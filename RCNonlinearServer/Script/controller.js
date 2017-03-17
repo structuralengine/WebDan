@@ -1,5 +1,6 @@
-﻿angular.module('myApp', ['ngMaterial'])
-  .controller('AppController', function ($scope) {
+﻿
+// コンテンツ関連のスクリプト -------------------------
+app.controller('AppController', function ($scope) {
     // 入力されたユーザー名を保持
     $scope.username = '';
     // ユーザー一覧（空の配列で初期化）
@@ -21,4 +22,7 @@
     $scope.deleteUser = function (index) {
       $scope.users.splice(index, 1);
     };
-  });
+});
+
+
+
