@@ -1,0 +1,52 @@
+﻿<div id="navibarController" ng-controller="navibarController as ctrl" ng-cloak>
+
+    <md-content class="md-padding">
+
+            <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="top">
+
+               <md-tab id="tab1" ng-disabled="data.tab1Locked">
+                  <md-tab-label>基本データ</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page1.html'"></div></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab2" ng-disabled="data.tab2Locked">
+                  <md-tab-label>部材・断面</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page2.html'"></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab3" ng-disabled="data.tab3Locked">
+                  <md-tab-label>算出点</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page3.html'"></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab4" ng-disabled="data.tab4Locked">
+                  <md-tab-label>鉄筋配置</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page4.html'"></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab5" ng-disabled="data.tab5Locked">
+                  <md-tab-label>疲労データ</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page5.html'"></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab6" ng-disabled="data.tab6Locked">
+                  <md-tab-label>安全係数・材料強度</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page6.html'"></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab7" ng-disabled="data.tab7Locked">
+                  <md-tab-label>断面力</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page7.html'"></md-tab-body>
+               </md-tab>
+
+               <md-tab id="tab8" ng-disabled="data.tab8Locked">
+                  <md-tab-label>計算印刷</md-tab-label>
+                  <md-tab-body><div ng-include="'./views/page8.html'"></md-tab-body>
+               </md-tab>
+
+
+            </md-tabs>
+
+         </md-content>
+
+</div>

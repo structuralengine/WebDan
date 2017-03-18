@@ -22,7 +22,15 @@
         // -->
     </script> 
     <script src="./script/menu.js"></script>
-    <script src="./script/controller.js"></script>
+    <script src="./script/navi.js"></script>
+    <script src="./script/page1.js"></script>
+    <script src="./script/page2.js"></script>
+    <script src="./script/page3.js"></script>
+    <script src="./script/page4.js"></script>
+    <script src="./script/page5.js"></script>
+    <script src="./script/page6.js"></script>
+    <script src="./script/page7.js"></script>
+    <script src="./script/page8.js"></script>
 
 </head>
 
@@ -30,34 +38,7 @@
 
     <div ng-include="'./views/menu.html'"></div>
 
-    <div ng-controller="AppController">
-
-        <div>
-            <h1>登録フォーム</h1>
-            <form ng-submit="submit()">
-                <div class="form-group">
-                    <label for="username">ユーザー名</label>
-                    <input type="text" class="form-control" id="username" placeholder="twitterのユーザー名を入力" ng-model="username">
-                </div>
-                <button type="submit" class="btn btn-primary">登録</button>
-            </form>
-        </div>
-        <hr>
-
-        <div>
-            <h1>ユーザー一覧</h1>
-            <span ng-if="users.length === 0">ユーザーが一人も登録されていません</span>
-            <ul>
-                <li style="padding: 5px" ng-repeat="user in users">
-                    <div>
-                        <a href="{{user.url}}" target="_blank">{{user.username}}</a>
-                        <button type="button" class="btn btn-xs btn-danger" ng-click="deleteUser($index)">x</button>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </div>
-
+    <div ng-include="'./views/navi.html'"></div>
 
 </body>
 

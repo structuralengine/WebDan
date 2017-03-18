@@ -195,9 +195,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="script\navi.js" />
+    <Content Include="script\page2.js" />
+    <Content Include="script\page3.js" />
+    <Content Include="script\page4.js" />
+    <Content Include="script\page5.js" />
+    <Content Include="script\page6.js" />
+    <Content Include="script\page7.js" />
+    <Content Include="script\page8.js" />
     <Content Include="views\menu.html" />
-    <Content Include="script\controller.js" />
+    <Content Include="script\page1.js" />
     <Content Include="script\menu.js" />
+    <Content Include="views\navi.html" />
+    <Content Include="views\page1.html" />
+    <Content Include="views\page2.html" />
+    <Content Include="views\page3.html" />
+    <Content Include="views\page4.html" />
+    <Content Include="views\page5.html" />
+    <Content Include="views\page6.html" />
+    <Content Include="views\page7.html" />
+    <Content Include="views\page8.html" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
