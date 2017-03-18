@@ -2,7 +2,7 @@
 
     <md-content class="md-padding">
 
-            <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="top">
+            <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="top" md-dynamic-height>
 
                <md-tab id="tab1" ng-disabled="data.tab1Locked">
                   <md-tab-label>基本データ</md-tab-label>
@@ -11,7 +11,7 @@
 
                <md-tab id="tab2" ng-disabled="data.tab2Locked">
                   <md-tab-label>部材・断面</md-tab-label>
-                  <md-tab-body><div ng-include="'./views/page2.html'"></md-tab-body>
+                  <md-tab-body ><div ng-include="'./views/page2.html'"></md-tab-body>
                </md-tab>
 
                <md-tab id="tab3" ng-disabled="data.tab3Locked">

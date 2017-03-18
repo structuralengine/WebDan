@@ -1,7 +1,8 @@
 ﻿// ナビゲーションバー関連のスクリプト -------------------------
 app.controller('navibarController', navibarController);
 
-function navibarController($scope) {
+function navibarController($scope)
+{
     $scope.data = {
         selectedIndex: 0,
 
