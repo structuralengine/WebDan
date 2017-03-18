@@ -190,6 +190,9 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+    <Content Include="components\handsontable\handsontable.full.min.css" />
+    <Content Include="components\handsontable\handsontable.full.min.js" />
+    <Content Include="components\handsontable\ngHandsontable.min.js" />
     <Content Include="css\style.css" />
     <Content Include="index.html" />
   </ItemGroup>

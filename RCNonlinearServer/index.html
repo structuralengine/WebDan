@@ -3,22 +3,25 @@
 
 <head>
 
-    <!-- Angular Material CSS now available via Google CDN; version 1.0.0 used here -->
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.0.0/angular-material.min.css">
-    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-
     <!-- Angular Material Dependencies -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
 
-    <!-- Angular Material Javascript now available via Google CDN; version 1.1.1 used here -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+    <!-- Angular Material (now available via Google CDN; version 1.1.1 all dependencies) -->
+    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css">
+    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+
+    <!-- Loading Handsontable (full distribution that includes all dependencies) -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <link rel="stylesheet" media="screen" href="./components/handsontable/handsontable.full.min.css">
+    <script src="./components/handsontable/handsontable.full.min.js"></script>
+    <script src="./components/handsontable/ngHandsontable.min.js"></script>
 
     <!-- My script file here -->
     <script type="text/javascript">
         <!-- 
-        var app = angular.module('webdan.input.form', ['ngMaterial'])
+        var app = angular.module('webdan.input.form', ['ngMaterial', 'ngHandsontable'])
         // -->
     </script> 
     <script src="./script/menu.js"></script>
