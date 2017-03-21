@@ -10,4 +10,5 @@ function menubarController($scope, $mdDialog) {
             .targetEvent(ev)
         );
     };
+
 }

@@ -1,0 +1,11 @@
+﻿
+<div ng-controller="page8Controller">
+    <h1>このページは page8 です</h1>
+    <form name="myForm" novalidate>
+        <button ng-click="onclick()">送信</button>
+        <label for="name">このデータをpost します</label>
+        <br/>
+        <input id="name" name="name" type="text" ng-model="name" />
+    </form>
+    <div>{{result}}</div>
+</div>
