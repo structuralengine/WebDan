@@ -15,9 +15,22 @@ Public Class ValuesController
     End Function
 
     ' POST api/values
-    Public Sub PostValue(<FromBody()> ByVal value As String)
+    Public Function PostValue(<FromBody()> ByVal value As String) As String
 
-    End Sub
+        Try
+            If value Is Nothing Then
+                Return "Error!! - Input Xml Data Is Nothing"
+            Else
+                Dim rccal As New RCNonlinear.Nonliner
+                Dim result = rccal.CalcNonlinearity(value)
+
+                Return result
+            End If
+        Catch ex As Exception
+            Return "Error!! - " + ex.Message
+        End Try
+
+    End Function
 
     ' PUT api/values/5
     Public Sub PutValue(ByVal id As Integer, <FromBody()> ByVal value As String)

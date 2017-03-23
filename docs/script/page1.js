@@ -1,9 +1,6 @@
 ﻿
 // コンテンツ関連のスクリプト -------------------------
-app.controller(
-    'page1Controller',
-    function ($scope)
-    {
+app.controller( 'page1Controller', function ($scope) {
         // 入力されたユーザー名を保持
         $scope.username = '';
         // ユーザー一覧（空の配列で初期化）
