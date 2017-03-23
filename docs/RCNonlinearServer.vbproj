@@ -48,6 +48,12 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <HintPath>..\packages\RCNonlinear\Release\RCNonlinear.dll</HintPath>
+    </Reference>
+    <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <HintPath>..\packages\RCNonlinear\Debug\RCNonlinear.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -225,12 +231,6 @@
     <Content Include="Web.Release.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\RCNonlinear\RCNonlinear.vbproj">
-      <Project>{9a28576d-0287-4d78-9aa3-064bcebe25d0}</Project>
-      <Name>RCNonlinear</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
