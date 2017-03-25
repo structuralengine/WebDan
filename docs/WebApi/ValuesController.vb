@@ -15,7 +15,7 @@ Public Class ValuesController
     End Function
 
     ' POST api/values
-    Public Function PostValue(<FromBody()> ByVal value As String) As String
+    Public Function PostValue(<FromBody> ByVal value As String) As String
 
         Try
             If value Is Nothing Then

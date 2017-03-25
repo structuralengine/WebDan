@@ -3,7 +3,8 @@
 app.controller('page8Controller', ['$scope', '$http', function ($scope, $http) {
 
     // 初期化
-    $scope.name  = "<?xml version='1.0' encoding='utf-16'?>\n";
+    $scope.name = "=";
+    $scope.name += "<?xml version='1.0' encoding='utf-16'?>\n";
     $scope.name += "<InputData>\n";
     $scope.name += "  <Nd>0</Nd>\n";
     $scope.name += "  <Md>540</Md>\n";
@@ -161,9 +162,11 @@ app.controller('page8Controller', ['$scope', '$http', function ($scope, $http) {
     // [送信] ボタンで 非同期通信を開始
     $scope.onclick = function () {
         $http({
-            method: 'GET',
-            url: './api/values/5',
-            params: { name: $scope.name }
+            method: 'POST',
+            //url: './api/values/',
+            url: 'http://www.structuralengine.com/RCNonlinear/api/values/',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            data: $scope.name 
         })
         // 通信成功時の処理
         .success(function (data, status, headers, config) {
