@@ -174,7 +174,8 @@ app.controller('page8Controller', ['$scope', '$http', function ($scope, $http) {
         })
         // 通信失敗時の処理
         .error(function (data, status, headers, config) {
-            $scope.result = '!!通信に失敗しました!!';
+            $scope.result = '!!通信に失敗しました!!\n';
+            $scope.result += status;
         });
     };
 
