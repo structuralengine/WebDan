@@ -1,0 +1,40 @@
+﻿<md-content class="md-padding">
+
+    <md-tabs class="md-accent" md-selected="data.selectedIndex" md-align-tabs="top">
+        <md-tab id="tab1" ui-sref="main.page1">
+            <md-tab-label>基本データ</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab2" ui-sref="main.page2">
+            <md-tab-label>部材・断面</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab3" ui-sref="main.page3">
+            <md-tab-label>算出点</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab4" ui-sref="main.page4">
+            <md-tab-label>鉄筋配置</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab5" ui-sref="main.page5">
+            <md-tab-label>疲労データ</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab6" ui-sref="main.page6">
+            <md-tab-label>安全係数・材料強度</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab7" ui-sref="main.page7">
+            <md-tab-label>断面力</md-tab-label>
+        </md-tab>
+
+        <md-tab id="tab8" ui-sref="main.page8">
+            <md-tab-label>計算印刷</md-tab-label>
+        </md-tab>
+    </md-tabs>
+
+</md-content>
+
+<!-- メイン領域 -->
+<div class="md-padding" ui-view="viewMain"></div>

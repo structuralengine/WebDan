@@ -1,0 +1,17 @@
+﻿<div>
+    <div>
+        <h1>このページは page2 です</h1>
+
+        <form name="mainForm">
+            <button ng-click="page2Ctrl.getComments()">getComments</button>
+            <textarea style="width:250px;height:450px;" ng-model="page2Ctrl.result"></textarea>
+        </form>
+
+        <form name="sendForm">
+            <textarea style="width:250px;height:450px;" ng-model="page2Ctrl.data">
+
+            </textarea>
+            <button ng-click="page2Ctrl.postData()">postData</button>
+        </form>
+    </div>
+</div>

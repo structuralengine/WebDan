@@ -127,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="img\" />
+    <Folder Include="js\directives\" />
+    <Folder Include="js\filters\" />
+    <Folder Include="script\" />
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
@@ -205,26 +208,27 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
-    <Content Include="script\navi.js" />
-    <Content Include="script\page2.js" />
-    <Content Include="script\page3.js" />
-    <Content Include="script\page4.js" />
-    <Content Include="script\page5.js" />
-    <Content Include="script\page6.js" />
-    <Content Include="script\page7.js" />
-    <Content Include="script\page8.js" />
-    <Content Include="views\menu.html" />
-    <Content Include="script\page1.js" />
-    <Content Include="script\menu.js" />
-    <Content Include="views\navi.html" />
-    <Content Include="views\page1.html" />
-    <Content Include="views\page2.html" />
-    <Content Include="views\page3.html" />
-    <Content Include="views\page4.html" />
-    <Content Include="views\page5.html" />
-    <Content Include="views\page6.html" />
-    <Content Include="views\page7.html" />
-    <Content Include="views\page8.html" />
+    <Content Include="js\App.js" />
+    <Content Include="js\controllers\Menu.controller.js" />
+    <Content Include="js\controllers\menu.html" />
+    <Content Include="js\controllers\navi.html" />
+    <Content Include="js\controllers\page1\page1.controller.js" />
+    <Content Include="js\controllers\page1\page1.html" />
+    <Content Include="js\controllers\page2\Page2.controller.js" />
+    <Content Include="js\controllers\page2\page2.html" />
+    <Content Include="js\controllers\page3\Page3.controller.js" />
+    <Content Include="js\controllers\page3\page3.html" />
+    <Content Include="js\controllers\page4\Page4.controller.js" />
+    <Content Include="js\controllers\page4\page4.html" />
+    <Content Include="js\controllers\page5\Page5.controller.js" />
+    <Content Include="js\controllers\page5\page5.html" />
+    <Content Include="js\controllers\page6\Page6.controller.js" />
+    <Content Include="js\controllers\page6\page6.html" />
+    <Content Include="js\controllers\page7\Page7.controller.js" />
+    <Content Include="js\controllers\page7\page7.html" />
+    <Content Include="js\controllers\page8\Page8.controller.js" />
+    <Content Include="js\controllers\page8\page8.html" />
+    <Content Include="js\services\Rest.service.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

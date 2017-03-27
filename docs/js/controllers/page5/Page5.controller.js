@@ -1,8 +1,6 @@
 ﻿
 // コンテンツ関連のスクリプト -------------------------
-app.controller('page5Controller', function ($scope) {
-
-});
+app.controller('Page5Controller', ['$scope', function ($scope) {
 
 
-
+}]);

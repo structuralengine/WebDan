@@ -1,5 +1,5 @@
 ﻿
-  <div id="menubarContainer" ng-controller="menubarController as ctrl" layout="row" ng-cloak>
+  <div id="menuContainer" ng-controller="MenuController as menuController" layout="row" ng-cloak>
     <md-toolbar class="md-menu-toolbar">
       <div layout="row">
         <div>
@@ -11,18 +11,18 @@
               <button ng-click="$mdOpenMenu()">ファイル(&F)</button>
               <md-menu-content>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('file.new', $event)">新規作成(&N)</md-button>
+                  <md-button ng-click="menuController.menuAction('file.new', $event)">新規作成(&N)</md-button>
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('file.open', $event)">ファイルを開く(&O)</md-button>
+                  <md-button ng-click="menuController.menuAction('file.open', $event)">ファイルを開く(&O)</md-button>
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('file.save', $event)">上書き保存(&S)</md-button>
+                  <md-button ng-click="menuController.menuAction('file.save', $event)">上書き保存(&S)</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('file.saveas', $event)">名前をつけて保存(&A)</md-button>
+                  <md-button ng-click="menuController.menuAction('file.saveas', $event)">名前をつけて保存(&A)</md-button>
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>
                 <md-menu-item>
@@ -30,23 +30,23 @@
                     <md-button ng-click="$mdOpenMenu()">履歴</md-button>
                     <md-menu-content>
                       <md-menu-item>
-                        <md-button ng-click="ctrl.menuAction('file.resent1', $event)">HTML5</md-button>
+                        <md-button ng-click="menuController.menuAction('file.resent1', $event)">HTML5</md-button>
                       </md-menu-item>
                       <md-menu-item>
-                        <md-button ng-click="ctrl.menuAction('file.resent2', $event)">jQuery</md-button>
+                        <md-button ng-click="menuController.menuAction('file.resent2', $event)">jQuery</md-button>
                       </md-menu-item>
                       <md-menu-item>
-                        <md-button ng-click="ctrl.menuAction('file.resent3', $event)">AngularJS </md-button>
+                        <md-button ng-click="menuController.menuAction('file.resent3', $event)">AngularJS </md-button>
                       </md-menu-item>
                       <md-menu-item>
-                        <md-button disabled="disabled" ng-click="ctrl.menuAction('file.resent4', $event)">AngularJS 2.0</md-button>
+                        <md-button disabled="disabled" ng-click="menuController.menuAction('file.resent4', $event)">AngularJS 2.0</md-button>
                       </md-menu-item>
                     </md-menu-content>
                   </md-menu>
                 </md-menu-item>
                 <md-menu-divider></md-menu-divider>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('file.exit', $event)">終了(&X)</md-button>
+                  <md-button ng-click="menuController.menuAction('file.exit', $event)">終了(&X)</md-button>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
@@ -56,16 +56,16 @@
               <button ng-click="$mdOpenMenu()">編集(&E)</button>
               <md-menu-content>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('edit.cut', $event)">切り取り(&T)</md-button>
+                  <md-button ng-click="menuController.menuAction('edit.cut', $event)">切り取り(&T)</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('edit.copy', $event)">コピー(&C)</md-button>
+                  <md-button ng-click="menuController.menuAction('edit.copy', $event)">コピー(&C)</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('edit.paste', $event)">貼り付け(&V)</md-button>
+                  <md-button ng-click="menuController.menuAction('edit.paste', $event)">貼り付け(&V)</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('edit.undo', $event)">元に戻す(&Z)</md-button>
+                  <md-button ng-click="menuController.menuAction('edit.undo', $event)">元に戻す(&Z)</md-button>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
@@ -75,10 +75,10 @@
               <button ng-click="$mdOpenMenu()">オプション(&O)</button>
               <md-menu-content>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('option.edit', $event)">環境設定</md-button>
+                  <md-button ng-click="menuController.menuAction('option.edit', $event)">環境設定</md-button>
                 </md-menu-item>
                 <md-menu-item>
-                  <md-button ng-click="ctrl.menuAction('option.version', $event)">バージョン</md-button>
+                  <md-button ng-click="menuController.menuAction('option.version', $event)">バージョン</md-button>
                 </md-menu-item>
               </md-menu-content>
             </md-menu>
