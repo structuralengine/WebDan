@@ -1,16 +1,25 @@
 ﻿<!DOCTYPE html>
-<html ng-app="webdan.input.form">
+<html ng-app="webDan">
 
 <head>
+    <!--
+        ライブラリ        
+    -->
+    <!-- Angular Material CSS now available via Google CDN; version 1.1.1 used here -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css">
+    <link rel="stylesheet" type="text/css" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 
     <!-- Angular Material Dependencies -->
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular-aria.min.js"></script>
 
-    <!-- Angular Material (now available via Google CDN; version 1.1.1 all dependencies) -->
-    <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.css">
-    <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
+    <!-- ui-router -->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.4.2/angular-ui-router.min.js"></script>
+
+    <!-- Angular Material Javascript now available via Google CDN; version 1.1.1 used here -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.1/angular-material.min.js"></script>
 
     <!-- Loading Handsontable (full distribution that includes all dependencies) -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -18,62 +27,45 @@
     <script src="./components/handsontable/handsontable.full.min.js"></script>
     <script src="./components/handsontable/ngHandsontable.min.js"></script>
 
-    <!-- My script file here -->
-    <script type="text/javascript">
-        <!-- 
-        var app = angular.module('webdan.input.form', ['ngMaterial', 'ngHandsontable'])
-        // -->
-    </script> 
-    <script src="./script/menu.js"></script>
-    <script src="./script/navi.js"></script>
+    <!-- Or use TAG number for specific version. New versions are auto deployed -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <!--<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/restangular/1.6.1/restangular.js"></script>-->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/restangular/1.6.1/restangular.min.js"></script>
 
-    <script src="./script/page1.js"></script>
-    <script src="./script/page2.js"></script>
-    <script src="./script/page3.js"></script>
-    <script src="./script/page4.js"></script>
-    <script src="./script/page5.js"></script>
-    <script src="./script/page6.js"></script>
-    <script src="./script/page7.js"></script>
-    <script src="./script/page8.js"></script>
+    <!--
+        自作
+    -->
+    <!-- services -->
+    <script src="./js/services/Rest.service.js"></script>
 
+    <!-- directives -->
+    <!--    <script src="./js/directives/.directive.js"></script>-->
+
+    <!-- filters -->
+    <!--    <script src="./js/filters/.filter.js"></script>-->
+
+    <!-- service、directiveなどより後、controllerより前に読みこむ -->
+    <script src="./js/App.js"></script>
+
+    <!-- controllers -->
+    <script src="./js/controllers/Menu.controller.js"></script>
+
+    <script src="./js/controllers/page1/Page1.controller.js"></script>
+    <script src="./js/controllers/page2/Page2.controller.js"></script>
+    <script src="./js/controllers/page3/Page3.controller.js"></script>
+    <script src="./js/controllers/page4/Page4.controller.js"></script>
+    <script src="./js/controllers/page5/Page5.controller.js"></script>
+    <script src="./js/controllers/page6/Page6.controller.js"></script>
+    <script src="./js/controllers/page7/Page7.controller.js"></script>
+    <script src="./js/controllers/page8/Page8.controller.js"></script>
 </head>
 
 <body>
+    <!-- メニューバー -->
+    <div ng-include="'./js/controllers/menu.html'"></div>
 
-    <div ng-include="'./views/menu.html'"></div>
-
-    <div ng-include="'./views/navi.html'"></div>
-
-
-    <div id="dvData">
-        <iframe id="myFrame" style="display:none"></iframe>
-    </div>
-    <br/>
-    <a href="#" download="data.csv" id="btnExport" >Export data into Excel</a>
-    <script type="text/javascript">
-        <!-- 
-        function exportToCSV() {
-            var csv = "Abc, DEF, GHI, JKLM"
-            // Data URI
-            csvData = 'data:application/csv;charset=utf-8,' + csv;
-            if (navigator.appName == "Microsoft Internet Explorer") {
-                myFrame.document.open("text/html", "replace");
-                myFrame.document.write(uuu);
-                myFrame.document.close();
-                myFrame.focus()
-                myFrame.document.execCommand('SaveAs', true, 'data.xls');
-            } else {
-                //Others
-                $(this).attr({ 'href': csvData, 'target': '_blank' });
-            }
-        }
-        // This must be a hyperlink
-        $("#btnExport ").on('click', function (event) {
-            exportToCSV.apply();
-        });        
-        // -->
-    </script> 
-
+    <!-- アプリケーション表示域 -->
+    <div ui-view="viewApp"></div>
 </body>
 
 </html>

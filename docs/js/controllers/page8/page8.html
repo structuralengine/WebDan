@@ -1,0 +1,28 @@
+﻿
+<div>
+    <div>
+        <h1>このページは page8 です</h1>
+
+        <form name="mainForm">
+            <button ng-click="page8Ctrl.getComments()">getComments</button>
+            <textarea style="width:250px;height:450px;" ng-model="page8Ctrl.result"></textarea>
+        </form>
+
+        <form name="sendForm">
+            <textarea style="width:250px;height:450px;" ng-model="page8Ctrl.data"></textarea>
+            <button ng-click="page8Ctrl.postData()">postData</button>
+        </form>
+
+<!--
+        <form name="myForm" novalidate>
+            <button ng-click="page8Ctrl.onclick()">送信</button>
+            <label for="name">このデータをpost します</label>
+            <br/>
+            <textarea name="name" style="width:250px;height:450px;" ng-model="page8Ctrl.name"></textarea>
+        </form>
+
+        <div>{{page8Ctrl.result}}</div>
+-->
+
+    </div>
+</div>
