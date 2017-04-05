@@ -177,9 +177,9 @@ app.controller('Page2Controller', ['$scope', 'ValuesSvc', 'CalcSvc', function ($
 
     ctrl.postData = function () {
         CalcSvc.post({xmlData:ctrl.data})
-        .then(function (comments) {
+        .then(function (result) {
             // returns a list of comments
-            ctrl.result = JSON.stringify(comments);
+            ctrl.result = JSON.stringify(result);
 
         }, function errorCallback(error) {
             alert("エラー:" + JSON.stringify(error));

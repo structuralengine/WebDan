@@ -11,7 +11,7 @@ angular.module('RestService', ['restangular'])
 
 .factory('CalcSvc', ['Restangular', function (Restangular) {
 
-    return Restangular.service('calc');   // http://{apiroot}/calc/
+    return Restangular.service('values');   // http://{apiroot}/values/
 }]);
 
 /*
