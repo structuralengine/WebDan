@@ -66,8 +66,8 @@ angular.module('webdan')
         controller: 'AccountCtrl'
       })
       .whenAuthenticated('/basic-information', {
-        templateUrl: 'views/basic-information.html',
-        controller: 'BasicInformationCtrl',
+        templateUrl: 'views/basic-information/index.html',
+        controller: 'BasicInformationIndexCtrl',
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/member-section', {

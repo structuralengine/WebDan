@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name webdan.controller:BasicInformationCtrl
+ * @name webdan.controller:BasicInformationIndexCtrl
  * @description
- * # BasicInformationCtrl
+ * # BasicInformationIndexCtrl
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BasicInformationCtrl', function ($scope) {
+  .controller('BasicInformationIndexCtrl', function ($scope) {
     $scope.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
