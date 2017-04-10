@@ -14,8 +14,10 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- build:css styles/main.css -->
+    <!-- build:css styles/app.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/app.css">
+    <link rel="stylesheet" href="styles/header.css">
     <!-- endbuild -->
 
     <!-- build:js scripts/vendor/modernizr.js -->
@@ -31,6 +33,7 @@
       <div class="header">
         <ul class="nav nav-pills pull-right" ng-include="'views/navbar.html'"></ul>
         <h3 class="text-muted">webdan</h3>
+        <ul class="nav nav-pills" ng-include="'views/tabs.html'" ng-controller="TabsCtrl as tabs"></ul>
       </div>
 
       <div class="content">
@@ -83,6 +86,16 @@
     <script src="scripts/filters/reverse.js"></script>
     <script src="scripts/directives/ngShowAuth.js"></script>
     <script src="scripts/directives/ngHideAuth.js"></script>
+    <script src="scripts/controllers/tabs.js"></script>
+    <script src="scripts/controllers/basic-information.js"></script>
+    <script src="scripts/controllers/member-section.js"></script>
+    <script src="scripts/controllers/design-point.js"></script>
+    <script src="scripts/controllers/bars.js"></script>
+    <script src="scripts/controllers/fatigue.js"></script>
+    <script src="scripts/controllers/safety-factor-material-strength.js"></script>
+    <script src="scripts/controllers/section-forces.js"></script>
+    <script src="scripts/controllers/calculation-print.js"></script>
+    <script src="scripts/services/app.config.js"></script>
     <!-- endbuild -->
   </body>
 </html>

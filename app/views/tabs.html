@@ -1,0 +1,6 @@
+<li role="presentation"
+    ng-repeat="(key, label) in tabs.messages"
+    ng-class="{active: tabs.path == key}">
+
+  <a ng-href="#!/{{key}}">{{label}}</a>
+</li>

@@ -57,14 +57,6 @@ angular.module('webdan')
   // before trying to access that route
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
-      .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
-      })
-      .when('/chat', {
-        templateUrl: 'views/chat.html',
-        controller: 'ChatCtrl'
-      })
       .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl'
@@ -73,7 +65,47 @@ angular.module('webdan')
         templateUrl: 'views/account.html',
         controller: 'AccountCtrl'
       })
-      .otherwise({redirectTo: '/'});
+      .whenAuthenticated('/basic-information', {
+        templateUrl: 'views/basic-information.html',
+        controller: 'BasicInformationCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/member-section', {
+        templateUrl: 'views/member-section.html',
+        controller: 'MemberSectionCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/design-point', {
+        templateUrl: 'views/design-point.html',
+        controller: 'DesignPointCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/bars', {
+        templateUrl: 'views/bars.html',
+        controller: 'BarsCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/fatigue', {
+        templateUrl: 'views/fatigue.html',
+        controller: 'FatigueCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/safety-factor-material-strength', {
+        templateUrl: 'views/safety-factor-material-strength.html',
+        controller: 'SafetyFactorMaterialStrengthCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/section-forces', {
+        templateUrl: 'views/section-forces.html',
+        controller: 'SectionForcesCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/calculation-print', {
+        templateUrl: 'views/calculation-print.html',
+        controller: 'CalculationPrintCtrl',
+        controllerAs: 'ctrl'
+      })
+      .otherwise({redirectTo: '/basic-information'});
   }])
 
   /**
