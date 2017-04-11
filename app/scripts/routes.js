@@ -71,8 +71,8 @@ angular.module('webdan')
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/member-section', {
-        templateUrl: 'views/member-section.html',
-        controller: 'MemberSectionCtrl',
+        templateUrl: 'views/member-section/index.html',
+        controller: 'MemberSectionIndexCtrl',
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/design-point', {
