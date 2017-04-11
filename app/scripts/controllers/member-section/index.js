@@ -12,8 +12,6 @@ angular.module('webdan')
     function($scope) {
       var ctrl = this;
 
-      ctrl.memberSections = [];
-
       ctrl.members = [
         {groupNo: '1.0', name: '中層梁柱前面'},
         {groupNo: '1.1', name: '中層ハンチ端'},
