@@ -81,8 +81,8 @@ angular.module('webdan')
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/bars', {
-        templateUrl: 'views/bars.html',
-        controller: 'BarsCtrl',
+        templateUrl: 'views/bars/index.html',
+        controller: 'BarsIndexCtrl',
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/fatigue', {
