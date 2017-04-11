@@ -18,7 +18,8 @@
     "angular-resource": "^1.6.0",
     "angular-route": "^1.6.0",
     "angular-sanitize": "^1.6.0",
-    "angular-touch": "^1.6.0"
+    "angular-touch": "^1.6.0",
+    "ngHandsontable": "nghandsontable#^0.13.0"
   },
   "overrides": {
     "bootstrap-sass": {
