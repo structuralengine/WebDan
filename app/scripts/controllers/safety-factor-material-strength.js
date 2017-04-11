@@ -8,10 +8,7 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SafetyFactorMaterialStrengthCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('SafetyFactorMaterialStrengthCtrl', ['$scope',
+    function ($scope) {
+    }
+  ]);

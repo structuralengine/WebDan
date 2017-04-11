@@ -8,10 +8,7 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('CalculationPrintCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('CalculationPrintCtrl', ['$scope',
+    function ($scope) {
+    }
+  ]);
