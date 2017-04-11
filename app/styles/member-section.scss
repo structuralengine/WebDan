@@ -1,4 +1,16 @@
 .member-section {
+  .table {
+    td, th {
+      white-space: nowrap;
+    }
+    thead {
+      .vertical {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        white-space: nowrap;
+      }
+    }
+  }
   footer {
     .information {
       display: flex;

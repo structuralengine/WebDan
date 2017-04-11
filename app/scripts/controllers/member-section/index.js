@@ -12,6 +12,44 @@ angular.module('webdan')
     function($scope) {
       var ctrl = this;
 
+      ctrl.memberSections = [
+        {
+          no: 1,
+          length: 0.000,
+          groupNo: 1.0,
+          name: '上層梁',
+          shape: 'T 形',
+          section: {
+            width: 750,
+            height: 1200,
+            flangeWidth: 2480,
+            flangeThickness: 250,
+          },
+          conditions: {
+            upperSide: 1,
+            lowerSide: 1,
+            shear: null,
+          },
+          exterior: {
+            upperSide: false,
+            lowerSide: false,
+          },
+          crack: {
+            ecsd: 202,
+          },
+          shear: {
+            kr: 202.3,
+          },
+          r1: {
+           longitudinalRebar: 2.30,
+           hoopTie: null,
+           bentUpBar: null,
+          },
+          count: null,
+          forFatigue: false,
+        }
+      ];
+
       ctrl.members = [
         {groupNo: '1.0', name: '中層梁柱前面'},
         {groupNo: '1.1', name: '中層ハンチ端'},
@@ -28,17 +66,21 @@ angular.module('webdan')
       ];
 
       ctrl.sectionShapes = [
-        {name: '矩形'},
-        {name: 'T 形'},
-        {name: '円形'},
-        {name: '台形'},
-        {name: '小判'},
+        {name: '矩形', en: 'rectangle'},
+        {name: 'T 形', en: 't shaped'},
+        {name: '円形', en: 'section Radius'},
+        {name: '台形', en: 'trapezoid'},
+        {name: '小判', en: 'oval shape'},
       ];
 
       ctrl.conditions = [
-        {name: '一般'},
-        {name: '腐食性'},
-        {name: 'とくに厳しい腐食性'},
+        {name: '一般', en: 'normal enviro'},
+        {name: '腐食性', en: 'corrosive'},
+        {name: 'とくに厳しい腐食性', en: 'seve.corrosive'},
       ];
+
+      ctrl.addRow = function() {
+        ctrl.memberSections.push({});
+      }
     }
   ]);
