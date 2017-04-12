@@ -17,6 +17,7 @@ angular.module('webdan', [
     'ngRoute',
     'ngSanitize',
     'ngTouch',
+    'firebase',
     'firebase.ref',
     'firebase.auth.app',
     'ngHandsontable'

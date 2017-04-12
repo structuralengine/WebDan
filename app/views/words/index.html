@@ -1,0 +1,11 @@
+<section class="words">
+  <section class="nav">
+    <h2>Pages</h2>
+    <div ng-include="'views/words/pages.html'"></div>
+  </section>
+
+  <section class="list {{ctrl.page}}">
+    <h2>Words</h2>
+    <div ng-include="'views/words/words.html'" ng-if="ctrl.page"></div>
+  </section>
+</section>

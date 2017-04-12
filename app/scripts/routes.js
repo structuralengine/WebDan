@@ -105,6 +105,11 @@ angular.module('webdan')
         controller: 'CalculationPrintCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/words', {
+        templateUrl: 'views/words/index.html',
+        controller: 'WordsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 

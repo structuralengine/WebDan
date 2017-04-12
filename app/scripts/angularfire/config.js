@@ -1,11 +1,11 @@
 // Initialize Firebase
 var config = {
-  apiKey: 'AIzaSyDeEHtB9db5EQUI9Dp9cR9fMvPSVjW-U4s',
-  authDomain: 'test-ca1f8.firebaseapp.com',
-  databaseURL: 'https://test-ca1f8.firebaseio.com',
-  projectId: 'test-ca1f8',
-  storageBucket: 'test-ca1f8.appspot.com',
-  messagingSenderId: '230339306250'
+  apiKey: "AIzaSyC0nZsDxgRm9S1ppN_mx0nWcrgL1FF5GFI",
+  authDomain: "webdan-abcc6.firebaseapp.com",
+  databaseURL: "https://webdan-abcc6.firebaseio.com",
+  projectId: "webdan-abcc6",
+  storageBucket: "webdan-abcc6.appspot.com",
+  messagingSenderId: "1006569190487"
 };
 firebase.initializeApp(config);
 
