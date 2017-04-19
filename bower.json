@@ -19,6 +19,7 @@
     "angular-route": "^1.6.0",
     "angular-sanitize": "^1.6.0",
     "angular-touch": "^1.6.0",
+    "handsontable": "^0.31.2",
     "ngHandsontable": "nghandsontable#^0.13.0"
   },
   "overrides": {

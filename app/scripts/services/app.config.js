@@ -21,7 +21,8 @@ angular.module('webdan')
         'safety-factor-material-strength' : '安全係数・材料強度',
         'section-forces'                  : '断面力',
         'calculation-print'               : '計算・印刷',
-        'words'                           : '用語'
+        'words'                           : '用語',
+        'pages'                           : '項目'
       }
     };
 

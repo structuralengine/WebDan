@@ -8,11 +8,18 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('TabsCtrl', ['$scope', '$rootScope', 'appConfig',
-    function($scope, $rootScope, appConfig) {
+  .controller('TabsCtrl', ['$scope', '$rootScope', '$filter', 'appConfig', 'Page',
+    function($scope, $rootScope, $filter, appConfig, Page) {
       var tabs = this;
 
-      tabs.messages = appConfig.messages.tabs;
+      Page.query().$loaded(function(pages) {
+        let slug = $filter('slug');
+        pages.forEach(function(page) {
+          page.slug = slug(page.en);
+        });
+
+        tabs.pages = pages;
+      });
 
       $rootScope.$on('$routeChangeSuccess', function(e, $route) {
         tabs.path = $route.$$route.originalPath.substring(1) || 'basic-information';

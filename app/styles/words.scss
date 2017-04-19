@@ -24,6 +24,10 @@
     flex-grow: 1;
     position: relative;
 
+    .handsontable-container {
+      margin-bottom: 1rem;
+    }
+
     h2 {
       &::after {
         content: '';

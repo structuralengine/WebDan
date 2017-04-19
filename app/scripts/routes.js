@@ -110,6 +110,11 @@ angular.module('webdan')
         controller: 'WordsIndexCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/pages', {
+        templateUrl: 'views/pages/index.html',
+        controller: 'PagesIndexCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 
