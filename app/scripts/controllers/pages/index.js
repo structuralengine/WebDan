@@ -14,7 +14,7 @@ angular.module('webdan')
 
       ctrl.settings = {
         allowInvalid: false,
-        stretchH: 'all',
+        //stretchH: 'all',
         colHeaders: ['日本語', '英語'],
         columns: [
           {data: 'ja', validator: Page.validators.ja},

@@ -6,7 +6,7 @@
           ng-class="{active: page.$id? (page.$id == ctrl.page.$id) : (page.en == ctrl.page.en)}">
         <a ng-click="ctrl.select(page)">
           {{page.ja}}
-        </a>
+        </a>&nbsp;
         <a ng-href="images/words/{{page.slug}}.png" class="glyphicon glyphicon-picture" title="画像を開く" target="_blank"></a>
       </li>
     </ol>

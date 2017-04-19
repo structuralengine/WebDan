@@ -3,17 +3,29 @@
 
   .nav {
     white-space: nowrap;
+    margin-right: 1rem;
+    $active-color: #eee;
 
     li {
-      &.active {
-        background-color: #eee;
+      display: flex;
+      align-items: center;
+
+      :first-child {
+        flex-grow: 1;
       }
 
-      a[ng-href] {
+      &:hover {
+        background-color: $active-color;
+      }
+      &.active {
+        background-color: $active-color;
+      }
+
+      .glyphicon {
         visibility: hidden;
       }
       &:hover {
-        a[ng-href] {
+        .glyphicon {
           visibility: visible;
         }
       }

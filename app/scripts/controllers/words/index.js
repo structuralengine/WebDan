@@ -26,11 +26,12 @@ angular.module('webdan')
         colWidths: [50, 200, 200, 100, 200],
         columns: [
           {data: 'pointer', type: 'numeric'},
-          {data: 'ja', validator: Word.validators.ja},
+          {data: 'ja'},
           {data: 'en', validator: Word.validators.en},
           {data: 'var.text', validator: Word.validators.var.text},
           {data: 'var.html'},
         ],
+        contextMenu: ['remove_row'],
         afterChange: function(changes, source) {
           $log.debug('afterChange', source, changes);
 
@@ -44,6 +45,14 @@ angular.module('webdan')
             }
             catch (e) {
               $log.error(e);
+            }
+          });
+        },
+        beforeRemoveRow: function(index, amount, logicalRows) {
+          logicalRows.forEach(function(idx) {
+            let word = ctrl.words[idx];
+            if (word && word.$id) {
+              Word.remove(word);
             }
           });
         },
@@ -65,18 +74,30 @@ angular.module('webdan')
 
       ctrl.save = function() {
         return (ctrl.words || []).forEach(function(word) {
-          try {
-            if (word.$id) {
-              Word.save(word).then(function(ref) {
-                word.$dirty = false;
-              });
-            } else {
-              Word.add(word).then(function(ref) {
-                word.$dirty = false;
-              });
+          if (word.$dirty) {
+            try {
+              if (Word.isEmpty(word)) {
+                if (word.$id) {
+                  let idx = ctrl.words.indexOf(word);
+                  Word.remove(word).then(function(ref) {
+                    ctrl.words.splice(idx, 1);
+                  });
+                }
+              } else {
+                if (word.$id) {
+                  Word.save(word).then(function(ref) {
+                    word.$dirty = false;
+                  });
+                } else {
+                  word.page = ctrl.page.$id;
+                  Word.add(word).then(function(ref) {
+                    word.$dirty = false;
+                  });
+                }
+              }
+            } catch (e) {
+              $log.error(e);
             }
-          } catch (e) {
-            $log.error(e);
           }
         })
       };
