@@ -1,4 +1,18 @@
 <section class="member-section">
-  <div ng-include="'views/member-section/table.html'"></div>
-  <footer ng-include="'views/member-section/footer.html'"></footer>
+  <hot-table
+    hot-id="member-section"
+    settings="ctrl.settings.main">
+  </hot-table>
+
+  <footer>
+    <section>
+      <h3>断面形状</h3>
+      <hot-table settings="ctrl.settings.sectionShapes"></hot-table>
+    </section>
+
+    <section>
+      <h3>環境条件</h3>
+      <hot-table settings="ctrl.settings.conditions"></hot-table>
+    </section>
+  </footer>
 </section>
