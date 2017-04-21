@@ -178,15 +178,7 @@ angular.module('webdan')
         ctrl.members = Member.query();
         ctrl.sectionShapes = SectionShape.query();
         ctrl.conditions = Condition.query();
-        let promises = [
-          ctrl.members,
-          ctrl.SectionShapes,
-          ctrl.conditions
-        ];
-
-        $q.all(promises, function() {
-          ctrl.memberSections = MemberSection.query();
-        });
+        ctrl.memberSections = MemberSection.query();
       }
 
       init();
