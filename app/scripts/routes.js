@@ -115,6 +115,26 @@ angular.module('webdan')
         controller: 'PagesIndexCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/section-shapes', {
+        templateUrl: 'views/section-shapes/index.html',
+        controller: 'SectionShapesIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/conditions', {
+        templateUrl: 'views/conditions/index.html',
+        controller: 'ConditionsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/member-sections', {
+        templateUrl: 'views/member-sections/index.html',
+        controller: 'MemberSectionsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/members', {
+        templateUrl: 'views/members/index.html',
+        controller: 'MembersIndexCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 

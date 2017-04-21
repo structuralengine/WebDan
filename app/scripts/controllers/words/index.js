@@ -33,8 +33,6 @@ angular.module('webdan')
         ],
         contextMenu: ['remove_row'],
         afterChange: function(changes, source) {
-          $log.debug('afterChange', source, changes);
-
           (changes || []).forEach(function(change) {
             try {
               let [idx, prop, oldVal, newVal] = change;

@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MemberSectionIndexCtrl', ['$scope', '$compile',
-    function($scope, $compile) {
+  .controller('MemberSectionIndexCtrl', ['$scope', '$compile', 'Member', 'SectionShape', 'Condition', 'MemberSection',
+    function($scope, $compile, Member, SectionShape, Condition, MemberSection) {
       var ctrl = this;
 
       ctrl.memberSections = [{
@@ -36,27 +36,16 @@ angular.module('webdan')
         'flg_fatigue': true,
       }];
 
-      ctrl.sectionShapes = [
-        {name: '矩形', en: 'rectangle'},
-        {name: 'T 形', en: 't shaped'},
-        {name: '円形', en: 'section Radius'},
-        {name: '台形', en: 'trapezoid'},
-        {name: '小判', en: 'oval shape'},
-      ];
-
-      ctrl.conditions = [
-        {name: '一般', en: 'normal enviro'},
-        {name: '腐食性', en: 'corrosive'},
-        {name: 'とくに厳しい腐食性', en: 'seve.corrosive'},
-      ];
+      ctrl.members = Member.query();
+      ctrl.sectionShapes = SectionShape.query();
+      ctrl.conditions = Condition.query();
 
       ctrl.settings = {};
 
-      ctrl.settings.main = {
+      ctrl.settings.memberSections = {
         data: ctrl.memberSections,
         minSpareRows: 1,
         colHeaders: true,
-        //rowHeaders: true,
         nestedHeaders: [
           [
             /* 1*/ '<span header-rowspan="2">部材<br>番号</span>',
@@ -133,19 +122,28 @@ angular.module('webdan')
         },
       };
 
-      ctrl.settings.sectionShapes = {
-        data: ctrl.sectionShapes,
+      ctrl.settings.members = {
+        readOnly: true,
         rowHeaders: true,
         columns: [
-          {data: 'name', readOnly: true}
+          {data: 'g_no'},
+          {data: 'g_name', allowHtml: true}
+        ],
+      };
+
+      ctrl.settings.sectionShapes = {
+        readOnly: true,
+        rowHeaders: true,
+        columns: [
+          {data: 'name'}
         ],
       };
 
       ctrl.settings.conditions = {
-        data: ctrl.conditions,
+        readOnly: true,
         rowHeaders: true,
         columns: [
-          {data: 'name', readOnly: true}
+          {data: 'name'}
         ],
       };
     }

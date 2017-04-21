@@ -1,18 +1,32 @@
 <section class="member-section">
   <hot-table
     hot-id="member-section"
-    settings="ctrl.settings.main">
+    settings="ctrl.settings.memberSections">
   </hot-table>
 
   <footer>
     <section>
-      <h3>断面形状</h3>
-      <hot-table settings="ctrl.settings.sectionShapes"></hot-table>
+      <h3>
+        部材名
+        <a href="#!/members" class="glyphicon glyphicon-pencil"></a>
+      </h3>
+      <hot-table datarows="ctrl.members" settings="ctrl.settings.members"></hot-table>
     </section>
 
     <section>
-      <h3>環境条件</h3>
-      <hot-table settings="ctrl.settings.conditions"></hot-table>
+      <h3>
+        断面形状
+        <a href="#!/section-shapes" class="glyphicon glyphicon-pencil"></a>
+      </h3>
+      <hot-table datarows="ctrl.sectionShapes" settings="ctrl.settings.sectionShapes"></hot-table>
+    </section>
+
+    <section>
+      <h3>
+        環境条件
+        <a href="#!/conditions" class="glyphicon glyphicon-pencil"></a>
+      </h3>
+      <hot-table datarows="ctrl.conditions" settings="ctrl.settings.conditions"></hot-table>
     </section>
   </footer>
 </section>

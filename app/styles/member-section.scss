@@ -12,11 +12,15 @@
     }
   }
   footer {
-    .information {
-      display: flex;
+    display: flex;
 
-      fieldset {
-        margin-right: 30px;
+    section {
+      margin-right: 2rem;
+    }
+
+    h3 {
+      a {
+        font-size: .6em;
       }
     }
   }
