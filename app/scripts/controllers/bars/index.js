@@ -8,11 +8,11 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BarsIndexCtrl', ['$scope', '$compile',
-    function($scope, $compile) {
+  .controller('BarsIndexCtrl', ['$scope', '$compile', '$log', 'Bar',
+    function($scope, $compile, $log, Bar) {
       let ctrl = this;
 
-      ctrl.bars = [];
+      ctrl.bars = Bar.query();
 
       ctrl.settings = {
         minSpareRows: 1,
