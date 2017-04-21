@@ -11,9 +11,10 @@ angular.module('webdan')
   .factory('Member', ['webdanRef', '$firebaseArray', '$firebaseObject', '$firebaseUtils',
     function(webdanRef, $firebaseArray, $firebaseObject, $firebaseUtils) {
 
-      var ref = webdanRef.child('members');
-      var members = $firebaseArray(ref);
-      var Member = {};
+      let ref = webdanRef.child('members');
+      let members = $firebaseArray(ref);
+      let Member = {};
+      let selectOptions;
 
       Member.query = function(copy) {
         return members;
@@ -43,6 +44,32 @@ angular.module('webdan')
 
       Member.isEmpty = function(member) {
         return !member.g_no.trim() && !member.g_name.trim();
+      }
+
+      Member.selectOptions = function() {
+        if (!selectOptions) {
+          selectOptions = {};
+          members.forEach(function(member) {
+            selectOptions[member.$id] = member.g_name;
+          });
+        }
+        return selectOptions;
+      }
+
+      Member.renderName = function(instance, td, row, col, prop, memberId, cellProperties) {
+        return renderProp(td, memberId, 'g_name');
+      }
+
+      Member.renderNo = function(instance, td, row, col, prop, memberId, cellProperties) {
+        return renderProp(td, memberId, 'g_no');
+      }
+
+      function renderProp(td, memberId, prop) {
+        let member = members.$getRecord(memberId);
+        if (member) {
+          angular.element(td).html(member[prop] || '');
+        }
+        return td;
       }
 
       return Member;

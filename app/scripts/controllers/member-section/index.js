@@ -8,42 +8,12 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MemberSectionIndexCtrl', ['$scope', '$compile', 'Member', 'SectionShape', 'Condition', 'MemberSection',
-    function($scope, $compile, Member, SectionShape, Condition, MemberSection) {
+  .controller('MemberSectionIndexCtrl', ['$scope', '$compile', '$log', '$q', 'Member', 'SectionShape', 'Condition', 'MemberSection',
+    function($scope, $compile, $log, '$q', Member, SectionShape, Condition, MemberSection) {
       var ctrl = this;
-
-      ctrl.memberSections = [{
-        'm_no': 1,
-        'm_len': 0.000,
-        'g_no': 2.0,
-        'g_name': '柱 矩形',
-        'shape': '円形',
-        'B': 750,
-        'H': 1200,
-        'Bt': 2480,
-        't': 250,
-        'con_u': 1,
-        'con_l': 1,
-        'con_s': 1,
-        'vis_u': false,
-        'vis_l': true,
-        'ecsd': 202,
-        'kr': 202.31,
-        'r1_1': 57.10,
-        'r1_2': 25.50,
-        'r1_3': 25.50,
-        'n': 3,
-        'flg_fatigue': true,
-      }];
-
-      ctrl.members = Member.query();
-      ctrl.sectionShapes = SectionShape.query();
-      ctrl.conditions = Condition.query();
-
       ctrl.settings = {};
 
       ctrl.settings.memberSections = {
-        data: ctrl.memberSections,
         minSpareRows: 1,
         colHeaders: true,
         nestedHeaders: [
@@ -97,16 +67,16 @@ angular.module('webdan')
         columns: [
           /* 1*/ {data: 'm_no'        , type: 'numeric'},
           /* 2*/ {data: 'm_len'       , type: 'numeric', format: '0.000'},
-          /* 3*/ {data: 'g_no'        , type: 'numeric', format: '0.0'},
-          /* 4*/ {data: 'g_name', },
-          /* 5*/ {data: 'shape', },
+          /* 3*/ {data: 'memberId'    , type: 'numeric', format: '0.0', readOnly: true, renderer: Member.renderNo},
+          /* 4*/ {data: 'memberId'    , editor: 'select', selectOptions: Member.selectOptions, renderer: Member.renderName},
+          /* 5*/ {data: 'shapeId'     , editor: 'select', selectOptions: SectionShape.selectOptions, renderer: SectionShape.renderName},
           /* 6*/ {data: 'B'           , type: 'numeric'},
           /* 7*/ {data: 'H'           , type: 'numeric'},
           /* 8*/ {data: 'Bt'          , type: 'numeric'},
           /* 9*/ {data: 't'           , type: 'numeric'},
-          /*10*/ {data: 'con_u'       , type: 'numeric'},
-          /*11*/ {data: 'con_l'       , type: 'numeric'},
-          /*12*/ {data: 'con_s'       , type: 'numeric'},
+          /*10*/ {data: 'con_u'       , editor: 'select', selectOptions: Condition.selectOptions, renderer: Condition.renderName},
+          /*11*/ {data: 'con_l'       , editor: 'select', selectOptions: Condition.selectOptions, renderer: Condition.renderName},
+          /*12*/ {data: 'con_s'       , editor: 'select', selectOptions: Condition.selectOptions, renderer: Condition.renderName},
           /*13*/ {data: 'vis_u'       , type: 'checkbox'},
           /*14*/ {data: 'vis_l'       , type: 'checkbox'},
           /*15*/ {data: 'ecsd'        , type: 'numeric'},
@@ -117,6 +87,15 @@ angular.module('webdan')
           /*20*/ {data: 'n'           , type: 'numeric'},
           /*21*/ {data: 'flg_fatigue' , type: 'checkbox'},
         ],
+        afterChange: function(changes, source) {
+          (changes || []).forEach(function(change) {
+            let [idx, prop, oldVal, newVal] = change;
+            let memberSection = ctrl.memberSections[idx];
+            if (memberSection) {
+              memberSection.$dirty = true;
+            }
+          })
+        },
         afterRender: function() {
           $compile(this.rootElement)($scope);
         },
@@ -127,7 +106,7 @@ angular.module('webdan')
         rowHeaders: true,
         columns: [
           {data: 'g_no'},
-          {data: 'g_name', allowHtml: true}
+          {data: 'g_name', allowHtml: true, renderer: 'html'}
         ],
       };
 
@@ -146,5 +125,70 @@ angular.module('webdan')
           {data: 'name'}
         ],
       };
+
+      ctrl.isDirty = function() {
+        return (ctrl.memberSections || []).some(function(memberSection) {
+          return !!memberSection.$dirty;
+        });
+      }
+
+      ctrl.save = function() {
+        ctrl.memberSections.forEach(function(memberSection) {
+          if (!memberSection.$dirty) {
+            return;
+          }
+
+          try {
+            if (MemberSection.isEmpty(memberSection)) {
+              let idx = ctrl.memberSections.indexOf(memberSection);
+              if (!memberSection.$id) {
+                removeMemberSection(idx);
+              } else {
+                MemberSection.remove(memberSection).then(function(ref) {
+                  removeMemberSection(idx);
+                });
+              }
+            } else {
+              if (memberSection.$id) {
+                MemberSection.save(memberSection).then(function(ref) {
+                  resetDirty(memberSection);
+                });
+              } else {
+                MemberSection.add(memberSection).then(function(ref) {
+                  memberSection.$id = ref.key;
+                  resetDirty(memberSection);
+                });
+              }
+            }
+          } catch (e) {
+            $log.error(e);
+          }
+        })
+      }
+
+      function removeMemberSection(idx) {
+        ctrl.memberSections.splice(idx, 1);
+      }
+
+      function resetDirty(memberSection) {
+        memberSection.$dirty = false;
+      }
+
+      function init() {
+        ctrl.members = Member.query();
+        ctrl.sectionShapes = SectionShape.query();
+        ctrl.conditions = Condition.query();
+        let promises = [
+          ctrl.members,
+          ctrl.SectionShapes,
+          ctrl.conditions
+        ];
+
+        $q.all(promises, function() {
+          ctrl.memberSections = MemberSection.query();
+        });
+      }
+
+      init();
     }
   ]);

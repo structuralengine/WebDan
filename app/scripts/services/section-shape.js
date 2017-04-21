@@ -9,11 +9,12 @@
  */
 angular.module('webdan')
   .factory('SectionShape', ['webdanRef', '$firebaseArray', '$firebaseObject', '$firebaseUtils',
-    function(webdanRef, $firebaseArray, $firebaseObject $firebaseUtils) {
+    function(webdanRef, $firebaseArray, $firebaseObject, $firebaseUtils) {
 
       var ref = webdanRef.child('sectionShapes');
       var sectionShapes = $firebaseArray(ref);
       var SectionShape = {};
+      let selectOptions;
 
       SectionShape.query = function(copy) {
         return sectionShapes;
@@ -43,6 +44,28 @@ angular.module('webdan')
 
       SectionShape.isEmpty = function(sectionShape) {
         return !sectionShape.name.trim();
+      }
+
+      SectionShape.selectOptions = function() {
+        if (!selectOptions) {
+          selectOptions = {};
+          sectionShapes.forEach(function(sectionShape) {
+            selectOptions[sectionShape.$id] = sectionShape.name;
+          });
+        }
+        return selectOptions;
+      }
+
+      SectionShape.renderName = function(instance, td, row, col, prop, sectionShapeId, cellProperties) {
+        return renderProp(td, sectionShapeId, 'name');
+      }
+
+      function renderProp(td, sectionShapeId, prop) {
+        let sectionShape = sectionShapes.$getRecord(sectionShapeId);
+        if (sectionShape) {
+          angular.element(td).html(sectionShape[prop] || '');
+        }
+        return td;
       }
 
       return SectionShape;

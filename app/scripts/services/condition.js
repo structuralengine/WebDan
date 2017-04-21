@@ -11,9 +11,10 @@ angular.module('webdan')
   .factory('Condition', ['webdanRef', '$firebaseArray', '$firebaseObject', '$firebaseUtils',
     function(webdanRef, $firebaseArray, $firebaseObject, $firebaseUtils) {
 
-      var ref = webdanRef.child('conditions');
-      var conditions = $firebaseArray(ref);
-      var Condition = {};
+      let ref = webdanRef.child('conditions');
+      let conditions = $firebaseArray(ref);
+      let Condition = {};
+      let selectOptions;
 
       Condition.query = function(copy) {
         return conditions;
@@ -43,6 +44,28 @@ angular.module('webdan')
 
       Condition.isEmpty = function(condition) {
         return !condition.name.trim();
+      }
+
+      Condition.selectOptions = function() {
+        if (!selectOptions) {
+          selectOptions = {};
+          conditions.forEach(function(condition) {
+            selectOptions[condition.$id] = condition.name;
+          });
+        }
+        return selectOptions;
+      }
+
+      Condition.renderName = function(instance, td, row, col, prop, conditionId, cellProperties) {
+        return renderProp(td, conditionId, 'name');
+      }
+
+      function renderProp(td, conditionId, prop) {
+        let condition = conditions.$getRecord(conditionId);
+        if (condition) {
+          angular.element(td).html(condition[prop] || '');
+        }
+        return td;
       }
 
       return Condition;

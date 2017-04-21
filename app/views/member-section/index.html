@@ -1,8 +1,18 @@
 <section class="member-section">
-  <hot-table
-    hot-id="member-section"
-    settings="ctrl.settings.memberSections">
-  </hot-table>
+  <section>
+    <hot-table
+      datarows="ctrl.memberSections"
+      settings="ctrl.settings.memberSections">
+    </hot-table>
+
+    <footer>
+      <button type="button" class="btn btn-primary btn-sm"
+          ng-disabled="!ctrl.isDirty()"
+          ng-click="ctrl.save()">
+        <span class="glyphicon glyphicon-plus"></span> Save
+      </button>
+    </footer>
+  </section>
 
   <footer>
     <section>

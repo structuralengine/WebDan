@@ -7,3 +7,11 @@
 [ng-click] {
   cursor: pointer;
 }
+
+hot-table {
+  + footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: .5em;
+  }
+}
