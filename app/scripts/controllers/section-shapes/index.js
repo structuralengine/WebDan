@@ -23,9 +23,15 @@ angular.module('webdan')
       ctrl.settings = {
         minSpareRows: 1,
         colHeaders: true,
-        rowHeaders: true,
-        colHeaders: ['部材名'],
-        columns: [{data: 'name'}],
+        rowHeaders: false,
+        colHeaders: [
+          'No',
+          '形状名'
+        ],
+        columns: [
+          {data: 'no', type: 'numeric'},
+          {data: 'name'}
+        ],
         afterChange: function(changes, source) {
           (changes || []).forEach(function(change) {
             let [idx, prop, oldVal, newVal] = change;

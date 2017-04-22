@@ -9,7 +9,7 @@
  */
 angular.module('webdan')
   .controller('MemberSectionIndexCtrl', ['$scope', '$compile', '$log', '$q', 'Member', 'SectionShape', 'Condition', 'MemberSection',
-    function($scope, $compile, $log, '$q', Member, SectionShape, Condition, MemberSection) {
+    function($scope, $compile, $log, $q, Member, SectionShape, Condition, MemberSection) {
       var ctrl = this;
       ctrl.settings = {};
 
@@ -37,7 +37,7 @@ angular.module('webdan')
       	    /*17*/ {label: '鉄筋 曲げ加工 r<sub>1</sub>', colspan: 3},
       	    /*18*/
       	    /*19*/
-      	    /*20*/ '<span header-rowspan="2">部材数</span>',
+      	    /*20*/ '<span header-rowspan="2" class="vertical-container"><span class="vertical">部材数</span></span>',
       	    /*21*/ '<span header-rowspan="2">疲労<br>パス</span>'
           ],
           [
@@ -67,16 +67,16 @@ angular.module('webdan')
         columns: [
           /* 1*/ {data: 'm_no'        , type: 'numeric'},
           /* 2*/ {data: 'm_len'       , type: 'numeric', format: '0.000'},
-          /* 3*/ {data: 'memberId'    , type: 'numeric', format: '0.0', readOnly: true, renderer: Member.renderNo},
-          /* 4*/ {data: 'memberId'    , editor: 'select', selectOptions: Member.selectOptions, renderer: Member.renderName},
-          /* 5*/ {data: 'shapeId'     , editor: 'select', selectOptions: SectionShape.selectOptions, renderer: SectionShape.renderName},
+          /* 3*/ {data: 'g_no'        , type: 'numeric', format: '0.0'},
+          /* 4*/ {data: 'g_name'      , },
+          /* 5*/ {data: 'shape_no'    , type: 'numeric', renderer: SectionShape.renderName},
           /* 6*/ {data: 'B'           , type: 'numeric'},
           /* 7*/ {data: 'H'           , type: 'numeric'},
           /* 8*/ {data: 'Bt'          , type: 'numeric'},
           /* 9*/ {data: 't'           , type: 'numeric'},
-          /*10*/ {data: 'con_u'       , editor: 'select', selectOptions: Condition.selectOptions, renderer: Condition.renderName},
-          /*11*/ {data: 'con_l'       , editor: 'select', selectOptions: Condition.selectOptions, renderer: Condition.renderName},
-          /*12*/ {data: 'con_s'       , editor: 'select', selectOptions: Condition.selectOptions, renderer: Condition.renderName},
+          /*10*/ {data: 'con_u'       , type: 'numeric'},
+          /*11*/ {data: 'con_l'       , type: 'numeric'},
+          /*12*/ {data: 'con_s'       , type: 'numeric'},
           /*13*/ {data: 'vis_u'       , type: 'checkbox'},
           /*14*/ {data: 'vis_l'       , type: 'checkbox'},
           /*15*/ {data: 'ecsd'        , type: 'numeric'},
@@ -99,15 +99,6 @@ angular.module('webdan')
         afterRender: function() {
           $compile(this.rootElement)($scope);
         },
-      };
-
-      ctrl.settings.members = {
-        readOnly: true,
-        rowHeaders: true,
-        columns: [
-          {data: 'g_no'},
-          {data: 'g_name', allowHtml: true, renderer: 'html'}
-        ],
       };
 
       ctrl.settings.sectionShapes = {

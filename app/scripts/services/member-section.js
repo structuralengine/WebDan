@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MemberSection', ['webdanRef', '$firebaseArray', '$firebaseObject',
-    function(webdanRef, $firebaseArray, $firebaseObject) {
+  .factory('MemberSection', ['webdanRef', '$firebaseArray', '$firebaseObject', '$firebaseUtils',
+    function(webdanRef, $firebaseArray, $firebaseObject, $firebaseUtils) {
 
       var ref = webdanRef.child('memberSections');
       var memberSections = $firebaseArray(ref);
@@ -42,7 +42,7 @@ angular.module('webdan')
       }
 
       MemberSection.isEmpty = function(memberSection) {
-        return !memberSection.memberId;
+        return !memberSection.g_no && !memberSection.g_name;
       }
 
       MemberSection.selectOptions = function() {

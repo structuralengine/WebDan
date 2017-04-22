@@ -56,8 +56,16 @@ angular.module('webdan')
         return selectOptions;
       }
 
-      SectionShape.renderName = function(instance, td, row, col, prop, sectionShapeId, cellProperties) {
-        return renderProp(td, sectionShapeId, 'name');
+      SectionShape.renderName = function(instance, td, row, col, prop, sectionShapeNo, cellProperties) {
+        if (sectionShapes.$resolved) {
+          let shapes = sectionShapes.filter(function(shape) {
+            return (shape.no == sectionShapeNo);
+          });
+          if (shapes.length) {
+            angular.element(td).html(shapes[0].name);
+          }
+        }
+        return td;
       }
 
       function renderProp(td, sectionShapeId, prop) {
