@@ -1,0 +1,13 @@
+<hot-table
+  settings="{
+    colHeaders: colHeaders,
+    contextMenu: ['row_above', 'row_below', 'remove_row'],
+    afterChange: afterChange
+  }"
+  row-headers="true"
+  min-spare-rows="minSpareRows"
+  datarows="ctrl.table.b">
+
+  <hot-column data="stress" title="'断面照査に用いる応力'" type="grayedOut" read-only></hot-column>
+  <hot-column data="pickupno" title="'PickUp No.'"></hot-column>
+</hot-table>

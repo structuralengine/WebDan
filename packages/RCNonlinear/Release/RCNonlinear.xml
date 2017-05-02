@@ -173,6 +173,9 @@ RCNonlinear
 <member name="F:RCNonlinear.clsAggregate.ElasticID">
  <summary>材料番号</summary>
 </member>
+<member name="T:RCNonlinear.jsonReader`1">
+ <summary> インプットデータから XMLファイルを読み書きするクラス </summary>
+</member>
 <member name="F:RCNonlinear.PublicConfig.LIMITERVALUE1">
  <summary>釣り合い計算の際の無限ループを回避するリミッター</summary>
 </member>
@@ -405,6 +408,12 @@ RCNonlinear
 <member name="F:RCNonlinear.clsReactionY.x">
  <summary>中立軸</summary>
 </member>
+<member name="F:RCNonlinear.clsReactionY.εs">
+ <summary>引張鉄筋の降伏ひずみ</summary>
+</member>
+<member name="F:RCNonlinear.clsReactionY.εc">
+ <summary>コンクリート圧縮縁のひずみ</summary>
+</member>
 <member name="F:RCNonlinear.clsReactionY.ry1">
  <summary>軸方向鉄筋の部材接合部からの伸出しによる回転角</summary>
 </member>
@@ -413,6 +422,12 @@ RCNonlinear
 </member>
 <member name="F:RCNonlinear.clsReactionM.x">
  <summary>中立軸</summary>
+</member>
+<member name="F:RCNonlinear.clsReactionM.εs">
+ <summary>引張鉄筋のひずみ</summary>
+</member>
+<member name="F:RCNonlinear.clsReactionM.εc">
+ <summary>コンクリート圧縮縁の終局ひずみ</summary>
 </member>
 <member name="F:RCNonlinear.clsReactionM.rm1">
  <summary>軸方向鉄筋の部材接合部からの伸出しによる回転角</summary>

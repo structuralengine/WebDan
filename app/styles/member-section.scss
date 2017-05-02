@@ -1,0 +1,27 @@
+.member-section {
+  .table {
+    td, th {
+      white-space: nowrap;
+    }
+    thead {
+      .vertical {
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+        white-space: nowrap;
+      }
+    }
+  }
+  footer {
+    display: flex;
+
+    section {
+      margin-right: 2rem;
+    }
+
+    h3 {
+      a {
+        font-size: .6em;
+      }
+    }
+  }
+}
