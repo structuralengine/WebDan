@@ -25,14 +25,14 @@ Running `grunt test` will run the unit tests with karma.
 > https://goo.gl/p8K32Q
 
 
-![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/wiki/images/2017-05-02_131912.png)
+![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_131912.png)
 
-![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/wiki/images/2017-05-02_133239.png)
+![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
 
-![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/wiki/images/2017-05-02_133536.png)
+![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
 
-![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/wiki/images/2017-05-02_133725.png)
+![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
 
-![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/wiki/images/2017-05-02_134318.png)
+![画像の説明](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_134318.png)
 
 
