@@ -56,9 +56,6 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-      <HintPath>..\packages\RCNonlinear\Release\RCNonlinear.dll</HintPath>
-    </Reference>
     <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <HintPath>..\packages\RCNonlinear\Debug\RCNonlinear.dll</HintPath>
     </Reference>
@@ -141,7 +138,6 @@
       <Private>True</Private>
     </Reference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
     <Import Include="System" />
@@ -312,6 +308,12 @@
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\RCNonlinear\RCNonlinear.vbproj">
+      <Project>{9a28576d-0287-4d78-9aa3-064bcebe25d0}</Project>
+      <Name>RCNonlinear</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -352,6 +354,10 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PreBuildEvent>REM -ExecutionPolicy RemoteSigned 作成したスクリプトは署名がなくても実行可能にする 
+powershell -ExecutionPolicy RemoteSigned -File "$(SolutionDir)build.ps1"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

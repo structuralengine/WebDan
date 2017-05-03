@@ -8,7 +8,6 @@ packages/
 RCNonlinear/
 RCNonlinearTester/
 *.sln
-RCNonlinear/bin/
 RCNonlinear/My Project/
 RCNonlinear/obj/
 RCNonlinear/WebApi/
