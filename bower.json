@@ -6,6 +6,7 @@
   "private": true,
   "dependencies": {
     "bootstrap-sass": "~3.3.5",
+    "ui.bootstrap": "^2.5.0",
     "modernizr": "~2.8.1",
     "angular": "^1.6.0",
     "firebase": "^3.7.0",
