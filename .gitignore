@@ -3,19 +3,23 @@
 
 # sasa custom
 .vs/
+.tmp/
+test/
+bower_components/
+dist/
+node_modules/
 BuildProcessTemplates/
 packages/
-RCNonlinear/
 RCNonlinearTester/
-*.sln
+RCNonlinear/*.vb
+RCNonlinear/*.vbproj
+RCNonlinear/*.user
 RCNonlinear/My Project/
 RCNonlinear/obj/
-RCNonlinear/WebApi/
-*.asax
-*.vb
-*.vbproj
-*.user
-*.config
+RCNonlinear/CalcrationModule/
+RCNonlinear/DataClass/
+RCNonlinear/HelperClass/
+*.sln
 
 
 # User-specific files

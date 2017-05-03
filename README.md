@@ -13,7 +13,7 @@ Running `grunt test` will run the unit tests with karma.
 
 ## SetUp
 
-細かいことをやろうとするとドキュメントを読んでいた方がいいので、その URL を列挙しておきます。
+細かいことをやろうとするとドキュメントを読んでぁE��方がいぁE�Eで、その URL を�E挙しておきます、E
 
 > yeoman / generator-webapp
 > https://goo.gl/WYtzuO
@@ -47,19 +47,19 @@ bower, gulp の準備
 
 ### step.3
 
-![開発に必要なライブラリーの準備](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
+![開発に忁E��なライブラリーの準備](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
 
-開発に必要なライブラリーの準備
+開発に忁E��なライブラリーの準備
 
-適当な branch (例 origin/#17) に switch した後、以下を実行してください。
+適当な branch (侁Eorigin/#17) に switch した後、以下を実行してください、E
 
 > $ npm install
 > $ bower install
 
-![angular のバージョン](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
+![angular のバ�Eジョン](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
 
-内部で要求されている angular のバージョンが不整合なので、入力を要求されます。
-最新版で構わないので「2」と入力します。
+冁E��で要求されてぁE�� angular のバ�Eジョンが不整合なので、�E力を要求されます、E
+最新版で構わなぁE�Eで、E」と入力します、E
 
 
 ### step.4
@@ -67,26 +67,26 @@ bower, gulp の準備
 ![build](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_134318.png)
 
 
-1. web サイトの起動
+1. web サイト�E起勁E
 
 > $ gulp serve
 
-「 http://localhost:9000 」でアクセス可能です。
+、Ehttp://localhost:9000 」でアクセス可能です、E
 
 
-2. 配布用ファイルの作成 (dist/ ディレクトリ）
+2. 配币E��ファイルの作�E (dist/ チE��レクトリ�E�E
 
 > $ gulp
 > $ ls dist/
 
-command `gulp` により、内部で `gulp build` が実行され、dist ディレクトリが生成されます。この dist ディレクトリが公開用のファイル群です。
+command `gulp` により、�E部で `gulp build` が実行され、dist チE��レクトリが生成されます。この dist チE��レクトリが�E開用のファイル群です、E
 
 
-3. 配布用ファイルを使った web サイトの起動
+3. 配币E��ファイルを使っぁEweb サイト�E起勁E
 
 > $ gulp serve:dist
 
-公開用ファイル (dist) を使って web サイトの確認ができます。
+公開用ファイル (dist) を使って web サイト�E確認ができます、E
 
-以上です。
-これにより、開発環境が用意されました。
+以上です、E
+これにより、E��発環墁E��用意されました、E
