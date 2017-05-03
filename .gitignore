@@ -9,7 +9,6 @@ bower_components/
 dist/
 node_modules/
 BuildProcessTemplates/
-packages/
 RCNonlinearTester/
 RCNonlinear/*.vb
 RCNonlinear/*.vbproj

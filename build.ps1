@@ -1,3 +1,3 @@
 gulp
 
-Copy-Item -Path .\dist\* .\docs -Force
+Copy-Item .\dist\* .\docs -Force

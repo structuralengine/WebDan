@@ -340,7 +340,9 @@
   </ProjectExtensions>
   <PropertyGroup>
     <PreBuildEvent>REM -ExecutionPolicy RemoteSigned 作成したスクリプトは署名がなくても実行可能にする 
-powershell -ExecutionPolicy RemoteSigned -File "$(SolutionDir)build.ps1"</PreBuildEvent>
+cd $(ProjectDir)
+cd ..
+powershell -ExecutionPolicy RemoteSigned -File "build.ps1"</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
