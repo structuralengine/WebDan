@@ -56,9 +56,6 @@
       <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-      <HintPath>..\packages\RCNonlinear\Debug\RCNonlinear.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -217,7 +214,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap-theme.css.map" />
-    <None Include="scripts\jquery-3.1.1-vsdoc.js" />
     <Content Include="images\words\bars.png" />
     <Content Include="images\words\basic-information.png" />
     <Content Include="images\words\calculation-print.png" />
@@ -226,17 +222,6 @@
     <Content Include="images\words\member-section.png" />
     <Content Include="images\words\safety-factor-material-strength.png" />
     <Content Include="images\words\section-forces.png" />
-    <Content Include="scripts\bootstrap.js" />
-    <Content Include="scripts\bootstrap.min.js" />
-    <Content Include="scripts\jquery-3.1.1.js" />
-    <Content Include="scripts\jquery-3.1.1.min.js" />
-    <Content Include="scripts\jquery-3.1.1.slim.js" />
-    <Content Include="scripts\jquery-3.1.1.slim.min.js" />
-    <Content Include="scripts\modernizr-2.8.3.js" />
-    <Content Include="scripts\respond.js" />
-    <Content Include="scripts\respond.matchmedia.addListener.js" />
-    <Content Include="scripts\respond.matchmedia.addListener.min.js" />
-    <Content Include="scripts\respond.min.js" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -256,14 +241,11 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="images\yeoman.png" />
     <Content Include="index.html" />
-    <Content Include="scripts\jquery-3.1.1.slim.min.map" />
-    <Content Include="scripts\jquery-3.1.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="robots.txt" />
     <Content Include="scripts\app.js" />
-    <Content Include="scripts\services\Calc.service.js" />
     <Content Include="scripts\vendor.js" />
     <Content Include="scripts\vendor\modernizr.js" />
     <Content Include="styles\app.css" />
@@ -309,10 +291,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\RCNonlinear\RCNonlinear.vbproj">
-      <Project>{9a28576d-0287-4d78-9aa3-064bcebe25d0}</Project>
-      <Name>RCNonlinear</Name>
-    </ProjectReference>
+    <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+      <HintPath>..\RCNonlinear\bin\Release\RCNonlinear.dll</HintPath>
+    </Reference>
+    <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+      <HintPath>..\RCNonlinear\bin\Debug\RCNonlinear.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

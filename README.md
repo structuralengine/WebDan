@@ -13,7 +13,7 @@ Running `grunt test` will run the unit tests with karma.
 
 ## SetUp
 
-邏ｰ縺九＞縺薙→繧偵ｄ繧阪≧縺ｨ縺吶ｋ縺ｨ繝峨く繝･繝｡繝ｳ繝医ｒ隱ｭ繧薙〒縺・◆譁ｹ縺後＞縺・・縺ｧ縲√◎縺ｮ URL 繧貞・謖吶＠縺ｦ縺翫″縺ｾ縺吶・
+細かいことをやろうとするとドキュメントを読んでいた方がいいので、その URL を列挙しておきます。
 
 > yeoman / generator-webapp
 > https://goo.gl/WYtzuO
@@ -37,9 +37,9 @@ git clone
 
 ### step.2
 
-![bower, gulp 縺ｮ貅門ｙ](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
+![bower, gulp の準備](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
 
-bower, gulp 縺ｮ貅門ｙ
+bower, gulp の準備
 
 > $ cd webdan
 > $ npm install --global gulp-cli bower
@@ -47,46 +47,45 @@ bower, gulp 縺ｮ貅門ｙ
 
 ### step.3
 
-![髢狗匱縺ｫ蠢・ｦ√↑繝ｩ繧､繝悶Λ繝ｪ繝ｼ縺ｮ貅門ｙ](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
+![開発に必要なライブラリーの準備](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
 
-髢狗匱縺ｫ蠢・ｦ√↑繝ｩ繧､繝悶Λ繝ｪ繝ｼ縺ｮ貅門ｙ
+開発に必要なライブラリーの準備
 
-驕ｩ蠖薙↑ branch (萓・origin/#17) 縺ｫ switch 縺励◆蠕後∽ｻ･荳九ｒ螳溯｡後＠縺ｦ縺上□縺輔＞縲・
+適当な branch (例 origin/#17) に switch した後、以下を実行してください。
 
 > $ npm install
 > $ bower install
 
-![angular 縺ｮ繝舌・繧ｸ繝ｧ繝ｳ](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
+![angular のバージョンが不整合](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
 
-蜀・Κ縺ｧ隕∵ｱゅ＆繧後※縺・ｋ angular 縺ｮ繝舌・繧ｸ繝ｧ繝ｳ縺御ｸ肴紛蜷医↑縺ｮ縺ｧ縲∝・蜉帙ｒ隕∵ｱゅ＆繧後∪縺吶・
-譛譁ｰ迚医〒讒九ｏ縺ｪ縺・・縺ｧ縲・縲阪→蜈･蜉帙＠縺ｾ縺吶・
-
+内部で要求されている angular のバージョンが不整合なので、入力を要求されます。
+最新版で構わないので「2」と入力します。
 
 ### step.4
 
 ![build](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_134318.png)
 
 
-1. web 繧ｵ繧､繝医・襍ｷ蜍・
+1. web サイトの起動
 
 > $ gulp serve
 
-縲・http://localhost:9000 縲阪〒繧｢繧ｯ繧ｻ繧ｹ蜿ｯ閭ｽ縺ｧ縺吶・
+「 http://localhost:9000 」でアクセス可能です。
 
 
-2. 驟榊ｸ・畑繝輔ぃ繧､繝ｫ縺ｮ菴懈・ (dist/ 繝・ぅ繝ｬ繧ｯ繝医Μ・・
+2. 配布用ファイルの作成 (dist/ ディレクトリ）
 
 > $ gulp
 > $ ls dist/
 
-command `gulp` 縺ｫ繧医ｊ縲∝・驛ｨ縺ｧ `gulp build` 縺悟ｮ溯｡後＆繧後‥ist 繝・ぅ繝ｬ繧ｯ繝医Μ縺檎函謌舌＆繧後∪縺吶ゅ％縺ｮ dist 繝・ぅ繝ｬ繧ｯ繝医Μ縺悟・髢狗畑縺ｮ繝輔ぃ繧､繝ｫ鄒､縺ｧ縺吶・
+command `gulp` により、内部で `gulp build` が実行され、dist ディレクトリが生成されます。この dist ディレクトリが公開用のファイル群です。
 
 
-3. 驟榊ｸ・畑繝輔ぃ繧､繝ｫ繧剃ｽｿ縺｣縺・web 繧ｵ繧､繝医・襍ｷ蜍・
+3. 配布用ファイルを使った web サイトの起動
 
 > $ gulp serve:dist
 
-蜈ｬ髢狗畑繝輔ぃ繧､繝ｫ (dist) 繧剃ｽｿ縺｣縺ｦ web 繧ｵ繧､繝医・遒ｺ隱阪′縺ｧ縺阪∪縺吶・
+公開用ファイル (dist) を使って web サイトの確認ができます。
 
-莉･荳翫〒縺吶・
-縺薙ｌ縺ｫ繧医ｊ縲・幕逋ｺ迺ｰ蠅・′逕ｨ諢上＆繧後∪縺励◆縲・
+以上です。
+これにより、開発環境が用意されました

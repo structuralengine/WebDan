@@ -8,7 +8,11 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('CalculationPrintCtrl', ['$scope',
-    function ($scope) {
+  .controller('CalculationPrintCtrl', ['$scope', 'CalcService',
+    function ($scope, calcService) {
+      var ctrl = this;
+      ctrl.calcStart = function () {
+         calcService.calcStart(); 
+      };
     }
   ]);

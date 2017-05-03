@@ -20,5 +20,6 @@ angular.module('webdan', [
     'firebase',
     'firebase.ref',
     'firebase.auth.app',
+    'ui.bootstrap',
     'ngHandsontable'
   ]);
