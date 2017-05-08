@@ -163,13 +163,6 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="views\services\HTMLView.aspx.designer.vb">
-      <DependentUpon>HTMLView.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="views\services\HTMLView.aspx.vb">
-      <DependentUpon>HTMLView.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
     <Compile Include="WebApi\WebApiConfig.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
@@ -202,18 +195,6 @@
   <ItemGroup>
     <Content Include=".buildignore" />
     <Content Include=".htaccess" />
-    <Content Include="Content\bootstrap-theme.css" />
-    <Content Include="Content\bootstrap-theme.min.css" />
-    <Content Include="Content\bootstrap.css" />
-    <Content Include="Content\bootstrap.min.css" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="images\words\bars.png" />
     <Content Include="images\words\basic-information.png" />
     <Content Include="images\words\calculation-print.png" />
@@ -236,9 +217,7 @@
     <Content Include="404.html" />
     <Content Include="apple-touch-icon.png" />
     <Content Include="clientaccesspolicy.xml" />
-    <Content Include="css\style.css" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="images\yeoman.png" />
     <Content Include="index.html" />
   </ItemGroup>
@@ -251,7 +230,6 @@
     <Content Include="styles\app.css" />
     <Content Include="styles\vendor.css" />
     <Content Include="views\account.html" />
-    <Content Include="views\bars.html" />
     <Content Include="views\bars\index.html" />
     <Content Include="views\basic-information\index.html" />
     <Content Include="views\basic-information\settings.html" />
@@ -265,16 +243,13 @@
     <Content Include="views\login.html" />
     <Content Include="views\main.html" />
     <Content Include="views\member-sections\index.html" />
-    <Content Include="views\member-section\footer.html" />
     <Content Include="views\member-section\index.html" />
-    <Content Include="views\member-section\table.html" />
     <Content Include="views\members\index.html" />
     <Content Include="views\navbar.html" />
     <Content Include="views\pages\index.html" />
     <Content Include="views\safety-factor-material-strength.html" />
     <Content Include="views\section-forces.html" />
     <Content Include="views\section-shapes\index.html" />
-    <Content Include="views\services\HTMLView.aspx" />
     <Content Include="views\tabs.html" />
     <Content Include="views\words\index.html" />
     <Content Include="Web.config" />

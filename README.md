@@ -76,6 +76,7 @@ bower, gulp の準備
 2. 配布用ファイルの作成 (dist/ ディレクトリ）
 
 > $ gulp
+> 
 > $ ls dist/
 
 command `gulp` により、内部で `gulp build` が実行され、dist ディレクトリが生成されます。この dist ディレクトリが公開用のファイル群です。

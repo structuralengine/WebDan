@@ -1,3 +1,3 @@
 gulp
 
-Copy-Item .\dist\* .\docs -Force
+Copy-Item .\dist\* -destination .\docs -recurse -Force

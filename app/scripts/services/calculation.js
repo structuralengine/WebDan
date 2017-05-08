@@ -1,21 +1,20 @@
 'use strict';
 
+/**
+ * @ngdoc service
+ * @name webdan.Calculation
+ * @description
+ * # Calculation
+ * Factory in the webdan.
+ */
 angular.module('webdan')
-  .factory('CalcService', ['webdanRef', '$uibModal', 
-    function (webdanRef, $uibModal) {
+  .factory('Calculation', function() {
+    return {
+      page: function(value1, value2) {
+        // 値をセッションへ代入する。この値を calculation.aspx が読み込む
 
-      let ref = webdanRef.child('CalcService');
-      let calcService = $firebaseArray(ref);
-      
-      calcService.calcStart = function () {
-        try {
-          $uibModal.open({
-            template: '<div class="md">モーダルだよ</div>'
-          });
-        }
-        catch (e) {
-          alert(e);
-        }
+        // 呼び出す
+        return 'calculation.aspx';
       }
     }
-  ]);
+  });
