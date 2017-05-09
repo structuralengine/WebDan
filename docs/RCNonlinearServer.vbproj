@@ -163,6 +163,20 @@
     <Import Include="System.Web.UI.HtmlControls" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HTMLView.aspx.designer.vb">
+      <DependentUpon>HTMLView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="HTMLView.aspx.vb">
+      <DependentUpon>HTMLView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="SaveFile.aspx.designer.vb">
+      <DependentUpon>SaveFile.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SaveFile.aspx.vb">
+      <DependentUpon>SaveFile.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="WebApi\WebApiConfig.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
@@ -185,16 +199,24 @@
     <Compile Include="WebApi\ValuesController.vb" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="HTMLView.aspx.resx">
+      <DependentUpon>HTMLView.aspx.vb</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="My Project\Resources.resx">
       <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.vb</LastGenOutput>
       <CustomToolNamespace>My.Resources</CustomToolNamespace>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="SaveFile.aspx.resx">
+      <DependentUpon>SaveFile.aspx.vb</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Content Include=".buildignore" />
     <Content Include=".htaccess" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="HTMLView.aspx" />
     <Content Include="images\words\bars.png" />
     <Content Include="images\words\basic-information.png" />
     <Content Include="images\words\calculation-print.png" />
@@ -203,6 +225,10 @@
     <Content Include="images\words\member-section.png" />
     <Content Include="images\words\safety-factor-material-strength.png" />
     <Content Include="images\words\section-forces.png" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff2" />
     <None Include="My Project\Application.myapp">
       <Generator>MyApplicationCodeGenerator</Generator>
       <LastGenOutput>Application.Designer.vb</LastGenOutput>
@@ -216,7 +242,6 @@
     </None>
     <Content Include="404.html" />
     <Content Include="apple-touch-icon.png" />
-    <Content Include="clientaccesspolicy.xml" />
     <Content Include="favicon.ico" />
     <Content Include="images\yeoman.png" />
     <Content Include="index.html" />
@@ -224,7 +249,30 @@
   <ItemGroup>
     <Content Include="Global.asax" />
     <Content Include="robots.txt" />
+    <Content Include="SaveFile.aspx" />
     <Content Include="scripts\app.js" />
+    <Content Include="scripts\formula.js" />
+    <Content Include="scripts\jquery-1.9.0.min.js" />
+    <Content Include="scripts\tablecreator.js" />
+    <Content Include="scripts\ui\css\redmond\images\animated-overlay.gif" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_flat_55_fbec88_40x100.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_glass_75_d0e5f5_1x400.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_glass_85_dfeffc_1x400.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_gloss-wave_55_5c9ccc_500x100.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_inset-hard_100_f5f8f9_1x100.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-bg_inset-hard_100_fcfdfd_1x100.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_217bc0_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_469bdd_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_6da8d5_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_d8e7f3_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\images\ui-icons_f9bd01_256x240.png" />
+    <Content Include="scripts\ui\css\redmond\jquery-ui-1.10.0.custom.min.css" />
+    <Content Include="scripts\ui\i18n\jquery.ui.datepicker-ja.js" />
+    <Content Include="scripts\ui\js\jquery-ui-1.10.0.custom.min.js" />
     <Content Include="scripts\vendor.js" />
     <Content Include="scripts\vendor\modernizr.js" />
     <Content Include="styles\app.css" />
@@ -272,6 +320,9 @@
     <Reference Include="RCNonlinear" Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
       <HintPath>..\RCNonlinear\bin\Debug\RCNonlinear.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

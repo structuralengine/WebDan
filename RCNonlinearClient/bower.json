@@ -1,0 +1,39 @@
+{
+  "name": "webdan",
+  "appPath": "app",
+  "moduleName": "webdan",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap-sass": "~3.3.5",
+    "modernizr": "~2.8.1",
+    "angular": "^1.6.0",
+    "firebase": "^3.7.0",
+    "angularfire": "^2.3.0",
+    "bootstrap": "^3.2.0",
+    "angular-animate": "^1.6.0",
+    "angular-aria": "^1.6.0",
+    "angular-cookies": "^1.6.0",
+    "angular-messages": "^1.6.0",
+    "angular-resource": "^1.6.0",
+    "angular-route": "^1.6.0",
+    "angular-sanitize": "^1.6.0",
+    "angular-touch": "^1.6.0",
+    "angular-bootstrap":"^2.5.0",
+    "handsontable": "^0.31.2",
+    "ngHandsontable": "nghandsontable#^0.13.0"
+  },
+  "overrides": {
+    "bootstrap-sass": {
+      "main": [
+        "assets/stylesheets/_bootstrap.scss",
+        "assets/fonts/bootstrap/*",
+        "assets/javascripts/bootstrap.js"
+      ]
+    }
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0"
+  }
+}

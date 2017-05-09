@@ -1,0 +1,132 @@
+<!doctype html>
+<html class="no-js" lang="">
+  <head>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>webdan</title>
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <!-- build:css styles/vendor.css -->
+    <!-- bower:css -->
+    <link rel="stylesheet" href="/bower_components/pikaday/css/pikaday.css" />
+    <link rel="stylesheet" href="/bower_components/handsontable/dist/handsontable.css" />
+    <!-- endbower -->
+    <link rel="stylesheet" href="https://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.css">
+    <!-- endbuild -->
+
+    <!-- build:css styles/app.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/app.css">
+    <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/member-section.css">
+    <link rel="stylesheet" href="styles/words.css">
+    <link rel="stylesheet" href="styles/header-rowspan.css">
+    <!-- endbuild -->
+
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+  </head>
+  <body ng-app="webdan" ng-clock>
+    <!--[if lt IE 10]>
+      <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <div class="container">
+      <div class="header">
+        <ul class="nav nav-pills pull-right" ng-include="'views/navbar.html'"></ul>
+        <h3 class="text-muted">webdan</h3>
+        <ul class="nav nav-pills" ng-include="'views/tabs.html'" ng-controller="TabsCtrl as tabs"></ul>
+      </div>
+
+      <div class="content">
+        <div ng-view=""></div>
+      </div>
+    </div>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
+      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
+      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
+      e.src='https://www.google-analytics.com/analytics.js';
+      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
+      ga('create','UA-XXXXX-X');ga('send','pageview');
+    </script>
+
+    <!-- build:js scripts/vendor.js -->
+    <script src="https://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.js"></script>
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <script src="/bower_components/angular/angular.js"></script>
+    <script src="/bower_components/firebase/firebase.js"></script>
+    <script src="/bower_components/angularfire/dist/angularfire.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="/bower_components/angular-animate/angular-animate.js"></script>
+    <script src="/bower_components/angular-aria/angular-aria.js"></script>
+    <script src="/bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="/bower_components/angular-messages/angular-messages.js"></script>
+    <script src="/bower_components/angular-resource/angular-resource.js"></script>
+    <script src="/bower_components/angular-route/angular-route.js"></script>
+    <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="/bower_components/angular-touch/angular-touch.js"></script>
+    <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="/bower_components/moment/moment.js"></script>
+    <script src="/bower_components/numbro/numbro.js"></script>
+    <script src="/bower_components/pikaday/pikaday.js"></script>
+    <script src="/bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
+    <script src="/bower_components/handsontable/dist/handsontable.js"></script>
+    <script src="/bower_components/ngHandsontable/dist/ngHandsontable.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/plugins.js -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/app.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/routes.js"></script>
+    <script src="scripts/angularfire/config.js"></script>
+    <script src="scripts/angularfire/firebase.ref.js"></script>
+    <script src="scripts/angularfire/webdan.ref.js"></script>
+    <script src="scripts/angularfire/auth.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/chat.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/account.js"></script>
+    <script src="scripts/filters/reverse.js"></script>
+    <script src="scripts/directives/ngShowAuth.js"></script>
+    <script src="scripts/directives/ngHideAuth.js"></script>
+    <script src="scripts/controllers/tabs.js"></script>
+    <script src="scripts/controllers/design-point.js"></script>
+    <script src="scripts/controllers/fatigue.js"></script>
+    <script src="scripts/controllers/safety-factor-material-strength.js"></script>
+    <script src="scripts/controllers/section-forces.js"></script>
+    <script src="scripts/controllers/calculation-print.js"></script>
+    <script src="scripts/services/calculation.js"></script>
+    <script src="scripts/services/app.config.js"></script>
+    <script src="scripts/controllers/basic-information/index.js"></script>
+    <script src="scripts/controllers/member-section/index.js"></script>
+    <script src="scripts/controllers/bars/index.js"></script>
+    <script src="scripts/controllers/words/index.js"></script>
+    <script src="scripts/services/word.js"></script>
+    <script src="scripts/controllers/pages/index.js"></script>
+    <script src="scripts/services/page.js"></script>
+    <script src="scripts/filters/slug.js"></script>
+    <script src="scripts/directives/header-rowspan.js"></script>
+    <script src="scripts/services/member-section.js"></script>
+    <script src="scripts/services/section-shape.js"></script>
+    <script src="scripts/services/condition.js"></script>
+    <script src="scripts/services/member.js"></script>
+    <script src="scripts/controllers/section-shapes/index.js"></script>
+    <script src="scripts/controllers/conditions/index.js"></script>
+    <script src="scripts/controllers/member-sections/index.js"></script>
+    <script src="scripts/controllers/members/index.js"></script>
+    <script src="scripts/services/bar.js"></script>
+    <!-- endbuild -->
+  </body>
+</html>

@@ -1,3 +1,7 @@
+Set-Location .\RCNonlinearClient\
+
 gulp
 
-Copy-Item .\dist\* -destination .\docs -recurse -Force
+Set-Location ..
+
+Copy-Item .\RCNonlinearClient\dist\* -destination .\docs -recurse -Force

@@ -1,0 +1,102 @@
+<div class="information">
+    <fieldset>
+        <legend>部材名</legend>
+        <table class="table table-striped table-condensed">
+            <thead>
+                <tr>
+                    <th>グループ No.</th>
+                    <th>部材名</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="member in ctrl.members">
+                    <td>{{member.groupNo}}</td>
+                    <td ng-bind-html="member.name"></td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="21"><button type="button" class="btn btn-default btn-sm">リセット</button></td>
+                </tr>
+            </tfoot>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>断面形状</legend>
+        <table class="table table-striped table-condensed">
+            <tbody>
+                <tr ng-repeat="shape in ctrl.sectionShapes">
+                    <td>{{$index + 1}}</td>
+                    <td>{{shape.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+    <fieldset>
+        <legend>環境条件</legend>
+        <table class="table table-striped table-condensed">
+            <tbody>
+                <tr ng-repeat="cond in ctrl.conditions">
+                    <td>{{$index + 1}}</td>
+                    <td>{{cond.name}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </fieldset>
+</div>
+<dl class="remarks">
+    <dt>台形</dt>
+    <dd>
+        <dl>
+            <dt>B</dt>
+            <dd>上幅</dd>
+            <dt>Bt</dt>
+            <dd>下幅</dd>
+        </dl>
+    </dd>
+    <dt>円形断面は半径を入力</dt>
+    <dt>場所打ち杭 (ベントナイト泥水) は公称径を入力。</dt>
+    <dt>&epsilon;<sub>csd</sub></dt>
+    <dd>
+        <ul>
+            <li>曲げひび割れ幅の増加を考慮する数値</li>
+            <li>未入力は
+                <dl>
+                    <dt>JR 東では</dt>
+                    <dd>300 &times; 10<sup>-6</sup></dd>
+                    <dt>その他は</dt>
+                    <dd>450 &times; 10<sup>-6</sup></dd>
+                </dl>を設定</li>
+        </ul>
+    </dd>
+    <dt>K<sub>r</sub></dt>
+    <dd>
+        <ul>
+            <li>せん断耐力の計算に使用します</li>
+            <li>K<sub>r</sub> = 0.5 または</li>
+            <li>K<sub>r</sub> = 1.0 を入力</li>
+            <li>未入力は 0.5 とします</li>
+        </ul>
+    </dd>
+    <dt>r<sub>1</sub></dt>
+    <dd>
+        <ul>
+            <li>鉄筋の継手 曲げ加工による低減係数</li>
+            <li>未入力は 1.00 0.65 0.65 とします</li>
+        </ul>
+    </dd>
+    <dt>部材数</dt>
+    <dd>
+        <ul>
+            <li>断面力を部材数で除算します</li>
+            <li>100 の場合は幅 B で除算します</li>
+            <li>この場合部材幅は 1000mm で断面照査を行います</li>
+        </ul>
+    </dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+    <dt></dt>
+    <dd></dd>
+</dl>
