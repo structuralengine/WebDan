@@ -94,7 +94,7 @@ span.comment
             <td id="title" align="left">VB-Report 8.0 for .NET　-　ASP.NET Web Sample</td>
         </tr>
         <tr>
-            <td id="comment" align="left">製品一覧で選択した内容の見積書を作成するデモです。</td>
+            <td id="comment" align ="left">製品一覧で選択した内容の見積書を作成するデモです。</td>
         </tr>
     </table>
     <br />
