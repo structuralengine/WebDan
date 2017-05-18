@@ -20,7 +20,8 @@
     "angular-sanitize": "^1.6.0",
     "angular-touch": "^1.6.0",
     "file-saver": "^1.3.3",
-    "angular-moment": "^1.0.1"
+    "angular-moment": "^1.0.1",
+    "ngHandsontable": "nghandsontable#^0.13.0"
   },
   "overrides": {
     "bootstrap-sass": {

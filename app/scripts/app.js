@@ -19,5 +19,7 @@ angular.module('webdan', [
     'ngTouch',
     'firebase.ref',
     'firebase.auth.app',
-    'angularMoment'
+    'angularMoment',
+    'firebase.auth.app',
+    'ngHandsontable'
   ]);
