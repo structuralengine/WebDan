@@ -18,7 +18,9 @@
     "angular-resource": "^1.6.0",
     "angular-route": "^1.6.0",
     "angular-sanitize": "^1.6.0",
-    "angular-touch": "^1.6.0"
+    "angular-touch": "^1.6.0",
+    "file-saver": "^1.3.3",
+    "angular-moment": "^1.0.1"
   },
   "overrides": {
     "bootstrap-sass": {
