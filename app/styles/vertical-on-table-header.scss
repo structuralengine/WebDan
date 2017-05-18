@@ -1,0 +1,21 @@
+hot-table {
+  + footer {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: .5em;
+  }
+
+  thead {
+    .vertical-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      .vertical {
+        writing-mode: vertical-lr;
+        text-orientation: upright;
+        white-space: nowrap;
+      }
+    }
+  }
+}
