@@ -31,7 +31,7 @@
 
     <div class="container">
       <div class="header">
-        <ul class="nav nav-pills pull-right" ng-include="'views/navbar.html'"></ul>
+        <ul class="nav nav-pills pull-right" ng-controller="MenuCtrl as menu" ng-include="'views/menubar.html'"></ul>
         <h3 class="text-muted">webdan</h3>
         <ul class="nav nav-pills" ng-include="'views/tabs.html'" ng-controller="TabsCtrl as tabs"></ul>
       </div>
@@ -96,6 +96,8 @@
     <script src="scripts/controllers/section-forces.js"></script>
     <script src="scripts/controllers/calculation-print.js"></script>
     <script src="scripts/services/app.config.js"></script>
+    <script src="scripts/controllers/menu.js"></script>
+    <script src="scripts/services/tmp.js"></script>
     <!-- endbuild -->
   </body>
 </html>
