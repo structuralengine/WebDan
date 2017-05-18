@@ -18,12 +18,17 @@ angular.module('webdan')
       };
 
       menu.saveAsFile = function() {
-        let content = angular.toJson(tmp.data);
-        let timestamp = moment().format('YYYYMMDD-HHmmss');
-        let filename = "webdan."+ timestamp +".json";
-        let type = {type: "application/json; charset=utf-8"};
-        let file = new File([content], filename, type);
-        saveAs(file);
+        try {
+          throw 'save failed';
+        }
+        catch (e) {
+          let content = angular.toJson(tmp.data);
+          let timestamp = moment().format('YYYYMMDD-HHmmss');
+          let filename = "webdan."+ timestamp +".json";
+          let type = {type: "application/json; charset=utf-8"};
+          let file = new File([content], filename, type);
+          saveAs(file);
+        }
       }
     }
   ]);
