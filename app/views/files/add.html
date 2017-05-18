@@ -1,0 +1,15 @@
+<section class="files">
+  <h2>
+    <a href="#!/"><span class="glyphicon glyphicon-arrow-left"></span> Files</a>
+    Add File
+  </h2>
+
+  <form name="FileForm" ng-submit="ctrl.submit(FileForm)">
+    <fieldset ng-disabled="FileForm.$submitted">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" name="name" class="form-control" ng-model="ctrl.file.name" required="">
+      </div>
+    </fieldset>
+  </form>
+</section>

@@ -19,7 +19,8 @@
     "angular-route": "^1.6.0",
     "angular-sanitize": "^1.6.0",
     "angular-touch": "^1.6.0",
-    "ngHandsontable": "nghandsontable#^0.13.0"
+    "ngHandsontable": "nghandsontable#^0.13.0",
+    "lodash": "^4.17.4"
   },
   "overrides": {
     "bootstrap-sass": {
@@ -36,5 +37,8 @@
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.2.0"
+  },
+  "resolutions": {
+    "angular": "^1.6.4"
   }
 }

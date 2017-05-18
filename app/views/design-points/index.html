@@ -1,0 +1,20 @@
+<section class="design-points">
+  <h2>
+    <a href="#!/members"><span class="glyphicon glyphicon-arrow-left"></span> Members</a>
+    DesignPoints
+    <a href="#!/design-points/add"><span class="glyphicon glyphicon-plus"></span></a>
+    <a href="#!/bar1s">Bar1s <span class="glyphicon glyphicon-arrow-right"></span></a>
+    <a href="#!/fatigue1s">Fatigue1s <span class="glyphicon glyphicon-arrow-right"></span></a>
+    <a href="#!/bending-moments">BendingMoments <span class="glyphicon glyphicon-arrow-right"></span></a>
+    <a href="#!/shears">Shears <span class="glyphicon glyphicon-arrow-right"></span></a>
+  </h2>
+
+  <section ng-repeat="group in ctrl.groups" ng-init="designPoints = ctrl.groupedDesignPoints[group.$id]">
+    <h3>{{group.g_name}}</h3>
+
+    <hot-table
+      settings="ctrl.settings"
+      datarows="designPoints">
+    </hot-table>
+  </section>
+</section>

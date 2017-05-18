@@ -1,16 +1,14 @@
 <section class="members">
-  <h2>部材</h2>
+  <h2>
+    <a href="#!/groups"><span class="glyphicon glyphicon-arrow-left"></span> Groups</a>
+    Members
+    <a href="#!/members/add"><span class="glyphicon glyphicon-plus"></span></a>
+    <a href="#!/member-sections">MemberSections <span class="glyphicon glyphicon-arrow-right"></span></a>
+    <a href="#!/design-points">DesignPoints <span class="glyphicon glyphicon-arrow-right"></span></a>
+  </h2>
 
   <hot-table
-      datarows="ctrl.members"
-      settings="ctrl.settings">
+    settings="ctrl.settings"
+    datarows="ctrl.members">
   </hot-table>
-
-  <footer>
-    <button type="button" class="btn btn-primary btn-sm"
-        ng-disabled="!ctrl.isDirty()"
-        ng-click="ctrl.save()">
-      <span class="glyphicon glyphicon-plus"></span> Save
-    </button>
-  </footer>
 </section>

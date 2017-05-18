@@ -8,65 +8,76 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MemberSection', ['webdanRef', '$firebaseArray', '$firebaseObject', '$firebaseUtils',
-    function(webdanRef, $firebaseArray, $firebaseObject, $firebaseUtils) {
+  .factory('MemberSection', function (webdanRef, $fbResource, memberSectionsConfig) {
 
-      var ref = webdanRef.child('memberSections');
-      var memberSections = $firebaseArray(ref);
-      var MemberSection = {};
-
-      MemberSection.query = function() {
-        return memberSections;
-      }
-
-      MemberSection.remove = function(memberSection) {
-        let origMemberSection = memberSections.$getRecord(memberSection.$id);
-        return memberSections.$remove(origMemberSection).catch(function(err) {
-          throw err;
-        });
-      }
-
-      MemberSection.save = function(memberSection) {
-        let origMemberSection = memberSections.$getRecord(memberSection.$id);
-        let plainMemberSection = $firebaseUtils.toJSON(memberSection);
-        angular.extend(origMemberSection, plainMemberSection);
-        return memberSections.$save(origMemberSection).catch(function(err) {
-          throw err;
-        });
-      }
-
-      MemberSection.add = function(memberSection) {
-        return memberSections.$add(memberSection).catch(function(err) {
-          throw err;
-        });
-      }
-
-      MemberSection.isEmpty = function(memberSection) {
-        return !memberSection.g_no && !memberSection.g_name;
-      }
-
-      MemberSection.selectOptions = function() {
-        if (!selectOptions) {
-          selectOptions = {};
-          memberSections.forEach(function(memberSection) {
-            selectOptions[memberSection.$id] = memberSection.name;
-          });
+    let params = {
+      ref: webdanRef.child('member-sections'),
+      foreignKeysIn: {
+        parent: {
+          children: {
+            MemberSection: 'memberSections'
+          }
+        },
+        entry: {
+          parent: {
+            Member: 'member'
+          }
         }
-        return selectOptions;
       }
+    };
+    let MemberSection = $fbResource(params);
 
-      MemberSection.renderName = function(instance, td, row, col, prop, memberSectionId, cellProperties) {
-        return renderProp(td, memberSectionId, 'name');
-      }
 
-      function renderProp(td, memberSectionId, prop) {
-        let memberSection = memberSections.$getRecord(memberSectionId);
-        if (memberSection) {
-          angular.element(td).html(memberSection[prop] || '');
-        }
-        return td;
-      }
-
-      return MemberSection;
+    function init() {
+      createNestedHeaders(memberSectionsConfig);
+      createColumns(memberSectionsConfig);
     }
-  ]);
+
+    function createColumns(config, columns) {
+      if (angular.isUndefined(columns)) {
+        columns = MemberSection.columns = [];
+      }
+      angular.forEach(config, function(conf, ja) {
+        if (angular.isDefined(conf.items)) {
+          createColumns(conf.items, columns);
+        }
+        else {
+          columns.push(conf.column);
+        }
+      })
+      return columns;
+    }
+
+    function createNestedHeaders(config) {
+      let nestedHeaders = MemberSection.nestedHeaders = [];
+      let nestedHeader = [];
+      angular.forEach(config, function(conf, ja) {
+        if (angular.isUndefined(conf.items)) {
+          nestedHeader.push(ja);
+        }
+        else {
+          nestedHeader.push({
+            label: ja,
+            colspan: Object.keys(conf.items).length
+          })
+        }
+      })
+      nestedHeaders.push(nestedHeader);
+      nestedHeader = [];
+      angular.forEach(config, function(conf, ja) {
+        if (angular.isUndefined(conf.items)) {
+          nestedHeader.push('');
+        }
+        else {
+          angular.forEach(conf.items, function(cfg, ja) {
+            nestedHeader.push(ja);
+          })
+        }
+      })
+      nestedHeaders.push(nestedHeader);
+    }
+
+    init();
+
+    return MemberSection;
+  });

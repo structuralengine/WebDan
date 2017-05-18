@@ -1,0 +1,16 @@
+<section class="bar1s">
+  <h2>
+    <a href="#!/design-points"><span class="glyphicon glyphicon-arrow-left"></span> DesignPoints</a>
+    Bar1s
+    <a href="#!/bar1s/add"><span class="glyphicon glyphicon-plus"></span></a>
+  </h2>
+
+  <section ng-repeat="group in ctrl.groups" ng-init="bar1s = ctrl.groupedBar1s[group.$id]">
+    <h3>{{group.g_name}}</h3>
+
+    <hot-table
+      settings="ctrl.settings"
+      datarows="bar1s">
+    </hot-table>
+  </section>
+</section>

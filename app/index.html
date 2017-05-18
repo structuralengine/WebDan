@@ -20,9 +20,18 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/app.css">
     <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/member-section.css">
     <link rel="stylesheet" href="styles/words.css">
     <link rel="stylesheet" href="styles/header-rowspan.css">
+    <link rel="stylesheet" href="styles/files.css">
+    <link rel="stylesheet" href="styles/groups.css">
+    <link rel="stylesheet" href="styles/members.css">
+    <link rel="stylesheet" href="styles/member-sections.css">
+    <link rel="stylesheet" href="styles/section-forces.css">
+    <link rel="stylesheet" href="styles/design-points.css">
+    <link rel="stylesheet" href="styles/bar1s.css">
+    <link rel="stylesheet" href="styles/fatigue1s.css">
+    <link rel="stylesheet" href="styles/bending-moments.css">
+    <link rel="stylesheet" href="styles/shears.css">
     <!-- endbuild -->
 
     <!-- build:js scripts/vendor/modernizr.js -->
@@ -42,7 +51,7 @@
       </div>
 
       <div class="content">
-        <div ng-view=""></div>
+        <main ng-view=""></main>
       </div>
     </div>
 
@@ -87,42 +96,87 @@
     <!-- build:js scripts/app.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/routes.js"></script>
+    <script src="scripts/angularfire/auth.js"></script>
     <script src="scripts/angularfire/config.js"></script>
     <script src="scripts/angularfire/firebase.ref.js"></script>
     <script src="scripts/angularfire/webdan.ref.js"></script>
-    <script src="scripts/angularfire/auth.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/chat.js"></script>
-    <script src="scripts/controllers/login.js"></script>
+
+
     <script src="scripts/controllers/account.js"></script>
-    <script src="scripts/filters/reverse.js"></script>
-    <script src="scripts/directives/ngShowAuth.js"></script>
-    <script src="scripts/directives/ngHideAuth.js"></script>
-    <script src="scripts/controllers/tabs.js"></script>
-    <script src="scripts/controllers/design-point.js"></script>
-    <script src="scripts/controllers/fatigue.js"></script>
-    <script src="scripts/controllers/safety-factor-material-strength.js"></script>
-    <script src="scripts/controllers/section-forces.js"></script>
-    <script src="scripts/controllers/calculation-print.js"></script>
-    <script src="scripts/services/app.config.js"></script>
+    <script src="scripts/controllers/bar1s/add.js"></script>
+    <script src="scripts/controllers/bar1s/index.js"></script>
     <script src="scripts/controllers/basic-information/index.js"></script>
-    <script src="scripts/controllers/member-section/index.js"></script>
-    <script src="scripts/controllers/bars/index.js"></script>
-    <script src="scripts/controllers/words/index.js"></script>
-    <script src="scripts/services/word.js"></script>
-    <script src="scripts/controllers/pages/index.js"></script>
-    <script src="scripts/services/page.js"></script>
-    <script src="scripts/filters/slug.js"></script>
-    <script src="scripts/directives/header-rowspan.js"></script>
-    <script src="scripts/services/member-section.js"></script>
-    <script src="scripts/services/section-shape.js"></script>
-    <script src="scripts/services/condition.js"></script>
-    <script src="scripts/services/member.js"></script>
-    <script src="scripts/controllers/section-shapes/index.js"></script>
+    <script src="scripts/controllers/bending-moments/add.js"></script>
+    <script src="scripts/controllers/bending-moments/index.js"></script>
+    <script src="scripts/controllers/calculation-print.js"></script>
+    <script src="scripts/controllers/chat.js"></script>
     <script src="scripts/controllers/conditions/index.js"></script>
+    <script src="scripts/controllers/design-points/add.js"></script>
+    <script src="scripts/controllers/design-points/index.js"></script>
+    <script src="scripts/controllers/fatigue1s/add.js"></script>
+    <script src="scripts/controllers/fatigue1s/index.js"></script>
+    <script src="scripts/controllers/files/add.js"></script>
+    <script src="scripts/controllers/files/index.js"></script>
+    <script src="scripts/controllers/groups/add.js"></script>
+    <script src="scripts/controllers/groups/edit.js"></script>
+    <script src="scripts/controllers/groups/index.js"></script>
+    <script src="scripts/controllers/login.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/member-sections/add.js"></script>
     <script src="scripts/controllers/member-sections/index.js"></script>
+    <script src="scripts/controllers/members/add.js"></script>
+    <script src="scripts/controllers/members/edit.js"></script>
     <script src="scripts/controllers/members/index.js"></script>
-    <script src="scripts/services/bar.js"></script>
+    <script src="scripts/controllers/pages/index.js"></script>
+    <script src="scripts/controllers/section-forces/add.js"></script>
+    <script src="scripts/controllers/section-forces/index.js"></script>
+    <script src="scripts/controllers/section-shapes/index.js"></script>
+    <script src="scripts/controllers/shears/add.js"></script>
+    <script src="scripts/controllers/shears/index.js"></script>
+    <script src="scripts/controllers/tabs.js"></script>
+    <script src="scripts/controllers/words/index.js"></script>
+
+
+    <script src="scripts/directives/header-rowspan.js"></script>
+    <script src="scripts/directives/ngHideAuth.js"></script>
+    <script src="scripts/directives/ngShowAuth.js"></script>
+    <script src="scripts/filters/reverse.js"></script>
+    <script src="scripts/filters/slug.js"></script>
+    <script src="scripts/services/app.config.js"></script>
+    <script src="scripts/services/bar1.js"></script>
+    <script src="scripts/services/bending-moment.js"></script>
+    <script src="scripts/services/condition.js"></script>
+    <script src="scripts/services/config/bar-data-sets.js"></script>
+    <script src="scripts/services/config/bar1s.js"></script>
+    <script src="scripts/services/config/bars.columns.complex.js"></script>
+    <script src="scripts/services/config/bars.js"></script>
+    <script src="scripts/services/config/bars.nested-headers.complex.js"></script>
+    <script src="scripts/services/config/bending-moments.js"></script>
+    <script src="scripts/services/config/design-points.js"></script>
+    <script src="scripts/services/config/fatigue-data-sets.js"></script>
+    <script src="scripts/services/config/fatigue-positions.js"></script>
+    <script src="scripts/services/config/fatigue.complex.columns.js"></script>
+    <script src="scripts/services/config/fatigue.complex.nested-headers.js"></script>
+    <script src="scripts/services/config/fatigue1s.js"></script>
+    <script src="scripts/services/config/fatigues.js"></script>
+    <script src="scripts/services/config/files.js"></script>
+    <script src="scripts/services/config/groups.js"></script>
+    <script src="scripts/services/config/member-sections.js"></script>
+    <script src="scripts/services/config/members.js"></script>
+    <script src="scripts/services/config/section-forces.js"></script>
+    <script src="scripts/services/config/shears.js"></script>
+    <script src="scripts/services/design-point.js"></script>
+    <script src="scripts/services/fatigue1.js"></script>
+    <script src="scripts/services/file.js"></script>
+    <script src="scripts/services/firebase-resource.js"></script>
+    <script src="scripts/services/group.js"></script>
+    <script src="scripts/services/ht-helper.js"></script>
+    <script src="scripts/services/member-section.js"></script>
+    <script src="scripts/services/member.js"></script>
+    <script src="scripts/services/page.js"></script>
+    <script src="scripts/services/section-shape.js"></script>
+    <script src="scripts/services/shear.js"></script>
+    <script src="scripts/services/word.js"></script>
     <!-- endbuild -->
   </body>
 </html>

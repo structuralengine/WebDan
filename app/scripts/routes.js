@@ -65,39 +65,114 @@ angular.module('webdan')
         templateUrl: 'views/account.html',
         controller: 'AccountCtrl'
       })
+      .whenAuthenticated('/', {
+        templateUrl: 'views/files/index.html',
+        controller: 'FilesIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/files/add', {
+        templateUrl: 'views/files/add.html',
+        controller: 'FilesAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/groups', {
+        templateUrl: 'views/groups/index.html',
+        controller: 'GroupsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/groups/add', {
+        templateUrl: 'views/groups/add.html',
+        controller: 'GroupsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/members', {
+        templateUrl: 'views/members/index.html',
+        controller: 'MembersIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/members/add', {
+        templateUrl: 'views/members/add.html',
+        controller: 'MembersAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/member-sections', {
+        templateUrl: 'views/member-sections/index.html',
+        controller: 'MemberSectionsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/member-sections/add', {
+        templateUrl: 'views/member-sections/add.html',
+        controller: 'MemberSectionsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/design-points', {
+        templateUrl: 'views/design-points/index.html',
+        controller: 'DesignPointsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/design-points/add', {
+        templateUrl: 'views/design-points/add.html',
+        controller: 'DesignPointsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/section-forces', {
+        templateUrl: 'views/section-forces/index.html',
+        controller: 'SectionForcesIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/section-forces/add', {
+        templateUrl: 'views/section-forces/add.html',
+        controller: 'SectionForcesAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/bending-moments', {
+        templateUrl: 'views/bending-moments/index.html',
+        controller: 'BendingMomentsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/bending-moments/add', {
+        templateUrl: 'views/bending-moments/add.html',
+        controller: 'BendingMomentsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/shears', {
+        templateUrl: 'views/shears/index.html',
+        controller: 'ShearsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/shears/add', {
+        templateUrl: 'views/shears/add.html',
+        controller: 'ShearsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/bar1s', {
+        templateUrl: 'views/bar1s/index.html',
+        controller: 'Bar1sIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/bar1s/add', {
+        templateUrl: 'views/bar1s/add.html',
+        controller: 'Bar1sAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/fatigue1s', {
+        templateUrl: 'views/fatigue1s/index.html',
+        controller: 'Fatigue1sIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/fatigue1s/add', {
+        templateUrl: 'views/fatigue1s/add.html',
+        controller: 'Fatigue1sAddCtrl',
+        controllerAs: 'ctrl'
+      })
       .whenAuthenticated('/basic-information', {
         templateUrl: 'views/basic-information/index.html',
         controller: 'BasicInformationIndexCtrl',
         controllerAs: 'ctrl'
       })
-      .whenAuthenticated('/member-section', {
-        templateUrl: 'views/member-section/index.html',
-        controller: 'MemberSectionIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/design-point', {
-        templateUrl: 'views/design-point.html',
-        controller: 'DesignPointCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/bars', {
-        templateUrl: 'views/bars/index.html',
-        controller: 'BarsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/fatigue', {
-        templateUrl: 'views/fatigue.html',
-        controller: 'FatigueCtrl',
-        controllerAs: 'ctrl'
-      })
       .whenAuthenticated('/safety-factor-material-strength', {
         templateUrl: 'views/safety-factor-material-strength.html',
         controller: 'SafetyFactorMaterialStrengthCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/section-forces', {
-        templateUrl: 'views/section-forces.html',
-        controller: 'SectionForcesCtrl',
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/calculation-print', {
@@ -123,16 +198,6 @@ angular.module('webdan')
       .whenAuthenticated('/conditions', {
         templateUrl: 'views/conditions/index.html',
         controller: 'ConditionsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/member-sections', {
-        templateUrl: 'views/member-sections/index.html',
-        controller: 'MemberSectionsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/members', {
-        templateUrl: 'views/members/index.html',
-        controller: 'MembersIndexCtrl',
         controllerAs: 'ctrl'
       })
       .otherwise({redirectTo: '/basic-information'});

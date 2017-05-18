@@ -1,0 +1,25 @@
+<section class="section-forces">
+  <h2>
+    <a href="#!/section-forces"><span class="glyphicon glyphicon-arrow-left"></span> SectionForces</a>
+    Add SectionForce
+  </h2>
+
+  <form name="SectionForceForm" ng-submit="ctrl.submit(SectionForceForm)">
+    <fieldset>
+      <div class="form-group">
+        <label for="member">Member No</label>
+        <select class="form-control"
+          name="member"
+          ng-model="ctrl.sectionForce.member"
+          requred
+          ng-options="member.$id as (member.m_no +' '+ member.Group.g_name) for member in ctrl.members">
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="p_name">算出点名</label>
+        <input type="text" name="p_name" class="form-control" ng-model="ctrl.sectionForce.p_name">
+      </div>
+    </fieldset>
+  </form>
+</section>

@@ -8,10 +8,20 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MemberSectionsIndexCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+  .controller('MemberSectionsIndexCtrl', function ($scope, $log, $q, MemberSection) {
+    let ctrl = this;
+
+    ctrl.settings = {
+      colHeaders: true,
+      nestedHeaders: MemberSection.nestedHeaders,
+      columns: MemberSection.columns
+    };
+
+    function init() {
+      MemberSection.$queryAsc().then(function(memberSections) {
+        ctrl.memberSections = memberSections;
+      });
+    }
+
+    init();
   });
