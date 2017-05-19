@@ -11,26 +11,28 @@ angular.module('webdan')
   .constant('appConfig', {
     messages: {
       tabs: {
-        'basic-information'
-          : '基本データ',
-        'groups'
-          : 'グループ',
-        'members'
-          : '部材',
-        'member-sections'
-          : '部材・断面',
-        'design-points'
-          : '算出点',
-        'bars'
-          : '鉄筋配置',
-        'fatigues'
-          : '疲労データ',
-        'safety-factors-material-strengths'
-          : '安全係数・材料強度',
-        'section-forces'
-          : '断面力',
-        'calculation-print'
-          : '計算・印刷',
+        'basic-information':
+          '基本データ',
+        'groups':
+          'グループ',
+        'members':
+          '部材',
+        'member-sections':
+          '部材・断面',
+        'design-points-2':
+          'DesignPoints',
+        'design-points':
+          '算出点',
+        'bars':
+          '鉄筋配置',
+        'fatigues':
+          '疲労データ',
+        'safety-factors-material-strengths':
+          '安全係数・材料強度',
+        'section-forces':
+          '断面力',
+        'calculation-print':
+          '計算・印刷',
       },
       groups: {
         file: {
