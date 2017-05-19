@@ -115,9 +115,15 @@ angular.module('webdan')
         controller: 'GroupsAddCtrl',
         controllerAs: 'ctrl'
       })
-      .when('/help', {
-        templateUrl: 'views/help.html',
-        controller: 'HelpCtrl'
+      .whenAuthenticated('/members', {
+        templateUrl: 'views/members/index.html',
+        controller: 'MembersIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/members/add', {
+        templateUrl: 'views/members/add.html',
+        controller: 'MembersAddCtrl',
+        controllerAs: 'ctrl'
       })
       .otherwise({redirectTo: '/basic-information'});
   }])
