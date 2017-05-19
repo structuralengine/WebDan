@@ -165,6 +165,16 @@ angular.module('webdan')
         controller: 'MaterialStrengthsAddCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/material-strength-rest', {
+        templateUrl: 'views/material-strength-rest/index.html',
+        controller: 'MaterialStrengthRestIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/material-strength-rest/add', {
+        templateUrl: 'views/material-strength-rest/add.html',
+        controller: 'MaterialStrengthRestAddCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 

@@ -31,6 +31,8 @@ angular.module('webdan')
           '安全係数',
         'material-strengths':
           '材料強度',
+        'material-strength-rest':
+          '材料強度 (その他)',
         'section-forces':
           '断面力',
         'calculation-print':

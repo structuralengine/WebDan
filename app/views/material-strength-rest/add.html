@@ -1,0 +1,59 @@
+<section class="material-strength-rest">
+  <h2>
+    <a href="#!/material-strength-rest"><span class="glyphicon glyphicon-arrow-left"></span> MaterialStrengthRest</a>
+    Add MaterialStrengthRest
+  </h2>
+
+  <form name="MaterialStrengthRestForm" ng-submit="ctrl.submit(MaterialStrengthRestForm)" class="form-horizontal">
+    <fieldset ng-disabled="MaterialStrengthRestForm.$submitted">
+      <div class="row">
+        <div class="col-sm-5">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <th>Group</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="group"
+                    ng-model="ctrl.materialStrengthRest.group"
+                    ng-options="group.$id as group.g_name for group in ctrl.groups"
+                    required="">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>コンクリートの設計基準強度 f'ck (N/mm<sup>2</sup>)</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="fck" ng-model="ctrl.materialStrengthRest.fck"></td>
+              </tr>
+              <tr>
+                <th>粗骨材の最大寸法 (mm)</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="dmax" ng-model="ctrl.materialStrengthRest.dmax"></td>
+              </tr>
+              <tr>
+                <th>鋼材の表面形状係数 (通常は未入力) &kappa;1</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="k1" ng-model="ctrl.materialStrengthRest.k1"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="submit" class="btn btn-primary"
+            ng-disabled="
+              MaterialStrengthRestForm.$invalid ||
+              MaterialStrengthRestForm.$submitted ||
+              MaterialStrengthRestForm.$pristine
+            ">
+            Submit
+          </button>
+        </div>
+
+        <div class="col-sm-4">
+          <pre>{{ctrl.materialStrengthRest|json}}</pre>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</section>
