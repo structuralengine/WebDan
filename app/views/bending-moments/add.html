@@ -1,0 +1,212 @@
+<section class="bending-moments">
+  <h2>
+    <a href="#!/bending-moments"><span class="glyphicon glyphicon-arrow-left"></span> BendingMoments</a>
+    Add BendingMoment
+  </h2>
+
+  <form name="BendingMomentForm" ng-submit="ctrl.submit(BendingMomentForm)" class="form-inline">
+    <fieldset ng-disabled="BendingMomentForm.$submitted">
+      <div class="row">
+        <div class="col-sm-6">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <td>DesignPoint</td>
+                <td></td>
+                <td></td>
+                <td>
+                  <select class="form-control"
+                    name="designPoint"
+                    ng-model="ctrl.bendingMoment.designPoint"
+                    requred
+                    ng-options="designPoint.$id as (designPoint.Member.m_no +' / '+ designPoint.Member.Group.g_name +' / '+ designPoint.p_name) for designPoint in ctrl.designPoints">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <td>耐久性・使用性</td>
+                <td>縁応力検討用</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_10.Md" ng-model="ctrl.bendingMoment.case_10.pik_10.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_10.Nd" ng-model="ctrl.bendingMoment.case_10.pik_10.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>鉄筋応力度検討用</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_11.Md" ng-model="ctrl.bendingMoment.case_10.pik_11.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_11.Nd" ng-model="ctrl.bendingMoment.case_10.pik_11.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>耐久性検討用 (永久)</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_12.Md" ng-model="ctrl.bendingMoment.case_10.pik_12.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_12.Nd" ng-model="ctrl.bendingMoment.case_10.pik_12.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>耐久性検討用 (変動)</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_13.Md" ng-model="ctrl.bendingMoment.case_10.pik_13.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_13.Nd" ng-model="ctrl.bendingMoment.case_10.pik_13.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>外観検討用</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_14.Md" ng-model="ctrl.bendingMoment.case_10.pik_14.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_10.pik_14.Nd" ng-model="ctrl.bendingMoment.case_10.pik_14.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td>疲労</td>
+                <td>最小応力</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_20.pik_20.Md" ng-model="ctrl.bendingMoment.case_20.pik_20.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_20.pik_20.Nd" ng-model="ctrl.bendingMoment.case_20.pik_20.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>最大応力</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_20.pik_21.Md" ng-model="ctrl.bendingMoment.case_20.pik_21.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_20.pik_21.Nd" ng-model="ctrl.bendingMoment.case_20.pik_21.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td>破壊</td>
+                <td>設計断面力</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_30.pik_30.Md" ng-model="ctrl.bendingMoment.case_30.pik_30.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_30.pik_30.Nd" ng-model="ctrl.bendingMoment.case_30.pik_30.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>軸力最大</td>
+                <td></td>
+                <td>
+                  <input type="number" step="0.01" name="case_30.pik_31" ng-model="ctrl.bendingMoment.case_30.pik_31">
+                </td>
+              </tr>
+              <tr>
+                <td>復旧性</td>
+                <td>復旧 地震時以外</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_40.usual.Md" ng-model="ctrl.bendingMoment.case_40.usual.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_40.usual.Nd" ng-model="ctrl.bendingMoment.case_40.usual.Nd">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td>復旧 地震時</td>
+                <td>Md</td>
+                <td>
+                  <input type="number" step="0.01" name="case_40.pik_41.Md" ng-model="ctrl.bendingMoment.case_40.pik_41.Md">
+                </td>
+              </tr>
+              <tr>
+                <td></td>
+                <td></td>
+                <td>Nd</td>
+                <td>
+                  <input type="number" step="0.01" name="case_40.pik_41.Nd" ng-model="ctrl.bendingMoment.case_40.pik_41.Nd">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="submit" class="btn btn-primary"
+            ng-disabled="
+              BendingMomentForm.$invalid ||
+              BendingMomentForm.$submitted ||
+              BendingMomentForm.$pristine">
+            Submit
+          </button>
+        </div>
+
+        <div class="col-sm-4">
+          <pre>{{ctrl.bendingMoment|json}}</pre>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</section>

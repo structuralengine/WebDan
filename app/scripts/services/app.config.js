@@ -33,8 +33,10 @@ angular.module('webdan')
           '材料強度',
         'material-strength-rest':
           '材料強度 (その他)',
-        'section-forces':
-          '断面力',
+        // 'section-forces':
+        //   '断面力',
+        'bending-moments':
+          '曲げ照査',
         'calculation-print':
           '計算・印刷',
       },

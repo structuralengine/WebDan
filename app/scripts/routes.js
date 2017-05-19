@@ -175,6 +175,16 @@ angular.module('webdan')
         controller: 'MaterialStrengthRestAddCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/bending-moments', {
+        templateUrl: 'views/bending-moments/index.html',
+        controller: 'BendingMomentsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/bending-moments/add', {
+        templateUrl: 'views/bending-moments/add.html',
+        controller: 'BendingMomentsAddCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 
