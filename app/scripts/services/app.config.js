@@ -21,6 +21,19 @@ angular.module('webdan')
         'safety-factor-material-strength' : '安全係数・材料強度',
         'section-forces'                  : '断面力',
         'calculation-print'               : '計算・印刷'
+      },
+      groups: {
+        file: {
+          save: {
+            failed: ['ファイルの保存に失敗しました', 'ファイルをダウンロードします'].join('\n'),
+            nodata: ['データが読み込まれていません', 'データを新規作成するか、ファイルを読み込んでください'].join('\n')
+          }
+        }
       }
+    },
+    formats: {
+      save: {
+        timestamp: 'YYYYMMDD-HHmmss',
+      },
     }
   });
