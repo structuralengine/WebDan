@@ -9,13 +9,6 @@
  */
 angular.module('webdan')
   .constant('groupsConfig', {
-    "ファイル名": {
-      "en": "File Name",
-      "column": {
-        "data": "File.name",
-        "type": "text"
-      }
-    },
     "グループ No": {
       "en": "Group No",
       "column": {
