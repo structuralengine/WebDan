@@ -24,7 +24,7 @@ angular.module('webdan')
               Member: 'member'
             },
             children: {
-              Bar1: 'bars',
+              Bar: 'bars',
               Fatigue1: 'fatigues',
               BendingMoment: 'bendingMoments',
               Shear: 'shears',
