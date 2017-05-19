@@ -10,6 +10,7 @@
     <!-- Place favicon.ico in the root directory -->
 
     <!-- build:css styles/vendor.css -->
+    <link rel="stylesheet" href="http://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.css">
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/pikaday/css/pikaday.css" />
     <link rel="stylesheet" href="/bower_components/handsontable/dist/handsontable.css" />
@@ -20,6 +21,7 @@
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/app.css">
     <link rel="stylesheet" href="styles/header.css">
+    <link rel="stylesheet" href="styles/groups.css">
     <!-- endbuild -->
 
     <!-- build:js scripts/vendor/modernizr.js -->
@@ -39,7 +41,7 @@
       </div>
 
       <div class="content">
-        <div ng-view=""></div>
+        <main ng-view=""></main>
       </div>
     </div>
 
@@ -78,6 +80,7 @@
     <script src="/bower_components/handsontable/dist/handsontable.js"></script>
     <script src="/bower_components/ngHandsontable/dist/ngHandsontable.js"></script>
     <!-- endbower -->
+    <script src="http://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.js"></script>
     <!-- endbuild -->
 
     <!-- build:js scripts/plugins.js -->
@@ -108,6 +111,14 @@
     <script src="scripts/controllers/menu.js"></script>
     <script src="scripts/services/tmp.js"></script>
     <script src="scripts/controllers/basic-information/index.js"></script>
+    <script src="scripts/controllers/groups/index.js"></script>
+    <script src="scripts/controllers/groups/add.js"></script>
+    <script src="scripts/services/group.js"></script>
+    <script src="scripts/services/firebase-resource.js"></script>
+    <script src="scripts/controllers/help.js"></script>
+    <script src="scripts/services/ht-helper.js"></script>
+    <script src="scripts/angularfire/webdan.ref.js"></script>
+    <script src="scripts/services/config/groups.js"></script>
     <!-- endbuild -->
   </body>
 </html>

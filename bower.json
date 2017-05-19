@@ -30,6 +30,9 @@
         "assets/fonts/bootstrap/*",
         "assets/javascripts/bootstrap.js"
       ]
+    },
+    "handsontable": {
+      "Main": []
     }
   },
   "devDependencies": {

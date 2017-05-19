@@ -105,6 +105,20 @@ angular.module('webdan')
         controller: 'CalculationPrintCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/groups', {
+        templateUrl: 'views/groups/index.html',
+        controller: 'GroupsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/groups/add', {
+        templateUrl: 'views/groups/add.html',
+        controller: 'GroupsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .when('/help', {
+        templateUrl: 'views/help.html',
+        controller: 'HelpCtrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 

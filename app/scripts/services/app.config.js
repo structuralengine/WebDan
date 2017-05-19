@@ -12,6 +12,8 @@ angular.module('webdan')
     messages: {
       tabs: {
         'basic-information'               : '基本データ',
+        'groups'                          : 'グループ',
+        'members'                         : '部材',
         'member-section'                  : '部材・断面',
         'design-point'                    : '算出点',
         'bars'                            : '鉄筋配置',

@@ -1,5 +1,30 @@
-@media screen and (min-width: 768px) {
-  .container {
-      max-width: 970px;
+html, body, .container {
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  margin: 0px;
+  padding: 10px;
+}
+body {
+  > .container {
+    padding: 5px;
+
+    .header {
+      margin-bottom: 20px;
+
+      h3 {
+        padding-bottom: 5px;
+      }
+    }
+    main {
+      h2 {
+        margin-top: 5px;
+        margin-bottom: 5px;
+
+        a {
+          font-size: 50%;
+        }
+      }
+    }
   }
 }
