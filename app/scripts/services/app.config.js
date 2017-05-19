@@ -27,8 +27,10 @@ angular.module('webdan')
           '鉄筋配置',
         'fatigues':
           '疲労データ',
-        'safety-factors-material-strengths':
-          '安全係数・材料強度',
+        'safety-factors':
+          '安全係数',
+        'material-strengths':
+          '材料強度',
         'section-forces':
           '断面力',
         'calculation-print':
@@ -53,5 +55,31 @@ angular.module('webdan')
       save: {
         timestamp: 'YYYYMMDD-HHmmss',
       },
-    }
+    },
+    defaults: {
+      safetyFactors: {
+        keys: [
+          "耐久性",
+          "安全性 (疲労破壊)",
+          "安全性 (破壊)",
+          "復旧性 (損傷 地震時以外)",
+          "復旧性 (損傷 地震時)",
+        ],
+        considerRebars: [
+          {
+            no: 1,
+            name: "引張鉄筋",
+          },{
+            no: 2,
+            name: "引張＋圧縮",
+          },{
+            no: 3,
+            name: "全周鉄筋",
+          },{
+            no: 4,
+            name: "All 位置指定",
+          },
+        ],
+      },
+    },
   });

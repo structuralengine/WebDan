@@ -145,6 +145,16 @@ angular.module('webdan')
         controller: 'FatiguesAddCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/safety-factors', {
+        templateUrl: 'views/safety-factors/index.html',
+        controller: 'SafetyFactorsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/safety-factors/add', {
+        templateUrl: 'views/safety-factors/add.html',
+        controller: 'SafetyFactorsAddCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 
