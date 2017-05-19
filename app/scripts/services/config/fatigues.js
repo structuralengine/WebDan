@@ -17,14 +17,6 @@ angular.module('webdan')
         type: 'text',
       },
     },
-    "用途": {
-      en: "purpose",
-      var: "purpose",
-      column: {
-        data: 'purpose',
-        type: 'text',
-      },
-    },
     "S<sub>A</sub>/S<sub>C</sub>": {
       en: "S<sub>A</sub>/S<sub>C</sub>",
       var: "SASC",
@@ -41,49 +33,55 @@ angular.module('webdan')
         type: 'numeric',
       },
     },
-    "&kappa; = 0.06": {
+    "&kappa;": {
       en: "&kappa; = 0.06",
-      var: "kappa006",
+      var: "kappa",
       items: {
-        "N<sub>A</sub>": {
-          en: "N<sub>A</sub>",
-          var: "NA",
-          column: {
-            data: 'kappa006.NA',
-            type: 'numeric',
+        "0.06": {
+          en: "0.06",
+          var: "0.06",
+          items: {
+            "N<sub>A</sub>": {
+              en: "N<sub>A</sub>",
+              var: "NA",
+              column: {
+                data: 'kappa.006.NA',
+                type: 'numeric',
+              },
+            },
+            "N<sub>B</sub>": {
+              en: "N<sub>B</sub>",
+              var: "NB",
+              column: {
+                data: 'kappa.006.NB',
+                type: 'numeric',
+              },
+            },
           },
         },
-        "N<sub>B</sub>": {
-          en: "N<sub>B</sub>",
-          var: "NB",
-          column: {
-            data: 'kappa006.NB',
-            type: 'numeric',
+        "0.12": {
+          en: "0.12",
+          var: "0.12",
+          items: {
+            "N<sub>A</sub>": {
+              en: "N<sub>A</sub>",
+              var: "NA",
+              column: {
+                data: 'kappa.012.NA',
+                type: 'numeric',
+              },
+            },
+            "N<sub>B</sub>": {
+              en: "N<sub>B</sub>",
+              var: "NB",
+              column: {
+                data: 'kappa.012.NB',
+                type: 'numeric',
+              },
+            },
           },
         },
-      }
-    },
-    "&kappa; = 0.12": {
-      en: "&kappa; = 0.12",
-      var: "kappa012",
-      items: {
-        "N<sub>A</sub>": {
-          en: "N<sub>A</sub>",
-          var: "NA",
-          column: {
-            data: 'kappa012.NA',
-            type: 'numeric',
-          },
-        },
-        "N<sub>B</sub>": {
-          en: "N<sub>B</sub>",
-          var: "NB",
-          column: {
-            data: 'kappa012.NB',
-            type: 'numeric',
-          },
-        },
-      }
+      },
     },
     "複線補正 r<sub>2</sub>": {
       en: "r<sub>2</sub>",

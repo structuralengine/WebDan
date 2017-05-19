@@ -28,7 +28,8 @@ angular.module('webdan')
       });
 
       function init() {
-        Fatigue.nestedHeaders = HtHelper.parseNestedHeaders(fatiguesConfig, 1);
+        Fatigue.nestedHeaders = HtHelper.parseNestedHeaders(fatiguesConfig, 2);
+        Fatigue.nestedHeaders[2].splice(0, 0, '', '', '');
         Fatigue.columns = HtHelper.parseColumns(fatiguesConfig);
       }
 
