@@ -1,0 +1,88 @@
+<section class="material-strengths">
+  <h2>
+    <a href="#!/material-strengths"><span class="glyphicon glyphicon-arrow-left"></span> MaterialStrengths</a>
+    Add MaterialStrength
+  </h2>
+
+  <form name="MaterialStrengthForm" ng-submit="ctrl.submit(MaterialStrengthForm)" class="form-horizontal">
+    <fieldset ng-disabled="MaterialStrengthForm.$submitted">
+      <div class="row">
+        <div class="col-sm-4">
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <th>Group</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="group"
+                    ng-model="ctrl.materialStrength.group"
+                    ng-options="group.$id as group.g_name for group in ctrl.groups"
+                    required="">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>鉄筋</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="bar"
+                    ng-model="ctrl.materialStrength.bar"
+                    ng-options="bar.name as bar.name for bar in ctrl.bars"
+                    required="">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>Range</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="range"
+                    ng-model="ctrl.materialStrength.range"
+                    ng-options="range.value as range.name for range in ctrl.ranges"
+                    required="">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>軸方向鉄筋</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="rebar" ng-model="ctrl.materialStrength.rebar"></td>
+              </tr>
+              <tr>
+                <th>側方向鉄筋</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="sidebar" ng-model="ctrl.materialStrength.sidebar"></td>
+              </tr>
+              <tr>
+                <th>スターラップ</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="hoop" ng-model="ctrl.materialStrength.hoop"></td>
+              </tr>
+              <tr>
+                <th>折曲げ鉄筋</th>
+                <th></th>
+                <td><input type="number" class="form-control" name="bent" ng-model="ctrl.materialStrength.bent"></td>
+              </tr>
+            </tbody>
+          </table>
+
+          <button type="submit" class="btn btn-primary"
+            ng-disabled="
+              MaterialStrengthForm.$invalid ||
+              MaterialStrengthForm.$submitted ||
+              MaterialStrengthForm.$pristine
+            ">
+            Submit
+          </button>
+        </div>
+
+        <div class="col-sm-4">
+          <pre>{{ctrl.materialStrength|json}}</pre>
+        </div>
+      </div>
+    </fieldset>
+  </form>
+</section>

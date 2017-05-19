@@ -57,6 +57,30 @@ angular.module('webdan')
       },
     },
     defaults: {
+      materialStrengths: {
+        bars: [
+          {
+            name: "降伏強度",
+            en: "Yield strength",
+            value: "",
+          },{
+            name: "設計引張強度",
+            en: "Tension strength",
+            value: "",
+          },
+        ],
+        ranges: [
+          {
+            name: "D29 以上",
+            en: "above x",
+            value: "above",
+          },{
+            name: "D25 以下",
+            en: "below x",
+            value: "below",
+          },
+        ],
+      },
       safetyFactors: {
         keys: [
           "耐久性",
