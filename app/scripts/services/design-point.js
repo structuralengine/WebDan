@@ -25,7 +25,7 @@ angular.module('webdan')
             },
             children: {
               Bar: 'bars',
-              Fatigue1: 'fatigues',
+              Fatigue: 'fatigues',
               BendingMoment: 'bendingMoments',
               Shear: 'shears',
             }

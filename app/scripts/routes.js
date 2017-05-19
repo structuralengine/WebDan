@@ -70,11 +70,6 @@ angular.module('webdan')
         controller: 'BasicInformationIndexCtrl',
         controllerAs: 'ctrl'
       })
-      .whenAuthenticated('/fatigue', {
-        templateUrl: 'views/fatigue.html',
-        controller: 'FatigueCtrl',
-        controllerAs: 'ctrl'
-      })
       .whenAuthenticated('/safety-factor-material-strength', {
         templateUrl: 'views/safety-factor-material-strength.html',
         controller: 'SafetyFactorMaterialStrengthCtrl',
@@ -138,6 +133,16 @@ angular.module('webdan')
       .whenAuthenticated('/bars/add', {
         templateUrl: 'views/bars/add.html',
         controller: 'BarsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/fatigues', {
+        templateUrl: 'views/fatigues/index.html',
+        controller: 'FatiguesIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/fatigues/add', {
+        templateUrl: 'views/fatigues/add.html',
+        controller: 'FatiguesAddCtrl',
         controllerAs: 'ctrl'
       })
       .otherwise({redirectTo: '/basic-information'});
