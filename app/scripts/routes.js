@@ -185,6 +185,16 @@ angular.module('webdan')
         controller: 'BendingMomentsAddCtrl',
         controllerAs: 'ctrl'
       })
+      .whenAuthenticated('/shears', {
+        templateUrl: 'views/shears/index.html',
+        controller: 'ShearsIndexCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/shears/add', {
+        templateUrl: 'views/shears/add.html',
+        controller: 'ShearsAddCtrl',
+        controllerAs: 'ctrl'
+      })
       .otherwise({redirectTo: '/basic-information'});
   }])
 

@@ -11,7 +11,7 @@ angular.module('webdan')
   .factory('DesignPoint', ['webdanRef', '$fbResource', 'designPointsConfig',
     function(webdanRef, $fbResource, designPointsConfig) {
 
-      let params = {
+      let DesignPoint = $fbResource({
         ref: webdanRef.child('design-points'),
         foreignKeysIn: {
           parent: {
@@ -36,9 +36,7 @@ angular.module('webdan')
             }
           }
         }
-      };
-      let DesignPoint = $fbResource(params);
-
+      });
 
       function init() {
         DesignPoint.nestedHeaders = createNestedHeaders();

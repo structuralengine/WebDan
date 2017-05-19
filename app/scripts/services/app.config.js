@@ -37,6 +37,8 @@ angular.module('webdan')
         //   '断面力',
         'bending-moments':
           '曲げ照査',
+        'shears':
+          'せん断照査',
         'calculation-print':
           '計算・印刷',
       },
