@@ -19,7 +19,7 @@ angular.module('webdan')
 
       menu.saveAsFile = function() {
         try {
-          let message = appConfig.messages.groups.file;
+          let messages = appConfig.messages.groups.file;
           if (tmp.data) {
             throw messages.save.failed;
           }
