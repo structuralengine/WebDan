@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SafetyFactorsAddCtrl', ['$scope', '$log', '$filter', 'SafetyFactor', 'Group',
-    function($scope, $log, $filter, SafetyFactor, Group) {
+  .controller('SafetyFactorsAddCtrl', ['$scope', '$log', '$filter', 'SafetyFactor', 'Group', 'appConfig',
+    function($scope, $log, $filter, SafetyFactor, Group, appConfig) {
       let ctrl = this;
 
       ctrl.submit = function(form) {
@@ -24,6 +24,8 @@ angular.module('webdan')
       }
 
       function init() {
+        ctrl.keys = appConfig.defaults.safetyFactors.keys;
+        ctrl.considerRebars = appConfig.defaults.safetyFactors.considerRebars
         ctrl.groups = Group.query();
       }
 

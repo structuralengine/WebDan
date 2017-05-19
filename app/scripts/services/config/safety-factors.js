@@ -27,6 +27,7 @@ angular.module('webdan')
           column: {
             data: "m_rc",
             type: "numeric",
+            format: "0.00",
           },
         },
         "&gamma;<sub>s</sub>": {
@@ -35,6 +36,7 @@ angular.module('webdan')
           column: {
             data: "m_rs",
             type: "numeric",
+            format: "0.00",
           },
         },
         "&gamma;<sub>bs</sub>": {
@@ -43,6 +45,7 @@ angular.module('webdan')
           column: {
             data: "m_rbs",
             type: "numeric",
+            format: "0.00",
           },
         },
       },
@@ -57,6 +60,7 @@ angular.module('webdan')
           column: {
             data: "s_rc",
             type: "numeric",
+            format: "0.00",
           },
         },
         "&gamma;<sub>s</sub>": {
@@ -65,6 +69,7 @@ angular.module('webdan')
           column: {
             data: "s_rs",
             type: "numeric",
+            format: "0.00",
           },
         },
         "&gamma;<sub>bc</sub>": {
@@ -73,6 +78,7 @@ angular.module('webdan')
           column: {
             data: "s_rbd",
             type: "numeric",
+            format: "0.00",
           },
         },
         "&gamma;<sub>bs</sub>": {
@@ -81,6 +87,7 @@ angular.module('webdan')
           column: {
             data: "s_rbs",
             type: "numeric",
+            format: "0.00",
           },
         },
         "&gamma;<sub>b</sub>": {
@@ -89,6 +96,7 @@ angular.module('webdan')
           column: {
             data: "s_rb",
             type: "numeric",
+            format: "0.00",
           },
         },
       },
@@ -103,6 +111,7 @@ angular.module('webdan')
           column: {
             data: "ri",
             type: "numeric",
+            format: "0.00",
           },
         },
       },

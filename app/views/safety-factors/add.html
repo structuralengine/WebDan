@@ -8,110 +8,90 @@
     <fieldset ng-disabled="SafetyFactorForm.$submitted">
       <div class="row">
         <div class="col-sm-4">
-          <div class="form-group">
-            <label class="col-sm-3 control-label" for="name">Group</label>
-            <div class="col-sm-9">
-              <select class="form-control"
-                name="group"
-                ng-model="ctrl.safetyFactor.group"
-                ng-options="group.$id as group.g_name for group in ctrl.groups"
-                required="">
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="col-sm-3 control-label" for="name">Name</label>
-            <div class="col-sm-9">
-              <input type="text" class="form-control" name="name" ng-model="ctrl.safetyFactor.name" required="">
-            </div>
-          </div>
-
-          <fieldset>
-            <legend>曲げ 安全係数</legend>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="m_rc">&gamma;<sub>c</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="m_rc" ng-model="ctrl.safetyFactor.m_rc" required="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="m_rs">&gamma;<sub>s</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="m_rs" ng-model="ctrl.safetyFactor.m_rs" required="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="m_rbs">&gamma;<sub>bs</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="m_rbs" ng-model="ctrl.safetyFactor.m_rc" required="">
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>せん断 安全係数</legend>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="s_rc">&gamma;<sub>c</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="s_rc" ng-model="ctrl.safetyFactor.s_rc" required="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="s_rs">&gamma;<sub>s</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="s_rs" ng-model="ctrl.safetyFactor.s_rs" required="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="s_rbd">&gamma;<sub>bc</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="s_rbd" ng-model="ctrl.safetyFactor.s_rbd" required="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="s_rbs">&gamma;<sub>bs</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="s_rbs" ng-model="ctrl.safetyFactor.s_rbs" required="">
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="s_rb">&gamma;<sub>b</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="s_rb" ng-model="ctrl.safetyFactor.s_rb" required="">
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>係数</legend>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="ri">&gamma;<sub>i</sub></label>
-              <div class="col-sm-9">
-                <input type="number" step="0.01" class="form-control" name="ri" ng-model="ctrl.safetyFactor.ri" required="">
-              </div>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend></legend>
-
-            <div class="form-group">
-              <label class="col-sm-3 control-label" for="consider_rebar">鉄筋配置</label>
-              <div class="col-sm-9">
-                <input type="text" class="form-control" name="consider_rebar" ng-model="ctrl.safetyFactor.consider_rebar" required="">
-              </div>
-            </div>
-          </fieldset>
+          <table class="table table-condensed">
+            <tbody>
+              <tr>
+                <th>Group</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="group"
+                    ng-model="ctrl.safetyFactor.group"
+                    ng-options="group.$id as group.g_name for group in ctrl.groups"
+                    required="">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>Name</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="name"
+                    ng-model="ctrl.safetyFactor.name"
+                    ng-options="key for key in ctrl.keys"
+                    required="">
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th>曲げ 安全係数</th>
+                <th>&gamma;<sub>c</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="m_rc" ng-model="ctrl.safetyFactor.m_rc"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th>&gamma;<sub>s</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="m_rs" ng-model="ctrl.safetyFactor.m_rs"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th>&gamma;<sub>bs</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="m_rbs" ng-model="ctrl.safetyFactor.m_rbs"></td>
+              </tr>
+              <tr>
+                <th>せん断 安全係数</th>
+                <th>&gamma;<sub>c</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="s_rc" ng-model="ctrl.safetyFactor.s_rc"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th>&gamma;<sub>s</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="s_rs" ng-model="ctrl.safetyFactor.s_rs"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th>&gamma;<sub>bc</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="s_rbd" ng-model="ctrl.safetyFactor.s_rbd"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th>&gamma;<sub>bs</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="s_rbs" ng-model="ctrl.safetyFactor.s_rbs"></td>
+              </tr>
+              <tr>
+                <th></th>
+                <th>&gamma;<sub>b</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="s_rb" ng-model="ctrl.safetyFactor.s_rb"></td>
+              </tr>
+              <tr>
+                <th>係数</th>
+                <th>&gamma;<sub>i</sub></th>
+                <td><input type="number" step="0.01" class="form-control" name="ri" ng-model="ctrl.safetyFactor.ri"></td>
+              </tr>
+              <tr>
+                <th>鉄筋配置</th>
+                <th></th>
+                <td>
+                  <select class="form-control"
+                    name="consider_rebar"
+                    ng-model="ctrl.safetyFactor.consider_rebar"
+                    ng-options="considerRebar.value as considerRebar.name for considerRebar in ctrl.considerRebars">
+                  </select>
+                </td>
+              </tr>
+            </tbody>
+          </table>
 
           <button type="submit" class="btn btn-primary"
             ng-disabled="
