@@ -1,0 +1,23 @@
+<section>
+  <h2>CalculationPrint</h2>
+
+  <form name="CalculationPrintForm" ng-submit="ctrl.submit(CalculationPrintForm)">
+    <fieldset>
+      <legend>計算・出力内容</legend>
+      <div ng-include="'views/calculation-print/content.html'"></div>
+
+      <legend>照査</legend>
+      <div ng-include="'views/calculation-print/check.html'"></div>
+
+      <legend>部材</legend>
+      <div ng-include="'views/calculation-print/groups.html'"></div>
+
+      <legend>性能照査</legend>
+      <div ng-include="'views/calculation-print/calc_start.html'"></div>
+
+      <legend>処理</legend>
+      <div ng-include="'views/calculation-print/print.html'"></div>
+      <div ng-include="'views/calculation-print/print.others.html'"></div>
+    </fieldset>
+  </form>
+</section>

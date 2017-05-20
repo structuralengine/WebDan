@@ -80,11 +80,6 @@ angular.module('webdan')
         controller: 'SectionForcesCtrl',
         controllerAs: 'ctrl'
       })
-      .whenAuthenticated('/calculation-print', {
-        templateUrl: 'views/calculation-print.html',
-        controller: 'CalculationPrintCtrl',
-        controllerAs: 'ctrl'
-      })
       .whenAuthenticated('/groups', {
         templateUrl: 'views/groups/index.html',
         controller: 'GroupsIndexCtrl',
@@ -198,6 +193,11 @@ angular.module('webdan')
       .whenAuthenticated('/shears/add', {
         templateUrl: 'views/shears/add.html',
         controller: 'ShearsAddCtrl',
+        controllerAs: 'ctrl'
+      })
+      .whenAuthenticated('/calculation-print', {
+        templateUrl: 'views/calculation-print/index.html',
+        controller: 'CalculationPrintIndexCtrl',
         controllerAs: 'ctrl'
       })
       .otherwise({redirectTo: '/basic-information'});
