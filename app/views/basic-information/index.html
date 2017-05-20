@@ -1,34 +1,43 @@
 <section class="basic-information index panes">
-  <div class="pane tables row">
-    <section class="col-sm-6">
-      <h3>ピックアップ (曲げ耐力用)</h3>
+  <form name="BasicInformationForm" ng-submit="ctrl.submit(BasicInformationForm)">
+    <fieldset ng-disabled="BasicInformationForm.$submitted">
+      <legend>ピックアップ (曲げ耐力用)</legend>
       <div ng-include="'views/basic-information/table.a.html'"></div>
-    </section>
 
-    <section class="col-sm-6">
-      <h3>ピックアップ (せん断耐力用)</h3>
+      <legend>ピックアップ (せん断耐力用)</legend>
       <div ng-include="'views/basic-information/table.b.html'"></div>
-    </section>
-  </div>
 
-  <footer>
-    <p>せん断耐力の耐久性変動応力を ①-② で算出する場合は、③ の Pick Up No を 0 とする。</p>
+      <section class="footer">
+        <p>せん断耐力の耐久性変動応力を ①-② で算出する場合は、③ の Pick Up No を 0 とする。</p>
 
-    <div class="checkbox">
-      <label>
-        <input type="checkbox" name="vietnam_railway"> Vietnam_Railway
-      </label>
-    </div>
-    <div class="buttons">
-      <button type="button" class="btn btn-default">標準の見出し</button>
-      <button type="button" class="btn btn-default">テンプレート読み込み</button>
-      <button type="button" class="btn btn-default">テンプレート保存</button>
-      <button type="button" class="btn btn-default">PickUp File (.pik) を開く</button>
-      <button type="button" class="btn btn-default">PickUp.dat 読み込み</button>
-    </div>
-  </footer>
+        <div class="checkbox">
+          <label>
+            <input type="checkbox" name="vietnam_railway"> Vietnam_Railway
+          </label>
+        </div>
+        <div class="buttons">
+          <button type="button" class="btn btn-default">標準の見出し</button>
+          <button type="button" class="btn btn-default">テンプレート読み込み</button>
+          <button type="button" class="btn btn-default">テンプレート保存</button>
+          <button type="button" class="btn btn-default">PickUp File (.pik) を開く</button>
+          <button type="button" class="btn btn-default">PickUp.dat 読み込み</button>
+        </div>
+      </section>
 
-  <div class="pane settings">
-    <div ng-include="'views/basic-information/settings.html'"></div>
-  </div>
+      <legend>仕様</legend>
+      <div ng-include="'views/basic-information/spec.html'"></div>
+
+      <legend>水平部材の軸方向力</legend>
+      <div ng-include="'views/basic-information/axial.html'"></div>
+
+      <legend>引張鉄筋の着目位置</legend>
+      <div ng-include="'views/basic-information/rebar.html'"></div>
+
+      <legend>その他</legend>
+      <div ng-include="'views/basic-information/others.html'"></div>
+
+      <legend>疲労データ</legend>
+      <div ng-include="'views/basic-information/fatigue.html'"></div>
+    </fieldset>
+  </form>
 </section>
