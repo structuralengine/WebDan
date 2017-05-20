@@ -27,7 +27,7 @@ angular.module('webdan')
         format: "0.1"
       },
     },
-    "鋼材の表面形状係数 (通常は未入力) &kappa;1": {
+    "鋼材の表面形状係数 (通常は未入力) &kappa;<sub>1</sub>": {
       en: "",
       var: "k1",
       column: {

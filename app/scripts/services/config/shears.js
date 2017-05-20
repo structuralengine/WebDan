@@ -17,24 +17,24 @@ angular.module('webdan')
           en: "",
           var: "pik_10",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_10.pik_10.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_10.pik_10.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_10.pik_10.Nd",
                 type: "numeric",
@@ -47,24 +47,24 @@ angular.module('webdan')
           en: "for examination on stress intensity of reinforcing bar",
           var: "pik_12",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_10.pik_11.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_10.pik_11.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_10.pik_11.Nd",
                 type: "numeric",
@@ -77,24 +77,24 @@ angular.module('webdan')
           en: "Check of durability (Permanent Load)",
           var: "pik_13",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_10.pik_12.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_10.pik_12.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_10.pik_12.Nd",
                 type: "numeric",
@@ -113,24 +113,24 @@ angular.module('webdan')
           en: "Failure by fatigue (Min Stress)",
           var: "pik_20",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_20.pik_20.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_20.pik_20.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_20.pik_20.Nd",
                 type: "numeric",
@@ -143,24 +143,24 @@ angular.module('webdan')
           en: "Failure by fatigue (Max Stress)",
           var: "pik_21",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_20.pik_21.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_20.pik_21.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_20.pik_21.Nd",
                 type: "numeric",
@@ -179,24 +179,24 @@ angular.module('webdan')
           en: "ultimate limit state",
           var: "pik_30",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_30.pik_30.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_30.pik_30.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_30.pik_30.Nd",
                 type: "numeric",
@@ -214,24 +214,24 @@ angular.module('webdan')
         "復旧 地震時以外": {
           en: "usual",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_40.usual.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_40.usual.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_40.usual.Nd",
                 type: "numeric",
@@ -244,24 +244,24 @@ angular.module('webdan')
           en: "Seismic",
           var: "pik_41",
           items: {
-            "Vd": {
-              en: "Vd",
+            "V<sub>d</sub>": {
+              en: "V<sub>d</sub>",
               column: {
                 data: "case_40.pik_41.Vd",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Md": {
-              en: "Md",
+            "M<sub>d</sub>": {
+              en: "M<sub>d</sub>",
               column: {
                 data: "case_40.pik_41.Md",
                 type: "numeric",
                 format: "0.00"
               }
             },
-            "Nd": {
-              en: "Nd",
+            "N<sub>d</sub>": {
+              en: "N<sub>d</sub>",
               column: {
                 data: "case_40.pik_41.Nd",
                 type: "numeric",
