@@ -8,18 +8,34 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsIndexCtrl', ['$scope', '$log', 'DesignPoint', 'Group',
+  .controller('DesignPointsIndex1Ctrl', ['$scope', '$log', 'DesignPoint', 'Group',
     function ($scope, $log, DesignPoint, Group) {
       let ctrl = this;
 
-      ctrl.settings = {
-        rowHeaders: true,
-        colHeaders: true,
-        nestedHeaders: DesignPoint.nestedHeaders,
-        columns: DesignPoint.columns
-      };
-
       function init() {
+        let nestedHeaders = [[
+          '部材番号',
+          '部材名',
+          '算出点名',
+        ]];
+
+        let columns = [
+          {
+            data: 'Member.m_no',
+            type: 'numeric',
+          },{
+            data: 'Member.Group.g_name',
+          },
+          DesignPoint.columns[2],
+        ];
+
+        ctrl.settings = {
+          rowHeaders: true,
+          colHeaders: true,
+          nestedHeaders: nestedHeaders,
+          columns: columns,
+        };
+
         DesignPoint.$queryAsc().then(function(designPoints) {
           ctrl.groupedDesignPoints = _.groupBy(designPoints, function(designPoint) {
             return designPoint.Member.group;

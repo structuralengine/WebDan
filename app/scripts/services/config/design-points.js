@@ -9,13 +9,6 @@
  */
 angular.module('webdan')
   .constant('designPointsConfig', {
-    "部材番号": {
-      en: "Member No",
-      column: {
-        data: "Member.m_no",
-        type: "numeric",
-      },
-    },
     "算出点": {
       en: "Point",
       column: {
