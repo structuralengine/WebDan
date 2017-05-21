@@ -8,38 +8,54 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BasicInformationIndexCtrl', ['$scope',
-    function ($scope) {
-      var ctrl = this;
+  .controller('BasicInformationIndexCtrl', ['$scope', 'basicInformationConfig',
+    function ($scope, basicInformationConfig) {
+      let ctrl = this;
 
-      ctrl.table = {};
-      ctrl.table.a = [
-        {'stress': '耐久性 縁引張応力度検討用', 'pickupno': null},
-        {'stress': '耐久性 鉄筋応力度検討用', 'pickupno': null},
-        {'stress': '耐久性 (永久荷重)', 'pickupno': null},
-        {'stress': '耐久性 (変動荷重)', 'pickupno': null},
+      function createPickUpMoment() {
+        let pickupMomentConfig = basicInformationConfig['pickup.moment'];
+        let items = pickupMomentConfig.items;
+        let data = Object.keys(items).map(function(key) {
+          return [
+            items[key].ja,
+            null,
+          ];
+        });
+        ctrl.settings.pickUpMoment = {
+          rowHeaders: true,
+          colHeaders: ['断面照査に用いる応力', 'PickUp No.'],
+          data: data,
+        };
+      }
 
-        {'stress': '使用性 (外観ひび割れ)', 'pickupno': null},
+      function createPickUpShearForce() {
+        let pickUpShearForceConfig = basicInformationConfig['pickup.shearforce'];
+        let items = pickUpShearForceConfig.items;
+        let data = Object.keys(items).map(function(key) {
+          return [
+            items[key].ja,
+            null,
+          ];
+        });
+        ctrl.settings.pickUpShearForce = {
+          rowHeaders: true,
+          colHeaders: ['断面照査に用いる応力', 'PickUp No.'],
+          data: data,
+        };
+      }
 
-        {'stress': '安全性 (疲労破壊) 最小応力', 'pickupno': null},
-        {'stress': '安全性 (疲労破壊) 最大応力', 'pickupno': null},
-        {'stress': '安全性 (破壊)', 'pickupno': null},
+      function createSpec() {
+        ctrl.settings.spec = basicInformationConfig.spec;
+      }
 
-        {'stress': '復旧性 (損傷 地震時以外)', 'pickupno': null},
-        {'stress': '復旧性 (損傷 地震時)', 'pickupno': null},
+      function init() {
+        ctrl.settings = {};
+        createPickUpMoment();
+        createPickUpShearForce();
+        createSpec();
 
-      ];
-      ctrl.table.b = [
-        {'stress': '耐久性 せん断ひび割れ検討判定用', 'pickupno': null},
-        {'stress': '耐久性 (永久荷重)', 'pickupno': null},
-        {'stress': '耐久性 (変動荷重)', 'pickupno': null},
+      }
 
-        {'stress': '安全性 (疲労破壊) 最小応力', 'pickupno': null},
-        {'stress': '安全性 (疲労破壊) 最大応力', 'pickupno': null},
-        {'stress': '安全性 (破壊)', 'pickupno': null},
-
-        {'stress': '復旧性 (損傷 地震時以外)', 'pickupno': null},
-        {'stress': '復旧性 (損傷 地震時)', 'pickupno': null},
-      ];
+      init();
     }
   ]);
