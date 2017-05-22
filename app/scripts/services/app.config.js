@@ -19,8 +19,6 @@ angular.module('webdan')
           '部材',
         'member-sections':
           '部材・断面',
-        'design-points-2':
-          'DesignPoints',
         'design-points':
           '算出点',
         'bars':

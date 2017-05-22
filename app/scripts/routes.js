@@ -111,16 +111,11 @@ angular.module('webdan')
         controllerAs: 'ctrl'
       })
       .whenAuthenticated('/design-points', {
-        templateUrl: 'views/design-points/index.1.html',
-        controller: 'DesignPointsIndex1Ctrl',
+        templateUrl: 'views/design-points/index.html',
+        controller: 'DesignPointsIndexCtrl',
         controllerAs: 'ctrl'
       })
-      .whenAuthenticated('/design-points-2', {
-        templateUrl: 'views/design-points/index.2.html',
-        controller: 'DesignPointsIndex2Ctrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/design-points-2/add', {
+      .whenAuthenticated('/design-points/add', {
         templateUrl: 'views/design-points/add.html',
         controller: 'DesignPointsAddCtrl',
         controllerAs: 'ctrl'
