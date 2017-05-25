@@ -70,20 +70,19 @@ angular.module('webdan')
           ctrl.shearForceData = createPickUpData(basicInformation, 'shearforce');
         });
 
-        ctrl.settings = {
-          pickup: {
-            items: {
-              moment: angular.copy(htSettings),
-              shearforce: angular.copy(htSettings),
-            }
-          },
-          spec: angular.copy(BasicInformation.config.spec),
-          limit: angular.copy(BasicInformation.config.limit),
-          axis: angular.copy(BasicInformation.config.axis),
-          rebar: angular.copy(BasicInformation.config.rebar),
-          conditions: angular.copy(BasicInformation.config.conditions),
-          fatigue: angular.copy(BasicInformation.config.fatigue),
-        };
+        let settings = ctrl.settings = {};
+        angular.forEach(BasicInformation.config, function(config, key) {
+          if (key == 'pickup') {
+            let hts = angular.copy(htSettings);
+            settings.pickup = {items: {
+              moment: hts,
+              shearforce: hts,
+            }};
+          }
+          else {
+            settings[key] = angular.copy(BasicInformation.config[key]);
+          }
+        });
       }
 
       init();

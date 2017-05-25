@@ -1,11 +1,5 @@
-<div class="checkbox">
+<div class="checkbox" ng-repeat="(key, config) in ctrl.settings.check">
   <label>
-    <input type="checkbox" name="calc_m" ng-model="ctrl.calculationPrint.calc_m"> 曲げ
-  </label>
-</div>
-
-<div class="checkbox">
-  <label>
-    <input type="checkbox" name="calc_s" ng-model="ctrl.calculationPrint.calc_s"> せん断
+    <input type="checkbox" name="{{key}}" ng-model="ctrl.calculationPrint[key]"> {{config.label}}
   </label>
 </div>

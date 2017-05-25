@@ -122,18 +122,23 @@ angular.module('webdan')
           }
 
           Firebase.get = function(key, collection) {
-            collection = collection || coll;
-            if (collection.$resolved) {
-              return collection.$getRecord(key);
+            if (!key) {
+              return $firebaseObject(ref);
             }
             else {
-              throw 'firebase collection not resolved';
+              collection = collection || coll;
+              if (collection.$resolved) {
+                return collection.$getRecord(key);
+              }
+              else {
+                throw 'firebase collection not resolved';
+              }
             }
           }
 
           Firebase.$get = function(key, collection) {
             if (!key) {
-              return $firebaseObject(ref).$loaded(function(entry) {
+              return Firebase.get(key).$loaded(function(entry) {
                 return entry;
               });
             }
