@@ -1,4 +1,4 @@
-<div class="radio" ng-repeat="(key, config) in ctrl.settings.spec.spec">
+<div class="radio" ng-repeat="(key, config) in ctrl.settings.spec.items.spec.items">
   <label>
     <input type="radio" name="spec" ng-model="ctrl.basicInformation.spec.spec" ng-value="key"> {{config.label}}
   </label>
@@ -7,7 +7,7 @@
 <div class="options">
   <div class="checkbox">
     <label>
-      <input type="checkbox" name="con_12" ng-model="ctrl.basicInformation.spec.con_12"> {{ctrl.settings.spec.con_12.label}}
+      <input type="checkbox" name="con_12" ng-model="ctrl.basicInformation.spec.con_12"> {{ctrl.settings.spec.items.con_12.label}}
     </label>
   </div>
 </div>

@@ -1,29 +1,5 @@
-<div class="checkbox">
+<div class="checkbox" ng-repeat="(key, config) in ctrl.settings.fatigue.items">
   <label>
-    <input type="checkbox" name=""> 変動応力は圧縮応力を考慮する (圧縮応力～引張応力の応力振幅)。チェックなしは、圧縮応力は 0 として応力振幅とする
+    <input type="checkbox" name="{{key}}" ng-model="ctrl.basicInformation[key]"> {{config.label}}
   </label>
 </div>
-<div class="checkbox">
-  <label>
-    <input type="checkbox" name=""> 変動応力度は最小応力と最大応力を用いた鉄筋応力度の差とする。チェックなしは、変動応力を用いた応力度を変動応力度とする。
-  </label>
-</div>
-
-<dl class="form-inline">
-  <dt>疲労寿命 N</dt>
-  <dd><input type="number" name="" class="form-control"> &sdot;10<sup>6</sup> 回</dd>
-
-  <dt>設計耐用年数 T</dt>
-  <dd><input type="number" name="" class="form-control"> 年</dd>
-
-  <dt>1日当たり列車本数</dt>
-  <dd>
-    <dl class="">
-      <dt>j<sub>A</sub></dt>
-      <dd><input type="number" name="" class="form-control"> 本/日</dd>
-
-      <dt>j<sub>B</sub></dt>
-      <dd><input type="number" name="" class="form-control"> 本/日</dd>
-    </dl>
-  </dd>
-</dl>

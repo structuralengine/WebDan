@@ -41,7 +41,8 @@ angular.module('webdan')
       }
 
       function createPickUpData(data, key) {
-        let config = BasicInformation.config.pickup[key] || {};
+        let configPath = 'pickup.items.'+ key +'.items';
+        let config = _.get(BasicInformation.config, configPath, {});
         return Object.keys(config).map(function(prop) {
           let path = 'pickup.'+ key +'.'+ prop;
           return {
@@ -50,17 +51,6 @@ angular.module('webdan')
             value: _.get(data, path, null),
           };
         });
-      }
-
-      ctrl._unchecked = function(config, checked) {
-        if (config) {
-          let data = ctrl.basicInformation;
-          angular.forEach(config, function(conf, key) {
-            if (checked === false) {
-              data[key] = false;
-            }
-          })
-        }
       }
 
       ctrl.isDisabled = function(key, key2) {
@@ -82,14 +72,17 @@ angular.module('webdan')
 
         ctrl.settings = {
           pickup: {
-            moment: angular.copy(htSettings),
-            shearforce: angular.copy(htSettings),
+            items: {
+              moment: angular.copy(htSettings),
+              shearforce: angular.copy(htSettings),
+            }
           },
           spec: angular.copy(BasicInformation.config.spec),
           limit: angular.copy(BasicInformation.config.limit),
           axis: angular.copy(BasicInformation.config.axis),
           rebar: angular.copy(BasicInformation.config.rebar),
           conditions: angular.copy(BasicInformation.config.conditions),
+          fatigue: angular.copy(BasicInformation.config.fatigue),
         };
       }
 

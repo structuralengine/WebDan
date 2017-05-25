@@ -1,0 +1,6 @@
+<div class="checkbox" ng-repeat="(key, config) in ctrl.settings.conditions.items">
+  <label>
+    <input type="checkbox" name="{{key}}" ng-model="ctrl.basicInformation.conditions[key]">
+    <span ng-bind-html="config.label"></span>
+  </label>
+</div>
