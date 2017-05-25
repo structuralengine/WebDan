@@ -9,89 +9,95 @@
  */
 angular.module('webdan')
   .constant('basicInformationConfig', {
-    "pickup.moment": {
-      en: "pick up (moment)",
-      ja: "ピックアップ (曲げ耐力用)",
+    "pickup": {
+      en: "",
+      ja: "",
       items: {
-        "pik_m10": {
-          en: "for examination of tensile extreme fiber stress intensity",
-          ja: "耐久性 縁引張応力度検討用",
+        "moment": {
+          en: "pick up (moment)",
+          ja: "ピックアップ (曲げ耐力用)",
+          items: {
+            "pik_m10": {
+              en: "for examination of tensile extreme fiber stress intensity",
+              ja: "耐久性 縁引張応力度検討用",
+            },
+            "pik_m11": {
+              en: "for examination on stress intensity of reinforcing bar",
+              ja: "耐久性 鉄筋応力度検討用",
+            },
+            "pik_m12": {
+              en: "Check of durability(Permanent Load)",
+              ja: "耐久性 (永久荷重)",
+            },
+            "pik_m13": {
+              en: "Check of durability(Variable Load)",
+              ja: "耐久性 (変動荷重)",
+            },
+            "pik_m14": {
+              en: "Check for serviceability(visible crack)",
+              ja: "使用性 (外観ひび割れ)",
+            },
+            "pik_m20": {
+              en: "Failure by fatigue(Min Stress)",
+              ja: "安全性 (疲労破壊) 最小応力",
+            },
+            "pik_m21": {
+              en: "Failure by fatigue(Max Stress)",
+              ja: "安全性 (疲労破壊) 最大応力",
+            },
+            "pik_m30": {
+              en: "ultimate limit state",
+              ja: "安全性 (破壊)",
+            },
+            "pik_m40": {
+              en: "Restorability (usual)",
+              ja: "復旧性 (損傷 地震時以外)",
+            },
+            "pik_m41": {
+              en: "Restorability (Seismic)",
+              ja: "復旧性 (損傷 地震時)",
+            },
+          }
         },
-        "pik_m11": {
-          en: "for examination on stress intensity of reinforcing bar",
-          ja: "耐久性 鉄筋応力度検討用",
-        },
-        "pik_m12": {
-          en: "Check of durability(Permanent Load)",
-          ja: "耐久性 (永久荷重)",
-        },
-        "pik_m13": {
-          en: "Check of durability(Variable Load)",
-          ja: "耐久性 (変動荷重)",
-        },
-        "pik_m14": {
-          en: "Check for serviceability(visible crack)",
-          ja: "使用性 (外観ひび割れ)",
-        },
-        "pik_m20": {
-          en: "Failure by fatigue(Min Stress)",
-          ja: "安全性 (疲労破壊) 最小応力",
-        },
-        "pik_m21": {
-          en: "Failure by fatigue(Max Stress)",
-          ja: "安全性 (疲労破壊) 最大応力",
-        },
-        "pik_m30": {
-          en: "ultimate limit state",
-          ja: "安全性 (破壊)",
-        },
-        "pik_m40": {
-          en: "Restorability (usual)",
-          ja: "復旧性 (損傷 地震時以外)",
-        },
-        "pik_m41": {
-          en: "Restorability (Seismic)",
-          ja: "復旧性 (損傷 地震時)",
+        "shearforce": {
+          en: "pick up (shear force)",
+          ja: "ピックアップ (せん断耐力用)",
+          items: {
+            "pik_s10": {
+              en: "Determine whether checking of shear crack can be omitted",
+              ja: "耐久性 せん断ひび割れ検討判定用",
+            },
+            "pik_s11": {
+              en: "Check of durability(Permanent Load)",
+              ja: "耐久性 (永久荷重)",
+            },
+            "pik_s12": {
+              en: "Check of durability(Variable Load)",
+              ja: "耐久性 (変動荷重)",
+            },
+            "pik_s20": {
+              en: "Failure by fatigue(Min Stress)",
+              ja: "安全性 (疲労破壊) 最小応力",
+            },
+            "pik_s21": {
+              en: "Failure by fatigue(Max Stress)",
+              ja: "安全性 (疲労破壊) 最大応力",
+            },
+            "pik_s30": {
+              en: "ultimate limit state",
+              ja: "安全性 (破壊)",
+            },
+            "pik_s40": {
+              en: "Restorability (usual)",
+              ja: "復旧性 (損傷 地震時以外)",
+            },
+            "pik_s41": {
+              en: "Restorability (Seismic)",
+              ja: "復旧性 (損傷 地震時)",
+            },
+          },
         },
       }
-    },
-    "pickup.shearforce": {
-      en: "pick up (shear force)",
-      ja: "ピックアップ (せん断耐力用)",
-      items: {
-        "pik_s10": {
-          en: "Determine whether checking of shear crack can be omitted",
-          ja: "耐久性 せん断ひび割れ検討判定用",
-        },
-        "pik_s11": {
-          en: "Check of durability(Permanent Load)",
-          ja: "耐久性 (永久荷重)",
-        },
-        "pik_s12": {
-          en: "Check of durability(Variable Load)",
-          ja: "耐久性 (変動荷重)",
-        },
-        "pik_s20": {
-          en: "Failure by fatigue(Min Stress)",
-          ja: "安全性 (疲労破壊) 最小応力",
-        },
-        "pik_s21": {
-          en: "Failure by fatigue(Max Stress)",
-          ja: "安全性 (疲労破壊) 最大応力",
-        },
-        "pik_s30": {
-          en: "ultimate limit state",
-          ja: "安全性 (破壊)",
-        },
-        "pik_s40": {
-          en: "Restorability (usual)",
-          ja: "復旧性 (損傷 地震時以外)",
-        },
-        "pik_s41": {
-          en: "Restorability (Seismic)",
-          ja: "復旧性 (損傷 地震時)",
-        },
-      },
     },
     "buttons": {
       items: {
@@ -121,24 +127,28 @@ angular.module('webdan')
       en: "specification",
       ja: "仕様",
       items: {
-        "jr": {
-          en: "JR companies",
-          ja: "JR 各社",
+        "spec": {
+          en: "",
+          ja: "",
+          items: {
+            "jr": {
+              en: "JR companies",
+              ja: "JR 各社",
+            },
+            "jrtt": {
+              en: "japan railway construction transport and technology agency",
+              ja: "鉄道・運輸機構",
+            },
+            "jrc": {
+              en: "East Japan Railway Company",
+              ja: "JR 東日本",
+            },
+            "jes": {
+              en: "Jointed Element Structure",
+              ja: "JES 工法",
+            },
+          },
         },
-        "jrtt": {
-          en: "japan railway construction transport and technology agency",
-          ja: "鉄道・運輸機構",
-        },
-        "jrc": {
-          en: "East Japan Railway Company",
-          ja: "JR 東日本",
-        },
-        "jes": {
-          en: "Jointed Element Structure",
-          ja: "JES 工法",
-        },
-      },
-      options: {
         "con_12": {
           en: "EARTH STRUCTURE",
           ja: "抗土圧構造モード",

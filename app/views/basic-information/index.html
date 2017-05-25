@@ -1,30 +1,40 @@
 <section class="basic-information index panes">
-  <form name="BasicInformationForm" ng-submit="ctrl.submit(BasicInformationForm)">
-    <fieldset ng-disabled="BasicInformationForm.$submitted">
-      <legend>ピックアップ (曲げ耐力用)</legend>
-      <div ng-include="'views/basic-information/pickup.moment.html'"></div>
+  <div class="row">
+    <div class="col-sm-6">
+      <form name="BasicInformationForm" ng-submit="ctrl.submit(BasicInformationForm)">
+        <fieldset ng-disabled="BasicInformationForm.$submitted">
+          <legend>ピックアップ (曲げ耐力用)</legend>
+          <div ng-include="'views/basic-information/pickup.moment.html'"></div>
 
-      <legend>ピックアップ (せん断耐力用)</legend>
-      <div ng-include="'views/basic-information/pickup.shearforce.html'"></div>
-      <div ng-include="'views/basic-information/buttons.html'"></div>
+          <legend>ピックアップ (せん断耐力用)</legend>
+          <div ng-include="'views/basic-information/pickup.shearforce.html'"></div>
 
-      <legend>仕様</legend>
-      <div ng-include="'views/basic-information/spec.html'"></div>
+          <legend>Buttons</legend>
+          <div ng-include="'views/basic-information/buttons.html'"></div>
 
-      <legend>使用性 (外観) ひび割れ幅</legend>
-      <div ng-include="'views/basic-information/limit.html'"></div>
+          <legend>仕様</legend>
+          <div ng-include="'views/basic-information/spec.html'"></div>
 
-      <legend>水平部材の軸方向力</legend>
-      <div ng-include="'views/basic-information/axial.html'"></div>
+          <legend>使用性 (外観) ひび割れ幅</legend>
+          <div ng-include="'views/basic-information/limit.html'"></div>
 
-      <legend>引張鉄筋の着目位置</legend>
-      <div ng-include="'views/basic-information/rebar.html'"></div>
+          <legend>水平部材の軸方向力</legend>
+          <div ng-include="'views/basic-information/axial.html'"></div>
 
-      <legend>その他</legend>
-      <div ng-include="'views/basic-information/others.html'"></div>
+          <legend>引張鉄筋の着目位置</legend>
+          <div ng-include="'views/basic-information/rebar.html'"></div>
 
-      <legend>疲労データ</legend>
-      <div ng-include="'views/basic-information/fatigue.html'"></div>
-    </fieldset>
-  </form>
+          <legend>その他</legend>
+          <div ng-include="'views/basic-information/others.html'"></div>
+
+          <legend>疲労データ</legend>
+          <div ng-include="'views/basic-information/fatigue.html'"></div>
+        </fieldset>
+      </form>
+    </div>
+
+    <div class="col-sm-6">
+      <pre>{{ctrl.basicInformation|json}}</pre>
+    </div>
+  </div>
 </section>

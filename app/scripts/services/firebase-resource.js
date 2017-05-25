@@ -132,21 +132,28 @@ angular.module('webdan')
           }
 
           Firebase.$get = function(key, collection) {
-            return Firebase.$query().then(function() {
-              try {
-                let entry = Firebase.get(key, collection);
-                if (entry) {
-                  return $q.resolve(entry);
+            if (!key) {
+              return $firebaseObject(ref).$loaded(function(entry) {
+                return entry;
+              });
+            }
+            else {
+              return Firebase.$query().then(function() {
+                try {
+                  let entry = Firebase.get(key, collection);
+                  if (entry) {
+                    return $q.resolve(entry);
+                  }
+                  else {
+                    throw 'no such entry with key: '+ key;
+                  }
                 }
-                else {
-                  throw 'no such entry with key: '+ key;
+                catch (err) {
+                  $log.error(err);
+                  return $q.reject(err);
                 }
-              }
-              catch (err) {
-                $log.error(err);
-                return $q.reject(err);
-              }
-            })
+              })
+            }
           }
 
           Firebase.$getAsc = function(key, collection) {
