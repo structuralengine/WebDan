@@ -28,8 +28,18 @@ angular.module('webdan')
       });
 
       function init() {
-        MaterialStrengthRest.nestedHeaders = HtHelper.parseNestedHeaders(materialStrengthRestConfig, 0);
-        MaterialStrengthRest.columns = HtHelper.parseColumns(materialStrengthRestConfig);
+        let config = MaterialStrengthRest.config = {};
+        parseConfig(materialStrengthRestConfig, config);
+      }
+
+      function parseConfig(items, config) {
+        config = config || {};
+        Object.keys(items).forEach(function(key) {
+          config[key] = {
+            key: key,
+            label: items[key].ja || null,
+          };
+        });
       }
 
       init();

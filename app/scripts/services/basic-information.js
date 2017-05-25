@@ -17,10 +17,10 @@ angular.module('webdan')
 
       function init() {
         let config = BasicInformation.config = {};
-        parseItems(basicInformationConfig, config);
+        parseConfig(basicInformationConfig, config);
       }
 
-      function parseItems(items, config) {
+      function parseConfig(items, config) {
         config = config || {};
         Object.keys(items).forEach(function(key) {
           config[key] = {
@@ -29,7 +29,7 @@ angular.module('webdan')
           };
           if (angular.isDefined(items[key].items)) {
             config[key].items = {};
-            parseItems(items[key].items, config[key].items);
+            parseConfig(items[key].items, config[key].items);
           }
         });
       }
