@@ -52,6 +52,27 @@ angular.module('webdan')
         });
       }
 
+      ctrl._unchecked = function(config, checked) {
+        if (config) {
+          let data = ctrl.basicInformation;
+          angular.forEach(config, function(conf, key) {
+            if (checked === false) {
+              data[key] = false;
+            }
+          })
+        }
+      }
+
+      ctrl.isDisabled = function(key, key2) {
+        if (ctrl.basicInformation && ctrl.basicInformation.axis && key2) {
+          if (ctrl.basicInformation.axis === key) {
+            return false;
+          }
+          ctrl.basicInformation[key2] = false;
+        }
+        return true;
+      }
+
       function init() {
         BasicInformation.$get().then(function(basicInformation) {
           ctrl.basicInformation = basicInformation || {};
@@ -66,6 +87,9 @@ angular.module('webdan')
           },
           spec: angular.copy(BasicInformation.config.spec),
           limit: angular.copy(BasicInformation.config.limit),
+          axis: angular.copy(BasicInformation.config.axis),
+          rebar: angular.copy(BasicInformation.config.rebar),
+          conditions: angular.copy(BasicInformation.config.conditions),
         };
       }
 

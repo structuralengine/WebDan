@@ -23,15 +23,13 @@ angular.module('webdan')
       function parseItems(items, config) {
         config = config || {};
         Object.keys(items).forEach(function(key) {
+          config[key] = {
+            key: key,
+            label: items[key].ja || null
+          };
           if (angular.isDefined(items[key].items)) {
-            config[key] = {};
-            parseItems(items[key].items, config[key]);
-          }
-          else {
-            config[key] = {
-              key: key,
-              label: items[key].ja || null
-            };
+            config[key].items = {};
+            parseItems(items[key].items, config[key].items);
           }
         });
       }

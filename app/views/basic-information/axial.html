@@ -1,18 +1,19 @@
-<div class="radio">
+<div class="radio" ng-repeat="(key, config) in ctrl.settings.axis.items">
   <label>
-    <input type="radio" name="optionsRadios"> 考慮する
+    <input type="radio" name="axis"
+        ng-model="ctrl.basicInformation.axis"
+        ng-value="key"
+        ng-change="ctrl.unchecked(config.items, (ctrl.basicInformation.axis === key))">
+      {{config.label}}
   </label>
-  <label>
-    <input type="checkbox" name=""> 軸力 最大最小についても照査する
-  </label>
-</div>
-<div class="radio">
-  <label>
-    <input type="radio" name="optionsRadios"> 考慮しない
-  </label>
-</div>
-<div class="radio">
-  <label>
-    <input type="radio" name="optionsRadios"> 引張 (マイナス) のみ考慮
-  </label>
+
+  <span ng-if="config.items" ng-repeat="(key2, config2) in config.items">
+    <label>
+      <input type="checkbox"
+          name="{{key2}}"
+          ng-model="ctrl.basicInformation[key2]"
+          ng-disabled="ctrl.isDisabled(key, key2)">
+        {{config2.label}}
+    </label>
+  </span>
 </div>

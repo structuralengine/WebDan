@@ -191,7 +191,7 @@ angular.module('webdan')
     },
     "rebar": {
       en: "calculation point of tensile bar",
-      ja: "軸力 最大最小についても照査する",
+      ja: "",
       items: {
         "rebar_01": {
           en: "Centroid",
@@ -229,19 +229,19 @@ angular.module('webdan')
         },
         "con_05": {
           en: "Calculate the axial compressive strength N'oud of pillars / piles (member factor γb = 1.3)",
-          ja: "柱・杭の軸方向圧縮耐力 N'oud を計算する (部材係数 γb=1.3)",
+          ja: "柱・杭の軸方向圧縮耐力 N'<sub>oud</sub> を計算する (部材係数 &gamma;<sub>b</sub>=1.3)",
         },
         "con_06": {
-          en: "In the study of durability shear crack, Vd <0.7 * Vcd is not omitted",
-          ja: "耐久性のせん断ひび割れの検討で Vd < 0.7 * Vcd でも省略しない",
+          en: "In the study of durability shear crack, Vd &lt; 0.7 * Vcd is not omitted",
+          ja: "耐久性のせん断ひび割れの検討で V<sub>d</sub> &lt; 0.7 &sdot; V<sub>cd</sub> でも省略しない",
         },
         "con_07": {
           en: "Do not consider σc <= 0.4 * fcd",
-          ja: "σc <= 0.4 * fcd の検討を行わない",
+          ja: "&sigma;<sub>c</sub> &le; 0.4 &sdot; f<sub>cd</sub> の検討を行わない",
         },
         "con_08": {
           en: "Shear strength: Mud used for calculation of βn does not consider axial force",
-          ja: "せん断耐力:βn の算定に用いる Mud は軸力を考慮しない",
+          ja: "せん断耐力: &beta;<sub>n</sub> の算定に用いる M<sub>ud</sub> は軸力を考慮しない",
         },
       },
     },
