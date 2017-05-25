@@ -4,8 +4,16 @@
     <a href="#!/groups/add"><span class="glyphicon glyphicon-plus"></span></a>
   </h2>
 
-  <hot-table
-    settings="ctrl.settings"
-    datarows="ctrl.groups">
-  </hot-table>
+  <div class="row">
+    <div class="col-sm-6">
+      <hot-table
+        settings="ctrl.settings"
+        datarows="ctrl.groups">
+      </hot-table>
+    </div>
+
+    <div class="col-sm-6">
+      <pre>{{ctrl.groups|json}}</pre>
+    </div>
+  </div>
 </section>

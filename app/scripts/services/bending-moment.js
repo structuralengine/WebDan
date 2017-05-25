@@ -12,7 +12,7 @@ angular.module('webdan')
     function (webdanRef, $fbResource, bendingMomentsConfig) {
 
       let BendingMoment = $fbResource({
-        ref: webdanRef.child('bending-moments'),
+        ref: webdanRef.child('bendingMoments'),
         foreignKeysIn: {
           parent: {
             children: {

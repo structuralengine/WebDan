@@ -12,7 +12,7 @@ angular.module('webdan')
     function(webdanRef, $fbResource, designPointsConfig) {
 
       let DesignPoint = $fbResource({
-        ref: webdanRef.child('design-points'),
+        ref: webdanRef.child('designPoints'),
         foreignKeysIn: {
           parent: {
             children: {

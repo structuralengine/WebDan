@@ -9,6 +9,7 @@
  */
 angular.module('webdan')
   .service('HtHelper', function () {
+
     this.parseNestedHeaders = function(config, maxDepth) {
       let depth = 0;
       let nestedHeaders = [];
@@ -65,4 +66,16 @@ angular.module('webdan')
         }
       });
     }
+
+    this.getChangeRows = function(changes, hot) {
+      let rows = changes.map(function(change) {
+        return change[0];
+      });
+      let uniqRows = Array.from(new Set(rows));
+
+      return uniqRows.map(function(row) {
+        return hot.getSourceDataAtRow(row);
+      });
+    }
+
   });

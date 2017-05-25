@@ -12,7 +12,7 @@ angular.module('webdan')
     function(webdanRef, $fbResource, memberSectionsConfig) {
 
       let params = {
-        ref: webdanRef.child('member-sections'),
+        ref: webdanRef.child('memberSections'),
         foreignKeysIn: {
           parent: {
             children: {
