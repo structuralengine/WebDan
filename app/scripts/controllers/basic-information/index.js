@@ -65,6 +65,7 @@ angular.module('webdan')
             shearforce: angular.copy(htSettings),
           },
           spec: angular.copy(BasicInformation.config.spec),
+          limit: angular.copy(BasicInformation.config.limit),
         };
       }
 

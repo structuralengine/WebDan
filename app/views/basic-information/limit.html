@@ -1,4 +1,6 @@
 <div class="form-group">
-  <label for="limit">制限値 (mm)</label>
-  <input type="number" name="" class="form-control">
+  <label for="limit_m05">{{ctrl.settings.limit.limit_m05.label}}</label>
+  <input type="number" step="0.01"  class="form-control"
+      name="limit_m05"
+      ng-model="ctrl.basicInformation.limit.limit_m05">
 </div>
