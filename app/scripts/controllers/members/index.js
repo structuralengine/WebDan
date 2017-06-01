@@ -50,18 +50,22 @@ angular.module('webdan')
               })
             }
           },
-          afterRemoveRow: function(index, amount, logicalRows) {
-            Member.remove();
+          beforeRemoveRow: function(index, amount, logicalRows) {
+            let get = this.getSourceDataAtRow;
+            logicalRows.map(function(row) {
+              let member = get(row);
+              return member.id;
+            })
+            .forEach(function(id) {
+              Member.remove(id);
+            });
           },
         };
 
-        ctrl.members = Member.query()
-          .filter(function(m) {
-            return m.id;
-          })
-          .sort(function(m1, m2) {
-            return m1.g_no - m2.g_no;
-          });
+        let members = Member.query();
+        ctrl.members = $filter('orderBy')(members, function(member) {
+          return member.g_no;
+        });
       }
 
       init();

@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('GroupsIndexCtrl', ['$scope', '$log', 'Group', 'HtHelper',
-    function ($scope, $log, Group, HtHelper) {
+  .controller('GroupsIndexCtrl', ['$scope', '$filter', '$log', 'Group', 'HtHelper',
+    function ($scope, $filter, $log, Group, HtHelper) {
       let ctrl = this;
 
       ctrl.settings = {
@@ -30,17 +30,27 @@ angular.module('webdan')
             let hot = this;
             changes.forEach(function(change) {
               let group = hot.getSourceDataAtRow(change[0]);
-              Group.save(group, true);
+              Group.save(group);
             })
           }
         },
-        afterRemoveRow: function(index, amount, logicalRows) {
-          Group.remove(null, true);
+        beforeRemoveRow: function(index, amount, logicalRows) {
+          let get = this.getSourceDataAtRow;
+          logicalRows.map(function(row) {
+            let group = get(row);
+            return group.id;
+          })
+          .forEach(function(id) {
+            Group.remove(id);
+          });
         },
       };
 
       function init() {
-        ctrl.groups = Group.query();
+        let groups = Group.query();
+        ctrl.groups = $filter('orderBy')(groups, function(group) {
+          return group.g_no;
+        });
       }
 
       init();

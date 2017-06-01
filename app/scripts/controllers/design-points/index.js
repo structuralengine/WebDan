@@ -38,15 +38,22 @@ angular.module('webdan')
           },
           afterChange: function(changes, source) {
             if (source !== 'loadData') {
-              let hot = this;
+              let get = this.getSourceDataAtRow;
               changes.forEach(function(change) {
-                let designPoint = hot.getSourceDataAtRow(change[0]);
+                let designPoint = get(change[0]);
                 DesignPoint.save(designPoint);
-              })
+              });
             }
           },
-          afterRemoveRow: function(index, amount, logicalRows) {
-            DesignPoint.remove();
+          beforeRemoveRow: function(index, amount, logicalRows) {
+            let get = this.getSourceDataAtRow;
+            logicalRows.map(function(row) {
+              let designPoint = get(row);
+              return designPoint.id;
+            })
+            .forEach(function(id) {
+              DesignPoint.remove(id);
+            });
           },
         };
 

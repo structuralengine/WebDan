@@ -35,28 +35,22 @@ angular.module('webdan')
             return store.value();
           };
 
-          lowArray.save = function(doc, immediately) {
+          lowArray.save = function(doc) {
             if (doc.id) {
-              return lowArray.update(doc, immediately);
+              return lowArray.update(doc);
             }
             else {
-              return lowArray.add(doc, immediately);
+              return lowArray.add(doc);
             }
           }
 
-          lowArray.add = function(doc, immediately) {
+          lowArray.add = function(doc) {
             doc.id = _.createId();
-            if (!immediately) {
-              store.push(doc);
-            }
-            return lowArray.update(doc, true);
+            return store.push(doc).write();
           };
 
-          lowArray.update = function(doc, immediately) {
-            if (!immediately) {
-              store.find({id: doc.id}).assign(doc);
-            }
-            return store.write();
+          lowArray.update = function(doc) {
+            return store.find({id: doc.id}).assign(doc).write();
           }
 
           lowArray.get = function(id) {
@@ -91,11 +85,8 @@ angular.module('webdan')
             return doc;
           }
 
-          lowArray.remove = function(doc, immediately) {
-            if (!immediately && doc) {
-              store.remove({id: doc.id});
-            }
-            return store.write();
+          lowArray.remove = function(id) {
+            return store.remove({id: id}).write();
           };
 
           lowArray.init = function() {
