@@ -4,12 +4,20 @@
     <a href="#!/design-points/add"><span class="glyphicon glyphicon-plus"></span></a>
   </h2>
 
-  <section ng-repeat="group in ctrl.groups" ng-init="designPoints = ctrl.groupedDesignPoints[group.$id]">
+  <section ng-repeat="group in ctrl.groups" ng-init="designPoints = ctrl.groupedDesignPoints[group.$id] || []">
     <h3>{{group.g_name}}</h3>
 
-    <hot-table
-      settings="ctrl.settings"
-      datarows="designPoints">
-    </hot-table>
+    <div class="row">
+      <div class="col-sm-8">
+        <hot-table
+          settings="ctrl.settings"
+          datarows="designPoints">
+        </hot-table>
+      </div>
+
+      <div class="col-sm-4">
+        <pre>{{designPoints|json}}</pre>
+      </div>
+    </div>
   </section>
 </section>

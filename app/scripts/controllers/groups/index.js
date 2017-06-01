@@ -30,12 +30,12 @@ angular.module('webdan')
             let hot = this;
             changes.forEach(function(change) {
               let group = hot.getSourceDataAtRow(change[0]);
-              Group.save(group);
+              Group.save(group, true);
             })
           }
         },
         afterRemoveRow: function(index, amount, logicalRows) {
-          Group.remove();
+          Group.remove(null, true);
         },
       };
 

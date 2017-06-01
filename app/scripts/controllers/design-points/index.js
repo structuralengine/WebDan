@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsIndexCtrl', ['$scope', '$log', 'DesignPoint', 'Group',
-    function ($scope, $log, DesignPoint, Group) {
+  .controller('DesignPointsIndexCtrl', ['$scope', '$log', 'DesignPoint', 'Member', 'Group',
+    function ($scope, $log, DesignPoint, Member, Group) {
       let ctrl = this;
 
       function init() {
@@ -19,21 +19,44 @@ angular.module('webdan')
 
         let columns = angular.copy(DesignPoint.columns);
         columns.unshift({
-          data: 'Member.m_no',
+          data: 'm_no',
           type: 'numeric',
         });
 
         ctrl.settings = {
           rowHeaders: true,
           colHeaders: true,
+          minSpareRows: 1,
           nestedHeaders: nestedHeaders,
           columns: columns,
+          contextMenu: {
+            items: {
+              'remove_row': {
+                name: '行削除',
+              },
+            },
+          },
+          afterChange: function(changes, source) {
+            if (source !== 'loadData') {
+              let hot = this;
+              changes.forEach(function(change) {
+                let designPoint = hot.getSourceDataAtRow(change[0]);
+                DesignPoint.save(designPoint);
+              })
+            }
+          },
+          afterRemoveRow: function(index, amount, logicalRows) {
+            DesignPoint.remove();
+          },
         };
 
-        let designPoints = DesignPoint.$query();
+        let designPoints = DesignPoint.query();
         ctrl.groupedDesignPoints = _.groupBy(designPoints, function(designPoint) {
-          return designPoint.Member.group_id;
+          let member = Member.getBy('m_no', designPoint.m_no);
+          return member.g_no;
         });
+
+        ctrl.groups = Group.query();
       }
 
       init();

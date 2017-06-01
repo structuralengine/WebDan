@@ -35,21 +35,27 @@ angular.module('webdan')
             return store.value();
           };
 
-          lowArray.save = function(doc) {
+          lowArray.save = function(doc, immediately) {
             if (doc.id) {
-              return lowArray.update(doc);
+              return lowArray.update(doc, immediately);
             }
             else {
-              return lowArray.add(doc);
+              return lowArray.add(doc, immediately);
             }
           }
 
-          lowArray.add = function(doc) {
+          lowArray.add = function(doc, immediately) {
             doc.id = _.createId();
-            return lowArray.update(doc);
+            if (!immediately) {
+              store.push(doc);
+            }
+            return lowArray.update(doc, true);
           };
 
-          lowArray.update = function(doc) {
+          lowArray.update = function(doc, immediately) {
+            if (!immediately) {
+              store.find({id: doc.id}).assign(doc);
+            }
             return store.write();
           }
 
@@ -85,8 +91,11 @@ angular.module('webdan')
             return doc;
           }
 
-          lowArray.remove = function(doc) {
-            store.write();
+          lowArray.remove = function(doc, immediately) {
+            if (!immediately && doc) {
+              store.remove({id: doc.id});
+            }
+            return store.write();
           };
 
           lowArray.init = function() {
