@@ -57,6 +57,12 @@ angular.module('webdan')
             return store.find({id: id}).value();
           };
 
+          lowArray.getBy = function(prop, val) {
+            let param = {};
+            param[prop] = val;
+            return store.find(param).value();
+          };
+
           lowArray.getAsc = function(id) {
             let doc = lowArray.get(id);
             if (doc) {

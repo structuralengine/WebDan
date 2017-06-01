@@ -9,19 +9,20 @@
  */
 angular.module('webdan')
   .constant('membersConfig', {
-    'グループ No': {
-      'en': 'Group No',
-      'column': {
-        'data': 'Group.g_no',
-        'type': 'numeric',
-        'format': '0.0'
-      }
-    },
+    // 'グループ No': {
+    //   'en': 'Group No',
+    //   'column': {
+    //     'data': 'Group.g_no',
+    //     'type': 'numeric',
+    //     'format': '0.0'
+    //   }
+    // },
     '部材名': {
       'en': 'Member Name',
       'column': {
-        'data': 'Group.g_name',
-        'type': 'text'
+        'data': 'g_no',
+        'type': 'numeric',
+        format: '0.0',
       }
     },
     '部材番号': {
