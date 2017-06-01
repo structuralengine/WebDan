@@ -30,12 +30,9 @@ angular.module('webdan')
           columns: columns,
         };
 
-        DesignPoint.$queryAsc().then(function(designPoints) {
-          ctrl.groupedDesignPoints = _.groupBy(designPoints, function(designPoint) {
-            return designPoint.Member.group;
-          })
-
-          ctrl.groups = Group.query();
+        let designPoints = DesignPoint.$query();
+        ctrl.groupedDesignPoints = _.groupBy(designPoints, function(designPoint) {
+          return designPoint.Member.group_id;
         });
       }
 

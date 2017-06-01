@@ -8,17 +8,12 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('CalculationPrint', ['webdanRef', '$fbResource', 'calculationPrintConfig', 'HtHelper',
-    function (webdanRef, $fbResource, calculationPrintConfig, HtHelper) {
+  .factory('CalculationPrint', ['$lowObject', 'calculationPrintConfig', 'HtHelper',
+    function ($lowObject, calculationPrintConfig, HtHelper) {
 
-      let CalculationPrint = $fbResource({
-        ref: webdanRef.child('calculationPrint'),
+      let CalculationPrint = $lowObject({
+        store: 'calculationPrint',
       });
-
-      function init() {
-        let config = CalculationPrint.config = {};
-        parseConfig(calculationPrintConfig, config);
-      }
 
       function parseConfig(items, config) {
         config = config || {};
@@ -36,8 +31,12 @@ angular.module('webdan')
         });
       }
 
-      init();
+      function init() {
+        let config = CalculationPrint.config = {};
+        parseConfig(calculationPrintConfig, config);
+        return CalculationPrint;
+      }
 
-      return CalculationPrint;
+      return init();
     }
   ]);

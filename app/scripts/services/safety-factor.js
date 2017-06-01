@@ -8,21 +8,14 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('SafetyFactor', ['webdanRef', '$fbResource', 'safetyFactorsConfig', 'HtHelper',
-    function (webdanRef, $fbResource, safetyFactorsConfig, HtHelper) {
+  .factory('SafetyFactor', ['$lowArray', 'safetyFactorsConfig', 'HtHelper',
+    function ($lowArray, safetyFactorsConfig, HtHelper) {
 
-      let SafetyFactor = $fbResource({
-        ref: webdanRef.child('safetyFactors'),
-        foreignKeysIn: {
+      let SafetyFactor = $lowArray({
+        store: 'safetyFactors',
+        foreignKeys: {
           parent: {
-            children: {
-              SafetyFactor: 'safetyFactors'
-            },
-          },
-          entry: {
-            parent: {
-              Group: 'group'
-            },
+            Group: 'group_id',
           },
         }
       });
@@ -30,10 +23,9 @@ angular.module('webdan')
       function init() {
         SafetyFactor.nestedHeaders = HtHelper.parseNestedHeaders(safetyFactorsConfig, 1);
         SafetyFactor.columns = HtHelper.parseColumns(safetyFactorsConfig);
+        return SafetyFactor;
       }
 
-      init();
-
-      return SafetyFactor;
+      return init();
     }
   ]);

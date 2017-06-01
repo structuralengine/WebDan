@@ -8,17 +8,12 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('BasicInformation', ['webdanRef', '$fbResource', 'basicInformationConfig', 'HtHelper',
-    function (webdanRef, $fbResource, basicInformationConfig, HtHelper) {
+  .factory('BasicInformation', ['$lowObject', 'basicInformationConfig', 'HtHelper',
+    function ($lowObject, basicInformationConfig, HtHelper) {
 
-      let BasicInformation = $fbResource({
-        ref: webdanRef.child('basicInformation'),
+      let BasicInformation = $lowObject({
+        store: 'basicInformation',
       });
-
-      function init() {
-        let config = BasicInformation.config = {};
-        parseConfig(basicInformationConfig, config);
-      }
 
       function parseConfig(items, config) {
         config = config || {};
@@ -34,8 +29,12 @@ angular.module('webdan')
         });
       }
 
-      init();
+      function init() {
+        let config = BasicInformation.config = {};
+        parseConfig(basicInformationConfig, config);
+        return BasicInformation;
+      }
 
-      return BasicInformation;
+      return init();
     }
   ]);

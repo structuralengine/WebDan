@@ -8,40 +8,23 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('DesignPoint', ['webdanRef', '$fbResource', 'designPointsConfig',
-    function(webdanRef, $fbResource, designPointsConfig) {
+  .factory('DesignPoint', ['$lowArray', 'designPointsConfig',
+    function($lowArray, designPointsConfig) {
 
-      let DesignPoint = $fbResource({
-        ref: webdanRef.child('designPoints'),
-        foreignKeysIn: {
+      let DesignPoint = $lowArray({
+        store: 'designPoints',
+        foreignKeys: {
           parent: {
-            children: {
-              DesignPoint: 'designPoints'
-            },
+            Member: 'member_id',
           },
-          entry: {
-            parent: {
-              Member: 'member'
-            },
-            children: {
-              Bar: 'bars',
-              Fatigue: 'fatigues',
-              BendingMoment: 'bendingMoments',
-              Shear: 'shears',
-            }
+          children: {
+            Bar: 'bar_id',
+            Fatigue: 'fatigue_id',
+            BendingMoment: 'bendingMoment_id',
+            Shear: 'shear_id',
           },
-          child: {
-            parent: {
-              DesignPoint: 'designPoint'
-            }
-          }
         }
       });
-
-      function init() {
-        DesignPoint.nestedHeaders = createNestedHeaders();
-        DesignPoint.columns = createColumns();
-      }
 
       function createNestedHeaders() {
         let nestedHeaders = [];
@@ -93,8 +76,12 @@ angular.module('webdan')
         return columns;
       }
 
-      init();
+      function init() {
+        DesignPoint.nestedHeaders = createNestedHeaders();
+        DesignPoint.columns = createColumns();
+        return DesignPoint;
+      }
 
-      return DesignPoint;
+      return init();
     }
   ]);

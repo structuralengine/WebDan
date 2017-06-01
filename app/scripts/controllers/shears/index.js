@@ -35,9 +35,7 @@ angular.module('webdan')
           columns: columns
         };
 
-        Shear.$queryAsc().then(function(shears) {
-          ctrl.shears = shears;
-        });
+        ctrl.shears = Shear.$query();
       }
 
       init();

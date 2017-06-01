@@ -8,29 +8,17 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MaterialStrengthRest', ['webdanRef', '$fbResource', 'materialStrengthRestConfig', 'HtHelper',
-    function (webdanRef, $fbResource, materialStrengthRestConfig, HtHelper) {
+  .factory('MaterialStrengthRest', ['$lowObject', 'materialStrengthRestConfig', 'HtHelper',
+    function ($lowObject, materialStrengthRestConfig, HtHelper) {
 
-      let MaterialStrengthRest = $fbResource({
-        ref: webdanRef.child('materialStrengthRest'),
-        foreignKeysIn: {
+      let MaterialStrengthRest = $lowObject({
+        store: 'materialStrengthRest',
+        foreignKeys: {
           parent: {
-            children: {
-              MaterialStrengthRest: 'materialStrengthRest'
-            },
+            Group: 'group_id',
           },
-          entry: {
-            parent: {
-              Group: 'group'
-            },
-          },
-        }
+        },
       });
-
-      function init() {
-        let config = MaterialStrengthRest.config = {};
-        parseConfig(materialStrengthRestConfig, config);
-      }
 
       function parseConfig(items, config) {
         config = config || {};
@@ -42,8 +30,12 @@ angular.module('webdan')
         });
       }
 
-      init();
+      function init() {
+        let config = MaterialStrengthRest.config = {};
+        parseConfig(materialStrengthRestConfig, config);
+        return MaterialStrengthRest;
+      }
 
-      return MaterialStrengthRest;
+      return init();
     }
   ]);

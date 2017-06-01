@@ -42,5 +42,8 @@
         "single"
       ]
     }
+  },
+  "dependencies": {
+    "lodash-id": "^0.14.0"
   }
 }

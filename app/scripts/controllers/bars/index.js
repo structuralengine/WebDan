@@ -57,20 +57,9 @@ angular.module('webdan')
           columns: columns
         };
 
-        Bar.$queryAsc().then(function(bars) {
-          let p1 = bars.map(function(bar) {
-            return Bar.$getDesc(bar).then(function(bar) {
-              return $q.resolve(bar);
-            })
-          })
-
-          $q.all(p1).then(function(bars) {
-            ctrl.groupedBars = _.groupBy(bars, function(bar) {
-              return bar.DesignPoint.Member.group;
-            })
-
-            ctrl.groups = Group.query();
-          })
+        let bars = Bar.$query();
+        ctrl.groupedBars = _.groupBy(bars, function(bar) {
+          return bar.DesignPoint.Member.group_id;
         });
       }
 

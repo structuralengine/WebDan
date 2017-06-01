@@ -32,8 +32,8 @@ angular.module('webdan')
             let content = angular.toJson(tmp.data);
             let format = appConfig.formats.save.timestamp;
             let timestamp = moment().format(format);
-            let filename = "webdan."+ timestamp +".json";
-            let type = {type: "application/json; charset=utf-8"};
+            let filename = 'webdan.'+ timestamp +'.json';
+            let type = {type: 'application/json; charset=utf-8'};
             let file = new File([content], filename, type);
             saveAs(file);
           }

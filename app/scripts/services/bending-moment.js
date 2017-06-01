@@ -8,30 +8,17 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('BendingMoment', ['webdanRef', '$fbResource', 'bendingMomentsConfig',
-    function (webdanRef, $fbResource, bendingMomentsConfig) {
+  .factory('BendingMoment', ['$lowArray', 'bendingMomentsConfig',
+    function ($lowArray, bendingMomentsConfig) {
 
-      let BendingMoment = $fbResource({
-        ref: webdanRef.child('bendingMoments'),
-        foreignKeysIn: {
+      let BendingMoment = $lowArray({
+        store: 'bendingMoments',
+        foreignKeys: {
           parent: {
-            children: {
-              BendingMoment: 'bendingMoments'
-            }
+            DesignPoint: 'designPoint_id',
           },
-          entry: {
-            parent: {
-              DesignPoint: 'designPoint'
-            }
-          }
-        }
+        },
       });
-
-      function init() {
-        BendingMoment.nestedHeaders = [];
-        createNestedHeaders(bendingMomentsConfig, BendingMoment.nestedHeaders);
-        BendingMoment.columns = createColumns(bendingMomentsConfig);
-      }
 
       function createNestedHeaders(config, nestedHeaders, depth) {
         nestedHeaders = nestedHeaders || [];
@@ -74,8 +61,13 @@ angular.module('webdan')
         return columns;
       }
 
-      init();
+      function init() {
+        BendingMoment.nestedHeaders = [];
+        createNestedHeaders(bendingMomentsConfig, BendingMoment.nestedHeaders);
+        BendingMoment.columns = createColumns(bendingMomentsConfig);
+        return BendingMoment;
+      }
 
-      return BendingMoment;
+      return init();
     }
   ]);

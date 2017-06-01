@@ -38,12 +38,9 @@ angular.module('webdan')
           columns: columns,
         };
 
-        SafetyFactor.$query().then(function(safetyFactors) {
-          ctrl.groupedSafetyFactors = _.groupBy(safetyFactors, function(safetyFactor) {
-            return safetyFactor.group;
-          });
-
-          ctrl.groups = Group.query();
+        let safetyFactors = SafetyFactor.$query();
+        ctrl.groupedSafetyFactors = _.groupBy(safetyFactors, function(safetyFactor) {
+          return safetyFactor.group_id;
         });
       }
 

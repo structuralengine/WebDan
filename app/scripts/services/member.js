@@ -8,42 +8,29 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Member', ['webdanRef', '$fbResource', 'HtHelper', 'membersConfig',
-    function(webdanRef, $fbResource, HtHelper, membersConfig) {
+  .factory('Member', ['$lowArray', 'HtHelper', 'membersConfig',
+    function($lowArray, HtHelper, membersConfig) {
 
-      let Member = $fbResource({
-        ref: webdanRef.child('members'),
-        foreignKeysIn: {
+      let Member = $lowArray({
+        store: 'members',
+        foreignKeys: {
           parent: {
-            children: {
-              Member: 'members'
-            },
+            Group: 'group_id',
           },
-          entry: {
-            parent: {
-              Group: 'group'
-            },
-            children: {
-              MemberSection: 'memberSections',
-              DesignPoint: 'designPoints',
-              SectionForce: 'sectionForces'
-            }
+          children: {
+            MemberSection: 'memberSection_id',
+            DesignPoint: 'designPoint_id',
+            SectionForce: 'sectionForce_id',
           },
-          child: {
-            parent: {
-              Member: 'member'
-            }
-          }
-        }
+        },
       });
 
       function init() {
         Member.nestedHeaders = HtHelper.parseNestedHeaders(membersConfig);
         Member.columns = HtHelper.parseColumns(membersConfig);
+        return Member;
       }
 
-      init();
-
-      return Member;
+      return init();
     }
   ]);

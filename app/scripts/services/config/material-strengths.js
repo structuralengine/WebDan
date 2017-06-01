@@ -9,52 +9,52 @@
  */
 angular.module('webdan')
   .constant('materialStrengthsConfig', {
-    "鉄筋 (N/mm<sup>2</sup>)": {
-      en: "bar",
-      var: "bar",
+    '鉄筋 (N/mm<sup>2</sup>)': {
+      en: 'bar',
+      var: 'bar',
       column: {
-        data: "bar",
-        type: "text",
+        data: 'bar',
+        type: 'text',
       },
     },
-    "": {
-      en: "range",
-      var: "range",
+    '': {
+      en: 'range',
+      var: 'range',
       column: {
-        data: "range",
-        type: "text",
+        data: 'range',
+        type: 'text',
       },
     },
-    "軸方向鉄筋": {
-      en: "longitudinal rebar",
-      var: "rebar",
+    '軸方向鉄筋': {
+      en: 'longitudinal rebar',
+      var: 'rebar',
       column: {
-        data: "rebar",
-        type: "numeric",
+        data: 'rebar',
+        type: 'numeric',
       },
     },
-    "側方向鉄筋": {
-      en: "Side rebar",
-      var: "sidebar",
+    '側方向鉄筋': {
+      en: 'Side rebar',
+      var: 'sidebar',
       column: {
-        data: "sidebar",
-        type: "numeric",
+        data: 'sidebar',
+        type: 'numeric',
       },
     },
-    "スターラップ": {
-      en: "hoop tie",
-      var: "hoop",
+    'スターラップ': {
+      en: 'hoop tie',
+      var: 'hoop',
       column: {
-        data: "hoop",
-        type: "numeric",
+        data: 'hoop',
+        type: 'numeric',
       },
     },
-    "折曲げ鉄筋": {
-      en: "bent up bar",
-      var: "bent",
+    '折曲げ鉄筋': {
+      en: 'bent up bar',
+      var: 'bent',
       column: {
-        data: "bent",
-        type: "numeric",
+        data: 'bent',
+        type: 'numeric',
       },
     },
   });

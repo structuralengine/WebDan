@@ -45,7 +45,10 @@ function lint(files, options) {
 }
 
 gulp.task('lint', () => {
-  return lint('app/scripts/**/*.js')
+  return lint([
+      'app/scripts/**/*.js',
+      '!app/scripts/**/*.webpack.js'
+    ])
     .pipe(gulp.dest('app/scripts'));
 });
 gulp.task('lint:test', () => {

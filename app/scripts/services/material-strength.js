@@ -8,32 +8,24 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MaterialStrength', ['webdanRef', '$fbResource', 'materialStrengthsConfig', 'HtHelper',
-    function (webdanRef, $fbResource, materialStrengthsConfig, HtHelper) {
+  .factory('MaterialStrength', ['$lowArray', 'materialStrengthsConfig', 'HtHelper',
+    function ($lowArray, materialStrengthsConfig, HtHelper) {
 
-      let MaterialStrength = $fbResource({
-        ref: webdanRef.child('materialStrengths'),
-        foreignKeysIn: {
+      let MaterialStrength = $lowArray({
+        store: 'materialStrengths',
+        foreignKeys: {
           parent: {
-            children: {
-              MaterialStrength: 'materialStrengths'
-            },
+            Group: 'group_id',
           },
-          entry: {
-            parent: {
-              Group: 'group'
-            },
-          },
-        }
+        },
       });
 
       function init() {
         MaterialStrength.nestedHeaders = HtHelper.parseNestedHeaders(materialStrengthsConfig, 0);
         MaterialStrength.columns = HtHelper.parseColumns(materialStrengthsConfig);
+        return MaterialStrength;
       }
 
-      init();
-
-      return MaterialStrength;
+      return init();
     }
   ]);

@@ -8,33 +8,25 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Fatigue', ['webdanRef', '$fbResource', 'fatiguesConfig', 'HtHelper',
-    function (webdanRef, $fbResource, fatiguesConfig, HtHelper) {
+  .factory('Fatigue', ['$lowArray', 'fatiguesConfig', 'HtHelper',
+    function ($lowArray, fatiguesConfig, HtHelper) {
 
-      let Fatigue = $fbResource({
-        ref: webdanRef.child('fatigues'),
-        foreignKeysIn: {
+      let Fatigue = $lowArray({
+        store: 'fatigues',
+        foreignKeys: {
           parent: {
-            children: {
-              Fatigue: 'fatigues'
-            },
+            DesignPoint: 'designPoint_id'
           },
-          entry: {
-            parent: {
-              DesignPoint: 'designPoint'
-            },
-          },
-        }
+        },
       });
 
       function init() {
         Fatigue.nestedHeaders = HtHelper.parseNestedHeaders(fatiguesConfig, 2);
         Fatigue.nestedHeaders[2].splice(0, 0, '', '', '');
         Fatigue.columns = HtHelper.parseColumns(fatiguesConfig);
+        return Fatigue;
       }
 
-      init();
-
-      return Fatigue;
+      return init();
     }
   ]);

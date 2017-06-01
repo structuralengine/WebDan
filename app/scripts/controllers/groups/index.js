@@ -12,38 +12,34 @@ angular.module('webdan')
     function ($scope, $log, Group, HtHelper) {
       let ctrl = this;
 
-      function update(changes, hot) {
-        let groups = HtHelper.getChangeRows(changes, hot);
-        groups.forEach(function(group) {
-          let p;
-          if (group.$id) {
-            p = Group.$save(group);
+      ctrl.settings = {
+        rowHeaders: true,
+        colHeaders: true,
+        minSpareRows: 1,
+        nestedHeaders: Group.nestedHeaders,
+        columns: Group.columns,
+        contextMenu: {
+          items: {
+            'remove_row': {
+              name: '行削除',
+            },
+          },
+        },
+        afterChange: function(changes, source) {
+          if (source !== 'loadData') {
+            let hot = this;
+            changes.forEach(function(change) {
+              let group = hot.getSourceDataAtRow(change[0]);
+              Group.save(group);
+            })
           }
-          else {
-            p = Group.$add(group);
-          }
-          p.then(function(g) {
-            g;
-          }).catch(function(err) {
-            $log.error(err);
-          });
-        });
-      }
+        },
+        afterRemoveRow: function(index, amount, logicalRows) {
+          Group.remove();
+        },
+      };
 
       function init() {
-        ctrl.settings = {
-          rowHeaders: true,
-          colHeaders: true,
-          minSpareRows: 1,
-          nestedHeaders: Group.nestedHeaders,
-          columns: Group.columns,
-          afterChange: function(changes, source) {
-            if (source !== 'loadData') {
-              update(changes, this);
-            }
-          },
-        };
-
         ctrl.groups = Group.query();
       }
 

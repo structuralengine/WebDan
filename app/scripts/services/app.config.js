@@ -9,6 +9,7 @@
  */
 angular.module('webdan')
   .constant('appConfig', {
+    source: 'webdan.db',
     messages: {
       tabs: {
         'basic-information':
@@ -61,54 +62,72 @@ angular.module('webdan')
       },
     },
     defaults: {
+      state: {
+        basicInformation: {},
+        groups: [],
+        members: [],
+        designPoints: [],
+
+        memberSections: [],
+        bars: [],
+        fatigues: [],
+        bendingMoments: [],
+        shears: [],
+
+        safetyFactors: [],
+        materialStrengths: [],
+        materialStrengthRest: {},
+
+        calculationPrint: {},
+      },
       materialStrengths: {
         bars: [
           {
-            name: "降伏強度",
-            en: "Yield strength",
-            value: "",
+            name: '降伏強度',
+            en: 'Yield strength',
+            value: '',
           },{
-            name: "設計引張強度",
-            en: "Tension strength",
-            value: "",
+            name: '設計引張強度',
+            en: 'Tension strength',
+            value: '',
           },
         ],
         ranges: [
           {
-            name: "D29 以上",
-            en: "above x",
-            value: "above",
+            name: 'D29 以上',
+            en: 'above x',
+            value: 'above',
           },{
-            name: "D25 以下",
-            en: "below x",
-            value: "below",
+            name: 'D25 以下',
+            en: 'below x',
+            value: 'below',
           },
         ],
       },
       safetyFactors: {
         keys: [
-          "耐久性",
-          "安全性 (疲労破壊)",
-          "安全性 (破壊)",
-          "復旧性 (損傷 地震時以外)",
-          "復旧性 (損傷 地震時)",
+          '耐久性',
+          '安全性 (疲労破壊)',
+          '安全性 (破壊)',
+          '復旧性 (損傷 地震時以外)',
+          '復旧性 (損傷 地震時)',
         ],
         considerRebars: [
           {
             no: 1,
-            name: "引張鉄筋",
+            name: '引張鉄筋',
             value: 'rebar_01',
           },{
             no: 2,
-            name: "引張＋圧縮",
+            name: '引張＋圧縮',
             value: 'rebar_02',
           },{
             no: 3,
-            name: "全周鉄筋",
+            name: '全周鉄筋',
             value: 'rebar_03',
           },{
             no: 4,
-            name: "All 位置指定",
+            name: 'All 位置指定',
             value: 'rebar_04',
           },
         ],

@@ -64,11 +64,9 @@ angular.module('webdan')
       }
 
       function init() {
-        BasicInformation.$get().then(function(basicInformation) {
-          ctrl.basicInformation = basicInformation || {};
-          ctrl.momentData = createPickUpData(basicInformation, 'moment');
-          ctrl.shearForceData = createPickUpData(basicInformation, 'shearforce');
-        });
+        let basicInformation = ctrl.basicInformation = BasicInformation.query();
+        ctrl.momentData = createPickUpData(basicInformation, 'moment');
+        ctrl.shearForceData = createPickUpData(basicInformation, 'shearforce');
 
         let settings = ctrl.settings = {};
         angular.forEach(BasicInformation.config, function(config, key) {

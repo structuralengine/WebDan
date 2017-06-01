@@ -8,32 +8,24 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Bar', ['webdanRef', '$fbResource', 'barsConfig', 'HtHelper',
-    function (webdanRef, $fbResource, barsConfig, HtHelper) {
+  .factory('Bar', ['$lowArray', 'barsConfig', 'HtHelper',
+    function ($lowArray, barsConfig, HtHelper) {
 
-      let Bar = $fbResource({
-        ref: webdanRef.child('bars'),
-        foreignKeysIn: {
+      let Bar = $lowArray({
+        store: 'bars',
+        foreignKeys: {
           parent: {
-            children: {
-              Bar: 'bars'
-            },
+            DesignPoint: 'designPoint_id',
           },
-          entry: {
-            parent: {
-              DesignPoint: 'designPoint'
-            },
-          },
-        }
+        },
       });
 
       function init() {
         Bar.nestedHeaders = HtHelper.parseNestedHeaders(barsConfig, 2);
         Bar.columns = HtHelper.parseColumns(barsConfig);
+        return Bar;
       }
 
-      init();
-
-      return Bar;
+      return init();
     }
   ]);

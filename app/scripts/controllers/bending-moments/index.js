@@ -35,9 +35,7 @@ angular.module('webdan')
           columns: columns
         };
 
-        BendingMoment.$queryAsc().then(function(bendingMoments) {
-          ctrl.bendingMoments = bendingMoments;
-        });
+        ctrl.bendingMoments = BendingMoment.$query();
       }
 
       init();

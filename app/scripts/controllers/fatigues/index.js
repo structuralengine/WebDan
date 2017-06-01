@@ -53,11 +53,9 @@ angular.module('webdan')
           columns: columns
         };
 
-        Fatigue.$queryAsc().then(function(fatigues) {
-          ctrl.groupedFatigues = _.groupBy(fatigues, function(fatigue) {
-            return fatigue.DesignPoint.Member.group;
-          });
-          ctrl.groups = Group.query();
+        let fatigues = Fatigue.$query();
+        ctrl.groupedFatigues = _.groupBy(fatigues, function(fatigue) {
+          return fatigue.DesignPoint.Member.group;
         });
       }
 

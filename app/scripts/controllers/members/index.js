@@ -12,25 +12,16 @@ angular.module('webdan')
     function($scope, $log, $filter, Member, Group) {
       let ctrl = this;
 
-      ctrl.changeGroup = function(group) {
-        group;
-      }
+      ctrl.settings = {
+        rowHeaders: true,
+        colHeaders: true,
+        nestedHeaders: Member.nestedHeaders,
+        columns: Member.columns
+      };
 
       function init() {
-        Group.$queryAsc().then(function(groups) {
-          ctrl.groups = groups;
-        });
-
-        ctrl.settings = {
-          rowHeaders: true,
-          colHeaders: true,
-          nestedHeaders: Member.nestedHeaders,
-          columns: Member.columns
-        };
-
-        Member.$queryAsc().then(function(members) {
-          ctrl.members = $filter('orderBy')(members, 'm_no');
-        });
+        let members = Member.$query();
+        ctrl.members = $filter('orderBy')(members, 'm_no');
       }
 
       init();

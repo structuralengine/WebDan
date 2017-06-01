@@ -19,9 +19,7 @@ angular.module('webdan')
       };
 
       function init() {
-        MemberSection.$queryAsc().then(function(memberSections) {
-          ctrl.memberSections = memberSections;
-        });
+        ctrl.memberSections = MemberSection.$query();
       }
 
       init();

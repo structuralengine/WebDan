@@ -8,31 +8,17 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MemberSection', ['webdanRef', '$fbResource', 'memberSectionsConfig',
-    function(webdanRef, $fbResource, memberSectionsConfig) {
+  .factory('MemberSection', ['$lowArray', 'memberSectionsConfig',
+    function($lowArray, memberSectionsConfig) {
 
-      let params = {
-        ref: webdanRef.child('memberSections'),
-        foreignKeysIn: {
+      let MemberSection = $lowArray({
+        store: 'memberSections',
+        foreignKeys: {
           parent: {
-            children: {
-              MemberSection: 'memberSections'
-            }
+            Member: 'member_id',
           },
-          entry: {
-            parent: {
-              Member: 'member'
-            }
-          }
-        }
-      };
-      let MemberSection = $fbResource(params);
-
-
-      function init() {
-        createNestedHeaders(memberSectionsConfig);
-        createColumns(memberSectionsConfig);
-      }
+        },
+      });
 
       function createColumns(config, columns) {
         if (angular.isUndefined(columns)) {
@@ -78,8 +64,12 @@ angular.module('webdan')
         nestedHeaders.push(nestedHeader);
       }
 
-      init();
+      function init() {
+        createNestedHeaders(memberSectionsConfig);
+        createColumns(memberSectionsConfig);
+        return MemberSection;
+      }
 
-      return MemberSection;
+      return init();
     }
   ]);

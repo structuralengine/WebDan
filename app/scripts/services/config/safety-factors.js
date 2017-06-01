@@ -9,119 +9,119 @@
  */
 angular.module('webdan')
   .constant('safetyFactorsConfig', {
-    "": {
-      en: "Name",
-      var: "name",
+    '': {
+      en: 'Name',
+      var: 'name',
       column: {
-        data: "name",
-        type: "text",
+        data: 'name',
+        type: 'text',
       },
     },
-    "曲げ 安全係数": {
-      en: "Safety factor for bending moment",
-      var: "",
+    '曲げ 安全係数': {
+      en: 'Safety factor for bending moment',
+      var: '',
       items: {
-        "&gamma;<sub>c</sub>": {
-          en: "&gamma;<sub>c</sub>",
-          var: "m_rc",
+        '&gamma;<sub>c</sub>': {
+          en: '&gamma;<sub>c</sub>',
+          var: 'm_rc',
           column: {
-            data: "m_rc",
-            type: "numeric",
-            format: "0.00",
+            data: 'm_rc',
+            type: 'numeric',
+            format: '0.00',
           },
         },
-        "&gamma;<sub>s</sub>": {
-          en: "&gamma;<sub>s</sub>",
-          var: "m_rs",
+        '&gamma;<sub>s</sub>': {
+          en: '&gamma;<sub>s</sub>',
+          var: 'm_rs',
           column: {
-            data: "m_rs",
-            type: "numeric",
-            format: "0.00",
+            data: 'm_rs',
+            type: 'numeric',
+            format: '0.00',
           },
         },
-        "&gamma;<sub>bs</sub>": {
-          en: "&gamma;<sub>bs</sub>",
-          var: "m_rbs",
+        '&gamma;<sub>bs</sub>': {
+          en: '&gamma;<sub>bs</sub>',
+          var: 'm_rbs',
           column: {
-            data: "m_rbs",
-            type: "numeric",
-            format: "0.00",
+            data: 'm_rbs',
+            type: 'numeric',
+            format: '0.00',
           },
         },
       },
     },
-    "せん断 安全係数": {
-      en: "Safety factor for shear force",
-      var: "",
+    'せん断 安全係数': {
+      en: 'Safety factor for shear force',
+      var: '',
       items: {
-        "&gamma;<sub>c</sub>": {
-          en: "&gamma;<sub>c</sub>",
-          var: "s_rc",
+        '&gamma;<sub>c</sub>': {
+          en: '&gamma;<sub>c</sub>',
+          var: 's_rc',
           column: {
-            data: "s_rc",
-            type: "numeric",
-            format: "0.00",
+            data: 's_rc',
+            type: 'numeric',
+            format: '0.00',
           },
         },
-        "&gamma;<sub>s</sub>": {
-          en: "&gamma;<sub>s</sub>",
-          var: "s_rs",
+        '&gamma;<sub>s</sub>': {
+          en: '&gamma;<sub>s</sub>',
+          var: 's_rs',
           column: {
-            data: "s_rs",
-            type: "numeric",
-            format: "0.00",
+            data: 's_rs',
+            type: 'numeric',
+            format: '0.00',
           },
         },
-        "&gamma;<sub>bc</sub>": {
-          en: "&gamma;<sub>bc</sub",
-          var: "s_rbd",
+        '&gamma;<sub>bc</sub>': {
+          en: '&gamma;<sub>bc</sub',
+          var: 's_rbd',
           column: {
-            data: "s_rbd",
-            type: "numeric",
-            format: "0.00",
+            data: 's_rbd',
+            type: 'numeric',
+            format: '0.00',
           },
         },
-        "&gamma;<sub>bs</sub>": {
-          en: "&gamma;<sub>bs</sub>",
-          var: "s_rbs",
+        '&gamma;<sub>bs</sub>': {
+          en: '&gamma;<sub>bs</sub>',
+          var: 's_rbs',
           column: {
-            data: "s_rbs",
-            type: "numeric",
-            format: "0.00",
+            data: 's_rbs',
+            type: 'numeric',
+            format: '0.00',
           },
         },
-        "&gamma;<sub>b</sub>": {
-          en: "&gamma;<sub>b</sub>",
-          var: "s_rb",
+        '&gamma;<sub>b</sub>': {
+          en: '&gamma;<sub>b</sub>',
+          var: 's_rb',
           column: {
-            data: "s_rb",
-            type: "numeric",
-            format: "0.00",
+            data: 's_rb',
+            type: 'numeric',
+            format: '0.00',
           },
         },
       },
     },
-    "係数": {
-      en: "Member factor",
-      var: "",
+    '係数': {
+      en: 'Member factor',
+      var: '',
       items: {
-        "&gamma;<sub>i</sub>": {
-          en: "&gamma;<sub>i</sub>",
-          var: "ri",
+        '&gamma;<sub>i</sub>': {
+          en: '&gamma;<sub>i</sub>',
+          var: 'ri',
           column: {
-            data: "ri",
-            type: "numeric",
-            format: "0.00",
+            data: 'ri',
+            type: 'numeric',
+            format: '0.00',
           },
         },
       },
     },
-    "鉄筋配置": {
-      en: "Consider rebar",
-      var: "consider_rebar",
+    '鉄筋配置': {
+      en: 'Consider rebar',
+      var: 'consider_rebar',
       column: {
-        data: "consider_rebar",
-        type: "text",
+        data: 'consider_rebar',
+        type: 'text',
       },
     },
   });

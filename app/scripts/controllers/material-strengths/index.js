@@ -41,12 +41,9 @@ angular.module('webdan')
           columns: columns,
         };
 
-        MaterialStrength.$query().then(function(materialStrengths) {
-          ctrl.groupedMaterialStrengths = _.groupBy(materialStrengths, function(materialStrength) {
-            return materialStrength.group;
-          });
-
-          ctrl.groups = Group.query();
+        let materialStrengths = MaterialStrength.$query();
+        ctrl.groupedMaterialStrengths = _.groupBy(materialStrengths, function(materialStrength) {
+          return materialStrength.group_id;
         });
       }
 
