@@ -15,12 +15,12 @@ angular.module('webdan')
         store: 'members',
         foreignKeys: {
           parent: {
-            Group: 'group_id',
+            Group: 'g_no',
           },
           children: {
-            MemberSection: 'memberSection_id',
-            DesignPoint: 'designPoint_id',
-            SectionForce: 'sectionForce_id',
+            MemberSection: 'm_no',
+            DesignPoint: 'm_no',
+            SectionForce: 'm_no',
           },
         },
       });

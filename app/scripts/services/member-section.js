@@ -15,7 +15,7 @@ angular.module('webdan')
         store: 'memberSections',
         foreignKeys: {
           parent: {
-            Member: 'member_id',
+            Member: 'm_no',
           },
         },
       });

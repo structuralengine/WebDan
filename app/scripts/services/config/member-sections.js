@@ -12,7 +12,7 @@ angular.module('webdan')
     '部材番号': {
       en: 'member no',
       column: {
-        data: 'Member.m_no',
+        data: 'm_no',
         type: 'numeric',
       }
     },
@@ -27,15 +27,15 @@ angular.module('webdan')
     'グループ No': {
       en: 'group no',
       column: {
-        data: 'Member.Group.g_no',
+        data: 'm_no',
         type: 'numeric',
-        format: '0.0'
       }
     },
     '部材名': {
       en: 'member name',
       column: {
-        data: 'Member.Group.g_name',
+        data: 'm_no',
+        type: 'numeric',
       }
     },
     '断面形状': {

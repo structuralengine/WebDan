@@ -4,8 +4,16 @@
     <a href="#!/member-sections/add"><span class="glyphicon glyphicon-plus"></span></a>
   </h2>
 
-  <hot-table
-    settings="ctrl.settings"
-    datarows="ctrl.memberSections">
-  </hot-table>
+  <div class="row">
+    <div class="col-sm-9">
+      <hot-table
+        settings="ctrl.settings"
+        datarows="ctrl.memberSections">
+      </hot-table>
+    </div>
+
+    <div class="col-sm-2">
+      <pre>{{ctrl.memberSections|json}}</pre>
+    </div>
+  </div>
 </section>

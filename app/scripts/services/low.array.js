@@ -63,15 +63,16 @@ angular.module('webdan')
             return store.find(param).value();
           };
 
-          lowArray.getAsc = function(id) {
-            let doc = lowArray.get(id);
+          lowArray.getAsc = function(id, prop) {
+            prop = prop || 'id';
+            let doc = lowArray.getBy(prop, id);
             if (doc) {
               doc = angular.copy(doc);
               angular.forEach(foreignKeys.parent, function(foreignKey, alias) {
                 if (angular.isDefined(doc[foreignKey])) {
                   let Parent = $injector.get(alias);
                   if (Parent) {
-                    let parent = Parent.getAsc(doc[foreignKey]);
+                    let parent = Parent.getAsc(doc[foreignKey], foreignKey);
                     if (parent) {
                       doc[alias] = parent;
                     }
