@@ -14,14 +14,7 @@ angular.module('webdan')
 
       function init() {
         let nestedHeaders = angular.copy(DesignPoint.nestedHeaders);
-        nestedHeaders[0].unshift('部材番号');
-        nestedHeaders[1].unshift('');
-
         let columns = angular.copy(DesignPoint.columns);
-        columns.unshift({
-          data: 'm_no',
-          type: 'numeric',
-        });
 
         ctrl.settings = {
           rowHeaders: true,

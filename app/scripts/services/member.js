@@ -20,7 +20,6 @@ angular.module('webdan')
           children: {
             MemberSection: 'm_no',
             DesignPoint: 'm_no',
-            SectionForce: 'm_no',
           },
         },
       });

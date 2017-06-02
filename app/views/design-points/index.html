@@ -4,7 +4,7 @@
     <a href="#!/design-points/add"><span class="glyphicon glyphicon-plus"></span></a>
   </h2>
 
-  <section ng-repeat="group in ctrl.groups" ng-init="designPoints = ctrl.groupedDesignPoints[group.$id] || []">
+  <section ng-repeat="group in ctrl.groups" ng-init="designPoints = ctrl.groupedDesignPoints[group.g_no] || []">
     <h3>{{group.g_name}}</h3>
 
     <div class="row">
