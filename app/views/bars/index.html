@@ -7,9 +7,17 @@
   <section ng-repeat="group in ctrl.groups" ng-init="bars = ctrl.groupedBars[group.$id]">
     <h3>{{group.g_name}}</h3>
 
-    <hot-table
-      settings="ctrl.settings"
-      datarows="bars">
-    </hot-table>
+    <div class="row">
+      <div class="col-sm-10">
+        <hot-table
+          settings="ctrl.settings"
+          datarows="bars">
+        </hot-table>
+      </div>
+
+      <div class="col-sm-2">
+        <pre>{{bars|json}}</pre>
+      </div>
+    </div>
   </section>
 </section>

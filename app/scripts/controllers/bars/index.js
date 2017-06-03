@@ -12,6 +12,12 @@ angular.module('webdan')
     function ($scope, $log, $q, Bar, Group, barsConfig) {
       let ctrl = this;
 
+      function renderMemberNo(instance, td, row, col, prop, value, cellProperties) {
+        return td;
+      }
+      function renderPointName(instance, td, row, col, prop, value, cellProperties) {
+        return td;
+      }
       function renderSection(instance, td, row, col, prop, value, cellProperties) {
         if (value) {
           let val = (row % 2 == 0)? (value.B || null) : (value.H || null);
@@ -19,7 +25,6 @@ angular.module('webdan')
         }
         return td;
       }
-
       function renderHaunchHeight(instance, td, row, col, prop, value, cellProperties) {
         if (value) {
           let val = (row % 2 == 0)? value.dH_m : value.dH_s;
@@ -30,37 +35,71 @@ angular.module('webdan')
 
       function init() {
         let nestedHeaders = angular.copy(Bar.nestedHeaders);
-        nestedHeaders[0].splice(0, 0, '部材番号', '算出点名', '断面力', 'ハンチ高');
-        nestedHeaders[1].splice(0, 0, '', '', 'B', '曲げ');
-        nestedHeaders[2].splice(0, 0, '', '', 'H', 'せん断');
+        nestedHeaders[0].splice(0, 0,
+          '部材番号',
+          '算出点名',
+          '断面力',
+          'ハンチ高'
+        );
+        nestedHeaders[1].splice(0, 0,
+          '',
+          '',
+          'B',
+          '曲げ'
+        );
+        nestedHeaders[2].splice(0, 0,
+          '',
+          '',
+          'H',
+          'せん断'
+        );
 
         let columns = angular.copy(Bar.columns);
         columns.splice(0, 0, {
-          data: 'DesignPoint.Member.m_no',
-          type: 'numeric'
+          // DesignPoint.Member.m_no
+          data: 'DesignPoint_id',
+          type: 'numeric',
+          renderer: renderMemberNo,
         }, {
-          data: 'DesignPoint.p_name',
+          // DesignPoint.p_name
+          data: 'DesignPoint_id',
+          type: 'numeric',
+          renderer: renderPointName,
         }, {
-          data: 'DesignPoint.section',
+          // DesignPoint.section
+          data: 'DesignPoint_id',
           type: 'numeric',
           renderer: renderSection,
         }, {
-          data: 'DesignPoint',
+          // DesignPoint
+          data: 'DesignPoint_id',
           type: 'numeric',
           renderer: renderHaunchHeight,
-        })
+        });
 
         ctrl.settings = {
           rowHeaders: true,
           colHeaders: true,
           nestedHeaders: nestedHeaders,
-          columns: columns
+          columns: columns,
+          afterChange: function(changes, source) {
+            if (source !== 'loadData') {
+              let get = this.getSourceDataAtRow;
+              changes.forEach(function(change) {
+                let bar = get(change[0]);
+                Bar.save(bar);
+              });
+            }
+          },
         };
 
-        let bars = Bar.$query();
+        let bars = Bar.query();
         ctrl.groupedBars = _.groupBy(bars, function(bar) {
-          return bar.DesignPoint.Member.group_id;
+          let designPoint = DesignPoint.getAsc('id', bar.designPoint_id);
+          return designPoint.Member.g_no;
         });
+
+        ctrl.groups = Group.query();
       }
 
       init();
