@@ -27,16 +27,27 @@ angular.module('webdan')
 
         function lowArrayFactory(params) {
           let store;
+          let primaryKey;
           let foreignKeys;
 
           function lowArray() {}
 
           lowArray.query = function() {
-            return store.value();
+            let items = store.value();
+            if (!angular.isArray(items)) {
+              return items;
+            }
+            else {
+              return items.filter(function(item) {
+                return Object.values(item).filter(function(value) {
+                  return !!value;
+                }).length > 0;
+              });
+            }
           };
 
           lowArray.save = function(doc) {
-            if (doc.id) {
+            if (doc[primaryKey]) {
               return lowArray.update(doc);
             }
             else {
@@ -45,16 +56,17 @@ angular.module('webdan')
           }
 
           lowArray.add = function(doc) {
-            doc.id = _.createId();
-            return lowArray.update(doc);
+            doc[primaryKey] = _.createId();
+            return store.push(doc).write();
           };
 
           lowArray.update = function(doc) {
-            return store.write();
+            let id = doc[primaryKey];
+            return store.find({id: id}).assign(doc).write();
           }
 
           lowArray.get = function(id) {
-            return store.find({id: id}).value();
+            return lowArray.getBy(primaryKey, id);
           };
 
           lowArray.getBy = function(prop, val) {
@@ -85,9 +97,44 @@ angular.module('webdan')
             return doc;
           }
 
-          lowArray.remove = function(doc) {
-            store.write();
+          lowArray.remove = function(id) {
+            return store.remove({id: id}).write();
           };
+
+          lowArray.afterChange = function(changes, hot) {
+            let get = hot.getSourceDataAtRow;
+            changes.forEach(function(change) {
+              let item = get(change[0]);
+              lowArray.save(item);
+            });
+          }
+
+          lowArray.getRenderer = function(path) {
+            return function(hot, td, row, col, prop, id, cellProperties) {
+              let label = '';
+              if (id) {
+                let item = lowArray.getAsc(id);
+                if (item) {
+                  label = _.get(item, path);
+                }
+              }
+              angular.element(td).html(label);
+              return td;
+            };
+          };
+
+          lowArray.getOptions = function getOptions(path) {
+            return function(row, col, prop) {
+              let items = lowArray.query();
+              return items.reduce(function(coll, item) {
+                let id = item[primaryKey];
+                if (id) {
+                  coll[id] = _.get(item, path);
+                }
+                return coll;
+              }, {});
+            }
+          }
 
           lowArray.init = function() {
             store = $lowdb.get(params.store);
@@ -96,6 +143,7 @@ angular.module('webdan')
           function init() {
             lowArray.init();
             $lowdb.appendResource(lowArray);
+            primaryKey = params.primaryKey || 'id';
             foreignKeys = angular.merge({}, provider.defaults.foreignKeys, params.foreignKeys || {});
 
             return lowArray;
