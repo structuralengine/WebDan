@@ -29,6 +29,7 @@ angular.module('webdan')
           let store;
           let primaryKey;
           let foreignKeys;
+          let afterAdd;
 
           function lowArray() {}
 
@@ -61,7 +62,10 @@ angular.module('webdan')
             if (primaryKey == 'id') {
               doc[primaryKey] = _.createId();
             }
-            return store.push(doc).write();
+            let result = store.push(doc).write();
+            if (afterAdd && foreignKeys.children) {
+              afterAdd(doc[primaryKey], foreignKeys.children);
+            }
           };
 
           lowArray.update = function(doc) {
@@ -95,14 +99,14 @@ angular.module('webdan')
               angular.forEach(foreignKeys.parent, function(foreignKey, alias) {
                 if (angular.isDefined(doc[foreignKey])) {
                   let Parent = $injector.get(alias);
-                  if (Parent) {
+                  if (!Parent) {
+                    throw 'Invalid parent: '+ alias;
+                  }
+                  else {
                     let parent = Parent.getAsc(doc[foreignKey], foreignKey);
                     if (parent) {
                       doc[alias] = parent;
                     }
-                  }
-                  else {
-                    throw 'Invalid parent: '+ alias;
                   }
                 }
               });
@@ -115,11 +119,13 @@ angular.module('webdan')
           };
 
           lowArray.afterChange = function(changes, hot) {
-            let get = hot.getSourceDataAtRow;
-            changes.forEach(function(change) {
-              let item = get(change[0]);
-              lowArray.save(item);
-            });
+            if (changes) {
+              let get = hot.getSourceDataAtRow;
+              changes.forEach(function(change) {
+                let item = get(change[0]);
+                lowArray.save(item);
+              });
+            }
           }
 
           lowArray.getRenderer = function(path) {
@@ -147,6 +153,26 @@ angular.module('webdan')
                 return coll;
               }, {});
             }
+          };
+
+          lowArray.parseColumns = function(columns) {
+            let parentForeignKeys = {};
+            angular.forEach(foreignKeys.parent, function(foreignKey, alias) {
+              parentForeignKeys[foreignKey] = alias;
+            });
+
+            columns.forEach(function(column) {
+              let parentForeignKey = column.data;
+              let parentAlias = parentForeignKeys[parentForeignKey];
+              if (angular.isDefined(parentAlias)) {
+                let Parent = $injector.get(parentAlias);
+                let path = column.path;
+                if (!path) {
+                  throw 'no foreign path for '+ parentAlias;
+                }
+                column.renderer = Parent.getRenderer(path);
+              }
+            });
           }
 
           lowArray.init = function() {
@@ -158,6 +184,10 @@ angular.module('webdan')
             $lowdb.appendResource(lowArray);
             primaryKey = params.primaryKey || 'id';
             foreignKeys = angular.merge({}, provider.defaults.foreignKeys, params.foreignKeys || {});
+
+            if (angular.isDefined(params.afterAdd)) {
+              afterAdd = params.afterAdd;
+            }
 
             return lowArray;
           }

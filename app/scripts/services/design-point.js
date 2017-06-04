@@ -8,23 +8,46 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('DesignPoint', ['$lowArray', 'designPointsConfig',
-    function($lowArray, designPointsConfig) {
+  .factory('DesignPoint', ['$lowArray', '$injector', 'designPointsConfig', 'appConfig',
+    function($lowArray, $injector, designPointsConfig, appConfig) {
 
       let DesignPoint = $lowArray({
         store: 'designPoints',
         foreignKeys: {
           parent: {
-            Member: 'member_id',
+            Member: 'm_no',
           },
           children: {
-            Bar: 'bar_id',
-            Fatigue: 'fatigue_id',
-            BendingMoment: 'bendingMoment_id',
-            Shear: 'shear_id',
+            Bar: 'designPoint_id',
+            Fatigue: 'designPoint_id',
+            BendingMoment: 'designPoint_id',
+            Shear: 'designPoint_id',
           },
-        }
+        },
+        afterAdd: addChildren,
       });
+
+      function addChildren(id, childForeignKeys) {
+        angular.forEach(childForeignKeys, function(foreignKey, alias) {
+          let Child = $injector.get(alias);
+          if (!Child) {
+            throw 'no such child resource: '+ alias;
+          }
+          switch (alias) {
+            case 'Bar':
+              let positions = appConfig.defaults.bars.positions;
+              angular.forEach(positions, function(label, position) {
+                let bar = {};
+                bar[foreignKey] = id;
+                bar.rebar_side = position;
+                Child.add(bar);
+              });
+              break;
+            default:
+              break;
+          }
+        });
+      }
 
       function createNestedHeaders() {
         let nestedHeaders = [];

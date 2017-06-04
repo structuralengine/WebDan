@@ -4,20 +4,12 @@
     <a href="#!/bars/add"><span class="glyphicon glyphicon-plus"></span></a>
   </h2>
 
-  <section ng-repeat="group in ctrl.groups" ng-init="bars = ctrl.groupedBars[group.$id]">
+  <section ng-repeat="group in ctrl.groups" ng-init="bars = ctrl.groupedBars[group.g_no]">
     <h3>{{group.g_name}}</h3>
 
-    <div class="row">
-      <div class="col-sm-10">
-        <hot-table
-          settings="ctrl.settings"
-          datarows="bars">
-        </hot-table>
-      </div>
-
-      <div class="col-sm-2">
-        <pre>{{bars|json}}</pre>
-      </div>
-    </div>
+    <hot-table
+      settings="ctrl.settings"
+      datarows="bars">
+    </hot-table>
   </section>
 </section>

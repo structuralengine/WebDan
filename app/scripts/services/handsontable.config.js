@@ -8,8 +8,8 @@
  * Constant in the webdan.
  */
 angular.module('webdan')
-  .service('handsontableConfig', ['appConfig', 'checkboxRenderer',
-    function (appConfig, checkboxRenderer) {
+  .service('handsontableConfig', ['appConfig', 'checkboxRenderer', '$log',
+    function (appConfig, checkboxRenderer, $log) {
 
       let defaultSettings = appConfig.defaults.handsontable.settings;
 

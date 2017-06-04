@@ -147,5 +147,18 @@ angular.module('webdan')
           },
         ],
       },
+      bars: {
+        positions: {
+          1: "上",
+          2: "下"
+        },
+      },
+      fatigues: {
+        positions: {
+          1: '曲げ用・上',
+          2: '曲げ用・下',
+          3: 'せん断用',
+        },
+      },
     },
   });
