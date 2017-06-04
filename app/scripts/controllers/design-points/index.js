@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsIndexCtrl', ['$scope', '$log', 'DesignPoint', 'Member', 'Group',
-    function ($scope, $log, DesignPoint, Member, Group) {
+  .controller('DesignPointsIndexCtrl', ['$scope', '$log', 'DesignPoint', 'Member', 'Group', 'handsontableConfig',
+    function ($scope, $log, DesignPoint, Member, Group, handsontableConfig) {
       let ctrl = this;
 
       function init() {
@@ -23,39 +23,11 @@ angular.module('webdan')
           type: 'numeric',
         });
 
-        ctrl.settings = {
-          rowHeaders: true,
-          colHeaders: true,
-          minSpareRows: 1,
+        ctrl.settings = handsontableConfig.create({
+          resource: DesignPoint,
           nestedHeaders: nestedHeaders,
           columns: columns,
-          contextMenu: {
-            items: {
-              'remove_row': {
-                name: '行削除',
-              },
-            },
-          },
-          afterChange: function(changes, source) {
-            if (source !== 'loadData') {
-              let get = this.getSourceDataAtRow;
-              changes.forEach(function(change) {
-                let designPoint = get(change[0]);
-                DesignPoint.save(designPoint);
-              });
-            }
-          },
-          beforeRemoveRow: function(index, amount, logicalRows) {
-            let get = this.getSourceDataAtRow;
-            logicalRows.map(function(row) {
-              let designPoint = get(row);
-              return designPoint.id;
-            })
-            .forEach(function(id) {
-              DesignPoint.remove(id);
-            });
-          },
-        };
+        });
 
         let designPoints = DesignPoint.query();
         ctrl.groupedDesignPoints = _.groupBy(designPoints, function(designPoint) {
