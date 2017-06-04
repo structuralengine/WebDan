@@ -80,6 +80,21 @@ angular.module('webdan')
 
         calculationPrint: {},
       },
+      handsontable: {
+        settings: {
+          colHeaders: [],
+          rowHeaders: true,
+          minSpareRows: 1,
+          columns: [],
+          contextMenu: {
+            items: {
+              'remove_row': {
+                name: "行削除",
+              },
+            },
+          },
+        },
+      },
       materialStrengths: {
         bars: [
           {

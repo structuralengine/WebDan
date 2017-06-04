@@ -8,20 +8,18 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('GroupsIndexCtrl', ['$scope', '$filter', '$log', 'Group', 'HtHelper',
-    function ($scope, $filter, $log, Group, HtHelper) {
+  .controller('GroupsIndexCtrl', ['$scope', '$filter', 'Group', 'HtHelper', 'handsontableConfig',
+    function ($scope, $filter, Group, HtHelper, handsontableConfig) {
       let ctrl = this;
 
-      ctrl.settings = {
-        rowHeaders: true,
-        colHeaders: true,
-        minSpareRows: 1,
+      ctrl.settings = handsontableConfig.create({
         nestedHeaders: Group.nestedHeaders,
         columns: Group.columns,
+<<<<<<< .mine
         contextMenu: {
           items: {
             'remove_row': {
-              name: '行削除',
+              name: '�s�폜',
             },
           },
         },
@@ -45,10 +43,38 @@ angular.module('webdan')
           });
         },
       };
+=======
+        resource: Group,
+      });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+>>>>>>> .theirs
 
       function init() {
-        let groups = Group.query();
-        ctrl.groups = $filter('orderBy')(groups, function(group) {
+        ctrl.groups = $filter('orderBy')(Group.query(), function(group) {
           return group.g_no;
         });
       }
