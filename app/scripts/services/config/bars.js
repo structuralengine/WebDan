@@ -85,7 +85,7 @@ angular.module("webdan")
       },
       column: {
         data: "rebar_side",
-        type: "text",
+        type: "numeric",
       },
     },
     "軸方向鉄筋": {

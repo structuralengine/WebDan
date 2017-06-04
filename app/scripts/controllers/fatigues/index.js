@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('FatiguesIndexCtrl', ['$scope', '$log', '$q', 'Fatigue', 'Group', 'fatiguesConfig',
-    function ($scope, $log, $q, Fatigue, Group, fatiguesConfig) {
+  .controller('FatiguesIndexCtrl', ['$scope', 'Fatigue', 'DesignPoint', 'Group', 'handsontableConfig',
+    function ($scope, Fatigue, DesignPoint, Group, handsontableConfig) {
       let ctrl = this;
 
       function renderSection(instance, td, row, col, prop, value, cellProperties) {
@@ -28,35 +28,25 @@ angular.module('webdan')
 
       function init() {
         let nestedHeaders = angular.copy(Fatigue.nestedHeaders);
-        nestedHeaders[0].splice(0, 0, '部材番号', '算出点名', '断面力');
-        nestedHeaders[1].splice(0, 0, '', '', 'B');
-        nestedHeaders[2].splice(0, 0, '', '', 'H');
-
         let columns = angular.copy(Fatigue.columns);
-        columns.splice(0, 0,
-          {
-            data: 'DesignPoint.Member.m_no',
-            type: 'numeric'
-          }, {
-            data: 'DesignPoint.p_name',
-          }, {
-            data: 'DesignPoint.section',
-            type: 'numeric',
-            renderer: renderSection
-          }
-        );
 
-        ctrl.settings = {
-          rowHeaders: true,
-          colHeaders: true,
+        ctrl.settings = handsontableConfig.create({
           nestedHeaders: nestedHeaders,
-          columns: columns
-        };
-
-        let fatigues = Fatigue.$query();
-        ctrl.groupedFatigues = _.groupBy(fatigues, function(fatigue) {
-          return fatigue.DesignPoint.Member.group;
+          columns: columns,
+          resource: Fatigue,
         });
+
+        let fatigues = Fatigue.query().filter(function(fatigue) {
+          let designPoint = DesignPoint.getAsc(fatigue.designPoint_id);
+          fatigue.g_no = designPoint.Member.g_no;
+          return designPoint.p_name;
+        });
+
+        ctrl.groupedFatigues = _.groupBy(fatigues, function(fatigue) {
+          return fatigue.g_no;
+        });
+
+        ctrl.groups = Group.query();
       }
 
       init();

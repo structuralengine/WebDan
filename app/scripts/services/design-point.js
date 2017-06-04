@@ -35,12 +35,14 @@ angular.module('webdan')
           }
           switch (alias) {
             case 'Bar':
-              let positions = appConfig.defaults.bars.positions;
+            case 'Fatigue':
+              let key = (alias == 'Bar')? 'bars': 'fatigues';
+              let positions = appConfig.defaults[key].positions;
               angular.forEach(positions, function(label, position) {
-                let bar = {};
-                bar[foreignKey] = id;
-                bar.rebar_side = position;
-                Child.add(bar);
+                let child = {};
+                child[foreignKey] = id;
+                child.rebar_side = position;
+                Child.add(child);
               });
               break;
             default:
