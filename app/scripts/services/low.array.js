@@ -48,35 +48,47 @@ angular.module('webdan')
 
           lowArray.save = function(doc) {
             if (doc[primaryKey]) {
-              return lowArray.update(doc);
+              let id = doc[primaryKey];
+              let foundDoc = lowArray.get(id);
+              if (foundDoc) {
+                return lowArray.update(doc);
+              }
             }
-            else {
-              return lowArray.add(doc);
-            }
+            return lowArray.add(doc);
           }
 
           lowArray.add = function(doc) {
-            doc[primaryKey] = _.createId();
+            if (primaryKey == 'id') {
+              doc[primaryKey] = _.createId();
+            }
             return store.push(doc).write();
           };
 
           lowArray.update = function(doc) {
             let id = doc[primaryKey];
-            return store.find({id: id}).assign(doc).write();
+            let foundDoc = lowArray.get(id, true);
+            return foundDoc.assign(doc).write();
           }
 
-          lowArray.get = function(id) {
-            return lowArray.getBy(primaryKey, id);
+          lowArray.get = function(id, asRef) {
+            return lowArray.getBy(primaryKey, id, asRef);
           };
 
-          lowArray.getBy = function(prop, val) {
+          lowArray.getBy = function(prop, val, asRef) {
             let param = {};
             param[prop] = val;
-            return store.find(param).value();
+            let ref = store.find(param);
+
+            if (asRef) {
+              return ref;
+            }
+            else {
+              return ref.value();
+            }
           };
 
           lowArray.getAsc = function(id, prop) {
-            prop = prop || 'id';
+            prop = prop || primaryKey;
             let doc = lowArray.getBy(prop, id);
             if (doc) {
               doc = angular.copy(doc);

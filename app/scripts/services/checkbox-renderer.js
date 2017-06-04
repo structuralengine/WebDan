@@ -10,9 +10,24 @@
 angular.module('webdan')
   .service('checkboxRenderer', function () {
 
+    let numRegex = /\d+/;
+
     this.render = function(instance, td, row, col, prop, value, cellProperties) {
-      if (typeof value !== 'boolean') {
-        value = !!value;
+      switch (typeof value) {
+        case 'boolean':
+          break;
+        case 'string':
+          value = value.trim().toLowerCase();
+          if (value == 'true') {
+            value = true;
+          }
+          else {
+            value = false;
+          }
+          break;
+        default:
+          value = false;
+          break;
       }
       let checkboxRenderer = Handsontable.renderers.getRenderer('checkbox');
       checkboxRenderer(instance, td, row, col, prop, value, cellProperties);

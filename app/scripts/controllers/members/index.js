@@ -14,7 +14,7 @@ angular.module('webdan')
 
       function init() {
         let columns = angular.copy(Member.columns);
-        columns[0].renderer = Group.getRenderer('g_name', 'g_no');
+        columns[0].renderer = Group.getRenderer('g_name');
 
         ctrl.settings = handsontableConfig.create({
           nestedHeaders: Member.nestedHeaders,

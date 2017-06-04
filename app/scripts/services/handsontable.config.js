@@ -8,8 +8,8 @@
  * Constant in the webdan.
  */
 angular.module('webdan')
-  .service('handsontableConfig', ['appConfig',
-    function (appConfig) {
+  .service('handsontableConfig', ['appConfig', 'checkboxRenderer',
+    function (appConfig, checkboxRenderer) {
 
       let defaultSettings = appConfig.defaults.handsontable.settings;
 
@@ -27,6 +27,11 @@ angular.module('webdan')
           }
           else {
             settings.columns = params.columns;
+            angular.forEach(settings.columns, function(column) {
+              if (column.type == 'checkbox') {
+                column.renderer = checkboxRenderer.render;
+              }
+            });
           }
         }
         else {
