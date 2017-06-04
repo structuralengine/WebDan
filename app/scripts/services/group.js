@@ -13,6 +13,7 @@ angular.module('webdan')
 
         let Group = $lowArray({
           store: 'groups',
+          primaryKey: 'g_no',
           foreignKeys: {
             children: {
               Member: 'member_id'

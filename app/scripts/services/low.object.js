@@ -52,7 +52,14 @@ angular.module('webdan')
             let key = propKeys[row];
             storedObject[key] = value;
             store.write();
-          }
+          };
+
+          lowObject.afterChange = function(changes, hot) {
+            changes.forEach(function(change) {
+              let [row, prop, oldVal, newVal] = change;
+              lowObject.save(row, newVal);
+            });
+          };
 
           lowObject.init = function() {
             store = $lowdb.get(params.store);
