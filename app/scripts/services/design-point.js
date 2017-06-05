@@ -45,6 +45,13 @@ angular.module('webdan')
                 Child.add(child);
               });
               break;
+
+            case 'BendingMoment':
+              let bendingMoment = {};
+              bendingMoment.designPoint_id = id;
+              Child.add(bendingMoment);
+              break;
+
             default:
               break;
           }

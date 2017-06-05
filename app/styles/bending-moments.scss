@@ -1,0 +1,12 @@
+main {
+  .bending-moments {
+    hot-table {
+      span.break {
+        &:before {
+          content: "\A" ;
+          white-space: pre;
+        }
+      }
+    }
+  }
+}

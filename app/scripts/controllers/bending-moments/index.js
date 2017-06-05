@@ -8,34 +8,34 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BendingMomentsIndexCtrl', ['$scope', '$log', 'BendingMoment',
-    function ($scope, $log, BendingMoment) {
+  .controller('BendingMomentsIndexCtrl', ['$scope', '$filter', 'BendingMoment', 'DesignPoint', 'handsontableConfig',
+    function ($scope, $filter, BendingMoment, DesignPoint, handsontableConfig) {
       let ctrl = this;
 
       function init() {
         let nestedHeaders = BendingMoment.nestedHeaders;
-        nestedHeaders[0].splice(0, 0, '部材番号', '部材名', '算出点名');
-        nestedHeaders[1].splice(0, 0, '', '', '');
-        nestedHeaders[2].splice(0, 0, '', '', '');
-
         let columns = BendingMoment.columns;
-        columns.splice(0, 0, {
-          data: 'DesignPoint.Member.m_no',
-          type: 'numeric'
-        }, {
-          data: 'DesignPoint.Member.Group.g_name',
-        }, {
-          data: 'DesignPoint.p_name',
-        })
 
-        ctrl.settings = {
-          rowHeaders: true,
-          colHeaders: true,
+        ctrl.settings = handsontableConfig.create({
           nestedHeaders: nestedHeaders,
-          columns: columns
-        };
+          columns: columns,
+          resource: BendingMoment,
+        });
 
-        ctrl.bendingMoments = BendingMoment.$query();
+        let bendingMoments = BendingMoment.query().filter(function(bendingMoment) {
+          if (bendingMoment.m_no) {
+            return bendingMoment.m_no;
+          }
+          else {
+            let designPoint = DesignPoint.getAsc(bendingMoment.designPoint_id);
+            bendingMoment.m_no = designPoint.Member.m_no;
+            return designPoint.p_name;
+          }
+        });
+
+        ctrl.bendingMoments = $filter('orderBy')(bendingMoments, function(bendingMoment) {
+          return bendingMoment.m_no;
+        })
       }
 
       init();

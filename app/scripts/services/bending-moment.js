@@ -65,6 +65,7 @@ angular.module('webdan')
         BendingMoment.nestedHeaders = [];
         createNestedHeaders(bendingMomentsConfig, BendingMoment.nestedHeaders);
         BendingMoment.columns = createColumns(bendingMomentsConfig);
+        BendingMoment.parseColumns(BendingMoment.columns);
         return BendingMoment;
       }
 
