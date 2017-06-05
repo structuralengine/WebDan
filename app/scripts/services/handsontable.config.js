@@ -44,7 +44,7 @@ angular.module('webdan')
         settings.colHeaders = params.colHeaders || true;
         settings.rowHeaders = params.rowHeaders || true;
         settings.nestedHeaders = params.nestedHeaders || [];
-        settings.minSpareRows = params.minSpareRows || 1;
+        settings.minSpareRows = angular.isDefined(params.minSpareRows)? params.minSpareRows: 1;
         angular.merge(settings.contextMenu, params.contextMenu || {});
 
         settings.afterChange = function(changes, source) {

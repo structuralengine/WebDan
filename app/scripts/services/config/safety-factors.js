@@ -15,6 +15,7 @@ angular.module('webdan')
       column: {
         data: 'name',
         type: 'text',
+        readOnly: true,
       },
     },
     '曲げ 安全係数': {

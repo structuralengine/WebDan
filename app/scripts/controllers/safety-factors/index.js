@@ -8,40 +8,27 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SafetyFactorsIndexCtrl', ['$scope', '$log', '$filter', 'SafetyFactor', 'Group', 'appConfig',
-    function($scope, $log, $filter, SafetyFactor, Group, appConfig) {
+  .controller('SafetyFactorsIndexCtrl', ['$scope', '$log', '$filter', 'SafetyFactor', 'Group', 'handsontableConfig',
+    function($scope, $log, $filter, SafetyFactor, Group, handsontableConfig) {
       let ctrl = this;
-      let considerRebars = {};
-
-      function renderConsiderRebar(instance, td, row, col, prop, value, cellProperties) {
-        if (value) {
-          let considerRebar = considerRebars[value] || {};
-          let name = considerRebar.name;
-          angular.element(td).html(name);
-        }
-        return td;
-      }
 
       function init() {
         let columns = angular.copy(SafetyFactor.columns);
-        let considerRebarColumn = columns[columns.length - 1];
-        considerRebarColumn.renderer = renderConsiderRebar;
 
-        appConfig.defaults.safetyFactors.considerRebars.forEach(function(considerRebar) {
-          considerRebars[considerRebar.value] = considerRebar;
-        });
-
-        ctrl.settings = {
+        ctrl.settings = handsontableConfig.create({
           rowHeaders: false,
-          colHeaders: true,
+          minSpareRows: 0,
           nestedHeaders: SafetyFactor.nestedHeaders,
           columns: columns,
-        };
-
-        let safetyFactors = SafetyFactor.$query();
-        ctrl.groupedSafetyFactors = _.groupBy(safetyFactors, function(safetyFactor) {
-          return safetyFactor.group_id;
+          resource: SafetyFactor,
         });
+
+        let safetyFactors = SafetyFactor.query();
+        ctrl.groupedSafetyFactors = _.groupBy(safetyFactors, function(safetyFactor) {
+          return safetyFactor.g_no;
+        });
+
+        ctrl.groups = Group.query();
       }
 
       init();
