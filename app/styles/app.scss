@@ -28,6 +28,14 @@ body {
           font-size: 50%;
         }
       }
+      hot-table {
+        span.break {
+          &:before {
+            content: "\A" ;
+            white-space: pre;
+          }
+        }
+      }
     }
   }
 }

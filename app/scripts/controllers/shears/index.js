@@ -8,34 +8,34 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('ShearsIndexCtrl', ['$scope', '$log', 'Shear',
-    function ($scope, $log, Shear) {
+  .controller('ShearsIndexCtrl', ['$scope', '$filter', 'Shear', 'DesignPoint', 'handsontableConfig',
+    function ($scope, $filter, Shear, DesignPoint, handsontableConfig) {
       let ctrl = this;
 
       function init() {
         let nestedHeaders = angular.copy(Shear.nestedHeaders);
-        nestedHeaders[0].splice(0, 0, '部材番号', '部材名', '算出点名');
-        nestedHeaders[1].splice(0, 0, '', '', '');
-        nestedHeaders[2].splice(0, 0, '', '', '');
-
         let columns = angular.copy(Shear.columns);
-        columns.splice(0, 0, {
-          data: 'DesignPoint.Member.m_no',
-          type: 'numeric'
-        }, {
-          data: 'DesignPoint.Member.Group.g_name',
-        }, {
-          data: 'DesignPoint.p_name',
-        })
 
-        ctrl.settings = {
-          rowHeaders: true,
-          colHeaders: true,
+        ctrl.settings = handsontableConfig.create({
           nestedHeaders: nestedHeaders,
-          columns: columns
-        };
+          columns: columns,
+          resource: Shear,
+        });
 
-        ctrl.shears = Shear.$query();
+        let shears = Shear.query().filter(function(shear) {
+          if (shear.m_no) {
+            return shear.m_no;
+          }
+          else {
+            let designPoint = DesignPoint.getAsc(shear.designPoint_id);
+            shear.m_no = designPoint.Member.m_no;
+            return designPoint.p_name;
+          }
+        });
+
+        ctrl.shears = $filter('orderBy')(shears, function(shear) {
+          return shear.m_no;
+        })
       }
 
       init();

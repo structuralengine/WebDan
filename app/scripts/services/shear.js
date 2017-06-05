@@ -24,6 +24,7 @@ angular.module('webdan')
         let maxDepth = 2;
         Shear.nestedHeaders = HtHelper.parseNestedHeaders(shearsConfig, maxDepth);
         Shear.columns = HtHelper.parseColumns(shearsConfig);
+        Shear.parseColumns(Shear.columns);
         return Shear;
       }
 

@@ -47,9 +47,10 @@ angular.module('webdan')
               break;
 
             case 'BendingMoment':
-              let bendingMoment = {};
-              bendingMoment.designPoint_id = id;
-              Child.add(bendingMoment);
+            case 'Shear':
+              let child = {};
+              child[foreignKey] = id;
+              Child.add(child);
               break;
 
             default:
