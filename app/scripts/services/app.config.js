@@ -96,28 +96,26 @@ angular.module('webdan')
         },
       },
       materialStrengths: {
-        bars: [
-          {
+        bars: {
+          "yield": {
             name: '降伏強度',
             en: 'Yield strength',
-            value: '',
-          },{
+          },
+          "tension": {
             name: '設計引張強度',
             en: 'Tension strength',
-            value: '',
           },
-        ],
-        ranges: [
-          {
+        },
+        ranges: {
+          "above": {
             name: 'D29 以上',
             en: 'above x',
-            value: 'above',
-          },{
+          },
+          "below": {
             name: 'D25 以下',
             en: 'below x',
-            value: 'below',
           },
-        ],
+        },
       },
       safetyFactors: {
         keys: [

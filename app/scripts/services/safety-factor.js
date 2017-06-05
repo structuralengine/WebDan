@@ -33,11 +33,12 @@ angular.module('webdan')
 
       let considerRebars = {};
       function renderConsiderRebar(instance, td, row, col, prop, value, cellProperties) {
+        let content = '';
         if (value) {
           let considerRebar = considerRebars[value] || {};
-          let name = considerRebar.name;
-          angular.element(td).html(name);
+          content = considerRebar.name;
         }
+        angular.element(td).html(content);
         return td;
       }
 

@@ -142,6 +142,23 @@ angular.module('webdan')
             };
           };
 
+          lowArray.getSelectRenderer = function(options, path) {
+            return function renderB(hot, td, row, col, prop, value, cellProperties) {
+              let content = '';
+              if (value) {
+                let option = options[value] || {};
+                if (path) {
+                  content = _.get(option, path);
+                }
+                else {
+                  content = option;
+                }
+              }
+              angular.element(td).html(content);
+              return td;
+            }
+          }
+
           lowArray.getOptions = function getOptions(path) {
             return function(row, col, prop) {
               let items = lowArray.query();

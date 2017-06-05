@@ -16,8 +16,9 @@ angular.module('webdan')
           primaryKey: 'g_no',
           foreignKeys: {
             children: {
-              "Member": 'member_id',
+              "Member": 'g_no',
               "SafetyFactor": 'g_no',
+              "MaterialStrength": "g_no",
             },
           },
           afterAdd: addChildren,
@@ -38,6 +39,20 @@ angular.module('webdan')
                   child.name = key;
                   Child.add(child);
                 });
+                break;
+
+              case 'MaterialStrength':
+                let bars = appConfig.defaults.materialStrengths.bars;
+                let ranges = appConfig.defaults.materialStrengths.ranges;
+                angular.forEach(bars, function(bar, barKey) {
+                  angular.forEach(ranges, function(range, rangeKey) {
+                    let child = {};
+                    child[foreignKey] = id;
+                    child.bar = barKey;
+                    child.range = rangeKey;
+                    Child.add(child);
+                  })
+                })
                 break;
 
               default:
