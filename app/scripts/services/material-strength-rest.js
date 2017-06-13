@@ -8,34 +8,20 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MaterialStrengthRest', ['$lowObject', 'materialStrengthRestConfig', 'HtHelper',
-    function ($lowObject, materialStrengthRestConfig, HtHelper) {
+  .factory('MaterialStrengthRest', ['$lowdb', 'LowResource', 'materialStrengthRestConfig', 'HtHelper',
+    function ($lowdb, LowResource, materialStrengthRestConfig, HtHelper) {
 
-      let MaterialStrengthRest = $lowObject({
-        store: 'materialStrengthRest',
-        foreignKeys: {
-          parent: {
-            Group: 'group_id',
+      let MaterialStrengthRest = LowResource({
+        "store": 'materialStrengthRests',
+        "foreignKeys": {
+          "parents": {
+            Group: 'g_no',
           },
         },
       });
 
-      function parseConfig(items, config) {
-        config = config || {};
-        Object.keys(items).forEach(function(key) {
-          config[key] = {
-            key: key,
-            label: items[key].ja || null,
-          };
-        });
-      }
+      _.mixin(MaterialStrengthRest, HtHelper);
 
-      function init() {
-        let config = MaterialStrengthRest.config = {};
-        parseConfig(materialStrengthRestConfig, config);
-        return MaterialStrengthRest;
-      }
-
-      return init();
+      return MaterialStrengthRest;
     }
   ]);

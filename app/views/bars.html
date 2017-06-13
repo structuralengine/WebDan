@@ -1,1 +1,12 @@
-<p>This is the bars view.</p>
+<section class="bars">
+  <h2>Bars</h2>
+
+  <section ng-repeat="group in ctrl.groups" ng-init="bars = ctrl.bars[group.g_no] || []">
+    <h3>{{group.g_name}}</h3>
+
+    <hot-table
+      settings="ctrl.settings"
+      datarows="bars">
+    </hot-table>
+  </section>
+</section>

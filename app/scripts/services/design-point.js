@@ -8,113 +8,63 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('DesignPoint', ['$lowArray', '$injector', 'designPointsConfig', 'appConfig',
-    function($lowArray, $injector, designPointsConfig, appConfig) {
+  .factory('DesignPoint', ['$injector', 'LowResource', 'designPointConfig', 'barConfig', 'fatigueConfig', 'HtHelper',
+    function ($injector, LowResource, designPointConfig, barConfig, fatigueConfig, HtHelper) {
 
-      let DesignPoint = $lowArray({
-        store: 'designPoints',
-        foreignKeys: {
-          parent: {
+      let foreignKey = 'designPointId';
+
+      let DesignPoint = LowResource({
+        "store": 'designPoints',
+        "foreignKeys": {
+          "parents": {
             Member: 'm_no',
           },
-          children: {
-            Bar: 'designPoint_id',
-            Fatigue: 'designPoint_id',
-            BendingMoment: 'designPoint_id',
-            Shear: 'designPoint_id',
+          "children": {
+            Bar: foreignKey,
+            Fatigue: foreignKey,
+            BendingMoment: foreignKey,
+            Shear: foreignKey,
           },
         },
-        afterAdd: addChildren,
+        afterAdd: afterAdd,
       });
 
-      function addChildren(id, childForeignKeys) {
-        angular.forEach(childForeignKeys, function(foreignKey, alias) {
+      function afterAdd(designPointId) {
+        let children = this.foreignKeys.children;
+        let aliasesWithSide = ['Bar', 'Fatigue'];
+
+        angular.forEach(children, function(foreignKey, alias) {
           let Child = $injector.get(alias);
-          if (!Child) {
-            throw 'no such child resource: '+ alias;
+
+          // BendingMoment, Shear
+          if (!aliasesWithSide.includes(alias)) {
+            let data = {designPointId: designPointId};
+            Child.add(data);
           }
-          switch (alias) {
-            case 'Bar':
-            case 'Fatigue':
-              let key = (alias == 'Bar')? 'bars': 'fatigues';
-              let positions = appConfig.defaults[key].positions;
-              angular.forEach(positions, function(label, position) {
-                let child = {};
-                child[foreignKey] = id;
-                child.rebar_side = position;
-                Child.add(child);
-              });
-              break;
 
-            case 'BendingMoment':
-            case 'Shear':
-              let child = {};
-              child[foreignKey] = id;
-              Child.add(child);
-              break;
+          // Bar, Fatigue
+          else {
+            let config = (alias == 'Bar')? barConfig: fatigueConfig;
+            let key = _.findKey(config, function(cfg) {
+              return (cfg.var == 'rebar_side');
+            });
 
-            default:
-              break;
+            let sides = _.get(config, key +'.values', []);
+            angular.forEach(sides, function(label, id) {
+              let data = {
+                designPointId: designPointId,
+                rebar_side: id,
+              };
+              Child.add(data);
+            });
           }
         });
       }
 
-      function createNestedHeaders() {
-        let nestedHeaders = [];
-        let nestedHeader;
-        for (let i = 0; i < 2; i++) {
-          nestedHeader = [];
-          if (i == 0) {
-            angular.forEach(designPointsConfig, function(config, ja) {
-              if (angular.isUndefined(config.items)) {
-                nestedHeader.push(ja);
-              }
-              else {
-                nestedHeader.push({
-                  label: ja,
-                  colspan: Object.keys(config.items).length
-                })
-              }
-            })
-          }
-          else {
-            angular.forEach(designPointsConfig, function(config, ja) {
-              if (angular.isUndefined(config.items)) {
-                nestedHeader.push('');
-              }
-              else {
-                angular.forEach(config.items, function(conf, ja) {
-                  nestedHeader.push(ja)
-                })
-              }
-            })
-          }
-          nestedHeaders.push(nestedHeader);
-        }
-        return nestedHeaders;
-      }
+      _.mixin(DesignPoint, HtHelper);
 
-      function createColumns() {
-        let columns = [];
-        angular.forEach(designPointsConfig, function(config, ja) {
-          if (angular.isUndefined(config.items)) {
-            columns.push(config.column);
-          }
-          else {
-            angular.forEach(config.items, function(conf, ja) {
-              columns.push(conf.column);
-            })
-          }
-        });
-        return columns;
-      }
+      DesignPoint.htInit(designPointConfig);
 
-      function init() {
-        DesignPoint.nestedHeaders = createNestedHeaders();
-        DesignPoint.columns = createColumns();
-        return DesignPoint;
-      }
-
-      return init();
+      return DesignPoint;
     }
   ]);

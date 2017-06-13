@@ -8,33 +8,15 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('BasicInformation', ['$lowObject', 'basicInformationConfig', 'HtHelper',
-    function ($lowObject, basicInformationConfig, HtHelper) {
+  .factory('BasicInformation', ['LowResource', 'basicInformationConfig', 'HtHelper',
+    function (LowResource, basicInformationConfig, HtHelper) {
 
-      let BasicInformation = $lowObject({
+      let BasicInformation = LowResource({
         store: 'basicInformation',
       });
 
-      function parseConfig(items, config) {
-        config = config || {};
-        Object.keys(items).forEach(function(key) {
-          config[key] = {
-            key: key,
-            label: items[key].ja || null
-          };
-          if (angular.isDefined(items[key].items)) {
-            config[key].items = {};
-            parseConfig(items[key].items, config[key].items);
-          }
-        });
-      }
+      _.mixin(BasicInformation, HtHelper);
 
-      function init() {
-        let config = BasicInformation.config = {};
-        parseConfig(basicInformationConfig, config);
-        return BasicInformation;
-      }
-
-      return init();
+      return BasicInformation;
     }
   ]);

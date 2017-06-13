@@ -17,9 +17,16 @@ angular.module('webdan', [
     'ngRoute',
     'ngSanitize',
     'ngTouch',
-    'firebase.ref',
+    'firebase.ref.app',
     'firebase.auth.app',
-    'angularMoment',
-    'firebase.auth.app',
-    'ngHandsontable'
+    'ngHandsontable',
+    'lowdb',
+  ])
+  .config(['$lowdbProvider', 'dbConfig',
+    function($lowdbProvider, dbConfig) {
+      $lowdbProvider.init({
+        path: dbConfig.path,
+        state: dbConfig.defaults.state,
+      });
+    }
   ]);

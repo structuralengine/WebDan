@@ -31,7 +31,7 @@ angular.module('webdan')
 
 /**
  * Adds a special `whenAuthenticated` method onto $routeProvider. This special method,
- * when called, invokes Auth.$requireSignIn() service (see Auth.js).
+ * when called, invokes Auth.$requireAuth() service (see Auth.js).
  *
  * The promise either resolves to the authenticated user object and makes it available to
  * dependency injection (see AccountCtrl), or rejects the promise if user is not logged in,
@@ -65,137 +65,72 @@ angular.module('webdan')
         templateUrl: 'views/account.html',
         controller: 'AccountCtrl'
       })
-      .whenAuthenticated('/basic-information', {
-        templateUrl: 'views/basic-information/index.html',
-        controller: 'BasicInformationIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/safety-factor-material-strength', {
-        templateUrl: 'views/safety-factor-material-strength.html',
-        controller: 'SafetyFactorMaterialStrengthCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/section-forces', {
-        templateUrl: 'views/section-forces.html',
-        controller: 'SectionForcesCtrl',
-        controllerAs: 'ctrl'
+      .whenAuthenticated('/', {
+        templateUrl: 'views/basic-information.html',
+        controller: 'BasicInformationCtrl',
+        controllerAs: 'ctrl',
       })
       .whenAuthenticated('/groups', {
-        templateUrl: 'views/groups/index.html',
-        controller: 'GroupsIndexCtrl',
-        controllerAs: 'ctrl'
+        templateUrl: 'views/groups.html',
+        controller: 'GroupsCtrl',
+        controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/groups/add', {
-        templateUrl: 'views/groups/add.html',
-        controller: 'GroupsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/members', {
-        templateUrl: 'views/members/index.html',
-        controller: 'MembersIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/members/add', {
-        templateUrl: 'views/members/add.html',
-        controller: 'MembersAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/member-sections', {
-        templateUrl: 'views/member-sections/index.html',
-        controller: 'MemberSectionsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/member-sections/add', {
-        templateUrl: 'views/member-sections/add.html',
-        controller: 'MemberSectionsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/design-points', {
-        templateUrl: 'views/design-points/index.html',
-        controller: 'DesignPointsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/design-points/add', {
-        templateUrl: 'views/design-points/add.html',
-        controller: 'DesignPointsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/bars', {
-        templateUrl: 'views/bars/index.html',
-        controller: 'BarsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/bars/add', {
-        templateUrl: 'views/bars/add.html',
-        controller: 'BarsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/fatigues', {
-        templateUrl: 'views/fatigues/index.html',
-        controller: 'FatiguesIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/fatigues/add', {
-        templateUrl: 'views/fatigues/add.html',
-        controller: 'FatiguesAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/safety-factors', {
-        templateUrl: 'views/safety-factors/index.html',
-        controller: 'SafetyFactorsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/safety-factors/add', {
-        templateUrl: 'views/safety-factors/add.html',
-        controller: 'SafetyFactorsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/material-strengths', {
-        templateUrl: 'views/material-strengths/index.html',
-        controller: 'MaterialStrengthsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/material-strengths/add', {
-        templateUrl: 'views/material-strengths/add.html',
-        controller: 'MaterialStrengthsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/material-strength-rest', {
-        templateUrl: 'views/material-strength-rest/index.html',
-        controller: 'MaterialStrengthRestIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/material-strength-rest/add', {
-        templateUrl: 'views/material-strength-rest/add.html',
-        controller: 'MaterialStrengthRestAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/bending-moments', {
-        templateUrl: 'views/bending-moments/index.html',
-        controller: 'BendingMomentsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/bending-moments/add', {
-        templateUrl: 'views/bending-moments/add.html',
-        controller: 'BendingMomentsAddCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/shears', {
-        templateUrl: 'views/shears/index.html',
-        controller: 'ShearsIndexCtrl',
-        controllerAs: 'ctrl'
-      })
-      .whenAuthenticated('/shears/add', {
-        templateUrl: 'views/shears/add.html',
-        controller: 'ShearsAddCtrl',
-        controllerAs: 'ctrl'
+      .whenAuthenticated('/material-strength-rests', {
+        templateUrl: 'views/material-strength-rests.html',
+        controller: 'MaterialStrengthRestsCtrl',
+        controllerAs: 'ctrl',
       })
       .whenAuthenticated('/calculation-print', {
-        templateUrl: 'views/calculation-print/index.html',
-        controller: 'CalculationPrintIndexCtrl',
-        controllerAs: 'ctrl'
+        templateUrl: 'views/calculation-print.html',
+        controller: 'CalculationPrintCtrl',
+        controllerAs: 'ctrl',
       })
-      .otherwise({redirectTo: '/basic-information'});
+      .whenAuthenticated('/members', {
+        templateUrl: 'views/members.html',
+        controller: 'MembersCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/member-sections', {
+        templateUrl: 'views/member-sections.html',
+        controller: 'MemberSectionsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/design-points', {
+        templateUrl: 'views/design-points.html',
+        controller: 'DesignPointsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/bars', {
+        templateUrl: 'views/bars.html',
+        controller: 'BarsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/fatigues', {
+        templateUrl: 'views/fatigues.html',
+        controller: 'FatiguesCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/bending-moments', {
+        templateUrl: 'views/bending-moments.html',
+        controller: 'BendingMomentsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/shears', {
+        templateUrl: 'views/shears.html',
+        controller: 'ShearsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/safety-factors', {
+        templateUrl: 'views/safety-factors.html',
+        controller: 'SafetyFactorsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/material-strengths', {
+        templateUrl: 'views/material-strengths.html',
+        controller: 'MaterialStrengthsCtrl',
+        controllerAs: 'ctrl',
+      })
+      .otherwise({redirectTo: '/'});
   }])
 
   /**

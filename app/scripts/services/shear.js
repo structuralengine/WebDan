@@ -8,26 +8,22 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Shear', ['$lowArray', 'shearsConfig', 'HtHelper',
-    function ($lowArray, shearsConfig, HtHelper) {
+  .factory('Shear', ['LowResource', 'shearConfig', 'HtHelper',
+    function (LowResource, shearConfig, HtHelper) {
 
-      let Shear = $lowArray({
-        store: 'shears',
-        foreignKeys: {
-          parent: {
-            DesignPoint: 'designPoint_id',
+      let Shear = LowResource({
+        "store": 'shears',
+        "foreignKeys": {
+          "parents": {
+            DesignPoint: 'designPointId',
           },
         },
       });
 
-      function init() {
-        let maxDepth = 2;
-        Shear.nestedHeaders = HtHelper.parseNestedHeaders(shearsConfig, maxDepth);
-        Shear.columns = HtHelper.parseColumns(shearsConfig);
-        Shear.parseColumns(Shear.columns);
-        return Shear;
-      }
+      _.mixin(Shear, HtHelper);
 
-      return init();
+      Shear.htInit(shearConfig);
+
+      return Shear;
     }
   ]);

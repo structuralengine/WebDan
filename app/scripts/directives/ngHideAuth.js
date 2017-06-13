@@ -1,11 +1,10 @@
+'use strict';
 
 /**
- * @ngdoc function
+ * @ngdoc directive
  * @name webdan.directive:ngHideAuth
  * @description
- * # ngHideAuthDirective
- * A directive that shows elements only when user is logged out. It also waits for Auth
- * to be initialized so there is no initial flashing of incorrect state.
+ * # ngHideAuth
  */
 angular.module('webdan')
   .directive('ngHideAuth', ['Auth', '$timeout', function (Auth, $timeout) {

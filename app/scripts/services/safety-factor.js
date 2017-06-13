@@ -8,52 +8,22 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('SafetyFactor', ['$lowArray', 'safetyFactorsConfig', 'appConfig', 'HtHelper',
-    function ($lowArray, safetyFactorsConfig, appConfig, HtHelper) {
+  .factory('SafetyFactor', ['LowResource', 'safetyFactorConfig', 'HtHelper',
+    function (LowResource, safetyFactorConfig, HtHelper) {
 
-      let SafetyFactor = $lowArray({
-        store: 'safetyFactors',
-        foreignKeys: {
-          parent: {
-            "Group": 'group_id',
+      let SafetyFactor = LowResource({
+        "store": 'safetyFactors',
+        "foreignKeys": {
+          "parents": {
+            Group: 'g_no',
           },
         },
       });
 
-      let parseColumns = SafetyFactor.parseColumns;
-      SafetyFactor.parseColumns = function(columns) {
-        parseColumns(columns);
+      _.mixin(SafetyFactor, HtHelper);
 
-        columns.forEach(function(column) {
-          if (column.data == 'consider_rebar') {
-            column.renderer = renderConsiderRebar;
-          }
-        })
-      }
+      SafetyFactor.htInit(safetyFactorConfig);
 
-      let considerRebars = {};
-      function renderConsiderRebar(instance, td, row, col, prop, value, cellProperties) {
-        let content = '';
-        if (value) {
-          let considerRebar = considerRebars[value] || {};
-          content = considerRebar.name;
-        }
-        angular.element(td).html(content);
-        return td;
-      }
-
-      function init() {
-        SafetyFactor.nestedHeaders = HtHelper.parseNestedHeaders(safetyFactorsConfig, 1);
-        SafetyFactor.columns = HtHelper.parseColumns(safetyFactorsConfig);
-        SafetyFactor.parseColumns(SafetyFactor.columns);
-
-        appConfig.defaults.safetyFactors.considerRebars.forEach(function(considerRebar) {
-          considerRebars[considerRebar.no] = considerRebar;
-        });
-
-        return SafetyFactor;
-      }
-
-      return init();
+      return SafetyFactor;
     }
   ]);

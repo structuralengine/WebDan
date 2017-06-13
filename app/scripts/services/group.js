@@ -8,65 +8,63 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Group', ['$lowArray', '$injector', 'HtHelper', 'groupsConfig', 'appConfig',
-    function ($lowArray, $injector, HtHelper, groupsConfig, appConfig) {
+  .factory('Group', ['$injector', 'LowResource', 'groupConfig', 'safetyFactorConfig', 'materialStrengthConfig', 'HtHelper',
+    function ($injector, LowResource, groupConfig, safetyFactorConfig, materialStrengthConfig, HtHelper) {
 
-        let Group = $lowArray({
-          store: 'groups',
-          primaryKey: 'g_no',
-          foreignKeys: {
-            children: {
-              "Member": 'g_no',
-              "SafetyFactor": 'g_no',
-              "MaterialStrength": "g_no",
-            },
+      let primaryKey = 'g_no';
+
+      let Group = LowResource({
+        "store": 'groups',
+        "primaryKey": primaryKey,
+        "foreignKeys": {
+          "children": {
+            Member: primaryKey,
+            SafetyFactor: primaryKey,
+            MaterialStrength: primaryKey,
+            MaterialStrengthRest: primaryKey,
           },
-          afterAdd: addChildren,
+        },
+        afterAdd: afterAdd,
+      });
+
+      function afterAdd(g_no) {
+        // SafetyFactor
+        let SafetyFactor = $injector.get('SafetyFactor');
+        let labels = safetyFactorConfig[""].values;
+        labels.forEach(function(label) {
+          let newSafetyFactor = {
+            g_no: g_no,
+            name: label,
+          };
+          SafetyFactor.save(newSafetyFactor);
         });
 
-        function addChildren(id, childForeignKeys) {
-          angular.forEach(childForeignKeys, function(foreignKey, alias) {
-            let Child = $injector.get(alias);
-            if (!Child) {
-              throw 'no such child resource: '+ alias;
-            }
-            switch (alias) {
-              case 'SafetyFactor':
-                let keys = appConfig.defaults.safetyFactors.keys;
-                keys.forEach(function(key) {
-                  let child = {};
-                  child[foreignKey] = id;
-                  child.name = key;
-                  Child.add(child);
-                });
-                break;
-
-              case 'MaterialStrength':
-                let bars = appConfig.defaults.materialStrengths.bars;
-                let ranges = appConfig.defaults.materialStrengths.ranges;
-                angular.forEach(bars, function(bar, barKey) {
-                  angular.forEach(ranges, function(range, rangeKey) {
-                    let child = {};
-                    child[foreignKey] = id;
-                    child.bar = barKey;
-                    child.range = rangeKey;
-                    Child.add(child);
-                  })
-                })
-                break;
-
-              default:
-                break;
-            }
+        // MaterialStrength
+        let MaterialStrength = $injector.get('MaterialStrength');
+        let configs = Object.values(materialStrengthConfig);
+        let bars = configs[0].values;
+        let ranges = configs[1].values;
+        bars.forEach(function(bar) {
+          ranges.forEach(function(range) {
+            let newMaterialStrength = {
+              bar: bar,
+              range: range,
+              g_no: g_no,
+            };
+            MaterialStrength.save(newMaterialStrength);
           });
-        }
+        });
 
-        function init() {
-          Group.nestedHeaders = HtHelper.parseNestedHeaders(groupsConfig);
-          Group.columns = HtHelper.parseColumns(groupsConfig);
-          return Group;
-        }
-
-        return init();
+        // MaterialStrengthRest
+        let MaterialStrengthRest = $injector.get('MaterialStrengthRest');
+        let newMaterialStrengthRest = {g_no: g_no};
+        MaterialStrengthRest.add(newMaterialStrengthRest);
       }
-    ]);
+
+      _.mixin(Group, HtHelper);
+
+      Group.htInit(groupConfig);
+
+      return Group;
+    }
+  ]);

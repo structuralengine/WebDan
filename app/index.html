@@ -4,63 +4,68 @@
     <meta charset="utf-8">
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>webdan</title>
+    <title>app</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
 
     <!-- build:css styles/vendor.css -->
-    <link rel="stylesheet" href="http://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.css">
     <!-- bower:css -->
     <link rel="stylesheet" href="/bower_components/pikaday/css/pikaday.css" />
-    <link rel="stylesheet" href="/bower_components/handsontable/dist/handsontable.css" />
     <!-- endbower -->
+    <link rel="stylesheet" href="http://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.css">
     <!-- endbuild -->
 
-    <!-- build:css styles/app.css -->
+    <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/app.css">
-    <link rel="stylesheet" href="styles/header.css">
-    <link rel="stylesheet" href="styles/groups.css">
-    <link rel="stylesheet" href="styles/design-points.css">
-    <link rel="stylesheet" href="styles/member-sections.css">
-    <link rel="stylesheet" href="styles/bars.css">
-    <link rel="stylesheet" href="styles/fatigues.css">
-    <link rel="stylesheet" href="styles/bending-moments.css">
-    <link rel="stylesheet" href="styles/material-strength-rest.css">
-    <link rel="stylesheet" href="styles/calculation-print.css">
-    <!-- endbuild -->
-
-    <!-- build:js scripts/vendor/modernizr.js -->
-    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <link rel="stylesheet" href="styles/basic-information.css">
     <!-- endbuild -->
   </head>
-  <body ng-app="webdan" ng-clock>
+  <body ng-app="webdan" ng-cloak>
     <!--[if lt IE 10]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
     <div class="container">
       <div class="header">
-        <ul class="nav nav-pills pull-right" ng-controller="MenuCtrl as menu" ng-include="'views/menubar.html'"></ul>
+        <ul class="nav nav-pills pull-right" ng-controller="MenuCtrl as menu" ng-include="'views/_menu.html'"></ul>
         <h3 class="text-muted">webdan</h3>
-        <ul class="nav nav-pills" ng-include="'views/tabs.html'" ng-controller="TabsCtrl as tabs"></ul>
+        <ul class="nav nav-pills" ng-include="'views/_tabs.html'" ng-controller="TabsCtrl as tabs"></ul>
       </div>
 
-      <div class="content">
-        <main ng-view=""></main>
-      </div>
+      <ol>
+        <li><a href="#!/basic-information">Basic Information</a></li>
+        <li>
+          <a href="#!/groups">Groups</a>
+          <ol>
+            <li>
+              <a href="#!/members">Members</a>
+              <ol>
+                <li><a href="#!/member-sections">Member Sections</a></li>
+                <li>
+                  <a href="#!/design-points">Design Points</a>
+                  <ol>
+                    <li><a href="#!/bars">Bars</a></li>
+                    <li><a href="#!/fatigues">Fatigues</a></li>
+                    <li><a href="#!/bending-moments">Bending Moments</a></li>
+                    <li><a href="#!/shears">Shears</a></li>
+                  </ol>
+                </li>
+              </ol>
+            </li>
+            <li><a href="#!/safety-factors">Safety Factors</a></li>
+            <li><a href="#!/material-strengths">Material Strengths</a></li>
+            <li><a href="#!/material-strength-rests">Material Strength Rests</a></li>
+          </ol>
+        </li>
+        <li><a href="#!/calculation-print">Calculation Print</a></li>
+      </ol>
+
+      <main ng-view></main>
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-      (function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
-      function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
-      e=o.createElement(i);r=o.getElementsByTagName(i)[0];
-      e.src='https://www.google-analytics.com/analytics.js';
-      r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
-      ga('create','UA-XXXXX-X');ga('send','pageview');
-    </script>
 
     <!-- build:js scripts/vendor.js -->
     <!-- bower:js -->
@@ -78,105 +83,74 @@
     <script src="/bower_components/angular-route/angular-route.js"></script>
     <script src="/bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="/bower_components/angular-touch/angular-touch.js"></script>
-    <script src="/bower_components/file-saver/FileSaver.js"></script>
+    <script src="/bower_components/lodash/lodash.js"></script>
+    <script src="/bower_components/lowdb/dist/lowdb.js"></script>
+    <script src="/bower_components/handsontable.full/index.js"></script>
     <script src="/bower_components/moment/moment.js"></script>
-    <script src="/bower_components/angular-moment/angular-moment.js"></script>
     <script src="/bower_components/numbro/numbro.js"></script>
     <script src="/bower_components/pikaday/pikaday.js"></script>
     <script src="/bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
-    <script src="/bower_components/handsontable/dist/handsontable.js"></script>
     <script src="/bower_components/ngHandsontable/dist/ngHandsontable.js"></script>
-    <script src="/bower_components/lodash/lodash.js"></script>
-    <script src="/bower_components/lowdb/dist/lowdb.js"></script>
+    <script src="/bower_components/ht-lowdb/dist/ht-lowdb.js"></script>
     <!-- endbower -->
-    <script src="http://docs.handsontable.com/pro/bower_components/handsontable-pro/dist/handsontable.full.js"></script>
-    <script src="scripts/services/lodash-id.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:js scripts/plugins.js -->
     <!-- endbuild -->
 
     <!-- build:js scripts/app.js -->
     <script src="scripts/app.js"></script>
     <script src="scripts/routes.js"></script>
+    <script src="scripts/angularfire/auth.js"></script>
     <script src="scripts/angularfire/config.js"></script>
     <script src="scripts/angularfire/firebase.ref.js"></script>
-    <script src="scripts/angularfire/auth.js"></script>
+    <script src="scripts/angularfire/webdan.ref.js"></script>
+    <script src="scripts/config/app.config.js"></script>
+    <script src="scripts/config/bar.config.js"></script>
+    <script src="scripts/config/basic-information.config.js"></script>
+    <script src="scripts/config/bending-moment.config.js"></script>
+    <script src="scripts/config/calculation-print.config.js"></script>
+    <script src="scripts/config/db.config.js"></script>
+    <script src="scripts/config/design-point.config.js"></script>
+    <script src="scripts/config/fatigue.config.js"></script>
+    <script src="scripts/config/group.config.js"></script>
+    <script src="scripts/config/material-strength-rest.config.js"></script>
+    <script src="scripts/config/material-strength.config.js"></script>
+    <script src="scripts/config/member-section.config.js"></script>
+    <script src="scripts/config/member.config.js"></script>
+    <script src="scripts/config/safety-factor.config.js"></script>
+    <script src="scripts/config/shear.config.js"></script>
+    <script src="scripts/controllers/bars.js"></script>
+    <script src="scripts/controllers/basic-information.js"></script>
+    <script src="scripts/controllers/bending-moments.js"></script>
+    <script src="scripts/controllers/calculation-print.js"></script>
+    <script src="scripts/controllers/design-points.js"></script>
+    <script src="scripts/controllers/fatigues.js"></script>
+    <script src="scripts/controllers/groups.js"></script>
     <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/chat.js"></script>
+    <script src="scripts/controllers/material-strength-rests.js"></script>
+    <script src="scripts/controllers/material-strengths.js"></script>
+    <script src="scripts/controllers/member-sections.js"></script>
+    <script src="scripts/controllers/members.js"></script>
+    <script src="scripts/controllers/menu.js"></script>
+    <script src="scripts/controllers/safety-factors.js"></script>
+    <script src="scripts/controllers/shears.js"></script>
+    <script src="scripts/controllers/tabs.js"></script>
     <script src="scripts/controllers/login.js"></script>
     <script src="scripts/controllers/account.js"></script>
-    <script src="scripts/filters/reverse.js"></script>
-    <script src="scripts/directives/ngShowAuth.js"></script>
-    <script src="scripts/directives/ngHideAuth.js"></script>
-    <script src="scripts/controllers/tabs.js"></script>
-    <script src="scripts/controllers/member-section.js"></script>
-    <script src="scripts/controllers/design-point.js"></script>
-    <script src="scripts/controllers/bars.js"></script>
-    <script src="scripts/controllers/fatigue.js"></script>
-    <script src="scripts/controllers/safety-factor-material-strength.js"></script>
-    <script src="scripts/controllers/section-forces.js"></script>
-    <script src="scripts/controllers/calculation-print.js"></script>
-    <script src="scripts/services/app.config.js"></script>
-    <script src="scripts/controllers/menu.js"></script>
-    <script src="scripts/services/tmp.js"></script>
-    <script src="scripts/controllers/basic-information/index.js"></script>
-    <script src="scripts/controllers/groups/index.js"></script>
-    <script src="scripts/controllers/groups/add.js"></script>
-    <script src="scripts/services/group.js"></script>
-    <script src="scripts/services/ht-helper.js"></script>
-    <script src="scripts/angularfire/webdan.ref.js"></script>
-    <script src="scripts/services/config/groups.js"></script>
-    <script src="scripts/services/config/members.js"></script>
-    <script src="scripts/services/member.js"></script>
-    <script src="scripts/controllers/members/index.js"></script>
-    <script src="scripts/controllers/members/add.js"></script>
-    <script src="scripts/services/config/member-sections.js"></script>
-    <script src="scripts/services/member-section.js"></script>
-    <script src="scripts/controllers/member-sections/index.js"></script>
-    <script src="scripts/controllers/member-sections/add.js"></script>
-    <script src="scripts/services/config/design-points.js"></script>
-    <script src="scripts/services/design-point.js"></script>
-    <script src="scripts/controllers/design-points/index.js"></script>
-    <script src="scripts/controllers/design-points/add.js"></script>
-    <script src="scripts/services/config/bars.js"></script>
     <script src="scripts/services/bar.js"></script>
-    <script src="scripts/controllers/bars/index.js"></script>
-    <script src="scripts/controllers/bars/add.js"></script>
-    <script src="scripts/services/config/fatigues.js"></script>
-    <script src="scripts/services/fatigue.js"></script>
-    <script src="scripts/controllers/fatigues/index.js"></script>
-    <script src="scripts/controllers/fatigues/add.js"></script>
-    <script src="scripts/services/config/safety-factors.js"></script>
-    <script src="scripts/services/safety-factor.js"></script>
-    <script src="scripts/controllers/safety-factors/index.js"></script>
-    <script src="scripts/controllers/safety-factors/add.js"></script>
-    <script src="scripts/services/config/material-strengths.js"></script>
-    <script src="scripts/services/material-strength.js"></script>
-    <script src="scripts/controllers/material-strengths/index.js"></script>
-    <script src="scripts/controllers/material-strengths/add.js"></script>
-    <script src="scripts/services/config/material-strength-rest.js"></script>
-    <script src="scripts/services/material-strength-rest.js"></script>
-    <script src="scripts/controllers/material-strength-rest/index.js"></script>
-    <script src="scripts/controllers/material-strength-rest/add.js"></script>
-    <script src="scripts/services/config/bending-moments.js"></script>
-    <script src="scripts/services/bending-moment.js"></script>
-    <script src="scripts/controllers/bending-moments/index.js"></script>
-    <script src="scripts/controllers/bending-moments/add.js"></script>
-    <script src="scripts/services/config/shears.js"></script>
-    <script src="scripts/services/shear.js"></script>
-    <script src="scripts/controllers/shears/index.js"></script>
-    <script src="scripts/controllers/shears/add.js"></script>
-    <script src="scripts/controllers/calculation-print/index.js"></script>
-    <script src="scripts/services/config/basic-information.js"></script>
     <script src="scripts/services/basic-information.js"></script>
-    <script src="scripts/services/config/calculation-print.js"></script>
+    <script src="scripts/services/bending-moment.js"></script>
     <script src="scripts/services/calculation-print.js"></script>
-    <script src="scripts/services/low.db.js"></script>
-    <script src="scripts/services/low.array.js"></script>
-    <script src="scripts/services/low.object.js"></script>
-    <script src="scripts/services/handsontable.config.js"></script>
-    <script src="scripts/services/checkbox-renderer.js"></script>
+    <script src="scripts/services/design-point.js"></script>
+    <script src="scripts/services/fatigue.js"></script>
+    <script src="scripts/services/group.js"></script>
+    <script src="scripts/services/material-strength-rest.js"></script>
+    <script src="scripts/services/material-strength.js"></script>
+    <script src="scripts/services/member-section.js"></script>
+    <script src="scripts/services/member.js"></script>
+    <script src="scripts/services/safety-factor.js"></script>
+    <script src="scripts/services/shear.js"></script>
+    <script src="scripts/directives/nghideauth.js"></script>
+    <script src="scripts/directives/ngshowauth.js"></script>
+    <script src="scripts/filters/reverse.js"></script>
     <!-- endbuild -->
   </body>
 </html>

@@ -1,4 +1,4 @@
-// generated on 2017-04-10 using generator-webapp 2.3.2
+// generated on 2017-06-10 using generator-webapp 2.3.2
 const gulp = require('gulp');
 const gulpLoadPlugins = require('gulp-load-plugins');
 const browserSync = require('browser-sync').create();
@@ -12,7 +12,7 @@ const reload = browserSync.reload;
 var dev = true;
 
 gulp.task('styles', () => {
-  return gulp.src('app/styles/**/*.scss')
+  return gulp.src('app/styles/*.scss')
     .pipe($.plumber())
     .pipe($.sourcemaps.init())
     .pipe($.sass.sync({
@@ -45,10 +45,7 @@ function lint(files, options) {
 }
 
 gulp.task('lint', () => {
-  return lint([
-      'app/scripts/**/*.js',
-      '!app/scripts/**/*.webpack.js'
-    ])
+  return lint('app/scripts/**/*.js')
     .pipe(gulp.dest('app/scripts'));
 });
 gulp.task('lint:test', () => {
@@ -57,7 +54,7 @@ gulp.task('lint:test', () => {
 });
 
 gulp.task('html', ['styles', 'scripts'], () => {
-  return gulp.src('app/**/*.html')
+  return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
     .pipe($.if('*.js', $.uglify()))
     .pipe($.if('*.css', $.cssnano({safe: true, autoprefixer: false})))
@@ -102,7 +99,7 @@ gulp.task('serve', () => {
     });
 
     gulp.watch([
-      'app/**/*.html',
+      'app/*.html',
       'app/images/**/*',
       '.tmp/fonts/**/*'
     ]).on('change', reload);
@@ -145,7 +142,7 @@ gulp.task('serve:test', ['scripts'], () => {
 
 // inject bower components
 gulp.task('wiredep', () => {
-  gulp.src('app/styles/**/*.scss')
+  gulp.src('app/styles/*.scss')
     .pipe($.filter(file => file.stat && file.stat.size))
     .pipe(wiredep({
       ignorePath: /^(\.\.\/)+/

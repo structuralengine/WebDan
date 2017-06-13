@@ -11,6 +11,6 @@ firebase.initializeApp(config);
 
 
 angular.module('firebase.config', [])
-  .constant('FBURL', 'https://webdan.firebaseio.com')
-  .constant('SIMPLE_LOGIN_PROVIDERS', ['password','google'])
+  .constant('FBURL', 'https://webdan-abcc6.firebaseio.com')
+  .constant('SIMPLE_LOGIN_PROVIDERS', ['google'])
   .constant('loginRedirectPath', '/login');

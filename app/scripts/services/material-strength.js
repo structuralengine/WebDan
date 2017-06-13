@@ -8,42 +8,22 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MaterialStrength', ['$lowArray', 'materialStrengthsConfig', 'appConfig', 'HtHelper',
-    function ($lowArray, materialStrengthsConfig, appConfig, HtHelper) {
+  .factory('MaterialStrength', ['LowResource', 'materialStrengthConfig', 'HtHelper',
+    function (LowResource, materialStrengthConfig, HtHelper) {
 
-      let MaterialStrength = $lowArray({
-        store: 'materialStrengths',
-        foreignKeys: {
-          parent: {
+      let MaterialStrength = LowResource({
+        "store": 'materialStrengths',
+        "foreignKeys": {
+          "parents": {
             Group: 'g_no',
           },
         },
       });
 
-      function init() {
-        MaterialStrength.nestedHeaders = HtHelper.parseNestedHeaders(materialStrengthsConfig, 0);
-        MaterialStrength.columns = HtHelper.parseColumns(materialStrengthsConfig);
-        MaterialStrength.parseColumns(MaterialStrength.columns);
+      _.mixin(MaterialStrength, HtHelper);
 
-        MaterialStrength.columns.forEach(function(column) {
-          switch (column.data) {
-            case 'bar':
-              let bars = appConfig.defaults.materialStrengths.bars;
-              column.renderer = MaterialStrength.getSelectRenderer(bars, 'name');
-              break;
+      MaterialStrength.htInit(materialStrengthConfig);
 
-            case 'range':
-              let ranges = appConfig.defaults.materialStrengths.ranges;
-              column.renderer = MaterialStrength.getSelectRenderer(ranges, 'name');
-              break;
-            default:
-              break;
-          }
-        })
-
-        return MaterialStrength;
-      }
-
-      return init();
+      return MaterialStrength;
     }
   ]);

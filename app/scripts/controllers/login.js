@@ -70,8 +70,6 @@ angular.module('webdan')
       return f + str.substr(1);
     }
 
-
-
     function redirect() {
       $location.path('/account');
     }
@@ -79,6 +77,5 @@ angular.module('webdan')
     function showError(err) {
       $scope.err = err;
     }
-
 
   });

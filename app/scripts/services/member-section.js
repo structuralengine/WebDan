@@ -8,68 +8,22 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MemberSection', ['$lowArray', 'memberSectionsConfig',
-    function($lowArray, memberSectionsConfig) {
+  .factory('MemberSection', ['LowResource', 'memberSectionConfig', 'HtHelper',
+    function (LowResource, memberSectionConfig, HtHelper) {
 
-      let MemberSection = $lowArray({
-        store: 'memberSections',
-        foreignKeys: {
-          parent: {
+      let MemberSection = LowResource({
+        "store": 'memberSections',
+        "foreignKeys": {
+          "parents": {
             Member: 'm_no',
           },
         },
       });
 
-      function createColumns(config, columns) {
-        if (angular.isUndefined(columns)) {
-          columns = MemberSection.columns = [];
-        }
-        angular.forEach(config, function(conf, ja) {
-          if (angular.isDefined(conf.items)) {
-            createColumns(conf.items, columns);
-          }
-          else {
-            columns.push(conf.column);
-          }
-        })
-        return columns;
-      }
+      _.mixin(MemberSection, HtHelper);
 
-      function createNestedHeaders(config) {
-        let nestedHeaders = MemberSection.nestedHeaders = [];
-        let nestedHeader = [];
-        angular.forEach(config, function(conf, ja) {
-          if (angular.isUndefined(conf.items)) {
-            nestedHeader.push(ja);
-          }
-          else {
-            nestedHeader.push({
-              label: ja,
-              colspan: Object.keys(conf.items).length
-            })
-          }
-        })
-        nestedHeaders.push(nestedHeader);
-        nestedHeader = [];
-        angular.forEach(config, function(conf, ja) {
-          if (angular.isUndefined(conf.items)) {
-            nestedHeader.push('');
-          }
-          else {
-            angular.forEach(conf.items, function(cfg, ja) {
-              nestedHeader.push(ja);
-            })
-          }
-        })
-        nestedHeaders.push(nestedHeader);
-      }
+      MemberSection.htInit(memberSectionConfig);
 
-      function init() {
-        createNestedHeaders(memberSectionsConfig);
-        createColumns(memberSectionsConfig);
-        return MemberSection;
-      }
-
-      return init();
+      return MemberSection;
     }
   ]);
