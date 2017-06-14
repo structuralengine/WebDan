@@ -22,8 +22,9 @@ angular.module("webdan")
         type: "text",
         renderer: function(hot, td, row, col, prop, value, cellProperties) {
           let group = hot.getSourceDataAtRow(row);
-          cellProperties.readOnly = !group.g_no;
-          angular.element(td).html(value);
+          let readOnly = cellProperties.readOnly = !group.g_no;
+          let className = (readOnly)? Handsontable.DefaultSettings.prototype.readOnlyCellClassName: '';
+          angular.element(td).html(value).addClass(className);
           return td;
         }
       },

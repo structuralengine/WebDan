@@ -7,4 +7,10 @@ html, body, body > .container {
 }
 main {
   margin-bottom: 3em;
+
+  hot-table {
+    .htDimmed {
+      background-color: #f3f3f3;
+    }
+  }
 }
