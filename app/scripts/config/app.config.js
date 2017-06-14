@@ -10,9 +10,6 @@
 angular.module('webdan')
   .constant('appConfig', {
     defaults: {
-      member: {
-        length: 40,
-      },
       bar: {
         rebar_sides: {
           1: "上",
