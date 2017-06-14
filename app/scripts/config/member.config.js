@@ -16,6 +16,14 @@ angular.module("webdan")
         "type": 'numeric',
       },
     },
+    "部材長": {
+      "en": 'Member length',
+      "column": {
+        "data": 'm_len',
+        "type": 'numeric',
+        "format": '0.001',
+      },
+    },
     "部材名": {
       "en": 'Member Name',
       "column": {
