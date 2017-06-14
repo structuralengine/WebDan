@@ -65,6 +65,10 @@ angular.module('webdan')
         templateUrl: 'views/account.html',
         controller: 'AccountCtrl'
       })
+      .whenAuthenticated('/main', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl'
+      })
       .whenAuthenticated('/', {
         templateUrl: 'views/basic-information.html',
         controller: 'BasicInformationCtrl',

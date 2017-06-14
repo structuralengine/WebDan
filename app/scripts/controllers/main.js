@@ -8,10 +8,22 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MainCtrl', function ($scope) {
-    $scope.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
-  });
+  .controller('MainCtrl', ['$scope',
+    function ($scope) {
+
+      $scope.settings = {
+        colHeaders: true,
+        rowHeaders: true,
+        minSpareRows: 1,
+        contextMenu: ['romove_row'],
+        columns: [
+          {data: 'name'},
+        ],
+      };
+
+      $scope.bs = [
+        {name: 'b1'},
+      ];
+
+    }
+  ]);
