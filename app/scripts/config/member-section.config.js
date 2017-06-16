@@ -26,7 +26,8 @@ angular.module('webdan')
       items: {
         "": {
           column: {
-            data: 'm_len',
+            data: 'm_no',
+            path: 'm_len',
             type: 'numeric',
             format: '0.000',
             readOnly: true,
