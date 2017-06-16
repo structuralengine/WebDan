@@ -21,7 +21,6 @@ angular.module('webdan')
             Group: 'g_no',
           },
           "children": {
-            MemberSection: primaryKey,
             DesignPoint: primaryKey,
           },
         },

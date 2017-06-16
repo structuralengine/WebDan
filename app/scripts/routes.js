@@ -74,11 +74,11 @@ angular.module('webdan')
         controller: 'BasicInformationCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/groups', {
-        templateUrl: 'views/groups.html',
-        controller: 'GroupsCtrl',
-        controllerAs: 'ctrl',
-      })
+      // .whenAuthenticated('/groups', {
+      //   templateUrl: 'views/groups.html',
+      //   controller: 'GroupsCtrl',
+      //   controllerAs: 'ctrl',
+      // })
       .whenAuthenticated('/material-strength-rests', {
         templateUrl: 'views/material-strength-rests.html',
         controller: 'MaterialStrengthRestsCtrl',
@@ -94,11 +94,11 @@ angular.module('webdan')
         controller: 'MembersCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/member-sections', {
-        templateUrl: 'views/member-sections.html',
-        controller: 'MemberSectionsCtrl',
-        controllerAs: 'ctrl',
-      })
+      // .whenAuthenticated('/member-sections', {
+      //   templateUrl: 'views/member-sections.html',
+      //   controller: 'MemberSectionsCtrl',
+      //   controllerAs: 'ctrl',
+      // })
       .whenAuthenticated('/design-points', {
         templateUrl: 'views/design-points.html',
         controller: 'DesignPointsCtrl',

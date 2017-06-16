@@ -1,6 +1,10 @@
-<li role="presentation"
-    ng-repeat="(key, label) in tabs.messages"
-    ng-class="{active: tabs.path == key}">
-
-  <a ng-href="#!/{{key}}">{{label}}</a>
-</li>
+<ul class="nav nav-pills">
+  <li role="presentation"><a href="#!/basic-information">基本データ</a></li>
+  <li role="presentation"><a href="#!/members">部材・断面</a></li>
+  <li role="presentation"><a href="#!/design-points">算出点</a></li>
+  <li role="presentation"><a href="#!/bars">鉄筋配置</a></li>
+  <li role="presentation"><a href="#!/fatigues">疲労データ</a></li>
+  <li role="presentation"><a href="#!/safety-factors-material-strengths">安全係数・材料強度</a></li>
+  <li role="presentation"><a href="#!/section-forces">断面力</a></li>
+  <li role="presentation"><a href="#!/calculation-print">計算・印刷</a></li>
+</ul>

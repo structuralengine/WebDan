@@ -15,7 +15,6 @@ angular.module('webdan')
         basicInformation: {},
         groups: [],
           members: [],
-            memberSections: [],
             designPoints: [],
               bars: [],
               fatigues: [],
