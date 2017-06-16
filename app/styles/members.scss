@@ -1,0 +1,13 @@
+main {
+  .members {
+    header {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 5px;
+
+      h2 {
+        display: none;
+      }
+    }
+  }
+}

@@ -86,6 +86,26 @@ angular.module('webdan')
 
       Member.htInit(memberConfig);
 
+      Member.settings.columns[4].renderer = getRenderer('shapes');
+      Member.settings.columns[9].renderer = getRenderer('conditions');
+      Member.settings.columns[10].renderer = getRenderer('conditions');
+      Member.settings.columns[11].renderer = getRenderer('conditions');
+
+      function getRenderer(key) {
+        return function(hot, td, row, col, prop, no, cellProperties) {
+          let items = appConfig.defaults[key];
+          let item = _.find(items, function(item) {
+            return (item.no == no);
+          });
+          let label = '';
+          if (item) {
+            label = item.name;
+          }
+          angular.element(td).html(label);
+          return td;
+        };
+      }
+
       return Member;
     }
   ]);

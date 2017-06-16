@@ -23,6 +23,18 @@ angular.module('webdan')
         '2.2': '柱 小判',
         '3.0': '杭',
       },
+      shapes: [
+        {no: 1, name: '矩形'},
+        {no: 2, name: 'T 形'},
+        {no: 3, name: '円形'},
+        {no: 4, name: '台形'},
+        {no: 5, name: '小判'},
+      ],
+      conditions: [
+        {no: 1, name: '一般'},
+        {no: 2, name: '腐食性'},
+        {no: 3, name: '特に厳しい腐食性'},
+      ],
       bar: {
         rebar_sides: {
           1: "上",

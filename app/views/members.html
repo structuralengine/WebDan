@@ -1,5 +1,22 @@
 <section class="members">
-  <h2>Members</h2>
+  <header>
+    <h2>Members</h2>
+    <div class="buttons">
+      <button uib-popover-template="'views/_section-shapes.html'"
+              popover-placement="left"
+              class="btn btn-default"
+              type="button">
+        断面形状
+      </button>
+
+      <button uib-popover-template="'views/_conditions.html'"
+              popover-placement="bottom"
+              class="btn btn-default"
+              type="button">
+        環境条件
+      </button>
+    </div>
+  </header>
 
   <hot-table
     settings="ctrl.settings"
