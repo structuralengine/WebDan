@@ -8,10 +8,8 @@
  * Factory in the webdan.
  */
 angular.module("webdan")
-  .factory("fatigueConfig", ['$injector', 'appConfig',
-    function($injector, appConfig) {
-
-      let rebar_sides = appConfig.defaults.fatigue.rebar_sides;
+  .factory("fatigueConfig", ['$injector', 'rebarSideFatigueDefaults',
+    function($injector, rebarSideFatigueDefaults) {
 
       return {
         "部材番号": {
@@ -91,7 +89,7 @@ angular.module("webdan")
               },
             },
           },
-          values: rebar_sides,
+          values: rebarSideFatigueDefaults,
           column: (function(sides) {
             let renderer = function(hot, td, row, col, prop, value, cellProperties) {
               let label = sides[value] || value;
@@ -105,7 +103,7 @@ angular.module("webdan")
               readOnly: true,
               renderer: renderer,
             };
-          })(rebar_sides),
+          })(rebarSideFatigueDefaults),
         },
         "S<sub>A</sub>/S<sub>C</sub>": {
           en: "S<sub>A</sub>/S<sub>C</sub>",

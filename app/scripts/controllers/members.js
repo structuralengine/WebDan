@@ -8,9 +8,16 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MembersCtrl', ['$scope', '$filter', 'Member', 'memberDefaults',
-    function ($scope, $filter, Member, memberDefaults) {
+  .controller('MembersCtrl', ['$scope', '$filter', 'Member', 'memberDefaults', 'sectionShapeDefaults', 'conditionDefaults',
+    function ($scope, $filter, Member, memberDefaults, sectionShapeDefaults, conditionDefaults) {
       let ctrl = this;
+
+      ctrl.subSettings = {
+        rowHeaders: false,
+        minSpareRows: 0,
+      };
+      ctrl.shapes = sectionShapeDefaults;
+      ctrl.conditions = conditionDefaults;
 
       function init() {
         let members = Member.query();

@@ -5,66 +5,53 @@
  * @name webdan.Group
  * @description
  * # Group
- * Factory in the webdan.
+ * Service in the webdan.
  */
 angular.module('webdan')
-  .factory('Group', ['$injector', 'LowResource', 'groupConfig', 'safetyFactorConfig', 'materialStrengthConfig', 'HtHelper',
-    function ($injector, LowResource, groupConfig, safetyFactorConfig, materialStrengthConfig, HtHelper) {
+  .service('Group', ['$filter', 'groupDefaults',
+    function ($filter, groupDefaults) {
 
-      let primaryKey = 'g_no';
+      let currentNames = {};
 
-      let Group = LowResource({
-        "store": 'groups',
-        "primaryKey": primaryKey,
-        "foreignKeys": {
-          "children": {
-            Member: primaryKey,
-            SafetyFactor: primaryKey,
-            MaterialStrength: primaryKey,
-            MaterialStrengthRest: primaryKey,
-          },
-        },
-        afterAdd: afterAdd,
-      });
+      this.update = function(member, coll) {
+        let g_no = _.get(member, 'g_no');
+        let g_name = _.get(member, 'g_name');
 
-      function afterAdd(g_no) {
-        // SafetyFactor
-        let SafetyFactor = $injector.get('SafetyFactor');
-        let labels = safetyFactorConfig[""].values;
-        labels.forEach(function(label) {
-          let newSafetyFactor = {
-            g_no: g_no,
-            name: label,
-          };
-          SafetyFactor.save(newSafetyFactor);
+        if (g_no) {
+          g_no = $filter('number')(g_no, 1);
+          if (g_name) {
+            updateOtherGNames(g_no, g_name, coll);
+          }
+          else if (!g_name) {
+            g_name = getCurrentGName(g_no);
+          }
+        }
+        else if (!g_no) {
+          g_name = '';
+        }
+        _.set(member, 'g_name', g_name);
+      };
+
+      function updateOtherGNames(g_no, g_name, members) {
+        members.forEach(function(member) {
+          if (member.g_no == g_no) {
+            member.g_name = g_name;
+          }
         });
-
-        // MaterialStrength
-        let MaterialStrength = $injector.get('MaterialStrength');
-        let configs = Object.values(materialStrengthConfig);
-        let bars = configs[0].values;
-        let ranges = configs[1].values;
-        bars.forEach(function(bar) {
-          ranges.forEach(function(range) {
-            let newMaterialStrength = {
-              bar: bar,
-              range: range,
-              g_no: g_no,
-            };
-            MaterialStrength.save(newMaterialStrength);
-          });
-        });
-
-        // MaterialStrengthRest
-        let MaterialStrengthRest = $injector.get('MaterialStrengthRest');
-        let newMaterialStrengthRest = {g_no: g_no};
-        MaterialStrengthRest.add(newMaterialStrengthRest);
       }
 
-      _.mixin(Group, HtHelper);
-
-      Group.htInit(groupConfig);
-
-      return Group;
+      function getCurrentGName(g_no) {
+        let g_name;
+        if (angular.isUndefined(currentNames[g_no])) {
+          if (angular.isUndefined(groupDefaults[g_no])) {
+            throw 'services/Group: no group name with '+ g_no;
+          }
+          g_name = currentNames[g_no] = groupDefaults[g_no];
+        }
+        else {
+          g_name = currentNames[g_no];
+        }
+        return g_name;
+      }
     }
   ]);

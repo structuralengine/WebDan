@@ -21,6 +21,7 @@ angular.module('webdan', [
     'firebase.auth.app',
     'ngHandsontable',
     'lowdb',
+    'ui.bootstrap',
   ])
   .config(['$lowdbProvider', 'dbConfig',
     function($lowdbProvider, dbConfig) {

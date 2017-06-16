@@ -8,10 +8,8 @@
  * Factory in the webdan.
  */
 angular.module("webdan")
-  .factory("barConfig", ['$injector', 'appConfig',
-    function($injector, appConfig) {
-
-      let rebar_sides = appConfig.defaults.bar.rebar_sides;
+  .factory("barConfig", ['$injector', 'rebarSideBarDefaults',
+    function($injector, rebarSideBarDefaults) {
 
       return {
         "部材番号": {
@@ -106,7 +104,7 @@ angular.module("webdan")
               },
             },
           },
-          values: rebar_sides,
+          values: rebarSideBarDefaults,
           column: (function(sides) {
             let renderer = function(hot, td, row, col, prop, value, cellProperties) {
               let label = sides[value] || value;
@@ -120,7 +118,7 @@ angular.module("webdan")
               readOnly: true,
               renderer: renderer,
             };
-          })(rebar_sides),
+          })(rebarSideBarDefaults),
         },
         "軸方向鉄筋": {
           en: "longitudinal rebar",
