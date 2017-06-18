@@ -16,6 +16,10 @@ angular.module('webdan')
         CalculationPrint.save(ctrl.calculationPrint);
       };
 
+      ctrl.submit = function(form) {
+        form;
+      }
+
       function init() {
         ctrl.config = calculationPrintConfig;
         ctrl.calculationPrint = CalculationPrint.query();
