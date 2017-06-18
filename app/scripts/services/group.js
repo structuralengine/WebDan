@@ -53,5 +53,28 @@ angular.module('webdan')
         }
         return g_name;
       }
+
+      this.query = function() {
+        let groups = [];
+        angular.forEach(currentNames, function(g_name, g_no) {
+          groups.push({
+            g_no: g_no,
+            g_name: g_name,
+          });
+        })
+        return groups;
+      }
+
+      this.load = function(members) {
+        currentNames = members.reduce(function(names, member) {
+          let g_no = member.g_no;
+          let g_name = member.g_name;
+          if (g_no && g_name) {
+            names[g_no] = g_name;
+          }
+          return names;
+        }, {});
+      };
+      
     }
   ]);

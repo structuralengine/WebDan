@@ -9,4 +9,7 @@
  */
 angular.module('webdan')
   .constant('appConfig', {
+    DesignPoint: {
+      useDefaults: false,
+    },
   });

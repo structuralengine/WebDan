@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MembersCtrl', ['$scope', '$filter', 'Member', 'memberDefaults', 'sectionShapeDefaults', 'conditionDefaults',
-    function ($scope, $filter, Member, memberDefaults, sectionShapeDefaults, conditionDefaults) {
+  .controller('MembersCtrl', ['$scope', '$filter', '$q', 'Member', 'memberDefaults', 'sectionShapeDefaults', 'conditionDefaults',
+    function ($scope, $filter, $q, Member, memberDefaults, sectionShapeDefaults, conditionDefaults) {
       let ctrl = this;
 
       ctrl.subSettings = {
@@ -25,7 +25,7 @@ angular.module('webdan')
         if (members.length == 0) {
           memberDefaults.forEach(function(member) {
             Member.save(member);
-          })
+          });
           members = Member.query();
         }
 

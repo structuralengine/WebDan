@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('DesignPoint', ['$injector', 'LowResource', 'designPointConfig', 'barConfig', 'fatigueConfig', 'HtHelper',
-    function ($injector, LowResource, designPointConfig, barConfig, fatigueConfig, HtHelper) {
+  .factory('DesignPoint', ['$injector', 'LowResource', 'appConfig', 'designPointConfig', 'barConfig', 'fatigueConfig', 'designPointDefaults', 'HtHelper',
+    function ($injector, LowResource, appConfig, designPointConfig, barConfig, fatigueConfig, designPointDefaults, HtHelper) {
 
       let foreignKey = 'designPointId';
 
@@ -59,6 +59,15 @@ angular.module('webdan')
             });
           }
         });
+      }
+
+      DesignPoint.getDefaults = function() {
+        if (appConfig.DesignPoint.useDefaults) {
+          return designPointDefaults;
+        }
+        else {
+          return [{}];
+        }
       }
 
       _.mixin(DesignPoint, HtHelper);

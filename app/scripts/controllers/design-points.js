@@ -8,12 +8,12 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsCtrl', ['$scope', '$filter', '$location', '$log', 'DesignPoint', 'Group', 'Member',
-    function ($scope, $filter, $location, $log, DesignPoint, Group, Member) {
+  .controller('DesignPointsCtrl', ['$scope', '$filter', '$log', 'DesignPoint', 'Member',
+    function ($scope, $filter, $log, DesignPoint, Member) {
       let ctrl = this;
 
       function init() {
-        let groups = Group.query();
+        let groups = Member.Group.query();
         if (groups.length == 0) {
           $scope.$emit('DesignPoints', 'no group');
           $log.error('no group');

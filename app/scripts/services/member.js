@@ -26,11 +26,21 @@ angular.module('webdan')
       let Member = LowResource(params);
 
       function afterAdd(m_no) {
-        let data = {m_no: m_no};
         let children = this.foreignKeys.children;
         angular.forEach(children, function(foreignKey, alias) {
           let Child = $injector.get(alias);
-          Child.add(data);
+          let children;
+          if (angular.isDefined(Child.getDefaults)) {
+            children = Child.getDefaults();
+          }
+          else {
+            children = [];
+          }
+
+          children.forEach(function(data) {
+            data[primaryKey] = m_no;
+            Child.add(data);
+          });
         });
       }
 
@@ -51,6 +61,17 @@ angular.module('webdan')
           }
         });
       };
+
+      Member.Group = {
+        query: function() {
+          let groups = Group.query();
+          if (Object.keys(groups).length == 0) {
+            let members = Member.query();
+            Group.load(members);
+          }
+          return Group.query();
+        },
+      }
 
       _.mixin(Member, HtHelper);
 
