@@ -70,10 +70,12 @@ angular.module('webdan')
             Group.load(members);
             groups = Group.query();
           }
-          return groups.map(function(group) {
+          groups = groups.map(function(group) {
             group.g_no = $filter('number')(group.g_no, 1) + '';
             return group;
           });
+
+          return $filter('orderBy')(groups, 'g_no');
         },
       }
 

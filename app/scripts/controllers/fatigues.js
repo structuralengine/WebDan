@@ -13,19 +13,15 @@ angular.module('webdan')
       let ctrl = this;
 
       function init() {
-        let groups = Member.Group.query();
-        ctrl.groups = $filter('orderBy')(groups, 'g_no');
+        ctrl.settings = Fatigue.settings;
+        ctrl.groups = Member.Group.query();
 
         let fatigues = Fatigue.query();
         let number = $filter('number');
         ctrl.fatigues = _.groupBy(fatigues, function(fatigue) {
           let designPoint = DesignPoint.getAsc(fatigue.designPointId);
-          return nubmer(designPoint.Member.g_no, 1);
+          return number(designPoint.Member.g_no, 1);
         });
-
-        let settings = Fatigue.settings;
-        settings.minSpareRows = 0;
-        ctrl.settings = settings;
       }
 
       init();

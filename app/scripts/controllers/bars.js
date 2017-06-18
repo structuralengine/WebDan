@@ -13,8 +13,7 @@ angular.module('webdan')
       let ctrl = this;
 
       function init() {
-        let groups = Member.Group.query();
-        ctrl.groups = $filter('orderBy')(groups, 'g_no');
+        ctrl.groups = Member.Group.query();
 
         let bars = Bar.query();
         let number = $filter('number');

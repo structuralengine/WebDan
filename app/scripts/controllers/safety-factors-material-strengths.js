@@ -21,8 +21,7 @@ angular.module('webdan')
         };
 
         // groups
-        let groups = Member.Group.query();
-        ctrl.groups = $filter('orderBy')(groups, 'g_no');
+        let groups = ctrl.groups = Member.Group.query();
 
         // Safety Factors
         let safetyFactors = SafetyFactor.query();
@@ -75,7 +74,7 @@ angular.module('webdan')
           rests = MaterialStrengthRest.query();
         }
         let groupedRests = _.groupBy(rests, function(rest) {
-          return number(est.g_no, 1);
+          return number(rest.g_no, 1);
         });
         let store = MaterialStrengthRest.store;
         Object.keys(groupedRests).forEach(function(g_no) {

@@ -10,44 +10,41 @@
 angular.module("webdan")
   .constant("shearConfig", {
     "部材番号": {
+      column: {
+        data: "designPointId",
+        path: "Member.m_no",
+        type: "numeric"
+      },
       items: {
         "": {
           items: {
-            "": {
-              column: {
-                data: "designPointId",
-                path: "Member.m_no",
-                type: "numeric"
-              },
-            },
+            "": {},
           },
         },
       },
     },
     "部材名": {
+      column: {
+        data: "designPointId",
+        path: "Member.g_name",
+      },
       items: {
         "": {
           items: {
-            "": {
-              column: {
-                data: "designPointId",
-                path: "Member.Group.g_name",
-              },
-            },
+            "": {},
           },
         },
       },
     },
     "算出点名": {
+      column: {
+        data: "designPointId",
+        path: "p_name",
+      },
       items: {
         "": {
           items: {
-            "": {
-              column: {
-                data: "designPointId",
-                path: "p_name",
-              },
-            },
+            "": {},
           },
         },
       },

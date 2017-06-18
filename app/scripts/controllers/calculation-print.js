@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('CalculationPrintCtrl', ['$scope', '$filter', 'CalculationPrint', 'Group', 'calculationPrintConfig',
-    function ($scope, $filter, CalculationPrint, Group, calculationPrintConfig) {
+  .controller('CalculationPrintCtrl', ['$scope', '$filter', 'CalculationPrint', 'Member', 'calculationPrintConfig',
+    function ($scope, $filter, CalculationPrint, Member, calculationPrintConfig) {
       let ctrl = this;
 
       ctrl.change = function(key) {
@@ -20,10 +20,7 @@ angular.module('webdan')
         ctrl.config = calculationPrintConfig;
         ctrl.calculationPrint = CalculationPrint.query();
 
-        let groups = Group.query();
-        ctrl.groups = $filter('orderBy')(groups, function(group) {
-          return group.g_no;
-        });
+        ctrl.groups = Member.Group.query();
       }
 
       init();

@@ -19,7 +19,7 @@ angular.module('webdan')
           $log.error('no group');
         }
         else {
-          ctrl.groups = $filter('orderBy')(groups, 'g_no');
+          ctrl.groups = groups;
 
           let designPoints = DesignPoint.query();
           let number = $filter('number');
