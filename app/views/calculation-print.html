@@ -25,6 +25,7 @@
 
       <section ng-repeat="(title, config) in ctrl.config.calc_target" ng-init="name = config.var" class="form-inline">
         <h3>{{title}}</h3>
+        <p class="hint"><span class="label label-info">Ctrl</span> キーを押しながら、複数選択可能</p>
         <div class="form-group">
           <select class="form-control"
             name="{{name}}"
