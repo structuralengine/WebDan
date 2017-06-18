@@ -18,7 +18,7 @@ angular.module('webdan')
         let shears = Shear.query();
         ctrl.shears = _.groupBy(shears, function(shear) {
           let designPoint = DesignPoint.getAsc(shear.designPointId);
-          return designPoint.Member.g_no;
+          return $filter('nubmer')(designPoint.Member.g_no, 1);
         });
 
         let settings = Shear.settings;

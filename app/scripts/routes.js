@@ -139,6 +139,11 @@ angular.module('webdan')
         controller: 'SafetyFactorsMaterialStrengthsCtrl',
         controllerAs: 'ctrl',
       })
+      .whenAuthenticated('/section-forces', {
+        templateUrl: 'views/section-forces.html',
+        controller: 'SectionForcesCtrl',
+        controllerAs: 'ctrl',
+      })
       .otherwise({redirectTo: '/'});
   }])
 

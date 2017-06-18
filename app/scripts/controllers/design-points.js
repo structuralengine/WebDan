@@ -22,9 +22,10 @@ angular.module('webdan')
           ctrl.groups = $filter('orderBy')(groups, 'g_no');
 
           let designPoints = DesignPoint.query();
+          let number = $filter('number');
           ctrl.designPoints = _.groupBy(designPoints, function(designPoint) {
             let member = Member.get(designPoint.m_no);
-            return member.g_no;
+            return number(member.g_no, 1);
           });
 
           let settings = DesignPoint.settings;

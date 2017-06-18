@@ -17,9 +17,10 @@ angular.module('webdan')
         ctrl.groups = $filter('orderBy')(groups, 'g_no');
 
         let bars = Bar.query();
+        let number = $filter('number');
         ctrl.bars = _.groupBy(bars, function(bar) {
           let designPoint = DesignPoint.getAsc(bar.designPointId);
-          return designPoint.Member.g_no;
+          return number(designPoint.Member.g_no, 1);
         });
 
         ctrl.settings = Bar.settings;

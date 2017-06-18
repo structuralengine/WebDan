@@ -17,9 +17,10 @@ angular.module('webdan')
         ctrl.groups = $filter('orderBy')(groups, 'g_no');
 
         let fatigues = Fatigue.query();
+        let number = $filter('number');
         ctrl.fatigues = _.groupBy(fatigues, function(fatigue) {
           let designPoint = DesignPoint.getAsc(fatigue.designPointId);
-          return designPoint.Member.g_no;
+          return nubmer(designPoint.Member.g_no, 1);
         });
 
         let settings = Fatigue.settings;

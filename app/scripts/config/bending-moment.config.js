@@ -12,16 +12,15 @@ angular.module("webdan")
     "部材番号": {
       en: "",
       var: "",
+      column: {
+        data: "designPointId",
+        path: "Member.m_no",
+        type: "numeric"
+      },
       items: {
         "": {
           items: {
-            "": {
-              column: {
-                data: "designPointId",
-                path: "Member.m_no",
-                type: "numeric"
-              },
-            },
+            "": {},
           },
         },
       },
@@ -29,15 +28,14 @@ angular.module("webdan")
     "部材名": {
       en: "",
       var: "",
+      column: {
+        data: "designPointId",
+        path: "Member.g_name",
+      },
       items: {
         "": {
           items: {
-            "": {
-              column: {
-                data: "designPointId",
-                path: "Member.Group.g_name",
-              },
-            },
+            "": {},
           },
         },
       },
@@ -45,15 +43,14 @@ angular.module("webdan")
     "算出点名": {
       en: "",
       var: "",
+      column: {
+        data: "designPointId",
+        path: "p_name",
+      },
       items: {
         "": {
           items: {
-            "": {
-              column: {
-                data: "designPointId",
-                path: "p_name",
-              },
-            },
+            "": {},
           },
         },
       },

@@ -22,10 +22,7 @@ angular.module('webdan')
 
         // groups
         let groups = Member.Group.query();
-        ctrl.groups = $filter('orderBy')(groups, 'g_no').map(function(group) {
-          group.g_no = $filter('number')(group.g_no, 1) + '';
-          return group;
-        });
+        ctrl.groups = $filter('orderBy')(groups, 'g_no');
 
         // Safety Factors
         let safetyFactors = SafetyFactor.query();
@@ -40,8 +37,9 @@ angular.module('webdan')
           });
           safetyFactors = SafetyFactor.query();
         }
+        let number = $filter('number');
         ctrl.safetyFactors = _.groupBy(safetyFactors, function(safetyFactor) {
-          return safetyFactor.g_no;
+          return number(safetyFactor.g_no, 1);
         });
 
         // Material Strengths
@@ -63,7 +61,7 @@ angular.module('webdan')
           materialStrengths = MaterialStrength.query();
         }
         ctrl.materialStrengths = _.groupBy(materialStrengths, function(materialStrength) {
-          return materialStrength.g_no;
+          return number(materialStrength.g_no, 1);
         });
 
         // Material Strength Rest
@@ -77,7 +75,7 @@ angular.module('webdan')
           rests = MaterialStrengthRest.query();
         }
         let groupedRests = _.groupBy(rests, function(rest) {
-          return rest.g_no;
+          return number(est.g_no, 1);
         });
         let store = MaterialStrengthRest.store;
         Object.keys(groupedRests).forEach(function(g_no) {
