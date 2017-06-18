@@ -1,0 +1,35 @@
+<section class="safety-factors">
+  <h2>Safety Factors, Material Strengths</h2>
+
+  <section ng-repeat="group in ctrl.groups"
+      ng-init="
+        safetyFactors = ctrl.safetyFactors[group.g_no] || [];
+        materialStrengths = ctrl.materialStrengths[group.g_no] || [];
+        materialStrengthRests = ctrl.materialStrengthRests[group.g_no] || [];
+      ">
+    <h3>{{group.g_name}}</h3>
+
+    <section>
+      <h4>安全係数</h4>
+      <hot-table
+        settings="ctrl.settings.safetyFactors"
+        datarows="safetyFactors">
+      </hot-table>
+    </section>
+
+    <section>
+      <h4>材料強度</h4>
+      <hot-table
+        settings="ctrl.settings.materialStrengths"
+        datarows="materialStrengths">
+      </hot-table>
+
+      <h4>&nbsp;</h4>
+      <hot-table
+        ng-repeat="materialStrengthRest in materialStrengthRests"
+        settings="materialStrengthRest.settings"
+        datarows="materialStrengthRest.datarows">
+      </hot-table>
+    </section>
+  </section>
+</section>

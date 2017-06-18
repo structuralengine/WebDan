@@ -134,6 +134,11 @@ angular.module('webdan')
         controller: 'MaterialStrengthsCtrl',
         controllerAs: 'ctrl',
       })
+      .whenAuthenticated('/safety-factors-material-strengths', {
+        templateUrl: 'views/safety-factors-material-strengths.html',
+        controller: 'SafetyFactorsMaterialStrengthsCtrl',
+        controllerAs: 'ctrl',
+      })
       .otherwise({redirectTo: '/'});
   }])
 
