@@ -8,12 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('FatiguesCtrl', ['$scope', '$filter', 'Fatigue', 'Group', 'DesignPoint',
-    function ($scope, $filter, Fatigue, Group, DesignPoint) {
+  .controller('FatiguesCtrl', ['$scope', '$filter', 'Fatigue', 'Member', 'DesignPoint',
+    function ($scope, $filter, Fatigue, Member, DesignPoint) {
       let ctrl = this;
 
       function init() {
-        ctrl.groups = $filter('orderBy')(Group.query(), 'g_no');
+        let groups = Member.Group.query();
+        ctrl.groups = $filter('orderBy')(groups, 'g_no');
 
         let fatigues = Fatigue.query();
         ctrl.fatigues = _.groupBy(fatigues, function(fatigue) {

@@ -67,12 +67,10 @@ angular.module("webdan")
               let fatigue = hot.getSourceDataAtRow(row);
               if (fatigue) {
                 let DesignPoint = $injector.get('DesignPoint');
-                let MemberSection = $injector.get('MemberSection');
-                let designPoint = DesignPoint.get(fatigue.designPointId);
-                let memberSection = MemberSection.getBy('m_no', designPoint.m_no);
+                let designPoint = DesignPoint.getAsc(fatigue.designPointId);
                 label = ''+
-                  '<span class="B">'+ memberSection.B +'</span>'+
-                  '<span class="H">'+ memberSection.H +'</span>';
+                  '<span class="B">'+ designPoint.Member.B +'</span>'+
+                  '<span class="H">'+ designPoint.Member.H +'</span>';
               }
               angular.element(td).html(label);
               return td;
