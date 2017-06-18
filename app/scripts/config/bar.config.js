@@ -15,16 +15,15 @@ angular.module("webdan")
         "部材番号": {
           en: "member no",
           var: "m_no",
+          column: {
+            data: "designPointId",
+            path: "Member.m_no",
+            readOnly: true,
+          },
           items: {
             "": {
               items: {
-                "": {
-                  column: {
-                    data: "designPointId",
-                    path: "Member.m_no",
-                    readOnly: true,
-                  },
-                },
+                "": {},
               },
             },
           },
@@ -32,16 +31,14 @@ angular.module("webdan")
         "算出点名": {
           en: "design point",
           var: "p_name",
+          column: {
+            data: "designPointId",
+            path: "p_name",
+          },
           items: {
             "": {
               items: {
-                "": {
-                  column: {
-                    data: "designPointId",
-                    path: "p_name",
-                    readOnly: true,
-                  },
-                },
+                "": {},
               },
             },
           },
@@ -66,10 +63,8 @@ angular.module("webdan")
               let bar = hot.getSourceDataAtRow(row);
               if (bar) {
                 let DesignPoint = $injector.get('DesignPoint');
-                let MemberSection = $injector.get('MemberSection');
-                let designPoint = DesignPoint.get(bar.designPointId);
-                let memberSection = MemberSection.getBy('m_no', designPoint.m_no);
-                label = (row % 2 == 0)? memberSection.B: memberSection.H;
+                let designPoint = DesignPoint.getAsc(bar.designPointId);
+                label = (row % 2 == 0)? designPoint.Member.B: designPoint.Member.H;
               }
               angular.element(td).html(label);
               return td;
@@ -78,17 +73,17 @@ angular.module("webdan")
         },
         "ハンチ高": {
           en: "haunch height",
-          var: "dH_m,dH_s",
+          var: "dH",
+          column: {
+            data: "haunch_height",
+            type: "numeric",
+          },
           items: {
             "曲げ": {
               var: "dH_m",
               items: {
                 "せん断": {
                   var: "dH_s",
-                  column: {
-                    data: "haunch_height",
-                    type: "numeric",
-                  },
                 },
               },
             },
