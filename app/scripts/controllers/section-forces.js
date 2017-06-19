@@ -13,12 +13,14 @@ angular.module('webdan')
       let ctrl = this;
 
       function init() {
-        ctrl.bendingMoments = BendingMoment.query().filter(function(bendingMoment) {
+        let bendingMoments = BendingMoment.query();
+        ctrl.bendingMoments = bendingMoments.filter(function(bendingMoment) {
           let designPoint = DesignPoint.get(bendingMoment.designPointId);
           return designPoint.p_name;
         });
 
-        ctrl.shears = Shear.query().filter(function(shear) {
+        let shears = Shear.query();
+        ctrl.shears = shears.filter(function(shear) {
           let designPoint = DesignPoint.get(shear.designPointId);
           return designPoint.p_name;
         });

@@ -11,11 +11,13 @@ angular.module('webdan')
   .factory('BendingMoment', ['LowResource', 'bendingMomentConfig', 'HtHelper',
     function (LowResource, bendingMomentConfig, HtHelper) {
 
+      let foreignKey = 'designPointId';
+
       let BendingMoment = LowResource({
         "store": 'bendingMoments',
         "foreignKeys": {
           "parents": {
-            DesignPoint: 'designPointId',
+            DesignPoint: foreignKey,
           },
         },
       });
@@ -23,6 +25,9 @@ angular.module('webdan')
       _.mixin(BendingMoment, HtHelper);
 
       BendingMoment.htInit(bendingMomentConfig);
+
+      BendingMoment.settings.afterBeginEditing = HtHelper.getAfterBeginEditingForForeignKeyEditor('DesignPoint', 'p_name', bendingMomentConfig);
+      BendingMoment.settings.beforeChange = HtHelper.getBeforeChangeForForeignKeyEditor('DesignPoint', 'p_name', foreignKey, 'shears');
 
       return BendingMoment;
     }
