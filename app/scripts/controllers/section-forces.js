@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SectionForcesCtrl', ['$scope', '$filter', 'BendingMoment', 'Shear', 'DesignPoint',
-    function ($scope, $filter, BendingMoment, Shear, DesignPoint) {
+  .controller('SectionForcesCtrl', ['$scope', '$filter', 'BendingMoment', 'Shear', 'DesignPoint', 'HtHelper',
+    function ($scope, $filter, BendingMoment, Shear, DesignPoint, HtHelper) {
       let ctrl = this;
 
       function init() {
@@ -29,6 +29,15 @@ angular.module('webdan')
           bendingMoments: BendingMoment.settings,
           shears: Shear.settings,
         };
+
+        let props = [{
+          prop: 'designPointId',
+          col: 1,
+        }];
+        angular.forEach(ctrl.settings, function(settings, key) {
+          let coll = ctrl[key];
+          settings.mergeCells = HtHelper.mergeCells(coll, props);
+        });
       }
 
       init();
