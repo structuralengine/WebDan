@@ -69,10 +69,12 @@ angular.module("webdan")
                 let DesignPoint = $injector.get('DesignPoint');
                 let designPoint = DesignPoint.getAsc(fatigue.designPointId);
                 label = ''+
-                  '<span class="B">'+ designPoint.Member.B +'</span>'+
-                  '<span class="H">'+ designPoint.Member.H +'</span>';
+                  ' <div class="BH">'+
+                  '   <div class="B">'+ designPoint.Member.B +'</div>'+
+                  '   <div class="H">'+ designPoint.Member.H +'</div>'+
+                  ' </div>';
               }
-              angular.element(td).html(label);
+              angular.element(td).html(label).addClass('section');
               return td;
             },
           },

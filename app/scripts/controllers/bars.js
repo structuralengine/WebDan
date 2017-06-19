@@ -23,9 +23,13 @@ angular.module('webdan')
         });
 
         ctrl.settings = {};
+        let mergeConfig = [
+          {prop: 'designPointId', col: 0},
+          {prop: 'designPointId', col: 1},
+        ];
         angular.forEach(ctrl.bars, function(bars, g_no) {
           let settings = ctrl.settings[g_no] = angular.copy(Bar.settings);
-          settings.mergeCells = HtHelper.mergeCells(bars, ['designPointId', 'designPointId']);
+          settings.mergeCells = HtHelper.mergeCells(bars, mergeConfig);
         });
       }
 
