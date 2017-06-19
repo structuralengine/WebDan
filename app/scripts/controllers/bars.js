@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BarsCtrl', ['$scope', '$filter', 'Bar', 'DesignPoint', 'Member',
-    function ($scope, $filter, Bar, DesignPoint, Member) {
+  .controller('BarsCtrl', ['$scope', '$filter', 'Bar', 'DesignPoint', 'Member', 'HtHelper',
+    function ($scope, $filter, Bar, DesignPoint, Member, HtHelper) {
       let ctrl = this;
 
       function init() {
@@ -22,8 +22,11 @@ angular.module('webdan')
           return number(designPoint.Member.g_no, 1);
         });
 
-        ctrl.settings = Bar.settings;
-        ctrl.settings.minSpareRows = 0;
+        ctrl.settings = {};
+        angular.forEach(ctrl.bars, function(bars, g_no) {
+          let settings = ctrl.settings[g_no] = angular.copy(Bar.settings);
+          settings.mergeCells = HtHelper.mergeCells(bars, ['designPointId', 'designPointId']);
+        });
       }
 
       init();
