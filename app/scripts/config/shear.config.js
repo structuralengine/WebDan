@@ -44,26 +44,7 @@ angular.module("webdan")
             column: {
               data: "designPointId",
               path: "p_name",
-              renderer: function(hot, td, row, col, prop, designPointId, cellProperties) {
-                let label = '';
-                if (designPointId) {
-                  if (HtHelper.isUUID(designPointId)) {
-                    let DesignPoint = $injector.get('DesignPoint');
-                    let designPoint = DesignPoint.get(designPointId);
-                    if (designPoint && designPoint.p_name) {
-                      label = designPoint.p_name;
-                    }
-                    else {
-                      throw 'no such designPoint for '+ designPointId;
-                    }
-                  }
-                  else if (angular.isString(designPointId)) {
-                    label = designPointId;
-                  }
-                }
-                angular.element(td).html(label);
-                return td;
-              },
+              renderer: HtHelper.getEditableForeignValueRenderer('DesignPoint', 'p_name'),
             },
             items: {
               "": {

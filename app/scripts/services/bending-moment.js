@@ -26,8 +26,13 @@ angular.module('webdan')
 
       BendingMoment.htInit(bendingMomentConfig);
 
-      BendingMoment.settings.afterBeginEditing = HtHelper.getAfterBeginEditingForForeignKeyEditor('DesignPoint', 'p_name', bendingMomentConfig);
-      BendingMoment.settings.beforeChange = HtHelper.getBeforeChangeForForeignKeyEditor('DesignPoint', 'p_name', foreignKey, 'shears');
+      HtHelper.enableEditableForeignValue({
+        onResource: BendingMoment,
+        parent: 'DesignPoint',
+        targetProp: 'p_name',
+        config: bendingMomentConfig,
+        refreshingHotIds: 'shears',
+      });
 
       return BendingMoment;
     }
