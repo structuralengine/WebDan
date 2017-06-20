@@ -36,7 +36,6 @@ angular.module('webdan')
               hot = hotRegisterer.getInstance(attrs.hotId);
             }
             if (hot) {
-              hot.view.activeWt.wtTable.alignOverlaysWithTrimmingContainer();
               hot.render();
             }
           }
