@@ -29,8 +29,8 @@ angular.module('webdan')
           bendingMoments: BendingMoment.settings,
           shears: Shear.settings,
         };
-        angular.forEach(ctrl.settings, function(settings, key) {
-          settings.enterMoves = HtHelper.enterMoves(key, 3);
+        angular.forEach(ctrl.settings, function(settings, hotId) {
+          settings.enterMoves = HtHelper.enterMoves(hotId, 3);
         });
       }
 

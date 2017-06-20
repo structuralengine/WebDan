@@ -12,4 +12,9 @@ angular.module('webdan')
     DesignPoint: {
       useDefaults: false,
     },
+    CalculationPrint: {
+      server: {
+        url: 'http://www.structuralengine.com/RCNonlinear/api/values',
+      },
+    },
   });

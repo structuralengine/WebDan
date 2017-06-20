@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('CalculationPrintCtrl', ['$scope', '$filter', 'CalculationPrint', 'Member', 'calculationPrintConfig',
-    function ($scope, $filter, CalculationPrint, Member, calculationPrintConfig) {
+  .controller('CalculationPrintCtrl', ['$scope', '$filter', '$log', 'CalculationPrint', 'Member', 'calculationPrintConfig', 'RCNonlinear',
+    function ($scope, $filter, $log, CalculationPrint, Member, calculationPrintConfig, RCNonlinear) {
       let ctrl = this;
 
       ctrl.change = function(key) {
@@ -17,7 +17,13 @@ angular.module('webdan')
       };
 
       ctrl.submit = function(form) {
-        form;
+        let data = CalculationPrint.getAllData();
+        RCNonlinear.send(data)
+          .then(function(response) {
+            response;
+          }, function(err) {
+            $log.error(err);
+          });
       }
 
       function init() {
