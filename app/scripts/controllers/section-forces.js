@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SectionForcesCtrl', ['$scope', '$filter', 'BendingMoment', 'Shear', 'DesignPoint', 'hotRegisterer',
-    function ($scope, $filter, BendingMoment, Shear, DesignPoint, hotRegisterer) {
+  .controller('SectionForcesCtrl', ['$scope', '$filter', 'BendingMoment', 'Shear', 'DesignPoint', 'HtHelper',
+    function ($scope, $filter, BendingMoment, Shear, DesignPoint, HtHelper) {
       let ctrl = this;
 
       function init() {
@@ -30,32 +30,7 @@ angular.module('webdan')
           shears: Shear.settings,
         };
         angular.forEach(ctrl.settings, function(settings, key) {
-          let hot, lastColIdx, lastRowIdx;
-          settings.enterMoves = function() {
-            hot = hot || hotRegisterer.getInstance(key);
-            lastColIdx = lastColIdx || settings.columns.length - 1;
-            lastRowIdx = lastRowIdx || hot.getSourceData().length - 1;
-            let [startRow, startCol, endRow, endCol] = hot.getSelected();
-
-            let row, col;
-            if (startCol == lastColIdx) {
-              if (startRow == lastRowIdx) {
-                row = -lastRowIdx;
-              }
-              else {
-                row = 1;
-              }
-              col = -(lastColIdx - 3);
-            }
-            else {
-              row = 0;
-              col = 1;
-            }
-            return {
-              row: row,
-              col: col,
-            };
-          };
+          settings.enterMoves = HtHelper.enterMoves(key, 3);
         });
       }
 
