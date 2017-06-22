@@ -5,11 +5,18 @@ const browserSync = require('browser-sync').create();
 const del = require('del');
 const wiredep = require('wiredep').stream;
 const runSequence = require('run-sequence');
+const spawn = require('cross-spawn');
 
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
 var dev = true;
+
+gulp.task('lowdb', () => {
+  process.chdir('./bower_components/lowdb');
+  spawn.sync('npm', ['install'], {stdio: 'inherit'});
+  spawn.sync('npm', ['run', 'build'], {stdio: 'inherit'});
+})
 
 gulp.task('styles', () => {
   return gulp.src('app/styles/*.scss')
