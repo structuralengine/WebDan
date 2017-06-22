@@ -22,9 +22,7 @@ angular.module('webdan')
           return nubmer(designPoint.Member.g_no, 1);
         });
 
-        let settings = BendingMoment.settings;
-        settings.minSpareRows = 0;
-        ctrl.settings = settings;
+        ctrl.settings = BendingMoment.settings;
       }
 
       init();
