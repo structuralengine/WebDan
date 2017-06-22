@@ -1,11 +1,16 @@
 <section class="material-strength-rests">
   <h2>MaterialStrengthRest</h2>
 
-  <section ng-repeat="group in ctrl.groups" ng-init="materialStrengthRests = ctrl.materialStrengthRests[group.g_no] || []">
+  <section ng-repeat="group in ctrl.groups"
+      ng-init="
+        materialStrengthRests = ctrl.materialStrengthRests[group.g_no] || [];
+        group_idx = $index;
+      ">
     <h3>{{group.g_name}}</h3>
 
     <hot-table
       ng-repeat="materialStrengthRest in materialStrengthRests"
+      hot-id="materialStrengthRest-{{group_idx}}"
       settings="materialStrengthRest.settings"
       datarows="materialStrengthRest.datarows">
     </hot-table>

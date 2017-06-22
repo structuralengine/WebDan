@@ -20,9 +20,7 @@ angular.module('webdan')
           return materialStrength.g_no;
         });
 
-        let settings = MaterialStrength.settings;
-        settings.minSpareRows = 0;
-        ctrl.settings = settings;
+        ctrl.settings = MaterialStrength.settings;
       }
 
       init();

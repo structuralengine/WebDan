@@ -20,9 +20,7 @@ angular.module('webdan')
           return safetyFactor.g_no;
         });
 
-        let settings = SafetyFactor.settings;
-        settings.minSpareRows = 0;
-        ctrl.settings = settings;
+        ctrl.settings = SafetyFactor.settings;
       }
 
       init();

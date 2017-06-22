@@ -12,10 +12,10 @@
 <li class="dropdown">
   <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">編集 <span class="caret"></span></a>
   <ul class="dropdown-menu">
-    <li><a>切り取り</a></li>
-    <li><a>コピー</a></li>
-    <li><a>貼り付け</a></li>
-    <li><a>元に戻す</a></li>
+    <li><a ng-click="$htCpCtrl.cut()">切り取り</a></li>
+    <li><a ng-click="$htCpCtrl.copy()">コピー</a></li>
+    <li><a ng-click="$htCpCtrl.paste()">貼り付け</a></li>
+    <li><a ng-click="$htCpCtrl.undo()">元に戻す</a></li>
   </ul>
 </li>
 <li class="dropdown">

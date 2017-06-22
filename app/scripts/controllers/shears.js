@@ -21,9 +21,7 @@ angular.module('webdan')
           return $filter('nubmer')(designPoint.Member.g_no, 1);
         });
 
-        let settings = Shear.settings;
-        settings.minSpareRows = 0;
-        ctrl.settings = settings;
+        ctrl.settings = Shear.settings;
       }
 
       init();

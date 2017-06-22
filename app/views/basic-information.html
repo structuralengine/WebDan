@@ -4,6 +4,7 @@
   <section ng-repeat="(title, config) in ctrl.config['pickup.moment']" class="pickup-moment">
     <h3>{{title}}</h3>
     <hot-table
+      hot-id="pickupMoment"
       settings="ctrl.pickup.moment.settings"
       datarows="ctrl.pickup.moment.datarows">
     </hot-table>
@@ -12,6 +13,7 @@
   <section ng-repeat="(title, config) in ctrl.config['pickup.shearforce']" class="pickup-shear-force">
     <h3>{{title}}</h3>
     <hot-table
+      hot-id="pickupShearforce"
       settings="ctrl.pickup.shearforce.settings"
       datarows="ctrl.pickup.shearforce.datarows">
     </hot-table>
