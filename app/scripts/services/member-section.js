@@ -12,9 +12,9 @@ angular.module('webdan')
     function (LowResource, memberSectionConfig, HtHelper) {
 
       let MemberSection = LowResource({
-        "store": 'memberSections',
-        "foreignKeys": {
-          "parents": {
+        'store': 'memberSections',
+        'foreignKeys': {
+          'parents': {
             Member: 'm_no',
           },
         },

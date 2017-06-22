@@ -12,9 +12,9 @@ angular.module('webdan')
     function ($lowdb, LowResource, materialStrengthRestConfig, HtHelper) {
 
       let MaterialStrengthRest = LowResource({
-        "store": 'materialStrengthRests',
-        "foreignKeys": {
-          "parents": {
+        'store': 'materialStrengthRests',
+        'foreignKeys': {
+          'parents': {
             Group: 'g_no',
           },
         },

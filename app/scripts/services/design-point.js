@@ -14,12 +14,12 @@ angular.module('webdan')
       let foreignKey = 'designPointId';
 
       let DesignPoint = LowResource({
-        "store": 'designPoints',
-        "foreignKeys": {
-          "parents": {
+        'store': 'designPoints',
+        'foreignKeys': {
+          'parents': {
             Member: 'm_no',
           },
-          "children": {
+          'children': {
             Bar: foreignKey,
             Fatigue: foreignKey,
             BendingMoment: foreignKey,

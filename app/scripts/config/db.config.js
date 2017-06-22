@@ -9,9 +9,9 @@
  */
 angular.module('webdan')
   .constant('dbConfig', {
-    "path": 'webdan.2',
-    "defaults": {
-      "state": {
+    'path': 'webdan.2',
+    'defaults': {
+      'state': {
         basicInformation: {},
         groups: [],
           members: [],

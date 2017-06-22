@@ -12,9 +12,9 @@ angular.module('webdan')
     function (LowResource, safetyFactorConfig, HtHelper) {
 
       let SafetyFactor = LowResource({
-        "store": 'safetyFactors',
-        "foreignKeys": {
-          "parents": {
+        'store': 'safetyFactors',
+        'foreignKeys': {
+          'parents': {
             Group: 'g_no',
           },
         },

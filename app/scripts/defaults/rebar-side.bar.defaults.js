@@ -9,6 +9,6 @@
  */
 angular.module('webdan')
   .constant('rebarSideBarDefaults', {
-    1: "上",
-    2: "下",
+    1: '上',
+    2: '下',
   });

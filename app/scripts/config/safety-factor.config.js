@@ -13,7 +13,7 @@ angular.module('webdan')
       en: 'Name',
       var: 'name',
       items: {
-        "": {
+        '': {
           column: {
             data: 'name',
             type: 'text',
