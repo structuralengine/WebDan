@@ -7,27 +7,27 @@
  * # memberConfig
  * Constant in the webdan.
  */
-angular.module("webdan")
-  .constant("memberConfig", {
-    "部材番号": {
-      "en": 'Member No',
-      "column": {
-        "data": 'm_no',
-        "type": 'numeric',
+angular.module('webdan')
+  .constant('memberConfig', {
+    '部材番号': {
+      'en': 'Member No',
+      'column': {
+        'data': 'm_no',
+        'type': 'numeric',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
-    "部材長": {
-      "en": 'Member length',
-      "column": {
-        "data": 'm_len',
-        "type": 'numeric',
-        "format": '0.001',
+    '部材長': {
+      'en': 'Member length',
+      'column': {
+        'data': 'm_len',
+        'type': 'numeric',
+        'format': '0.001',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
     'グループ No': {
@@ -38,16 +38,16 @@ angular.module("webdan")
         format: '0.0',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
-    "部材名": {
-      "en": 'Member Name',
-      "column": {
-        "data": 'g_name',
+    '部材名': {
+      'en': 'Member Name',
+      'column': {
+        'data': 'g_name',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
     '断面形状': {
@@ -56,7 +56,7 @@ angular.module("webdan")
         data: 'shape',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
     '断面 (mm)': {
@@ -141,7 +141,7 @@ angular.module("webdan")
     'ひび割れ': {
       en: 'crack',
       items: {
-        "&epsilon;<sub>csd</sub>": {
+        '&epsilon;<sub>csd</sub>': {
           column: {
             data: 'ecsd',
             type: 'numeric',
@@ -152,7 +152,7 @@ angular.module("webdan")
     'せん断': {
       en: 'shear',
       items: {
-        "k<sub>r</sub>": {
+        'k<sub>r</sub>': {
           column: {
             data: 'kr',
             type: 'numeric',
@@ -197,7 +197,7 @@ angular.module("webdan")
         type: 'numeric',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
     '疲労パス': {
@@ -207,7 +207,7 @@ angular.module("webdan")
         type: 'checkbox',
       },
       items: {
-        "": {},
+        '': {},
       },
     },
   });

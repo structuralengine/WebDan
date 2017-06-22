@@ -12,9 +12,9 @@ angular.module('webdan')
     function (LowResource, barConfig, HtHelper) {
 
       let Bar = LowResource({
-        "store": 'bars',
-        "foreignKeys": {
-          "parents": {
+        'store': 'bars',
+        'foreignKeys': {
+          'parents': {
             DesignPoint: 'designPointId',
           },
         },

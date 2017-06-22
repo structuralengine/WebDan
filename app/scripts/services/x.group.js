@@ -14,10 +14,10 @@ angular.module('webdan')
       let primaryKey = 'g_no';
 
       let Group = LowResource({
-        "store": 'groups',
-        "primaryKey": primaryKey,
-        "foreignKeys": {
-          "children": {
+        'store': 'groups',
+        'primaryKey': primaryKey,
+        'foreignKeys': {
+          'children': {
             Member: primaryKey,
             SafetyFactor: primaryKey,
             MaterialStrength: primaryKey,
@@ -30,7 +30,7 @@ angular.module('webdan')
       function afterAdd(g_no) {
         // SafetyFactor
         let SafetyFactor = $injector.get('SafetyFactor');
-        let labels = safetyFactorConfig[""].values;
+        let labels = safetyFactorConfig[''].values;
         labels.forEach(function(label) {
           let newSafetyFactor = {
             g_no: g_no,

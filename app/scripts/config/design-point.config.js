@@ -11,7 +11,7 @@ angular.module('webdan')
   .constant('designPointConfig', {
     '部材番号': {
       items: {
-        "": {
+        '': {
           column: {
             data: 'm_no',
             type: 'numeric',
@@ -23,7 +23,7 @@ angular.module('webdan')
     '算出点': {
       en: 'Point',
       items: {
-        "": {
+        '': {
           column: {
             data: 'p_id',
             type: 'text',
@@ -35,7 +35,7 @@ angular.module('webdan')
     '位置': {
       en: 'Location',
       items: {
-        "": {
+        '': {
           column: {
             data: 'p_pos',
             type: 'numeric',
@@ -48,7 +48,7 @@ angular.module('webdan')
     '算出点名': {
       en: 'Point Name',
       items: {
-        "": {
+        '': {
           column: {
             data: 'p_name',
             type: 'text',
@@ -118,7 +118,7 @@ angular.module('webdan')
     '杭の直径 (mm)': {
       en: 'Diameter of Circle by Pile',
       items: {
-        "": {
+        '': {
           column: {
             data: 'r',
             type: 'numeric',

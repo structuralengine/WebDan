@@ -12,7 +12,7 @@ angular.module('webdan')
     '部材番号': {
       en: 'member no',
       items: {
-        "": {
+        '': {
           column: {
             data: 'm_no',
             type: 'numeric',
@@ -24,7 +24,7 @@ angular.module('webdan')
     '部材長': {
       en: 'member length',
       items: {
-        "": {
+        '': {
           column: {
             data: 'm_no',
             path: 'm_len',
@@ -38,7 +38,7 @@ angular.module('webdan')
     '部材名': {
       en: 'member name',
       items: {
-        "": {
+        '': {
           column: {
             data: 'm_no',
             path: 'Group.g_name',
@@ -50,7 +50,7 @@ angular.module('webdan')
     '断面形状': {
       en: 'section shape',
       items: {
-        "": {
+        '': {
           column: {
             data: 'shape',
           },
@@ -139,7 +139,7 @@ angular.module('webdan')
     'ひび割れ': {
       en: 'crack',
       items: {
-        "&epsilon;<sub>csd</sub>": {
+        '&epsilon;<sub>csd</sub>': {
           column: {
             data: 'ecsd',
             type: 'numeric',
@@ -150,7 +150,7 @@ angular.module('webdan')
     'せん断': {
       en: 'shear',
       items: {
-        "k<sub>r</sub>": {
+        'k<sub>r</sub>': {
           column: {
             data: 'kr',
             type: 'numeric',
@@ -191,7 +191,7 @@ angular.module('webdan')
     '部材数': {
       en: 'count',
       items: {
-        "": {
+        '': {
           column: {
             data: 'n',
             type: 'numeric',
@@ -202,7 +202,7 @@ angular.module('webdan')
     '疲労パス': {
       en: 'for fatigue',
       items: {
-        "": {
+        '': {
           column: {
             data: 'flg_fatigue',
             type: 'checkbox',
@@ -214,7 +214,7 @@ angular.module('webdan')
   .constant('designPointsConfig', {
     '部材番号': {
       items: {
-        "": {
+        '': {
           column: {
             data: 'm_no',
             type: 'numeric',
@@ -225,7 +225,7 @@ angular.module('webdan')
     '算出点': {
       en: 'Point',
       items: {
-        "": {
+        '': {
           column: {
             data: 'p_id',
             type: 'text',
@@ -236,7 +236,7 @@ angular.module('webdan')
     '位置': {
       en: 'Location',
       items: {
-        "": {
+        '': {
           column: {
             data: 'p_pos',
             type: 'numeric',
@@ -248,7 +248,7 @@ angular.module('webdan')
     '算出点名': {
       en: 'Point Name',
       items: {
-        "": {
+        '': {
           column: {
             data: 'p_name',
             type: 'text',
@@ -318,7 +318,7 @@ angular.module('webdan')
     '杭の直径 (mm)': {
       en: 'Diameter of Circle by Pile',
       items: {
-        "": {
+        '': {
           column: {
             data: 'r',
             type: 'numeric',
