@@ -144,6 +144,11 @@ angular.module('webdan')
         controller: 'SectionForcesCtrl',
         controllerAs: 'ctrl',
       })
+      .whenAuthenticated('/calc', {
+        templateUrl: 'views/calc.html',
+        controller: 'CalcCtrl',
+        controllerAs: 'ctrl',
+      })
       .otherwise({redirectTo: '/'});
   }])
 

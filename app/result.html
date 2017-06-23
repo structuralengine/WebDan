@@ -31,13 +31,8 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div class="container" ht-copy-paste>
-      <div class="header">
-        <ul class="nav nav-pills pull-right" ng-controller="MenuCtrl as menu" ng-include="'views/_menu.html'"></ul>
-        <h3 class="text-muted">webdan</h3>
-        <ul class="nav nav-pills" ng-include="'views/_tabs.html'" ng-controller="TabsCtrl as tabs"></ul>
-      </div>
-      <main ng-view></main>
+    <div ng-controller="CalcCtrl as ctrl">
+      <div ng-include="'views/calc.html'"></div>
     </div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
@@ -93,7 +88,6 @@
     <script src="scripts/config/group.config.js"></script>
     <script src="scripts/config/material-strength-rest.config.js"></script>
     <script src="scripts/config/material-strength.config.js"></script>
-    <!-- <script src="scripts/config/member-section.config.js"></script> -->
     <script src="scripts/config/member.config.js"></script>
     <script src="scripts/config/safety-factor.config.js"></script>
     <script src="scripts/config/shear.config.js"></script>
@@ -107,7 +101,6 @@
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/material-strength-rests.js"></script>
     <script src="scripts/controllers/material-strengths.js"></script>
-    <!-- <script src="scripts/controllers/member-sections.js"></script> -->
     <script src="scripts/controllers/members.js"></script>
     <script src="scripts/controllers/menu.js"></script>
     <script src="scripts/controllers/safety-factors.js"></script>
@@ -124,7 +117,6 @@
     <script src="scripts/services/group.js"></script>
     <script src="scripts/services/material-strength-rest.js"></script>
     <script src="scripts/services/material-strength.js"></script>
-    <!-- <script src="scripts/services/member-section.js"></script> -->
     <script src="scripts/services/member.js"></script>
     <script src="scripts/services/safety-factor.js"></script>
     <script src="scripts/services/shear.js"></script>

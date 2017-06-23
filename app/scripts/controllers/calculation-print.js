@@ -16,14 +16,9 @@ angular.module('webdan')
         CalculationPrint.save(ctrl.calculationPrint);
       };
 
-      ctrl.submit = function(form) {
-        let data = CalculationPrint.getStoredData();
-        RCNonlinear.send(data)
-          .then(function(response) {
-            response;
-          }, function(err) {
-            $log.error(err);
-          });
+      ctrl.isFormDisabled = function(form) {
+        ctrl.disabled = (form.$invalid || form.$submitted || form.$pristine);
+        return ctrl.disabled;
       }
 
       function init() {

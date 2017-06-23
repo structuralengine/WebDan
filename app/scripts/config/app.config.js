@@ -19,7 +19,8 @@ angular.module('webdan')
     },
     CalculationPrint: {
       server: {
-        url: 'http://www.structuralengine.com/RCNonlinear/api/values',
+        //url: 'http://www.structuralengine.com/RCNonlinear/api/values',
+        url: 'https://jsonplaceholder.typicode.com/photos',
       },
     },
   });

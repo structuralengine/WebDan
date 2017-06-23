@@ -26,12 +26,6 @@ angular.module('webdan')
             let timestamp = moment().format(format);
             let filename = 'webdan.'+ timestamp +'.json';
             CalculationPrint.saveAs(filename);
-            // let content = angular.toJson(storedData);
-            // let format = appConfig.formats.save.timestamp;
-            // let timestamp = moment().format(format);
-            // let type = {type: 'application/json; charset=utf-8'};
-            // let file = new File([content], filename, type);
-            // saveAs(file);
           }
         }
       }

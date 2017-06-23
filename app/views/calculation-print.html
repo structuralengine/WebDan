@@ -1,7 +1,7 @@
 <section>
   <h2>Calculation Print</h2>
 
-  <form name="CalculationPrintForm" ng-submit="ctrl.submit(CalculationPrintForm)">
+  <form name="CalculationPrintForm">
     <fieldset ng-disabled="CalculationPrintForm.$submitted">
       <section ng-repeat="(title, items) in ctrl.config.content">
         <h3>{{title}}</h3>
@@ -57,12 +57,10 @@
         </div>
       </section>
 
-      <button type="submit" class="btn btn-primary"
-          ng-disabled="
-            CalculationPrintForm.$invalid ||
-            CalculationPrintForm.$submitted ||
-            CalculationPrintForm.$pristine
-          ">
+      <a ng-hide="ctrl.disabled" ng-disabled="ctrl.disabled" href="/result.html" target="_blank" class="btn btn-primary">
+        性能照査 計算スタート
+      </a>
+      <button ng-show="ctrl.disabled" ng-disabled="ctrl.isFormDisabled(CalculationPrintForm)" type="button" class="btn btn-primary">
         性能照査 計算スタート
       </button>
     </fieldset>
