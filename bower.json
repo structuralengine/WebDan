@@ -43,6 +43,12 @@
       "main": [
         "dist/lowdb.js"
       ]
+    },
+    "dropzone": {
+      "main": [
+        "dist/dropzone.js",
+        "dist/dropzone.css"
+      ]
     }
   },
   "devDependencies": {
