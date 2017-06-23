@@ -9,10 +9,20 @@
 angular.module('webdan')
   .directive('dropzone', function () {
     return {
-      template: '<div></div>',
-      restrict: 'E',
-      link: function postLink(scope, element, attrs) {
-        element.text('this is the dropzone directive');
+      restrict: 'A',
+      link: function(scope, element, attrs) {
+
+        let receive = scope.$eval(attrs.receive) || angular.noop;
+
+        let dz = new Dropzone(element[0], {
+          url: '#',
+          autoProcessQueue: false,
+          clickable: [attrs.clickable || 'a[dropzone]'],
+          acceptedFiles: attrs.extensions || '.json',
+          addedfile: function(file) {
+            receive(file);
+          },
+        });
       }
     };
   });

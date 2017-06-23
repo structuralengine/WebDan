@@ -16,12 +16,28 @@ angular.module('webdan')
 
       menu.createNewBucket = function() {
         CalculationPrint.clear();
+        reload();
+      };
+
+      menu.loadFile = function(file) {
+        try {
+          let reader = new FileReader();
+          reader.onload = function(e) {
+            let json = e.target.result;
+            let loadedData = angular.fromJson(json);
+            CalculationPrint.load(loadedData);
+            reload();
+          };
+          reader.readAsText(file);
+        }
+        catch (e) {
+          $log.error(e);
+        }
+      };
+
+      function reload() {
         $window.location.reload();
-      };
-
-      menu.loadFile = function() {
-
-      };
+      }
 
       menu.saveAsFile = function() {
         try {
