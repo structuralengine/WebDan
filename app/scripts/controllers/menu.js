@@ -12,6 +12,7 @@ angular.module('webdan')
     function ($scope, $window, $log, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
       let resource;
+      let dz;
 
       menu.createNewBucket = function() {
         CalculationPrint.clear();
@@ -35,6 +36,6 @@ angular.module('webdan')
             CalculationPrint.saveAs(filename);
           }
         }
-      }
+      };
     }
   ]);
