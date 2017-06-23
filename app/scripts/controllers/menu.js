@@ -8,13 +8,14 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MenuCtrl', ['$scope', '$window', '$route', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
-    function ($scope, $window, $route, $log, CalculationPrint, moment, msgConfig, appConfig) {
+  .controller('MenuCtrl', ['$scope', '$window', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
+    function ($scope, $window, $log, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
       let resource;
 
       menu.createNewBucket = function() {
         CalculationPrint.clear();
+        $window.location.reload();
       };
 
       menu.loadFile = function() {
