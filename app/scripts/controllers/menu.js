@@ -8,11 +8,17 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MenuCtrl', ['$scope', '$window', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
-    function ($scope, $window, $log, CalculationPrint, moment, msgConfig, appConfig) {
+  .controller('MenuCtrl', ['$scope', '$window', '$route', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
+    function ($scope, $window, $route, $log, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
+      let resource;
 
       menu.createNewBucket = function() {
+        CalculationPrint.clear();
+      };
+
+      menu.loadFile = function() {
+
       };
 
       menu.saveAsFile = function() {
@@ -26,12 +32,6 @@ angular.module('webdan')
             let timestamp = moment().format(format);
             let filename = 'webdan.'+ timestamp +'.json';
             CalculationPrint.saveAs(filename);
-            // let content = angular.toJson(storedData);
-            // let format = appConfig.formats.save.timestamp;
-            // let timestamp = moment().format(format);
-            // let type = {type: 'application/json; charset=utf-8'};
-            // let file = new File([content], filename, type);
-            // saveAs(file);
           }
         }
       }
