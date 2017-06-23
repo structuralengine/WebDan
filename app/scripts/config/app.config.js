@@ -9,6 +9,11 @@
  */
 angular.module('webdan')
   .constant('appConfig', {
+    formats: {
+      save: {
+        timestamp: 'YYYYMMDD-HHmmss',
+      },
+    },
     DesignPoint: {
       useDefaults: false,
     },

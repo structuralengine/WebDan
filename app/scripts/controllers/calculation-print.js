@@ -17,7 +17,7 @@ angular.module('webdan')
       };
 
       ctrl.submit = function(form) {
-        let data = CalculationPrint.getAllData();
+        let data = CalculationPrint.getStoredData();
         RCNonlinear.send(data)
           .then(function(response) {
             response;

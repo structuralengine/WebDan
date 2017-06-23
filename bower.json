@@ -23,7 +23,9 @@
     "handsontable.full.js": "http://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.js",
     "ngHandsontable": "^0.13.0",
     "ht-lowdb": "https://github.com/a311cb/ht-lowdb.git#^1.0.1",
-    "angular-bootstrap": "^2.5.0"
+    "angular-bootstrap": "^2.5.0",
+    "angular-moment": "^1.0.1",
+    "file-saver": "^1.3.3"
   },
   "overrides": {
     "bootstrap-sass": {
