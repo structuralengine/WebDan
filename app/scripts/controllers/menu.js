@@ -11,9 +11,33 @@ angular.module('webdan')
   .controller('MenuCtrl', ['$scope', '$window', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
     function ($scope, $window, $log, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
+      let resource;
+      let dz;
 
       menu.createNewBucket = function() {
+        CalculationPrint.clear();
+        reload();
       };
+
+      menu.loadFile = function(file) {
+        try {
+          let reader = new FileReader();
+          reader.onload = function(e) {
+            let json = e.target.result;
+            let loadedData = angular.fromJson(json);
+            CalculationPrint.load(loadedData);
+            reload();
+          };
+          reader.readAsText(file);
+        }
+        catch (e) {
+          $log.error(e);
+        }
+      };
+
+      function reload() {
+        $window.location.reload();
+      }
 
       menu.saveAsFile = function() {
         try {
@@ -28,6 +52,6 @@ angular.module('webdan')
             CalculationPrint.saveAs(filename);
           }
         }
-      }
+      };
     }
   ]);
