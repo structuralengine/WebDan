@@ -13,7 +13,7 @@ Running `grunt test` will run the unit tests with karma.
 
 ## SetUp
 
-×‚©‚¢‚±‚Æ‚ð‚â‚ë‚¤‚Æ‚·‚é‚ÆƒhƒLƒ…ƒƒ“ƒg‚ð“Ç‚ñ‚Å‚¢‚½•û‚ª‚¢‚¢‚Ì‚ÅA‚»‚Ì URL ‚ð—ñ‹“‚µ‚Ä‚¨‚«‚Ü‚·B
+ç´°ã‹ã„ã“ã¨ã‚’ã‚„ã‚ã†ã¨ã™ã‚‹ã¨ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆã‚’èª­ã‚“ã§ã„ãŸæ–¹ãŒã„ã„ã®ã§ã€ãã® URL ã‚’åˆ—æŒ™ã—ã¦ãŠãã¾ã™ã€‚
 
 > yeoman / generator-webapp
 > https://goo.gl/WYtzuO
@@ -31,62 +31,77 @@ Running `grunt test` will run the unit tests with karma.
 
 git clone
 
+> 
 > $ cd __working_directory__
+> 
 > $ git clone -v "https://github.com/structuralengine/WebDan.git" webdan
-
+> 
 
 ### step.2
 
-![bower, gulp ‚Ì€”õ](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
+![bower, gulp ã®æº–å‚™](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
 
-bower, gulp ‚Ì€”õ
+bower, gulp ã®æº–å‚™
 
+> 
 > $ cd webdan
+> 
 > $ npm install --global gulp-cli bower
-
+> 
 
 ### step.3
 
-![ŠJ”­‚É•K—v‚Èƒ‰ƒCƒuƒ‰ƒŠ[‚Ì€”õ](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
+![é–‹ç™ºã«å¿…è¦ãªãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ¼ã®æº–å‚™](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
 
-ŠJ”­‚É•K—v‚Èƒ‰ƒCƒuƒ‰ƒŠ[‚Ì€”õ
+é–‹ç™ºã«å¿…è¦ãªãƒ©ã‚¤ãƒ–ãƒ©ãƒªãƒ¼ã®æº–å‚™
 
-“K“–‚È branch (—á origin/#17) ‚É switch ‚µ‚½ŒãAˆÈ‰º‚ðŽÀs‚µ‚Ä‚­‚¾‚³‚¢B
+é©å½“ãª branch (ä¾‹ origin/#17) ã« switch ã—ãŸå¾Œã€ä»¥ä¸‹ã‚’å®Ÿè¡Œã—ã¦ãã ã•ã„ã€‚
 
+> 
 > $ npm install
+> 
 > $ bower install
+> 
+> $ gulp lowdb
+> 
 
-![angular ‚Ìƒo[ƒWƒ‡ƒ“‚ª•s®‡](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
+![angular ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒä¸æ•´åˆ](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
 
-“à•”‚Å—v‹‚³‚ê‚Ä‚¢‚é angular ‚Ìƒo[ƒWƒ‡ƒ“‚ª•s®‡‚È‚Ì‚ÅA“ü—Í‚ð—v‹‚³‚ê‚Ü‚·B
-ÅV”Å‚Å\‚í‚È‚¢‚Ì‚Åu2v‚Æ“ü—Í‚µ‚Ü‚·B
+å†…éƒ¨ã§è¦æ±‚ã•ã‚Œã¦ã„ã‚‹ angular ã®ãƒãƒ¼ã‚¸ãƒ§ãƒ³ãŒä¸æ•´åˆãªã®ã§ã€å…¥åŠ›ã‚’è¦æ±‚ã•ã‚Œã¾ã™ã€‚
+æœ€æ–°ç‰ˆã§æ§‹ã‚ãªã„ã®ã§ã€Œ2ã€ã¨å…¥åŠ›ã—ã¾ã™ã€‚
 
 ### step.4
 
 ![build](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_134318.png)
 
 
-1. web ƒTƒCƒg‚Ì‹N“®
+1. web ã‚µã‚¤ãƒˆã®èµ·å‹•
 
+> 
 > $ gulp serve
+> 
 
-u http://localhost:9000 v‚ÅƒAƒNƒZƒX‰Â”\‚Å‚·B
+ã€Œ http://localhost:9000 ã€ã§ã‚¢ã‚¯ã‚»ã‚¹å¯èƒ½ã§ã™ã€‚
 
 
-2. ”z•z—pƒtƒ@ƒCƒ‹‚Ìì¬ (dist/ ƒfƒBƒŒƒNƒgƒŠj
+2. é…å¸ƒç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã®ä½œæˆ (dist/ ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªï¼‰
 
+> 
 > $ gulp
 > 
 > $ ls dist/
+> 
 
-command `gulp` ‚É‚æ‚èA“à•”‚Å `gulp build` ‚ªŽÀs‚³‚êAdist ƒfƒBƒŒƒNƒgƒŠ‚ª¶¬‚³‚ê‚Ü‚·B‚±‚Ì dist ƒfƒBƒŒƒNƒgƒŠ‚ªŒöŠJ—p‚Ìƒtƒ@ƒCƒ‹ŒQ‚Å‚·B
+command `gulp` ã«ã‚ˆã‚Šã€å†…éƒ¨ã§ `gulp build` ãŒå®Ÿè¡Œã•ã‚Œã€dist ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒç”Ÿæˆã•ã‚Œã¾ã™ã€‚ã“ã® dist ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªãŒå…¬é–‹ç”¨ã®ãƒ•ã‚¡ã‚¤ãƒ«ç¾¤ã§ã™ã€‚
 
 
-3. ”z•z—pƒtƒ@ƒCƒ‹‚ðŽg‚Á‚½ web ƒTƒCƒg‚Ì‹N“®
+3. é…å¸ƒç”¨ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ä½¿ã£ãŸ web ã‚µã‚¤ãƒˆã®èµ·å‹•
 
+> 
 > $ gulp serve:dist
+> 
 
-ŒöŠJ—pƒtƒ@ƒCƒ‹ (dist) ‚ðŽg‚Á‚Ä web ƒTƒCƒg‚ÌŠm”F‚ª‚Å‚«‚Ü‚·B
+å…¬é–‹ç”¨ãƒ•ã‚¡ã‚¤ãƒ« (dist) ã‚’ä½¿ã£ã¦ web ã‚µã‚¤ãƒˆã®ç¢ºèªãŒã§ãã¾ã™ã€‚
 
-ˆÈã‚Å‚·B
-‚±‚ê‚É‚æ‚èAŠJ”­ŠÂ‹«‚ª—pˆÓ‚³‚ê‚Ü‚µ‚½
+ä»¥ä¸Šã§ã™ã€‚
+ã“ã‚Œã«ã‚ˆã‚Šã€é–‹ç™ºç’°å¢ƒãŒç”¨æ„ã•ã‚Œã¾ã—ãŸ
