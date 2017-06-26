@@ -67,13 +67,14 @@
     <script src="/bower_components/pikaday/pikaday.js"></script>
     <script src="/bower_components/zeroclipboard/dist/ZeroClipboard.js"></script>
     <script src="/bower_components/ngHandsontable/dist/ngHandsontable.js"></script>
-    <script src="/bower_components/lodash/lodash.js"></script>
-    <script src="/bower_components/lowdb/dist/lowdb.js"></script>
     <script src="/bower_components/ht-lowdb/dist/ht-lowdb.js"></script>
     <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="/bower_components/angular-moment/angular-moment.js"></script>
     <script src="/bower_components/file-saver/FileSaver.js"></script>
     <script src="/bower_components/dropzone/dist/dropzone.js"></script>
+    <script src="/bower_components/lodash/lodash.js"></script>
+    <script src="/bower_components/lowdb/dist/lowdb.js"></script>
+    <script src="/bower_components/local-db/dist/local-db.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -95,28 +96,44 @@
     <script src="scripts/config/group.config.js"></script>
     <script src="scripts/config/material-strength-rest.config.js"></script>
     <script src="scripts/config/material-strength.config.js"></script>
-    <!-- <script src="scripts/config/member-section.config.js"></script> -->
     <script src="scripts/config/member.config.js"></script>
+    <script src="scripts/config/msg.config.js"></script>
     <script src="scripts/config/safety-factor.config.js"></script>
     <script src="scripts/config/shear.config.js"></script>
+    <script src="scripts/controllers/account.js"></script>
     <script src="scripts/controllers/bars.js"></script>
     <script src="scripts/controllers/basic-information.js"></script>
     <script src="scripts/controllers/bending-moments.js"></script>
+    <script src="scripts/controllers/calc.js"></script>
     <script src="scripts/controllers/calculation-print.js"></script>
     <script src="scripts/controllers/design-points.js"></script>
     <script src="scripts/controllers/fatigues.js"></script>
     <script src="scripts/controllers/groups.js"></script>
+    <script src="scripts/controllers/login.js"></script>
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/material-strength-rests.js"></script>
     <script src="scripts/controllers/material-strengths.js"></script>
-    <!-- <script src="scripts/controllers/member-sections.js"></script> -->
     <script src="scripts/controllers/members.js"></script>
     <script src="scripts/controllers/menu.js"></script>
+    <script src="scripts/controllers/safety-factors-material-strengths.js"></script>
     <script src="scripts/controllers/safety-factors.js"></script>
+    <script src="scripts/controllers/section-forces.js"></script>
     <script src="scripts/controllers/shears.js"></script>
     <script src="scripts/controllers/tabs.js"></script>
-    <script src="scripts/controllers/login.js"></script>
-    <script src="scripts/controllers/account.js"></script>
+    <script src="scripts/defaults/condition.defaults.js"></script>
+    <script src="scripts/defaults/design-point.defaults.js"></script>
+    <script src="scripts/defaults/group.defaults.js"></script>
+    <script src="scripts/defaults/material-strength.defaults.js"></script>
+    <script src="scripts/defaults/member.defaults.js"></script>
+    <script src="scripts/defaults/rebar-side.bar.defaults.js"></script>
+    <script src="scripts/defaults/rebar-side.fatigue.defaults.js"></script>
+    <script src="scripts/defaults/safety-factor.defaults.js"></script>
+    <script src="scripts/defaults/section-shape.defaults.js"></script>
+    <script src="scripts/directives/dropzone.js"></script>
+    <script src="scripts/directives/ht-resizable.js"></script>
+    <script src="scripts/directives/nghideauth.js"></script>
+    <script src="scripts/directives/ngshowauth.js"></script>
+    <script src="scripts/filters/reverse.js"></script>
     <script src="scripts/services/bar.js"></script>
     <script src="scripts/services/basic-information.js"></script>
     <script src="scripts/services/bending-moment.js"></script>
@@ -126,29 +143,10 @@
     <script src="scripts/services/group.js"></script>
     <script src="scripts/services/material-strength-rest.js"></script>
     <script src="scripts/services/material-strength.js"></script>
-    <!-- <script src="scripts/services/member-section.js"></script> -->
     <script src="scripts/services/member.js"></script>
+    <script src="scripts/services/rcnonlinear.js"></script>
     <script src="scripts/services/safety-factor.js"></script>
     <script src="scripts/services/shear.js"></script>
-    <script src="scripts/directives/nghideauth.js"></script>
-    <script src="scripts/directives/ngshowauth.js"></script>
-    <script src="scripts/filters/reverse.js"></script>
-    <script src="scripts/defaults/member.defaults.js"></script>
-    <script src="scripts/defaults/group.defaults.js"></script>
-    <script src="scripts/defaults/section-shape.defaults.js"></script>
-    <script src="scripts/defaults/condition.defaults.js"></script>
-    <script src="scripts/defaults/rebar-side.bar.defaults.js"></script>
-    <script src="scripts/defaults/rebar-side.fatigue.defaults.js"></script>
-    <script src="scripts/defaults/design-point.defaults.js"></script>
-    <script src="scripts/controllers/safety-factors-material-strengths.js"></script>
-    <script src="scripts/defaults/safety-factor.defaults.js"></script>
-    <script src="scripts/defaults/material-strength.defaults.js"></script>
-    <script src="scripts/controllers/section-forces.js"></script>
-    <script src="scripts/directives/ht-resizable.js"></script>
-    <script src="scripts/services/rcnonlinear.js"></script>
-    <script src="scripts/config/msg.config.js"></script>
-    <script src="scripts/directives/dropzone.js"></script>
-    <script src="scripts/controllers/calc.js"></script>
     <!-- endbuild -->
   </body>
 </html>
