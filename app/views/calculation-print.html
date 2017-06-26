@@ -3,59 +3,70 @@
 
   <form name="CalculationPrintForm" ng-submit="ctrl.submit(CalculationPrintForm)">
     <fieldset ng-disabled="CalculationPrintForm.$submitted">
-      <section ng-repeat="(title, items) in ctrl.config.content">
-        <h3>{{title}}</h3>
-        <div class="checkbox" ng-repeat="(label, config) in items" ng-init="name = config.var">
-          <label>
-            <input type="checkbox" name="{{name}}" ng-model="ctrl.calculationPrint[name]" ng-change="ctrl.change(name)">
-            {{label}}
-          </label>
-        </div>
-      </section>
 
-      <section ng-repeat="(title, items) in ctrl.config.check">
-        <h3>{{title}}</h3>
-        <div class="checkbox" ng-repeat="(label, config) in items" ng-init="name = config.var">
-          <label>
-            <input type="checkbox" name="{{name}}" ng-model="ctrl.calculationPrint[name]" ng-change="ctrl.change(name)">
-            {{label}}
-          </label>
+      <div class="row">
+        <div class="col-sm-3">
+          <section ng-repeat="(title, items) in ctrl.config.content">
+            <h3>{{title}}</h3>
+            <div class="checkbox" ng-repeat="(label, config) in items" ng-init="name = config.var">
+              <label>
+                <input type="checkbox" name="{{name}}" ng-model="ctrl.calculationPrint[name]" ng-change="ctrl.change(name)">
+                {{label}}
+              </label>
+            </div>
+          </section>
         </div>
-      </section>
 
-      <section ng-repeat="(title, config) in ctrl.config.calc_target" ng-init="name = config.var" class="form-inline">
-        <h3>{{title}}</h3>
-        <p class="hint"><span class="label label-info">Ctrl</span> キーを押しながら、複数選択可能</p>
-        <div class="form-group">
-          <select class="form-control"
-            name="{{name}}"
-            ng-model="ctrl.calculationPrint[name]"
-            ng-options="group.g_no as group.g_name for group in ctrl.groups"
-            ng-change="ctrl.change(name)"
-            multiple="">
-          </select>
+        <div class="col-sm-2">
+          <section ng-repeat="(title, items) in ctrl.config.check">
+            <h3>{{title}}</h3>
+            <div class="checkbox" ng-repeat="(label, config) in items" ng-init="name = config.var">
+              <label>
+                <input type="checkbox" name="{{name}}" ng-model="ctrl.calculationPrint[name]" ng-change="ctrl.change(name)">
+                {{label}}
+              </label>
+            </div>
+          </section>
         </div>
-      </section>
 
-      <section ng-repeat="(title, items) in ctrl.config.print">
-        <h3>{{title}}</h3>
-        <div class="radio" ng-repeat="(label, config) in items" ng-init="value = config.var">
-          <label>
-            <input type="radio" name="print" ng-model="ctrl.calculationPrint.print" ng-value="value" ng-change="ctrl.change(name)">
-            {{label}}
-          </label>
+        <div class="col-sm-3">
+          <section ng-repeat="(title, config) in ctrl.config.calc_target" ng-init="name = config.var" class="form-inline">
+            <h3>{{title}}</h3>
+            <p class="hint"><span class="label label-info">Ctrl</span> を押しながら複数選択可能</p>
+            <div class="form-group">
+              <select class="form-control"
+                name="{{name}}"
+                ng-model="ctrl.calculationPrint[name]"
+                ng-options="group.g_no as group.g_name for group in ctrl.groups"
+                ng-change="ctrl.change(name)"
+                multiple="">
+              </select>
+            </div>
+          </section>
         </div>
-      </section>
 
-      <section ng-repeat="(title, config) in ctrl.config.preview" ng-init="name = config.var">
-        <h3>プレビュー</h3>
-        <div class="checkbox">
-          <label>
-            <input type="checkbox" name="{{name}}" ng-model="ctrl.calculationPrint[name]" ng-change="ctrl.change(name)">
-            {{title}}
-          </label>
+        <div class="col-sm-3">
+          <section ng-repeat="(title, items) in ctrl.config.print">
+            <h3>{{title}}</h3>
+            <div class="radio" ng-repeat="(label, config) in items" ng-init="value = config.var">
+              <label>
+                <input type="radio" name="print" ng-model="ctrl.calculationPrint.print" ng-value="value" ng-change="ctrl.change(name)">
+                {{label}}
+              </label>
+            </div>
+          </section>
+
+          <section ng-repeat="(title, config) in ctrl.config.preview" ng-init="name = config.var">
+            <h3>プレビュー</h3>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="{{name}}" ng-model="ctrl.calculationPrint[name]" ng-change="ctrl.change(name)">
+                {{title}}
+              </label>
+            </div>
+          </section>
         </div>
-      </section>
+      </div>
 
       <button type="submit" class="btn btn-primary"
           ng-disabled="
