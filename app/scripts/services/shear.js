@@ -29,7 +29,7 @@ angular.module('webdan')
         parent: 'DesignPoint',
         targetProp: 'p_name',
         config: shearConfig,
-        refreshingHotIds: 'bending-moments',
+        refreshingHotIds: 'bendingMoments',
       });
 
       return Shear;
