@@ -31,7 +31,7 @@ angular.module('webdan')
           if (consider_rebar) {
             let rebar = _.find(considerRebarDefaults, {value: consider_rebar});
             if (rebar) {
-              editor.setValue(rebar.name);
+              editor.setValue(rebar.no);
             }
           }
         }
