@@ -21,6 +21,8 @@ angular.module('webdan')
         data: 'g_name',
         type: 'text',
         renderer: function(hot, td, row, col, prop, value, cellProperties) {
+          Handsontable.renderers.TextRenderer.apply(this, arguments);
+
           let group = hot.getSourceDataAtRow(row);
           let readOnly = cellProperties.readOnly = !group.g_no;
           let className = (readOnly)? Handsontable.DefaultSettings.prototype.readOnlyCellClassName: '';

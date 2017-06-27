@@ -138,6 +138,8 @@ angular.module('webdan')
             data: 'consider_rebar',
             type: 'text',
             renderer: function(hot, td, row, col, prop, consider_rebar, cellProperties) {
+              Handsontable.renderers.TextRenderer.apply(this, arguments);
+
               let label = '';
               if (consider_rebar) {
                 let key;

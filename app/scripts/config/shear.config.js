@@ -17,7 +17,8 @@ angular.module('webdan')
             column: {
               data: 'designPointId',
               path: 'Member.m_no',
-              type: 'numeric'
+              type: 'numeric',
+              readOnly: true,
             },
             items: {
               '': {
@@ -31,6 +32,7 @@ angular.module('webdan')
             column: {
               data: 'designPointId',
               path: 'Member.g_name',
+              readOnly: true,
             },
             items: {
               '': {

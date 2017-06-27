@@ -102,6 +102,8 @@ angular.module('webdan')
             break;
         }
         return function(hot, td, row, col, prop, no, cellProperties) {
+          Handsontable.renderers.TextRenderer.apply(this, arguments);
+
           let item = _.find(items, function(item) {
             return (item.no == no);
           });

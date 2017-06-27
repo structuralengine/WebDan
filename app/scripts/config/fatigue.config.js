@@ -63,6 +63,8 @@ angular.module('webdan')
             type: 'numeric',
             readOnly: true,
             renderer: function(hot, td, row, col, prop, value, cellProperties) {
+              Handsontable.renderers.NumericRenderer.apply(this, arguments);
+
               let label = '';
               let fatigue = hot.getSourceDataAtRow(row);
               if (fatigue) {
@@ -92,6 +94,8 @@ angular.module('webdan')
           values: rebarSideFatigueDefaults,
           column: (function(sides) {
             let renderer = function(hot, td, row, col, prop, value, cellProperties) {
+              Handsontable.renderers.NumericRenderer.apply(this, arguments);
+
               let label = sides[value] || value;
               angular.element(td).html(label);
               return td;
