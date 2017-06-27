@@ -1,9 +1,10 @@
 <section class="members">
-  <header>
-    <h2>Members</h2>
+  <h2>Members</h2>
+
+  <div class="ht-container">
     <div class="buttons">
       <button uib-popover-template="'views/_section-shapes.html'"
-              popover-placement="bottom"
+              popover-placement="left"
               class="btn btn-default"
               type="button">
         断面形状
@@ -16,12 +17,12 @@
         環境条件
       </button>
     </div>
-  </header>
 
-  <hot-table
-    hot-id="members"
-    settings="ctrl.settings"
-    datarows="ctrl.members"
-    ht-resizable>
-  </hot-table>
+    <hot-table
+      hot-id="members"
+      settings="ctrl.settings"
+      datarows="ctrl.members"
+      ht-resizable>
+    </hot-table>
+  </div>
 </section>
