@@ -14,7 +14,7 @@ angular.module('webdan')
       let foreignKey = 'designPointId';
 
       let BendingMoment = LowResource({
-        'store': 'bendingMoments',
+        'table': 'bendingMoments',
         'foreignKeys': {
           'parents': {
             DesignPoint: foreignKey,

@@ -30,12 +30,12 @@ angular.module('webdan')
         ctrl.basicInformation = BasicInformation.query();
 
         let pickup = ctrl.pickup = {};
-        let store = BasicInformation.store;
+        let table = BasicInformation.table;
         let keys = ['moment', 'shearforce'];
         keys.forEach(function(key) {
           let config = Object.values(basicInformationConfig['pickup.'+ key])[0];
           let htObject = new HtObject(ctrl.basicInformation, {
-            store: store,
+            table: table,
             config: config,
           });
           pickup[key] = {

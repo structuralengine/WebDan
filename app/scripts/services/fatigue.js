@@ -12,7 +12,7 @@ angular.module('webdan')
     function (LowResource, fatigueConfig, HtHelper) {
 
       let Fatigue = LowResource({
-        'store': 'fatigues',
+        'table': 'fatigues',
         'foreignKeys': {
           'parents': {
             DesignPoint: 'designPointId',

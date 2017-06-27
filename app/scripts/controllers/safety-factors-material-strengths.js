@@ -76,12 +76,12 @@ angular.module('webdan')
         let groupedRests = _.groupBy(rests, function(rest) {
           return number(rest.g_no, 1);
         });
-        let store = MaterialStrengthRest.store;
+        let table = MaterialStrengthRest.table;
         Object.keys(groupedRests).forEach(function(g_no) {
           let rests = groupedRests[g_no];
           groupedRests[g_no] = rests.map(function(rest) {
             return new HtObject(rest, {
-              store: store,
+              table: table,
               config: materialStrengthRestConfig,
             });
           })

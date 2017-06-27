@@ -12,7 +12,7 @@ angular.module('webdan')
     function (LowResource, basicInformationConfig, HtHelper) {
 
       let BasicInformation = LowResource({
-        store: 'basicInformation',
+        table: 'basicInformation',
       });
 
       _.mixin(BasicInformation, HtHelper);

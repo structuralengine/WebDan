@@ -12,7 +12,7 @@ angular.module('webdan')
     function (LowResource, DesignPoint, shearConfig, HtHelper) {
 
       let Shear = LowResource({
-        'store': 'shears',
+        'table': 'shears',
         'foreignKeys': {
           'parents': {
             DesignPoint: 'designPointId',

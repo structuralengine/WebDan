@@ -14,7 +14,7 @@ angular.module('webdan')
       let primaryKey = 'm_no';
       let g_no_column = 2;
       let params = {
-        'store': 'members',
+        'table': 'members',
         'primaryKey': primaryKey,
         'foreignKeys': {
           'children': {

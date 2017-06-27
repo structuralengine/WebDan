@@ -22,12 +22,12 @@ angular.module('webdan')
           return rest.g_no;
         });
 
-        let store = MaterialStrengthRest.store;
+        let table = MaterialStrengthRest.table;
         Object.keys(gropudedRests).forEach(function(g_no) {
           let rests = gropudedRests[g_no];
           gropudedRests[g_no] = rests.map(function(rest) {
             return new HtObject(rest, {
-              store: store,
+              table: table,
               config: materialStrengthRestConfig,
             });
           })

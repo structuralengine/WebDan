@@ -25,11 +25,9 @@ angular.module('webdan', [
     'ht-utils',
     'ui.bootstrap',
   ])
-  .config(['$lowdbProvider', 'dbConfig',
-    function($lowdbProvider, dbConfig) {
-      $lowdbProvider.init({
-        path: dbConfig.path,
-        state: dbConfig.defaults.state,
-      });
+  .config(['dbConfig', 'appConfig',
+    function(dbConfig, appConfig) {
+      dbConfig.source = appConfig.db.source;
+      dbConfig.defaults = appConfig.db.defaults;
     }
   ]);

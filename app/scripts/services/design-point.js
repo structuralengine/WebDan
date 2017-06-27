@@ -14,7 +14,7 @@ angular.module('webdan')
       let foreignKey = 'designPointId';
 
       let DesignPoint = LowResource({
-        'store': 'designPoints',
+        'table': 'designPoints',
         'foreignKeys': {
           'parents': {
             Member: 'm_no',

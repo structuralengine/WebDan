@@ -12,7 +12,7 @@ angular.module('webdan')
     function (LowResource, calculationPrintConfig, HtHelper) {
 
       let CalculationPrint = LowResource({
-        store: 'calculationPrint',
+        table: 'calculationPrint',
       });
 
       _.mixin(CalculationPrint, HtHelper);

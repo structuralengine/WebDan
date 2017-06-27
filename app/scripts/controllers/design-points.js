@@ -24,7 +24,7 @@ angular.module('webdan')
           let designPoints = DesignPoint.query();
           let number = $filter('number');
           ctrl.designPoints = _.groupBy(designPoints, function(designPoint) {
-            let member = Member.get(designPoint.m_no);
+            let member = Member.getById(designPoint.m_no);
             return number(member.g_no, 1);
           });
 

@@ -9,6 +9,23 @@
  */
 angular.module('webdan')
   .constant('appConfig', {
+    db: {
+      'source': 'webdan.2',
+      'defaults': {
+        basicInformation: {},
+        groups: [],
+          members: [],
+            designPoints: [],
+              bars: [],
+              fatigues: [],
+              bendingMoments: [],
+              shears: [],
+          safetyFactors: [],
+          materialStrengths: [],
+          materialStrengthRests: [],
+        calculationPrint: {},
+      },
+    },
     formats: {
       save: {
         timestamp: 'YYYYMMDD-HHmmss',
