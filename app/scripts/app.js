@@ -27,7 +27,6 @@ angular.module('webdan', [
   ])
   .config(['dbConfig', 'appConfig',
     function(dbConfig, appConfig) {
-      dbConfig.source = appConfig.db.source;
-      dbConfig.defaults = appConfig.db.defaults;
+      angular.extend(dbConfig, appConfig.db);
     }
   ]);

@@ -26,11 +26,6 @@ angular.module('webdan')
         calculationPrint: {},
       },
     },
-    formats: {
-      save: {
-        timestamp: 'YYYYMMDD-HHmmss',
-      },
-    },
     DesignPoint: {
       useDefaults: false,
     },

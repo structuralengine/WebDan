@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MenuCtrl', ['$scope', '$window', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
-    function ($scope, $window, $log, CalculationPrint, moment, msgConfig, appConfig) {
+  .controller('MenuCtrl', ['$scope', '$window', '$lowdb', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
+    function ($scope, $window, $lowdb, $log, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
       let resource;
       let dz;
@@ -20,19 +20,12 @@ angular.module('webdan')
       };
 
       menu.loadFile = function(file) {
-        try {
-          let reader = new FileReader();
-          reader.onload = function(e) {
-            let json = e.target.result;
-            let loadedData = angular.fromJson(json);
-            CalculationPrint.load(loadedData);
+        $lowdb.load(file)
+          .then(function() {
             reload();
-          };
-          reader.readAsText(file);
-        }
-        catch (e) {
-          $log.error(e);
-        }
+          }, function(err) {
+            $window.alert(err);
+          });
       };
 
       function reload() {
@@ -46,10 +39,7 @@ angular.module('webdan')
         }
         catch (e) {
           if ($window.confirm(e)) {
-            let format = appConfig.formats.save.timestamp;
-            let timestamp = moment().format(format);
-            let filename = 'webdan.'+ timestamp +'.json';
-            CalculationPrint.saveAs(filename);
+            $lowdb.download();
           }
         }
       };

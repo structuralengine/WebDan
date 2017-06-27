@@ -3,10 +3,10 @@
   <ul class="dropdown-menu">
     <li><a ng-click="menu.createNewBucket()">新規作成</a></li>
     <li>
-      <a dropzone
+      <a open-file
           data-extensions=".json"
-          data-clickable=".header a[dropzone]"
-          data-receive="menu.loadFile">
+          data-clickable=".header a[open-file]"
+          data-receiver="menu.loadFile">
         ファイルを開く
       </a>
     </li>
