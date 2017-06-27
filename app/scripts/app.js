@@ -21,8 +21,8 @@ angular.module('webdan', [
     'firebase.auth.app',
     'angularMoment',
     'ngHandsontable',
-    'ht-helper',
     'local-db',
+    'ht-utils',
     'ui.bootstrap',
   ])
   .config(['$lowdbProvider', 'dbConfig',
