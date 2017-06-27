@@ -59,19 +59,23 @@ angular.module('webdan')
     $routeProvider
       .when('/', {
         templateUrl: 'views/main.html',
-        controller: 'MainCtrl'
+        controller: 'MainCtrl',
+        controllerAs: 'ctrl',
       })
       .when('/chat', {
         templateUrl: 'views/chat.html',
-        controller: 'ChatCtrl'
+        controller: 'ChatCtrl',
+        controllerAs: 'ctrl',
       })
       .when('/login', {
         templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
+        controller: 'LoginCtrl',
+        controllerAs: 'ctrl',
       })
       .whenAuthenticated('/account', {
         templateUrl: 'views/account.html',
-        controller: 'AccountCtrl'
+        controller: 'AccountCtrl',
+        controllerAs: 'ctrl',
       })
       .otherwise({redirectTo: '/'});
   }])

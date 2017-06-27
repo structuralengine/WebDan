@@ -18,5 +18,5 @@ angular.module('webdan', [
     'ngSanitize',
     'ngTouch',
     'firebase.ref',
-    'firebase.auth.app'
+    //'firebase.auth.app'
   ]);
