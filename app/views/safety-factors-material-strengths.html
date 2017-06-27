@@ -1,4 +1,4 @@
-<section class="safety-factors">
+<section class="safety-factors-material-strengths">
   <h2>Safety Factors, Material Strengths</h2>
 
   <section ng-repeat="group in ctrl.groups"
@@ -10,8 +10,17 @@
       ">
     <h3>{{group.g_name}}</h3>
 
-    <section>
-      <h4>安全係数</h4>
+    <section class="safety-factors">
+      <header>
+        <h4>安全係数</h4>
+        <button uib-popover-template="'views/_consider-rebars.html'"
+                popover-placement="right"
+                class="btn btn-default"
+                type="button">
+          鉄筋配置
+        </button>
+      </header>
+
       <hot-table
         hot-id="safetyFactors-{{g_idx}}"
         settings="ctrl.settings.safetyFactors"
@@ -19,7 +28,7 @@
       </hot-table>
     </section>
 
-    <section>
+    <section class="material-strengths">
       <h4>材料強度</h4>
       <hot-table
         hot-id="materialStrengths-{{g_idx}}"

@@ -9,8 +9,8 @@
  */
 angular.module('webdan')
   .controller('SafetyFactorsMaterialStrengthsCtrl',
-            ['$scope', '$filter', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'materialStrengthRestConfig', 'HtObject',
-    function ($scope, $filter, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, materialStrengthRestConfig, HtObject) {
+            ['$scope', '$filter', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject',
+    function ($scope, $filter, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, considerRebarDefaults, materialStrengthRestConfig, HtObject) {
       let ctrl = this;
 
       function init() {
@@ -18,6 +18,10 @@ angular.module('webdan')
         ctrl.settings = {
           safetyFactors: SafetyFactor.settings,
           materialStrengths: MaterialStrength.settings,
+          considerRebars: {
+            minSpareRows: 0,
+            data: considerRebarDefaults,
+          },
         };
 
         // groups
