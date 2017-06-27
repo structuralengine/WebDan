@@ -17,11 +17,7 @@ angular.module('webdan')
       };
 
       ctrl.submit = function(form) {
-        let data = CalculationPrint.getStoredData();
-        let json = angular.toJson(data);
-        let key = appConfig.CalculationPrint.sessionStorageKey;
-        sessionStorage.setItem(key, json);
-        $window.open('result.html');
+        $window.open(appConfig.CalculationPrint.calculatePage);
         form.$setPristine();
       };
 
