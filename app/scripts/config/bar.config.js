@@ -34,6 +34,7 @@ angular.module('webdan')
           column: {
             data: 'designPointId',
             path: 'p_name',
+            readOnly: true,
           },
           items: {
             '': {
@@ -55,11 +56,10 @@ angular.module('webdan')
           },
           column: {
             data: 'designPointId',
-            path: 'section',
             type: 'numeric',
             readOnly: true,
             renderer: function(hot, td, row, col, prop, value, cellProperties) {
-              Handsontable.renderers.NumericRenderer.apply(this, arguments);
+              Handsontable.renderers.BaseRenderer.apply(this, arguments);
 
               let label = '';
               let bar = hot.getSourceDataAtRow(row);
@@ -104,7 +104,7 @@ angular.module('webdan')
           values: rebarSideBarDefaults,
           column: (function(sides) {
             let renderer = function(hot, td, row, col, prop, value, cellProperties) {
-              Handsontable.renderers.NumericRenderer.apply(this, arguments);
+              Handsontable.renderers.BaseRenderer.apply(this, arguments);
 
               let label = sides[value] || value;
               angular.element(td).html(label);
