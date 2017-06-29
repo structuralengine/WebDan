@@ -13,7 +13,8 @@ angular.module('webdan')
 
       let primaryKey = 'm_no';
       let g_no_column = 2;
-      let params = {
+
+      let Member = LowResource({
         'table': 'members',
         'primaryKey': primaryKey,
         'foreignKeys': {
@@ -22,8 +23,7 @@ angular.module('webdan')
           },
         },
         afterAdd: afterAdd,
-      };
-      let Member = LowResource(params);
+      });
 
       function afterAdd(m_no) {
         let children = this.foreignKeys.children;
@@ -80,7 +80,6 @@ angular.module('webdan')
       }
 
       _.mixin(Member, HtHelper);
-
       Member.htInit(memberConfig);
 
       Member.settings.columns[4].renderer = getRenderer('shapes');
