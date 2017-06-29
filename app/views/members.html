@@ -3,19 +3,19 @@
 
   <div class="ht-container">
     <div class="buttons">
-      <button uib-popover-template="'views/_section-shapes.html'"
-              popover-placement="left"
-              class="btn btn-default"
-              type="button">
-        断面形状
-      </button>
+      <cheat-button
+        data-datarows="ctrl.shapes"
+        data-table-title="形状"
+        data-button-title="断面形状"
+        data-placement="left">
+      </cheat-button>
 
-      <button uib-popover-template="'views/_conditions.html'"
-              popover-placement="right"
-              class="btn btn-default"
-              type="button">
-        環境条件
-      </button>
+      <cheat-button
+        data-datarows="ctrl.conditions"
+        data-table-title="条件"
+        data-button-title="環境条件"
+        data-placement="right">
+      </cheat-button>
     </div>
 
     <hot-table

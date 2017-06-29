@@ -108,7 +108,7 @@ angular.module('webdan')
           });
           let label = '';
           if (item) {
-            label = item.name;
+            label = item.value;
           }
           angular.element(td).html(label);
           return td;

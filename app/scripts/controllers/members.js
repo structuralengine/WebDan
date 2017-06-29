@@ -12,10 +12,6 @@ angular.module('webdan')
     function ($scope, $filter, $q, Member, memberDefaults, sectionShapeDefaults, conditionDefaults) {
       let ctrl = this;
 
-      ctrl.subSettings = {
-        rowHeaders: false,
-        minSpareRows: 0,
-      };
       ctrl.shapes = sectionShapeDefaults;
       ctrl.conditions = conditionDefaults;
 

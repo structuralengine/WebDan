@@ -57,6 +57,12 @@
       "main": [
         "dist/local-db.js"
       ]
+    },
+    "ht-utils": {
+      "main": [
+        "dist/ht-utils.js",
+        "dist/ht-utils.css"
+      ]
     }
   },
   "devDependencies": {
