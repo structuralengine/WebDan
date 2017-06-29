@@ -67,11 +67,12 @@ angular.module('webdan')
           let groups = Group.query();
           if (Object.keys(groups).length == 0) {
             let members = Member.query();
-            Group.load(members);
+            Group.loadMembers(members);
             groups = Group.query();
           }
+          let number = $filter('number');
           groups = groups.map(function(group) {
-            group.g_no = $filter('number')(group.g_no, 1) + '';
+            group.g_no = number(group.g_no, 1) + '';
             return group;
           });
 
