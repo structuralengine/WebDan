@@ -29,18 +29,19 @@ angular.module('webdan')
         let children = this.foreignKeys.children;
         angular.forEach(children, function(foreignKey, alias) {
           let Child = $injector.get(alias);
-          let children;
-          if (angular.isDefined(Child.getDefaults)) {
-            children = Child.getDefaults();
-          }
-          else {
-            children = [];
-          }
-
-          children.forEach(function(data) {
-            data[primaryKey] = m_no;
-            Child.add(data);
-          });
+          Child.createDefaultEntries(primaryKey, m_no);
+          // let children;
+          // if (angular.isDefined(Child.getDefaults)) {
+          //   children = Child.getDefaults();
+          // }
+          // else {
+          //   children = [];
+          // }
+          //
+          // children.forEach(function(data) {
+          //   data[primaryKey] = m_no;
+          //   Child.add(data);
+          // });
         });
       }
 

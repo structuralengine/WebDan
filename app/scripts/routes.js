@@ -94,15 +94,14 @@ angular.module('webdan')
         controller: 'MembersCtrl',
         controllerAs: 'ctrl',
       })
-      // .whenAuthenticated('/member-sections', {
-      //   templateUrl: 'views/member-sections.html',
-      //   controller: 'MemberSectionsCtrl',
-      //   controllerAs: 'ctrl',
-      // })
       .whenAuthenticated('/design-points', {
         templateUrl: 'views/design-points.html',
         controller: 'DesignPointsCtrl',
         controllerAs: 'ctrl',
+      })
+      .whenAuthenticated('/design-points/defaults', {
+        templateUrl: 'views/design-points/defaults.html',
+        controller: 'DesignPointsDefaultsCtrl'
       })
       .whenAuthenticated('/bars', {
         templateUrl: 'views/bars.html',

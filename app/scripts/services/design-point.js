@@ -26,6 +26,7 @@ angular.module('webdan')
             Shear: foreignKey,
           },
         },
+        defaultEntries: getDefaultEntries(),
         afterAdd: afterAdd,
       });
 
@@ -35,34 +36,35 @@ angular.module('webdan')
 
         angular.forEach(children, function(foreignKey, alias) {
           let Child = $injector.get(alias);
+          Child.createDefaultEntries(foreignKey, designPointId);
 
-          // BendingMoment, Shear
-          if (!aliasesWithSide.includes(alias)) {
-            let data = {designPointId: designPointId};
-            Child.add(data);
-          }
-
-          // Bar, Fatigue
-          else {
-            let config = (alias == 'Bar')? barConfig: fatigueConfig;
-            let key = _.findKey(config, function(cfg) {
-              return (cfg.var == 'rebar_side');
-            });
-
-            let sides = _.get(config, key +'.values', []);
-            angular.forEach(sides, function(label, id) {
-              let data = {
-                designPointId: designPointId,
-                rebar_side: id,
-              };
-              Child.add(data);
-            });
-          }
+          // // BendingMoment, Shear
+          // if (!aliasesWithSide.includes(alias)) {
+          //   let data = {designPointId: designPointId};
+          //   Child.add(data);
+          // }
+          //
+          // // Bar, Fatigue
+          // else {
+          //   let config = (alias == 'Bar')? barConfig: fatigueConfig;
+          //   let key = _.findKey(config, function(cfg) {
+          //     return (cfg.var == 'rebar_side');
+          //   });
+          //
+          //   let sides = _.get(config, key +'.values', []);
+          //   angular.forEach(sides, function(label, id) {
+          //     let data = {
+          //       designPointId: designPointId,
+          //       rebar_side: id,
+          //     };
+          //     Child.add(data);
+          //   });
+          // }
         });
       }
 
-      DesignPoint.getDefaults = function() {
-        if (appConfig.DesignPoint.useDefaults) {
+      function getDefaultEntries() {
+        if (appConfig.DesignPoint.externalResource) {
           return designPointDefaults;
         }
         else {
