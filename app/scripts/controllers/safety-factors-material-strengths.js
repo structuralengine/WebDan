@@ -8,12 +8,12 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SafetyFactorsMaterialStrengthsCtrl',
-            ['$scope', '$filter', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject',
+  .controller('SafetyFactorsMaterialStrengthsCtrl', ['$scope', '$filter', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject',
     function ($scope, $filter, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, considerRebarDefaults, materialStrengthRestConfig, HtObject) {
       let ctrl = this;
 
       function init() {
+
         // settings
         ctrl.settings = {
           safetyFactors: SafetyFactor.settings,
@@ -24,19 +24,16 @@ angular.module('webdan')
           },
         };
 
+
         // groups
         let groups = ctrl.groups = Member.Group.query();
+
 
         // Safety Factors
         let safetyFactors = SafetyFactor.query();
         if (safetyFactors.length == 0) {
           groups.forEach(function(group) {
-            safetyFactorDefaults.forEach(function(name) {
-              SafetyFactor.save({
-                name: name,
-                g_no: group.g_no,
-              })
-            });
+            SafetyFactor.createDefaultEntries('g_no', group.g_no);
           });
           safetyFactors = SafetyFactor.query();
         }
@@ -45,21 +42,12 @@ angular.module('webdan')
           return number(safetyFactor.g_no, 1);
         });
 
+
         // Material Strengths
         let materialStrengths = MaterialStrength.query();
         if (materialStrengths.length == 0) {
-          let bars = materialStrengthDefaults.bars;
-          let ranges = materialStrengthDefaults.ranges;
           groups.forEach(function(group) {
-            bars.forEach(function(bar) {
-              ranges.forEach(function(range) {
-                MaterialStrength.save({
-                  bar: bar,
-                  range: range,
-                  g_no: group.g_no,
-                })
-              });
-            });
+            MaterialStrength.createDefaultEntries('g_no', group.g_no);
           });
           materialStrengths = MaterialStrength.query();
         }
@@ -67,13 +55,12 @@ angular.module('webdan')
           return number(materialStrength.g_no, 1);
         });
 
+
         // Material Strength Rest
         let rests = MaterialStrengthRest.query();
         if (rests.length == 0) {
           groups.forEach(function(group) {
-            MaterialStrengthRest.save({
-              g_no: group.g_no,
-            });
+            MaterialStrengthRest.createDefaultEntries('g_no', group.g_no);
           });
           rests = MaterialStrengthRest.query();
         }

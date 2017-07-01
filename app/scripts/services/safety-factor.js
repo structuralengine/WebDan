@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('SafetyFactor', ['LowResource', 'safetyFactorConfig', 'considerRebarDefaults', 'HtHelper',
-    function (LowResource, safetyFactorConfig, considerRebarDefaults, HtHelper) {
+  .factory('SafetyFactor', ['LowResource', 'safetyFactorConfig', 'safetyFactorDefaults', 'considerRebarDefaults', 'HtHelper',
+    function (LowResource, safetyFactorConfig, safetyFactorDefaults, considerRebarDefaults, HtHelper) {
 
       let SafetyFactor = LowResource({
         'table': 'safetyFactors',
@@ -22,6 +22,14 @@ angular.module('webdan')
 
       _.mixin(SafetyFactor, HtHelper);
       SafetyFactor.htInit(safetyFactorConfig);
+
+      SafetyFactor.createDefaultEntries = function(foreignKey, foreignValue) {
+        let defaultEntries = safetyFactorDefaults || [];
+        angular.copy(defaultEntries).forEach(function(entry) {
+          entry[foreignKey] = foreignValue;
+          SafetyFactor.save(entry);
+        });
+      }
 
       let considerRebarCol = SafetyFactor.settings.columns.length - 1;
       SafetyFactor.settings.afterBeginEditing = function(row, col) {

@@ -22,6 +22,12 @@ angular.module('webdan')
 
       _.mixin(MaterialStrengthRest, HtHelper);
 
+      MaterialStrengthRest.createDefaultEntries = function(foreignKey, foreignValue) {
+        MaterialStrengthRest.save({
+          g_no: foreignValue,
+        });
+      }
+
       return MaterialStrengthRest;
     }
   ]);
