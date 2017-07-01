@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Member', ['$injector', '$filter', 'LowResource', 'Group', 'memberConfig', 'groupDefaults', 'sectionShapeDefaults', 'conditionDefaults', 'HtHelper',
-    function ($injector, $filter, LowResource, Group, memberConfig, groupDefaults, sectionShapeDefaults, conditionDefaults, HtHelper) {
+  .factory('Member', ['$injector', '$filter', 'LowResource', 'Group', 'memberDefaults', 'memberConfig', 'groupDefaults', 'sectionShapeDefaults', 'conditionDefaults', 'HtHelper',
+    function ($injector, $filter, LowResource, Group, memberDefaults, memberConfig, groupDefaults, sectionShapeDefaults, conditionDefaults, HtHelper) {
 
       let primaryKey = 'm_no';
       let g_no_column = 2;
@@ -22,28 +22,8 @@ angular.module('webdan')
             DesignPoint: primaryKey,
           },
         },
-        afterAdd: afterAdd,
+        'defaultEntries': memberDefaults,
       });
-
-      function afterAdd(m_no) {
-        let children = this.foreignKeys.children;
-        angular.forEach(children, function(foreignKey, alias) {
-          let Child = $injector.get(alias);
-          Child.createDefaultEntries(primaryKey, m_no);
-          // let children;
-          // if (angular.isDefined(Child.getDefaults)) {
-          //   children = Child.getDefaults();
-          // }
-          // else {
-          //   children = [];
-          // }
-          //
-          // children.forEach(function(data) {
-          //   data[primaryKey] = m_no;
-          //   Child.add(data);
-          // });
-        });
-      }
 
       Member.afterChange = function(changes, source) {
         let hot = this;

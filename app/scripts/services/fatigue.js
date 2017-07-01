@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Fatigue', ['LowResource', 'fatigueConfig', 'HtHelper',
-    function (LowResource, fatigueConfig, HtHelper) {
+  .factory('Fatigue', ['LowResource', 'fatigueConfig', 'fatigueDefaults', 'HtHelper',
+    function (LowResource, fatigueConfig, fatigueDefaults, HtHelper) {
 
       let Fatigue = LowResource({
         'table': 'fatigues',
@@ -18,10 +18,10 @@ angular.module('webdan')
             DesignPoint: 'designPointId',
           },
         },
+        'defaultEntries': fatigueDefaults,
       });
 
       _.mixin(Fatigue, HtHelper);
-
       Fatigue.htInit(fatigueConfig);
 
       return Fatigue;

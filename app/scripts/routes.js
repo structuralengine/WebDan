@@ -69,16 +69,11 @@ angular.module('webdan')
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .whenAuthenticated('/', {
+      .whenAuthenticated('/basic-information', {
         templateUrl: 'views/basic-information.html',
         controller: 'BasicInformationCtrl',
         controllerAs: 'ctrl',
       })
-      // .whenAuthenticated('/groups', {
-      //   templateUrl: 'views/groups.html',
-      //   controller: 'GroupsCtrl',
-      //   controllerAs: 'ctrl',
-      // })
       .whenAuthenticated('/material-strength-rests', {
         templateUrl: 'views/material-strength-rests.html',
         controller: 'MaterialStrengthRestsCtrl',
@@ -89,7 +84,7 @@ angular.module('webdan')
         controller: 'CalculationPrintCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/members', {
+      .whenAuthenticated('/', {
         templateUrl: 'views/members.html',
         controller: 'MembersCtrl',
         controllerAs: 'ctrl',

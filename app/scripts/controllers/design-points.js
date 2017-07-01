@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsCtrl', ['$scope', '$filter', '$log', 'DesignPoint', 'Member',
-    function ($scope, $filter, $log, DesignPoint, Member) {
+  .controller('DesignPointsCtrl', ['$scope', '$filter', '$q', '$log', 'DesignPoint', 'Member',
+    function ($scope, $filter, $q, $log, DesignPoint, Member) {
       let ctrl = this;
 
       function init() {
@@ -20,17 +20,30 @@ angular.module('webdan')
         }
         else {
           ctrl.groups = groups;
+          ctrl.settings = DesignPoint.settings;
 
           let designPoints = DesignPoint.query();
+          if (designPoints.length == 0) {
+            let p1 = Member.query().forEach(function(member) {
+              return DesignPoint.createDefaultEntries('m_no', member.m_no);
+            });
+
+            $q.all(p1).then(function() {
+              designPoints = DesignPoint.query();
+              groupBy(designPoints);
+            });
+          }
+          else {
+            groupBy(designPoints);
+          }
+        }
+
+        function groupBy(designPoints) {
           let number = $filter('number');
           ctrl.designPoints = _.groupBy(designPoints, function(designPoint) {
             let member = Member.getById(designPoint.m_no);
             return number(member.g_no, 1);
           });
-
-          let settings = DesignPoint.settings;
-          settings.minSpareRows = 0;
-          ctrl.settings = settings;
         }
       }
 

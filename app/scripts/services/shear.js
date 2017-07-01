@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Shear', ['LowResource', 'DesignPoint', 'shearConfig', 'HtHelper',
-    function (LowResource, DesignPoint, shearConfig, HtHelper) {
+  .factory('Shear', ['LowResource', 'DesignPoint', 'shearConfig', 'shearDefaults', 'HtHelper',
+    function (LowResource, DesignPoint, shearConfig, shearDefaults, HtHelper) {
 
       let Shear = LowResource({
         'table': 'shears',
@@ -18,10 +18,10 @@ angular.module('webdan')
             DesignPoint: 'designPointId',
           },
         },
+        'defaultEntries': shearDefaults,
       });
 
       _.mixin(Shear, HtHelper);
-
       Shear.htInit(shearConfig);
 
       HtHelper.enableEditableForeignValue({

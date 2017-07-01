@@ -19,9 +19,7 @@ angular.module('webdan')
         let members = Member.query();
 
         if (members.length == 0) {
-          memberDefaults.forEach(function(member) {
-            Member.save(member);
-          });
+          Member.createDefaultEntries();
           members = Member.query();
         }
 

@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('BendingMoment', ['LowResource', 'bendingMomentConfig', 'HtHelper',
-    function (LowResource, bendingMomentConfig, HtHelper) {
+  .factory('BendingMoment', ['LowResource', 'bendingMomentConfig', 'bendingMomentDefaults', 'HtHelper',
+    function (LowResource, bendingMomentConfig, bendingMomentDefaults, HtHelper) {
 
       let foreignKey = 'designPointId';
 
@@ -20,10 +20,10 @@ angular.module('webdan')
             DesignPoint: foreignKey,
           },
         },
+        'defaultEntries': bendingMomentDefaults,
       });
 
       _.mixin(BendingMoment, HtHelper);
-
       BendingMoment.htInit(bendingMomentConfig);
 
       HtHelper.enableEditableForeignValue({

@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('Bar', ['LowResource', 'barConfig', 'HtHelper',
-    function (LowResource, barConfig, HtHelper) {
+  .factory('Bar', ['LowResource', 'barConfig', 'barDefaults', 'HtHelper',
+    function (LowResource, barConfig, barDefaults, HtHelper) {
 
       let Bar = LowResource({
         'table': 'bars',
@@ -18,10 +18,10 @@ angular.module('webdan')
             DesignPoint: 'designPointId',
           },
         },
+        'defaultEntries': barDefaults,
       });
 
       _.mixin(Bar, HtHelper);
-
       Bar.htInit(barConfig);
 
       return Bar;

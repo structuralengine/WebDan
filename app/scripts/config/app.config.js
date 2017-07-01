@@ -26,9 +26,6 @@ angular.module('webdan')
         calculationPrint: {},
       },
     },
-    DesignPoint: {
-      externalResource: '#!/designPoints/defaults',
-    },
     CalculationPrint: {
       calculatePage: 'calculate.aspx',
       server: {
