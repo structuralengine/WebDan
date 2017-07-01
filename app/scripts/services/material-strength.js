@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('MaterialStrength', ['LowResource', 'materialStrengthConfig', 'HtHelper',
-    function (LowResource, materialStrengthConfig, HtHelper) {
+  .factory('MaterialStrength', ['LowResource', 'materialStrengthConfig', 'materialStrengthDefaults', 'HtHelper',
+    function (LowResource, materialStrengthConfig, materialStrengthDefaults, HtHelper) {
 
       let MaterialStrength = LowResource({
         'table': 'materialStrengths',
@@ -20,8 +20,21 @@ angular.module('webdan')
         },
       });
 
-      _.mixin(MaterialStrength, HtHelper);
+      MaterialStrength.createDefaultEntries = function(foreignKey, foreignValue) {
+        let bars = materialStrengthDefaults.bars;
+        let ranges = materialStrengthDefaults.ranges;
+        bars.forEach(function(bar) {
+          ranges.forEach(function(range) {
+            MaterialStrength.save({
+              bar: bar,
+              range: range,
+              g_no: foreignValue,
+            })
+          });
+        });
+      };
 
+      _.mixin(MaterialStrength, HtHelper);
       MaterialStrength.htInit(materialStrengthConfig);
 
       return MaterialStrength;
