@@ -8,9 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BendingMomentsCtrl', ['$scope', '$filter', 'BendingMoment', 'Group', 'DesignPoint',
-    function ($scope, $filter, BendingMoment, Group, DesignPoint) {
+  .controller('BendingMomentsCtrl', ['$scope', '$filter', '$location', 'BendingMoment', 'Group', 'DesignPoint',
+    function ($scope, $filter, $location, BendingMoment, Group, DesignPoint) {
       let ctrl = this;
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.groups = $filter('orderBy')(Group.query(), 'g_no');

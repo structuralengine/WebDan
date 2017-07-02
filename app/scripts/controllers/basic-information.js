@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BasicInformationCtrl', ['$scope', 'BasicInformation', 'HtObject', 'basicInformationConfig',
-    function ($scope, BasicInformation, HtObject, basicInformationConfig) {
+  .controller('BasicInformationCtrl', ['$scope', '$location', 'BasicInformation', 'HtObject', 'basicInformationConfig',
+    function ($scope, $location, BasicInformation, HtObject, basicInformationConfig) {
       let ctrl = this;
 
       ctrl.change = function(key) {
@@ -25,6 +25,10 @@ angular.module('webdan')
         }
         return true;
       }
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.basicInformation = BasicInformation.query();

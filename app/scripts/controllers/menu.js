@@ -8,15 +8,14 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MenuCtrl', ['$scope', '$window', '$location', '$lowdb', '$log', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
-    function ($scope, $window, $location, $lowdb, $log, CalculationPrint, moment, msgConfig, appConfig) {
+  .controller('MenuCtrl', ['$scope', '$window', '$rootScope', '$lowdb', '$log', '$injector', 'CalculationPrint', 'moment', 'msgConfig', 'appConfig',
+    function ($scope, $window, $rootScope, $lowdb, $log, $injector, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
       let resource;
       let dz;
 
       menu.createNewBucket = function() {
         CalculationPrint.clear();
-        $location.path('/');
         reload();
       };
 
@@ -30,7 +29,24 @@ angular.module('webdan')
       };
 
       function reload() {
-        $window.location.reload();
+        let models = [
+          'Member',
+          'DesignPoint',
+          'Bar',
+          'Fatigue',
+          'BendingMoment',
+          'Shear',
+          'SafetyFactor',
+          'MaterialStrength',
+          'MaterialStrengthRest',
+          'BasicInformation',
+          'CalculationPrint',
+        ];
+        models.forEach(function(model) {
+          let Model = $injector.get(model);
+          Model.reload();
+        });
+        $rootScope.$broadcast('reload');
       }
 
       menu.saveAsFile = function() {

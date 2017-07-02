@@ -15,6 +15,10 @@ angular.module('webdan')
       ctrl.shapes = sectionShapeDefaults;
       ctrl.conditions = conditionDefaults;
 
+      $scope.$on('reload', function(e) {
+        init();
+      });
+
       function init() {
         let members = Member.query();
 

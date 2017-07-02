@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('CalculationPrintCtrl', ['$scope', '$window', '$filter', '$log', 'CalculationPrint', 'Member', 'calculationPrintConfig', 'RCNonlinear', 'appConfig',
-    function ($scope, $window, $filter, $log, CalculationPrint, Member, calculationPrintConfig, RCNonlinear, appConfig) {
+  .controller('CalculationPrintCtrl', ['$scope', '$window', '$filter', '$log', '$location', 'CalculationPrint', 'Member', 'calculationPrintConfig', 'RCNonlinear', 'appConfig',
+    function ($scope, $window, $filter, $log, $location, CalculationPrint, Member, calculationPrintConfig, RCNonlinear, appConfig) {
       let ctrl = this;
 
       ctrl.change = function(key) {
@@ -20,6 +20,10 @@ angular.module('webdan')
         $window.open(appConfig.CalculationPrint.calculatePage);
         form.$setPristine();
       };
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.config = calculationPrintConfig;

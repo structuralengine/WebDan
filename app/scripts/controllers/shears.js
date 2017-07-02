@@ -8,9 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('ShearsCtrl', ['$scope', '$filter', 'Shear', 'Group', 'DesignPoint',
-    function ($scope, $filter, Shear, Group, DesignPoint) {
+  .controller('ShearsCtrl', ['$scope', '$filter', '$location', 'Shear', 'Group', 'DesignPoint',
+    function ($scope, $filter, $location, Shear, Group, DesignPoint) {
       let ctrl = this;
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.groups = $filter('orderBy')(Group.query(), 'g_no');

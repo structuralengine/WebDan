@@ -8,9 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BarsCtrl', ['$scope', '$filter', '$q', 'Bar', 'DesignPoint', 'Member', 'HtHelper',
-    function ($scope, $filter, $q, Bar, DesignPoint, Member, HtHelper) {
+  .controller('BarsCtrl', ['$scope', '$filter', '$q', '$location', 'Bar', 'DesignPoint', 'Member', 'HtHelper',
+    function ($scope, $filter, $q, $location, Bar, DesignPoint, Member, HtHelper) {
       let ctrl = this;
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.groups = Member.Group.query();

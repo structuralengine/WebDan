@@ -8,9 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('FatiguesCtrl', ['$scope', '$filter', '$q', 'Fatigue', 'Member', 'DesignPoint', 'rebarSideFatigueDefaults', 'HtHelper',
-    function ($scope, $filter, $q, Fatigue, Member, DesignPoint, rebarSideFatigueDefaults, HtHelper) {
+  .controller('FatiguesCtrl', ['$scope', '$filter', '$q', '$location', 'Fatigue', 'Member', 'DesignPoint', 'rebarSideFatigueDefaults', 'HtHelper',
+    function ($scope, $filter, $q, $location, Fatigue, Member, DesignPoint, rebarSideFatigueDefaults, HtHelper) {
       let ctrl = this;
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.groups = Member.Group.query();

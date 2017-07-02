@@ -8,9 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SafetyFactorsMaterialStrengthsCtrl', ['$scope', '$filter', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject',
-    function ($scope, $filter, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, considerRebarDefaults, materialStrengthRestConfig, HtObject) {
+  .controller('SafetyFactorsMaterialStrengthsCtrl', ['$scope', '$filter', '$location', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject',
+    function ($scope, $filter, $location, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, considerRebarDefaults, materialStrengthRestConfig, HtObject) {
       let ctrl = this;
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
 

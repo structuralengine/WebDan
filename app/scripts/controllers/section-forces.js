@@ -8,9 +8,13 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SectionForcesCtrl', ['$scope', '$filter', '$q', 'BendingMoment', 'Shear', 'DesignPoint', 'HtHelper',
-    function ($scope, $filter, $q, BendingMoment, Shear, DesignPoint, HtHelper) {
+  .controller('SectionForcesCtrl', ['$scope', '$filter', '$q', '$location', 'BendingMoment', 'Shear', 'DesignPoint', 'HtHelper',
+    function ($scope, $filter, $q, $location, BendingMoment, Shear, DesignPoint, HtHelper) {
       let ctrl = this;
+
+      $scope.$on('reload', function(e) {
+        $location.path('/');
+      });
 
       function init() {
         ctrl.settings = {
