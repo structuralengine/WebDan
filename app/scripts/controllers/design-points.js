@@ -8,9 +8,11 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsCtrl', ['$scope', '$filter', '$q', '$location', '$log', 'DesignPoint', 'Member',
-    function ($scope, $filter, $q, $location, $log, DesignPoint, Member) {
+  .controller('DesignPointsCtrl', ['$scope', '$filter', '$q', '$location', '$log', 'DesignPoint', 'Member', 'designPointNameDefaults',
+    function ($scope, $filter, $q, $location, $log, DesignPoint, Member, designPointNameDefaults) {
       let ctrl = this;
+
+      ctrl.designPointNames = designPointNameDefaults;
 
       $scope.$on('reload', function(e) {
         $location.path('/');

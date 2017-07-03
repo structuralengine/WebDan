@@ -2,12 +2,23 @@
   <h2>DesignPoints</h2>
 
   <section ng-repeat="group in ctrl.groups" ng-init="designPoints = ctrl.designPoints[group.g_no] || []">
-    <h3>{{group.g_name}}</h3>
+    <div class="ht-container">
+      <header>
+        <h3>{{group.g_name}}</h3>
 
-    <hot-table
-      hot-id="designPoints-{{$index}}"
-      settings="ctrl.settings"
-      datarows="designPoints">
-    </hot-table>
+        <cheat-button
+          data-datarows="ctrl.designPointNames"
+          data-table-title="算出点名"
+          data-button-title="算出点名"
+          data-placement="right-top">
+        </cheat-button>
+      </header>
+
+      <hot-table
+        hot-id="designPoints-{{$index}}"
+        settings="ctrl.settings"
+        datarows="designPoints">
+      </hot-table>
+    </div>
   </section>
 </section>
