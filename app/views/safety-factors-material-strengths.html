@@ -13,12 +13,12 @@
     <section class="safety-factors">
       <header>
         <h4>安全係数</h4>
-        <button uib-popover-template="'views/_consider-rebars.html'"
-                popover-placement="right"
-                class="btn btn-default"
-                type="button">
-          鉄筋配置
-        </button>
+        <cheat-button
+          data-datarows="ctrl.considerRebars"
+          data-table-title="鉄筋配置"
+          data-button-title="鉄筋配置"
+          data-placement="right">
+        </cheat-button>
       </header>
 
       <hot-table

@@ -22,11 +22,8 @@ angular.module('webdan')
         ctrl.settings = {
           safetyFactors: SafetyFactor.settings,
           materialStrengths: MaterialStrength.settings,
-          considerRebars: {
-            minSpareRows: 0,
-            data: considerRebarDefaults,
-          },
         };
+        ctrl.considerRebars = considerRebarDefaults;
 
 
         // groups
