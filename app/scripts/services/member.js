@@ -64,39 +64,6 @@ angular.module('webdan')
       _.mixin(Member, HtHelper);
       Member.htInit(memberConfig);
 
-      Member.settings.columns[4].renderer = getRenderer('shapes');
-      Member.settings.columns[9].renderer = getRenderer('conditions');
-      Member.settings.columns[10].renderer = getRenderer('conditions');
-      Member.settings.columns[11].renderer = getRenderer('conditions');
-
-      function getRenderer(key) {
-        let items;
-        switch (key) {
-          case 'conditions':
-            items = conditionDefaults;
-            break;
-          case 'shapes':
-            items = sectionShapeDefaults;
-            break;
-          default:
-            items = [];
-            break;
-        }
-        return function(hot, td, row, col, prop, no, cellProperties) {
-          Handsontable.renderers.BaseRenderer.apply(this, arguments);
-
-          let item = _.find(items, function(item) {
-            return (item.no == no);
-          });
-          let label = '';
-          if (item) {
-            label = item.value;
-          }
-          angular.element(td).html(label);
-          return td;
-        };
-      }
-
       return Member;
     }
   ]);

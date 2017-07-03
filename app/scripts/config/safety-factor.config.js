@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('safetyFactorConfig', ['considerRebarDefaults',
-    function(considerRebarDefaults) {
+  .factory('safetyFactorConfig', ['htSpeedInput', 'considerRebarDefaults',
+    function(htSpeedInput, considerRebarDefaults) {
 
       return {
         '': {
@@ -136,31 +136,8 @@ angular.module('webdan')
           var: 'consider_rebar',
           column: {
             data: 'consider_rebar',
-            type: 'text',
-            renderer: function(hot, td, row, col, prop, consider_rebar, cellProperties) {
-              Handsontable.renderers.TextRenderer.apply(this, arguments);
-
-              let label = '';
-              if (consider_rebar) {
-                let key;
-                if (/^\d+$/.test(consider_rebar)) {
-                  key = 'no';
-                }
-                else if (consider_rebar.startsWith('rebar_')) {
-                  key = 'value';
-                }
-                if (key) {
-                  let predicate = {};
-                  predicate[key] = consider_rebar;
-                  let rebar = _.find(considerRebarDefaults, predicate);
-                  if (rebar) {
-                    label = rebar.label || rebar.value;
-                  }
-                }
-              }
-              angular.element(td).html(label);
-              return td;
-            }
+            type: 'numeric',
+            renderer: htSpeedInput.getRenderer(considerRebarDefaults),
           },
         },
       };
