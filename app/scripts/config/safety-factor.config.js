@@ -154,7 +154,7 @@ angular.module('webdan')
                   predicate[key] = consider_rebar;
                   let rebar = _.find(considerRebarDefaults, predicate);
                   if (rebar) {
-                    label = rebar.name;
+                    label = rebar.label || rebar.value;
                   }
                 }
               }
