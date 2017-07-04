@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('DesignPointsCtrl', ['$scope', '$filter', '$q', '$location', '$log', 'DesignPoint', 'Member', 'designPointNameDefaults',
-    function ($scope, $filter, $q, $location, $log, DesignPoint, Member, designPointNameDefaults) {
+  .controller('DesignPointsCtrl', ['$scope', '$filter', '$q', '$location', '$log', 'DesignPoint', 'Member', 'designPointNameDefaults', 'htNestedHeaders', 'designPointsNestedHeadersConfig',
+    function ($scope, $filter, $q, $location, $log, DesignPoint, Member, designPointNameDefaults, htNestedHeaders, designPointsNestedHeadersConfig) {
       let ctrl = this;
 
       ctrl.designPointNames = designPointNameDefaults;
@@ -27,6 +27,9 @@ angular.module('webdan')
         else {
           ctrl.groups = groups;
           ctrl.settings = DesignPoint.settings;
+          ctrl.settings.afterRender = function() {
+            htNestedHeaders.mergeCells(this, designPointsNestedHeadersConfig);
+          }
 
           let designPoints = DesignPoint.query();
           if (designPoints.length == 0) {

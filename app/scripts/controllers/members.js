@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('MembersCtrl', ['$scope', '$filter', '$q', 'Member', 'memberDefaults', 'sectionShapeDefaults', 'conditionDefaults',
-    function ($scope, $filter, $q, Member, memberDefaults, sectionShapeDefaults, conditionDefaults) {
+  .controller('MembersCtrl', ['$scope', '$filter', '$q', 'Member', 'memberDefaults', 'sectionShapeDefaults', 'conditionDefaults', 'htNestedHeaders', 'membersNestedHeadersConfig',
+    function ($scope, $filter, $q, Member, memberDefaults, sectionShapeDefaults, conditionDefaults, htNestedHeaders, membersNestedHeadersConfig) {
       let ctrl = this;
 
       ctrl.shapes = sectionShapeDefaults;
@@ -29,6 +29,9 @@ angular.module('webdan')
 
         ctrl.members = $filter('orderBy')(members, 'm_no');
         ctrl.settings = Member.settings;
+        ctrl.settings.afterRender = function() {
+          htNestedHeaders.mergeCells(this, membersNestedHeadersConfig);
+        }
       }
 
       init();

@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('BarsCtrl', ['$scope', '$filter', '$q', '$location', 'Bar', 'DesignPoint', 'Member', 'HtHelper',
-    function ($scope, $filter, $q, $location, Bar, DesignPoint, Member, HtHelper) {
+  .controller('BarsCtrl', ['$scope', '$filter', '$q', '$location', 'Bar', 'DesignPoint', 'Member', 'HtHelper', 'htNestedHeaders', 'barsNestedHeadersConfig',
+    function ($scope, $filter, $q, $location, Bar, DesignPoint, Member, HtHelper, htNestedHeaders, barsNestedHeadersConfig) {
       let ctrl = this;
 
       $scope.$on('reload', function(e) {
@@ -49,6 +49,9 @@ angular.module('webdan')
           angular.forEach(ctrl.bars, function(bars, g_no) {
             let settings = ctrl.settings[g_no] = angular.copy(Bar.settings);
             settings.mergeCells = HtHelper.mergeCells(bars, mergeConfig);
+            settings.afterRender = function() {
+              htNestedHeaders.mergeCells(this, barsNestedHeadersConfig);
+            };
           });
         }
       }

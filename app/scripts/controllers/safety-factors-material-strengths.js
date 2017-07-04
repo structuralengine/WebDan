@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SafetyFactorsMaterialStrengthsCtrl', ['$scope', '$filter', '$location', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject',
-    function ($scope, $filter, $location, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, considerRebarDefaults, materialStrengthRestConfig, HtObject) {
+  .controller('SafetyFactorsMaterialStrengthsCtrl', ['$scope', '$filter', '$location', 'Member', 'SafetyFactor', 'MaterialStrength', 'MaterialStrengthRest', 'safetyFactorDefaults', 'materialStrengthDefaults', 'considerRebarDefaults', 'materialStrengthRestConfig', 'HtObject', 'htNestedHeaders', 'safetyFactorsNestedHeadersConfig',
+    function ($scope, $filter, $location, Member, SafetyFactor, MaterialStrength, MaterialStrengthRest, safetyFactorDefaults, materialStrengthDefaults, considerRebarDefaults, materialStrengthRestConfig, HtObject, htNestedHeaders, safetyFactorsNestedHeadersConfig) {
       let ctrl = this;
 
       $scope.$on('reload', function(e) {
@@ -23,6 +23,9 @@ angular.module('webdan')
           safetyFactors: SafetyFactor.settings,
           materialStrengths: MaterialStrength.settings,
         };
+        SafetyFactor.settings.afterRender = function() {
+          htNestedHeaders.mergeCells(this, safetyFactorsNestedHeadersConfig);
+        }
         ctrl.considerRebars = considerRebarDefaults;
 
 

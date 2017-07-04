@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('FatiguesCtrl', ['$scope', '$filter', '$q', '$location', 'Fatigue', 'Member', 'DesignPoint', 'rebarSideFatigueDefaults', 'HtHelper',
-    function ($scope, $filter, $q, $location, Fatigue, Member, DesignPoint, rebarSideFatigueDefaults, HtHelper) {
+  .controller('FatiguesCtrl', ['$scope', '$filter', '$q', '$location', 'Fatigue', 'Member', 'DesignPoint', 'rebarSideFatigueDefaults', 'HtHelper', 'htNestedHeaders', 'fatiguesNestedHeadersConfig',
+    function ($scope, $filter, $q, $location, Fatigue, Member, DesignPoint, rebarSideFatigueDefaults, HtHelper, htNestedHeaders, fatiguesNestedHeadersConfig) {
       let ctrl = this;
 
       $scope.$on('reload', function(e) {
@@ -50,6 +50,9 @@ angular.module('webdan')
           angular.forEach(ctrl.fatigues, function(fatigues, g_no) {
             let settings = ctrl.settings[g_no] = angular.copy(Fatigue.settings);
             settings.mergeCells = HtHelper.mergeCells(fatigues, mergeConfig);
+            settings.afterRender = function() {
+              htNestedHeaders.mergeCells(this, fatiguesNestedHeadersConfig);
+            }
           });
         }
       }

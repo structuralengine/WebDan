@@ -8,8 +8,8 @@
  * Controller of the webdan
  */
 angular.module('webdan')
-  .controller('SectionForcesCtrl', ['$scope', '$filter', '$q', '$location', 'BendingMoment', 'Shear', 'DesignPoint', 'HtHelper',
-    function ($scope, $filter, $q, $location, BendingMoment, Shear, DesignPoint, HtHelper) {
+  .controller('SectionForcesCtrl', ['$scope', '$filter', '$q', '$location', 'BendingMoment', 'Shear', 'DesignPoint', 'HtHelper', 'htNestedHeaders', 'bendingMomentsNestedHeadersConfig', 'shearsNestedHeadersConfig',
+    function ($scope, $filter, $q, $location, BendingMoment, Shear, DesignPoint, HtHelper, htNestedHeaders, bendingMomentsNestedHeadersConfig, shearsNestedHeadersConfig) {
       let ctrl = this;
 
       $scope.$on('reload', function(e) {
@@ -17,6 +17,12 @@ angular.module('webdan')
       });
 
       function init() {
+        BendingMoment.settings.afterRender = function() {
+          htNestedHeaders.mergeCells(this, bendingMomentsNestedHeadersConfig);
+        };
+        Shear.settings.afterRender = function() {
+          htNestedHeaders.mergeCells(this, shearsNestedHeadersConfig);
+        };
         ctrl.settings = {
           bendingMoments: BendingMoment.settings,
           shears: Shear.settings,
