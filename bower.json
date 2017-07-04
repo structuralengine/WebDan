@@ -69,6 +69,6 @@
     "mocha": "^3.4.2"
   },
   "resolutions": {
-    "angular": "1.6.4"
+    "angular": "1.6.5"
   }
 }
