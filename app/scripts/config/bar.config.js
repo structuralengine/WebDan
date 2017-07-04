@@ -68,7 +68,7 @@ angular.module('webdan')
                 let designPoint = DesignPoint.getAsc(bar.designPointId);
                 label = (row % 2 == 0)? designPoint.Member.B: designPoint.Member.H;
               }
-              angular.element(td).html(label);
+              angular.element(td).html(label).addClass('htNumeric htRight');
               return td;
             },
           },
