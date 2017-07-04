@@ -12,7 +12,7 @@ angular.module('webdan')
     function($injector, rebarSideFatigueDefaults) {
 
       return {
-        '部材番号': {
+        '<span class="vertical-container"><span class="vertical">部材番号</span></span>': {
           en: '',
           var: '',
           items: {
@@ -30,7 +30,7 @@ angular.module('webdan')
             },
           },
         },
-        '算出点名': {
+        '<span class="vertical-container"><span class="vertical">算出点名</span></span>': {
           en: '',
           var: '',
           items: {
@@ -81,7 +81,7 @@ angular.module('webdan')
             },
           },
         },
-        '位置': {
+        '<span class="vertical-container"><span class="vertical">位置</span></span>': {
           en: 'position',
           var: 'rebar_side',
           items: {

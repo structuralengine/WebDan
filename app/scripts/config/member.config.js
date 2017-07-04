@@ -12,7 +12,7 @@ angular.module('webdan')
     function(htSpeedInput, sectionShapeDefaults, conditionDefaults) {
 
       return {
-        '部材番号': {
+        '<span class="vertical-container"><span class="vertical">部材番号</span></span>': {
           'en': 'Member No',
           'column': {
             'data': 'm_no',
@@ -22,7 +22,7 @@ angular.module('webdan')
             '': {},
           },
         },
-        '部材長': {
+        '<span class="vertical-container"><span class="vertical">部材長</span></span>': {
           'en': 'Member length',
           'column': {
             'data': 'm_len',
@@ -33,7 +33,7 @@ angular.module('webdan')
             '': {},
           },
         },
-        'グループ No': {
+        '<span class="vertical-container"><span class="vertical">グループ</span><span>No</span></span>': {
           en: 'group no',
           column: {
             data: 'g_no',
@@ -44,7 +44,7 @@ angular.module('webdan')
             '': {},
           },
         },
-        '部材名': {
+        '<span class="vertical-container"><span class="vertical">部材名</span></span>': {
           'en': 'Member Name',
           'column': {
             'data': 'g_name',
@@ -53,7 +53,7 @@ angular.module('webdan')
             '': {},
           },
         },
-        '断面形状': {
+        '<span class="vertical-container"><span class="vertical">断面形状</span></span>': {
           en: 'section shape',
           column: {
             data: 'shape',
@@ -197,7 +197,7 @@ angular.module('webdan')
             },
           },
         },
-        '部材数': {
+        '<span class="vertical-container"><span class="vertical">部材数</span></span>': {
           en: 'count',
           column: {
             data: 'n',
@@ -207,7 +207,7 @@ angular.module('webdan')
             '': {},
           },
         },
-        '疲労パス': {
+        '<span class="vertical-container"><span class="vertical">疲労パス</span></span>': {
           en: 'for fatigue',
           column: {
             data: 'flg_fatigue',

@@ -12,7 +12,7 @@ angular.module('webdan')
     function(htSpeedInput, designPointNameDefaults) {
 
       return {
-        '部材番号': {
+        '部材<span class="break"></span>番号': {
           items: {
             '': {
               column: {
@@ -119,7 +119,7 @@ angular.module('webdan')
             },
           }
         },
-        '杭の直径 (mm)': {
+        '杭の直径 <span class="break"></span>(mm)': {
           en: 'Diameter of Circle by Pile',
           items: {
             '': {

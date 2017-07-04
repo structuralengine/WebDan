@@ -12,7 +12,7 @@ angular.module('webdan')
     function($injector, rebarSideBarDefaults) {
 
       return {
-        '部材番号': {
+        '<span class="vertical-container"><span class="vertical">部材番号</span></span>': {
           en: 'member no',
           var: 'm_no',
           column: {
@@ -28,7 +28,7 @@ angular.module('webdan')
             },
           },
         },
-        '算出点名': {
+        '<span class="vertical-container"><span class="vertical">算出点名</span></span>': {
           en: 'design point',
           var: 'p_name',
           column: {
@@ -91,7 +91,7 @@ angular.module('webdan')
             },
           },
         },
-        '位置': {
+        '<span class="vertical-container"><span class="vertical">位置</span></span>': {
           en: 'position',
           var: 'rebar_side',
           items: {
@@ -147,7 +147,7 @@ angular.module('webdan')
                 },
               },
             },
-            '一段目カブリ': {
+            '一段目<span class="break"></span>カブリ': {
               en: 'Cover of rebar',
               var: 'rebar_03',
               items: {
@@ -228,7 +228,7 @@ angular.module('webdan')
                 },
               },
             },
-            '上端位置/ピッチ': {
+            '上端位置<span class="break"></span>/ピッチ': {
               en: 'depth per interval',
               var: 'sidebar_03',
               items: {
@@ -285,7 +285,7 @@ angular.module('webdan')
             },
           },
         },
-        '主筋の斜率': {
+        '<span class="vertical-container"><span class="vertical">主筋の斜率</span></span>': {
           en: 'Angle of longitudinal rebar',
           var: 'rebar_07',
           items: {
@@ -302,7 +302,7 @@ angular.module('webdan')
             },
           },
         },
-        'tan&gamma; + tan&beta;': {
+        'tan&gamma;<span class="break"></span> +<span class="break"></span> tan&beta;': {
           en: 'tanγ+tanβ',
           var: 'rebar_08',
           items: {
@@ -372,7 +372,7 @@ angular.module('webdan')
             },
           },
         },
-        '処理': {
+        '<span class="vertical-container"><span class="vertical">処理</span></span>': {
           en: 'processing',
           var: 'flg_enable',
           items: {

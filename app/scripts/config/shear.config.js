@@ -13,7 +13,7 @@ angular.module('webdan')
 
       return (function() {
         return {
-          '部材番号': {
+          '<span class="vertical-container"><span class="vertical">部材番号</span></span>': {
             column: {
               data: 'designPointId',
               path: 'Member.m_no',
@@ -28,7 +28,7 @@ angular.module('webdan')
               },
             },
           },
-          '部材名': {
+          '<span class="vertical-container"><span class="vertical">部材名</span></span>': {
             column: {
               data: 'designPointId',
               path: 'Member.g_name',
@@ -42,7 +42,7 @@ angular.module('webdan')
               },
             },
           },
-          '算出点名': {
+          '<span class="vertical-container"><span class="vertical">算出点名</span></span>': {
             column: {
               data: 'designPointId',
               path: 'p_name',
