@@ -52,6 +52,7 @@ angular.module('webdan')
             column: {
               data: 'designPointId',
               path: 'p_name',
+              type: 'text',
               renderer: HtHelper.getEditableForeignValueRenderer('DesignPoint', 'p_name'),
             },
             items: {

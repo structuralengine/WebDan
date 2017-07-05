@@ -8,8 +8,8 @@
  * Factory in the webdan.
  */
 angular.module('webdan')
-  .factory('memberConfig', ['htSpeedInput', 'sectionShapeDefaults', 'conditionDefaults',
-    function(htSpeedInput, sectionShapeDefaults, conditionDefaults) {
+  .factory('memberConfig', ['HtHelper', 'htSpeedInput', 'sectionShapeDefaults', 'conditionDefaults',
+    function(HtHelper, htSpeedInput, sectionShapeDefaults, conditionDefaults) {
 
       return {
         '部材番号': {
@@ -48,6 +48,8 @@ angular.module('webdan')
           'en': 'Member Name',
           'column': {
             'data': 'g_name',
+            'type': 'text',
+            renderer: HtHelper.getTextRenderer(),
           },
           items: {
             '': {},
@@ -57,6 +59,7 @@ angular.module('webdan')
           en: 'section shape',
           column: {
             data: 'shape',
+            type: 'numeric',
             renderer: htSpeedInput.getRenderer(sectionShapeDefaults),
           },
           items: {
