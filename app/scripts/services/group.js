@@ -35,16 +35,16 @@ angular.module('webdan')
         return groups;
       }
 
-      this.update = function(member, coll) {
+      this.update = function(member, members) {
         let g_no = _.get(member, 'g_no');
         let g_name = _.get(member, 'g_name');
 
         if (g_no) {
           g_no = $filter('number')(g_no, 1);
           if (g_name) {
-            updateOtherGroupNames(g_no, g_name, coll);
+            g_name = findOtherGroupName(g_no, g_name, members);
           }
-          else if (!g_name) {
+          if (!g_name) {
             g_name = getCurrentGroupName(g_no);
           }
         }
@@ -54,12 +54,16 @@ angular.module('webdan')
         _.set(member, 'g_name', g_name);
       };
 
-      function updateOtherGroupNames(g_no, g_name, members) {
-        members.forEach(function(member) {
-          if (member.g_no == g_no) {
-            member.g_name = g_name;
+      function findOtherGroupName(g_no, g_name, members) {
+        let len = members.length;
+        let member;
+        for (let i = 0; i < len; i++) {
+          member = members[i];
+          if (member.g_no == g_no && member.g_name !== g_name) {
+            return member.g_name;
           }
-        });
+        }
+        return g_name;
       }
 
       function getCurrentGroupName(g_no) {
