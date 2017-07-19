@@ -62,7 +62,7 @@ bower, gulp の準備
 > 
 > $ bower install
 > 
-> $ gulp lowdb
+> $ gulp init
 > 
 
 ![angular のバージョンが不整合](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
