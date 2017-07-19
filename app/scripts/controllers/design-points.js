@@ -48,7 +48,9 @@ angular.module('webdan')
           let number = $filter('number');
           ctrl.designPoints = _.groupBy(designPoints, function(designPoint) {
             let member = Member.getById(designPoint.m_no);
-            return number(member.g_no, 1);
+            return (member && member.g_no)
+              ? number(member.g_no, 1)
+              : null;
           });
         }
       }

@@ -12,7 +12,6 @@ angular.module('webdan')
     function ($scope, $window, $rootScope, $lowdb, $log, $injector, CalculationPrint, moment, msgConfig, appConfig) {
       let menu = this;
       let resource;
-      let dz;
 
       menu.createNewBucket = function() {
         CalculationPrint.clear();
