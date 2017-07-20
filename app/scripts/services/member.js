@@ -35,7 +35,10 @@ angular.module('webdan')
             case 'g_no':
             case 'g_name':
               let members = hot.getSourceData();
-              Group.update(member, members);
+              let fn = (prop == 'g_no')
+                ? Group.updateGroupNo
+                : Group.updateGroupName;
+              fn(member, members);
               break;
             default:
               break;
