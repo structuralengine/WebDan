@@ -1,0 +1,15 @@
+main {
+  .fatigues {
+    hot-table {
+      td.section[rowspan] {
+        .BH {
+          display: flex;
+          flex-direction: column;
+          //justify-content: center;
+          //height: 100%;
+          text-align: right;
+        }
+      }
+    }
+  }
+}

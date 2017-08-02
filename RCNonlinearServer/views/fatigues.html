@@ -1,0 +1,5 @@
+<section class="fatigues"><h2>Fatigues</h2><section ng-repeat="group in ctrl.groups" ng-init="
+        g_no = group.g_no;
+        fatigues = ctrl.fatigues[g_no] || [];
+        settings = ctrl.settings[g_no];
+      "><h3>{{group.g_name}}</h3><hot-table hot-id="fatigues-{{$index}}" settings="settings" datarows="fatigues"></hot-table></section></section>

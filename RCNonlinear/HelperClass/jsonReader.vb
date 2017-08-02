@@ -47,6 +47,4 @@ Friend Class jsonReader(Of T As New)
         End Set
     End Property
 
-
-
 End Class

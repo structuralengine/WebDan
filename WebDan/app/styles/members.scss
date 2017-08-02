@@ -1,0 +1,21 @@
+main {
+  .members {
+    h2 {
+      display: none;
+    }
+
+    .ht-container {
+      display: inline-block;
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 3px;
+
+        button {
+          margin-right: 3px;
+        }
+      }
+    }
+  }
+}

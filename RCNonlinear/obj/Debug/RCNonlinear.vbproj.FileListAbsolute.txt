@@ -46,6 +46,7 @@ E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\RCNonlinear.xml
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Debug\RCNonlinear.dll
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Debug\RCNonlinear.pdb
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Debug\RCNonlinear.xml
+E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Debug\RCNonlinear.vbprojResolveAssemblyReference.cache
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Debug\RCNonlinear.Resources.resources
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Debug\RCNonlinear.vbproj.GenerateResource.Cache
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Debug\RCNonlinear.dll

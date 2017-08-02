@@ -30,12 +30,12 @@ E:\Documents\Visual Studio 2015\Projects\WebDan\packages\RCNonlinear\Release\RCN
 E:\Documents\Visual Studio 2015\Projects\WebDan\packages\RCNonlinear\Release\RCNonlinear.pdb
 E:\Documents\Visual Studio 2015\Projects\WebDan\packages\RCNonlinear\Release\RCNonlinear.xml
 E:\Documents\Visual Studio 2015\Projects\WebDan\packages\RCNonlinear\Release\RCNonlinear.tlb
+E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Release\RCNonlinear.dll
+E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Release\RCNonlinear.pdb
+E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Release\RCNonlinear.xml
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Release\RCNonlinear.vbprojResolveAssemblyReference.cache
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Release\RCNonlinear.Resources.resources
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Release\RCNonlinear.vbproj.GenerateResource.Cache
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Release\RCNonlinear.dll
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Release\RCNonlinear.xml
 E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\obj\Release\RCNonlinear.pdb
-E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Release\RCNonlinear.dll
-E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Release\RCNonlinear.pdb
-E:\Documents\Visual Studio 2015\Projects\WebDan\RCNonlinear\bin\Release\RCNonlinear.xml
