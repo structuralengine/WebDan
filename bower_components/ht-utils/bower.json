@@ -1,0 +1,45 @@
+{
+  "name": "ht-utils",
+  "version": "1.27.0",
+  "appPath": "app",
+  "moduleName": "ht-utils",
+  "private": true,
+  "main": "dist/ht-utils.*",
+  "dependencies": {
+    "angular": "^1.3.0",
+    "angular-animate": "^1.3.0",
+    "angular-aria": "^1.3.0",
+    "angular-cookies": "^1.3.0",
+    "angular-messages": "^1.3.0",
+    "angular-route": "^1.3.0",
+    "angular-sanitize": "^1.3.0",
+    "angular-touch": "^1.3.0",
+    "ngHandsontable": "nghandsontable#^0.13.0",
+    "handsontable.full.css": "http://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.css",
+    "handsontable.full.js": "http://docs.handsontable.com/pro/1.10.2/bower_components/handsontable-pro/dist/handsontable.full.js"
+  },
+  "overrides": {
+    "handsontable": {
+      "main": []
+    }
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  },
+  "ignore": [
+    "**/.*",
+    "app",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "webpack.config.js",
+    "gulpfile.js",
+    "package.js",
+    "!dist"
+  ],
+  "resolutions": {
+    "angular": "1.6.4"
+  }
+}

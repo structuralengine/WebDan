@@ -1,0 +1,13 @@
+main {
+  margin-bottom: 3em;
+}
+
+main h2 {
+  display: none;
+}
+
+main hot-table .htDimmed {
+  background-color: #f3f3f3;
+}
+
+/*# sourceMappingURL=data:application/json;charset=utf8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImFwcC5zY3NzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBO0VBQ0UsbUJBQW1CO0NBV3BCOztBQVpEO0VBSUksY0FBYztDQUNmOztBQUxIO0VBU00sMEJBQTBCO0NBQzNCIiwiZmlsZSI6ImFwcC5jc3MiLCJzb3VyY2VzQ29udGVudCI6WyJtYWluIHtcclxuICBtYXJnaW4tYm90dG9tOiAzZW07XHJcblxyXG4gIGgyIHtcclxuICAgIGRpc3BsYXk6IG5vbmU7XHJcbiAgfVxyXG5cclxuICBob3QtdGFibGUge1xyXG4gICAgLmh0RGltbWVkIHtcclxuICAgICAgYmFja2dyb3VuZC1jb2xvcjogI2YzZjNmMztcclxuICAgIH1cclxuICB9XHJcbn1cclxuIl19 */

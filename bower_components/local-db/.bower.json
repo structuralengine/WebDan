@@ -1,0 +1,41 @@
+{
+  "name": "localdb",
+  "version": "0.2.0",
+  "main": "dist/local-db.js",
+  "appPath": "app",
+  "moduleName": "local-db",
+  "private": true,
+  "dependencies": {
+    "angular": "^1.3.0",
+    "angular-messages": "^1.3.0",
+    "angular-route": "^1.3.0",
+    "angular-sanitize": "^1.3.0",
+    "lodash": "^4.17.4"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "mocha": "^3.4.2"
+  },
+  "ignore": [
+    "**/.*",
+    "app",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests",
+    "webpack.config.js",
+    "gulpfile.js",
+    "package.js",
+    "!dist"
+  ],
+  "homepage": "https://github.com/a311cb/local-db",
+  "_release": "0.2.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.2.0",
+    "commit": "9d14f593dc67074d4041392a68ab7baa22b5e29f"
+  },
+  "_source": "https://github.com/a311cb/local-db.git",
+  "_target": "*",
+  "_originalSource": "https://github.com/a311cb/local-db.git"
+}

@@ -1,0 +1,15 @@
+'use strict';
+
+angular.module('webdan')
+  .factory('CalculationPrint', ['LowResource', 'calculationPrintConfig', 'HtHelper',
+    function (LowResource, calculationPrintConfig, HtHelper) {
+
+      let CalculationPrint = LowResource({
+        table: 'calculationPrint'
+      });
+
+      _.mixin(CalculationPrint, HtHelper);
+
+      return CalculationPrint;
+    }
+  ]);
