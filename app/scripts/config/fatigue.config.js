@@ -72,8 +72,8 @@ angular.module('webdan')
                 let designPoint = DesignPoint.getAsc(fatigue.designPointId);
                 label = ''+
                   ' <div class="BH">'+
-                  '   <div class="B">'+ designPoint.Member.B +'</div>'+
-                  '   <div class="H">'+ designPoint.Member.H +'</div>'+
+                  '   <div class="B">'+ (designPoint.Member.B || '') +'</div>'+
+                  '   <div class="H">'+ (designPoint.Member.H || '') +'</div>'+
                   ' </div>';
               }
               angular.element(td).html(label).addClass('section');
