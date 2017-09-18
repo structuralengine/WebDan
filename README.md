@@ -1,8 +1,8 @@
-# ãƒ•ã‚©ãƒ«ãƒ€ã®èª¬æ˜ã¨ãƒ•ã‚¡ã‚¤ãƒ«
+# ƒtƒHƒ‹ƒ_‚Ìà–¾‚Æƒtƒ@ƒCƒ‹
 
-## wwwroot ãƒ•ã‚©ãƒ«ãƒ€
+## wwwroot ƒtƒHƒ‹ƒ_
 
-|  No  |      ãƒ•ã‚¡ã‚¤ãƒ«   |        èª¬æ˜E     |
+|  No  |      ƒtƒ@ƒCƒ‹  |        à–¾     |
 |:----:|----------------:|:-----------------|
 |   1  |     index.html  |                  |
 
@@ -11,39 +11,38 @@
     <table>
         <tbody>
             <tr>
-                <th rowspan="2">viewsãƒ•ã‚©ãƒ«ãƒ€</th>
-                <th rowspan="2">stylesãƒ•ã‚©ãƒ«ãƒ€</th>
-                <th colspan="5" align="left">scriptsãƒ•ã‚©ãƒ«ãƒ€</th>
-                <th rowspan="3">èª¬æ˜E/th>
+                <th rowspan="2">viewsƒtƒHƒ‹ƒ_€</th>
+                <th rowspan="2">stylesƒtƒHƒ‹ƒ_€</th>
+                <th colspan="5" align="left">scriptsƒtƒHƒ‹ƒ_€</th>
+                <th rowspan="3">à–¾/th>
             </tr>
             <tr>
                 <th>.</th>
-<<<<<<< HEAD
                 <th>/configƒtƒHƒ‹ƒ_</th>
                 <th>/controllersƒtƒHƒ‹ƒ_</th>
                 <th>/servicesƒtƒHƒ‹ƒ_</th>
                 <th>/defaultsƒtƒHƒ‹ƒ_</th>
-=======
-                <th>/configãƒ•ã‚©ãƒ«ãƒ€</th>
-                <th>/controllersãƒ•ã‚©ãƒ«ãƒ€</th>
-                <th>/servicesãƒ•ã‚©ãƒ«ãƒ€</th>
-                <th>/defaultsãƒ•ã‚©ãƒ«ãƒ€</th>
->>>>>>> 24db6b4caedc17acfd12cd945f0dd9e162a144d4
+            </tr>
+            <tr>
+                <th>/configƒtƒHƒ‹ƒ_€</th>
+                <th>/controllersƒtƒHƒ‹ƒ_€</th>
+                <th>/servicesƒtƒHƒ‹ƒ_€</th>
+                <th>/defaultsƒtƒHƒ‹ƒ_€</th>
             </tr>
             <tr>
                 <td align="center">(html)</td>
-                <td align="center">(ã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒE</td>
+                <td align="center">(ƒXƒ^ƒCƒ‹ƒV[ƒg)</td>
                 <td align="center">&nbsp;</td>
-                <td align="center">(ãƒE‚¶ã‚¤ãƒ³å®šç¾©)</td>
-                <td align="center">(ãƒE‚¶ã‚¤ãƒ³ã¸ã®çµãEã¤ãE</td>
-                <td align="center">(ãƒEEã‚¿æ“ä½œãEä½œæE)</td>
-                <td align="center">(å…¥åŠ›è£œåŠ©ã®é E›®å®šç¾©)</td>
+                <td align="center">(ƒfƒUƒCƒ“’è‹`)</td>
+                <td align="center">(ƒfƒUƒCƒ“‚Ö‚ÌŒ‹‚Ñ‚Â‚¯)</td>
+                <td align="center">(ƒf[ƒ^‘€ìEì¬)</td>
+                <td align="center">(“ü—Í•â•‚Ì€–Ú’è‹`)</td>
             </tr>
             <tr>
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -83,7 +82,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>1</td><td>app.css</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -123,7 +122,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>1</td><td>app.js</td></tr>
                             <tr><td>2</td><td>routes.js</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
@@ -163,7 +162,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -203,7 +202,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -243,7 +242,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>3</td><td>auth.js</td></tr>
@@ -283,7 +282,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
+                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -371,11 +370,11 @@
 </nobr>
 
 
-## lib ãƒ•ã‚©ãƒ«ãƒ€
+## lib ƒtƒHƒ‹ƒ_€
 
 bower_compornets
 
-|  No  |      ãƒ•ã‚¡ã‚¤ãƒ«      |           èª¬æ˜E       | ä½¿ã£ã¦ãE‚‹ã¨ã“ã‚ |        URL                                                     |
+|  No  |      ƒtƒ@ƒCƒ‹      |           èª¬æ˜E       | ä½¿ã£ã¦ãE‚‹ã¨ã“ã‚ |        URL                                                     |
 |:----:|:-------------------|:----------------------|:-----------------|:---------------------------------------------------------------|
 |   1  |  bootstrap-sass    |                       |                  |                                                                |
 |   2  |  modernizr         |                       |                  |                                                                |
@@ -394,7 +393,7 @@ bower_compornets
 |  15  |  angular-bootstrap |                       |                  |                                                                |
 |  16  |  angular-moment    |                       |                  |                                                                |
 |  17  |  file-saver        |                       |                  |                                                                |
-|  18  |  dropzone          | ãƒ•ã‚¡ã‚¤ãƒ«ã‚¢ãƒEEãƒ­ãƒ¼ãƒE |                  | http://www.dropzonejs.com/                                     |
+|  18  |  dropzone          | ƒtƒ@ƒCƒ‹ã‚¢ãƒEEãƒ­ãƒ¼ãƒE |                  | http://www.dropzonejs.com/                                     |
 |  19  |  lodash            | Array,Collection æ“ä½E|                  | https://lodash.com/                                            |
 |  20  |  lowdb             |                       |                  | https://github.com/typicode/lowdb                              |
 |  21  |  local-db          |                       |                  | https://github.com/a311cb/local-db                             |
