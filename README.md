@@ -13,7 +13,7 @@
             <tr>
                 <th rowspan="2">viewsフォルダ</th>
                 <th rowspan="2">stylesフォルダ</th>
-                <th colspan="4" align="left">scriptsフォルダ</th>
+                <th colspan="5" align="left">scriptsフォルダ</th>
                 <th rowspan="3">説明</th>
             </tr>
             <tr>
@@ -359,3 +359,33 @@
 </nobr>
 
 
+## lib フォルダ
+
+bower_compornets
+
+|  No  |      ファイル      |           説明        | 使っているところ |        URL                                                     |
+|:----:|:-------------------|:----------------------|:-----------------|:---------------------------------------------------------------|
+|   1  |  bootstrap-sass    |                       |                  |                                                                |
+|   2  |  modernizr         |                       |                  |                                                                |
+|   3  |  angular           |                       |                  |                                                                |
+|   4  |  firebase          |                       |                  |                                                                |
+|   5  |  angularfire       |                       |                  |                                                                |
+|   6  |  bootstrap         |                       |                  |                                                                |
+|   7  |  angular-animate   |                       |                  |                                                                |
+|   8  |  angular-aria      |                       |                  |                                                                |
+|   9  |  angular-cookies   |                       |                  |                                                                |
+|  10  |  angular-messages  |                       |                  |                                                                |
+|  11  |  angular-resource  |                       |                  |                                                                |
+|  12  |  angular-route     |                       |                  |                                                                |
+|  13  |  angular-sanitize  |                       |                  |                                                                |
+|  14  |  angular-touch     |                       |                  |                                                                |
+|  15  |  angular-bootstrap |                       |                  |                                                                |
+|  16  |  angular-moment    |                       |                  |                                                                |
+|  17  |  file-saver        |                       |                  |                                                                |
+|  18  |  dropzone          | ファイルアップロード  |                  | http://www.dropzonejs.com/                                     |
+|  19  |  lodash            | Array,Collection 操作 |                  | https://lodash.com/                                            |
+|  20  |  lowdb             |                       |                  | https://github.com/typicode/lowdb                              |
+|  21  |  local-db          |                       |                  | https://github.com/a311cb/local-db                             |
+|  22  |  handsontable-pro  |                       |                  | https://my.handsontable.com/handsontable/handsontable-pro.git  |
+|  23  |  ngHandsontable    |                       |                  | https://github.com/handsontable/ngHandsontable                 |
+|  24  |  ht-utils          |                       |                  | https://github.com/a311cb/ht-utils                             |
