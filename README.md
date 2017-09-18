@@ -17,7 +17,7 @@
                 <th rowspan="3">説明</th>
             </tr>
             <tr>
-                <th style="width: 600px;">.</th>
+                <th style="width: 1000px;">.</th>
                 <th>/configフォルダ</th>
                 <th>/controllersフォルダ</th>
                 <th>/servicesフォルダ</th>
