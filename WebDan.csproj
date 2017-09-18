@@ -5,17 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="wwwroot\.git\**" />
-    <Compile Remove="wwwroot\bower_components\**" />
-    <Content Remove="wwwroot\.git\**" />
-    <Content Remove="wwwroot\bower_components\**" />
-    <EmbeddedResource Remove="wwwroot\.git\**" />
-    <EmbeddedResource Remove="wwwroot\bower_components\**" />
-    <None Remove="wwwroot\.git\**" />
-    <None Remove="wwwroot\bower_components\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Remove="wwwroot\README.md" />
   </ItemGroup>
 
