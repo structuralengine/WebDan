@@ -1,0 +1,10 @@
+diff a/README.md b/README.md	(rejected hunks)
+@@ -17,7 +17,7 @@
+                 <th rowspan="3">���</th>
+             </tr>
+             <tr>
+-                <th style="width: 300px;">.</th>
++                <th>.</th>
+                 <th>/config�t�H���_</th>
+                 <th>/controllers�t�H���_</th>
+                 <th>/services�t�H���_</th>

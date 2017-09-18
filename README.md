@@ -119,7 +119,7 @@
                             <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
                             <tr><td>1</td><td>app.js</td></tr>
                             <tr><td>2</td><td>routes.js</td></tr>
-                            <tr><td>&nbsp;</td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td></tr>
+                            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
