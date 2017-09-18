@@ -1,8 +1,8 @@
-# ƒtƒHƒ‹ƒ_‚Ìà–¾‚Æƒtƒ@ƒCƒ‹
+# ãƒ•ã‚©ãƒ«ãƒ€ã®èª¬æ˜ã¨ãƒ•ã‚¡ã‚¤ãƒ«
 
-## wwwroot ƒtƒHƒ‹ƒ_
+## wwwroot ãƒ•ã‚©ãƒ«ãƒ€
 
-|  No  |      ƒtƒ@ƒCƒ‹   |        à–¾      |
+|  No  |      ãƒ•ã‚¡ã‚¤ãƒ«   |        èª¬æ˜      |
 |:----:|----------------:|:-----------------|
 |   1  |     index.html  |                  |
 
@@ -11,32 +11,32 @@
     <table>
         <tbody>
             <tr>
-                <th rowspan="2">viewsƒtƒHƒ‹ƒ_</th>
-                <th rowspan="2">stylesƒtƒHƒ‹ƒ_</th>
-                <th colspan="5" align="left">scriptsƒtƒHƒ‹ƒ_</th>
-                <th rowspan="3">à–¾</th>
+                <th rowspan="2">viewsãƒ•ã‚©ãƒ«ãƒ€</th>
+                <th rowspan="2">stylesãƒ•ã‚©ãƒ«ãƒ€</th>
+                <th colspan="5" align="left">scriptsãƒ•ã‚©ãƒ«ãƒ€</th>
+                <th rowspan="3">èª¬æ˜</th>
             </tr>
             <tr>
-                <th style="width: 300px;">.</th>
-                <th>/configƒtƒHƒ‹ƒ_</th>
-                <th>/controllersƒtƒHƒ‹ƒ_</th>
-                <th>/servicesƒtƒHƒ‹ƒ_</th>
-                <th>/defaultsƒtƒHƒ‹ƒ_</th>
+                <th style="width: 600px;">.</th>
+                <th>/configãƒ•ã‚©ãƒ«ãƒ€</th>
+                <th>/controllersãƒ•ã‚©ãƒ«ãƒ€</th>
+                <th>/servicesãƒ•ã‚©ãƒ«ãƒ€</th>
+                <th>/defaultsãƒ•ã‚©ãƒ«ãƒ€</th>
             </tr>
             <tr>
                 <td align="center">(html)</td>
-                <td align="center">(ƒXƒ^ƒCƒ‹ƒV[ƒg)</td>
+                <td align="center">(ã‚¹ã‚¿ã‚¤ãƒ«ã‚·ãƒ¼ãƒˆ)</td>
                 <td align="center">&nbsp;</td>
-                <td align="center">(ƒfƒUƒCƒ“’è‹`)</td>
-                <td align="center">(ƒfƒUƒCƒ“‚Ö‚ÌŒ‹‚Ñ‚Â‚¯)</td>
-                <td align="center">(ƒf[ƒ^‘€ìEì¬)</td>
-                <td align="center">(“ü—Í•â•‚Ì€–Ú’è‹`)</td>
+                <td align="center">(ãƒ‡ã‚¶ã‚¤ãƒ³å®šç¾©)</td>
+                <td align="center">(ãƒ‡ã‚¶ã‚¤ãƒ³ã¸ã®çµã³ã¤ã‘)</td>
+                <td align="center">(ãƒ‡ãƒ¼ã‚¿æ“ä½œãƒ»ä½œæˆ)</td>
+                <td align="center">(å…¥åŠ›è£œåŠ©ã®é …ç›®å®šç¾©)</td>
             </tr>
             <tr>
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -76,7 +76,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>1</td><td>app.css</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -116,7 +116,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>1</td><td>app.js</td></tr>
                             <tr><td>2</td><td>routes.js</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -156,7 +156,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -196,7 +196,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -236,7 +236,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>3</td><td>auth.js</td></tr>
@@ -276,7 +276,7 @@
                 <td valign="top">
                     <table>
                         <tbody>
-                            <tr><th>No</th><th>ƒtƒ@ƒCƒ‹</th></tr>
+                            <tr><th>No</th><th>ãƒ•ã‚¡ã‚¤ãƒ«</th></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
@@ -322,33 +322,33 @@
                             <tr><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td></tr>
-                            <tr><td>“S‹Ø”z’u</td></tr>
-                            <tr><td>Šî–{ƒf[ƒ^</td></tr>
+                            <tr><td>é‰„ç­‹é…ç½®</td></tr>
+                            <tr><td>åŸºæœ¬ãƒ‡ãƒ¼ã‚¿</td></tr>
                             <tr><td>bending-moment*</td></tr>
                             <tr><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td></tr>
-                            <tr><td>ŒvZEˆóü</td></tr>
-                            <tr><td>Zo“_</td></tr>
+                            <tr><td>è¨ˆç®—ãƒ»å°åˆ·</td></tr>
+                            <tr><td>ç®—å‡ºç‚¹</td></tr>
                             <tr><td>&nbsp;</td></tr>
-                            <tr><td>”æ˜Jƒf[ƒ^</td></tr>
-                            <tr><td>•”ŞE’f–Ê‚ÌƒOƒ‹[ƒvNo‚Æ•”Ş–¼</td></tr>
-                            <tr><td>&nbsp;</td></tr>
-                            <tr><td>&nbsp;</td></tr>
-                            <tr><td>&nbsp;</td></tr>
-                            <tr><td>&nbsp;</td></tr>
-                            <tr><td>ˆÀ‘SŒW”EŞ—¿‹­“x‚ÌŞ—¿‹­“x</td></tr>
-                            <tr><td>ˆÀ‘SŒW”EŞ—¿‹­“x‚ÌŞ—¿‚ÌŠî–{î•ñ</td></tr>
-                            <tr><td>•”ŞE’f–Ê</td></tr>
-                            <tr><td>•”ŞE’f–Ê‚ÌƒOƒ‹[ƒvNoˆÈŠO</td></tr>
+                            <tr><td>ç–²åŠ´ãƒ‡ãƒ¼ã‚¿</td></tr>
+                            <tr><td>éƒ¨æãƒ»æ–­é¢ã®ã‚°ãƒ«ãƒ¼ãƒ—Noã¨éƒ¨æå</td></tr>
                             <tr><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td></tr>
                             <tr><td>&nbsp;</td></tr>
+                            <tr><td>å®‰å…¨ä¿‚æ•°ãƒ»ææ–™å¼·åº¦ã®ææ–™å¼·åº¦</td></tr>
+                            <tr><td>å®‰å…¨ä¿‚æ•°ãƒ»ææ–™å¼·åº¦ã®ææ–™ã®åŸºæœ¬æƒ…å ±</td></tr>
+                            <tr><td>éƒ¨æãƒ»æ–­é¢</td></tr>
+                            <tr><td>éƒ¨æãƒ»æ–­é¢ã®ã‚°ãƒ«ãƒ¼ãƒ—Noä»¥å¤–</td></tr>
                             <tr><td>&nbsp;</td></tr>
-                            <tr><td>ˆÀ‘SŒW”EŞ—¿‹­“x</td></tr>
-                            <tr><td>’f–Ê—Í</td></tr>
                             <tr><td>&nbsp;</td></tr>
-                            <tr><td>’f–Ê—Í‚Ì‚¹‚ñ’fÆ¸</td></tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr><td>å®‰å…¨ä¿‚æ•°ãƒ»ææ–™å¼·åº¦</td></tr>
+                            <tr><td>æ–­é¢åŠ›</td></tr>
+                            <tr><td>&nbsp;</td></tr>
+                            <tr><td>æ–­é¢åŠ›ã®ã›ã‚“æ–­ç…§æŸ»</td></tr>
                             <tr><td>&nbsp;</td></tr>
                         </tbody>
                     </table>
@@ -359,11 +359,11 @@
 </nobr>
 
 
-## lib ƒtƒHƒ‹ƒ_
+## lib ãƒ•ã‚©ãƒ«ãƒ€
 
 bower_compornets
 
-|  No  |      ƒtƒ@ƒCƒ‹      |           à–¾        | g‚Á‚Ä‚¢‚é‚Æ‚±‚ë |        URL                                                     |
+|  No  |      ãƒ•ã‚¡ã‚¤ãƒ«      |           èª¬æ˜        | ä½¿ã£ã¦ã„ã‚‹ã¨ã“ã‚ |        URL                                                     |
 |:----:|:-------------------|:----------------------|:-----------------|:---------------------------------------------------------------|
 |   1  |  bootstrap-sass    |                       |                  |                                                                |
 |   2  |  modernizr         |                       |                  |                                                                |
@@ -382,8 +382,8 @@ bower_compornets
 |  15  |  angular-bootstrap |                       |                  |                                                                |
 |  16  |  angular-moment    |                       |                  |                                                                |
 |  17  |  file-saver        |                       |                  |                                                                |
-|  18  |  dropzone          | ƒtƒ@ƒCƒ‹ƒAƒbƒvƒ[ƒh  |                  | http://www.dropzonejs.com/                                     |
-|  19  |  lodash            | Array,Collection ‘€ì |                  | https://lodash.com/                                            |
+|  18  |  dropzone          | ãƒ•ã‚¡ã‚¤ãƒ«ã‚¢ãƒƒãƒ—ãƒ­ãƒ¼ãƒ‰  |                  | http://www.dropzonejs.com/                                     |
+|  19  |  lodash            | Array,Collection æ“ä½œ |                  | https://lodash.com/                                            |
 |  20  |  lowdb             |                       |                  | https://github.com/typicode/lowdb                              |
 |  21  |  local-db          |                       |                  | https://github.com/a311cb/local-db                             |
 |  22  |  handsontable-pro  |                       |                  | https://my.handsontable.com/handsontable/handsontable-pro.git  |
