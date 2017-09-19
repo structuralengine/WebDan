@@ -11,9 +11,9 @@
     <table>
         <tbody>
             <tr>
-                <th rowspan="2" colspan="2">viewsÉtÉHÉãÉ_Ä</th>
-                <th rowspan="2" colspan="2">stylesÉtÉHÉãÉ_Ä</th>
-                <th colspan="10" align="left">scriptsÉtÉHÉãÉ_Ä</th>
+                <th rowspan="2" colspan="2">viewsÉtÉHÉãÉ_</th>
+                <th rowspan="2" colspan="2">stylesÉtÉHÉãÉ_</th>
+                <th colspan="10" align="left">scriptsÉtÉHÉãÉ_</th>
                 <th rowspan="3">ê‡ñæ</th>
             </tr>
             <tr>
@@ -377,33 +377,35 @@
 </nobr>
 
 
-## lib ÉtÉHÉãÉ_Ä
+## lib ÉtÉHÉãÉ_
 
 bower_compornets
 
-|  No  |      ÉtÉ@ÉCÉã      |          ê‡ñæ         | égÇ¡ÇƒÇ¢ÇÈÇ∆Ç±ÇÎ |        URL                                                     |
-|:----:|:-------------------|:----------------------|:-----------------|:---------------------------------------------------------------|
-|   1  |  bootstrap-sass    |                       |                  |                                                                |
-|   2  |  modernizr         |                       |                  |                                                                |
-|   3  |  angular           |                       |                  |                                                                |
-|   4  |  firebase          |                       |                  |                                                                |
-|   5  |  angularfire       |                       |                  |                                                                |
-|   6  |  bootstrap         |                       |                  |                                                                |
-|   7  |  angular-animate   |                       |                  |                                                                |
-|   8  |  angular-aria      |                       |                  |                                                                |
-|   9  |  angular-cookies   |                       |                  |                                                                |
-|  10  |  angular-messages  |                       |                  |                                                                |
-|  11  |  angular-resource  |                       |                  |                                                                |
-|  12  |  angular-route     |                       |                  |                                                                |
-|  13  |  angular-sanitize  |                       |                  |                                                                |
-|  14  |  angular-touch     |                       |                  |                                                                |
-|  15  |  angular-bootstrap |                       |                  |                                                                |
-|  16  |  angular-moment    |                       |                  |                                                                |
-|  17  |  file-saver        |                       |                  |                                                                |
-|  18  |  dropzone          | ÉtÉ@ÉCÉãÉAÉbÉvÉçÅ[Éh  |                  | http://www.dropzonejs.com/                                     |
-|  19  |  lodash            | Array,Collection ëÄçÏ |                  | https://lodash.com/                                            |
-|  20  |  lowdb             |                       |                  | https://github.com/typicode/lowdb                              |
-|  21  |  local-db          |                       |                  | https://github.com/a311cb/local-db                             |
-|  22  |  handsontable-pro  |                       |                  | https://my.handsontable.com/handsontable/handsontable-pro.git  |
-|  23  |  ngHandsontable    |                       |                  | https://github.com/handsontable/ngHandsontable                 |
-|  24  |  ht-utils          |                       |                  | https://github.com/a311cb/ht-utils                             |
+|  No  |      ÉtÉ@ÉCÉã      |          ê‡ñæ            | égÇ¡ÇƒÇ¢ÇÈÇ∆Ç±ÇÎ |        URL                                                     |
+|:----:|:-------------------|:-------------------------|:-----------------|:---------------------------------------------------------------|
+|   1  |  bootstrap-sass    |                          |                  |                                                                |
+|   2  |  modernizr         | ÉuÉâÉEÉUëŒâû             |                  | https://github.com/Modernizr/Modernizr                         |
+|   3  |  angular           |                          |                  |                                                                |
+|   4  |  firebase          | Google Firebase          |                  | https://github.com/firebase/firebase-bower                     |
+|   5  |  angularfire       | AngularJS + Firebase     |                  | https://github.com/firebase/angularFire                        |
+|   6  |  bootstrap         |                          |                  |                                                                |
+|   7  |  angular-animate   |                          |                  |                                                                |
+|   8  |  angular-aria      |                          |                  |                                                                |
+|   9  |  angular-cookies   |                          |                  |                                                                |
+|  10  |  angular-messages  |                          |                  |                                                                |
+|  11  |  angular-resource  |                          |                  |                                                                |
+|  12  |  angular-route     |                          |                  |                                                                |
+|  13  |  angular-sanitize  |                          |                  |                                                                |
+|  14  |  angular-touch     |                          |                  |                                                                |
+|  15  |  angular-bootstrap |                          |                  |                                                                |
+|  16  |  angular-moment    |                          |                  |                                                                |
+|  17  |  file-saver        | ÉtÉ@ÉCÉãÇï€ë∂Ç∑ÇÈ       |                  | https://github.com/eligrey/FileSaver.js                        |
+|  18  |  dropzone          | ÉtÉ@ÉCÉãÉAÉbÉvÉçÅ[Éh     |                  | http://www.dropzonejs.com/                                     |
+|  19  |  lodash            | Array,Collection ëÄçÏ    |                  | https://lodash.com/                                            |
+|  20  |  lowdb             | jsonÉtÉ@ÉCÉãÇì«Ç›èëÇ´   |                  | https://github.com/typicode/lowdb                              |
+|  21  |  local-db          | ***                      |                  | https://github.com/a311cb/local-db                             |
+|  22  |  handsontable-pro  |                          |                  | https://my.handsontable.com/handsontable/handsontable-pro.git  |
+|  23  |  ngHandsontable    |                          |                  | https://github.com/handsontable/ngHandsontable                 |
+|  24  |  ht-utils          | ***                      |                  | https://github.com/a311cb/ht-utils                             |
+|  25  |  chai              | assertion library        |                  | https://github.com/chaijs/chai                                 |
+|  26  |  mocha             | íPëÃÉeÉXÉgÉtÉåÅ[ÉÄÉèÅ[ÉN |                  | https://github.com/mochajs/mocha                               |
