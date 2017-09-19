@@ -236,7 +236,7 @@
                 <td>&nbsp;</td><td>&nbsp;</td>
                 <td>&nbsp;</td><td>&nbsp;</td>     
                 <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>20</td><td></td>     
+                <td>20</td><td>material-strength.config.js</td>     
                 <td>&nbsp;</td><td>&nbsp;</td>     
                 <td>20</td><td>material&#045;strength.js</td>     
                 <td>20</td><td>material&#045;strength.defaults.js</td>     
@@ -403,9 +403,9 @@ bower_compornets
 |  18  |  dropzone          | ファイルアップロード     |                  | http://www.dropzonejs.com/                                     |
 |  19  |  lodash            | Array,Collection 操作    |                  | https://lodash.com/                                            |
 |  20  |  lowdb             | jsonファイルを読み書き   |                  | https://github.com/typicode/lowdb                              |
-|  21  |  local-db          | ***                      |                  | https://github.com/a311cb/local-db                             |
+|  21  |  local-db          | 自作                     |                  | https://github.com/a311cb/local-db                             |
 |  22  |  handsontable-pro  |                          |                  | https://my.handsontable.com/handsontable/handsontable-pro.git  |
 |  23  |  ngHandsontable    |                          |                  | https://github.com/handsontable/ngHandsontable                 |
-|  24  |  ht-utils          | ***                      |                  | https://github.com/a311cb/ht-utils                             |
+|  24  |  ht-utils          | コピー,ペースト,アンドゥ |                  | https://github.com/a311cb/ht-utils                             |
 |  25  |  chai              | assertion library        |                  | https://github.com/chaijs/chai                                 |
 |  26  |  mocha             | 単体テストフレームワーク |                  | https://github.com/mochajs/mocha                               |
