@@ -1,0 +1,13 @@
+<section class="bending-moments">
+  <h2>Bending Moments</h2>
+
+  <section ng-repeat="group in ctrl.groups" ng-init="bendingMoments = ctrl.bendingMoments[group.g_no] || []">
+    <h3>{{group.g_name}}</h3>
+
+    <hot-table
+      hot-id="bendingMoments-{{$index}}"
+      settings="ctrl.settings"
+      datarows="bendingMoments">
+    </hot-table>
+  </section>
+</section>

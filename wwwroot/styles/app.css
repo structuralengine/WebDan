@@ -1,0 +1,12 @@
+main {
+  margin-bottom: 3em;
+}
+
+main h2 {
+  display: none;
+}
+
+main hot-table .htDimmed {
+  background-color: #f3f3f3;
+}
+

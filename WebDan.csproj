@@ -1,0 +1,156 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="wwwroot\lib\**" />
+    <Content Remove="wwwroot\lib\**" />
+    <EmbeddedResource Remove="wwwroot\lib\**" />
+    <None Remove="wwwroot\lib\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\README.md" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include=".bowerrc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="wwwroot\report\HTMLView.aspx.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Include="wwwroot\report\SaveFile.aspx.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\.htaccess" />
+    <None Include="wwwroot\Calculate.aspx" />
+    <None Include="wwwroot\Calculate.aspx.designer.vb" />
+    <None Include="wwwroot\Calculate.aspx.vb" />
+    <None Include="wwwroot\fonts\glyphicons-halflings-regular.svg" />
+    <None Include="wwwroot\fonts\glyphicons-halflings-regular.woff2" />
+    <None Include="wwwroot\Global.asax" />
+    <None Include="wwwroot\Global.asax.vb" />
+    <None Include="wwwroot\report\HTMLView.aspx" />
+    <None Include="wwwroot\report\HTMLView.aspx.designer.vb" />
+    <None Include="wwwroot\report\HTMLView.aspx.vb" />
+    <None Include="wwwroot\report\SaveFile.aspx" />
+    <None Include="wwwroot\report\SaveFile.aspx.designer.vb" />
+    <None Include="wwwroot\report\SaveFile.aspx.vb" />
+    <None Include="wwwroot\report\scripts\formula.js" />
+    <None Include="wwwroot\report\scripts\jquery-1.9.0.min.js" />
+    <None Include="wwwroot\report\scripts\tablecreator.js" />
+    <None Include="wwwroot\report\scripts\ui\i18n\jquery.ui.datepicker-ja.js" />
+    <None Include="wwwroot\report\scripts\ui\js\jquery-ui-1.10.0.custom.min.js" />
+    <None Include="wwwroot\report\見積書.xls" />
+    <None Include="wwwroot\report\見積書.xlsx" />
+    <None Include="wwwroot\scripts\angularfire\auth.js" />
+    <None Include="wwwroot\scripts\angularfire\config.js" />
+    <None Include="wwwroot\scripts\angularfire\firebase.ref.js" />
+    <None Include="wwwroot\scripts\angularfire\webdan.ref.js" />
+    <None Include="wwwroot\scripts\app.js" />
+    <None Include="wwwroot\scripts\config\app.config.js" />
+    <None Include="wwwroot\scripts\config\bar.config.js" />
+    <None Include="wwwroot\scripts\config\basic-information.config.js" />
+    <None Include="wwwroot\scripts\config\bending-moment.config.js" />
+    <None Include="wwwroot\scripts\config\calculation-print.config.js" />
+    <None Include="wwwroot\scripts\config\design-point.config.js" />
+    <None Include="wwwroot\scripts\config\fatigue.config.js" />
+    <None Include="wwwroot\scripts\config\group.config.js" />
+    <None Include="wwwroot\scripts\config\material-strength-rest.config.js" />
+    <None Include="wwwroot\scripts\config\material-strength.config.js" />
+    <None Include="wwwroot\scripts\config\member-section.config.js" />
+    <None Include="wwwroot\scripts\config\member.config.js" />
+    <None Include="wwwroot\scripts\config\msg.config.js" />
+    <None Include="wwwroot\scripts\config\safety-factor.config.js" />
+    <None Include="wwwroot\scripts\config\shear.config.js" />
+    <None Include="wwwroot\scripts\controllers\account.js" />
+    <None Include="wwwroot\scripts\controllers\bars.js" />
+    <None Include="wwwroot\scripts\controllers\basic-information.js" />
+    <None Include="wwwroot\scripts\controllers\bending-moments.js" />
+    <None Include="wwwroot\scripts\controllers\calculation-print.js" />
+    <None Include="wwwroot\scripts\controllers\design-points.js" />
+    <None Include="wwwroot\scripts\controllers\fatigues.js" />
+    <None Include="wwwroot\scripts\controllers\groups.js" />
+    <None Include="wwwroot\scripts\controllers\login.js" />
+    <None Include="wwwroot\scripts\controllers\main.js" />
+    <None Include="wwwroot\scripts\controllers\members.js" />
+    <None Include="wwwroot\scripts\controllers\menu.js" />
+    <None Include="wwwroot\scripts\controllers\safety-factors-material-strengths.js" />
+    <None Include="wwwroot\scripts\controllers\section-forces.js" />
+    <None Include="wwwroot\scripts\controllers\shears.js" />
+    <None Include="wwwroot\scripts\controllers\tabs.js" />
+    <None Include="wwwroot\scripts\defaults\bar.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\bending-moment.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\condition.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\consider-rebar.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\design-point-name.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\design-point.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\fatigue.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\group.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\material-strength.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\member.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\rebar-side.bar.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\rebar-side.fatigue.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\safety-factor.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\section-shape.defaults.js" />
+    <None Include="wwwroot\scripts\defaults\shear.defaults.js" />
+    <None Include="wwwroot\scripts\directives\dropzone.js" />
+    <None Include="wwwroot\scripts\directives\ht-resizable.js" />
+    <None Include="wwwroot\scripts\directives\ngHideAuth.js" />
+    <None Include="wwwroot\scripts\directives\ngShowAuth.js" />
+    <None Include="wwwroot\scripts\filters\reverse.js" />
+    <None Include="wwwroot\scripts\routes.js" />
+    <None Include="wwwroot\scripts\services\auth.js" />
+    <None Include="wwwroot\scripts\services\bar.js" />
+    <None Include="wwwroot\scripts\services\basic-information.js" />
+    <None Include="wwwroot\scripts\services\bending-moment.js" />
+    <None Include="wwwroot\scripts\services\calculation-print.js" />
+    <None Include="wwwroot\scripts\services\design-point.js" />
+    <None Include="wwwroot\scripts\services\fatigue.js" />
+    <None Include="wwwroot\scripts\services\group.js" />
+    <None Include="wwwroot\scripts\services\material-strength-rest.js" />
+    <None Include="wwwroot\scripts\services\material-strength.js" />
+    <None Include="wwwroot\scripts\services\member.js" />
+    <None Include="wwwroot\scripts\services\rcnonlinear.js" />
+    <None Include="wwwroot\scripts\services\safety-factor.js" />
+    <None Include="wwwroot\scripts\services\shear.js" />
+    <None Include="wwwroot\Web.config" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\report\HTMLView.aspx.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HTMLView.aspx.resx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\report\HTMLView.aspx.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HTMLView.aspx.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Update="wwwroot\report\SaveFile.aspx.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SaveFile.aspx.resx</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\report\SaveFile.aspx.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SaveFile.aspx.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\styles\" />
+  </ItemGroup>
+
+</Project>

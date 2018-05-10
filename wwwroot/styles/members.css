@@ -1,0 +1,22 @@
+main .members h2 {
+  display: none;
+}
+
+main .members .ht-container {
+  display: inline-block;
+}
+
+main .members .ht-container .buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  margin-bottom: 3px;
+}
+
+main .members .ht-container .buttons button {
+  margin-right: 3px;
+}
+
