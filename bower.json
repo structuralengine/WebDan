@@ -25,10 +25,10 @@
     "dropzone": "^5.1.1",
     "lodash": "^4.17.4",
     "lowdb": "^0.16.2",
-    "local-db": "https://github.com/a311cb/local-db.git",
+    "local-db": "https://github.com/structuralengine/local-db.git",
     "handsontable-pro": "https://my.handsontable.com/handsontable/handsontable-pro.git#^1.11.0",
     "ngHandsontable": "^0.13.0",
-    "ht-utils": "https://github.com/a311cb/ht-utils.git#^1.0.1"
+    "ht-utils": "https://github.com/structuralengine/ht-utils.git"
   },
   "overrides": {
     "bootstrap-sass": {
