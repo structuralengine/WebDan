@@ -1,4 +1,5 @@
-# bin フォルダは要らない
-bin/
-# obj フォルダは要らない
-obj/
+node_modules
+dist
+.tmp
+bower_components
+test/bower_components
