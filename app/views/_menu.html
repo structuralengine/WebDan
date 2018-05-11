@@ -1,0 +1,56 @@
+<li class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ファイル <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a ng-click="menu.createNewBucket()">新規作成</a></li>
+    <li>
+      <a open-file
+          data-extensions=".json"
+          data-clickable=".header a[open-file]"
+          data-receiver="menu.loadFile">
+        ファイルを開く
+      </a>
+    </li>
+    <li><a ng-click="menu.saveAsFile()">データをファイルとして保存</a></li>
+    <li><a>Pick Up File の取り込み</a></li>
+    <li role="separator" class="divider"></li>
+    <li><a>断面照査の終了</a></li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">編集 <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a ng-click="$htCpCtrl.cut()">切り取り</a></li>
+    <li><a ng-click="$htCpCtrl.copy()">コピー</a></li>
+    <li><a ng-click="$htCpCtrl.paste()">貼り付け</a></li>
+    <li><a ng-click="$htCpCtrl.undo()">元に戻す</a></li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">オプション <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a>ピックアップデータの単位変換</a></li>
+    <li><a>メニューにスペースを入れる</a></li>
+    <li><a>総括表でケース毎に改ページ</a></li>
+    <li><a>杭段落し表 改ページ無し</a></li>
+    <li><a>ファイル履歴数の変更</a></li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">手入力 <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a>断面力手入力</a></li>
+  </ul>
+</li>
+<li><a href="#!/">計算</a></li>
+<li class="dropdown">
+  <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">ヘルプ <span class="caret"></span></a>
+  <ul class="dropdown-menu">
+    <li><a>目次</a></li>
+    <li><a>トピックの検索</a></li>
+    <li><a>バージョン情報</a></li>
+  </ul>
+</li>
+<li>
+  <a ng-hide-auth="" href="#!/login">Log In</a>
+  <a ng-show-auth="" href="#!/account">Account</a>
+</li>

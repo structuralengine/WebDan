@@ -1,3 +1,7 @@
 {
+<<<<<<< HEAD
+  "directory": "bower_components"
+=======
   "directory": "wwwroot/lib"
+>>>>>>> origin/master
 }

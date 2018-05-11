@@ -1,3 +1,17 @@
+<<<<<<< HEAD
+# app
+
+This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
+version 1.0.0.
+
+## Build & development
+
+Run `grunt` for building and `grunt serve` for preview.
+
+## Testing
+
+Running `grunt test` will run the unit tests with karma.
+=======
 # フォルダの説明とファイル
 
 ## wwwroot フォルダ
@@ -409,3 +423,4 @@ bower_compornets
 |  24  |  ht-utils          | コピー,ペースト,アンドゥ |                  | https://github.com/a311cb/ht-utils                             |
 |  25  |  chai              | assertion library        |                  | https://github.com/chaijs/chai                                 |
 |  26  |  mocha             | 単体テストフレームワーク |                  | https://github.com/mochajs/mocha                               |
+>>>>>>> origin/master
