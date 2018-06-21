@@ -57,88 +57,105 @@ angular.module('webdan')
   // before trying to access that route
   .config(['$routeProvider', function($routeProvider) {
     $routeProvider
-      .when('/login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl'
-      })
-      .whenAuthenticated('/account', {
+      //.when('/login', {
+      //  templateUrl: 'views/login.html',
+      //  controller: 'LoginCtrl'
+      //})
+      //.whenAuthenticated('/account', {
+      .when('/account', {
         templateUrl: 'views/account.html',
         controller: 'AccountCtrl'
       })
-      .whenAuthenticated('/main', {
+      //.whenAuthenticated('/main', {
+      .when('/main', {
         templateUrl: 'views/main.html',
         controller: 'MainCtrl'
       })
-      .whenAuthenticated('/basic-information', {
+      //.whenAuthenticated('/basic-information', {
+      .when('/basic-information', {
         templateUrl: 'views/basic-information.html',
         controller: 'BasicInformationCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/material-strength-rests', {
+      //.whenAuthenticated('/material-strength-rests', {
+      .when('/material-strength-rests', {
         templateUrl: 'views/material-strength-rests.html',
         controller: 'MaterialStrengthRestsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/calculation-print', {
+      //.whenAuthenticated('/calculation-print', {
+      .when('/calculation-print', {
         templateUrl: 'views/calculation-print.html',
         controller: 'CalculationPrintCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/', {
+      //.whenAuthenticated('/', {
+      .when('/', {
         templateUrl: 'views/members.html',
         controller: 'MembersCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/design-points', {
+      //.whenAuthenticated('/design-points', {
+      .when('/design-points', {
         templateUrl: 'views/design-points.html',
         controller: 'DesignPointsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/design-points/defaults', {
+      //.whenAuthenticated('/design-points/defaults', {
+      .when('/design-points/defaults', {
         templateUrl: 'views/design-points/defaults.html',
         controller: 'DesignPointsDefaultsCtrl'
       })
-      .whenAuthenticated('/bars', {
+      //.whenAuthenticated('/bars', {
+      .when('/bars', {
         templateUrl: 'views/bars.html',
         controller: 'BarsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/fatigues', {
+      //.whenAuthenticated('/fatigues', {
+      .when('/fatigues', {
         templateUrl: 'views/fatigues.html',
         controller: 'FatiguesCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/bending-moments', {
+      //.whenAuthenticated('/bending-moments', {
+      .when('/bending-moments', {
         templateUrl: 'views/bending-moments.html',
         controller: 'BendingMomentsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/shears', {
+      //.whenAuthenticated('/shears', {
+      .when('/shears', {
         templateUrl: 'views/shears.html',
         controller: 'ShearsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/safety-factors', {
+      //.whenAuthenticated('/safety-factors', {
+      .when('/safety-factors', {
         templateUrl: 'views/safety-factors.html',
         controller: 'SafetyFactorsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/material-strengths', {
+      //.whenAuthenticated('/material-strengths', {
+      .when('/material-strengths', {
         templateUrl: 'views/material-strengths.html',
         controller: 'MaterialStrengthsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/safety-factors-material-strengths', {
+      //.whenAuthenticated('/safety-factors-material-strengths', {
+      .when('/safety-factors-material-strengths', {
         templateUrl: 'views/safety-factors-material-strengths.html',
         controller: 'SafetyFactorsMaterialStrengthsCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/section-forces', {
+      //.whenAuthenticated('/section-forces', {
+      .when('/section-forces', {
         templateUrl: 'views/section-forces.html',
         controller: 'SectionForcesCtrl',
         controllerAs: 'ctrl',
       })
-      .whenAuthenticated('/calc', {
+      //.whenAuthenticated('/calc', {
+      .when('/calc', {
         templateUrl: 'views/calc.html',
         controller: 'CalcCtrl',
         controllerAs: 'ctrl',

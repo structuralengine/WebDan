@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-# app
+# webdan
 
 This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
 version 1.0.0.
@@ -11,416 +10,98 @@ Run `grunt` for building and `grunt serve` for preview.
 ## Testing
 
 Running `grunt test` will run the unit tests with karma.
-=======
-# ÉtÉHÉãÉ_ÇÃê‡ñæÇ∆ÉtÉ@ÉCÉã
 
-## wwwroot ÉtÉHÉãÉ_
+## SetUp
 
-|  No  |      ÉtÉ@ÉCÉã  |        ê‡ñæ     |
-|:----:|----------------:|:-----------------|
-|   1  |     index.html  |                  |
+Á¥∞„Åã„ÅÑ„Åì„Å®„Çí„ÇÑ„Çç„ÅÜ„Å®„Åô„Çã„Å®„Éâ„Ç≠„É•„É°„É≥„Éà„ÇíË™≠„Çì„Åß„ÅÑ„ÅüÊñπ„Åå„ÅÑ„ÅÑ„ÅÆ„Åß„ÄÅ„Åù„ÅÆ URL „ÇíÂàóÊåô„Åó„Å¶„Åä„Åç„Åæ„Åô„ÄÇ
 
-
-<nobr>
-    <table>
-        <tbody>
-            <tr>
-                <th rowspan="2" colspan="2">viewsÉtÉHÉãÉ_</th>
-                <th rowspan="2" colspan="2">stylesÉtÉHÉãÉ_</th>
-                <th colspan="10" align="left">scriptsÉtÉHÉãÉ_</th>
-                <th rowspan="3">ê‡ñæ</th>
-            </tr>
-            <tr>
-                <th colspan="2">.</th>
-                <th colspan="2">/configÉtÉHÉãÉ_</th>
-                <th colspan="2">/controllersÉtÉHÉãÉ_</th>
-                <th colspan="2">/servicesÉtÉHÉãÉ_</th>
-                <th colspan="2">/defaultsÉtÉHÉãÉ_</th>
-            </tr>
-            <tr>
-                <td colspan="2" align="center">(html)</td>
-                <td colspan="2" align="center">(ÉXÉ^ÉCÉãÉVÅ[Ég)</td>
-                <td colspan="2" align="center">&nbsp;</td>
-                <td colspan="2" align="center">(ÉfÉUÉCÉìíËã`)</td>
-                <td colspan="2" align="center">(ÉfÉUÉCÉìÇ÷ÇÃåãÇ—Ç¬ÇØ)</td>
-                <td colspan="2" align="center">(ÉfÅ[É^ëÄçÏÅEçÏê¨)</td>
-                <td colspan="2" align="center">(ì¸óÕï‚èïÇÃçÄñ⁄íËã`)</td>
-            </tr>
-            <tr>
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>     
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>     
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>     
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>     
-                <th>No</th><th>ÉtÉ@ÉCÉã</th>     
-                <th>&nbsp;</th>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>1</td><td>app.css</td>     
-                <td>1</td><td>app.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>2</td><td>routes.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>3</td><td>auth.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>4</td><td>account.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>4</td><td>account.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>5</td><td>app.config.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>5</td><td>bar.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>6</td><td>bars.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>6</td><td>bar.config.js</td>     
-                <td>6</td><td>bars.js</td>     
-                <td>6</td><td>bar.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>ìSãÿîzíu</td>     
-            </tr>
-            <tr>
-                <td>7</td><td>basic&#045;information.html</td>
-                <td>7</td><td>basic&#045;information.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>7</td><td>basic&#045;information.config.js</td>     
-                <td>7</td><td>basic&#045;information.js</td>     
-                <td>7</td><td>basic&#045;information.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>äÓñ{ÉfÅ[É^</td>     
-            </tr>
-            <tr>
-                <td>8</td><td>bending&#045;moments.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>8</td><td>bending&#045;moment.config.js</td>     
-                <td>8</td><td>bending&#045;moments.js</td>     
-                <td>8</td><td>bending&#045;moment.js</td>     
-                <td>8</td><td>bending&#045;moment.defaults.js</td>     
-                <td>bending&#045;moment*</td>     
-            </tr>
-            <tr>
-                <td>9</td><td>_conditions.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>9</td><td>condition.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>10</td><td>_consider&#045;rebars.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>10</td><td>consider&#045;rebar.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>11</td><td>calculation&#045;print.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>11</td><td>calculation&#045;print.config.js</td>     
-                <td>11</td><td>calculation&#045;print.js</td>     
-                <td>11</td><td>calculation&#045;print.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>åvéZÅEàÛç¸</td>     
-            </tr>
-            <tr>
-                <td>12</td><td>design&#045;points.html</td>
-                <td>12</td><td>design&#045;points.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>12</td><td>design&#045;point.config.js</td>     
-                <td>12</td><td>design&#045;points.js</td>     
-                <td>12</td><td>design&#045;point.js</td>     
-                <td>12</td><td>design&#045;point.defaults.js</td>     
-                <td>éZèoì_</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>13</td><td>design&#045;point&#045;name.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>14</td><td>fatigues.html</td>
-                <td>14</td><td>fatigues.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>14</td><td>fatigue.config.js</td>     
-                <td>14</td><td>fatigues.js</td>     
-                <td>14</td><td>fatigue.js</td>     
-                <td>14</td><td>fatigue.defaults.js</td>     
-                <td>îÊòJÉfÅ[É^</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>15</td><td>group.js</td>     
-                <td>15</td><td>group.defaults.js</td>     
-                <td>ïîçﬁÅEífñ ÇÃÉOÉãÅ[ÉvNoÇ∆ïîçﬁñº</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>16</td><td>group.config.js</td>     
-                <td>16</td><td>groups.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>17</td><td>layout.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>18</td><td>login.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>18</td><td>login.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>19</td><td>main.html</td>
-                <td>19</td><td>main.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>19</td><td>main.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>20</td><td>material-strength.config.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>20</td><td>material&#045;strength.js</td>     
-                <td>20</td><td>material&#045;strength.defaults.js</td>     
-                <td>à¿ëSåWêîÅEçﬁóøã≠ìxÇÃçﬁóøã≠ìx</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>21</td><td>material&#045;strength&#045;rest.config.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>21</td><td>material&#045;strength&#045;rest.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>à¿ëSåWêîÅEçﬁóøã≠ìxÇÃçﬁóøÇÃäÓñ{èÓïÒ</td>     
-            </tr>
-            <tr>
-                <td>22</td><td>members.html</td>
-                <td>22</td><td>members.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>22</td><td>member.config.js</td>     
-                <td>22</td><td>members.js</td>     
-                <td>22</td><td>member.js</td>     
-                <td>22</td><td>member.defaults.js</td>     
-                <td>ïîçﬁÅEífñ </td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>23</td><td>member&#045;section.config.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>ïîçﬁÅEífñ ÇÃÉOÉãÅ[ÉvNoà»äO</td>     
-            </tr>
-            <tr>
-                <td>24</td><td>_menu.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>24</td><td>menu.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>25</td><td>msg.config.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>26</td><td>rcnonlinear.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>27</td><td>rebar&#045;side.bar.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>&nbsp;</td><td>&nbsp;</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>28</td><td>rebar&#045;side.fatigue.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>29</td><td>safety&#045;factors&#045;material&#045;strengths.html</td>
-                <td>29</td><td>safety&#045;factors.css</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>29</td><td>safety&#045;factor.config.js</td>     
-                <td>29</td><td>safety&#045;factors&#045;material&#045;strengths.js</td>     
-                <td>29</td><td>safety&#045;factor.js</td>     
-                <td>29</td><td>safety&#045;factor.defaults.js</td>     
-                <td>à¿ëSåWêîÅEçﬁóøã≠ìx</td>     
-            </tr>
-            <tr>
-                <td>30</td><td>section&#045;forces.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>30</td><td>section&#045;forces.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>ífñ óÕ</td>     
-            </tr>
-            <tr>
-                <td>31</td><td>_section&#045;shapes.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>31</td><td>section&#045;shape.defaults.js</td>     
-                <td>&nbsp;</td>     
-            </tr>
-            <tr>
-                <td>32</td><td>shears.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>32</td><td>shear.config.js</td>     
-                <td>32</td><td>shears.js</td>     
-                <td>32</td><td>shear.js</td>     
-                <td>32</td><td>shear.defaults.js</td>     
-                <td>ífñ óÕÇÃÇπÇÒífè∆ç∏</td>     
-            </tr>
-            <tr>
-                <td>33</td><td>_tabs.html</td>
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>33</td><td>tabs.js</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td><td>&nbsp;</td>     
-                <td>&nbsp;</td>     
-            </tr>
-        </tbody>
-    </table>
-</nobr>
+> yeoman / generator-webapp
+> https://goo.gl/WYtzuO
+>
+> Bower
+> https://goo.gl/j0z3QO
+>
+> gulpjs / gulp
+> https://goo.gl/p8K32Q
 
 
-## lib ÉtÉHÉãÉ_
+### step.1
 
-bower_compornets
+![git clone](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_131912.png)
 
-|  No  |      ÉtÉ@ÉCÉã      |          ê‡ñæ            | égÇ¡ÇƒÇ¢ÇÈÇ∆Ç±ÇÎ |        URL                                                     |
-|:----:|:-------------------|:-------------------------|:-----------------|:---------------------------------------------------------------|
-|   1  |  bootstrap-sass    |                          |                  |                                                                |
-|   2  |  modernizr         | ÉuÉâÉEÉUëŒâû             |                  | https://github.com/Modernizr/Modernizr                         |
-|   3  |  angular           |                          |                  |                                                                |
-|   4  |  firebase          | Google Firebase          |                  | https://github.com/firebase/firebase-bower                     |
-|   5  |  angularfire       | AngularJS + Firebase     |                  | https://github.com/firebase/angularFire                        |
-|   6  |  bootstrap         |                          |                  |                                                                |
-|   7  |  angular-animate   |                          |                  |                                                                |
-|   8  |  angular-aria      |                          |                  |                                                                |
-|   9  |  angular-cookies   |                          |                  |                                                                |
-|  10  |  angular-messages  |                          |                  |                                                                |
-|  11  |  angular-resource  |                          |                  |                                                                |
-|  12  |  angular-route     |                          |                  |                                                                |
-|  13  |  angular-sanitize  |                          |                  |                                                                |
-|  14  |  angular-touch     |                          |                  |                                                                |
-|  15  |  angular-bootstrap |                          |                  |                                                                |
-|  16  |  angular-moment    |                          |                  |                                                                |
-|  17  |  file-saver        | ÉtÉ@ÉCÉãÇï€ë∂Ç∑ÇÈ       |                  | https://github.com/eligrey/FileSaver.js                        |
-|  18  |  dropzone          | ÉtÉ@ÉCÉãÉAÉbÉvÉçÅ[Éh     |                  | http://www.dropzonejs.com/                                     |
-|  19  |  lodash            | Array,Collection ëÄçÏ    |                  | https://lodash.com/                                            |
-|  20  |  lowdb             | jsonÉtÉ@ÉCÉãÇì«Ç›èëÇ´   |                  | https://github.com/typicode/lowdb                              |
-|  21  |  local-db          | é©çÏ                     |                  | https://github.com/a311cb/local-db                             |
-|  22  |  handsontable-pro  |                          |                  | https://my.handsontable.com/handsontable/handsontable-pro.git  |
-|  23  |  ngHandsontable    |                          |                  | https://github.com/handsontable/ngHandsontable                 |
-|  24  |  ht-utils          | ÉRÉsÅ[,ÉyÅ[ÉXÉg,ÉAÉìÉhÉD |                  | https://github.com/a311cb/ht-utils                             |
-|  25  |  chai              | assertion library        |                  | https://github.com/chaijs/chai                                 |
-|  26  |  mocha             | íPëÃÉeÉXÉgÉtÉåÅ[ÉÄÉèÅ[ÉN |                  | https://github.com/mochajs/mocha                               |
->>>>>>> origin/master
+git clone
+
+> 
+> $ cd __working_directory__
+> 
+> $ git clone -v "https://github.com/structuralengine/WebDan.git" webdan
+> 
+
+### step.2
+
+![bower, gulp „ÅÆÊ∫ñÂÇô](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
+
+bower, gulp „ÅÆÊ∫ñÂÇô
+
+> 
+> $ cd webdan
+> 
+> $ npm install --global gulp-cli bower
+> 
+
+### step.3
+
+![ÈñãÁô∫„Å´ÂøÖË¶Å„Å™„É©„Ç§„Éñ„É©„É™„Éº„ÅÆÊ∫ñÂÇô](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
+
+ÈñãÁô∫„Å´ÂøÖË¶Å„Å™„É©„Ç§„Éñ„É©„É™„Éº„ÅÆÊ∫ñÂÇô
+
+ÈÅ©ÂΩì„Å™ branch (‰æã origin/#17) „Å´ switch „Åó„ÅüÂæå„ÄÅ‰ª•‰∏ã„ÇíÂÆüË°å„Åó„Å¶„Åè„Å†„Åï„ÅÑ„ÄÇ
+
+> 
+> $ npm install
+> 
+> $ bower install
+> 
+> $ gulp init
+> 
+
+![angular „ÅÆ„Éê„Éº„Ç∏„Éß„É≥„Åå‰∏çÊï¥Âêà](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
+
+ÂÜÖÈÉ®„ÅßË¶ÅÊ±Ç„Åï„Çå„Å¶„ÅÑ„Çã angular „ÅÆ„Éê„Éº„Ç∏„Éß„É≥„Åå‰∏çÊï¥Âêà„Å™„ÅÆ„Åß„ÄÅÂÖ•Âäõ„ÇíË¶ÅÊ±Ç„Åï„Çå„Åæ„Åô„ÄÇ
+ÊúÄÊñ∞Áâà„ÅßÊßã„Çè„Å™„ÅÑ„ÅÆ„Åß„Äå2„Äç„Å®ÂÖ•Âäõ„Åó„Åæ„Åô„ÄÇ
+
+### step.4
+
+![build](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_134318.png)
+
+
+1. web „Çµ„Ç§„Éà„ÅÆËµ∑Âãï
+
+> 
+> $ gulp serve
+> 
+
+„Äå http://localhost:9000 „Äç„Åß„Ç¢„ÇØ„Çª„ÇπÂèØËÉΩ„Åß„Åô„ÄÇ
+
+
+2. ÈÖçÂ∏ÉÁî®„Éï„Ç°„Ç§„É´„ÅÆ‰ΩúÊàê (dist/ „Éá„Ç£„É¨„ÇØ„Éà„É™Ôºâ
+
+> 
+> $ gulp
+> 
+> $ ls dist/
+> 
+
+command `gulp` „Å´„Çà„Çä„ÄÅÂÜÖÈÉ®„Åß `gulp build` „ÅåÂÆüË°å„Åï„Çå„ÄÅdist „Éá„Ç£„É¨„ÇØ„Éà„É™„ÅåÁîüÊàê„Åï„Çå„Åæ„Åô„ÄÇ„Åì„ÅÆ dist „Éá„Ç£„É¨„ÇØ„Éà„É™„ÅåÂÖ¨ÈñãÁî®„ÅÆ„Éï„Ç°„Ç§„É´Áæ§„Åß„Åô„ÄÇ
+
+
+3. ÈÖçÂ∏ÉÁî®„Éï„Ç°„Ç§„É´„Çí‰Ωø„Å£„Åü web „Çµ„Ç§„Éà„ÅÆËµ∑Âãï
+
+> 
+> $ gulp serve:dist
+> 
+
+ÂÖ¨ÈñãÁî®„Éï„Ç°„Ç§„É´ (dist) „Çí‰Ωø„Å£„Å¶ web „Çµ„Ç§„Éà„ÅÆÁ¢∫Ë™ç„Åå„Åß„Åç„Åæ„Åô„ÄÇ
+
+‰ª•‰∏ä„Åß„Åô„ÄÇ
+„Åì„Çå„Å´„Çà„Çä„ÄÅÈñãÁô∫Áí∞Â¢É„ÅåÁî®ÊÑè„Åï„Çå„Åæ„Åó„Åü

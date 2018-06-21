@@ -1,16 +1,16 @@
 // Initialize Firebase
 var config = {
-  apiKey: 'AIzaSyC0nZsDxgRm9S1ppN_mx0nWcrgL1FF5GFI',
-  authDomain: 'webdan-abcc6.firebaseapp.com',
-  databaseURL: 'https://webdan-abcc6.firebaseio.com',
-  projectId: 'webdan-abcc6',
-  storageBucket: 'webdan-abcc6.appspot.com',
-  messagingSenderId: '1006569190487'
+  apiKey: 'AIzaSyCeB1y4wsj6S9Zb-NnE8gNE937mBnZPcMc',
+  authDomain: 'the-structural-engine.firebaseapp.com',
+  databaseURL: 'https://the-structural-engine.firebaseio.com',
+  projectId: 'the-structural-engine',
+  storageBucket: 'the-structural-engine.appspot.com',
+  messagingSenderId: '193022928063'
 };
 firebase.initializeApp(config);
 
 
 angular.module('firebase.config', [])
-  .constant('FBURL', 'https://webdan-abcc6.firebaseio.com')
-  .constant('SIMPLE_LOGIN_PROVIDERS', ['google'])
+  .constant('FBURL', 'https://the-structural-engine.firebaseio.com')
+  .constant('SIMPLE_LOGIN_PROVIDERS', ['password'])
   .constant('loginRedirectPath', '/login');

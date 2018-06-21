@@ -1,11 +1,7 @@
 {
   "name": "webdan",
   "version": "0.0.0",
-<<<<<<< HEAD
   "appPath": "app",
-=======
-  "appPath": "wwwroot",
->>>>>>> origin/master
   "moduleName": "webdan",
   "private": true,
   "dependencies": {
@@ -29,17 +25,10 @@
     "dropzone": "^5.1.1",
     "lodash": "^4.17.4",
     "lowdb": "^0.16.2",
-<<<<<<< HEAD
     "local-db": "https://github.com/structuralengine/local-db.git",
     "handsontable-pro": "https://my.handsontable.com/handsontable/handsontable-pro.git#^1.11.0",
     "ngHandsontable": "^0.13.0",
     "ht-utils": "https://github.com/structuralengine/ht-utils.git"
-=======
-    "local-db": "https://github.com/a311cb/local-db.git",
-    "handsontable-pro": "https://my.handsontable.com/handsontable/handsontable-pro.git#^1.11.0",
-    "ngHandsontable": "^0.13.0",
-    "ht-utils": "https://github.com/a311cb/ht-utils.git#^1.0.1"
->>>>>>> origin/master
   },
   "overrides": {
     "bootstrap-sass": {
@@ -80,10 +69,6 @@
     "mocha": "^3.4.2"
   },
   "resolutions": {
-<<<<<<< HEAD
     "angular": "1.6.5"
-=======
-    "angular": ">=1.2.0 <1.7.0"
->>>>>>> origin/master
   }
 }
