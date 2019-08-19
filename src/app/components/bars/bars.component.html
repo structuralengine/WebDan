@@ -1,0 +1,93 @@
+<div #ht_container class="ht-container">
+  <ngb-tabset>
+    <ngb-tab *ngFor="let groupe of groupe_list; index as i">
+      <ng-template ngbTabTitle>
+        <h3>{{groupe[0].g_name}}</h3>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="table-container">
+          <div class="header">
+            <table width="1835px">
+              <thead>
+                <tr>
+                  <th rowspan="3" width="60px">部材番号</th>
+                  <th rowspan="3" width="250px">算出点名</th>
+                  <th width="85px">断面</th>
+                  <th width="85px">ﾊﾝﾁ高</th>
+                  <th rowspan="3" width="40px">位置</th>
+                  <th colspan="6">軸方向鉄筋</th>
+                  <th colspan="4">側方鉄筋</th>
+                  <th colspan="3">スターラップ</th>
+                  <th colspan="4">折曲げ鉄筋</th>
+                  <th rowspan="3" width="85px">主鉄筋の斜率</th>
+                  <th rowspan="3" width="85px">tanγ+tanβ</th>
+                  <th rowspan="3" width="40px" type="checkbox">処理</th>
+                </tr>
+                <tr>
+                  <th>B</th>
+                  <th>曲げ</th>
+                  <th rowspan="2" width="70px">鉄筋径</th>
+                  <th rowspan="2" width="70px">本数</th>
+                  <th rowspan="2" width="70px">かぶり１段目</th>
+                  <th rowspan="2" width="70px">ならび本数</th>
+                  <th rowspan="2" width="70px">アキ</th>
+                  <th rowspan="2" width="70px">間隔</th>
+                  <th rowspan="2" width="70px">鉄筋径</th>
+                  <th rowspan="2" width="70px">本数片</th>
+                  <th rowspan="2" width="70px">上端位置</th>
+                  <th rowspan="2" width="70px">間隔</th>
+                  <th rowspan="2" width="70px">鉄筋径</th>
+                  <th rowspan="2" width="70px">組数</th>
+                  <th rowspan="2" width="70px">間隔</th>
+                  <th rowspan="2" width="70px">鉄筋径</th>
+                  <th rowspan="2" width="70px">組数</th>
+                  <th rowspan="2" width="70px">間隔</th>
+                  <th rowspan="2" width="70px">角度</th>
+                </tr>
+                <tr>
+                  <th>H</th>
+                  <th>せん断</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+
+          <hot-table class="hot" [settings]="table_settings" [data]="table_datas[i]" [colHeaders]="false"
+            [rowHeaders]="false" height="{{hottable_height}}" width="1855">
+            <hot-column data="m_no" width="60" [readOnly]="true"></hot-column>
+            <hot-column data="p_name_ex" width="230" [readOnly]="true"></hot-column>
+            <hot-column data="bh" width="85" [readOnly]="true"></hot-column>
+            <hot-column data="haunch_height" width="80"></hot-column>
+            <hot-column data="design_point_id" width="38" [readOnly]="true"></hot-column>
+
+            <hot-column data="rebar_dia" width="67" type="numeric"></hot-column>
+            <hot-column data="rebar_n" width="67" type="numeric"></hot-column>
+            <hot-column data="rebar_cover" width="67" type="numeric"></hot-column>
+            <hot-column data="rebar_lines" width="67" type="numeric"></hot-column>
+            <hot-column data="rebar_space" width="67" type="numeric"></hot-column>
+            <hot-column data="rebar_ss" width="67" type="numeric"></hot-column>
+
+            <hot-column data="side_dia" width="67" type="numeric"></hot-column>
+            <hot-column data="side_n" width="67" type="numeric"></hot-column>
+            <hot-column data="side_cover" width="67" type="numeric"></hot-column>
+            <hot-column data="side_ss" width="67" type="numeric"></hot-column>
+
+            <hot-column data="stirrup_dia" width="67" type="numeric"></hot-column>
+            <hot-column data="stirrup_n" width="67" type="numeric"></hot-column>
+            <hot-column data="stirrup_ss" width="67" type="numeric"></hot-column>
+
+            <hot-column data="bending_dia" width="67" type="numeric"></hot-column>
+            <hot-column data="bending_n" width="67" type="numeric"></hot-column>
+            <hot-column data="bending_ss" width="67" type="numeric"></hot-column>
+            <hot-column data="bending_angle" width="67" type="numeric"></hot-column>
+
+            <hot-column data="cos" width="83" type="numeric"></hot-column>
+            <hot-column data="tan" width="83" type="numeric"></hot-column>
+            <hot-column data="enable" width="38" type="checkbox"></hot-column>
+          </hot-table>
+        </div>
+
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

@@ -1,47 +1,72 @@
 {
+  "name": "bridge-bearing-shoe",
+  "version": "1.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve --open",
+    "build": "ng build --prod --base-href \"https://structuralengine.github.io/WebDanforJS/\" && angular-cli-ghpages",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "description": "断面照査プログラム",
+  "author": {
+    "name": "sasaco",
+    "email": "sasaicco@gmail.com"
+  },
+  "keywords": [
+    "angular",
+    "angular 6",
+    "typescript",
+    "sass"
+  ],
   "private": true,
-  "engines": {
-    "node": ">=4"
+  "dependencies": {
+    "@angular/animations": "^7.2.8",
+    "@angular/cdk": "~7.3.3",
+    "@angular/common": "6.1.2",
+    "@angular/compiler": "6.1.2",
+    "@angular/core": "6.1.2",
+    "@angular/forms": "6.1.2",
+    "@angular/http": "6.1.2",
+    "@angular/material": "~7.3.3",
+    "@angular/platform-browser": "6.1.2",
+    "@angular/platform-browser-dynamic": "6.1.2",
+    "@angular/router": "6.1.2",
+    "@handsontable/angular": "^3.0.0",
+    "@ng-bootstrap/ng-bootstrap": "^4.1.0",
+    "@ng-bootstrap/schematics": "^2.0.0-alpha.1",
+    "@types/file-saver": "^2.0.0",
+    "angular-cli-ghpages": "^0.5.3",
+    "core-js": "2.5.6",
+    "file-saver": "^2.0.1",
+    "hammerjs": "^2.0.8",
+    "handsontable": "^6.2.2",
+    "print-js": "^1.0.61",
+    "rxjs": "6.2.2",
+    "zone.js": "0.8.26"
   },
   "devDependencies": {
-    "babel-core": "^6.4.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-register": "^6.5.2",
-    "browser-sync": "^2.2.1",
-    "cross-spawn": "^5.1.0",
-    "del": "^2.2.0",
-    "gulp": "^3.9.0",
-    "gulp-autoprefixer": "^3.0.1",
-    "gulp-babel": "^6.1.1",
-    "gulp-cache": "^0.4.2",
-    "gulp-cssnano": "^2.0.0",
-    "gulp-eslint": "^3.0.0",
-    "gulp-filter": "^4.0.0",
-    "gulp-htmlmin": "^3.0.0",
-    "gulp-if": "^2.0.2",
-    "gulp-imagemin": "^3.0.1",
-    "gulp-load-plugins": "^1.2.4",
-    "gulp-plumber": "^1.0.1",
-    "gulp-sass": "^2.0.0",
-    "gulp-size": "^2.1.0",
-    "gulp-sourcemaps": "^2.2.0",
-    "gulp-uglify": "^2.0.0",
-    "gulp-useref": "^3.0.0",
-    "main-bower-files": "^2.5.0",
-    "run-sequence": "^1.2.2",
-    "wiredep": "^4.0.0"
-  },
-  "eslintConfig": {
-    "env": {
-      "es6": true,
-      "node": true,
-      "browser": true
-    },
-    "rules": {
-      "quotes": [
-        2,
-        "single"
-      ]
-    }
+    "@angular-devkit/build-angular": "^0.13.8",
+    "@angular/cli": "6.1.2",
+    "@angular/compiler-cli": "^8.1.2",
+    "@angular/language-service": "6.1.2",
+    "@types/jasmine": "2.8.7",
+    "@types/jasminewd2": "2.0.3",
+    "@types/node": "8.9.4",
+    "bootstrap": "^4.3.1",
+    "codelyzer": "4.2.1",
+    "jasmine-core": "3.1.0",
+    "jasmine-spec-reporter": "4.2.1",
+    "jquery": "^3.3.1",
+    "karma": "^4.2.0",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-coverage-istanbul-reporter": "2.0.0",
+    "karma-jasmine": "1.1.2",
+    "karma-jasmine-html-reporter": "1.1.0",
+    "protractor": "^6.0.0",
+    "ts-node": "6.0.3",
+    "tslint": "5.10.0",
+    "typescript": "~3.4.0"
   }
 }

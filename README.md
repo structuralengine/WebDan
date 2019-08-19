@@ -1,107 +1,114 @@
-# webdan
+# MyApp
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 1.0.0.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.4.
 
-## Build & development
+## Development server
 
-Run `grunt` for building and `grunt serve` for preview.
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Testing
+## Code scaffolding
 
-Running `grunt test` will run the unit tests with karma.
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## SetUp
+## Build
 
-細かいことをやろうとするとドキュメントを読んでいた方がいいので、その URL を列挙しておきます。
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-> yeoman / generator-webapp
-> https://goo.gl/WYtzuO
->
-> Bower
-> https://goo.gl/j0z3QO
->
-> gulpjs / gulp
-> https://goo.gl/p8K32Q
+## Running unit tests
 
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-### step.1
+## Running end-to-end tests
 
-![git clone](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_131912.png)
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-git clone
+## Further help
 
-> 
-> $ cd __working_directory__
-> 
-> $ git clone -v "https://github.com/structuralengine/WebDan.git" webdan
-> 
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
-### step.2
+# angular-unity
 
-![bower, gulp の準備](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133239.png)
+Example Angular and Unity integration using:
+* Unity
+* Angular 6.1.x
 
-bower, gulp の準備
+## Installation
 
-> 
-> $ cd webdan
-> 
-> $ npm install --global gulp-cli bower
-> 
+    npm install
 
-### step.3
+## Usage
 
-![開発に必要なライブラリーの準備](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133536.png)
+    npm start
 
-開発に必要なライブラリーの準備
+Then view the site at:
 
-適当な branch (例 origin/#17) に switch した後、以下を実行してください。
-
-> 
-> $ npm install
-> 
-> $ bower install
-> 
-> $ gulp init
-> 
-
-![angular のバージョンが不整合](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_133725.png)
-
-内部で要求されている angular のバージョンが不整合なので、入力を要求されます。
-最新版で構わないので「2」と入力します。
-
-### step.4
-
-![build](https://raw.githubusercontent.com/wiki/structuralengine/WebDan/images/2017-05-02_134318.png)
+    http://localhost:4200/
 
 
-1. web サイトの起動
+## Creating a compatible Unity project
 
-> 
-> $ gulp serve
-> 
+To communicate between JavaScript and Unity you need a few things:
 
-「 http://localhost:9000 」でアクセス可能です。
+1) Create a Unity Project with GameObject > Controller.cs:
+
+```
+    using System.Collections;
+    using System.Collections.Generic;
+    using UnityEngine;
+    using System.Runtime.InteropServices;
+
+    public class Controller : MonoBehaviour {
+
+        [DllImport("__Internal")]
+        private static extern void SendMessageToWeb(string msg);
+
+        public void ReceiveMessageFromWeb(string msg) {
+            Debug.Log("Controller.ReceiveMessageFromWeb: " + msg);
+        }
+
+        // Use this for initialization
+        void Start() {
+            SendMessageToWeb("Hello from Unity");
+        }
+
+        // Update is called once per frame
+        void Update() {
+
+        }
+    }
+```
+
+2) Add a file to the Unity project at: /Assets/Plugins/WebInterface.jslib containing:
+
+```
+    mergeInto(LibraryManager.library, {
+    SendMessageToWeb: function (str) {
+        window.receiveMessageFromUnity(str);
+    },
+    });
+```
+
+3) Build the project as WebGL so that it creates the files:
+
+- demo.data.unityweb
+- demo.json
+- demo.wasm.code.unityweb
+- demo.wasm.framework.unityweb
+
+4) Copy the generated files to this project folder:
+
+    /src/assets
+    
+5) Embed your generated files using the reusable Angular component:
+
+    <app-unity appLocation="../assets/demo/demo.json"></app-unity>
+    
+## Directory structure
+
+    src/                       --> Frontend sources files
+    unity-src/                 --> Unity script examples
 
 
-2. 配布用ファイルの作成 (dist/ ディレクトリ）
+## Contact
 
-> 
-> $ gulp
-> 
-> $ ls dist/
-> 
-
-command `gulp` により、内部で `gulp build` が実行され、dist ディレクトリが生成されます。この dist ディレクトリが公開用のファイル群です。
-
-
-3. 配布用ファイルを使った web サイトの起動
-
-> 
-> $ gulp serve:dist
-> 
-
-公開用ファイル (dist) を使って web サイトの確認ができます。
-
-以上です。
-これにより、開発環境が用意されました
+For more information please contact kmturley

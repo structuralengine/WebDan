@@ -1,0 +1,68 @@
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { InputSectionForcesService } from '../../providers/input-section-forces.service';
+
+@Component({
+  selector: 'app-section-forces',
+  templateUrl: './section-forces.component.html',
+  styleUrls: ['./section-forces.component.scss']
+})
+export class SectionForcesComponent implements OnInit {
+  @ViewChild('ht_container') ht_container: ElementRef;
+  private hottable_height: number;
+  private Mtable_datas: any[];
+  private Vtable_datas: any[];
+  table_settings = {
+    beforeChange: (source, changes) => { }
+  };
+
+  constructor(private input: InputSectionForcesService) { }
+
+  ngOnInit() {
+    const height = this.ht_container.nativeElement.offsetHeight;
+    this.hottable_height = height - 250;
+
+    // 曲げモーメントの初期化
+    this.Mtable_datas = new Array();
+    for (const data of this.input.getMdtableColumns()) {
+      const column = { 'm_no': data['m_no'] };
+      column['p_name_ex'] = data['p_name_ex'];
+      const caseList: any[] = data['case'];
+      for (let i = 0; i < caseList.length; i++) {
+        const keyMd: string = 'case' + i + '_Md';
+        const keyNd: string = 'case' + i + '_Nd';
+        column[keyMd] = caseList[i].Md;
+        column[keyNd] = caseList[i].Nd;
+        if ('Nmax' in caseList[i]) {
+          const keyNmax: string = 'case' + i + '_Nmax';
+          column[keyNmax] = caseList[i].Nmax;
+        }
+      }
+      this.Mtable_datas.push(column);
+    }
+
+    // せん断力の初期化
+    this.Vtable_datas = new Array();
+    for (const data of this.input.getVdtableColumns()) {
+      const column = { 'm_no': data['m_no'] };
+      column['p_name_ex'] = data['p_name_ex'];
+      const caseList: any[] = data['case'];
+      for (let i = 0; i < caseList.length; i++) {
+        const keyVd: string = 'case' + i + '_Md';
+        const keyMd: string = 'case' + i + '_Md';
+        const keyNd: string = 'case' + i + '_Nd';
+        column[keyVd] = caseList[i].Vd;
+        column[keyMd] = caseList[i].Md;
+        column[keyNd] = caseList[i].Nd;
+      }
+      this.Vtable_datas.push(column);
+    }
+
+  }
+  
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy(): void {
+    this.input.setMdtableColumns(this.Mtable_datas);
+    this.input.setVdtableColumns(this.Vtable_datas);
+  }
+
+}

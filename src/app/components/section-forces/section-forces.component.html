@@ -1,0 +1,178 @@
+<div #ht_container class="ht-container">
+  <ngb-tabset>
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <h3>曲げ照査</h3>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="table-container">
+          <div class="header">
+            <table width="1770px">
+              <thead>
+                <tr>
+                  <th rowspan="3" width="50px">部材<br />番号</th>
+                  <th rowspan="3" width="250px">算出点名</th>
+                  <th colspan="10">耐久性・使用性</th>
+                  <th colspan="4">疲労</th>
+                  <th colspan="3">破壊</th>
+                  <th colspan="4">復旧性</th>
+                </tr>
+                <tr>
+                  <th colspan="2">縁応力検討用</th>
+                  <th colspan="2">鉄筋応力度検討用</th>
+                  <th colspan="2">耐久性検討用<br />(永久作用)</th>
+                  <th colspan="2">耐久性検討用<br />(変動作用)</th>
+                  <th colspan="2">外観検討用</th>
+                  <th colspan="2">最小応力</th>
+                  <th colspan="2">最大応力</th>
+                  <th colspan="2">曲げ耐力検討用</th>
+                  <th>最大<br />軸圧縮力</th>
+                  <th colspan="2">地震時以外</th>
+                  <th colspan="2">地震時</th>
+                </tr>
+                <tr>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Nmax<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                  <th width="70px">Md<br />(kN/m)</th>
+                  <th width="70px">Nd<br />(kN)</th>
+                </tr>
+              </thead>
+            </table>
+          </div>
+          <hot-table class="hot" [settings]="table_settings" [data]="Mtable_datas" height="{{hottable_height}}"
+            [colHeaders]="false" [rowHeaders]="false">
+            <hot-column data="m_no" width="50px" type="numeric" [readOnly]="true"></hot-column>
+            <hot-column data="p_name_ex" width="250px" [readOnly]="true"></hot-column>
+            <hot-column data="case0_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case0_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case1_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case1_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case2_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case2_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case3_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case3_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case4_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case4_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case5_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case5_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case6_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case6_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case7_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case7_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case7_Nmax" type="numeric" width="70px"></hot-column>
+            <hot-column data="case8_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case8_Nd" type="numeric" width="70px"></hot-column>
+            <hot-column data="case9_Md" type="numeric" width="70px"></hot-column>
+            <hot-column data="case9_Nd" type="numeric" width="70px"></hot-column>
+          </hot-table>
+        </div>
+      </ng-template>
+    </ngb-tab>
+
+    <ngb-tab>
+      <ng-template ngbTabTitle>
+        <h3>せん断照査</h3>
+      </ng-template>
+      <ng-template ngbTabContent>
+          <div class="table-container">
+              <div class="header">
+                <table width="1980px">
+                  <thead>
+                    <tr>
+                      <th rowspan="3" width="50px">部材<br />番号</th>
+                      <th rowspan="3" width="250px">算出点名</th>
+                      <th colspan="9">耐久性・使用性</th>
+                      <th colspan="6">疲労</th>
+                      <th colspan="3">破壊</th>
+                      <th colspan="6">復旧性</th>
+                    </tr>
+                    <tr>
+                      <th colspan="3">設計耐力検討用</th>
+                      <th colspan="3">永久作用による<br />断面力</th>
+                      <th colspan="3">変動作用による<br />断面力</th>
+                      <th colspan="3">最小応力</th>
+                      <th colspan="3">最大応力</th>
+                      <th colspan="3">設計断面力</th>
+                      <th colspan="3">地震時以外</th>
+                      <th colspan="3">地震時</th>
+                    </tr>
+                    <tr>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                      <th width="70px">Vd<br />(kN)</th>
+                      <th width="70px">Md<br />(kN/m)</th>
+                      <th width="70px">Nd<br />(kN)</th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+              <hot-table class="hot" [settings]="table_settings" [data]="Vtable_datas" height="{{hottable_height}}"
+              [colHeaders]="false" [rowHeaders]="false">
+              <hot-column data="m_no" width="50px" type="numeric" [readOnly]="true"></hot-column>
+              <hot-column data="p_name_ex" width="250px" [readOnly]="true"></hot-column>
+              <hot-column data="case0_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case0_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case0_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case1_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case1_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case1_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case2_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case2_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case2_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case3_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case3_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case3_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case4_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case4_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case4_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case5_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case5_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case5_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case6_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case6_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case6_Nd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case7_Vd" type="numeric" width="70px"></hot-column>
+              <hot-column data="case7_Md" type="numeric" width="70px"></hot-column>
+              <hot-column data="case7_Nd" type="numeric" width="70px"></hot-column>
+            </hot-table>
+            </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

@@ -1,0 +1,27 @@
+/* ページレイアウト (section.sheet を１ページとする) */
+.HtmlPage {
+  /* マージン・パディングをリセットした方がデザインしやすい */
+  margin: 0;
+  padding: 0;
+
+  /* 背景色・背景画像を印刷する（Chromeのみで有効） */
+  -webkit-print-color-adjust: exact;
+
+  .sheet {
+    background: white; /* 背景を白く */
+    box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3); /* ドロップシャドウ */
+    margin: 5mm auto;
+    overflow: hidden;
+    position: relative;
+    box-sizing: border-box;
+    page-break-after: always;
+    /* 用紙サイズ A4 */
+    height: 297mm;
+    width: 210mm;
+    /* 余白サイズ */
+    padding-top: 32mm;
+    padding-left: 27mm;
+    padding-right: 27mm;
+  }
+
+}
