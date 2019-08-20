@@ -53,7 +53,6 @@ export class MenuComponent implements OnInit {
     this.app.isManual = true;
     this.app.isCalculated = false;
     this.InputData.clear();
-    this.ResultData.clear();
     this.router.navigate(['/']);
   }
 

@@ -4,6 +4,10 @@
 
   <!-- 安全性（破壊）曲げモーメントの照査表 出力 -->
   <ng-container *ngFor="let pages of safety_moment_pages; index as i">
+  </ng-container>
+
+  <!-- 復旧性（地震時以外）曲げモーメントの照査表 出力 -->
+  <ng-container *ngFor="let pages of restorability_moment_pages; index as i">
     <section class="sheet">
       <svg width="150mm" height="232mm" viewBox="0 0 150 232" xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
