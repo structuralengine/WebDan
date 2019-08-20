@@ -1,11 +1,11 @@
 /* ページレイアウト (section.sheet を１ページとする) */
 .HtmlPage {
+
+  font-family:"ＭＳ 明朝","HG明朝E", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN",  "ＭＳ Ｐ明朝",  serif;
+  
   /* マージン・パディングをリセットした方がデザインしやすい */
   margin: 0;
   padding: 0;
-
-  /* 背景色・背景画像を印刷する（Chromeのみで有効） */
-  -webkit-print-color-adjust: exact;
 
   .sheet {
     background: white; /* 背景を白く */
@@ -19,9 +19,9 @@
     height: 297mm;
     width: 210mm;
     /* 余白サイズ */
-    padding-top: 32mm;
-    padding-left: 27mm;
-    padding-right: 27mm;
+    padding-top: 35mm;
+    padding-left: 30mm;
+    padding-right: 30mm;
   }
 
 }

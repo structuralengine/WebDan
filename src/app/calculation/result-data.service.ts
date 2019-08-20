@@ -29,277 +29,49 @@ export class ResultDataService {
   // 安全性曲げモーメント
   public safety_moment_pages(): any[] {
     const result: any[] = new Array();
-    const pages = { 'caption': '安全性(破壊)照査結果', 'tables': new Array() };
-    const rows: any[] = new Array();
-    let column: any[];
-
-    const column_count = 6;
 
     for ( let i = 0; i < 1; i++) {
+      const page = { caption: '安全性(破壊)照査結果', columns: new Array() };
 
-      // タイトル列
-      column = new Array();
-      column.push('');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('左支点上側');
+      for ( let c = 0; c < 5; c++ ) {
+        const column: any[] = new Array();
+        column.push({alien: 'center', value: '1部材(0.600)'});
+        column.push({alien: 'center', value: '壁前面(上側)'});
+        column.push({alien: 'center', value: '1'});
+        column.push({alien: 'right', value: '1000'});
+        column.push({alien: 'right', value: '3000'});
+        column.push({alien: 'center', value: '-'});
+        column.push({alien: 'center', value: '-'});
+        column.push({alien: 'right', value: '6353.6'});
+        column.push({alien: 'center', value: 'D32-8 本'});
+        column.push({alien: 'right', value: '82.0'});
+        column.push({alien: 'right', value: '12707.2'});
+        column.push({alien: 'center', value: 'D32-16 本'});
+        column.push({alien: 'right', value: '114.0'});
+        column.push({alien: 'center', value: '-'});
+        column.push({alien: 'center', value: ''});
+        column.push({alien: 'center', value: '-'});
+        column.push({alien: 'right', value: '24.0'});
+        column.push({alien: 'right', value: '1.30'});
+        column.push({alien: 'right', value: '18.5'});
+        column.push({alien: 'right', value: '390'});
+        column.push({alien: 'right', value: '1.00'});
+        column.push({alien: 'right', value: '390'});
+        column.push({alien: 'right', value: '501.7'});
+        column.push({alien: 'right', value: '455.2'});
+        column.push({alien: 'right', value: '0.00048'});
+        column.push({alien: 'right', value: '0.00195'});
+        column.push({alien: 'right', value: '572.1'});
+        column.push({alien: 'right', value: '7420.2'});
+        column.push({alien: 'right', value: '1.00'});
+        column.push({alien: 'right', value: '7420.2'});
+        column.push({alien: 'right', value: '1.20'});
+        column.push({alien: 'right', value: '0.081'});
+        column.push({alien: 'center', value: 'OK'});
+        page.columns.push(column);
       }
-      rows.push(column);
-
-      // 照査位置
-      column = new Array();
-      column.push('照査位置');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1部材');
-      }
-      rows.push(column);
-
-      // 断面番号
-      column = new Array();
-      column.push('断面番号');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1');
-      }
-      rows.push(column);
-
-      // 断面高さ
-      column = new Array();
-      column.push('H (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1600');
-      }
-      rows.push(column);
-
-      // フランジ高さ
-      column = new Array();
-      column.push('Hf (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('-');
-      }
-      rows.push(column);
-
-      // フランジ幅
-      column = new Array();
-      column.push('Bf (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('-');
-      }
-      rows.push(column);
-
-      // 断面幅
-      column = new Array();
-      column.push('B (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('750');
-      }
-      rows.push(column);
-
-      // 引張鉄筋
-      column = new Array();
-      column.push('Ast');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('D32-4');
-      }
-      rows.push(column);
-
-      // 引張鉄筋量
-      column = new Array();
-      column.push('(mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('4765.2');
-      }
-      rows.push(column);
-
-      // 引張鉄筋かぶり
-      column = new Array();
-      column.push('dast (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('59.0');
-      }
-      rows.push(column);
-
-      // 圧縮鉄筋
-      column = new Array();
-      column.push('Asc');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('D32-4');
-      }
-      rows.push(column);
-
-      // 圧縮鉄筋量
-      column = new Array();
-      column.push('(mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('4765.2');
-      }
-      rows.push(column);
-
-      // 圧縮鉄筋かぶり
-      column = new Array();
-      column.push('dasc (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('59.0');
-      }
-      rows.push(column);
-
-      // 側面鉄筋
-      column = new Array();
-      column.push('Ase');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('D16-4');
-      }
-      rows.push(column);
-
-      // 側面鉄筋量
-      column = new Array();
-      column.push('(mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('4765.2');
-      }
-      rows.push(column);
-
-      // コンクリート強度
-      column = new Array();
-      column.push('fck (N/mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('27');
-      }
-      rows.push(column);
-
-      // 材料係数
-      column = new Array();
-      column.push('γc');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1.3');
-      }
-      rows.push(column);
-
-      // 設計コンクリート強度
-      column = new Array();
-      column.push('fcd (N/mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('20.8');
-      }
-      rows.push(column);
-
-      // 鉄筋強度
-      column = new Array();
-      column.push('fsyk (N/mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('345');
-      }
-      rows.push(column);
-
-      // 材料係数
-      column = new Array();
-      column.push('γs');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1.0');
-      }
-      rows.push(column);
-
-      // 設計鉄筋強度
-      column = new Array();
-      column.push('fsyd (N/mm2)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('345');
-      }
-      rows.push(column);
-
-      // 設計曲げモーメント
-      column = new Array();
-      column.push('Md (kN・m)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1167.2');
-      }
-      rows.push(column);
-
-      // 設計軸方向力
-      column = new Array();
-      column.push('Nd (kN)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('568.4');
-      }
-      rows.push(column);
-
-      // コンクリートの終局ひずみ
-      column = new Array();
-      column.push("ε'cu");
-      for ( let c = 1; c < column_count; c++) {
-        column.push('0.00350');
-      }
-      rows.push(column);
-
-      // 鉄筋のひずみ
-      column = new Array();
-      column.push('εs');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('0.07258');
-      }
-      rows.push(column);
-
-      // 中立軸
-      column = new Array();
-      column.push('x (mm)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('134.2');
-      }
-      rows.push(column);
-
-      // 終局耐力
-      column = new Array();
-      column.push('Mu (kN・m)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('7835.0');
-      }
-      rows.push(column);
-
-      // 部材係数
-      column = new Array();
-      column.push('γb');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1.1');
-      }
-      rows.push(column);
-
-      // 設計終局耐力
-      column = new Array();
-      column.push('Mud (kN・m)');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('7122.7');
-      }
-      rows.push(column);
-
-      // 安全係数
-      column = new Array();
-      column.push('γi');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('1.2');
-      }
-      rows.push(column);
-
-      // 安全率
-      column = new Array();
-      column.push('γi・Md/Mud');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('0.52');
-      }
-      rows.push(column);
-
-      // 判定
-      column = new Array();
-      column.push('照査結果');
-      for ( let c = 1; c < column_count; c++) {
-        column.push('OK');
-      }
-      rows.push(column);
-
-      // 追加
-      pages['tables'].push(rows);
+      result.push(page);
     }
-
-
-    result.push(pages);
-    result.push(pages);
     return result;
   }
 

@@ -29,7 +29,6 @@ import { InputSectionForcesService } from './providers/input-section-forces.serv
 import { InputCalclationPrintService } from './providers/input-calclation-print.service';
 import { SaveDataService } from './providers/save-data.service';
 
-import { ResultDataService } from './calculation/result-data.service';
 import { UserInfoService } from './providers/user-info.service';
 
 import { MenuComponent } from './components/menu/menu.component';
@@ -45,8 +44,20 @@ import { FatiguesComponent } from './components/fatigues/fatigues.component';
 import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-factors-material-strengths/safety-factors-material-strengths.component';
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
-import { ResultViewerComponent } from './calculation/result-viewer/result-viewer.component';
 
+import { ResultViewerComponent } from './calculation/result-viewer/result-viewer.component';
+import { ResultDataService } from './calculation/result-data.service';
+import { CalcSafetyMomentService } from './calculation/calc-safety-moment.service';
+import { CalcSafetyShearForceService } from './calculation/calc-safety-shear-force.service';
+import { CalcSafetyFatigueMomentService } from './calculation/calc-safety-fatigue-moment.service';
+import { CalcSafetyFatigueShearForceService } from './calculation/calc-safety-fatigue-shear-force.service';
+import { CalcServiceabilityMomentService } from './calculation/calc-serviceability-moment.service';
+import { CalcServiceabilityShearForceService } from './calculation/calc-serviceability-shear-force.service';
+import { CalcDurabilityMomentService } from './calculation/calc-durability-moment.service';
+import { CalcRestorabilityMomentService } from './calculation/calc-restorability-moment.service';
+import { CalcRestorabilityShearForceService } from './calculation/calc-restorability-shear-force.service';
+import { CalcEarthquakesMomentService } from './calculation/calc-earthquakes-moment.service';
+import { CalcEarthquakesShearForceService } from './calculation/calc-earthquakes-shear-force.service';
 
 @NgModule({
   imports: [
@@ -83,7 +94,8 @@ import { ResultViewerComponent } from './calculation/result-viewer/result-viewer
     ResultViewerComponent
   ],
   providers: [
-    SaveDataService,
+    UserInfoService,
+
     InputDataService,
     InputBasicInformationService,
     InputMembersService,
@@ -93,8 +105,20 @@ import { ResultViewerComponent } from './calculation/result-viewer/result-viewer
     InputSafetyFactorsMaterialStrengthsService,
     InputSectionForcesService,
     InputCalclationPrintService,
+    SaveDataService,
+
     ResultDataService,
-    UserInfoService
+    CalcSafetyMomentService,
+    CalcSafetyShearForceService,
+    CalcSafetyFatigueMomentService,
+    CalcSafetyFatigueShearForceService,
+    CalcServiceabilityMomentService,
+    CalcServiceabilityShearForceService,
+    CalcDurabilityMomentService,
+    CalcRestorabilityMomentService,
+    CalcRestorabilityShearForceService,
+    CalcEarthquakesMomentService,
+    CalcEarthquakesShearForceService
   ],
   bootstrap: [
     AppComponent

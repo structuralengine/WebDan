@@ -1,9 +1,8 @@
-﻿import { Component, OnInit, SimpleChanges } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { NgbModal, ModalDismissReasons, NgbPaginationNumber } from '@ng-bootstrap/ng-bootstrap';
+﻿import { Component, OnInit } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import * as printJS from "print-js";
-//import printJS = require("print-js");
+import * as printJS from 'print-js';
+// import printJS = require("print-js");
 
 import { WaitDialogComponent } from '../../components/wait-dialog/wait-dialog.component';
 
@@ -20,62 +19,50 @@ export class ResultViewerComponent implements OnInit {
 
   safety_moment_pages: any[];
 
+  private print_css: string;
 
-  private htmlString: SafeHtml;
-  mathJaxObject;
+  constructor(private resultData: ResultDataService,
+              private modalService: NgbModal
+  ) {
 
-  constructor(private sanitizer: DomSanitizer,
-    private resultData: ResultDataService,
-    public cs: ConfigService,
-    private modalService: NgbModal
-  ) { }
+    this.print_css = '@page {';
+    this.print_css += 'size: A4;';
+    this.print_css += 'margin: 0;';
+    this.print_css += '}';
+
+    this.print_css += '* {';
+    this.print_css += 'font-family:"ＭＳ 明朝", "HG明朝E", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ＭＳ Ｐ明朝", serif;';
+    this.print_css += 'margin: 0;';
+    this.print_css += 'padding: 0;';
+    this.print_css += '}';
+
+    this.print_css += '.sheet {';
+    this.print_css += 'overflow: hidden;';
+    this.print_css += 'position: relative;';
+    this.print_css += 'box-sizing: border-box;';
+    this.print_css += 'page-break-after: always;';
+    this.print_css += 'padding-top: 35mm;';
+    this.print_css += 'padding-left: 30mm;';
+    this.print_css += 'padding-right: 30mm;';
+    this.print_css += '}';
+  }
 
   ngOnInit() {
     const modalRef = this.modalService.open(WaitDialogComponent);
 
     // 安全性曲げモーメント
-     this.safety_moment_pages = this.resultData.safety_moment_pages();
-
-
-
-
-     modalRef.close();
-
-/*
-
-    this.htmlString = this.sanitizer.bypassSecurityTrustHtml(this.resultData.htmlContents);
-    this.loadMathConfig();
-    this.renderMath();
+    this.safety_moment_pages = this.resultData.safety_moment_pages();
 
     modalRef.close();
-    */
-  }
-/*
-  updateMathObt() {
-    this.mathJaxObject = this.cs.nativeGlobal()['MathJax'];
+
   }
 
-  renderMath() {
-    this.updateMathObt();
-    const angObj = this;
-    setTimeout(() => {
-      angObj.mathJaxObject['Hub'].Queue(['Typeset', angObj.mathJaxObject.Hub], 'mathContent');
-    }, 1000);
-  }
-
-  loadMathConfig() {
-    this.updateMathObt();
-    this.mathJaxObject.Hub.Config({
-      showMathMenu: false,
-      tex2jax: { inlineMath: [['$', '$']], displayMath: [['$$', '$$']] },
-      menuSettings: { zoom: 'Double-Click', zscale: '150%' },
-      CommonHTML: { linebreaks: { automatic: true } },
-      'HTML-CSS': { linebreaks: { automatic: true } },
-      SVG: { linebreaks: { automatic: true } }
+  printTest() {
+    printJS({
+      printable: 'print-section',
+      type: 'html',
+      style: this.print_css
     });
   }
-*/
-  printTest() {
-    printJS('print-section', 'html');
-  }
+  
 }
