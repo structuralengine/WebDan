@@ -3,11 +3,35 @@
 <div id="print-section" class='HtmlPage'>
 
   <!-- 安全性（破壊）曲げモーメントの照査表 出力 -->
-  <ng-container *ngFor="let pages of safety_moment_pages; index as i">
+  <ng-container *ngFor="let pages of safetyMomentPages; index as i">
+  </ng-container>
+
+  <!-- 安全性（破壊）せん断力の照査表 出力 -->
+  <ng-container *ngFor="let pages of safetyShearForcePages; index as i">
+  </ng-container>
+
+  <!-- 安全性（疲労破壊）曲げモーメントの照査表 出力 -->
+  <ng-container *ngFor="let pages of safetyFatigueMomentPages; index as i">
+  </ng-container>
+
+  <!-- 安全性（疲労破壊）せん断力の照査表 出力 -->
+  <ng-container *ngFor="let pages of safetyFatigueShearForcepages; index as i">
+  </ng-container>
+  
+  <!-- 耐久性 曲げひび割れの照査表 出力 -->
+  <ng-container *ngFor="let pages of serviceabilityMomentPages; index as i">
+  </ng-container>
+
+  <!-- 耐久性 せん断ひび割れの照査表 出力 -->
+  <ng-container *ngFor="let pages of serviceabilityShearForcePages; index as i">
+  </ng-container>
+
+  <!-- 使用性 曲げひび割れの照査表 出力 -->
+  <ng-container *ngFor="let pages of durabilityMomentPages; index as i">
   </ng-container>
 
   <!-- 復旧性（地震時以外）曲げモーメントの照査表 出力 -->
-  <ng-container *ngFor="let pages of restorability_moment_pages; index as i">
+  <ng-container *ngFor="let pages of restorabilityMomentPages; index as i">
     <section class="sheet">
       <svg width="150mm" height="232mm" viewBox="0 0 150 232" xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
@@ -125,10 +149,10 @@
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" 
-                  [attr.x]="48+c*24" [attr.y]="16+r*5">{{item.value}}</text>
-                <text *ngIf="item.alien == 'center'" text-anchor="middle" 
-                  [attr.x]="42+c*24" [attr.y]="16+r*5">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*5">{{item.value}}</text>
+                <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
+                  [attr.y]="16+r*5">{{item.value}}</text>
               </ng-container>
             </ng-container>
           </ng-container>
@@ -137,5 +161,15 @@
     </section>
   </ng-container>
 
+  <!-- 復旧性（地震時以外）せん断力の照査表 出力 -->
+  <ng-container *ngFor="let pages of restorabilityShearForcePages; index as i">
+  </ng-container>
 
+  <!-- 復旧性（地震時）曲げモーメントの照査表 出力 -->
+  <ng-container *ngFor="let pages of earthquakesMomentPages; index as i">
+  </ng-container>
+
+  <!-- 復旧性（地震時）せん断力の照査表 出力 -->
+  <ng-container *ngFor="let pages of earthquakesShearForcePages; index as i">
+  </ng-container>
 </div>
