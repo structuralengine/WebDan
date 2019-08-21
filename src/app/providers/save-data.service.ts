@@ -15,14 +15,14 @@ import { InputCalclationPrintService } from './input-calclation-print.service';
 export class SaveDataService extends InputDataService {
 
   constructor(
-    private bars: InputBarsService,
-    private basic: InputBasicInformationService,
-    private points: InputDesignPointsService,
-    private fatigues: InputFatiguesService,
-    private members: InputMembersService,
-    private safety: InputSafetyFactorsMaterialStrengthsService,
-    private force: InputSectionForcesService,
-    private calc: InputCalclationPrintService
+    public bars: InputBarsService,
+    public basic: InputBasicInformationService,
+    public points: InputDesignPointsService,
+    public fatigues: InputFatiguesService,
+    public members: InputMembersService,
+    public safety: InputSafetyFactorsMaterialStrengthsService,
+    public force: InputSectionForcesService,
+    public calc: InputCalclationPrintService
   ) {
     super();
   }

@@ -1,7 +1,7 @@
 ﻿import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-
+import { BlankPageComponent } from './components/blank-page/blank-page.component';
 import { BasicInformationComponent } from './components/basic-information/basic-information.component';
 import { MembersComponent } from './components/members/members.component';
 import { DesignPointsComponent } from './components/design-points/design-points.component';
@@ -24,7 +24,8 @@ const routes: Routes = [
     { path: 'safety-factors-material-strengths', component: SafetyFactorsMaterialStrengthsComponent },
     { path: 'section-forces', component: SectionForcesComponent },
     { path: 'calculation-print', component: CalculationPrintComponent },
-    { path: 'result-viewer', component: ResultViewerComponent }
+    { path: 'result-viewer', component: ResultViewerComponent },
+    { path: 'blank-page', component: BlankPageComponent }
 ];
 
 @NgModule({
