@@ -36,6 +36,7 @@ import { LoginDialogComponent } from './components/login-dialog/login-dialog.com
 import { WaitDialogComponent } from './components/wait-dialog/wait-dialog.component';
 
 
+import { BlankPageComponent } from './components/blank-page/blank-page.component';
 import { BasicInformationComponent } from './components/basic-information/basic-information.component';
 import { MembersComponent } from './components/members/members.component';
 import { DesignPointsComponent } from './components/design-points/design-points.component';
@@ -86,7 +87,8 @@ import { CalcEarthquakesShearForceService } from './calculation/calc-earthquakes
     FatiguesComponent,
     SafetyFactorsMaterialStrengthsComponent,
     SectionForcesComponent,
-    CalculationPrintComponent
+    CalculationPrintComponent,
+    BlankPageComponent
   ],
   entryComponents: [
     LoginDialogComponent,

@@ -1,14 +1,30 @@
 import { Injectable } from '@angular/core';
+import { SaveDataService } from '../providers/save-data.service';
+import { ResultDataService } from './result-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalcServiceabilityMomentService {
   // 耐久性 曲げひび割れ
+  private DesignForceList: any[];
+  
+  constructor(public save: SaveDataService,
+              public calc: ResultDataService) { }
 
-  constructor() { }
+  // 設計断面力の集計
+  // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  public setDesignForces(): any[] {
+    const result: any[] = new Array();
+    if (this.save.isManual() === true) {
+      return result;
+    }
 
-  public serviceability_moment_pages(title = '耐久性 曲げひび割れの照査結果'): any[] {
+    return result;
+  }
+
+  public getServiceabilityPages(title = '耐久性 曲げひび割れの照査結果'): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {

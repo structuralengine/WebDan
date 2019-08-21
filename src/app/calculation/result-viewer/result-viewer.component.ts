@@ -27,25 +27,45 @@ import { CalcEarthquakesShearForceService } from '../calc-earthquakes-shear-forc
 
 export class ResultViewerComponent implements OnInit {
 
+  // 断面力一覧表 /////////////////////////////////////
   // 安全性（破壊）
-  safetyMomentPages: any[];
-  safetyShearForcePages: any[];
+  private safetyMomentForces: any[];
+  private safetyShearForces: any[];
   // 安全性（疲労破壊）
-  safetyFatigueMomentPages: any[];
-  safetyFatigueShearForcepages: any[];
+  private safetyFatigueMomentForces: any[];
+  private safetyFatigueShearForces: any[];
   // 耐久性
-  serviceabilityMomentPages: any[];
-  serviceabilityShearForcePages: any[];
+  private serviceabilityMomentForces: any[];
+  private serviceabilityShearForces: any[];
   // 使用性
-  durabilityMomentPages: any[];
+  private durabilityMomentForces: any[];
   // 復旧性（地震時以外）
-  restorabilityMomentPages: any[];
-  restorabilityShearForcePages: any[];
+  private restorabilityMomentForces: any[];
+  private restorabilityShearForces: any[];
   // 復旧性（地震時）
-  earthquakesMomentPages: any[];
-  earthquakesShearForcePages: any[];
+  private earthquakesMomentForces: any[];
+  private earthquakesShearForces: any[];
 
-  // 印刷時のスタイル
+  // 断面照査表 /////////////////////////////////////
+  // 安全性（破壊）
+  private safetyMomentPages: any[];
+  private safetyShearForcePages: any[];
+  // 安全性（疲労破壊）
+  private safetyFatigueMomentPages: any[];
+  private safetyFatigueShearForcepages: any[];
+  // 耐久性
+  private serviceabilityMomentPages: any[];
+  private serviceabilityShearForcePages: any[];
+  // 使用性
+  private durabilityMomentPages: any[];
+  // 復旧性（地震時以外）
+  private restorabilityMomentPages: any[];
+  private restorabilityShearForcePages: any[];
+  // 復旧性（地震時）
+  private earthquakesMomentPages: any[];
+  private earthquakesShearForcePages: any[];
+
+  // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
   constructor( private modalService: NgbModal,
@@ -86,23 +106,44 @@ export class ResultViewerComponent implements OnInit {
   ngOnInit() {
     const modalRef = this.modalService.open(WaitDialogComponent);
 
+    // 断面力一覧表 /////////////////////////////////////
     // 安全性（破壊）
-    this.safetyMomentPages = this.CalcSafetyMoment.safety_moment_pages();
-    this.safetyShearForcePages = this.CalcSafetyShearForce.safety_shear_force_pages();
+    this.safetyMomentForces = this.CalcSafetyMoment.setDesignForces();
+    this.safetyShearForces = this.CalcSafetyShearForce.setDesignForces();
     // 安全性（疲労破壊）
-    this.safetyFatigueMomentPages = this.CalcSafetyFatigueMoment.safety_fatigue_moment_pages();
-    this.safetyFatigueShearForcepages = this.CalcSafetyFatigueShearForce.safety_fatigue_shear_force_pages();
+    this.safetyFatigueMomentForces = this.CalcSafetyFatigueMoment.setDesignForces();
+    this.safetyFatigueShearForces = this.CalcSafetyFatigueShearForce.setDesignForces();
     // 耐久性
-    this.serviceabilityMomentPages = this.CalcServiceabilityMoment.serviceability_moment_pages();
-    this.serviceabilityShearForcePages = this.CalcServiceabilityShearForce.serviceability_shear_force_pages();
+    this.serviceabilityMomentForces = this.CalcServiceabilityMoment.setDesignForces();
+    this.serviceabilityShearForces = this.CalcServiceabilityShearForce.setDesignForces();
     // 使用性
-    this.durabilityMomentPages = this.CalcDurabilityMoment.durability_moment_pages();
+    this.durabilityMomentForces = this.CalcDurabilityMoment.setDesignForces();
     // 復旧性（地震時以外）
-    this.restorabilityMomentPages = this.CalcRestorabilityMoment.restorability_moment_pages();
-    this.restorabilityShearForcePages = this.CalcRestorabilityShearForce.restorability_shear_force_pages();
+    this.restorabilityMomentForces = this.CalcRestorabilityMoment.setDesignForces();
+    this.restorabilityShearForces = this.CalcRestorabilityShearForce.setDesignForces();
     // 復旧性（地震時）
-    this.earthquakesMomentPages = this.CalcEarthquakesMoment.earthquakes_moment_pages();
-    this.earthquakesShearForcePages = this.CalcEarthquakesShearForce.earthquakes_shear_force_pages();
+    this.earthquakesMomentForces = this.CalcEarthquakesMoment.setDesignForces();
+    this.earthquakesShearForces = this.CalcEarthquakesShearForce.setDesignForces();
+
+
+    // 断面照査表 /////////////////////////////////////
+    // 安全性（破壊）
+    this.safetyMomentPages = this.CalcSafetyMoment.getSafetyPages();
+    this.safetyShearForcePages = this.CalcSafetyShearForce.getSafetyPages();
+    // 安全性（疲労破壊）
+    this.safetyFatigueMomentPages = this.CalcSafetyFatigueMoment.getSafetyFatiguePages();
+    this.safetyFatigueShearForcepages = this.CalcSafetyFatigueShearForce.getSafetyFatiguePages();
+    // 耐久性
+    this.serviceabilityMomentPages = this.CalcServiceabilityMoment.getServiceabilityPages();
+    this.serviceabilityShearForcePages = this.CalcServiceabilityShearForce.getServiceabilityPages();
+    // 使用性
+    this.durabilityMomentPages = this.CalcDurabilityMoment.getDurabilityPages();
+    // 復旧性（地震時以外）
+    this.restorabilityMomentPages = this.CalcRestorabilityMoment.getRestorabilityPages();
+    this.restorabilityShearForcePages = this.CalcRestorabilityShearForce.getRestorabilityPages();
+    // 復旧性（地震時）
+    this.earthquakesMomentPages = this.CalcEarthquakesMoment.getEarthquakesPages();
+    this.earthquakesShearForcePages = this.CalcEarthquakesShearForce.getEarthquakesPages();
 
     modalRef.close();
 

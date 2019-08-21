@@ -1,14 +1,33 @@
 import { Injectable } from '@angular/core';
+import { SaveDataService } from '../providers/save-data.service';
+import { ResultDataService } from './result-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CalcSafetyMomentService {
   // 安全性（破壊）曲げモーメント
+  private DesignForceList: any[];
 
-  constructor() { }
+  constructor(private save: SaveDataService,
+              private calc: ResultDataService) { }
 
-  public safety_moment_pages(): any[] {
+  // 設計断面力の集計
+  // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  public setDesignForces(): any[] {
+    const result: any[] = new Array();
+
+
+
+    if (this.save.isManual() === true) {
+      return result;
+    }
+
+    return result;
+  }
+
+  public getSafetyPages(): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {

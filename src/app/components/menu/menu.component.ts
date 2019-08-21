@@ -61,13 +61,14 @@ export class MenuComponent implements OnInit {
     const file = evt.target.files[0];
     this.fileName = file.name;
     evt.target.value = '';
-    this.router.navigate(['/calculation-print']);
+    this.router.navigate(['/blank-page']);
     this.fileToText(file)
       .then(text => {
         this.app.dialogClose(); // 現在表示中の画面を閉じる
         this.InputData.readInputData(text); // データを読み込む
         this.app.isManual = this.InputData.isManual();
         this.app.isCalculated = false;
+        this.pickup_file_name = this.InputData.pickup_filename;
       })
       .catch(err => console.log(err));
   }
@@ -84,7 +85,7 @@ export class MenuComponent implements OnInit {
         this.app.isManual = true;
         this.app.isCalculated = false;
         if (this.router.url === this.router.config[0].redirectTo ) {
-          this.router.navigate(['/calculation-print']);
+          this.router.navigate(['/blank-page']);
         } else {
           this.router.navigate(['/']);
         }

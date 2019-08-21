@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { SaveDataService } from '../providers/save-data.service';
+import { ResultDataService } from './result-data.service';
 import { CalcServiceabilityMomentService } from './calc-serviceability-moment.service';
 
 @Injectable({
@@ -6,13 +8,30 @@ import { CalcServiceabilityMomentService } from './calc-serviceability-moment.se
 })
 export class CalcDurabilityMomentService extends CalcServiceabilityMomentService {
   // 使用性 曲げひび割れ
+  private DesignForceList: any[];
 
-  constructor() {
-    super();
+  constructor(public save: SaveDataService,
+              public calc: ResultDataService) {
+    super(save, calc);
   }
 
-  public durability_moment_pages(): any[] {
-    const result: any[] = this.serviceability_moment_pages('使用性（外観）曲げひび割れの照査結果');
+  // 設計断面力の集計
+  // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  public setDesignForces(): any[] {
+    this.DesignForceList = this.calc.getDesignForceList('使用性 曲げひび割れ');
+    
+    const result: any[] = new Array();
+    this.calc
+    if (this.save.isManual() === true) {
+      return result;
+    }
+
+    return result;
+  }
+
+  public getDurabilityPages(): any[] {
+    const result: any[] = this.getServiceabilityPages('使用性（外観）曲げひび割れの照査結果');
     return result;
   }
 }
