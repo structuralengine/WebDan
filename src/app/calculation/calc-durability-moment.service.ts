@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
 import { SaveDataService } from '../providers/save-data.service';
 import { ResultDataService } from './result-data.service';
 import { CalcServiceabilityMomentService } from './calc-serviceability-moment.service';
 
+import { Injectable } from '@angular/core';
+
 @Injectable({
   providedIn: 'root'
 })
+
 export class CalcDurabilityMomentService extends CalcServiceabilityMomentService {
   // 使用性 曲げひび割れ
-  private DesignForceList: any[];
 
   constructor(public save: SaveDataService,
               public calc: ResultDataService) {
@@ -20,12 +21,14 @@ export class CalcDurabilityMomentService extends CalcServiceabilityMomentService
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
     this.DesignForceList = this.calc.getDesignForceList('使用性 曲げひび割れ');
+
     
     const result: any[] = new Array();
-    this.calc
     if (this.save.isManual() === true) {
+      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
       return result;
     }
+    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
 
     return result;
   }

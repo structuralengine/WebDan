@@ -1,14 +1,16 @@
-import { Injectable } from '@angular/core';
 import { SaveDataService } from '../providers/save-data.service';
 import { ResultDataService } from './result-data.service';
+
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class CalcServiceabilityShearForceService {
   // 耐久性 せん断ひび割れ
   private DesignForceList: any[];
-  
+
   constructor(private save: SaveDataService,
               private calc: ResultDataService) { }
 
@@ -16,6 +18,8 @@ export class CalcServiceabilityShearForceService {
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
+    this.DesignForceList = this.calc.getDesignForceList('耐久性 せん断ひび割れ');
+
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
       return result;

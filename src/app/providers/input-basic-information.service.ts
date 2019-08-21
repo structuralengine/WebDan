@@ -6,7 +6,6 @@ import { InputDataService } from './input-data.service';
 })
 export class InputBasicInformationService extends InputDataService {
 
-
   // pick up table に関する変数
   public pickup_moment_title: string[];
   public pickup_moment_no: number[];
@@ -63,7 +62,7 @@ export class InputBasicInformationService extends InputDataService {
 
         this.pickup_shear_force_title = [
           '耐久性 せん断ひび割れ検討判定用',
-          '耐久性 （永久荷重）', '耐久性 （変-動荷重）',
+          '耐久性 （永久荷重）', '耐久性 （変動荷重）',
           '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
           '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
         ];
@@ -161,5 +160,75 @@ export class InputBasicInformationService extends InputDataService {
     }
   }
 
+  public getPickUpNo(type: string): any[] {
+    const result: any[] = new Array();
+
+    switch (type) {
+      case '安全性（破壊）曲げモーメント':
+        result.push('Moment');
+        result.push(this.pickup_moment_no[7]);
+        break;
+      case '安全性（破壊）せん断力':
+        result.push('ShearForce');
+        result.push(this.pickup_shear_force_no[5]);
+        break;
+      case '安全性（疲労破壊）曲げモーメント':
+        result.push('Moment');
+        result.push(this.pickup_moment_no[5]); // 最小応力
+        result.push(this.pickup_moment_no[6]); // 最大応力
+
+        break;
+      case '安全性（疲労破壊）せん断力':
+        result.push('ShearForce');
+        result.push(this.pickup_shear_force_no[3]); // 最小応力
+        result.push(this.pickup_shear_force_no[4]); // 最大応力
+
+        break;
+      case '耐久性 曲げひび割れ':
+        result.push('Moment');
+        result.push(this.pickup_moment_no[0]); // 縁応力度検討用
+        result.push(this.pickup_moment_no[1]); // 鉄筋応力度検討用
+        result.push(this.pickup_moment_no[2]); // 永久荷重
+        result.push(this.pickup_moment_no[3]); // 変動荷重
+
+        break;
+      case '耐久性 せん断ひび割れ':
+        result.push('ShearForce');
+        result.push(this.pickup_shear_force_no[0]); // せん断ひび割れ検討判定用
+        result.push(this.pickup_shear_force_no[1]); // 永久荷重
+        result.push(this.pickup_shear_force_no[2]); // 変動荷重
+
+        break;
+      case '使用性 曲げひび割れ':
+        result.push('Moment');
+        result.push(this.pickup_moment_no[0]); // 縁応力度検討用
+        result.push(this.pickup_moment_no[1]); // 鉄筋応力度検討用
+        result.push(this.pickup_moment_no[4]); // 永久荷重
+        result.push(this.pickup_moment_no[3]); // 変動荷重
+
+        break;
+      case '復旧性（地震時以外）曲げモーメント':
+        result.push('Moment');
+        result.push(this.pickup_moment_no[8]);
+
+        break;
+      case '復旧性（地震時以外）せん断力':
+        result.push('ShearForce');
+        result.push(this.pickup_shear_force_no[6]);
+
+        break;
+      case '復旧性（地震時）曲げモーメント':
+        result.push('Moment');
+        result.push(this.pickup_moment_no[9]);
+
+        break;
+      case '復旧性（地震時）せん断力':
+        result.push('ShearForce');
+        result.push(this.pickup_shear_force_no[7]);
+
+        break;
+    }
+    return result;
+  }
 
 }

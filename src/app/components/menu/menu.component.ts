@@ -12,7 +12,6 @@ import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
 import { UserInfoService } from '../../providers/user-info.service';
 import * as FileSaver from 'file-saver';
 import { SaveDataService } from '../../providers/save-data.service';
-import { ResultDataService } from '../../calculation/result-data.service';
 
 @Component({
   selector: 'app-menu',
@@ -33,7 +32,6 @@ export class MenuComponent implements OnInit {
     private app: AppComponent,
     private user: UserInfoService,
     private InputData: SaveDataService,
-    private ResultData: ResultDataService,
     private http: Http,
     private platformLocation: PlatformLocation,
     private router: Router) {

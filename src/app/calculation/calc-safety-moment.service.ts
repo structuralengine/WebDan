@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
 import { SaveDataService } from '../providers/save-data.service';
 import { ResultDataService } from './result-data.service';
+
+import { Injectable } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class CalcSafetyMomentService {
   // 安全性（破壊）曲げモーメント
   private DesignForceList: any[];
@@ -16,10 +18,9 @@ export class CalcSafetyMomentService {
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
+    this.DesignForceList = this.calc.getDesignForceList('安全性（破壊）曲げモーメント');
+
     const result: any[] = new Array();
-
-
-
     if (this.save.isManual() === true) {
       return result;
     }

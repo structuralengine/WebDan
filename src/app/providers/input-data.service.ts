@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ɵangular_packages_platform_browser_platform_browser_k } from '@angular/platform-browser';
-import { ResultDataService } from '../calculation/result-data.service';
 
 @Injectable({
   providedIn: 'root'
