@@ -43,8 +43,6 @@ export class CalcSafetyFatigueShearForceService {
         column.push({ alien: 'right', value: '1000' });
         column.push({ alien: 'right', value: '3000' });
         column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
 
         column.push({ alien: 'right', value: '6353.6' });
         column.push({ alien: 'center', value: 'D32-8 本' });

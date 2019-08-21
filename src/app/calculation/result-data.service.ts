@@ -25,6 +25,13 @@ export class ResultDataService {
 
   // 断面力手入力情報から断面力一覧を取得
   private getDesignForceFromManualInput(type: string): any[] {
+
+    // 断面力を取得
+    const force: any[] = this.save.force.getDesignForce(type);
+
+    // 部材グループ・照査する着目点を取得
+    const result = this.getEnableMembers(force[0]); 
+
     return new Array();
   }
 
@@ -33,10 +40,12 @@ export class ResultDataService {
 
     // ピックアップNo を取得
     const pickupNoList: any[] = this.save.basic.getPickUpNo(type);
-    if (pickupNoList.length === 0) { return new Array(); }
+    if (pickupNoList.length < 1) { 
+      return new Array(); // ピックアップ番号が入力されていない
+   }
 
     // 部材グループ・照査する着目点を取得
-    const result = this.getEnableMembers(pickupNoList[0]); // 複製
+    const result = this.getEnableMembers(pickupNoList[0]);
 
     // 断面力を取得
     const force: object = this.save.pickup_data;
