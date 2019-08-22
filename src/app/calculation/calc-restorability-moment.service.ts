@@ -9,26 +9,48 @@ import { Injectable } from '@angular/core';
 
 export class CalcRestorabilityMomentService {
   // 復旧性（地震時以外）曲げモーメント
-  protected DesignForceList: any[];
+  private DesignForceList: any[];
 
-  constructor(public save: SaveDataService,
-              public calc: ResultDataService) { }
+  constructor(private save: SaveDataService,
+              private calc: ResultDataService) { }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
-    this.DesignForceList = this.calc.getDesignForceList('復旧性（地震時以外）曲げモーメント');
+
+    // 曲げモーメントが計算対象でない場合は処理を抜ける
+    if ( this.save.calc.print_selected.calculate_moment_checked === false){
+      this.DesignForceList = new Array();
+      return new Array();
+    }
+
+    const pickupNoList: any[] = new Array();
+    pickupNoList.push(this.save.basic.pickup_moment_no[8]); // ピックアップNoは 曲げの8番目に保存されている
+    this.DesignForceList = this.calc.getDesignForceList('Moment', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
+      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
       return result;
     }
+    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+    if (this.save.calc.print_selected.print_section_force_checked === false) {
+      return result;
+    }
+
+    // ToDo: ここで、断面力テーブル用のデータを 変数 result に構築する
 
     return result;
   }
 
   public getRestorabilityPages(title = '復旧性（地震時以外）曲げモーメントの照査結果'): any[] {
+    // 出力テーブル用のデータにセット
+    const result: any[] = this.setRestorabilityPages(title);
+    return result;
+  }
+
+  private setRestorabilityPages(title: string): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {

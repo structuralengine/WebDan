@@ -12,45 +12,78 @@ export class ResultDataService {
   }
 
   // 断面力一覧を取得
-  public getDesignForceList(type: string): any[] {
+  public getDesignForceList(calcTarget: string, pickupNoList: number[]): any[] {
 
     let result: any[];
     if (this.save.isManual() === true) {
-      result = this.getDesignForceFromManualInput(type);
+      result = this.getDesignForceFromManualInput(calcTarget, pickupNoList);
     } else {
-      result = this.getDesignForceFromPickUpData(type);
+      result = this.getDesignForceFromPickUpData(calcTarget, pickupNoList);
     }
     return result;
   }
 
   // 断面力手入力情報から断面力一覧を取得
-  private getDesignForceFromManualInput(type: string): any[] {
-
-    // 断面力を取得
-    const force: any[] = this.save.force.getDesignForce(type);
+  private getDesignForceFromManualInput(calcTarget: string, pickupNoList: number[]): any[] {
 
     // 部材グループ・照査する着目点を取得
-    const result = this.getEnableMembers(force[0]); 
+    const result = this.getEnableMembers(calcTarget);
 
-    return new Array();
+    // 断面力を取得
+    let force: any[];
+    switch (calcTarget) {
+      case 'Moment': // 曲げモーメントの照査の場合
+        force = this.save.force.Mdatas;
+        break;
+      case 'ShearForce': // せん断力の照査の場合
+        force = this.save.force.Vdatas;
+        break;
+    }
+
+    // 断面力を追加
+    for (const pickupNo of pickupNoList) {
+
+      for (const groupe of result) {
+        for (const member of groupe) {
+          const targetMember = force.find(function (value) {
+            return (value.m_no === member.m_no);
+          });
+          if (targetMember === undefined) {
+            return new Array(); // 存在しない要素番号がある
+          }
+          for (const positions of member.positions) {
+
+            if (targetMember.case.length < pickupNo) {
+              return new Array(); // ピックアップ番号の入力が不正
+            }
+            const targetForce = targetMember.case[pickupNo];
+
+            if ('designForce' in positions === false) {
+              positions['designForce'] = new Array();
+            }
+            const designForce = {
+              Manual: targetForce
+            };
+            positions['designForce'].push(designForce);
+          }
+        }
+      }
+    }
+
+    return result;
   }
 
   // ピックアップデータから断面力一覧を取得
-  private getDesignForceFromPickUpData(type: string): any[] {
-
-    // ピックアップNo を取得
-    const pickupNoList: any[] = this.save.basic.getPickUpNo(type);
-    if (pickupNoList.length < 1) { 
-      return new Array(); // ピックアップ番号が入力されていない
-   }
+  private getDesignForceFromPickUpData(calcTarget: string, pickupNoList: number[]): any[] {
 
     // 部材グループ・照査する着目点を取得
-    const result = this.getEnableMembers(pickupNoList[0]);
+    const result = this.getEnableMembers(calcTarget);
 
     // 断面力を取得
     const force: object = this.save.pickup_data;
 
-    for (let i = 1; i < pickupNoList.length; i++) {
+    // 断面力を追加
+    for (let i = 0; i < pickupNoList.length; i++) {
       const pickupNo: string = 'pickUpNo:' + pickupNoList[i];
       if (pickupNo in force === false) {
         return new Array(); // ピックアップ番号の入力が不正
@@ -60,7 +93,7 @@ export class ResultDataService {
       for (const groupe of result) {
         for (const member of groupe) {
           const targetMember = targetForce.find(function (value) {
-            return (value.m_no === member.m_no);
+            return (value.memberNo === member.m_no);
           });
           if (targetMember === undefined) {
             return new Array(); // 存在しない要素番号がある
@@ -96,8 +129,13 @@ export class ResultDataService {
 
   // 計算対象の着目点のみを抽出する
   private getEnableMembers(calcTarget: string): any[] {
-    const temp: any[] = this.save.points.getDesignPointColumns();
-    const result = temp.slice(0, temp.length); // 複製
+
+    const result = JSON.parse(
+      JSON.stringify({
+        temp: this.save.points.getDesignPointColumns()
+      })
+    ).temp;
+
     // 計算対象ではない着目点を削除する
     let groupe_delete_flug: boolean = true;
     while (groupe_delete_flug) {
@@ -105,6 +143,12 @@ export class ResultDataService {
 
       for (let i = 0; i < result.length; i++) {
         const groupe = result[i];
+        // 計算・印刷画面の部材にチェックが入っていなかければ削除
+        if (this.save.calc.calc_checked[i] === false) {
+          result.splice(i, 1);
+          groupe_delete_flug = true;
+          break;
+        }
 
         let member_delete_flug: boolean = true;
         while (member_delete_flug) {

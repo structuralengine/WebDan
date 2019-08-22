@@ -28,13 +28,10 @@ export class SectionForcesComponent implements OnInit {
       column['p_name_ex'] = data['p_name_ex'];
       const caseList: any[] = data['case'];
       for (let i = 0; i < caseList.length; i++) {
-        const keyMd: string = 'case' + i + '_Md';
-        const keyNd: string = 'case' + i + '_Nd';
-        column[keyMd] = caseList[i].Md;
-        column[keyNd] = caseList[i].Nd;
+        column['case' + i + '_Md'] = caseList[i].Md;
+        column['case' + i + '_Nd'] = caseList[i].Nd;
         if ('Nmax' in caseList[i]) {
-          const keyNmax: string = 'case' + i + '_Nmax';
-          column[keyNmax] = caseList[i].Nmax;
+          column['case' + i + '_Nmax'] = caseList[i].Nmax;
         }
       }
       this.Mtable_datas.push(column);
@@ -47,12 +44,9 @@ export class SectionForcesComponent implements OnInit {
       column['p_name_ex'] = data['p_name_ex'];
       const caseList: any[] = data['case'];
       for (let i = 0; i < caseList.length; i++) {
-        const keyVd: string = 'case' + i + '_Md';
-        const keyMd: string = 'case' + i + '_Md';
-        const keyNd: string = 'case' + i + '_Nd';
-        column[keyVd] = caseList[i].Vd;
-        column[keyMd] = caseList[i].Md;
-        column[keyNd] = caseList[i].Nd;
+        column['case' + i + '_Vd'] = caseList[i].Vd;
+        column['case' + i + '_Md'] = caseList[i].Md;
+        column['case' + i + '_Nd'] = caseList[i].Nd;
       }
       this.Vtable_datas.push(column);
     }

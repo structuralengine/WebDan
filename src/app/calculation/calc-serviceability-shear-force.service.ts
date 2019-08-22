@@ -12,23 +12,47 @@ export class CalcServiceabilityShearForceService {
   private DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-              private calc: ResultDataService) { }
+    private calc: ResultDataService) { }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
-    this.DesignForceList = this.calc.getDesignForceList('耐久性 せん断ひび割れ');
+
+    // せん断力が計算対象でない場合は処理を抜ける
+    if (this.save.calc.print_selected.calculate_shear_force === false) {
+      this.DesignForceList = new Array();
+      return new Array();
+    }
+
+    const pickupNoList: any[] = new Array();
+    pickupNoList.push(this.save.basic.pickup_moment_no[0]); // せん断ひび割れ検討判定用
+    pickupNoList.push(this.save.basic.pickup_moment_no[1]); // 永久荷重
+    pickupNoList.push(this.save.basic.pickup_moment_no[2]); // 変動荷重
+    this.DesignForceList = this.calc.getDesignForceList('ShearForce', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
+      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
       return result;
     }
+    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+    if (this.save.calc.print_selected.print_section_force_checked === false) {
+      return result;
+    }
+
+    // ToDo: ここで、断面力テーブル用のデータを 変数 result に構築する
 
     return result;
   }
 
   public getServiceabilityPages(): any[] {
+    // 出力テーブル用のデータにセット
+    const result: any[] = this.setServiceabilityPages();
+    return result;
+  }
+
+  private setServiceabilityPages(): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {

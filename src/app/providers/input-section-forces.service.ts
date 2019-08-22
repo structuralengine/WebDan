@@ -24,9 +24,7 @@ export class InputSectionForcesService extends InputDataService {
 
     const rows: any = { 'm_no': m_no, 'p_name_ex': p_name_ex, case: new Array() };
     for (let i = 0; i < 10; i++) {
-      const keyMd: string = 'case' + i + '_Md';
-      const keyNd: string = 'case' + i + '_Nd';
-      const tmp = { keyMd: null, keyNd: null };
+      const tmp = {Md: null, Nd: null };
       if (i === 7) {
         tmp['Nmax'] = null;
       }
@@ -39,10 +37,7 @@ export class InputSectionForcesService extends InputDataService {
 
     const rows: any = { 'm_no': m_no, 'p_name_ex': p_name_ex, case: new Array() };
     for (let i = 0; i < 8; i++) {
-      const keyVd: string = 'case' + i + '_Vd';
-      const keyMd: string = 'case' + i + '_Md';
-      const keyNd: string = 'case' + i + '_Nd';
-      const tmp = { keyVd: null, keyMd: null, keyNd: null };
+      const tmp = {Vd: null, Md: null, Nd: null};
       rows['case'].push(tmp)
     }
     return rows;
@@ -71,10 +66,8 @@ export class InputSectionForcesService extends InputDataService {
     for (const data of Mtable_datas) {
       const new_colum = this.default_m_column(data.m_no, data.p_name_ex);
       for (let i = 0; i < new_colum['case'].length; i++) {
-        const keyMd: string = 'case' + i + '_Md';
-        const keyNd: string = 'case' + i + '_Nd';
-        new_colum['case'][i].Md = data[keyMd];
-        new_colum['case'][i].Nd = data[keyNd];
+        new_colum['case'][i].Md = data['case' + i + '_Md'];
+        new_colum['case'][i].Nd = data['case' + i + '_Nd'];
         if ('Nmax' in new_colum['case'][i]) {
           const keyNmax: string = 'case' + i + '_Nmax';
           new_colum['case'][i].Nmax = data[keyNmax];
@@ -106,101 +99,16 @@ export class InputSectionForcesService extends InputDataService {
     for (const data of Vtable_datas) {
       const new_colum = this.default_v_column(data.m_no, data.p_name_ex);
       for (let i = 0; i < new_colum['case'].length; i++) {
-        const keyVd: string = 'case' + i + '_Vd';
-        const keyMd: string = 'case' + i + '_Md';
-        const keyNd: string = 'case' + i + '_Nd';
-        new_colum['case'][i].Vd = data[keyVd];
-        new_colum['case'][i].Md = data[keyMd];
-        new_colum['case'][i].Nd = data[keyNd];
+        new_colum['case'][i].Vd = data['case' + i + '_Vd'];
+        new_colum['case'][i].Md = data['case' + i + '_Md'];
+        new_colum['case'][i].Nd = data['case' + i + '_Nd'];
       }
       this.Vdatas.push(new_colum);
     }
   }
 
-  public getDesignForce(type: string): any[] {
-    const result: any[] = new Array();
-    let tempTable: any[];
-    const caseNo: number[] = new Array();
-
-    switch (type) {
-      case '安全性（破壊）曲げモーメント':
-        result.push('Moment');
-        tempTable = this.Mdatas;
-        caseNo.push(7);
-        break;
-      case '安全性（破壊）せん断力':
-        result.push('ShearForce');
-        tempTable = this.Vdatas;
-        caseNo.push(5); 
-        break;
-      case '安全性（疲労破壊）曲げモーメント':
-        result.push('Moment');
-        tempTable = this.Mdatas;
-        caseNo.push(5); // 最小応力
-        caseNo.push(6); // 最大応力
-
-        break;
-      case '安全性（疲労破壊）せん断力':
-        result.push('ShearForce');
-        tempTable = this.Vdatas;
-        caseNo.push(3); // 最小応力
-        caseNo.push(4); // 最大応力
-
-        break;
-      case '耐久性 曲げひび割れ':
-        result.push('Moment');
-        tempTable = this.Mdatas;
-        caseNo.push(0); // 縁応力度検討用
-        caseNo.push(1); // 鉄筋応力度検討用
-        caseNo.push(2); // 永久荷重
-        caseNo.push(3); // 変動荷重
-
-        break;
-      case '耐久性 せん断ひび割れ':
-        result.push('ShearForce');
-        tempTable = this.Vdatas;
-        caseNo.push(0); // せん断ひび割れ検討判定用
-        caseNo.push(1); // 永久荷重
-        caseNo.push(2); // 変動荷重
-
-        break;
-      case '使用性 曲げひび割れ':
-        result.push('Moment');
-        tempTable = this.Mdatas;
-        caseNo.push(0); // 縁応力度検討用
-        caseNo.push(1); // 鉄筋応力度検討用
-        caseNo.push(4); // 永久荷重
-        caseNo.push(3); // 変動荷重
-
-        break;
-      case '復旧性（地震時以外）曲げモーメント':
-        result.push('Moment');
-        tempTable = this.Mdatas;
-        caseNo.push(8); 
-
-        break;
-      case '復旧性（地震時以外）せん断力':
-        result.push('ShearForce');
-        tempTable = this.Vdatas;
-        caseNo.push(6); 
-
-        break;
-      case '復旧性（地震時）曲げモーメント':
-        result.push('Moment');
-        tempTable = this.Mdatas;
-        caseNo.push(9); 
-
-        break;
-      case '復旧性（地震時）せん断力':
-        result.push('ShearForce');
-        tempTable = this.Vdatas;
-        caseNo.push(7); 
-
-        break;
-    }
-
-
-    return result;
+  public getDesignForce(calcTarget: string){
+    
   }
 
 }

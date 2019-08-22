@@ -7,7 +7,7 @@ import { InputMembersService } from './input-members.service';
 export class InputCalclationPrintService {
 
   public print_selected: any;
-  private calc_checked: boolean[];
+  public calc_checked: boolean[];
 
   constructor(private members: InputMembersService) {
 
@@ -27,7 +27,7 @@ export class InputCalclationPrintService {
 
     const groups: any[] = this.members.getGroupeList();
     for ( let i = 0; i < groups.length; i++) {
-      let checked = false;
+      let checked = true;
       if ( i < this.calc_checked.length ) {
         checked = this.calc_checked[i];
       }

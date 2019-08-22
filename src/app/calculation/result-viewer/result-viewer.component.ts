@@ -4,6 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import * as printJS from 'print-js';
 // import printJS = require("print-js");
 
+import { SaveDataService } from '../../providers/save-data.service';
 import { WaitDialogComponent } from '../../components/wait-dialog/wait-dialog.component';
 
 import { CalcSafetyMomentService } from '../calc-safety-moment.service';
@@ -68,18 +69,19 @@ export class ResultViewerComponent implements OnInit {
   // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
-  constructor( private modalService: NgbModal,
-               private CalcSafetyMoment: CalcSafetyMomentService,
-               private CalcSafetyShearForce: CalcSafetyShearForceService,
-               private CalcSafetyFatigueMoment: CalcSafetyFatigueMomentService,
-               private CalcSafetyFatigueShearForce: CalcSafetyFatigueShearForceService,
-               private CalcServiceabilityMoment: CalcServiceabilityMomentService,
-               private CalcServiceabilityShearForce: CalcServiceabilityShearForceService,
-               private CalcDurabilityMoment: CalcDurabilityMomentService,
-               private CalcRestorabilityMoment: CalcRestorabilityMomentService,
-               private CalcRestorabilityShearForce: CalcRestorabilityShearForceService,
-               private CalcEarthquakesMoment: CalcEarthquakesMomentService,
-               private CalcEarthquakesShearForce: CalcEarthquakesShearForceService ) {
+  constructor(private save: SaveDataService,
+              private modalService: NgbModal,
+              private CalcSafetyMoment: CalcSafetyMomentService,
+              private CalcSafetyShearForce: CalcSafetyShearForceService,
+              private CalcSafetyFatigueMoment: CalcSafetyFatigueMomentService,
+              private CalcSafetyFatigueShearForce: CalcSafetyFatigueShearForceService,
+              private CalcServiceabilityMoment: CalcServiceabilityMomentService,
+              private CalcServiceabilityShearForce: CalcServiceabilityShearForceService,
+              private CalcDurabilityMoment: CalcDurabilityMomentService,
+              private CalcRestorabilityMoment: CalcRestorabilityMomentService,
+              private CalcRestorabilityShearForce: CalcRestorabilityShearForceService,
+              private CalcEarthquakesMoment: CalcEarthquakesMomentService,
+              private CalcEarthquakesShearForce: CalcEarthquakesShearForceService) {
 
     this.PrintCss = '@page {';
     this.PrintCss += 'size: A4;';
@@ -127,24 +129,43 @@ export class ResultViewerComponent implements OnInit {
 
 
     // 断面照査表 /////////////////////////////////////
-    // 安全性（破壊）
-    this.safetyMomentPages = this.CalcSafetyMoment.getSafetyPages();
-    this.safetyShearForcePages = this.CalcSafetyShearForce.getSafetyPages();
-    // 安全性（疲労破壊）
-    this.safetyFatigueMomentPages = this.CalcSafetyFatigueMoment.getSafetyFatiguePages();
-    this.safetyFatigueShearForcepages = this.CalcSafetyFatigueShearForce.getSafetyFatiguePages();
-    // 耐久性
-    this.serviceabilityMomentPages = this.CalcServiceabilityMoment.getServiceabilityPages();
-    this.serviceabilityShearForcePages = this.CalcServiceabilityShearForce.getServiceabilityPages();
-    // 使用性
-    this.durabilityMomentPages = this.CalcDurabilityMoment.getDurabilityPages();
-    // 復旧性（地震時以外）
-    this.restorabilityMomentPages = this.CalcRestorabilityMoment.getRestorabilityPages();
-    this.restorabilityShearForcePages = this.CalcRestorabilityShearForce.getRestorabilityPages();
-    // 復旧性（地震時）
-    this.earthquakesMomentPages = this.CalcEarthquakesMoment.getEarthquakesPages();
-    this.earthquakesShearForcePages = this.CalcEarthquakesShearForce.getEarthquakesPages();
+    if (this.save.calc.print_selected.print_calculate_checked === true) {
+      // 安全性（破壊）
+      this.safetyMomentPages = this.CalcSafetyMoment.getSafetyPages();
+      this.safetyShearForcePages = this.CalcSafetyShearForce.getSafetyPages();
+      // 安全性（疲労破壊）
+      this.safetyFatigueMomentPages = this.CalcSafetyFatigueMoment.getSafetyFatiguePages();
+      this.safetyFatigueShearForcepages = this.CalcSafetyFatigueShearForce.getSafetyFatiguePages();
+      // 耐久性
+      this.serviceabilityMomentPages = this.CalcServiceabilityMoment.getServiceabilityPages();
+      this.serviceabilityShearForcePages = this.CalcServiceabilityShearForce.getServiceabilityPages();
+      // 使用性
+      this.durabilityMomentPages = this.CalcDurabilityMoment.getDurabilityPages();
+      // 復旧性（地震時以外）
+      this.restorabilityMomentPages = this.CalcRestorabilityMoment.getRestorabilityPages();
+      this.restorabilityShearForcePages = this.CalcRestorabilityShearForce.getRestorabilityPages();
+      // 復旧性（地震時）
+      this.earthquakesMomentPages = this.CalcEarthquakesMoment.getEarthquakesPages();
+      this.earthquakesShearForcePages = this.CalcEarthquakesShearForce.getEarthquakesPages();
 
+    } else {
+      this.safetyMomentPages = new Array();
+      this.safetyShearForcePages = new Array();
+      this.safetyFatigueMomentPages = new Array();
+      this.safetyFatigueShearForcepages = new Array();
+      this.serviceabilityMomentPages = new Array();
+      this.serviceabilityShearForcePages = new Array();
+      this.durabilityMomentPages = new Array();
+      this.restorabilityMomentPages = new Array();
+      this.restorabilityShearForcePages = new Array();
+      this.earthquakesMomentPages = new Array();
+      this.earthquakesShearForcePages = new Array();
+
+      if (this.save.calc.print_selected.print_summary_table_checked === true) {
+        // 総括表のみ
+        window.alert('総括表まだ');
+      }
+    }
     modalRef.close();
 
   }

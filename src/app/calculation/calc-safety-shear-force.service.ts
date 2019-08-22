@@ -9,26 +9,49 @@ import { Injectable } from '@angular/core';
 
 export class CalcSafetyShearForceService {
   // 安全性（破壊）せん断力
-  protected DesignForceList: any[];
+  private DesignForceList: any[];
 
-  constructor(public save: SaveDataService,
-              public calc: ResultDataService) { }
+  constructor(private save: SaveDataService,
+              private calc: ResultDataService) { }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
-    this.DesignForceList = this.calc.getDesignForceList('安全性（破壊）せん断力');
+
+    // せん断力が計算対象でない場合は処理を抜ける
+    if ( this.save.calc.print_selected.calculate_shear_force === false){
+      this.DesignForceList = new Array();
+      return new Array();
+    }
+
+    const pickupNoList: any[] = new Array();
+    pickupNoList.push(this.save.basic.pickup_moment_no[5]); // ピックアップNoは せん断の5番目に保存されている
+    this.DesignForceList = this.calc.getDesignForceList('ShearForce', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
+      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
       return result;
     }
+    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+    if (this.save.calc.print_selected.print_section_force_checked === false) {
+      return result;
+    }
+
+    // ToDo: ここで、断面力テーブル用のデータを 変数 result に構築する
 
     return result;
   }
 
   public getSafetyPages(title = '安全性（破壊）せん断力の照査結果'): any[] {
+    // 出力テーブル用のデータにセット
+    const result: any[] = this.setSafetyFatiguePages(title);
+    return result;
+  }
+
+  private setSafetyFatiguePages(title: string): any[] {
+
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {

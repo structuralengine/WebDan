@@ -12,23 +12,72 @@ export class CalcSafetyMomentService {
   private DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-              private calc: ResultDataService) { }
+    private calc: ResultDataService) { }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): any[] {
-    this.DesignForceList = this.calc.getDesignForceList('安全性（破壊）曲げモーメント');
+
+    // 曲げモーメントが計算対象でない場合は処理を抜ける
+    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+      this.DesignForceList = new Array();
+      return new Array();
+    }
+
+    const pickupNoList: any[] = new Array();
+    pickupNoList.push(this.save.basic.pickup_moment_no[7]); // ピックアップNoは 曲げの7番目に保存されている
+    this.DesignForceList = this.calc.getDesignForceList('Moment', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
+      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
       return result;
     }
+    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
+    if (this.save.calc.print_selected.print_section_force_checked === false) {
+      return result;
+    }
+
+    // ToDo: ここで、断面力テーブル用のデータを 変数 result に構築する
 
     return result;
   }
 
   public getSafetyPages(): any[] {
+
+    // 断面力のエラーチェック
+    if (this.DesignForceList.length === null) {
+      return new Array();
+    }
+    if (this.DesignForceList.length < 1) {
+      return new Array();
+    }
+
+    // 断面照査するための情報を収集
+    for (let gi = 0; gi < this.DesignForceList.length; gi++) {
+      const groupe = this.DesignForceList[gi];
+      for (const member of groupe) {
+        for (const positions of member.positions) {
+                    
+
+        }
+      }
+    }
+
+    // サーバーに送信するデータを作成
+
+    // サーバーに送信する
+
+    // サーバーが計算した情報を集計する
+
+    // 出力テーブル用の配列にセット
+    const result: any[] = this.setSafetyPages();
+    return result;
+  }
+
+  // 出力テーブル用の配列にセット
+  private setSafetyPages(): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {
