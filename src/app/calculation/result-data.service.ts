@@ -51,20 +51,20 @@ export class ResultDataService {
           if (targetMember === undefined) {
             return new Array(); // 存在しない要素番号がある
           }
-          for (const positions of member.positions) {
+          for (const position of member.positions) {
 
             if (targetMember.case.length < pickupNo) {
               return new Array(); // ピックアップ番号の入力が不正
             }
             const targetForce = targetMember.case[pickupNo];
 
-            if ('designForce' in positions === false) {
-              positions['designForce'] = new Array();
+            if ('designForce' in position === false) {
+              position['designForce'] = new Array();
             }
             const designForce = {
               Manual: targetForce
             };
-            positions['designForce'].push(designForce);
+            position['designForce'].push(designForce);
           }
         }
       }
@@ -99,15 +99,15 @@ export class ResultDataService {
             return new Array(); // 存在しない要素番号がある
           }
 
-          for (const positions of member.positions) {
+          for (const position of member.positions) {
             const targetPosition = targetMember.positions.find(function (value) {
-              return (value.position === positions.position);
+              return (value.position === position.position);
             });
             if (targetPosition === undefined) {
               return new Array(); // 存在しない着目点がある
             }
-            if ('designForce' in positions === false) {
-              positions['designForce'] = new Array();
+            if ('designForce' in position === false) {
+              position['designForce'] = new Array();
             }
             const designForce = {
               Mmax: targetPosition['M'].max,
@@ -117,7 +117,7 @@ export class ResultDataService {
               Nmax: targetPosition['N'].max,
               Nmin: targetPosition['N'].min
             };
-            positions['designForce'].push(designForce);
+            position['designForce'].push(designForce);
           }
         }
       }
@@ -201,6 +201,115 @@ export class ResultDataService {
       }
     }
     return result;
+  }
+
+  // 鉄筋の本数・断面形状を入力する
+  public setSections(g_no: number, m_no: number, position: any): void {
+
+    // 部材・断面情報を探す //////////////////////////////////////////////////////
+    const memberInfo = this.save.members.member_list.find(function (value) {
+      return (value.m_no === m_no);
+    });
+    if (memberInfo === undefined) {
+      position.SectionData = new Array();
+      return; // 部材番号が存在しない
+    }
+
+    // 鉄筋配置情報を探す //////////////////////////////////////////////////////
+    const temp = this.save.bars.getBarsColumns();
+    const barList = temp.find(function (value) {
+      return (value[0].g_no === g_no);
+    });
+    if (barList === undefined) {
+      position.SectionData = new Array();
+      return; // 部材グループが存在しない
+    }
+
+    const startFlg: boolean[] = [false, false];
+    let barData: object = null;
+    for (let i = barList.length - 1; i >= 0; i--) {
+      // 同じ部材番号を探す
+      if (barList[i].positions.length < 1) { continue; }
+      if (startFlg[0] === false) {
+        if (barList[i].positions[0].m_no === m_no) {
+          startFlg[0] = true;
+        } else {
+          continue;
+        }
+      }
+
+      // 同じ着目点位置を探す
+      for (let j = barList[i].positions.length - 1; j >= 0; j--) {
+        const bar = barList[i].positions[j];
+        if (startFlg[1] === false) {
+          if (bar.position === position.position) {
+            startFlg[1] = true;
+          } else {
+            continue;
+          }
+        }
+        // 鉄筋情報を集計
+        if (barData === null) {
+          barData = bar;
+        } else {
+          this.setBarObjectValue(barData, bar);
+        }
+      }
+    }
+
+    // 鉄筋の本数・断面形状を入力する //////////////////////////////////////////////////////
+    for (const target of position.SectionData) {
+
+      // 断面形状を入力する
+      // memberInfo = {
+      //   'm_no': id, 'm_len': null, 'g_no': null, 'g_name': null, 'shape': '',
+      //   'B': null, 'H': null, 'Bt': null, 't': null,
+      //   'con_u': null, 'con_l': null, 'con_s': null,
+      //   'vis_u': false, 'vis_l': false, 'ecsd': null, 'kr': null,
+      //   'r1_1': null, 'r1_2': null, 'r1_3': null, 'n': null
+      // }
+
+      // 鉄筋の本数を入力する
+      switch (target.memo) {
+        case '上側引張':
+          break;
+        case '下側引張':
+          break;
+      }
+
+    }
+  }
+
+  // 連想配列の null の要素をコピーする
+  private setBarObjectValue(target: object, obj: object): void {
+    try {
+      for (const key of Object.keys(obj)) {
+        if (obj[key] === undefined) { continue; }
+        if (obj[key] === null) { continue; }
+        if (key === 'haunch_M') { continue; }
+        if (key === 'haunch_V') { continue; }
+        if (key === 'tan') { continue; }
+        if (key === 'b') { continue; }
+        if (key === 'h') { continue; }
+        if (key === 'm_no') { continue; }
+        if (key === 'p_name') { continue; }
+        if (key === 'p_name_ex') { continue; }
+        if (key === 'position') { continue; }
+        if (key === 'title') { continue; }
+        if (key === 'cos') { continue; }
+        if (key === 'enable') { continue; }
+
+        if (typeof obj[key] === 'object') {
+          this.setBarObjectValue(target[key], obj[key]);
+        } else {
+          if (target[key] === null) {
+            target[key] = obj[key];
+          }
+        }
+      }
+    } catch {
+      console.log('aa');
+    }
   }
 
 }

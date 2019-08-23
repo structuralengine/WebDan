@@ -26,7 +26,7 @@ export class InputBarsService extends InputDataService {
     const result: any[] = new Array();
 
     const old_bar_list = this.bar_list.slice(0, this.bar_list.length);
-    this.bar_list = new Array();
+    // this.bar_list = new Array();
 
     const design_points: any[] = this.points.getDesignPointColumns();
 
@@ -43,8 +43,9 @@ export class InputBarsService extends InputDataService {
             return (value.m_no === members.m_no && value.p_name === position.p_name);
           });
           if (b === undefined) {
-            b = this.default_bars(members.m_no, position.p_name);
+            b = this.default_bars(members.m_no, position.p_name, position.position);
           }
+          b.position = position['position'];
           b.p_name_ex = position['p_name_ex'];
           b.b = members['B'];
           b.h = members['H'];
@@ -70,7 +71,7 @@ export class InputBarsService extends InputDataService {
         const column1 = groupe[i];
         const column2 = groupe[i + 1];
 
-        const b = this.default_bars(column1.m_no, column1.p_name);
+        const b = this.default_bars(column1.m_no, column1.p_name, column1.position);
         b.p_name_ex = column1.p_name_ex;
         b.b = column1.bh;
         b.h = column2.bh;
@@ -119,9 +120,10 @@ export class InputBarsService extends InputDataService {
   }
 
   // 鉄筋情報
-  private default_bars(id: number, p_name: string): any {
+  private default_bars(id: number, p_name: string, position: number): any {
     return {
       'm_no': id,
+      'position': position,
       'p_name': p_name,
       'p_name_ex': null,
       'b': null,

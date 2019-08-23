@@ -12,7 +12,7 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
   public safety_factor_material_strengths_list: any[];
 
   private safety_factor_title: string[]
-  private pile_factor_list: any[];
+  public pile_factor_list: any[];
 
   constructor(
     private basic: InputBasicInformationService,

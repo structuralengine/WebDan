@@ -48,6 +48,7 @@ export class InputFatiguesService extends InputDataService {
           if (b === undefined) {
             b = this.default_fatigue(members.m_no, position.p_name);
           }
+          b.position = position['position'];
           b.p_name_ex = position['p_name_ex'];
           b.b = members['B'];
           b.h = members['H'];

@@ -7,10 +7,11 @@
       <ng-template ngbTabContent>
         <div class="table-container">
           <div class="header">
-            <table width="1835px">
+            <table width="1945px">
               <thead>
                 <tr>
                   <th rowspan="3" width="60px">部材番号</th>
+                  <th rowspan="3" width="110px">位置</th>
                   <th rowspan="3" width="250px">算出点名</th>
                   <th width="85px">断面</th>
                   <th width="85px">ﾊﾝﾁ高</th>
@@ -53,33 +54,34 @@
           </div>
 
           <hot-table class="hot" [settings]="table_settings" [data]="table_datas[i]" [colHeaders]="false"
-            [rowHeaders]="false" height="{{hottable_height}}" width="1855">
-            <hot-column data="m_no" width="60" [readOnly]="true"></hot-column>
-            <hot-column data="p_name_ex" width="230" [readOnly]="true"></hot-column>
-            <hot-column data="bh" width="85" [readOnly]="true"></hot-column>
+            [rowHeaders]="false" height="{{hottable_height}}" width="1980">
+            <hot-column data="m_no" width="58" [readOnly]="true"></hot-column>
+            <hot-column data="position" width="104" [readOnly]="true"></hot-column>
+            <hot-column data="p_name_ex" width="235" [readOnly]="true"></hot-column>
+            <hot-column data="bh" width="82" [readOnly]="true"></hot-column>
             <hot-column data="haunch_height" width="80"></hot-column>
-            <hot-column data="design_point_id" width="38" [readOnly]="true"></hot-column>
+            <hot-column data="design_point_id" width="40" [readOnly]="true"></hot-column>
 
-            <hot-column data="rebar_dia" width="67" type="numeric"></hot-column>
-            <hot-column data="rebar_n" width="67" type="numeric"></hot-column>
-            <hot-column data="rebar_cover" width="67" type="numeric"></hot-column>
-            <hot-column data="rebar_lines" width="67" type="numeric"></hot-column>
-            <hot-column data="rebar_space" width="67" type="numeric"></hot-column>
-            <hot-column data="rebar_ss" width="67" type="numeric"></hot-column>
+            <hot-column data="rebar_dia" width="68" type="numeric"></hot-column>
+            <hot-column data="rebar_n" width="68" type="numeric"></hot-column>
+            <hot-column data="rebar_cover" width="68" type="numeric"></hot-column>
+            <hot-column data="rebar_lines" width="68" type="numeric"></hot-column>
+            <hot-column data="rebar_space" width="68" type="numeric"></hot-column>
+            <hot-column data="rebar_ss" width="68" type="numeric"></hot-column>
 
-            <hot-column data="side_dia" width="67" type="numeric"></hot-column>
-            <hot-column data="side_n" width="67" type="numeric"></hot-column>
-            <hot-column data="side_cover" width="67" type="numeric"></hot-column>
-            <hot-column data="side_ss" width="67" type="numeric"></hot-column>
+            <hot-column data="side_dia" width="68" type="numeric"></hot-column>
+            <hot-column data="side_n" width="68" type="numeric"></hot-column>
+            <hot-column data="side_cover" width="68" type="numeric"></hot-column>
+            <hot-column data="side_ss" width="68" type="numeric"></hot-column>
 
-            <hot-column data="stirrup_dia" width="67" type="numeric"></hot-column>
-            <hot-column data="stirrup_n" width="67" type="numeric"></hot-column>
-            <hot-column data="stirrup_ss" width="67" type="numeric"></hot-column>
+            <hot-column data="stirrup_dia" width="68" type="numeric"></hot-column>
+            <hot-column data="stirrup_n" width="68" type="numeric"></hot-column>
+            <hot-column data="stirrup_ss" width="68" type="numeric"></hot-column>
 
-            <hot-column data="bending_dia" width="67" type="numeric"></hot-column>
-            <hot-column data="bending_n" width="67" type="numeric"></hot-column>
-            <hot-column data="bending_ss" width="67" type="numeric"></hot-column>
-            <hot-column data="bending_angle" width="67" type="numeric"></hot-column>
+            <hot-column data="bending_dia" width="68" type="numeric"></hot-column>
+            <hot-column data="bending_n" width="68" type="numeric"></hot-column>
+            <hot-column data="bending_ss" width="68" type="numeric"></hot-column>
+            <hot-column data="bending_angle" width="68" type="numeric"></hot-column>
 
             <hot-column data="cos" width="83" type="numeric"></hot-column>
             <hot-column data="tan" width="83" type="numeric"></hot-column>
