@@ -2,6 +2,130 @@
 
 <div id="print-section" class='HtmlPage'>
 
+  <!-- //////////////////// 断面力一覧表 出力 /////////////////////////////-->
+
+  <section class="sheet">
+    <h3>曲げ総括表</h3>
+    <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+      <!--タイトル-->
+      <text x="0" y="11" font-size="2.5pt" text-anchor="start">耐久性　縁応力度検討用</text>
+      <!--横線-->
+      <g fill="none" stroke="black">
+        <line stroke-width="0.50" x1="0" y1="12" x2="150" y2="12" />
+        <line stroke-width="0.25" x1="0" y1="16" x2="150" y2="16" />
+      </g>
+      <!--縦線-->
+      <g fill="none" stroke="black">
+        <line stroke-width="0.50" x1="30" y1="12" x2="30" y2="216" />
+        <line stroke-width="0.25" x1="54" y1="12" x2="54" y2="216" />
+        <line stroke-width="0.25" x1="78" y1="12" x2="78" y2="216" />
+        <line stroke-width="0.25" x1="102" y1="12" x2="102" y2="216" />
+        <line stroke-width="0.25" x1="126" y1="12" x2="126" y2="216" />
+      </g>
+      <!--column Header-->
+      <g font-size="2.5pt" text-anchor="middle">
+        <text x="15" y="15">部材名称</text>
+        <text x="15" y="19">位　　置</text>
+        <text x="15" y="23">断面番号</text>
+
+        <text x="8" y="27">B Bf</text><text x="20" y="27">(mm)</text>
+        <text x="8" y="31">H Ht</text><text x="20" y="31">(mm)</text>
+        <text x="15" y="35">tanθc+tanθt</text>
+
+        <text x="8" y="39">Ast</text>
+        <text x="20" y="39">
+          (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="15" y="43">引張鉄筋</text>
+        <text x="8" y="47">dast</text><text x="20" y="47">(mm)</text>
+
+        <text x="8" y="51">Asc</text>
+        <text x="20" y="51">
+          (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="15" y="55">圧縮鉄筋</text>
+        <text x="8" y="59">dasc</text><text x="20" y="59">(mm)</text>
+
+        <text x="15" y="63">側方鉄筋　Ase</text>
+        <text x="8" y="67">dase</text><text x="20" y="67">(mm)</text>
+
+        <text x="8" y="71">f'ck</text>
+        <text x="20" y="71">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="15" y="75">γc</text>
+        <text x="8" y="79">f'cd</text>
+        <text x="20" y="79">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+
+        <text x="8" y="83">fsyk</text>
+        <text x="20" y="83">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="15" y="87">γs</text>
+        <text x="8" y="91">fsyd</text>
+        <text x="20" y="91">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+
+        <text x="8" y="95">Md</text><text x="20" y="95">(kN･m)</text>
+        <text x="8" y="99">N'd</text><text x="20" y="99">(kN)</text>
+        <text x="8" y="103">Vd</text><text x="20" y="103">(kN)</text>
+        <text x="15" y="107">せん断スパン(mm)</text>
+
+        <text x="8" y="111">Aw</text>
+        <text x="20" y="111">
+          (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="15" y="115">スターラップ</text>
+        <text x="8" y="119">fwyd</text>
+        <text x="20" y="119">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="8" y="123">θs</text><text x="20" y="123">(° )</text>
+        <text x="8" y="127">Ss</text><text x="20" y="127">(mm)</text>
+
+        <text x="8" y="131">fvcd fdd</text>
+        <text x="20" y="131">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="15" y="135">βd</text>
+        <text x="15" y="139">βp</text>
+        <text x="8" y="143">Mu</text><text x="20" y="143">(kN･m)</text>
+        <text x="8" y="147">Mo</text><text x="20" y="147">(kN･m)</text>
+        <text x="15" y="151">βn</text>
+        <text x="16" y="155">せん断スパン比(a/d)</text>
+        <text x="8" y="159">βa f</text><text x="20" y="159">(a/d)</text>
+        <text x="15" y="163">pw</text>
+        <text x="15" y="167">βw 　cotθ</text>
+        <text x="15" y="171">γbc</text>
+        <text x="8" y="175">Vcd Vc2d</text><text x="20" y="175">(kN)</text>
+        <text x="15" y="179">γbs</text>
+        <text x="8" y="183">Vsd Vs2d</text><text x="20" y="183">(kN)</text>
+        <text x="8" y="187">Vyd Vdd Vfdd(kN)</text>
+        <text x="15" y="191">γi</text>
+
+        <text x="16" y="195">γi・Vd/Vyd Vdd Vfdd</text>
+        <text x="15" y="199">照査結果</text>
+
+        <text x="8" y=203>fwcd</text>
+        <text x="20" y="203">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+        </text>
+        <text x="8" y="207">Vwcd</text><text x="20" y="207">(kN)</text>
+
+        <text x="15" y="211">γi・Vd/Vwcd</text>
+        <text x="15" y="215">照査結果</text>
+      </g>
+
+    </svg>
+  </section>
+
+
+  <!-- //////////////////// 照査表 出力 /////////////////////////////-->
+
   <!-- 安全性（破壊）曲げモーメントの照査表 出力 -->
   <ng-container *ngFor="let pages of safetyMomentPages; index as i">
     <section class="sheet">
@@ -67,14 +191,14 @@
           </text>
           <text x="15" y="56">引張鉄筋</text>
           <text x="8" y="61">dast</text><text x="20" y="61">(mm)</text>
-          
+
           <text x="8" y="66">Asc</text>
           <text x="20" y="66">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
           <text x="15" y="71">圧縮鉄筋</text>
           <text x="8" y="76">dasc</text><text x="20" y="76">(mm)</text>
-          
+
           <text x="8" y="81">Ase</text>
           <text x="20" y="81">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -91,7 +215,7 @@
           <text x="20" y="106">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-          
+
           <text x="8" y="111">fsyk</text>
           <text x="20" y="111">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -112,7 +236,7 @@
           <text x="15" y="156">γb</text>
           <text x="8" y="161">Myd</text><text x="20" y="161">(kN･m)</text>
           <text x="15" y="166">γi</text>
-          
+
           <text x="15" y="171">γi･Md/Myd</text>
           <text x="15" y="176">照査結果</text>
         </g>
@@ -121,7 +245,8 @@
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24" [attr.y]="16+r*5">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*5">{{item.value}}</text>
                 <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
                   [attr.y]="16+r*5">{{item.value}}</text>
               </ng-container>
@@ -215,7 +340,7 @@
           </text>
           <text x="15" y="43">引張鉄筋</text>
           <text x="8" y="47">dast</text><text x="20" y="47">(mm)</text>
-          
+
           <text x="8" y="51">Asc</text>
           <text x="20" y="51">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -235,7 +360,7 @@
           <text x="20" y="79">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-          
+
           <text x="8" y="83">fsyk</text>
           <text x="20" y="83">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -273,11 +398,11 @@
           <text x="8" y="147">Mo</text><text x="20" y="147">(kN･m)</text>
           <text x="15" y="151">βn</text>
           <text x="16" y="155">せん断スパン比(a/d)</text>
-          <text x="8" y="159">βa  f</text><text x="20" y="159">(a/d)</text>
+          <text x="8" y="159">βa f</text><text x="20" y="159">(a/d)</text>
           <text x="15" y="163">pw</text>
           <text x="15" y="167">βw 　cotθ</text>
           <text x="15" y="171">γbc</text>
-          <text x="8" y="175">Vcd  Vc2d</text><text x="20" y="175">(kN)</text>
+          <text x="8" y="175">Vcd Vc2d</text><text x="20" y="175">(kN)</text>
           <text x="15" y="179">γbs</text>
           <text x="8" y="183">Vsd Vs2d</text><text x="20" y="183">(kN)</text>
           <text x="8" y="187">Vyd Vdd Vfdd(kN)</text>
@@ -300,7 +425,8 @@
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24" [attr.y]="16+r*4">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*4">{{item.value}}</text>
                 <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
                   [attr.y]="16+r*4">{{item.value}}</text>
               </ng-container>
@@ -388,14 +514,14 @@
           </text>
           <text x="15" y="56">引張鉄筋</text>
           <text x="8" y="61">dast</text><text x="20" y="61">(mm)</text>
-          
+
           <text x="8" y="66">Asc</text>
           <text x="20" y="66">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
           <text x="15" y="71">圧縮鉄筋</text>
           <text x="8" y="76">dasc</text><text x="20" y="76">(mm)</text>
-          
+
           <text x="8" y="81">Ase</text>
           <text x="20" y="81">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -412,7 +538,7 @@
           <text x="20" y="106">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-          
+
           <text x="8" y="111">fsyk</text>
           <text x="20" y="111">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -464,14 +590,15 @@
           <text x="15" y="226">γi</text>
 
           <text x="15" y="231">γi・σsrd/(fsrd/γb)</text>
-          <text x="15" y="236">照査結果</text> 
+          <text x="15" y="236">照査結果</text>
         </g>
         <!--calclate-->
         <g font-size="2.5pt">
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24" [attr.y]="16+r*5">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*5">{{item.value}}</text>
                 <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
                   [attr.y]="16+r*5">{{item.value}}</text>
               </ng-container>
@@ -576,7 +703,7 @@
           <text x="20" y="59">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-          
+
           <text x="8" y="63">fsyk</text>
           <text x="20" y="63">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -601,7 +728,7 @@
           </text>
           <text x="8" y="87">θ</text><text x="20" y="87">(° )</text>
           <text x="8" y="91">S</text><text x="20" y="91">(mm)</text>
-          
+
           <text x="8" y="95">Vpd</text><text x="20" y="95">(kN)</text>
           <text x="8" y="99">Mpd</text><text x="20" y="99">(kN)</text>
           <text x="8" y="103">N'pd</text><text x="20" y="103">(kN)</text>
@@ -616,7 +743,7 @@
           </text>
           <text x="15" y="123">γbc</text>
           <text x="8" y="127">Vcd</text><text x="20" y="127">(kN)</text>
-          
+
           <text x="15" y="131">Kr</text>
           <text x="8" y="135">σspd</text>
           <text x="20" y="135">
@@ -654,14 +781,15 @@
           <text x="15" y="203">γi</text>
 
           <text x="15" y="207">γi・σsrd/(fsrd/γb)</text>
-          <text x="15" y="211">照査結果</text> 
+          <text x="15" y="211">照査結果</text>
         </g>
         <!--calclate-->
         <g font-size="2.5pt">
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24" [attr.y]="16+r*4">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*4">{{item.value}}</text>
                 <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
                   [attr.y]="16+r*4">{{item.value}}</text>
               </ng-container>
@@ -671,7 +799,7 @@
       </svg>
     </section>
   </ng-container>
-  
+
   <!-- 耐久性 曲げひび割れの照査表 出力 -->
   <ng-container *ngFor="let pages of serviceabilityMomentPages; index as i">
     <section class="sheet">
@@ -752,21 +880,21 @@
           </text>
           <text x="15" y="56">引張鉄筋</text>
           <text x="8" y="61">dast</text><text x="20" y="61">(mm)</text>
-          
+
           <text x="8" y="66">Asc</text>
           <text x="20" y="66">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
           <text x="15" y="71">圧縮鉄筋</text>
           <text x="8" y="76">dasc</text><text x="20" y="76">(mm)</text>
-          
+
           <text x="8" y="81">Ase</text>
           <text x="20" y="81">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
           <text x="15" y="86">側方鉄筋</text>
           <text x="8" y="91">dase</text><text x="20" y="91">(mm)</text>
-          
+
           <text x="8" y="96">f'ck</text>
           <text x="20" y="96">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -776,7 +904,7 @@
           <text x="20" y="106">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-          
+
           <text x="8" y="111">fsyk</text>
           <text x="20" y="111">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -787,7 +915,7 @@
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
           <text x="15" y="126">環境条件</text>
-          
+
           <text x="8" y="131">Mhd</text><text x="20" y="131">(kN･m)</text>
           <text x="8" y="136">Nhd</text><text x="20" y="136">(kN)</text>
           <text x="15" y="141">σb≦σb1</text>
@@ -828,7 +956,8 @@
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24" [attr.y]="16+r*5">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*5">{{item.value}}</text>
                 <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
                   [attr.y]="16+r*5">{{item.value}}</text>
               </ng-container>
@@ -919,7 +1048,7 @@
           </text>
           <text x="15" y="51">引張鉄筋</text>
           <text x="8" y="56">dast</text><text x="20" y="56">(mm)</text>
-          
+
           <text x="8" y="61">Asc</text>
           <text x="20" y="61">
             (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -939,7 +1068,7 @@
           <text x="20" y="96">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-          
+
           <text x="8" y="101">fsyk</text>
           <text x="20" y="101">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -992,7 +1121,7 @@
           </text>
           <text x="15" y="231">γi・σwpd/σ12</text>
           <text x="15" y="236">照査結果</text>
-          
+
           <text x="10" y="241">σbpd σs12</text>
           <text x="25" y="241">
             (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
@@ -1005,7 +1134,8 @@
           <ng-container *ngFor="let column of pages.columns; index as c">
             <ng-container *ngFor="let item of column; index as r">
               <ng-container *ngIf="item.value != ''">
-                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24" [attr.y]="16+r*5">{{item.value}}</text>
+                <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                  [attr.y]="16+r*5">{{item.value}}</text>
                 <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
                   [attr.y]="16+r*5">{{item.value}}</text>
               </ng-container>
