@@ -5,125 +5,322 @@
   <!-- //////////////////// 断面力一覧表 出力 /////////////////////////////-->
 
   <section class="sheet">
-    <h3>曲げ総括表</h3>
+    <!-- <h3 class="h3">曲げ総括表</h3> -->
     <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
       <!--タイトル-->
-      <text x="0" y="11" font-size="2.5pt" text-anchor="start">耐久性　縁応力度検討用</text>
+      <text x="0" y="11" font-size="2.5pt" text-anchor="start">耐久性　縁引張応力度検討用</text>
       <!--横線-->
       <g fill="none" stroke="black">
+        
         <line stroke-width="0.50" x1="0" y1="12" x2="150" y2="12" />
-        <line stroke-width="0.25" x1="0" y1="16" x2="150" y2="16" />
+        <line stroke-width="0.25" x1="59" y1="17" x2="150" y2="17" />
+        <line stroke-width="0.50" x1="0" y1="22" x2="150" y2="22" />
+        <line stroke-width="0.25" x1="0" y1="34" x2="150" y2="34" />
       </g>
       <!--縦線-->
       <g fill="none" stroke="black">
-        <line stroke-width="0.50" x1="30" y1="12" x2="30" y2="216" />
-        <line stroke-width="0.25" x1="54" y1="12" x2="54" y2="216" />
-        <line stroke-width="0.25" x1="78" y1="12" x2="78" y2="216" />
-        <line stroke-width="0.25" x1="102" y1="12" x2="102" y2="216" />
-        <line stroke-width="0.25" x1="126" y1="12" x2="126" y2="216" />
+        <line stroke-width="0.25" x1="7" y1="12" x2="7" y2="216" />
+        <line stroke-width="0.25" x1="14" y1="12" x2="14" y2="216" />
+        <line stroke-width="0.25" x1="28" y1="12" x2="28" y2="216" />
+        <line stroke-width="0.25" x1="49" y1="22" x2="49" y2="216" />
+        <line stroke-width="0.50" x1="59" y1="12" x2="59" y2="216" />
+        <line stroke-width="0.25" x1="77" y1="17" x2="77" y2="216" />
+        <line stroke-width="0.25" x1="95" y1="17" x2="95" y2="216" />
+        <line stroke-width="0.50" x1="104" y1="12" x2="104" y2="216" />
+        <line stroke-width="0.25" x1="122" y1="17" x2="122" y2="216" />
+        <line stroke-width="0.25" x1="140" y1="17" x2="140" y2="216" />
       </g>
       <!--column Header-->
       <g font-size="2.5pt" text-anchor="middle">
-        <text x="15" y="15">部材名称</text>
-        <text x="15" y="19">位　　置</text>
-        <text x="15" y="23">断面番号</text>
+        <text x="4" y="16">部材</text>
+        <text x="4" y="20">番号</text>
+        <text x="11" y="16">算出</text>
+        <text x="11" y="20">番号</text>
+        <text x="21" y="16">算出点</text>
+        <text x="42" y="16">算 出 点 名</text>
+        <text x="80" y="16">上　　      側</text>
+        <text x="125" y="16">下　　      側</text>
+        <text x="63" y="21">M</text><text x="71" y="21">(kN･m)</text>
+        <text x="81" y="21">N</text><text x="89" y="21">(kN)</text>
+        <text x="99" y="21">comb</text>
+        <text x="107" y="21">M</text><text x="115" y="21">(kN･m)</text>
+        <text x="125" y="21">N</text><text x="133" y="21">(kN)</text>
+        <text x="145" y="21">comb</text>
 
-        <text x="8" y="27">B Bf</text><text x="20" y="27">(mm)</text>
-        <text x="8" y="31">H Ht</text><text x="20" y="31">(mm)</text>
-        <text x="15" y="35">tanθc+tanθt</text>
 
-        <text x="8" y="39">Ast</text>
-        <text x="20" y="39">
-          (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="15" y="43">引張鉄筋</text>
-        <text x="8" y="47">dast</text><text x="20" y="47">(mm)</text>
+        <text x="5" y="26">1</text>
+        <text x="12" y="26">2</text>
+        <text x="21" y="26">0.450</text>
+        <text x="35" y="26">柱前面</text>
+        <text x="54" y="26">Mmax</text>
+        <text x="68" y="26">-1715.28</text>
+        <text x="88" y="26">-10.46</text>
+        <text x="100" y="26">7</text>
+        <text x="115" y="26">690.82</text>
+        <text x="133" y="26">-79.09</text>
+        <text x="145" y="26">7</text>
+        <text x="54" y="29.5">Nmax</text>
+        <text x="68" y="29.5">-</text>
+        <text x="88" y="29.5">-</text>
+        <text x="100" y="29.5">-</text>
+        <text x="115" y="29.5">9.63</text>
+        <text x="133" y="29.5">58.06</text>
+        <text x="145" y="29.5">7</text>
+        <text x="54" y="33">Nmin</text>
+        <text x="68" y="33">-1140.82</text>
+        <text x="88" y="33">-128.90</text>
+        <text x="100" y="33">7</text>
+        <text x="115" y="33">-</text>
+        <text x="133" y="33">-</text>
+        <text x="145" y="33">-</text>
 
-        <text x="8" y="51">Asc</text>
-        <text x="20" y="51">
-          (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="15" y="55">圧縮鉄筋</text>
-        <text x="8" y="59">dasc</text><text x="20" y="59">(mm)</text>
 
-        <text x="15" y="63">側方鉄筋　Ase</text>
-        <text x="8" y="67">dase</text><text x="20" y="67">(mm)</text>
 
-        <text x="8" y="71">f'ck</text>
-        <text x="20" y="71">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="15" y="75">γc</text>
-        <text x="8" y="79">f'cd</text>
-        <text x="20" y="79">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
 
-        <text x="8" y="83">fsyk</text>
-        <text x="20" y="83">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="15" y="87">γs</text>
-        <text x="8" y="91">fsyd</text>
-        <text x="20" y="91">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
 
-        <text x="8" y="95">Md</text><text x="20" y="95">(kN･m)</text>
-        <text x="8" y="99">N'd</text><text x="20" y="99">(kN)</text>
-        <text x="8" y="103">Vd</text><text x="20" y="103">(kN)</text>
-        <text x="15" y="107">せん断スパン(mm)</text>
-
-        <text x="8" y="111">Aw</text>
-        <text x="20" y="111">
-          (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="15" y="115">スターラップ</text>
-        <text x="8" y="119">fwyd</text>
-        <text x="20" y="119">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="8" y="123">θs</text><text x="20" y="123">(° )</text>
-        <text x="8" y="127">Ss</text><text x="20" y="127">(mm)</text>
-
-        <text x="8" y="131">fvcd fdd</text>
-        <text x="20" y="131">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="15" y="135">βd</text>
-        <text x="15" y="139">βp</text>
-        <text x="8" y="143">Mu</text><text x="20" y="143">(kN･m)</text>
-        <text x="8" y="147">Mo</text><text x="20" y="147">(kN･m)</text>
-        <text x="15" y="151">βn</text>
-        <text x="16" y="155">せん断スパン比(a/d)</text>
-        <text x="8" y="159">βa f</text><text x="20" y="159">(a/d)</text>
-        <text x="15" y="163">pw</text>
-        <text x="15" y="167">βw 　cotθ</text>
-        <text x="15" y="171">γbc</text>
-        <text x="8" y="175">Vcd Vc2d</text><text x="20" y="175">(kN)</text>
-        <text x="15" y="179">γbs</text>
-        <text x="8" y="183">Vsd Vs2d</text><text x="20" y="183">(kN)</text>
-        <text x="8" y="187">Vyd Vdd Vfdd(kN)</text>
-        <text x="15" y="191">γi</text>
-
-        <text x="16" y="195">γi・Vd/Vyd Vdd Vfdd</text>
-        <text x="15" y="199">照査結果</text>
-
-        <text x="8" y=203>fwcd</text>
-        <text x="20" y="203">
-          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
-        </text>
-        <text x="8" y="207">Vwcd</text><text x="20" y="207">(kN)</text>
-
-        <text x="15" y="211">γi・Vd/Vwcd</text>
-        <text x="15" y="215">照査結果</text>
       </g>
 
     </svg>
   </section>
 
+  <section class="sheet">
+    <!-- <h3 class="h3">曲げ総括表</h3> -->
+    <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+      <!--タイトル-->
+      <text x="0" y="11" font-size="2.5pt" text-anchor="start">耐久性（永久荷重）</text>
+      <!--横線-->
+      <g fill="none" stroke="black">
+        
+        <line stroke-width="0.50" x1="0" y1="12" x2="150" y2="12" />
+        <line stroke-width="0.25" x1="59" y1="17" x2="150" y2="17" />
+        <line stroke-width="0.50" x1="0" y1="22" x2="150" y2="22" />
+        <line stroke-width="0.25" x1="0" y1="30" x2="150" y2="30" />
+      </g>
+      <!--縦線-->
+      <g fill="none" stroke="black">
+        <line stroke-width="0.25" x1="7" y1="12" x2="7" y2="216" />
+        <line stroke-width="0.25" x1="14" y1="12" x2="14" y2="216" />
+        <line stroke-width="0.25" x1="28" y1="12" x2="28" y2="216" />
+        <line stroke-width="0.25" x1="49" y1="22" x2="49" y2="216" />
+        <line stroke-width="0.50" x1="59" y1="12" x2="59" y2="216" />
+        <line stroke-width="0.25" x1="77" y1="17" x2="77" y2="216" />
+        <line stroke-width="0.25" x1="95" y1="17" x2="95" y2="216" />
+        <line stroke-width="0.50" x1="104" y1="12" x2="104" y2="216" />
+        <line stroke-width="0.25" x1="122" y1="17" x2="122" y2="216" />
+        <line stroke-width="0.25" x1="140" y1="17" x2="140" y2="216" />
+      </g>
+      <!--column Header-->
+      <g font-size="2.5pt" text-anchor="middle">
+        <text x="4" y="16">部材</text>
+        <text x="4" y="20">番号</text>
+        <text x="11" y="16">算出</text>
+        <text x="11" y="20">番号</text>
+        <text x="21" y="16">算出点</text>
+        <text x="42" y="16">算 出 点 名</text>
+        <text x="80" y="16">上　　      側</text>
+        <text x="125" y="16">下　　      側</text>
+        <text x="63" y="21">M</text><text x="71" y="21">(kN･m)</text>
+        <text x="81" y="21">N</text><text x="89" y="21">(kN)</text>
+        <text x="99" y="21">comb</text>
+        <text x="107" y="21">M</text><text x="115" y="21">(kN･m)</text>
+        <text x="125" y="21">N</text><text x="133" y="21">(kN)</text>
+        <text x="145" y="21">comb</text>
 
+
+        <text x="5" y="26">1</text>
+        <text x="12" y="26">2</text>
+        <text x="21" y="26">0.450</text>
+        <text x="35" y="26">柱前面</text>
+        <text x="54" y="26">永久</text>
+        <text x="68" y="26">-1195.97</text>
+        <text x="88" y="26">1.61</text>
+        <text x="100" y="26">8</text>
+        <text x="115" y="26">443.52</text>
+        <text x="133" y="26">-70.46</text>
+        <text x="145" y="26">8</text>
+        <text x="54" y="29.5">変動</text>
+        <text x="68" y="29.5">-388.46</text>
+        <text x="88" y="29.5">-17.92</text>
+        <text x="100" y="29.5">9</text>
+        <text x="115" y="29.5">116.45</text>
+        <text x="133" y="29.5">2.21</text>
+        <text x="145" y="29.5">9</text>
+        
+
+
+
+
+
+      </g>
+
+    </svg>
+  </section>
+
+  <section class="sheet">
+      <!-- <h3 class="h3">曲げ総括表</h3> -->
+      <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <!--タイトル-->
+        <text x="0" y="11" font-size="2.5pt" text-anchor="start">疲労破壊</text>
+        <!--横線-->
+        <g fill="none" stroke="black">
+          
+          <line stroke-width="0.50" x1="0" y1="12" x2="150" y2="12" />
+          <line stroke-width="0.25" x1="59" y1="17" x2="150" y2="17" />
+          <line stroke-width="0.50" x1="0" y1="22" x2="150" y2="22" />
+          <line stroke-width="0.25" x1="0" y1="34" x2="150" y2="34" />
+        </g>
+        <!--縦線-->
+        <g fill="none" stroke="black">
+          <line stroke-width="0.25" x1="7" y1="12" x2="7" y2="216" />
+          <line stroke-width="0.25" x1="14" y1="12" x2="14" y2="216" />
+          <line stroke-width="0.25" x1="28" y1="12" x2="28" y2="216" />
+          <line stroke-width="0.25" x1="49" y1="22" x2="49" y2="216" />
+          <line stroke-width="0.50" x1="59" y1="12" x2="59" y2="216" />
+          <line stroke-width="0.25" x1="77" y1="17" x2="77" y2="216" />
+          <line stroke-width="0.25" x1="95" y1="17" x2="95" y2="216" />
+          <line stroke-width="0.50" x1="104" y1="12" x2="104" y2="216" />
+          <line stroke-width="0.25" x1="122" y1="17" x2="122" y2="216" />
+          <line stroke-width="0.25" x1="140" y1="17" x2="140" y2="216" />
+        </g>
+        <!--column Header-->
+        <g font-size="2.5pt" text-anchor="middle">
+          <text x="4" y="16">部材</text>
+          <text x="4" y="20">番号</text>
+          <text x="11" y="16">算出</text>
+          <text x="11" y="20">番号</text>
+          <text x="21" y="16">算出点</text>
+          <text x="42" y="16">算 出 点 名</text>
+          <text x="80" y="16">上　　      側</text>
+          <text x="125" y="16">下　　      側</text>
+          <text x="63" y="21">M</text><text x="71" y="21">(kN･m)</text>
+          <text x="81" y="21">N</text><text x="89" y="21">(kN)</text>
+          <text x="99" y="21">comb</text>
+          <text x="107" y="21">M</text><text x="115" y="21">(kN･m)</text>
+          <text x="125" y="21">N</text><text x="133" y="21">(kN)</text>
+          <text x="145" y="21">comb</text>
+  
+  
+          <text x="5" y="26">1</text>
+          <text x="12" y="26">2</text>
+          <text x="21" y="26">0.450</text>
+          <text x="35" y="26">柱前面</text>
+          <text x="54" y="26">最大</text>
+          <text x="68" y="26">-1086.46</text>
+          <text x="88" y="26">-40.75</text>
+          <text x="100" y="26">5</text>
+          <text x="115" y="26">52.45</text>
+          <text x="133" y="26">-44.45</text>
+          <text x="145" y="26">5</text>
+          <text x="54" y="29.5">最小</text>
+          <text x="68" y="29.5">-79.86</text>
+          <text x="88" y="29.5">-47.11</text>
+          <text x="100" y="29.5">6</text>
+          <text x="115" y="29.5">-672.59</text>
+          <text x="133" y="29.5">-21.74</text>
+          <text x="145" y="29.5">6</text>
+          <text x="54" y="33">変動</text>
+          <text x="68" y="33">-1006.60</text>
+          <text x="88" y="33">-6.36</text>
+          <text x="100" y="33">-</text>
+          <text x="115" y="33">52.45</text>
+          <text x="133" y="33">-44.45</text>
+          <text x="145" y="33">-</text>
+  
+  
+  
+  
+  
+        </g>
+  
+      </svg>
+    </section>
+    <section class="sheet">
+        <!-- <h3 class="h3">曲げ総括表</h3> -->
+        <svg width="170mm" height="260mm" viewBox="0 0 170 260" xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+          <!--タイトル-->
+          <text x="0" y="11" font-size="2.5pt" text-anchor="start">曲げモーメントに対する安全度一覧表</text>
+          <!--横線-->
+          <g fill="none" stroke="black">
+            
+            <line stroke-width="0.50" x1="0" y1="12" x2="160" y2="12" />
+            <line stroke-width="0.25" x1="56" y1="17" x2="104" y2="17" />
+            <line stroke-width="0.25" x1="80" y1="22" x2="104" y2="22" />
+            <line stroke-width="0.50" x1="0" y1="27" x2="160" y2="27" />
+            <line stroke-width="0.25" x1="0" y1="41" x2="160" y2="41" />
+          </g>
+          <!--縦線-->
+          <g fill="none" stroke="black">
+            <line stroke-width="0.25" x1="7" y1="12" x2="7" y2="216" />
+            <line stroke-width="0.25" x1="14" y1="12" x2="14" y2="216" />
+            <line stroke-width="0.25" x1="35" y1="12" x2="35" y2="216" />
+            <line stroke-width="0.25" x1="40" y1="12" x2="40" y2="216" />
+            <line stroke-width="0.50" x1="56" y1="12" x2="56" y2="216" />
+            <line stroke-width="0.25" x1="68" y1="17" x2="68" y2="216" />
+            <line stroke-width="0.25" x1="80" y1="17" x2="80" y2="216" />
+            <line stroke-width="0.25" x1="92" y1="22" x2="92" y2="216" />
+            <line stroke-width="0.25" x1="104" y1="12" x2="104" y2="216" />
+            <line stroke-width="0.25" x1="118" y1="12" x2="118" y2="216" />
+            <line stroke-width="0.25" x1="132" y1="12" x2="132" y2="216" />
+            <line stroke-width="0.25" x1="146" y1="12" x2="146" y2="216" />
+            
+            
+          </g>
+          <!--column Header-->
+          <g font-size="2.5pt" text-anchor="middle">
+            <text x="4" y="20">No</text>
+            <text x="11" y="17">部</text>
+            <text x="11" y="21">材</text>
+            <text x="11" y="25">No</text>
+            <text x="25" y="21">算出点</text>
+            <text x="37.5" y="17">位</text>
+            <text x="37.5" y="25">置</text>
+            <text x="48" y="17">使用鉄筋</text>
+            <text x="48" y="21">径　本</text>
+            <text x="79" y="16">耐久性・使用性</text>
+            <text x="62" y="20">鉄筋</text>
+            <text x="62" y="24">応力度</text>
+            <text x="72" y="20">σc/</text>
+            <text x="74" y="24">0.4・fc</text>
+            <text x="90" y="21">ひび割れ幅</text>
+            <text x="86" y="26">耐久性</text>
+            <text x="97" y="26">外観</text>
+            <text x="107" y="21">M</text><text x="115" y="21">(kN･m)</text>
+            <text x="125" y="21">N</text><text x="133" y="21">(kN)</text>
+            <text x="145" y="21">comb</text>
+    
+    
+            <text x="5" y="26">1</text>
+            <text x="12" y="26">2</text>
+            <text x="21" y="26">0.450</text>
+            <text x="35" y="26">柱前面</text>
+            <text x="54" y="26">永久</text>
+            <text x="68" y="26">-1195.97</text>
+            <text x="88" y="26">1.61</text>
+            <text x="100" y="26">8</text>
+            <text x="115" y="26">443.52</text>
+            <text x="133" y="26">-70.46</text>
+            <text x="145" y="26">8</text>
+            <text x="54" y="29.5">変動</text>
+            <text x="68" y="29.5">-388.46</text>
+            <text x="88" y="29.5">-17.92</text>
+            <text x="100" y="29.5">9</text>
+            <text x="115" y="29.5">116.45</text>
+            <text x="133" y="29.5">2.21</text>
+            <text x="145" y="29.5">9</text>
+            
+    
+    
+    
+    
+    
+          </g>
+    
+        </svg>
+      </section>
   <!-- //////////////////// 照査表 出力 /////////////////////////////-->
 
   <!-- 安全性（破壊）曲げモーメントの照査表 出力 -->
