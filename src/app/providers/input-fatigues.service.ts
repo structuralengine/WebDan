@@ -29,7 +29,7 @@ export class InputFatiguesService extends InputDataService {
     const result: any[] = new Array();
 
     const old_fatigue_list = this.fatigue_list.slice(0, this.fatigue_list.length);
-    this.fatigue_list = new Array();
+    // this.fatigue_list = new Array();
 
     const design_points: any[] = this.points.getDesignPointColumns();
 
@@ -48,6 +48,7 @@ export class InputFatiguesService extends InputDataService {
           if (b === undefined) {
             b = this.default_fatigue(members.m_no, position.p_name);
           }
+          b.index = position['index'];
           b.position = position['position'];
           b.p_name_ex = position['p_name_ex'];
           b.b = members['B'];
@@ -74,6 +75,7 @@ export class InputFatiguesService extends InputDataService {
         const column2 = groupe[i + 1];
 
         const f = this.default_fatigue(column1.m_no, column1.p_name);
+        f['index'] = column1.index;
         f.p_name_ex = column1.p_name_ex;
         f.b = column1.bh;
         f.h = column2.bh;
@@ -122,9 +124,10 @@ export class InputFatiguesService extends InputDataService {
   }
 
   // 疲労情報
-  private default_fatigue(id: number, p_name: string): any {
+  private default_fatigue(m_no: number,  p_name: string): any {
     return {
-      'm_no': id,
+      'm_no': m_no,
+      'index': null,
       'p_name': p_name,
       'p_name_ex': null,
       'b': null,

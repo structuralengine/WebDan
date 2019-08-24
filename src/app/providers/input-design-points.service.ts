@@ -21,7 +21,7 @@ export class InputDesignPointsService extends InputDataService {
 
     // デフォルトで、数行のデータを用意しておく
     for (let i = 1; i <= this.DEFAULT_MEMBER_COUNT; i++) {
-      const new_point = this.default_positions(i, [this.default_position('', null)]);
+      const new_point = this.default_positions(i, [this.default_position(i, '', null)]);
       new_point.positions[0].isMyCalc = true;
       new_point.positions[0].isVyCalc = true;
       this.position_list.push(new_point);
@@ -34,8 +34,9 @@ export class InputDesignPointsService extends InputDataService {
       'm_no': id, 'positions': position
     };
   }
-  private default_position(p_name: string, position: number): any {
+  private default_position(index: number, p_name: string, position: number): any {
     return {
+      'index': index,
       'p_name': p_name, 'position': position, 'p_name_ex': null,
       'isMyCalc': null, 'isVyCalc': null,
       'isMzCalc': null, 'isVzCalc': null,
@@ -71,7 +72,8 @@ export class InputDesignPointsService extends InputDataService {
           }
         });
         if (new_position === undefined) {
-          new_position = this.default_position(mList[i].positions[j].p_name, mList[i].positions[j].position);
+          const info = mList[i].positions[j];
+          new_position = this.default_position(info.index, info.p_name, info.position);
         }
         new_member['positions'].push(new_position);
       }

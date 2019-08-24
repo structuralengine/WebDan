@@ -45,6 +45,7 @@ export class InputBarsService extends InputDataService {
           if (b === undefined) {
             b = this.default_bars(members.m_no, position.p_name, position.position);
           }
+          b.index = position['index'];
           b.position = position['position'];
           b.p_name_ex = position['p_name_ex'];
           b.b = members['B'];
@@ -72,6 +73,7 @@ export class InputBarsService extends InputDataService {
         const column2 = groupe[i + 1];
 
         const b = this.default_bars(column1.m_no, column1.p_name, column1.position);
+        b['index'] = column1.index;
         b.p_name_ex = column1.p_name_ex;
         b.b = column1.bh;
         b.h = column2.bh;
@@ -123,6 +125,7 @@ export class InputBarsService extends InputDataService {
   private default_bars(id: number, p_name: string, position: number): any {
     return {
       'm_no': id,
+      'index': null,
       'position': position,
       'p_name': p_name,
       'p_name_ex': null,

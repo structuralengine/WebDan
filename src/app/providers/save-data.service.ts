@@ -45,7 +45,7 @@ export class SaveDataService extends InputDataService {
       const tmp = str.split('\n'); // 改行を区切り文字として行を要素とした配列を生成
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
       const pickup_data = {};
-
+      let index: number = 0;
       for (let i = 1; i < tmp.length; ++i) {
         const line = tmp[i];
         if (line.trim().length === 0) { continue; }
@@ -62,9 +62,11 @@ export class SaveDataService extends InputDataService {
         const minMd: number = this.toNumber(line.slice(70, 80));
         const minVd: number = this.toNumber(line.slice(80, 90));
         const minNd: number = this.toNumber(line.slice(90, 100));
+        index += 1;
 
         if (pickUpNo in pickup_data === false) {
           pickup_data[pickUpNo] = new Array();
+          index = 1;
         }
 
         let m = pickup_data[pickUpNo].find(function (value) {
@@ -79,7 +81,7 @@ export class SaveDataService extends InputDataService {
           return value.p_name === p_name;
         });
         if (p === undefined) {
-          p = { p_name: p_name, position: position };
+          p = { p_name: p_name, index: index, position: position };
           m['positions'].push(p);
         }
 

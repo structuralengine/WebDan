@@ -15,6 +15,7 @@ export class DesignPointsComponent implements OnInit {
 
   groupe_list: any[];
   table_datas: any[][];
+  position_index: number[][];
 
   table_settings = {
     beforeChange: (source, changes) => {
@@ -36,9 +37,11 @@ export class DesignPointsComponent implements OnInit {
 
     this.groupe_list = this.input.getDesignPointColumns();
     this.table_datas = new Array(this.groupe_list.length);
+    this.position_index = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
+      this.position_index[i] = new Array();      
       for (let j = 0; j < this.groupe_list[i].length; j++) {
         const member = this.groupe_list[i][j];
         for (let k = 0; k < member['positions'].length; k++) {
@@ -48,6 +51,7 @@ export class DesignPointsComponent implements OnInit {
             column['m_no'] = member['m_no'];
           }
           this.table_datas[i].push(column);
+          this.position_index[i].push(column.index)
         }
       }
     }

@@ -101,7 +101,7 @@ export class ResultDataService {
 
           for (const position of member.positions) {
             const targetPosition = targetMember.positions.find(function (value) {
-              return (value.position === position.position);
+              return (value.index === position.index);
             });
             if (targetPosition === undefined) {
               return new Array(); // 存在しない着目点がある
@@ -242,7 +242,7 @@ export class ResultDataService {
       for (let j = barList[i].positions.length - 1; j >= 0; j--) {
         const bar = barList[i].positions[j];
         if (startFlg[1] === false) {
-          if (bar.position === position.position) {
+          if (bar.index === position.index) {
             startFlg[1] = true;
           } else {
             continue;
@@ -268,7 +268,28 @@ export class ResultDataService {
       //   'vis_u': false, 'vis_l': false, 'ecsd': null, 'kr': null,
       //   'r1_1': null, 'r1_2': null, 'r1_3': null, 'n': null
       // }
+      const rc = target.safety_factor.M_rc;
+      const fck = target.material_concrete.fck / rc;
+      const Ec = this.getEc(fck);
 
+      const FrameWebPostData = {
+        "Md": Math.abs(target.Md),
+        "Nd": target.Nd,
+        "Sections": [],
+        "SectionElastic": [{
+          "fck": fck,
+          "Ec": Ec,
+          "ElasticID": 'C'
+        }],
+        "Steels": [{
+
+        }],
+        "SteelElastic": [{
+          "fsk": ,
+          "Es": 200,
+          "ElasticID": 'S'
+        }]
+      }
       // 鉄筋の本数を入力する
       switch (target.memo) {
         case '上側引張':
@@ -295,6 +316,7 @@ export class ResultDataService {
         if (key === 'p_name') { continue; }
         if (key === 'p_name_ex') { continue; }
         if (key === 'position') { continue; }
+        if (key === 'index') { continue; }
         if (key === 'title') { continue; }
         if (key === 'cos') { continue; }
         if (key === 'enable') { continue; }
@@ -310,6 +332,39 @@ export class ResultDataService {
     } catch {
       console.log('aa');
     }
+  }
+
+  private getEc(fck: number) {
+
+    const EcList: number[] = [22, 25, 28, 31, 33, 35, 37, 38];
+    const fckList: number[] = [18, 24, 30, 40, 50, 60, 70, 80];
+
+    let i: number;
+    const j: number = fckList.length - 1;
+
+    let x1: number;
+    let x2: number;
+    let y1: number;
+    let y2: number;
+    if (fckList[0] >= fck) {
+      x1 = fckList[0];
+      x2 = fckList[1];
+      y1 = EcList[0];
+      y2 = EcList[1];
+    } else if (fckList[j] <= fck) {
+      i = j;
+    } else {
+      for (i = 0; i < fckList.length; i++) {
+        if (fckList[i] >= fck) {
+          break;
+        }
+      }
+      x1 = fckList[i - 1];
+      x2 = fckList[i];
+      y1 = EcList[i - 1];
+      y2 = EcList[i];
+    }
+    return y2 + (x2 - fck) * (y1 - y2) / (x2 - x1);
   }
 
 }

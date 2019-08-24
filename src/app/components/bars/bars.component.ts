@@ -47,6 +47,7 @@ export class BarsComponent implements OnInit {
             column1['m_no'] = data['m_no'];
           }
           // 1行目
+          column1['index'] = data['index'];
           column1['position'] = data['position'];
           column1['p_name'] = data['p_name'];
           column1['p_name_ex'] = data['p_name_ex'];
