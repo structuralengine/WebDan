@@ -55,16 +55,16 @@ export class CalcSafetyMomentService {
     }
 
     // 断面照査するための情報を収集
-    for (let gi = 0; gi < this.DesignForceList.length; gi++) {
-      const groupe = this.DesignForceList[gi];
+    for (let i = 0; i < this.DesignForceList.length; i++) {
+      const groupe = this.DesignForceList[i];
       for (const member of groupe) {
         for (const position of member.positions) {
           position['SectionData'] = this.getSectionForce(position.designForce[0]);
-          for ( const section of position['SectionData'] ){
+          for (const section of position['SectionData']) {
             // 安全係数を代入する
-            this.setSafetyFactor(member.g_no, position['SectionData'], 2);
+            this.calc.setSafetyFactor('Moment', member.g_no, position, 2);
             // 鉄筋の本数・断面形状を入力する
-            this.calc.setSections(member.g_no, member.m_no, position);
+            this.calc.setSectionData(member.g_no, member.m_no, position);
 
           }
         }
@@ -82,37 +82,8 @@ export class CalcSafetyMomentService {
     return result;
   }
 
-  public setSafetyFactor( g_no: number, SectionData: any[], tableIndex: number): void {
 
-    const safetyList = this.save.safety.safety_factor_material_strengths_list.find(function (value) {
-      return value.g_no === g_no;
-    });
-    if (safetyList === undefined) {
-      // 安全係数がないので計算対象外
-      SectionData = new Array();
-      return;
-    }
-
-    for ( const target of SectionData ) {
-      
-      // 安全係数・材料強度 を代入する
-      target['safety_factor'] = safetyList.safety_factor[tableIndex]; // 安全係数
-      target['material_steel'] = safetyList.material_steel; // 鉄筋強度
-      target['material_concrete'] = safetyList.material_concrete; // コンクリート強度
-      // 杭の施工条件
-      let pile_factor = this.save.safety.pile_factor_list.find(function (value) {
-        return value.id === safetyList.pile_factor_selected;
-      });
-      if (pile_factor === undefined) {
-        pile_factor = safetyList.pile_factor_list[0];
-      }
-      target['pile_factor'] = pile_factor;
-
-    }
-
-
-  }
-
+  // 設計断面力（リスト）を生成する
   public getSectionForce(forceList: any): any[] {
 
     // 設計断面の数をセット
@@ -200,5 +171,6 @@ export class CalcSafetyMomentService {
 
     return result;
   }
+
 }
 
