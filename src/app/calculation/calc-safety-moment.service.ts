@@ -55,18 +55,16 @@ export class CalcSafetyMomentService {
     }
 
     // 断面照査するための情報を収集
-    for (let gi = 0; gi < this.DesignForceList.length; gi++) {
-      const groupe = this.DesignForceList[gi];
+    for (let i = 0; i < this.DesignForceList.length; i++) {
+      const groupe = this.DesignForceList[i];
       for (const member of groupe) {
         for (const position of member.positions) {
           position['SectionData'] = this.getSectionForce(position.designForce[0]);
           for (const section of position['SectionData']) {
             // 安全係数を代入する
-            this.calc.setSafetyFactor(member.g_no, position, 2);
+            this.calc.setSafetyFactor('Moment', member.g_no, position, 2);
             // 鉄筋の本数・断面形状を入力する
-            this.calc.setSectionData(member.m_no, position);
-            // 鉄筋の本数・断面形状を入力する
-            this.calc.setBars(member.g_no, member.m_no, position);
+            this.calc.setSectionData(member.g_no, member.m_no, position);
 
           }
         }
