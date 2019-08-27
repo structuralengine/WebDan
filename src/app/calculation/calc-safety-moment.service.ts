@@ -11,7 +11,8 @@ export class CalcSafetyMomentService {
   // 安全性（破壊）曲げモーメント
   private DesignForceList: any[];
 
-  constructor(private save: SaveDataService,
+  constructor(
+    private save: SaveDataService,
     private calc: ResultDataService) { }
 
   // 設計断面力の集計
@@ -54,26 +55,31 @@ export class CalcSafetyMomentService {
       return new Array();
     }
 
-    // 断面照査するための情報を収集
+    // サーバーに送信するデータを作成
+    const postData = {
+      InputData: new Array()
+    }
+
     for (let i = 0; i < this.DesignForceList.length; i++) {
       const groupe = this.DesignForceList[i];
       for (const member of groupe) {
         for (const position of member.positions) {
-          position['SectionData'] = this.getSectionForce(position.designForce[0]);
-          for (const section of position['SectionData']) {
+          position['PostData'] = this.getSectionForce(position.designForce[0]);
+          for (const section of position.PostData) {
             // 安全係数を代入する
             this.calc.setSafetyFactor('Moment', member.g_no, position, 2);
             // 鉄筋の本数・断面形状を入力する
-            this.calc.setSectionData(member.g_no, member.m_no, position);
-
+            this.calc.setPostData(member.g_no, member.m_no, position);
+            // 設計断面力データ Md の入力がない場合、断面の耐力を計算します。
+            delete section.Md;
+            postData.InputData.push(section);
           }
         }
       }
     }
 
-    // サーバーに送信するデータを作成
-
     // サーバーに送信する
+    this.calc.calcrate(postData);
 
     // サーバーが計算した情報を集計する
 
@@ -87,12 +93,12 @@ export class CalcSafetyMomentService {
   public getSectionForce(forceList: any): any[] {
 
     // 設計断面の数をセット
-    let SectionData: any[];
+    let result: any[];
 
     if ('Manual' in forceList) {
       // 断面手入力モードの場合は 設計断面 1つ
       const side = (forceList.Manual.Md > 0) ? '下側引張' : '上側引張';
-      SectionData = [{
+      result = [{
         memo: side,
         Md: forceList.Manual.Md,
         Nd: forceList.Manual.Nd,
@@ -102,14 +108,14 @@ export class CalcSafetyMomentService {
       // Mmax, Mmin の符号が同じなら 設計断面 1つ
       const side = (forceList.Mmax.Md > 0) ? '下側引張' : '上側引張';
       const force = (Math.abs(forceList.Mmax.Md) > Math.abs(forceList.Mmin.Md)) ? forceList.Mmax : forceList.Mmin;
-      SectionData = [{
+      result = [{
         memo: side,
         Md: force.Md,
         Nd: force.Nd,
       }];
     } else {
       // Mmax, Mmin の符号が異なるなら 設計断面 2つ
-      SectionData = [{
+      result = [{
         memo: '上側引張',
         Md: forceList.Mmin.Md,
         Nd: forceList.Mmin.Nd,
@@ -119,7 +125,7 @@ export class CalcSafetyMomentService {
         Nd: forceList.Mmax.Nd,
       }];
     }
-    return SectionData;
+    return result;
   }
 
   // 出力テーブル用の配列にセット

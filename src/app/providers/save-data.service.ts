@@ -58,10 +58,10 @@ export class SaveDataService extends InputDataService {
         const position: number = this.toNumber(line.slice(30, 40));
         const maxMd: number = this.toNumber(line.slice(40, 50));
         const maxVd: number = this.toNumber(line.slice(50, 60));
-        const maxNd: number = this.toNumber(line.slice(60, 70));
+        const maxNd: number = -1 * this.toNumber(line.slice(60, 70)); // このソフトでは 圧縮がプラス(+)
         const minMd: number = this.toNumber(line.slice(70, 80));
         const minVd: number = this.toNumber(line.slice(80, 90));
-        const minNd: number = this.toNumber(line.slice(90, 100));
+        const minNd: number = -1 * this.toNumber(line.slice(90, 100)); // このソフトでは 圧縮がプラス(+)
         index += 1;
 
         if (pickUpNo in pickup_data === false) {
