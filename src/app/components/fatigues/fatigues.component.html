@@ -1,8 +1,26 @@
 <div #ht_container class="ht-container">
+
+  <div class="form-container">
+    <form>
+      <div class="input-container">
+        <label>耐用年数：</label>
+        <input id="T" name="T" type="text" [(ngModel)]="service_life" />
+      </div>
+      <div class="input-container">
+        <label>jA：</label>
+        <input id="jA" name="jA" type="text" [(ngModel)]="train_A_count" />
+      </div>
+      <div class="input-container">
+        <label>jB：</label>
+        <input id="jB" name="jB" type="text" [(ngModel)]="train_B_count" />
+      </div>
+    </form>
+  </div>
+
   <ngb-tabset>
     <ngb-tab *ngFor="let groupe of groupe_list; index as i">
       <ng-template ngbTabTitle>
-        <h3>{{groupe[0].g_name}}</h3>
+        <h3>{{ groupe[0].g_name }}</h3>
       </ng-template>
       <ng-template ngbTabContent>
         <div class="table-container">
@@ -52,13 +70,32 @@
             </table>
           </div>
 
-          <hot-table class="hot" [settings]="table_settings" [data]="table_datas[i]" [colHeaders]="false"
-            [rowHeaders]="false" height="{{hottable_height}}" width="1659">
+          <hot-table
+            class="hot"
+            [settings]="table_settings"
+            [data]="table_datas[i]"
+            [colHeaders]="false"
+            [rowHeaders]="false"
+            height="{{ hottable_height }}"
+            width="1680"
+          >
             <hot-column data="m_no" width="60" [readOnly]="true"></hot-column>
-            <hot-column data="position" width="104" [readOnly]="true"></hot-column>
-            <hot-column data="p_name_ex" width="250" [readOnly]="true"></hot-column>
+            <hot-column
+              data="position"
+              width="104"
+              [readOnly]="true"
+            ></hot-column>
+            <hot-column
+              data="p_name_ex"
+              width="250"
+              [readOnly]="true"
+            ></hot-column>
             <hot-column data="bh" width="85" [readOnly]="true"></hot-column>
-            <hot-column data="design_point_id" width="40" [readOnly]="true"></hot-column>
+            <hot-column
+              data="design_point_id"
+              width="40"
+              [readOnly]="true"
+            ></hot-column>
 
             <hot-column data="M_SA" width="70" type="numeric"></hot-column>
             <hot-column data="M_SB" width="70" type="numeric"></hot-column>
@@ -77,10 +114,8 @@
             <hot-column data="V_NB12" width="70" type="numeric"></hot-column>
             <hot-column data="V_A" width="70" type="numeric"></hot-column>
             <hot-column data="V_B" width="70" type="numeric"></hot-column>
-
           </hot-table>
         </div>
-
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

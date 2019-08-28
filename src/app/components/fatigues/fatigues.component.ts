@@ -21,6 +21,10 @@ export class FatiguesComponent implements OnInit {
     }
   };
 
+  train_A_count: number;
+  train_B_count: number;
+  service_life: number;
+  reference_count: number;
 
   constructor(private input: InputFatiguesService) {
 
@@ -29,7 +33,7 @@ export class FatiguesComponent implements OnInit {
   ngOnInit() {
     
     const height = this.ht_container.nativeElement.offsetHeight;
-    this.hottable_height = height - 250;
+    this.hottable_height = height - 280;
 
     this.groupe_list = this.input.getFatiguesColumns();
     this.table_datas = new Array(this.groupe_list.length);
@@ -102,11 +106,20 @@ export class FatiguesComponent implements OnInit {
         }
       }
     }
+
+    this.train_A_count = this.input.train_A_count;
+    this.train_B_count = this.input.train_B_count;
+    this.service_life = this.input.service_life;
+    this.reference_count = this.input.reference_count;
   }
 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
     this.input.setFatiguesColumns(this.table_datas);
+    this.input.train_A_count = this.train_A_count;
+    this.input.train_B_count = this.train_B_count;
+    this.input.service_life = this.service_life;
+
   }
 
 

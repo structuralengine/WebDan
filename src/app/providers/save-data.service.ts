@@ -120,6 +120,10 @@ export class SaveDataService extends InputDataService {
     jsonData['position_list'] = this.points.position_list;                     // 着目点情報
     jsonData['bar_list'] = this.bars.bar_list;                               // 鉄筋情報
     jsonData['fatigue_list'] = this.fatigues.fatigue_list;                       // 疲労情報
+    jsonData['train_A_count'] = this.fatigues.train_A_count;
+    jsonData['train_B_count'] = this.fatigues.train_B_count;
+    jsonData['service_life'] = this.fatigues.service_life;
+    jsonData['fatigue_reference_count'] = this.fatigues.reference_count;
     jsonData['safety_factor_material_strengths'] = this.safety.safety_factor_material_strengths_list;                     // 安全係数情報
     jsonData['manual_moment_force'] = this.force.Mdatas;
     jsonData['manual_shear_force'] = this.force.Vdatas;
@@ -145,6 +149,10 @@ export class SaveDataService extends InputDataService {
     this.points.position_list = jsonData['position_list'];                     // 着目点情報
     this.bars.bar_list = jsonData['bar_list'];                               // 鉄筋情報
     this.fatigues.fatigue_list = jsonData['fatigue_list'];                       // 疲労情報
+    this.fatigues.train_A_count = ('train_A_count' in jsonData) ? jsonData['train_A_count'] : null;
+    this.fatigues.train_B_count = ('train_B_count' in jsonData) ? jsonData['train_B_count'] : null;
+    this.fatigues.service_life = ('service_life' in jsonData) ? jsonData['service_life'] : null;
+    this.fatigues.reference_count = ('fatigue_reference_count' in jsonData) ? jsonData['fatigue_reference_count'] : null;
     this.safety.safety_factor_material_strengths_list = jsonData['safety_factor_material_strengths'];                     // 安全係数情報
     this.force.Mdatas = jsonData['manual_moment_force'];
     this.force.Vdatas = jsonData['manual_shear_force'];

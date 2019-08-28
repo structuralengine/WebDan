@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
 import { InputDesignPointsService } from '../design-points/input-design-points.service';
+import { NumberValueAccessor } from '@angular/forms/src/directives';
 
 @Injectable({
   providedIn: 'root'
@@ -9,6 +10,10 @@ export class InputFatiguesService extends InputDataService {
 
   // 疲労情報
   public fatigue_list: any[];
+  public train_A_count: number; // A列車本数
+  public train_B_count: number; // B列車本数
+  public service_life: number;  // 耐用年数
+  public reference_count: number; // 200万回
 
   constructor(private points: InputDesignPointsService) {
     super();
@@ -17,7 +22,10 @@ export class InputFatiguesService extends InputDataService {
   public clear(): void {
     // 疲労強度入力画面に関する初期化
     this.fatigue_list = new Array();
-
+    this.train_A_count = null;
+    this.train_B_count = null
+    this.service_life = null;
+    this.reference_count = 2000000;
   }
 
   /// <summary>
