@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InputBasicInformationService } from '../../providers/input-basic-information.service';
+import { InputBasicInformationService } from './input-basic-information.service';
 import { SaveDataService } from '../../providers/save-data.service';
 
 @Component({

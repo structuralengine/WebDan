@@ -1,0 +1,200 @@
+<div *ngIf="isLoading" class="spinner-border" style="width: 1rem; height: 1rem;" role="status">
+  <span class="sr-only">Loading...</span>
+</div>
+
+<ng-container *ngIf="!isLoading">
+  <ng-container *ngIf="isFulfilled">
+
+    <section class="sheet">
+      <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <!--タイトル-->
+        <text x="0" y="11" font-size="2.5pt" text-anchor="start"> 耐久性 せん断ひび割れの照査</text>
+
+      </svg>
+    </section>
+
+    <ng-container *ngFor="let pages of serviceabilityShearForcePages; index as i">
+      <section class="sheet">
+        <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+          <!--タイトル-->
+          <text x="0" y="11" font-size="2.5pt" text-anchor="start">{{pages.caption}} (その{{i+1}})</text>
+          <!--横線-->
+          <g fill="none" stroke="black">
+            <line stroke-width="0.50" x1="0" y1="12" x2="150" y2="12" />
+            <line stroke-width="0.25" x1="0" y1="17" x2="150" y2="17" />
+            <line stroke-width="0.25" x1="0" y1="22" x2="150" y2="22" />
+            <line stroke-width="0.50" x1="0" y1="27" x2="150" y2="27" />
+            <line stroke-width="0.25" x1="0" y1="32" x2="150" y2="32" />
+            <line stroke-width="0.25" x1="0" y1="37" x2="150" y2="37" />
+            <line stroke-width="0.50" x1="0" y1="42" x2="150" y2="42" />
+            <line stroke-width="0.25" x1="0" y1="52" x2="150" y2="52" />
+            <line stroke-width="0.25" x1="0" y1="57" x2="150" y2="57" />
+            <line stroke-width="0.25" x1="0" y1="67" x2="150" y2="67" />
+            <line stroke-width="0.25" x1="0" y1="72" x2="150" y2="72" />
+            <line stroke-width="0.25" x1="0" y1="77" x2="150" y2="77" />
+            <line stroke-width="0.50" x1="0" y1="82" x2="150" y2="82" />
+            <line stroke-width="0.25" x1="0" y1="87" x2="150" y2="87" />
+            <line stroke-width="0.25" x1="0" y1="92" x2="150" y2="92" />
+            <line stroke-width="0.25" x1="0" y1="97" x2="150" y2="97" />
+            <line stroke-width="0.25" x1="0" y1="102" x2="150" y2="102" />
+            <line stroke-width="0.25" x1="0" y1="107" x2="150" y2="107" />
+            <line stroke-width="0.50" x1="0" y1="112" x2="150" y2="112" />
+            <line stroke-width="0.25" x1="0" y1="122" x2="150" y2="122" />
+            <line stroke-width="0.25" x1="0" y1="127" x2="150" y2="127" />
+            <line stroke-width="0.25" x1="0" y1="132" x2="150" y2="132" />
+            <line stroke-width="0.50" x1="0" y1="137" x2="150" y2="137" />
+            <line stroke-width="0.25" x1="0" y1="142" x2="150" y2="142" />
+            <line stroke-width="0.25" x1="0" y1="147" x2="150" y2="147" />
+            <line stroke-width="0.25" x1="0" y1="152" x2="150" y2="152" />
+            <line stroke-width="0.50" x1="0" y1="157" x2="150" y2="157" />
+            <line stroke-width="0.25" x1="0" y1="162" x2="150" y2="162" />
+            <line stroke-width="0.25" x1="0" y1="167" x2="150" y2="167" />
+            <line stroke-width="0.25" x1="0" y1="172" x2="150" y2="172" />
+            <line stroke-width="0.25" x1="0" y1="177" x2="150" y2="177" />
+            <line stroke-width="0.25" x1="0" y1="182" x2="150" y2="182" />
+            <line stroke-width="0.25" x1="0" y1="187" x2="150" y2="187" />
+            <line stroke-width="0.25" x1="0" y1="192" x2="150" y2="192" />
+            <line stroke-width="0.25" x1="0" y1="197" x2="150" y2="197" />
+            <line stroke-width="0.50" x1="0" y1="202" x2="150" y2="202" />
+            <line stroke-width="0.50" x1="0" y1="207" x2="150" y2="207" />
+            <line stroke-width="0.25" x1="0" y1="212" x2="150" y2="212" />
+            <line stroke-width="0.25" x1="0" y1="217" x2="150" y2="217" />
+            <line stroke-width="0.50" x1="0" y1="222" x2="150" y2="222" />
+            <line stroke-width="0.25" x1="0" y1="227" x2="150" y2="227" />
+            <line stroke-width="0.25" x1="0" y1="232" x2="150" y2="232" />
+            <line stroke-width="0.50" x1="0" y1="237" x2="150" y2="237" />
+            <line stroke-width="0.25" x1="0" y1="242" x2="150" y2="242" />
+            <line stroke-width="0.25" x1="0" y1="247" x2="150" y2="247" />
+            <line stroke-width="0.50" x1="0" y1="252" x2="150" y2="252" />
+          </g>
+          <!--縦線-->
+          <g fill="none" stroke="black">
+            <line stroke-width="0.50" x1="30" y1="12" x2="30" y2="252" />
+            <line stroke-width="0.25" x1="54" y1="12" x2="54" y2="252" />
+            <line stroke-width="0.25" x1="78" y1="12" x2="78" y2="252" />
+            <line stroke-width="0.25" x1="102" y1="12" x2="102" y2="252" />
+            <line stroke-width="0.25" x1="126" y1="12" x2="126" y2="252" />
+          </g>
+          <!--Row Header-->
+          <g font-size="2.5pt" text-anchor="middle">
+            <text x="15" y="16">部材名称</text>
+            <text x="15" y="21">位　　置</text>
+            <text x="15" y="26">断面番号</text>
+
+            <text x="8" y="31">B</text><text x="20" y="31">(mm)</text>
+            <text x="8" y="36">H</text><text x="20" y="36">(mm)</text>
+            <text x="15" y="41">tanθc+tanθt</text>
+
+            <text x="8" y="46">Ast</text>
+            <text x="20" y="46">
+              (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="51">引張鉄筋</text>
+            <text x="8" y="56">dast</text><text x="20" y="56">(mm)</text>
+
+            <text x="8" y="61">Asc</text>
+            <text x="20" y="61">
+              (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="66">圧縮鉄筋</text>
+            <text x="8" y="71">dasc</text><text x="20" y="71">(mm)</text>
+
+            <text x="15" y="76">側方鉄筋　Ase</text>
+            <text x="8" y="81">dase</text><text x="20" y="81">(mm)</text>
+
+            <text x="8" y="86">f'ck</text>
+            <text x="20" y="86">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="91">γc</text>
+            <text x="8" y="96">f'cd</text>
+            <text x="20" y="96">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+
+            <text x="8" y="101">fsyk</text>
+            <text x="20" y="101">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="106">γs</text>
+            <text x="8" y="111">fsyd</text>
+            <text x="20" y="111">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+
+            <text x="8" y="116">Aw</text>
+            <text x="20" y="116">
+              (mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="121">スターラップ</text>
+            <text x="8" y="126">fwyd</text>
+            <text x="20" y="126">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="8" y="131">θs</text><text x="20" y="131">(° )</text>
+            <text x="8" y="136">Ss</text><text x="20" y="61">(mm)</text>
+
+            <text x="8" y="141">N'd</text><text x="20" y="141">(kN)</text>
+            <text x="8" y="146">Vhd</text><text x="20" y="146">(kN)</text>
+            <text x="8" y="151">Vpd</text><text x="20" y="151">(kN)</text>
+            <text x="8" y="156">Vrd</text><text x="20" y="156">(kN)</text>
+
+            <text x="8" y="161">fvcd</text>
+            <text x="20" y="161">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="166">βd</text>
+            <text x="15" y="171">pc</text>
+            <text x="15" y="176">βp</text>
+            <text x="8" y="181">Mu</text><text x="20" y="181">(kN･m)</text>
+            <text x="8" y="186">Mo</text><text x="20" y="186">(kN･m)</text>
+            <text x="15" y="191">βn</text>
+            <text x="15" y="196">γbc</text>
+            <text x="8" y="201">Vpcd Vcd</text><text x="20" y="201">(kN)</text>
+
+            <text x="15" y="206">Vhd:0.7/Vcd</text>
+
+            <text x="15" y="211">環境条件</text>
+            <text x="15" y="216">Kr</text>
+            <text x="15" y="221">γi</text>
+
+            <text x="10" y="226">σwpd σs12</text>
+            <text x="25" y="226">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="231">γi・σwpd/σ12</text>
+            <text x="15" y="236">照査結果</text>
+
+            <text x="10" y="241">σbpd σs12</text>
+            <text x="25" y="241">
+              (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+            </text>
+            <text x="15" y="246">γi・σwpd/σ12</text>
+            <text x="15" y="251">照査結果</text>
+          </g>
+
+          <!--calclate-->
+          <g font-size="2.5pt">
+            <ng-container *ngFor="let column of pages.columns; index as c">
+              <ng-container *ngFor="let item of column; index as r">
+                <ng-container *ngIf="item.value != ''">
+                  <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
+                    [attr.y]="16+r*5">{{item.value}}</text>
+                  <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
+                    [attr.y]="16+r*5">{{item.value}}</text>
+                </ng-container>
+              </ng-container>
+            </ng-container>
+          </g>
+        </svg>
+      </section>
+    </ng-container>
+
+
+  </ng-container>
+  <section *ngIf="err.length > 0" class="sheet">
+      <p >{{err}}</p>
+  </section>
+</ng-container>

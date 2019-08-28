@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InputSafetyFactorsMaterialStrengthsService } from '../../providers/input-safety-factors-material-strengths.service'
+import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
 
 @Component({
   selector: 'app-safety-factors-material-strengths',

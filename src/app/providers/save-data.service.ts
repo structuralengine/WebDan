@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from './input-data.service';
-import { InputBarsService } from './input-bars.service';
-import { InputBasicInformationService } from './input-basic-information.service';
-import { InputDesignPointsService } from './input-design-points.service';
-import { InputFatiguesService } from './input-fatigues.service';
-import { InputMembersService } from './input-members.service';
-import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service';
-import { InputSectionForcesService } from './input-section-forces.service';
-import { InputCalclationPrintService } from './input-calclation-print.service';
+import { InputBarsService } from '../components/bars/input-bars.service';
+import { InputBasicInformationService } from '../components/basic-information/input-basic-information.service';
+import { InputDesignPointsService } from '../components/design-points/input-design-points.service';
+import { InputFatiguesService } from '../components/fatigues/input-fatigues.service';
+import { InputMembersService } from '../components/members/input-members.service';
+import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
+import { InputSectionForcesService } from '../components/section-forces/input-section-forces.service';
+import { InputCalclationPrintService } from '../components/calculation-print/input-calclation-print.service';
 
 @Injectable({
   providedIn: 'root'

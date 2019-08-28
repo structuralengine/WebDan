@@ -19,14 +19,14 @@ import { HotTableModule } from '@handsontable/angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InputDataService } from './providers/input-data.service';
-import { InputBasicInformationService } from './providers/input-basic-information.service';
-import { InputMembersService } from './providers/input-members.service';
-import { InputDesignPointsService } from './providers/input-design-points.service';
-import { InputBarsService } from './providers/input-bars.service';
-import { InputFatiguesService } from './providers/input-fatigues.service';
-import { InputSafetyFactorsMaterialStrengthsService } from './providers/input-safety-factors-material-strengths.service';
-import { InputSectionForcesService } from './providers/input-section-forces.service';
-import { InputCalclationPrintService } from './providers/input-calclation-print.service';
+import { InputBasicInformationService } from './components/basic-information/input-basic-information.service';
+import { InputMembersService } from './components/members/input-members.service';
+import { InputDesignPointsService } from './components/design-points/input-design-points.service';
+import { InputBarsService } from './components/bars/input-bars.service';
+import { InputFatiguesService } from './components/fatigues/input-fatigues.service';
+import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
+import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
+import { InputCalclationPrintService } from './components/calculation-print/input-calclation-print.service';
 import { SaveDataService } from './providers/save-data.service';
 
 import { UserInfoService } from './providers/user-info.service';
@@ -34,7 +34,6 @@ import { UserInfoService } from './providers/user-info.service';
 import { MenuComponent } from './components/menu/menu.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
 import { WaitDialogComponent } from './components/wait-dialog/wait-dialog.component';
-
 
 import { BlankPageComponent } from './components/blank-page/blank-page.component';
 import { BasicInformationComponent } from './components/basic-information/basic-information.component';
@@ -46,19 +45,32 @@ import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-fac
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
 
-import { ResultViewerComponent } from './calculation/result-viewer/result-viewer.component';
 import { ResultDataService } from './calculation/result-data.service';
-import { CalcSafetyMomentService } from './calculation/calc-safety-moment.service';
-import { CalcSafetyShearForceService } from './calculation/calc-safety-shear-force.service';
-import { CalcSafetyFatigueMomentService } from './calculation/calc-safety-fatigue-moment.service';
-import { CalcSafetyFatigueShearForceService } from './calculation/calc-safety-fatigue-shear-force.service';
-import { CalcServiceabilityMomentService } from './calculation/calc-serviceability-moment.service';
-import { CalcServiceabilityShearForceService } from './calculation/calc-serviceability-shear-force.service';
-import { CalcDurabilityMomentService } from './calculation/calc-durability-moment.service';
-import { CalcRestorabilityMomentService } from './calculation/calc-restorability-moment.service';
-import { CalcRestorabilityShearForceService } from './calculation/calc-restorability-shear-force.service';
-import { CalcEarthquakesMomentService } from './calculation/calc-earthquakes-moment.service';
-import { CalcEarthquakesShearForceService } from './calculation/calc-earthquakes-shear-force.service';
+import { CalcSafetyMomentService } from './calculation/result-safety-moment/calc-safety-moment.service';
+import { CalcSafetyShearForceService } from './calculation/result-safety-shear-force/calc-safety-shear-force.service';
+import { CalcSafetyFatigueMomentService } from './calculation/result-safety-fatigue-moment/calc-safety-fatigue-moment.service';
+import { CalcSafetyFatigueShearForceService } from './calculation/result-safety-fatigue-shear-force/calc-safety-fatigue-shear-force.service';
+import { CalcServiceabilityMomentService } from './calculation/result-serviceability-moment/calc-serviceability-moment.service';
+import { CalcServiceabilityShearForceService } from './calculation/result-serviceability-shear-force/calc-serviceability-shear-force.service';
+import { CalcDurabilityMomentService } from './calculation/result-durability-moment/calc-durability-moment.service';
+import { CalcRestorabilityMomentService } from './calculation/result-restorability-moment/calc-restorability-moment.service';
+import { CalcRestorabilityShearForceService } from './calculation/result-restorability-shear-force/calc-restorability-shear-force.service';
+import { CalcEarthquakesMomentService } from './calculation/result-earthquakes-moment/calc-earthquakes-moment.service';
+import { CalcEarthquakesShearForceService } from './calculation/result-earthquakes-shear-force/calc-earthquakes-shear-force.service';
+
+import { ResultViewerComponent } from './calculation/result-viewer/result-viewer.component';
+import { ResultSafetyMomentComponent } from './calculation/result-safety-moment/result-safety-moment.component';
+import { ResultSafetyShearForceComponent } from './calculation/result-safety-shear-force/result-safety-shear-force.component';
+import { ResultDurabilityMomentComponent } from './calculation/result-durability-moment/result-durability-moment.component';
+import { ResultSafetyFatigueMomentComponent } from './calculation/result-safety-fatigue-moment/result-safety-fatigue-moment.component';
+import { ResultSafetyFatigueShearForceComponent } from './calculation/result-safety-fatigue-shear-force/result-safety-fatigue-shear-force.component';
+import { ResultServiceabilityMomentComponent } from './calculation/result-serviceability-moment/result-serviceability-moment.component';
+import { ResultServiceabilityShearForceComponent } from './calculation/result-serviceability-shear-force/result-serviceability-shear-force.component';
+import { ResultRestorabilityMomentComponent } from './calculation/result-restorability-moment/result-restorability-moment.component';
+import { ResultRestorabilityShearForceComponent } from './calculation/result-restorability-shear-force/result-restorability-shear-force.component';
+import { ResultEarthquakesMomentComponent } from './calculation/result-earthquakes-moment/result-earthquakes-moment.component';
+import { ResultEarthquakesShearForceComponent } from './calculation/result-earthquakes-shear-force/result-earthquakes-shear-force.component';
+import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 @NgModule({
   imports: [
@@ -88,7 +100,20 @@ import { CalcEarthquakesShearForceService } from './calculation/calc-earthquakes
     SafetyFactorsMaterialStrengthsComponent,
     SectionForcesComponent,
     CalculationPrintComponent,
-    BlankPageComponent
+    BlankPageComponent,
+
+    ResultSafetyMomentComponent,
+    ResultSafetyShearForceComponent,
+    ResultDurabilityMomentComponent,
+    ResultSafetyFatigueMomentComponent,
+    ResultSafetyFatigueShearForceComponent,
+    ResultServiceabilityMomentComponent,
+    ResultServiceabilityShearForceComponent,
+    ResultRestorabilityMomentComponent,
+    ResultRestorabilityShearForceComponent,
+    ResultEarthquakesMomentComponent,
+    ResultEarthquakesShearForceComponent,
+    SectionForceListComponent
   ],
   entryComponents: [
     LoginDialogComponent,

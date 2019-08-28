@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputBarsService } from '../../providers/input-bars.service';
+import { InputBarsService } from './input-bars.service';
 
 @Component({
   selector: 'app-bars',

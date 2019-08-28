@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { InputCalclationPrintService } from '../../providers/input-calclation-print.service';
+import { InputCalclationPrintService } from './input-calclation-print.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { UserInfoService } from '../../providers/user-info.service';
 

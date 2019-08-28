@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputSectionForcesService } from '../../providers/input-section-forces.service';
+import { InputSectionForcesService } from './input-section-forces.service';
 
 @Component({
   selector: 'app-section-forces',

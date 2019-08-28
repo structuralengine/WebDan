@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputDesignPointsService } from '../../providers/input-design-points.service';
+import { InputDesignPointsService } from './input-design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 
 @Component({

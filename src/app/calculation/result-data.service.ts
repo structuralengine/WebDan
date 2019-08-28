@@ -1,9 +1,6 @@
-﻿import { Http, Headers } from '@angular/http';
-import { UserInfoService } from '../providers/user-info.service';
-import { SaveDataService } from '../providers/save-data.service';
+﻿import { SaveDataService } from '../providers/save-data.service';
 
 import { Injectable } from '@angular/core';
-import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +8,7 @@ import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
 export class ResultDataService {
 
-  constructor(private http: Http,
-    private user: UserInfoService,
-    private save: SaveDataService) {
+  constructor(private save: SaveDataService) {
   }
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
@@ -61,13 +56,19 @@ export class ResultDataService {
             if (targetMember.case.length < pickupNo) {
               return new Array(); // ピックアップ番号の入力が不正
             }
+            // 奥行き本数
+            let n: number = this.save.toNumber(member.n);
+            if(n === null){ n=1; }
+            if(n === 0){ n=1; }
+
             const targetForce = targetMember.case[pickupNo];
 
             if ('designForce' in position === false) {
               position['designForce'] = new Array();
             }
             const designForce = {
-              Manual: targetForce
+              Manual: targetForce,
+              n: n
             };
             position['designForce'].push(designForce);
           }
@@ -103,7 +104,11 @@ export class ResultDataService {
           if (targetMember === undefined) {
             return new Array(); // 存在しない要素番号がある
           }
-
+          // 奥行き本数
+          let n: number = this.save.toNumber(member.n);
+          if(n === null){ n=1; }
+          if(n === 0){ n=1; }
+          
           for (const position of member.positions) {
             const targetPosition = targetMember.positions.find(function (value) {
               return (value.index === position.index);
@@ -120,7 +125,8 @@ export class ResultDataService {
               Smax: targetPosition['S'].max,
               Smin: targetPosition['S'].min,
               Nmax: targetPosition['N'].max,
-              Nmin: targetPosition['N'].min
+              Nmin: targetPosition['N'].min,
+              n: n
             };
             position['designForce'].push(designForce);
           }
@@ -1454,17 +1460,21 @@ export class ResultDataService {
     return y2 + (x2 - fck) * (y1 - y2) / (x2 - x1);
   }
 
-  // 計算
-  public calcrate(postData: any): boolean {
+  // 計算 ///////////////////////////////////////////////////////////////////////////////////////////
+  public URL: string = 'http://structuralengine.com/RCnonlinear/api/values/';
+  
+  /* チャレンジしたが うまくいかなかった
+  import { Http, Headers, Response } from '@angular/http';
+  import { UserInfoService } from '../providers/user-info.service';
 
-    let result: any;
+  public calcrate(postData: any): Promise<string> {
 
-    if (postData.InputData.Length < 1) { return; }
+    if (postData.InputData.length < 1) { return; }
     postData['username'] = this.user.loginUserName;
     postData['password'] = this.user.loginPassword;
 
     const jsonString: string = JSON.stringify(postData);
-    const inputJson: string = "=" + jsonString;
+    const inputJson: string = '=' + jsonString;
 
     const url = 'http://structuralengine.com/RCnonlinear/api/values/';
 
@@ -1473,18 +1483,16 @@ export class ResultDataService {
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
       })
-    }).subscribe(
-      response => {
-        // 通信成功時の処理（成功コールバック）
-        console.log('通信成功!!');
-        result = JSON.parse(response.text());
-      },
-      error => {
-        // 通信失敗時の処理（失敗コールバック）
-        result = error.statusText;
-      }
-    );
-    return true;
+    })
+    .toPromise()
+      .then(response => {
+        const result: string = response.text();
+        return Promise.resolve(result);
+      })
+      .catch(error => {
+        return Promise.resolve(error.toString());
+      });
   }
+  */
 
 }

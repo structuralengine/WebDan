@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputFatiguesService } from '../../providers/input-fatigues.service';
+import { InputFatiguesService } from './input-fatigues.service';
 
 @Component({
   selector: 'app-fatigues',

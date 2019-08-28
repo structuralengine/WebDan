@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputMembersService } from '../../providers/input-members.service';
+import { InputMembersService } from './input-members.service';
 
 @Component({
   selector: 'app-members',
