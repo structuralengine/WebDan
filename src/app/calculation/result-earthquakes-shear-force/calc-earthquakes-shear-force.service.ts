@@ -13,8 +13,8 @@ export class CalcEarthquakesShearForceService {
   private DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-    private calc: ResultDataService,
-    private base: CalcSafetyShearForceService) {
+              private calc: ResultDataService,
+              private base: CalcSafetyShearForceService) {
       this.DesignForceList = null;
   }
 
@@ -49,6 +49,31 @@ export class CalcEarthquakesShearForceService {
   }
 
 
+  // サーバー POST用データを生成する
+  public getPostData(): any {
+
+    // 断面力のエラーチェック
+    if (this.DesignForceList === null) {
+      this.setDesignForces();
+    }
+    if (this.DesignForceList.length < 1) {
+      this.setDesignForces();
+      if (this.DesignForceList.length < 1) {
+        // Error!! - 計算対象がありません
+        return null;
+      }
+    }
+
+    // サーバーに送信するデータを作成
+    const postData = this.setPostData(this.DesignForceList);
+    return postData;
+  }
+    
+  private setPostData(DesignForceList: any[]): any{
+    return this.base.setPostData(DesignForceList);
+  }
+
+  // 出力テーブル用の配列にセット
   public setEarthquakesPages(responseData: any, postData: any): any[] {
     const result: any[] = this.base.getSafetyPages(responseData, postData,'復旧性（地震時以外）せん断力の照査結果');
     return result;

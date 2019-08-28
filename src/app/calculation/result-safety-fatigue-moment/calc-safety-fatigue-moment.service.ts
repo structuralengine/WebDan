@@ -74,7 +74,7 @@ export class CalcSafetyFatigueMomentService {
   }
 
   // 出力テーブル用の配列にセット
-  public setSafetyFatiguePages(json: any): any[] {
+  public setSafetyFatiguePages(responseData: any, postData: any): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {

@@ -1,5 +1,6 @@
 import { SaveDataService } from '../../providers/save-data.service';
 import { ResultDataService } from '../result-data.service';
+import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service';
 
 import { Injectable } from '@angular/core';
 
@@ -12,7 +13,8 @@ export class CalcSafetyShearForceService {
   private DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-              private calc: ResultDataService) {
+              private calc: ResultDataService,
+              private base: CalcSafetyMomentService) {
     this.DesignForceList = null;
   }
 
@@ -46,8 +48,33 @@ export class CalcSafetyShearForceService {
     return result;
   }
 
+  // サーバー POST用データを生成する
+  public getPostData(): any {
 
-  public setSafetyFatiguePages(responseData: any, postData: any, title: string= '安全性（破壊）せん断力の照査結果'): any[] {
+    // 断面力のエラーチェック
+    if (this.DesignForceList === null) {
+      this.setDesignForces();
+    }
+    if (this.DesignForceList.length < 1) {
+      this.setDesignForces();
+      if (this.DesignForceList.length < 1) {
+        // Error!! - 計算対象がありません
+        return null;
+      }
+    }
+
+    // サーバーに送信するデータを作成
+    const postData = this.setPostData(this.DesignForceList);
+    return postData;
+  }
+    
+  public setPostData(DesignForceList: any[]): any{
+    return this.base.setPostData(DesignForceList);
+  }
+
+  // 出力テーブル用の配列にセット
+  public getSafetyPages(responseData: any, postData: any, 
+      title: string= '安全性（破壊）せん断力の照査結果'): any[] {
 
     const result: any[] = new Array();
 

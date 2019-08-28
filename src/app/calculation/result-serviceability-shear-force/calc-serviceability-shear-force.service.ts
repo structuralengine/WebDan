@@ -1,5 +1,6 @@
 import { SaveDataService } from '../../providers/save-data.service';
 import { ResultDataService } from '../result-data.service';
+import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 
 import { Injectable } from '@angular/core';
 
@@ -12,7 +13,8 @@ export class CalcServiceabilityShearForceService {
   private DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-              private calc: ResultDataService) {
+              private calc: ResultDataService,
+              private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
   }
 
@@ -48,13 +50,32 @@ export class CalcServiceabilityShearForceService {
     return result;
   }
 
-  public getServiceabilityPages(): any[] {
-    // 出力テーブル用のデータにセット
-    const result: any[] = this.setServiceabilityPages();
-    return result;
+  // サーバー POST用データを生成する
+  public getPostData(): any {
+
+    // 断面力のエラーチェック
+    if (this.DesignForceList === null) {
+      this.setDesignForces();
+    }
+    if (this.DesignForceList.length < 1) {
+      this.setDesignForces();
+      if (this.DesignForceList.length < 1) {
+        // Error!! - 計算対象がありません
+        return null;
+      }
+    }
+
+    // サーバーに送信するデータを作成
+    const postData = this.setPostData(this.DesignForceList);
+    return postData;
+  }
+    
+  private setPostData(DesignForceList: any[]): any{
+    return this.base.setPostData(DesignForceList);
   }
 
-  private setServiceabilityPages(): any[] {
+  // 出力テーブル用の配列にセット
+  public setServiceabilityPages(responseData: any, postData: any): any[] {
     const result: any[] = new Array();
 
     for (let i = 0; i < 1; i++) {
