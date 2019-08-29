@@ -51,7 +51,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       .subscribe(
         response => {
           const result: string = response.text();
-          this.isFulfilled = this.setPages(result, postData);
+          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
           this.isLoading = false;
         },
         error => {
@@ -71,7 +71,10 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       this.err = response;
       return false;
     }
-    const json = JSON.parse(response);
+
+    
+        const json = this.calc.parseJsonString(response);
+    if (json === null) { return false; }
     this.serviceabilityShearForcePages = this.print.setServiceabilityPages(json, postData);
     return true;
   }

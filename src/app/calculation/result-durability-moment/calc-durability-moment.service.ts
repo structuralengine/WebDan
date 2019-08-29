@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcDurabilityMomentService {
   // 使用性 曲げひび割れ
-  private DesignForceList: any[];
+  public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
     private calc: ResultDataService,

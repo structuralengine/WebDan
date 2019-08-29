@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcSafetyShearForceService {
   // 安全性（破壊）せん断力
-  private DesignForceList: any[];
+  public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
               private calc: ResultDataService,

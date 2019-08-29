@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcEarthquakesMomentService {
   // 復旧性（地震時）曲げモーメント
-  private DesignForceList: any[];
+  public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
               private calc: ResultDataService,

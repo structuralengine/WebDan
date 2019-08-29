@@ -58,8 +58,8 @@ export class ResultDataService {
             }
             // 奥行き本数
             let n: number = this.save.toNumber(member.n);
-            if(n === null){ n=1; }
-            if(n === 0){ n=1; }
+            if (n === null) { n = 1; }
+            if (n === 0) { n = 1; }
 
             const targetForce = targetMember.case[pickupNo];
 
@@ -106,9 +106,9 @@ export class ResultDataService {
           }
           // 奥行き本数
           let n: number = this.save.toNumber(member.n);
-          if(n === null){ n=1; }
-          if(n === 0){ n=1; }
-          
+          if (n === null) { n = 1; }
+          if (n === 0) { n = 1; }
+
           for (const position of member.positions) {
             const targetPosition = targetMember.positions.find(function (value) {
               return (value.index === position.index);
@@ -1462,7 +1462,20 @@ export class ResultDataService {
 
   // 計算 ///////////////////////////////////////////////////////////////////////////////////////////
   public URL: string = 'http://structuralengine.com/RCnonlinear/api/values/';
-  
+
+  public parseJsonString(str: string): any {
+
+    let json: any = null;
+    let tmp: any = null;
+    try {
+      tmp = JSON.parse(str);
+      json = JSON.parse(tmp);
+    } catch (e) {
+      return tmp;
+    }
+    return json;
+  }
+
   /* チャレンジしたが うまくいかなかった
   import { Http, Headers, Response } from '@angular/http';
   import { UserInfoService } from '../providers/user-info.service';

@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcEarthquakesShearForceService {
   // 復旧性（地震時）せん断力
-  private DesignForceList: any[];
+  public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
               private calc: ResultDataService,

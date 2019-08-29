@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcSafetyMomentService {
   // 安全性（破壊）曲げモーメント
-  private DesignForceList: any[];
+  public DesignForceList: any[];
 
   constructor(
     private save: SaveDataService,
@@ -114,7 +114,7 @@ export class CalcSafetyMomentService {
         memo: side,
         Md: forceList.Manual.Md / forceList.n,
         Vd: forceList.Manual.Vd / forceList.n,
-        Nd: forceList.Manual.Nd / forceList.n 
+        Nd: forceList.Manual.Nd / forceList.n
       }];
 
     } else if (Math.sign(forceList.Mmax.Md) === Math.sign(forceList.Mmin.Md)) {
@@ -148,50 +148,59 @@ export class CalcSafetyMomentService {
   // 出力テーブル用の配列にセット
   public setSafetyPages(responseData: any, postData: any): any[] {
     const result: any[] = new Array();
+    let page: any = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
 
-    for (let i = 0; i < 1; i++) {
-      const page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
-
-      for (let c = 0; c < 5; c++) {
-        const column: any[] = new Array();
-        column.push({ alien: 'center', value: '1部材(0.600)' });
-        column.push({ alien: 'center', value: '壁前面(上側)' });
-        column.push({ alien: 'center', value: '1' });
-        column.push({ alien: 'right', value: '1000' });
-        column.push({ alien: 'right', value: '3000' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'right', value: '6353.6' });
-        column.push({ alien: 'center', value: 'D32-8 本' });
-        column.push({ alien: 'right', value: '82.0' });
-        column.push({ alien: 'right', value: '12707.2' });
-        column.push({ alien: 'center', value: 'D32-16 本' });
-        column.push({ alien: 'right', value: '114.0' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'right', value: '24.0' });
-        column.push({ alien: 'right', value: '1.30' });
-        column.push({ alien: 'right', value: '18.5' });
-        column.push({ alien: 'right', value: '390' });
-        column.push({ alien: 'right', value: '1.00' });
-        column.push({ alien: 'right', value: '390' });
-        column.push({ alien: 'right', value: '501.7' });
-        column.push({ alien: 'right', value: '455.2' });
-        column.push({ alien: 'right', value: '0.00350' });
-        column.push({ alien: 'right', value: '0.02168' });
-        column.push({ alien: 'right', value: '572.1' });
-        column.push({ alien: 'right', value: '7420.2' });
-        column.push({ alien: 'right', value: '1.00' });
-        column.push({ alien: 'right', value: '7420.2' });
-        column.push({ alien: 'right', value: '1.20' });
-        column.push({ alien: 'right', value: '0.081' });
-        column.push({ alien: 'center', value: 'OK' });
-        page.columns.push(column);
+    for (const groupe of postData) {
+      for (const member of groupe) {
+        for (const position of member.positions) {
+          for (const postdata of position.PostData) {
+            if (page.columns.length > 4) {
+              result.push(page);
+              page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
+            }
+            const column: any[] = new Array();
+            column.push({ alien: 'center', value: '1部材(0.600)' });
+            column.push({ alien: 'center', value: '壁前面(上側)' });
+            column.push({ alien: 'center', value: '1' });
+            column.push({ alien: 'right', value: '1000' });
+            column.push({ alien: 'right', value: '3000' });
+            column.push({ alien: 'center', value: '-' });
+            column.push({ alien: 'center', value: '-' });
+            column.push({ alien: 'right', value: '6353.6' });
+            column.push({ alien: 'center', value: 'D32-8 本' });
+            column.push({ alien: 'right', value: '82.0' });
+            column.push({ alien: 'right', value: '12707.2' });
+            column.push({ alien: 'center', value: 'D32-16 本' });
+            column.push({ alien: 'right', value: '114.0' });
+            column.push({ alien: 'center', value: '-' });
+            column.push({ alien: 'center', value: '' });
+            column.push({ alien: 'center', value: '-' });
+            column.push({ alien: 'right', value: '24.0' });
+            column.push({ alien: 'right', value: '1.30' });
+            column.push({ alien: 'right', value: '18.5' });
+            column.push({ alien: 'right', value: '390' });
+            column.push({ alien: 'right', value: '1.00' });
+            column.push({ alien: 'right', value: '390' });
+            column.push({ alien: 'right', value: '501.7' });
+            column.push({ alien: 'right', value: '455.2' });
+            column.push({ alien: 'right', value: '0.00350' });
+            column.push({ alien: 'right', value: '0.02168' });
+            column.push({ alien: 'right', value: '572.1' });
+            column.push({ alien: 'right', value: '7420.2' });
+            column.push({ alien: 'right', value: '1.00' });
+            column.push({ alien: 'right', value: '7420.2' });
+            column.push({ alien: 'right', value: '1.20' });
+            column.push({ alien: 'right', value: '0.081' });
+            column.push({ alien: 'center', value: 'OK' });
+            page.columns.push(column);
+          }
+        }
       }
-      result.push(page);
+      if (page.columns.length > 0) {
+        result.push(page);
+        page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
+      }
     }
-
     return result;
   }
 

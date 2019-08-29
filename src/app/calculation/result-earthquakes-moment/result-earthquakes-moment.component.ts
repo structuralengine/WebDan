@@ -51,7 +51,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
       .subscribe(
         response => {
           const result: string = response.text();
-          this.isFulfilled = this.setPages(result, postData);
+          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
           this.isLoading = false;
         },
         error => {
@@ -71,7 +71,8 @@ export class ResultEarthquakesMomentComponent implements OnInit {
       this.err = response;
       return false;
     }
-    const json = JSON.parse(response);
+        const json = this.calc.parseJsonString(response);
+    if (json === null) { return false; }
     this.earthquakesMomentPages = this.print.setEarthquakesPages(json, postData);
     return true;
   }

@@ -4,6 +4,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcSafetyMomentService } from './calc-safety-moment.service';
 import { ResultDataService } from '../result-data.service';
+import { flattenStyles } from '@angular/platform-browser/src/dom/dom_renderer';
 
 
 @Component({
@@ -48,17 +49,17 @@ export class ResultSafetyMomentComponent implements OnInit {
         'Accept': 'application/json'
       })
     })
-    .subscribe(
-      response => {
-        const result: string = response.text();
-        this.isFulfilled = this.setPages(result, postData);
-        this.isLoading = false;
-      },
-      error => {
-        this.err = error.toString();
-        this.isLoading = false;
-        this.isFulfilled = false;
-      });
+      .subscribe(
+        response => {
+          const result: string = response.text();
+          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
+          this.isLoading = false;
+        },
+        error => {
+          this.err = error.toString();
+          this.isLoading = false;
+          this.isFulfilled = false;
+        });
 
   }
 
@@ -71,7 +72,8 @@ export class ResultSafetyMomentComponent implements OnInit {
       this.err = response;
       return false;
     }
-    const json = JSON.parse(response);
+    const json = this.calc.parseJsonString(response);
+    if (json === null) { return false; }
     this.safetyMomentPages = this.print.setSafetyPages(json, postData);
     return true;
   }

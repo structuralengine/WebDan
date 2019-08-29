@@ -48,17 +48,17 @@ export class ResultDurabilityMomentComponent implements OnInit {
         'Accept': 'application/json'
       })
     })
-    .subscribe(
-      response => {
-        const result: string = response.text();
-        this.isFulfilled = this.setPages(result, postData);
-        this.isLoading = false;
-      },
-      error => {
-        this.err = error.toString();
-        this.isLoading = false;
-        this.isFulfilled = false;
-      });
+      .subscribe(
+        response => {
+          const result: string = response.text();
+          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
+          this.isLoading = false;
+        },
+        error => {
+          this.err = error.toString();
+          this.isLoading = false;
+          this.isFulfilled = false;
+        });
 
   }
 
@@ -71,7 +71,8 @@ export class ResultDurabilityMomentComponent implements OnInit {
       this.err = response;
       return false;
     }
-    const json = JSON.parse(response);
+    const json = this.calc.parseJsonString(response);
+    if (json === null) { return false; }
     this.durabilityMomentPages = this.print.setDurabilityPages(json, postData);
     return true;
   }

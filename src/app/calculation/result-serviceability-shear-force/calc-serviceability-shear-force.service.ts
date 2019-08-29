@@ -10,7 +10,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcServiceabilityShearForceService {
   // 耐久性 せん断ひび割れ
-  private DesignForceList: any[];
+  public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
               private calc: ResultDataService,
