@@ -159,13 +159,13 @@ export class CalcSafetyMomentService {
               page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
             }
             const column: any[] = new Array();
-            column.push({ alien: 'center', value: '1部材(0.600)' });
-            column.push({ alien: 'center', value: '壁前面(上側)' });
-            column.push({ alien: 'center', value: '1' });
-            column.push({ alien: 'right', value: '1000' });
-            column.push({ alien: 'right', value: '3000' });
-            column.push({ alien: 'center', value: '-' });
-            column.push({ alien: 'center', value: '-' });
+            column.push({ alien: 'center', value: this.calc.getTitleString1(member, position) });
+            column.push({ alien: 'center', value: this.calc.getTitleString2(position, postdata) });
+            column.push({ alien: 'center', value: this.calc.getTitleString3(position) });
+            column.push({ alien: 'right', value: this.calc.getShapeString_B(position.memberInfo, postdata) });
+            column.push({ alien: 'right', value: this.calc.getShapeString_H(position.memberInfo, postdata) });
+            column.push({ alien: 'center', value: this.calc.getShapeString_Bt(position.memberInfo, postdata) });
+            column.push({ alien: 'center', value: this.calc.getShapeString_t(position.memberInfo, postdata) });
             column.push({ alien: 'right', value: '6353.6' });
             column.push({ alien: 'center', value: 'D32-8 本' });
             column.push({ alien: 'right', value: '82.0' });

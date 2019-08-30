@@ -1508,4 +1508,53 @@ export class ResultDataService {
   }
   */
 
+  // 照査表における タイトル１行目を取得
+  public getTitleString1(member: any, position: any): string {
+    const strPos: string = position.position.toFixed(3);
+    const m_no: string = member.m_no.toFixed();
+    const result: string = m_no + '部材(' + strPos + ')' ;
+    return result;
+  }
+
+  // 照査表における タイトル２行目を取得
+  public getTitleString2(position: any, postdata: any): string {
+    let side: string;
+    switch (postdata.memo) {
+      case '上側引張':
+        side = '(上側)';
+        break
+      case '下側引張':
+        side = '(下側)';
+        break
+      default:
+        side = '';
+    }
+    const result: string = position.p_name_ex + side;
+    return result;
+  }
+  // 照査表における タイトル３行目を取得
+  public getTitleString3(position: any): string {
+    const result: string = position.memberInfo.shape;
+    return result;
+  }
+
+  // 照査表における 断面幅の文字列を取得
+  public getShapeString_B(memberInfo: any, postdata: any): string {
+    const result: string = memberInfo.B;
+    return result;    
+  }
+  // 照査表における 断面高さの文字列を取得
+  public getShapeString_H(memberInfo: any, postdata: any): string {
+    const result: string = memberInfo.H;
+    return result;
+  }
+  // 照査表における フランジ幅の文字列を取得
+  public getShapeString_Bt(memberInfo: any, postdata: any): string {
+    return '-';
+  }
+  // 照査表における フランジ高さの文字列を取得
+  public getShapeString_t(memberInfo: any, postdata: any): string {
+    return '-';
+  }
+
 }
