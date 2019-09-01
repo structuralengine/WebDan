@@ -1,0 +1,133 @@
+import * as tslib_1 from "tslib";
+import { Injectable } from '@angular/core';
+import { InputDataService } from './input-data.service';
+var InputBasicInformationService = /** @class */ (function (_super) {
+    tslib_1.__extends(InputBasicInformationService, _super);
+    function InputBasicInformationService() {
+        var _this = _super.call(this) || this;
+        _this.clear();
+        return _this;
+    }
+    InputBasicInformationService.prototype.clear = function () {
+        this.specification1_selected = 0;
+        this.initSpecificationTitles();
+        this.specification2_selected = 0;
+    };
+    /// <summary>
+    /// specification1_selected によって変わる項目の設定
+    /// </summary>
+    InputBasicInformationService.prototype.initSpecificationTitles = function () {
+        this.specification1_list = [
+            { id: 0, title: '鉄道' },
+            { id: 1, title: '道路' }
+        ];
+        switch (this.specification1_selected) {
+            case 0: // 鉄道
+                this.pickup_moment_title = [
+                    '耐久性 縁応力度検討用', '耐久性 鉄筋応力度検討用',
+                    '耐久性 （永久荷重）', '耐久性 （変動荷重）', '使用性 （外観ひび割れ）',
+                    '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
+                    '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
+                ];
+                this.pickup_moment_no = new Array();
+                for (var i = 0; i < this.pickup_moment_title.length; i++) {
+                    this.pickup_moment_no.push(null);
+                }
+                this.pickup_shear_force_title = [
+                    '耐久性 せん断ひび割れ検討判定用',
+                    '耐久性 （永久荷重）', '耐久性 （変動荷重）',
+                    '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
+                    '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
+                ];
+                this.pickup_shear_force_no = new Array();
+                for (var i = 0; i < this.pickup_shear_force_title.length; i++) {
+                    this.pickup_shear_force_no.push(null);
+                }
+                this.specification2_list = [
+                    { id: 0, title: 'ＪＲ各社' },
+                    { id: 1, title: '運輸機構' },
+                    { id: 2, title: 'ＪＲ東日本' },
+                    { id: 3, title: 'ＪＲ西日本' }
+                ];
+                this.conditions_list = [
+                    { id: 'JR-000', title: '縁応力度が制限値以内でも ひび割れ幅の検討を行う', selected: false },
+                    { id: 'JR-001', title: 'ひび割れ幅制限値に用いるかぶりは 100mm を上限とする', selected: false },
+                    { id: 'JR-002', title: 'T形断面でフランジ側引張は矩形断面で計算する', selected: false },
+                    { id: 'JR-003', title: '円形断面で鉄筋を頂点に１本配置する', selected: false },
+                    { id: 'JR-004', title: 'せん断耐力におけるβn算定時の Mud は軸力を考慮しない', selected: false }
+                ];
+                break;
+            case 1: // 道路
+                this.pickup_moment_title = new Array();
+                this.pickup_moment_no = new Array(this.pickup_moment_title.length);
+                this.pickup_shear_force_title = new Array();
+                this.pickup_shear_force_no = new Array(this.pickup_shear_force_title.length);
+                this.specification2_list = new Array();
+                this.conditions_list = new Array();
+                break;
+            default:
+                return;
+        }
+    };
+    InputBasicInformationService.prototype.pickup_moment_count = function () {
+        return this.pickup_moment_title.length;
+    };
+    InputBasicInformationService.prototype.pickup_shear_force_count = function () {
+        return this.pickup_shear_force_title.length;
+    };
+    /// <summary>
+    /// basic-information.component の
+    /// pickup_moment_datarows のデータを返す関数
+    /// </summary>
+    /// <param name="row">行番号</param>
+    InputBasicInformationService.prototype.getPickUpNoMomentColumns = function (row) {
+        var result = {
+            row: row,
+            title: this.pickup_moment_title[row],
+            pickup_no: this.pickup_moment_no[row]
+        };
+        return result;
+    };
+    InputBasicInformationService.prototype.setPickUpNoMomentColumns = function (row, value) {
+        this.pickup_moment_no[row] = value;
+    };
+    /// <summary>
+    /// basic-information.component の
+    /// pickup_shear_force_datarows のデータを返す関数
+    /// </summary>
+    /// <param name="row">行番号</param>
+    InputBasicInformationService.prototype.getPickUpNoShearForceColumns = function (row) {
+        var result = {
+            row: row,
+            title: this.pickup_shear_force_title[row],
+            pickup_no: this.pickup_shear_force_no[row]
+        };
+        return result;
+    };
+    InputBasicInformationService.prototype.setPickUpNoShearForceColumns = function (row, value) {
+        this.pickup_shear_force_no[row] = value;
+    };
+    /// <summary>
+    /// basic-information.component の
+    /// conditions_list のデータを返す関数
+    /// </summary>
+    /// <param name="row">識別番号</param>
+    InputBasicInformationService.prototype.setConditions = function (id, isChecked) {
+        for (var i = 0; i < this.conditions_list.length; i++) {
+            var tmp = this.conditions_list[i];
+            if (tmp.id === id) {
+                tmp.selected = isChecked;
+                return;
+            }
+        }
+    };
+    InputBasicInformationService = tslib_1.__decorate([
+        Injectable({
+            providedIn: 'root'
+        }),
+        tslib_1.__metadata("design:paramtypes", [])
+    ], InputBasicInformationService);
+    return InputBasicInformationService;
+}(InputDataService));
+export { InputBasicInformationService };
+//# sourceMappingURL=input-basic-information.service.js.map
