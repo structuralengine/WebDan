@@ -159,34 +159,41 @@ export class CalcSafetyMomentService {
               page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
             }
             const column: any[] = new Array();
+            /////////////// タイトル ///////////////
             column.push(this.calc.getTitleString1(member, position) );
             column.push(this.calc.getTitleString2(position, postdata));
             column.push(this.calc.getTitleString3(position));
+            ///////////////// 形状 /////////////////
             column.push(this.calc.getShapeString_B(position.memberInfo, postdata));
             column.push(this.calc.getShapeString_H(position.memberInfo, postdata));
             column.push(this.calc.getShapeString_Bt(position.memberInfo, postdata));
             column.push(this.calc.getShapeString_t(position.memberInfo, postdata));
-            /////////////// 引張鉄筋 前処理 ///////////////
+            /////////////// 引張鉄筋 ///////////////
             const Ast: any = this.calc.getAsStringList(position.barData.rebar1, postdata.SteelElastic[0]);
             column.push(Ast.As);
             column.push(Ast.AsString);
             column.push(Ast.dt);
-            /////////////// 圧縮鉄筋 前処理 ///////////////
-            column.push({ alien: 'right', value: '12707.2' });
-            column.push({ alien: 'center', value: 'D32-16 本' });
-            column.push({ alien: 'right', value: '114.0' });
-
+            /////////////// 圧縮鉄筋 ///////////////
+            const Asc: any = this.calc.getAsStringList(position.barData.rebar2, postdata.SteelElastic[0]);
+            column.push(Asc.As);
+            column.push(Asc.AsString);
+            column.push(Asc.dt);
+            /////////////// 側面鉄筋 ///////////////
             column.push({ alien: 'center', value: '-' });
             column.push({ alien: 'center', value: '' });
             column.push({ alien: 'center', value: '-' });
+            /////////////// コンクリート情報 ///////////////
             column.push({ alien: 'right', value: '24.0' });
             column.push({ alien: 'right', value: '1.30' });
             column.push({ alien: 'right', value: '18.5' });
+            /////////////// 鉄筋情報 ///////////////
             column.push({ alien: 'right', value: '390' });
             column.push({ alien: 'right', value: '1.00' });
             column.push({ alien: 'right', value: '390' });
+            /////////////// 断面力 ///////////////
             column.push({ alien: 'right', value: '501.7' });
             column.push({ alien: 'right', value: '455.2' });
+            /////////////// 照査 ///////////////
             column.push({ alien: 'right', value: '0.00350' });
             column.push({ alien: 'right', value: '0.02168' });
             column.push({ alien: 'right', value: '572.1' });
