@@ -279,7 +279,7 @@ export class ResultDataService {
     this.setBarData(g_no, m_no, position);
 
     // POST 用の断面情報をセット
-    if (memberInfo.shape.indexOf('円') > 0) {
+    if (memberInfo.shape.indexOf('円') >= 0) {
 
       // 円形の場合は 上側引張、下側引張　どちらかにする
       if (position.PostData.length > 1) {
@@ -290,9 +290,9 @@ export class ResultDataService {
         }
       }
       let isEnable: boolean;
-      if (memberInfo.shape.indexOf('円形') > 0) {
+      if (memberInfo.shape.indexOf('円形') >= 0) {
         isEnable = this.getCircle(position) === false;
-      } else if (memberInfo.shape.indexOf('円環') > 0) {
+      } else if (memberInfo.shape.indexOf('円環') >= 0) {
         isEnable = this.getRing(position) === false;
       } else {
         isEnable = false;
@@ -302,7 +302,7 @@ export class ResultDataService {
         return;
       }
 
-    } else if (memberInfo.shape.indexOf('矩形') > 0) {
+    } else if (memberInfo.shape.indexOf('矩形') >= 0) {
 
       for (let i = position.PostData.length - 1; i >= 0; i--) {
         if (this.getRectangle(position, i) === false) {
@@ -310,7 +310,7 @@ export class ResultDataService {
         }
       }
 
-    } else if (memberInfo.shape.indexOf('T') > 0) {
+    } else if (memberInfo.shape.indexOf('T') >= 0) {
 
       // Ｔ形に関する 設計条件を確認する
       let condition = this.save.basic.conditions_list.find(function (value) {
@@ -322,14 +322,14 @@ export class ResultDataService {
 
       for (let i = position.PostData.length - 1; i >= 0; i--) {
         let isEnable: boolean;
-        if (memberInfo.shape.indexOf('T形') > 0) {
+        if (memberInfo.shape.indexOf('T形') >= 0) {
           if (condition.selected === true && position.PostData[i].memo === '上側引張') {
             // T形 断面の上側引張は 矩形
             isEnable = this.getRectangle(position, i);
           } else {
             isEnable = this.getTsection(position, i);
           }
-        } else if (memberInfo.shape.indexOf('逆T形') > 0) {
+        } else if (memberInfo.shape.indexOf('逆T形') >= 0) {
           if (condition.selected === true && position.PostData[i].memo === '下側引張') {
             // 逆T形 断面の下側引張は 矩形
             isEnable = this.getRectangle(position, i);
@@ -345,7 +345,7 @@ export class ResultDataService {
 
       }
 
-    } else if (memberInfo.shape.indexOf('小判形') > 0) {
+    } else if (memberInfo.shape.indexOf('小判形') >= 0) {
 
       // 小判形の場合は 上側引張、下側引張　どちらかにする
       if (position.PostData.length > 1) {
@@ -1509,15 +1509,16 @@ export class ResultDataService {
   */
 
   // 照査表における タイトル１行目を取得
-  public getTitleString1(member: any, position: any): string {
+  public getTitleString1(member: any, position: any): any {
     const strPos: string = position.position.toFixed(3);
     const m_no: string = member.m_no.toFixed();
-    const result: string = m_no + '部材(' + strPos + ')' ;
+    const title: string = m_no + '部材(' + strPos + ')';
+    const result = {alien: 'center', value: title};
     return result;
   }
 
   // 照査表における タイトル２行目を取得
-  public getTitleString2(position: any, postdata: any): string {
+  public getTitleString2(position: any, postdata: any): any {
     let side: string;
     switch (postdata.memo) {
       case '上側引張':
@@ -1529,32 +1530,70 @@ export class ResultDataService {
       default:
         side = '';
     }
-    const result: string = position.p_name_ex + side;
+    const title: string = position.p_name_ex + side;
+    const result = {alien: 'center', value: title};
     return result;
   }
   // 照査表における タイトル３行目を取得
-  public getTitleString3(position: any): string {
-    const result: string = position.memberInfo.shape;
+  public getTitleString3(position: any): any {
+    const title: string = position.memberInfo.shape;
+    const result = {alien: 'center', value: title};
     return result;
   }
 
   // 照査表における 断面幅の文字列を取得
-  public getShapeString_B(memberInfo: any, postdata: any): string {
-    const result: string = memberInfo.B;
-    return result;    
+  public getShapeString_B(memberInfo: any, postdata: any): any {
+    const result = { alien: 'right', value: memberInfo.B };
+    return result;
   }
   // 照査表における 断面高さの文字列を取得
-  public getShapeString_H(memberInfo: any, postdata: any): string {
-    const result: string = memberInfo.H;
+  public getShapeString_H(memberInfo: any, postdata: any): any {
+    const result = { alien: 'right', value: memberInfo.H };
     return result;
   }
   // 照査表における フランジ幅の文字列を取得
-  public getShapeString_Bt(memberInfo: any, postdata: any): string {
-    return '-';
+  public getShapeString_Bt(memberInfo: any, postdata: any): any {
+    const result = { alien: 'center', value: '-'};
+    return result;
   }
   // 照査表における フランジ高さの文字列を取得
-  public getShapeString_t(memberInfo: any, postdata: any): string {
-    return '-';
+  public getShapeString_t(memberInfo: any, postdata: any): any {
+    const result = { alien: 'center', value: '-'};
+    return result;
   }
+  // 照査表における 引張鉄筋情報を取得
+  public getAsStringList(rebar: any, SteelElastic: any): any {
+    let result = {};
+
+    let symbol: string;
+    if (SteelElastic.fsk === 235) {
+      symbol = 'φ';
+    } else {
+      symbol = 'D';
+    }
+    let sAs: string = symbol + rebar.rebar_dia;
+    result['AsString'] = { alien: 'center', value: sAs + '-' + rebar.rebar_n + '本'};
+
+    let Ass: number = this.save.getAs(sAs);
+    result['As'] = { alien: 'right', value: Ass * rebar.rebar_n};
+
+    let dt: number = rebar.rebar_cover;
+    if (rebar.rebar_lines !== null && rebar.rebar_space !== null) {
+      const nn: number = Math.ceil(rebar.rebar_n / rebar.rebar_lines);
+      let count: number = rebar.rebar_n;
+      let As_x_dt: number = 0;
+      let depth: number = dt;
+      for (let n = 0; n < nn; n++) {
+        As_x_dt = Math.min(rebar.rebar_line, count) * depth;
+        count = count - rebar.rebar_line;
+        depth += rebar.rebar_space;
+      }
+      dt = As_x_dt / rebar.rebar_n;
+    }
+    result['dt'] = { alien: 'right', value: dt};
+
+    return result;
+  }
+
 
 }

@@ -67,7 +67,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     if (response === null) {
       return false;
     }
-    if (response.slice(0, 7).indexOf('Error') > 0) {
+    if (response.slice(0, 7).indexOf('Error') >= 0) {
       this.err = response;
       return false;
     }

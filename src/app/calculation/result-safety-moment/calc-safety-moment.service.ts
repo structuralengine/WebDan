@@ -159,19 +159,23 @@ export class CalcSafetyMomentService {
               page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
             }
             const column: any[] = new Array();
-            column.push({ alien: 'center', value: this.calc.getTitleString1(member, position) });
-            column.push({ alien: 'center', value: this.calc.getTitleString2(position, postdata) });
-            column.push({ alien: 'center', value: this.calc.getTitleString3(position) });
-            column.push({ alien: 'right', value: this.calc.getShapeString_B(position.memberInfo, postdata) });
-            column.push({ alien: 'right', value: this.calc.getShapeString_H(position.memberInfo, postdata) });
-            column.push({ alien: 'center', value: this.calc.getShapeString_Bt(position.memberInfo, postdata) });
-            column.push({ alien: 'center', value: this.calc.getShapeString_t(position.memberInfo, postdata) });
-            column.push({ alien: 'right', value: '6353.6' });
-            column.push({ alien: 'center', value: 'D32-8 本' });
-            column.push({ alien: 'right', value: '82.0' });
+            column.push(this.calc.getTitleString1(member, position) );
+            column.push(this.calc.getTitleString2(position, postdata));
+            column.push(this.calc.getTitleString3(position));
+            column.push(this.calc.getShapeString_B(position.memberInfo, postdata));
+            column.push(this.calc.getShapeString_H(position.memberInfo, postdata));
+            column.push(this.calc.getShapeString_Bt(position.memberInfo, postdata));
+            column.push(this.calc.getShapeString_t(position.memberInfo, postdata));
+            /////////////// 引張鉄筋 前処理 ///////////////
+            const Ast: any = this.calc.getAsStringList(position.barData.rebar1, postdata.SteelElastic[0]);
+            column.push(Ast.As);
+            column.push(Ast.AsString);
+            column.push(Ast.dt);
+            /////////////// 圧縮鉄筋 前処理 ///////////////
             column.push({ alien: 'right', value: '12707.2' });
             column.push({ alien: 'center', value: 'D32-16 本' });
             column.push({ alien: 'right', value: '114.0' });
+
             column.push({ alien: 'center', value: '-' });
             column.push({ alien: 'center', value: '' });
             column.push({ alien: 'center', value: '-' });
