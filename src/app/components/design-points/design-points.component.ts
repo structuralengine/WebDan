@@ -15,6 +15,7 @@ export class DesignPointsComponent implements OnInit {
 
   groupe_list: any[];
   table_datas: any[][];
+  mergeCells: any[][];
   position_index: number[][];
 
   table_settings = {
@@ -37,14 +38,24 @@ export class DesignPointsComponent implements OnInit {
 
     this.groupe_list = this.input.getDesignPointColumns();
     this.table_datas = new Array(this.groupe_list.length);
+    this.mergeCells = new Array(this.groupe_list.length);
     this.position_index = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
-      this.position_index[i] = new Array();      
+      this.mergeCells[i] = new Array();
+      this.position_index[i] = new Array();
+
+      let row: number = 0;     
       for (let j = 0; j < this.groupe_list[i].length; j++) {
         const member = this.groupe_list[i][j];
-        for (let k = 0; k < member['positions'].length; k++) {
+
+        const positionCount: number = member['positions'].length;
+        if(positionCount> 1){
+          //this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount, colspan: 1});
+        }
+
+        for (let k = 0; k < positionCount; k++) {
           const column = member['positions'][k];
           if (k === 0) {
             // 最初の行には 部材番号を表示する
@@ -52,6 +63,8 @@ export class DesignPointsComponent implements OnInit {
           }
           this.table_datas[i].push(column);
           this.position_index[i].push(column.index)
+
+          row++;
         }
       }
     }

@@ -13,6 +13,7 @@ export class BarsComponent implements OnInit {
 
   groupe_list: any[];
   table_datas: any[][];
+  mergeCells: any[][];
 
   table_settings = {
     beforeChange: (source, changes) => {
@@ -33,12 +34,20 @@ export class BarsComponent implements OnInit {
 
     this.groupe_list = this.input.getBarsColumns();
     this.table_datas = new Array(this.groupe_list.length);
+    this.mergeCells = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
+      this.mergeCells[i] = new Array();
+
+      let row: number = 0;
       for (let j = 0; j < this.groupe_list[i].length; j++) {
         const member = this.groupe_list[i][j];
-        for (let k = 0; k < member['positions'].length; k++) {
+
+        const positionCount: number = member['positions'].length;
+        this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount * 2, colspan: 1});
+
+        for (let k = 0; k < positionCount; k++) {
           const data = member['positions'][k];
           const column1 = {};
           const column2 = {};
@@ -96,6 +105,15 @@ export class BarsComponent implements OnInit {
           column2['enable'] = data['rebar2'].enable;
 
           this.table_datas[i].push(column2);
+
+          // セルの結合情報
+          for(let col= 1; col <= 2; col++) {
+            this.mergeCells[i].push({row: row, col: col, rowspan: 2, colspan: 1});
+          }
+          for(let col= 12; col <= 18; col++) {
+            this.mergeCells[i].push({row: row, col: col, rowspan: 2, colspan: 1});
+          }
+          row += 2;
         }
       }
     }
