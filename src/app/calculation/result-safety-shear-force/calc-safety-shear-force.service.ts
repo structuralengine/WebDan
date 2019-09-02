@@ -1,4 +1,7 @@
 import { SaveDataService } from '../../providers/save-data.service';
+import { SetDesignForceService } from '../set-design-force.service';
+import { SetSectionService } from '../set-section.service';
+import { SetSafetyFactorService } from '../set-safety-factor.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service';
 
@@ -13,6 +16,9 @@ export class CalcSafetyShearForceService {
   public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
+              private force: SetDesignForceService,
+              private sectin: SetSectionService,
+              private safety: SetSafetyFactorService,
               private calc: ResultDataService,
               private base: CalcSafetyMomentService) {
     this.DesignForceList = null;
@@ -31,7 +37,7 @@ export class CalcSafetyShearForceService {
 
     const pickupNoList: any[] = new Array();
     pickupNoList.push(this.save.basic.pickup_moment_no[5]); // ピックアップNoは せん断の5番目に保存されている
-    this.DesignForceList = this.calc.getDesignForceList('ShearForce', pickupNoList);
+    this.DesignForceList = this.force.getDesignForceList('ShearForce', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {

@@ -165,6 +165,10 @@ export class SaveDataService extends InputDataService {
       const fai: number = this.toNumber(strAs.replace('φ', ''));
       if (fai === null) { return 0; }
       result = (fai ** 2) * Math.PI / 4;
+    } else if (strAs.indexOf('R') >= 0) {
+      const fai: number = this.toNumber(strAs.replace('R', ''));
+      if (fai === null) { return 0; }
+      result = (fai ** 2) * Math.PI / 4;
     } else if (strAs.indexOf('D') >= 0) {
       const fai: number = this.toNumber(strAs.replace('D', ''));
       if (fai === null) { return 0; }

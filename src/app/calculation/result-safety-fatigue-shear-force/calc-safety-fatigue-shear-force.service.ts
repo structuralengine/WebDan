@@ -1,4 +1,7 @@
 import { SaveDataService } from '../../providers/save-data.service';
+import { SetDesignForceService } from '../set-design-force.service';
+import { SetSectionService } from '../set-section.service';
+import { SetSafetyFactorService } from '../set-safety-factor.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 
@@ -13,6 +16,9 @@ export class CalcSafetyFatigueShearForceService {
   public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
+    private force: SetDesignForceService,
+    private sectin: SetSectionService,
+    private safety: SetSafetyFactorService,
     private calc: ResultDataService,
     private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
@@ -32,7 +38,7 @@ export class CalcSafetyFatigueShearForceService {
     const pickupNoList: any[] = new Array();
     pickupNoList.push(this.save.basic.pickup_moment_no[3]); // 最小応力
     pickupNoList.push(this.save.basic.pickup_moment_no[4]); // 最大応力
-    this.DesignForceList = this.calc.getDesignForceList('ShearForce', pickupNoList);
+    this.DesignForceList = this.force.getDesignForceList('ShearForce', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {

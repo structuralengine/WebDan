@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
-
 import { CalcRestorabilityShearForceService } from './calc-restorability-shear-force.service';
-import { ResultDataService } from '../result-data.service';
+import { SetPostDataService } from '../set-post-data.service';
 
 
 @Component({
@@ -20,7 +19,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
 
   constructor(private http: Http,
     private print: CalcRestorabilityShearForceService,
-    private calc: ResultDataService) { }
+    private post: SetPostDataService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -42,7 +41,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
 
     // postする
     const inputJson: string = '=' + JSON.stringify(postData);
-    this.http.post(this.calc.URL, inputJson, {
+    this.http.post(this.post.URL, inputJson, {
       headers: new Headers({
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
@@ -71,7 +70,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
       this.err = response;
       return false;
     }
-        const json = this.calc.parseJsonString(response);
+        const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
     this.restorabilityShearForcePages = this.print.setRestorabilityPages(json, postData);
     return true;

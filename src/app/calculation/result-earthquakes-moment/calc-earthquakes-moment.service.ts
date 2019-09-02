@@ -1,4 +1,7 @@
 import { SaveDataService } from '../../providers/save-data.service';
+import { SetDesignForceService } from '../set-design-force.service';
+import { SetSectionService } from '../set-section.service';
+import { SetSafetyFactorService } from '../set-safety-factor.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcRestorabilityMomentService } from '../result-restorability-moment/calc-restorability-moment.service';
 
@@ -13,6 +16,9 @@ export class CalcEarthquakesMomentService {
   public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
+    private force: SetDesignForceService,
+    private sectin: SetSectionService,
+    private safety: SetSafetyFactorService,
               private calc: ResultDataService,
               private base: CalcRestorabilityMomentService) {
     this.DesignForceList = null;
@@ -31,7 +37,7 @@ export class CalcEarthquakesMomentService {
 
     const pickupNoList: any[] = new Array();
     pickupNoList.push(this.save.basic.pickup_moment_no[9]); // ピックアップNoは 曲げの9番目に保存されている
-    this.DesignForceList = this.calc.getDesignForceList('Moment', pickupNoList);
+    this.DesignForceList = this.force.getDesignForceList('Moment', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {

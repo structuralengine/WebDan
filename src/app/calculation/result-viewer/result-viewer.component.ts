@@ -2,9 +2,6 @@
 import * as printJS from 'print-js';
 // import printJS = require("print-js");
 
-import { SaveDataService } from '../../providers/save-data.service';
-
-
 @Component({
   selector: 'app-result-viewer',
   templateUrl: './result-viewer.component.html',

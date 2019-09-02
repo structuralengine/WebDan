@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Http, Headers, Response } from '@angular/http';
 
-
 import { CalcSafetyFatigueMomentService } from './calc-safety-fatigue-moment.service';
-import { ResultDataService } from '../result-data.service';
+import { SetPostDataService } from '../set-post-data.service';
+
 
 @Component({
   selector: 'app-result-safety-fatigue-moment',
@@ -20,7 +20,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
   constructor(private http: Http,
     private print: CalcSafetyFatigueMomentService,
-    private calc: ResultDataService) { }
+    private post: SetPostDataService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -42,7 +42,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
     // postする
     const inputJson: string = '=' + JSON.stringify(postData);
-    this.http.post(this.calc.URL, inputJson, {
+    this.http.post(this.post.URL, inputJson, {
       headers: new Headers({
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
@@ -71,7 +71,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
       this.err = response;
       return false;
     }
-        const json = this.calc.parseJsonString(response);
+        const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
     this.safetyFatigueMomentPages = this.print.setSafetyFatiguePages(json, postData);
     return true;

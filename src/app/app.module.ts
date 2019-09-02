@@ -72,6 +72,12 @@ import { ResultEarthquakesMomentComponent } from './calculation/result-earthquak
 import { ResultEarthquakesShearForceComponent } from './calculation/result-earthquakes-shear-force/result-earthquakes-shear-force.component';
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
+import { SetDesignForceService} from './calculation/set-design-force.service';
+import { SetSafetyFactorService} from './calculation/set-safety-factor.service';
+import { SetSectionService} from './calculation/set-section.service';
+import { SetBarService} from './calculation/set-bar.service';
+import { SetPostDataService} from './calculation/set-post-data.service';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -145,7 +151,13 @@ import { SectionForceListComponent } from './calculation/section-force-list/sect
     CalcRestorabilityMomentService,
     CalcRestorabilityShearForceService,
     CalcEarthquakesMomentService,
-    CalcEarthquakesShearForceService
+    CalcEarthquakesShearForceService,
+
+    SetDesignForceService,
+    SetSafetyFactorService,
+    SetSectionService,
+    SetBarService,
+    SetPostDataService
   ],
   bootstrap: [
     AppComponent

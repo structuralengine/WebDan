@@ -1,4 +1,8 @@
 import { SaveDataService } from '../../providers/save-data.service';
+import { SetDesignForceService } from '../set-design-force.service';
+import { SetSectionService } from '../set-section.service';
+import { SetSafetyFactorService } from '../set-safety-factor.service';
+
 import { ResultDataService } from '../result-data.service';
 import { UserInfoService } from '../../providers/user-info.service';
 
@@ -15,6 +19,9 @@ export class CalcSafetyMomentService {
   constructor(
     private save: SaveDataService,
     private user: UserInfoService,
+    private force: SetDesignForceService,
+    private sectin: SetSectionService,
+    private safety: SetSafetyFactorService,
     private calc: ResultDataService) {
     this.DesignForceList = null;
   }
@@ -32,7 +39,7 @@ export class CalcSafetyMomentService {
 
     const pickupNoList: any[] = new Array();
     pickupNoList.push(this.save.basic.pickup_moment_no[7]); // ピックアップNoは 曲げの7番目に保存されている
-    this.DesignForceList = this.calc.getDesignForceList('Moment', pickupNoList);
+    this.DesignForceList = this.force.getDesignForceList('Moment', pickupNoList);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
@@ -71,7 +78,7 @@ export class CalcSafetyMomentService {
 
   // サーバーに送信するデータを作成
   public setPostData(DesignForceList: any[]): any {
-    const postData = {
+    const result = {
       username: this.user.loginUserName,
       password: this.user.loginPassword,
       InputData: new Array()
@@ -80,25 +87,30 @@ export class CalcSafetyMomentService {
     for (const groupe of DesignForceList) {
       for (const member of groupe) {
         for (const position of member.positions) {
-          for (let i = 0; i < position.designForce.length; i++) {
-            const temp1: any[] = this.getSectionForce(position.designForce[i]);
+          for(const force of position.designForce) {
+            const temp1: any[] = this.getSectionForce(force);
             if ('PostData' in position) {
               const temp2: any[] = position.PostData.concat(temp1);
               position.PostData = temp2;
             } else {
               position['PostData'] = temp1;
             }
+             // 安全係数を position['safety_factor'], position['material_steel']
+             // position['material_concrete'], position['pile_factor'] に登録する
+            this.safety.setSafetyFactor('Moment', member.g_no, position, 2);
+            // 鉄筋の本数・断面形状を position['PostData'] に登録
+            // 出力用の string を position['printData'] に登録
+            this.sectin.setPostData(member.g_no, member.m_no, position);
+            // 変数に登録
             for (const section of position.PostData) {
-              this.calc.setSafetyFactor('Moment', member.g_no, position, 0); // 安全係数を代入する
-              this.calc.setPostData(member.g_no, member.m_no, position); // 鉄筋の本数・断面形状を入力する
               delete section.Md;  // 設計断面力データ Md の入力がない場合、断面の耐力を計算します。
-              postData.InputData.push(section);
+              result.InputData.push(section);
             }
           }
         }
       }
     }
-    return postData;
+    return result;
   }
 
   // 設計断面力（リスト）を生成する
@@ -142,76 +154,6 @@ export class CalcSafetyMomentService {
       }];
     }
 
-    return result;
-  }
-
-  // 出力テーブル用の配列にセット
-  public setSafetyPages(responseData: any, postData: any): any[] {
-    const result: any[] = new Array();
-    let page: any = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
-
-    for (const groupe of postData) {
-      for (const member of groupe) {
-        for (const position of member.positions) {
-          for (const postdata of position.PostData) {
-            if (page.columns.length > 4) {
-              result.push(page);
-              page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
-            }
-            const column: any[] = new Array();
-            /////////////// タイトル ///////////////
-            column.push(this.calc.getTitleString1(member, position) );
-            column.push(this.calc.getTitleString2(position, postdata));
-            column.push(this.calc.getTitleString3(position));
-            ///////////////// 形状 /////////////////
-            column.push(this.calc.getShapeString_B(position.memberInfo, postdata));
-            column.push(this.calc.getShapeString_H(position.memberInfo, postdata));
-            column.push(this.calc.getShapeString_Bt(position.memberInfo, postdata));
-            column.push(this.calc.getShapeString_t(position.memberInfo, postdata));
-            /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.calc.getAsStringList(position.barData.rebar1, postdata.SteelElastic[0]);
-            column.push(Ast.As);
-            column.push(Ast.AsString);
-            column.push(Ast.dt);
-            /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.calc.getAsStringList(position.barData.rebar2, postdata.SteelElastic[0]);
-            column.push(Asc.As);
-            column.push(Asc.AsString);
-            column.push(Asc.dt);
-            /////////////// 側面鉄筋 ///////////////
-            column.push({ alien: 'center', value: '-' });
-            column.push({ alien: 'center', value: '' });
-            column.push({ alien: 'center', value: '-' });
-            /////////////// コンクリート情報 ///////////////
-            column.push({ alien: 'right', value: '24.0' });
-            column.push({ alien: 'right', value: '1.30' });
-            column.push({ alien: 'right', value: '18.5' });
-            /////////////// 鉄筋情報 ///////////////
-            column.push({ alien: 'right', value: '390' });
-            column.push({ alien: 'right', value: '1.00' });
-            column.push({ alien: 'right', value: '390' });
-            /////////////// 断面力 ///////////////
-            column.push({ alien: 'right', value: '501.7' });
-            column.push({ alien: 'right', value: '455.2' });
-            /////////////// 照査 ///////////////
-            column.push({ alien: 'right', value: '0.00350' });
-            column.push({ alien: 'right', value: '0.02168' });
-            column.push({ alien: 'right', value: '572.1' });
-            column.push({ alien: 'right', value: '7420.2' });
-            column.push({ alien: 'right', value: '1.00' });
-            column.push({ alien: 'right', value: '7420.2' });
-            column.push({ alien: 'right', value: '1.20' });
-            column.push({ alien: 'right', value: '0.081' });
-            column.push({ alien: 'center', value: 'OK' });
-            page.columns.push(column);
-          }
-        }
-      }
-      if (page.columns.length > 0) {
-        result.push(page);
-        page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
-      }
-    }
     return result;
   }
 

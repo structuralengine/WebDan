@@ -1,4 +1,7 @@
 import { SaveDataService } from '../../providers/save-data.service';
+import { SetDesignForceService } from '../set-design-force.service';
+import { SetSectionService } from '../set-section.service';
+import { SetSafetyFactorService } from '../set-safety-factor.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 
@@ -13,6 +16,9 @@ export class CalcDurabilityMomentService {
   public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
+    private force: SetDesignForceService,
+    private sectin: SetSectionService,
+    private safety: SetSafetyFactorService,
     private calc: ResultDataService,
     private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
@@ -36,7 +42,7 @@ export class CalcDurabilityMomentService {
     if (this.save.basic.pickup_moment_no[3] !== null) {
       pickupNoList.push(this.save.basic.pickup_moment_no[3]); // 変動荷重
     }
-    this.DesignForceList = this.calc.getDesignForceList('Moment', pickupNoList);
+    this.DesignForceList = this.force.getDesignForceList('Moment', pickupNoList);
 
 
     const result: any[] = new Array();
