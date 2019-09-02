@@ -52,7 +52,7 @@ export class DesignPointsComponent implements OnInit {
 
         const positionCount: number = member['positions'].length;
         if(positionCount> 1){
-          //this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount, colspan: 1});
+          this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount, colspan: 1});
         }
 
         for (let k = 0; k < positionCount; k++) {
@@ -68,6 +68,11 @@ export class DesignPointsComponent implements OnInit {
         }
       }
     }
+  }
+  
+  // tslint:disable-next-line: use-life-cycle-interface
+  ngOnDestroy() {
+    this.input.setDesignPointColumns(this.table_datas);
   }
 
 }
