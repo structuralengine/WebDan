@@ -3,6 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcSafetyShearForceService } from './calc-safety-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
+import { ResultDataService } from '../result-data.service';
 
 
 @Component({
@@ -14,11 +15,12 @@ export class ResultSafetyShearForceComponent implements OnInit {
 
   private isLoading = true;
   private isFulfilled = false;
-  private err: string;  
+  private err: string;
   private safetyShearForcePages: any[];
 
   constructor(private http: Http,
               private print: CalcSafetyShearForceService,
+              private calc: ResultDataService,
               private post: SetPostDataService) { }
 
   ngOnInit() {
@@ -70,10 +72,12 @@ export class ResultSafetyShearForceComponent implements OnInit {
       this.err = response;
       return false;
     }
-        const json = this.post.parseJsonString(response);
+    const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.safetyShearForcePages = this.print.getSafetyPages(json, postData);
+    this.safetyShearForcePages = this.print.getSafetyPages(json.OutputData, postData);
     return true;
   }
+
+
 
 }

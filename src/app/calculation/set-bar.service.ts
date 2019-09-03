@@ -236,7 +236,7 @@ export class SetBarService {
           compresBarList.push(Steel1);
         }
       }
-      result['ptint-Asc'] = this.save.getAs(dia2) * rebar_n2;
+      result['print-Asc'] = this.save.getAs(dia2) * rebar_n2;
       result['print-AscString'] = dia2 + '-' + rebar_n2 + '本';
       result['print-dsc'] = this.getBarCenterPosition(dsc2, rebar_n2, line2, space2);
     }
@@ -303,10 +303,18 @@ export class SetBarService {
       result.Steels.push(Ast);
     }
     // 印刷用の変数に登録
-    result['ptint-Ast'] = this.save.getAs(dia1) * rebar_n1;
+    result['print-Ast'] = this.save.getAs(dia1) * rebar_n1;
     result['print-AstString'] = dia1 + '-' + rebar_n1 + '本';
     result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1);
-
+    
+    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
+    if (Aw !== null) {
+      result['print-Aw'] = Aw.Aw;
+      result['print-AwString'] = Aw.AwString;
+      result['print-fwyd'] = Aw.fwyd;
+      result['print-deg'] = Aw.deg;
+      result['print-Ss'] = Aw.Ss;
+    }
     return result;
   }
 
@@ -393,7 +401,7 @@ export class SetBarService {
       }
     }
     // 印刷用の変数に登録
-    result['ptint-Ast'] = this.save.getAs(dia) * rebar_n;
+    result['print-Ast'] = this.save.getAs(dia) * rebar_n;
     result['print-AstString'] = dia + '-' + rebar_n + '本';
     result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space);
 
@@ -411,6 +419,14 @@ export class SetBarService {
     result['print-rs'] = rs;
     result['print-Es'] = 200;
 
+    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
+    if (Aw !== null) {
+      result['print-Aw'] = Aw.Aw;
+      result['print-AwString'] = Aw.AwString;
+      result['print-fwyd'] = Aw.fwyd;
+      result['print-deg'] = Aw.deg;
+      result['print-Ss'] = Aw.Ss;
+    }
     return result;
   }
 
@@ -486,7 +502,7 @@ export class SetBarService {
       result.Steels.push(Asc);
     }
     if (compresBarList.length > 0) { // 印刷用の変数に登録
-      result['ptint-Asc'] = printCompresBar['As'];
+      result['print-Asc'] = printCompresBar['As'];
       result['print-AscString'] = printCompresBar['AsString'];
       result['print-dsc'] = printCompresBar['ds'];
     }
@@ -509,9 +525,18 @@ export class SetBarService {
       result.Steels.push(Ast);
     }
     // 印刷用の変数に登録
-    result['ptint-Ast'] = printTensionBar['As'];
+    result['print-Ast'] = printTensionBar['As'];
     result['print-AstString'] = printTensionBar['AsString'];
     result['print-dst'] = printTensionBar['ds'];
+
+    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
+    if (Aw !== null) {
+      result['print-Aw'] = Aw.Aw;
+      result['print-AwString'] = Aw.AwString;
+      result['print-fwyd'] = Aw.fwyd;
+      result['print-deg'] = Aw.deg;
+      result['print-Ss'] = Aw.Ss;
+    }
 
     return result;
   }
@@ -689,6 +714,84 @@ export class SetBarService {
     }
     const result: number = PosNum / n;
     return result;
+  }
+
+  private setAwprintData(starrup: any, materialInfo: any[]): any {
+
+    // エラーチェック
+    if (starrup.stirrup_dia === null) { return null; }
+    if (starrup.stirrup_n === null) { return null; }
+    if (starrup.stirrup_n === 0) { return null; }
+    if (starrup.stirrup_ss === null) { return null; }
+    if (starrup.stirrup_ss === 0) { return null; }
+
+    const result = {
+      Aw: 0,
+      AwString: '',
+      fwyd: 0,
+      deg: 90,
+      Ss :0      
+    };
+
+    let fwyd: number;
+    if (starrup.stirrup_dia <= materialInfo[0].fsy1) {
+      fwyd = this.save.toNumber(materialInfo[3].fsy1);
+    } else {
+      fwyd = this.save.toNumber(materialInfo[3].fsy2);
+    }
+    if (fwyd === null) { return null; }
+    
+    result.fwyd = fwyd;
+    let dia: string = 'D' + starrup.stirrup_dia;
+    if (fwyd === 235) {
+      // 鉄筋強度が 235 なら 丸鋼
+      dia = 'R' + starrup.stirrup_dia;
+    }
+    const As: number = this.save.getAs(dia);
+    const n: number = starrup.stirrup_n;
+    result.Aw = As * n;
+    result.AwString = dia + '-' + n + '本';
+    result.Ss = starrup.stirrup_ss;
+
+    return result;
+  }
+
+  // 鉄筋情報を printData にセット
+  public setBarAtPrintData(printData: any, bars: any, target = ['Ast', 'Asc', 'Ase', 'Aw']): void {
+    // 引張鉄筋
+    printData['Ast'] = bars['print-Ast'];
+    printData['AstString'] = bars['print-AstString'];
+    printData['dst'] = bars['print-dst'];
+    // 圧縮鉄筋
+    if (target.indexOf('Asc') >= 0) {
+      if ('print-Asc' in bars) {
+        printData['Asc'] = bars['print-Asc'];
+        printData['AscString'] = bars['print-AscString'];
+        printData['dsc'] = bars['print-dsc'];
+      }
+    }
+    // 側方鉄筋
+    if (target.indexOf('Ase') >= 0) {
+      if ('ptint-Ase' in bars) {
+        printData['Ase'] = bars['ptint-Ase'];
+        printData['AseString'] = bars['print-AseString'];
+        printData['dse'] = bars['print-dse'];
+      }      
+    }
+    // 帯鉄筋
+    if (target.indexOf('Aw') >= 0) {
+      if ('print-Aw' in bars) {
+        printData['Aw'] = bars['print-Aw'];
+        printData['AwString'] = bars['print-AwString'];
+        printData['fwyd'] = bars['print-fwyd'];
+        printData['deg'] = bars['print-deg'];
+        printData['Ss'] = bars['print-Ss'];
+      }
+    }
+    // 鉄筋強度
+    printData['fsy'] = bars['print-fsy'];
+    printData['rs'] = bars['print-rs'];
+    printData['Es'] = bars['print-Es'];
   }
 
   // 鉄筋の入力情報を セット

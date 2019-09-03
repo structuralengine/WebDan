@@ -48,11 +48,32 @@ export class ResultDataService {
     const result = { alien: 'right', value: printData.B };
     return result;
   }
+  // せん断照査表における 断面幅の文字列を取得
+  public getShapeString_B_Bf(printData: any): any {
+    if ('Bt' in printData) {
+      let title: string = printData.B;
+      title += ' ' + printData.Bt;
+      return { alien: 'right', value: title};
+    } else {
+      return { alien: 'right', value: printData.B };
+    }
+  }
   // 照査表における 断面高さの文字列を取得
   public getShapeString_H(printData: any): any {
     const result = { alien: 'right', value: printData.H };
     return result;
   }
+  // せん断照査表における フランジ高さの文字列を取得
+  public getShapeString_H_Hf(printData: any): any {
+    if ('t' in printData) {
+      let title: string = printData.H;
+      title += ' ' + printData.t;
+      return { alien: 'right', value: title };
+    } else {
+      return { alien: 'right', value: printData.H };
+    }
+  }
+
   // 照査表における フランジ幅の文字列を取得
   public getShapeString_Bt(printData: any): any {
     if ('Bt' in printData) {
@@ -69,6 +90,17 @@ export class ResultDataService {
     } else {
       return { alien: 'center', value: '-' };
     }
+  }
+
+  // 照査表における tanθc + tanθt の文字列を取得
+  public getTan(barData: any): any {
+    if ('tan' in barData === false) {
+      return { alien: 'center', value: '-' };
+    }
+    if (this.save.toNumber(barData.tan) === null) {
+      return { alien: 'center', value: '-' };
+    }  
+    return { alien: 'right', value: barData.tan.toFixed(1) };
   }
 
   // 照査表における 引張鉄筋情報を取得
@@ -94,6 +126,28 @@ export class ResultDataService {
     };
 
     return result;
+  }
+
+  // 照査表における 帯鉄筋情報を取得
+  public getAwString(printData: any) {
+    
+    if ('Aw' in printData === false) {
+      return {
+        Aw: { alien: 'center', value: '-' },
+        AwString: { alien: 'center', value: '-' },
+        fwyd: { alien: 'center', value: '-' },
+        deg: { alien: 'center', value: '-' },
+        Ss: { alien: 'center', value: '-' }
+      };
+    }
+
+    const result = {
+      Aw: { alien: 'right', value: printData.Aw.toFixed(1) },
+      AwString: { alien: 'right', value: printData.AwString },
+      fwyd: { alien: 'right', value: printData.fwyd.toFixed(0)  },
+      deg: { alien: 'right', value: printData.deg.toFixed(0) },
+      Ss: { alien: 'right', value: printData.Ss.toFixed(0) }
+    };
   }
 
   // 照査表における コンクリート強度情報を取得

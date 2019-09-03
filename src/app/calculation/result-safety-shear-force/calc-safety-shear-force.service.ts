@@ -16,11 +16,11 @@ export class CalcSafetyShearForceService {
   public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private sectin: SetSectionService,
-              private safety: SetSafetyFactorService,
-              private calc: ResultDataService,
-              private base: CalcSafetyMomentService) {
+    private force: SetDesignForceService,
+    private sectin: SetSectionService,
+    private safety: SetSafetyFactorService,
+    private calc: ResultDataService,
+    private base: CalcSafetyMomentService) {
     this.DesignForceList = null;
   }
 
@@ -36,7 +36,7 @@ export class CalcSafetyShearForceService {
     }
 
     const pickupNoList: any[] = new Array();
-    pickupNoList.push(this.save.basic.pickup_moment_no[5]); // ピックアップNoは せん断の5番目に保存されている
+    pickupNoList.push(this.save.basic.pickup_shear_force_no[5]); // ピックアップNoは せん断の5番目に保存されている
     this.DesignForceList = this.force.getDesignForceList('ShearForce', pickupNoList);
 
     const result: any[] = new Array();
@@ -73,87 +73,267 @@ export class CalcSafetyShearForceService {
     const postData = this.setPostData(this.DesignForceList);
     return postData;
   }
-    
-  public setPostData(DesignForceList: any[]): any{
+
+  public setPostData(DesignForceList: any[]): any {
     return this.base.setPostData(DesignForceList);
   }
 
   // 出力テーブル用の配列にセット
-  public getSafetyPages(responseData: any, postData: any, 
-      title: string= '安全性（破壊）せん断力の照査結果'): any[] {
+  public getSafetyPages(
+    responseData: any,
+    postData: any,
+    title: string = '安全性（破壊）せん断力の照査結果'): any[] {
 
     const result: any[] = new Array();
+    let page: any;
+    let groupeName: string;
+    let i: number = 0;
+    for (const groupe of postData) {
+      groupeName = groupe[0].g_name;
+      page = { caption: title, g_name: groupeName, columns: new Array() };
 
-    for (let i = 0; i < 1; i++) {
-      const page = { caption: title, columns: new Array() };
+      for (const member of groupe) {
+        for (const position of member.positions) {
+          for (let j = 0; j < position.PostData.length; j++) {
+            const postdata = position.PostData[j];
+            const printData = position.printData[j];
+            const resultData = responseData[i].Reactions[0];
 
-      for (let c = 0; c < 5; c++) {
-        const column: any[] = new Array();
-        column.push({ alien: 'center', value: '1部材(0.600)' });
-        column.push({ alien: 'center', value: '壁前面(上側)' });
-        column.push({ alien: 'center', value: '1' });
+            if (page.columns.length > 4) {
+              result.push(page);
+              page = { caption: title, g_name: groupeName, columns: new Array() };
+            }
 
-        column.push({ alien: 'right', value: '1000' });
-        column.push({ alien: 'right', value: '3000' });
-        column.push({ alien: 'center', value: '-' });
+            const column: any[] = new Array();
+            /////////////// タイトル ///////////////
+            column.push(this.calc.getTitleString1(member, position));
+            column.push(this.calc.getTitleString2(position, postdata));
+            column.push(this.calc.getTitleString3(position));
 
-        column.push({ alien: 'right', value: '6353.6' });
-        column.push({ alien: 'center', value: 'D32-8 本' });
-        column.push({ alien: 'right', value: '82.0' });
-        column.push({ alien: 'right', value: '12707.2' });
-        column.push({ alien: 'center', value: 'D32-16 本' });
-        column.push({ alien: 'right', value: '114.0' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
+            ///////////////// 形状 /////////////////
+            column.push(this.calc.getShapeString_B_Bf(printData));
+            column.push(this.calc.getShapeString_H_Hf(printData));
+            column.push(this.calc.getTan(position.barData));
+            /////////////// 引張鉄筋 ///////////////
+            const Ast: any = this.calc.getAsString(printData);
+            column.push(Ast.As);
+            column.push(Ast.AsString);
+            column.push(Ast.ds);
+            /////////////// 圧縮鉄筋 ///////////////
+            const Asc: any = this.calc.getAsString(printData, 'Asc');
+            column.push(Asc.As);
+            column.push(Asc.AsString);
+            column.push(Asc.ds);
+            /////////////// 側面鉄筋 ///////////////
+            const Ase: any = this.calc.getAsString(printData, 'Ase');
+            column.push(Ase.AsString);
+            column.push(Ase.ds);
+            /////////////// コンクリート情報 ///////////////
+            const fck: any = this.calc.getFckString(printData);
+            column.push(fck.fck);
+            column.push(fck.rc);
+            column.push(fck.fcd);
+            /////////////// 鉄筋強度情報 ///////////////
+            const fsk: any = this.calc.getFskString(printData);
+            column.push(fsk.fsy);
+            column.push(fsk.rs);
+            column.push(fsk.fsd);
+            /////////////// 照査 ///////////////
+            const resultColumn: any = this.getResultString(printData, resultData, position);
+            column.push(resultColumn.Md);
+            column.push(resultColumn.Nd);
+            column.push(resultColumn.Vd);
+            column.push(resultColumn.La);
 
-        column.push({ alien: 'right', value: '24.0' });
-        column.push({ alien: 'right', value: '1.30' });
-        column.push({ alien: 'right', value: '18.5' });
-        column.push({ alien: 'right', value: '390' });
-        column.push({ alien: 'right', value: '1.00' });
-        column.push({ alien: 'right', value: '390' });
+            /////////////// 帯鉄筋情報 ///////////////
+            const Aw: any = this.calc.getAwString(printData);
+            column.push(Aw.As);
+            column.push(Aw.AsString);
+            column.push(Aw.fsk);
+            column.push(Aw.deg);
+            column.push(Aw.Ss);
 
-        column.push({ alien: 'right', value: '501.7' });
-        column.push({ alien: 'right', value: '455.2' });
-        column.push({ alien: 'right', value: '455.2' });
-        column.push({ alien: 'center', value: '-' });
+            column.push(resultColumn.fvcd);
+            column.push(resultColumn.Bd);
+            column.push(resultColumn.Bp);
+            column.push(resultColumn.Mu);
+            column.push(resultColumn.Mo);
+            column.push(resultColumn.Bn);
+            column.push(resultColumn.ad);
+            column.push(resultColumn.Ba);
+            column.push(resultColumn.pw);
+            column.push(resultColumn.Bw);
+            column.push(resultColumn.rbc);
+            column.push(resultColumn.Vcd);
+            column.push(resultColumn.rbs);
+            column.push(resultColumn.Vsd);
+            column.push(resultColumn.Vyd);
+            column.push(resultColumn.ri);
+            column.push(resultColumn.Vyd_Ratio);
+            column.push(resultColumn.Vyd_Result);
 
-        column.push({ alien: 'right', value: '506.8' });
-        column.push({ alien: 'center', value: 'D32-4 本' });
-        column.push({ alien: 'right', value: '345' });
-        column.push({ alien: 'right', value: '90' });
-        column.push({ alien: 'right', value: '250' });
+            column.push(resultColumn.fwcd);
+            column.push(resultColumn.Vwcd);
+            column.push(resultColumn.Vwcd_Ratio);
+            column.push(resultColumn.Vwcd_Result);
 
-        column.push({ alien: 'right', value: '0.550' });
-        column.push({ alien: 'right', value: '1.117' });
-        column.push({ alien: 'right', value: '0.681' });
-        column.push({ alien: 'right', value: '503.9' });
-        column.push({ alien: 'right', value: '18.1' });
-        column.push({ alien: 'right', value: '1.072' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'center', value: '-' });
-        column.push({ alien: 'right', value: '1.30' });
-        column.push({ alien: 'right', value: '221.5' });
-        column.push({ alien: 'right', value: '1.10' });
-        column.push({ alien: 'right', value: '355.5' });
-        column.push({ alien: 'right', value: '577.0' });
-        column.push({ alien: 'right', value: '1.20' });
-
-        column.push({ alien: 'right', value: '0.210' });
-        column.push({ alien: 'center', value: 'OK' });
-
-        column.push({ alien: 'right', value: '5.697' });
-        column.push({ alien: 'right', value: '2817.7' });
-        column.push({ alien: 'right', value: '0.043' });
-        column.push({ alien: 'center', value: 'OK' });
-
-        page.columns.push(column);
+            page.columns.push(column);
+            i++;
+          }
+        }
       }
-      result.push(page);
+      if (page.columns.length > 0) {
+        result.push(page);
+      }
     }
-
     return result;
   }
+
+  private getResultString(printData: any, resultData: any, position: any): any {
+
+    const result = {
+      Md: { alien: 'center', value: '-' },
+      Nd: { alien: 'center', value: '-' },
+      Vd: { alien: 'center', value: '-' },
+      La: { alien: 'center', value: '-' },
+      fvcd: { alien: 'center', value: '-' },
+      Bd: { alien: 'center', value: '-' },
+      Bp: { alien: 'center', value: '-' },
+      Mu: { alien: 'center', value: '-' },
+      Mo: { alien: 'center', value: '-' },
+      Bn: { alien: 'center', value: '-' },
+      ad: { alien: 'center', value: '-' },
+      Ba: { alien: 'center', value: '-' },
+      pw: { alien: 'center', value: '-' },
+      Bw: { alien: 'center', value: '-' },
+      rbc: { alien: 'center', value: '-' },
+      Vcd: { alien: 'center', value: '-' },
+      rbs: { alien: 'center', value: '-' },
+      Vsd: { alien: 'center', value: '-' },
+      Vyd: { alien: 'center', value: '-' },
+      ri: { alien: 'center', value: '-' },
+      Vyd_Ratio: { alien: 'center', value: '-' },
+      Vyd_Result: { alien: 'center', value: '-' },
+      fwcd: { alien: 'center', value: '-' },
+      Vwcd: { alien: 'center', value: '-' },
+      Vwcd_Ratio: { alien: 'center', value: '-' },
+      Vwcd_Result: { alien: 'center', value: '-' }
+    }
+
+    const Vyd: any = this.calcVyd(printData, resultData, position);
+    if (Vyd === null) { return result; }
+    
+    // 断面力
+    result.Md = { alien: 'right', value: Vyd.Md.toFixed(1) };
+    result.Nd = { alien: 'right', value: Vyd.Nd.toFixed(1) };    if (Vd === null) { return result; }
+    result.Vd = { alien: 'right', value: Vyd.Vd.toFixed(1) };
+
+    // せん断スパン
+    let La: number = position.La;
+    if (La !== null) {
+      result.La = { alien: 'right', value: La.toFixed(0) };
+    }
+
+
+
+    const Mu: number = resultData.M.Mi;
+    const rb: number = position.safety_facto.rb;
+    const ri: number = position.safety_facto.ri;
+    const ratio: number = Math.abs(ri * Md / Mu);
+    const Vyd_Result: string = (ratio < 1) ? 'OK' : 'NG';
+
+    return {
+      Md: { alien: 'right', value: Md.toFixed(1) },
+      Nd: { alien: 'right', value: printData.Nd.toFixed(1) },
+      Vd: { alien: 'right', value: printData.Vd.toFixed(1) },
+
+      La: { alien: 'center', value: '-' },
+      fvcd: { alien: 'center', value: '-' },
+      Bd: { alien: 'center', value: '-' },
+      Bp: { alien: 'center', value: '-' },
+      Mu: { alien: 'right', value: Mu.toFixed(1) },
+      Mo: { alien: 'center', value: '-' },
+      Bn: { alien: 'center', value: '-' },
+      ad: { alien: 'center', value: '-' },
+      Ba: { alien: 'center', value: '-' },
+      pw: { alien: 'center', value: '-' },
+      Bw: { alien: 'center', value: '-' },
+      rbc: { alien: 'center', value: '-' },
+      Vcd: { alien: 'center', value: '-' },
+      rbs: { alien: 'center', value: '-' },
+      Vsd: { alien: 'center', value: '-' },
+      Vyd: { alien: 'center', value: '-' },
+      ri: { alien: 'right', value: ri.toFixed(2) },
+      Vyd_Ratio: { alien: 'right', value: ratio.toFixed(3) },
+      Vyd_Result: { alien: 'center', value: Vyd_Result },
+
+      fwcd: { alien: 'center', value: '-' },
+      Vwcd: { alien: 'center', value: '-' },
+      Vwcd_Ratio: { alien: 'right', value: ratio.toFixed(3) },
+      Vwcd_Result: { alien: 'center', value: Vyd_Result }
+
+    };
+
+  }
+
+  public calcVyd(printData: any, resultData: any, position: any): any {
+
+    const result = {};
+
+    // 断面力
+    let Md: number = this.save.toNumber(printData.Md);
+    let Nd: number = this.save.toNumber(printData.Nd);
+    let Vd: number = this.save.toNumber(printData.Vd);
+    if (Md === null) { Md = 0; }
+    result['Md'] = Md;
+    if (Nd === null) { Md = 0; }
+    result['Nd'] = Nd;
+    if (Vd === null) { return null; }
+
+    // せん断スパン
+    let La: number = this.save.toNumber(position.La);
+    result['La'] = La;
+    if (La === null) {
+      La = Number.MAX_VALUE;
+    }
+
+    // 帯鉄筋
+    let Aw: number = 0;
+    if ('Aw' in printData) {
+      Aw = this.save.toNumber(printData.Aw);
+      if (Aw === null) {Aw = 0;}
+    }
+    let fwyd: number = 0;
+    if ('fwyd' in printData) {
+      fwyd = this.save.toNumber(printData.fwyd);
+      if (fwyd === null) { fwyd = 0; }
+    }
+    let deg: number = 90;
+    if ('deg' in printData) {
+      deg = this.save.toNumber(printData.deg);
+      if (deg === null) { deg = 90; }
+    }
+    let Ss: number = Number.MAX_VALUE;
+    if ('Ss' in printData) {
+      Ss = this.save.toNumber(printData.Ss);
+      if (Ss === null) { Ss = Number.MAX_VALUE; }
+    }
+
+    // 引張鉄筋
+    let Ast: number = 0;
+    if ('Ast' in printData) {
+      Ast = this.save.toNumber(printData.Ast);
+      if (Ast === null) { Ast = 0; }
+    } 
+    let dst: number = 0;
+    if ('dst' in printData) {
+      dst = this.save.toNumber(printData.dst);
+      if (dst === null) { dst = 0; }
+    }    
+
+    // 断面
+    
+
+  }
+    
 }

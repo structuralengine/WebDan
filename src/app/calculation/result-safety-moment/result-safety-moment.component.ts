@@ -82,10 +82,17 @@ export class ResultSafetyMomentComponent implements OnInit {
   // 出力テーブル用の配列にセット
   private setSafetyPages(responseData: any, postData: any): any[] {
     const result: any[] = new Array();
-    let page: any = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
-
+    let page: any;
+    let groupeName: string;
     let i: number = 0;
     for (const groupe of postData) {
+      groupeName = groupe[0].g_name;
+      page = {
+        caption: '安全性（破壊）曲げモーメントの照査結果',
+        g_name: groupeName,
+        columns: new Array()
+      };
+
       for (const member of groupe) {
         for (const position of member.positions) {
           for (let j = 0; j < position.PostData.length; j++) {
@@ -95,7 +102,11 @@ export class ResultSafetyMomentComponent implements OnInit {
 
             if (page.columns.length > 4) {
               result.push(page);
-              page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
+              page = {
+                caption: '安全性（破壊）曲げモーメントの照査結果',
+                g_name: groupeName,
+                columns: new Array()
+              };
             }
             const column: any[] = new Array();
             /////////////// タイトル ///////////////
@@ -152,7 +163,6 @@ export class ResultSafetyMomentComponent implements OnInit {
       }
       if (page.columns.length > 0) {
         result.push(page);
-        page = { caption: '安全性（破壊）曲げモーメントの照査結果', columns: new Array() };
       }
     }
     return result;

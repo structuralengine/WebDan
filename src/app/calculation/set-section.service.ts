@@ -31,7 +31,7 @@ export class SetSectionService {
         temp: position.PostData
       })
     ).temp;
-
+    
     // 鉄筋の入力情報ををセット
     this.bar.setBarData(g_no, m_no, position);
 
@@ -175,24 +175,8 @@ export class SetSectionService {
     const bars = this.bar.getRectBar(position, '横小判', h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-      if ('ptint-Asc' in bars) {
-        printData['Asc'] = bars['ptint-Asc'];
-        printData['AscString'] = bars['print-AscString'];
-        printData['dsc'] = bars['print-dsc'];
-      }
-      if ('ptint-Ase' in bars) {
-        printData['Ase'] = bars['ptint-Ase'];
-        printData['AseString'] = bars['print-AseString'];
-        printData['dse'] = bars['print-dse'];
-      }
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
+      this.bar.setBarAtPrintData(printData, bars );
     } else {
       return false;
     }
@@ -260,24 +244,8 @@ export class SetSectionService {
     const bars = this.bar.getVerticalOvalBar(position);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-      if ('ptint-Asc' in bars) {
-        printData['Asc'] = bars['ptint-Asc'];
-        printData['AscString'] = bars['print-AscString'];
-        printData['dsc'] = bars['print-dsc'];
-      }
-      if ('ptint-Ase' in bars) {
-        printData['Ase'] = bars['ptint-Ase'];
-        printData['AseString'] = bars['print-AseString'];
-        printData['dse'] = bars['print-dse'];
-      }
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
+      this.bar.setBarAtPrintData(printData, bars );
     } else {
       return false;
     }
@@ -336,24 +304,8 @@ export class SetSectionService {
     const bars = this.bar.getRectBar(position, PostData.memo, h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-      if ('ptint-Asc' in bars) {
-        printData['Asc'] = bars['ptint-Asc'];
-        printData['AscString'] = bars['print-AscString'];
-        printData['dsc'] = bars['print-dsc'];
-      }
-      if ('ptint-Ase' in bars) {
-        printData['Ase'] = bars['ptint-Ase'];
-        printData['AseString'] = bars['print-AseString'];
-        printData['dse'] = bars['print-dse'];
-      }
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
+      this.bar.setBarAtPrintData( printData, bars );
     } else {
       return false;
     }
@@ -412,24 +364,8 @@ export class SetSectionService {
     const bars = this.bar.getRectBar(position, PostData.memo, h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-      if ('ptint-Asc' in bars) {
-        printData['Asc'] = bars['ptint-Asc'];
-        printData['AscString'] = bars['print-AscString'];
-        printData['dsc'] = bars['print-dsc'];
-      }
-      if ('ptint-Ase' in bars) {
-        printData['Ase'] = bars['ptint-Ase'];
-        printData['AseString'] = bars['print-AseString'];
-        printData['dse'] = bars['print-dse'];
-      }
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
+      this.bar.setBarAtPrintData( printData, bars );
     } else {
       return false;
     }
@@ -470,24 +406,8 @@ export class SetSectionService {
     const bars = this.bar.getRectBar(position, PostData.memo, height);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-      if ('ptint-Asc' in bars) {
-        printData['Asc'] = bars['ptint-Asc'];
-        printData['AscString'] = bars['print-AscString'];
-        printData['dsc'] = bars['print-dsc'];
-      }
-      if ('ptint-Ase' in bars) {
-        printData['Ase'] = bars['ptint-Ase'];
-        printData['AseString'] = bars['print-AseString'];
-        printData['dse'] = bars['print-dse'];
-      }
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
+      this.bar.setBarAtPrintData( printData, bars );
     } else {
       return false;
     }
@@ -547,14 +467,8 @@ export class SetSectionService {
     const bars = this.bar.getCircleBar(position);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
+      this.bar.setBarAtPrintData( printData, bars, ['Ast', 'Aw'] );
     } else {
       return false;
     }
@@ -597,15 +511,8 @@ export class SetSectionService {
     const bars = this.bar.getCircleBar(position);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
-      printData['Ast'] = bars['ptint-Ast'];
-      printData['AstString'] = bars['print-AstString'];
-      printData['dst'] = bars['print-dst'];
-
       PostData['SteelElastic'] = bars.SteelElastic;
-      printData['fsy'] = bars['print-fsy'];
-      printData['rs'] = bars['print-rs'];
-      printData['Es'] = bars['print-Es'];
-
+      this.bar.setBarAtPrintData( printData, bars, ['Ast', 'Aw'] );
     } else {
       return false;
     }
