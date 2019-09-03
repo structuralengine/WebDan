@@ -8,7 +8,7 @@ import { SetBarService } from './set-bar.service';
 export class SetSectionService {
 
   constructor(private save: SaveDataService,
-              private bar: SetBarService) {
+    private bar: SetBarService) {
   }
 
   // position に コンクリート・鉄筋情報を入力する /////////////////////////////////////////////////////////////////////
@@ -26,12 +26,12 @@ export class SetSectionService {
     // 断面
     position['memberInfo'] = memberInfo;
     // 出力用の変数の用意する
-    position['printData']  = JSON.parse(
+    position['printData'] = JSON.parse(
       JSON.stringify({
         temp: position.PostData
       })
     ).temp;
-    
+
     // 鉄筋の入力情報ををセット
     this.bar.setBarData(g_no, m_no, position);
 
@@ -176,7 +176,22 @@ export class SetSectionService {
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData(printData, bars );
+      this.bar.setBarAtPrintData(printData, bars);
+      // せん断照査用の換算矩形断面を算定
+      const circleArea: number = (h ** 2) * Math.PI / 4;
+      const rectArea: number = h * (b - h);
+      const Area = circleArea + rectArea;
+      printData['Vyd_H'] = h;
+      printData['Vyd_B'] = Area / h;
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
     } else {
       return false;
     }
@@ -245,7 +260,22 @@ export class SetSectionService {
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData(printData, bars );
+      this.bar.setBarAtPrintData(printData, bars);
+      // せん断照査用の換算矩形断面を算定
+      const circleArea: number = (b ** 2) * Math.PI / 4;
+      const rectArea: number = b * (h - b);
+      const Area = circleArea + rectArea;
+      printData['Vyd_H'] = Area / b;
+      printData['Vyd_B'] = b;
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
     } else {
       return false;
     }
@@ -305,7 +335,19 @@ export class SetSectionService {
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData( printData, bars );
+      this.bar.setBarAtPrintData(printData, bars);
+      // せん断照査用の換算矩形断面を算定
+      printData['Vyd_H'] = h;
+      printData['Vyd_B'] = b;
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
     } else {
       return false;
     }
@@ -365,7 +407,19 @@ export class SetSectionService {
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData( printData, bars );
+      this.bar.setBarAtPrintData(printData, bars);
+      // せん断照査用の換算矩形断面を算定
+      printData['Vyd_H'] = h;
+      printData['Vyd_B'] = b;
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
     } else {
       return false;
     }
@@ -380,34 +434,46 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let height: number = this.save.toNumber(position.memberInfo.H);
-    if (height === null) { return false; }
+    let h: number = this.save.toNumber(position.memberInfo.H);
+    if (h === null) { return false; }
     if (this.save.toNumber(position.barData.haunch_M) !== null) {
-      height += position.barData.haunch_M;
+      h += position.barData.haunch_M;
     }
     const b: number = this.save.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
 
     const section = {
-      Height: height, // 断面高さ
+      Height: h, // 断面高さ
       WTop: b,        // 断面幅（上辺）
       WBottom: b,     // 断面幅（底辺）
       ElasticID: 'c'  // 材料番号
     };
     PostData.Sections.push(section);
     printData['B'] = b;
-    printData['H'] = height;
+    printData['H'] = h;
 
     // コンクリートの材料情報を集計
     const sectionElastic = this.setSectionElastic(position);
     PostData['SectionElastic'] = sectionElastic;
 
     // 鉄筋情報を 集計
-    const bars = this.bar.getRectBar(position, PostData.memo, height);
+    const bars = this.bar.getRectBar(position, PostData.memo, h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData( printData, bars );
+      this.bar.setBarAtPrintData(printData, bars);
+      // せん断照査用の換算矩形断面を算定
+      printData['Vyd_H'] = h;
+      printData['Vyd_B'] = b;
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
     } else {
       return false;
     }
@@ -468,7 +534,22 @@ export class SetSectionService {
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData( printData, bars, ['Ast', 'Aw'] );
+      this.bar.setBarAtPrintData(printData, bars, ['Ast', 'Aw']);
+      // せん断照査用の換算矩形断面を算定
+      let Area = (h ** 2) * Math.PI / 4;
+      printData['Vyd_H'] = Math.sqrt(Area);
+      Area -= (b ** 2) * Math.PI / 4;
+      printData['Vyd_B'] = h - Math.sqrt((h ** 2) - Area);
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
+
     } else {
       return false;
     }
@@ -512,7 +593,21 @@ export class SetSectionService {
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
-      this.bar.setBarAtPrintData( printData, bars, ['Ast', 'Aw'] );
+      this.bar.setBarAtPrintData(printData, bars, ['Ast', 'Aw']);
+      // せん断照査用の換算矩形断面を算定
+      const Area = (h ** 2) * Math.PI / 4;
+      printData['Vyd_H'] = Math.sqrt(Area);
+      printData['Vyd_B'] = printData.Vyd_H;
+      let n: number = 0;
+      let nDepth: number = 0;
+      for (const b of bars) {
+        if (b.IsTensionBar === true) {
+          n += b.n;
+          nDepth += (b.Depth * b.n);
+        }
+      }
+      printData['Vyd_d'] = nDepth / n;
+
     } else {
       return false;
     }
@@ -532,7 +627,7 @@ export class SetSectionService {
 
   }
 
-  
+
   // コンクリート強度の POST用データを返す
   private setSectionElastic(position: any): any[] {
     const result = new Array();

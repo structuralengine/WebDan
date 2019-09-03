@@ -4,6 +4,7 @@ import { SetSectionService } from '../set-section.service';
 import { SetSafetyFactorService } from '../set-safety-factor.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service';
+import { SetBarService } from '../set-bar.service';
 
 import { Injectable } from '@angular/core';
 
@@ -20,7 +21,8 @@ export class CalcSafetyShearForceService {
     private sectin: SetSectionService,
     private safety: SetSafetyFactorService,
     private calc: ResultDataService,
-    private base: CalcSafetyMomentService) {
+    private base: CalcSafetyMomentService,
+    private bar: SetBarService) {
     this.DesignForceList = null;
   }
 
@@ -105,6 +107,9 @@ export class CalcSafetyShearForceService {
             }
 
             const column: any[] = new Array();
+
+            /////////////// まず計算 ///////////////
+            const Vyd: any = this.calcVmu(printData, resultData, position);
             /////////////// タイトル ///////////////
             column.push(this.calc.getTitleString1(member, position));
             column.push(this.calc.getTitleString2(position, postdata));
@@ -189,6 +194,8 @@ export class CalcSafetyShearForceService {
     return result;
   }
 
+
+
   private getResultString(printData: any, resultData: any, position: any): any {
 
     const result = {
@@ -220,12 +227,11 @@ export class CalcSafetyShearForceService {
       Vwcd_Result: { alien: 'center', value: '-' }
     }
 
-    const Vyd: any = this.calcVyd(printData, resultData, position);
-    if (Vyd === null) { return result; }
-    
+
     // 断面力
     result.Md = { alien: 'right', value: Vyd.Md.toFixed(1) };
-    result.Nd = { alien: 'right', value: Vyd.Nd.toFixed(1) };    if (Vd === null) { return result; }
+    result.Nd = { alien: 'right', value: Vyd.Nd.toFixed(1) };
+    if (Vd === null) { return result; }
     result.Vd = { alien: 'right', value: Vyd.Vd.toFixed(1) };
 
     // せん断スパン
@@ -276,19 +282,64 @@ export class CalcSafetyShearForceService {
 
   }
 
-  public calcVyd(printData: any, resultData: any, position: any): any {
+  // 変数の整理と計算
+  public calcVmu(printData: any, resultData: any, position: any): any {
 
     const result = {};
 
     // 断面力
     let Md: number = this.save.toNumber(printData.Md);
     let Nd: number = this.save.toNumber(printData.Nd);
-    let Vd: number = this.save.toNumber(printData.Vd);
+    const Vd: number = this.save.toNumber(printData.Vd);
     if (Md === null) { Md = 0; }
     result['Md'] = Md;
-    if (Nd === null) { Md = 0; }
+    if (Nd === null) { Nd = 0; }
     result['Nd'] = Nd;
-    if (Vd === null) { return null; }
+    if (Vd === null) { return result; }
+    result['Vd'] = Vd;
+
+    // 断面
+    let h: number = 0;
+    if ('Vyd_H' in printData) {
+      h = this.save.toNumber(printData.Vyd_H);
+      if (h === null) { return result; }
+    }
+    result['H'] = h;
+    let b: number = 0;
+    if ('Vyd_B' in printData) {
+      b = this.save.toNumber(printData.Vyd_B);
+      if (b === null) { return result; }
+    }
+    result['B'] = b;
+
+    // 引張鉄筋
+    let Ast: number = 0;
+    if ('Ast' in printData) {
+      Ast = this.save.toNumber(printData.Ast);
+      if (Ast === null) { Ast = 0; }
+    }
+    result['Ast'] = Ast;
+
+    let d: number = 0;
+    if ('Vyd_d' in printData) {
+      d = this.save.toNumber(printData.Vyd_d);
+      if (d === null) { d = h; }
+    }
+    result['d'] = d;
+
+    //  tanθc + tanθt
+    let tan: number = 0;
+    let Vhd: number = 0
+    if ('tan' in position.barData) {
+      tan = this.save.toNumber(position.barData.tan);
+      if (tan === null) {
+        tan = 0;
+      } else {
+        Vhd = Md / d * this.bar.Radians(tan);
+      }
+    }
+    result['tan'] = tan;
+    result['Vhd'] = Vhd;
 
     // せん断スパン
     let La: number = this.save.toNumber(position.La);
@@ -301,39 +352,87 @@ export class CalcSafetyShearForceService {
     let Aw: number = 0;
     if ('Aw' in printData) {
       Aw = this.save.toNumber(printData.Aw);
-      if (Aw === null) {Aw = 0;}
+      if (Aw === null) { Aw = 0; }
     }
+    result['Aw'] = Aw;
+
     let fwyd: number = 0;
     if ('fwyd' in printData) {
       fwyd = this.save.toNumber(printData.fwyd);
       if (fwyd === null) { fwyd = 0; }
     }
+    result['fwyd'] = fwyd;
+
     let deg: number = 90;
     if ('deg' in printData) {
       deg = this.save.toNumber(printData.deg);
       if (deg === null) { deg = 90; }
     }
+    result['deg'] = deg;
+
     let Ss: number = Number.MAX_VALUE;
     if ('Ss' in printData) {
       Ss = this.save.toNumber(printData.Ss);
       if (Ss === null) { Ss = Number.MAX_VALUE; }
     }
+    result['Ss'] = Ss;
 
-    // 引張鉄筋
-    let Ast: number = 0;
-    if ('Ast' in printData) {
-      Ast = this.save.toNumber(printData.Ast);
-      if (Ast === null) { Ast = 0; }
-    } 
-    let dst: number = 0;
-    if ('dst' in printData) {
-      dst = this.save.toNumber(printData.dst);
-      if (dst === null) { dst = 0; }
-    }    
+    // コンクリート材料
+    let fck: number = 0;
+    if ('fck' in printData) {
+      fck = this.save.toNumber(printData.fck);
+      if (fck === null) { return result; }
+    }
+    result['fck'] = fck;
 
-    // 断面
-    
+    let rc: number = 0;
+    if ('rc' in printData) {
+      rc = this.save.toNumber(printData.rc);
+      if (rc === null) { return result; }
+    }
+    result['rc'] = rc;
+
+    result['fcd'] = fck / rc;
+
+    // 鉄筋材料
+    let fsy: number = 0;
+    if ('fsy' in printData) {
+      fsy = this.save.toNumber(printData.fsy);
+      if (fsy === null) { return result; }
+    }
+    result['fsy'] = fsy;
+
+    let rs: number = 0;
+    if ('rs' in printData) {
+      rs = this.save.toNumber(printData.rs);
+      if (rs === null) { return result; }
+    }
+    result['rs'] = rs;
+
+    result['fwyd'] = fsy / rs;
+
+
+    // せん断耐力の照査
+    if (La / d >= 2) {
+      const Vyd: any = this.calcVyd(result);
+      for (const key of Object.keys(Vyd)) {
+        result[key] = Vyd[key];
+      }
+
+    } else {
+
+    }
 
   }
-    
+
+  // 標準せん断耐力
+  private calcVyd(source: any): any {
+    const result = {};
+    let fvcd: number = 0.2 * (Math.pow(source.fcd, 1 / 3));
+    fvcd = Math.min(fvcd, 0.72);
+    let Bd: number = 0
+  }
+
+
 }
+

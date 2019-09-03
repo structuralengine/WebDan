@@ -14,12 +14,12 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
   private isLoading = true;
   private isFulfilled = false;
-  private err: string;  
+  private err: string;
   private serviceabilityShearForcePages: any[];
 
   constructor(private http: Http,
-              private print: CalcServiceabilityShearForceService,
-              private post: SetPostDataService) { }
+    private print: CalcServiceabilityShearForceService,
+    private post: SetPostDataService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -71,8 +71,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       return false;
     }
 
-    
-        const json = this.post.parseJsonString(response);
+    const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
     this.serviceabilityShearForcePages = this.print.setServiceabilityPages(json, postData);
     return true;
