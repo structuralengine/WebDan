@@ -50,6 +50,7 @@ export class SectionForceListComponent implements OnInit {
     ) { }
 
   ngOnInit() {
+    /*
     // 安全性（破壊）
     this.safetyMomentForces = this.CalcSafetyMoment.setDesignForces();
     this.safetyShearForces = this.CalcSafetyShearForce.setDesignForces();
@@ -67,6 +68,7 @@ export class SectionForceListComponent implements OnInit {
     // 復旧性（地震時）
     this.earthquakesMomentForces = this.CalcEarthquakesMoment.setDesignForces();
     this.earthquakesShearForces = this.CalcEarthquakesShearForce.setDesignForces();
+    */
   }
 
 }

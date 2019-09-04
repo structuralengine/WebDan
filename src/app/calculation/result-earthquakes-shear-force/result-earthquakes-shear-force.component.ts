@@ -3,24 +3,27 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcEarthquakesShearForceService } from './calc-earthquakes-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
-import { ResultSafetyShearForceComponent } from '../result-safety-shear-force/result-safety-shear-force.component';
+import { ResultDataService } from '../result-data.service';
+import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 
 @Component({
   selector: 'app-result-earthquakes-shear-force',
-  templateUrl: './result-earthquakes-shear-force.component.html',
+  templateUrl: '../result-safety-shear-force/result-safety-shear-force.component.html',
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
 export class ResultEarthquakesShearForceComponent implements OnInit {
 
+  private title: string = '復旧性（地震時）';
   private isLoading = true;
   private isFulfilled = false;
   private err: string;
-  private earthquakesShearForcePages: any[];
+  private safetyShearForcePages: any[];
 
   constructor(private http: Http,
     private calc: CalcEarthquakesShearForceService,
+    private result: ResultDataService,
     private post: SetPostDataService,
-    private base: ResultSafetyShearForceComponent) { }
+    private base: CalcSafetyShearForceService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -74,7 +77,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
     // 安全性破壊のページと同じ
-    this.earthquakesShearForcePages = this.base.getSafetyPages(json, postData, '復旧性（地震時以外）せん断力の照査結果');
+    this.safetyShearForcePages = this.base.getSafetyPages(json.OutputData, postData, '復旧性（地震時）せん断力の照査結果');
     return true;
   }
 

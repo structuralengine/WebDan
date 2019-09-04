@@ -6,88 +6,239 @@
   <ng-container *ngIf="isFulfilled">
 
     <section class="sheet">
-      <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
+      <svg width="160mm" height="260mm" viewBox="0 0 160 260" xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
         <!--タイトル-->
         <g font-size="2.5pt" text-anchor="start">
           <text x="0" y="11">3.3 耐久性の照査</text>
-
-          <text x="3" y="21">3.3.1 鋼材の腐食に関する検討【コンクリート標準　10.2】</text>
-          <text x="3" y="26">(1)ひび割れに関する検討【コンクリート標準　10.2.2】</text>
-          <text x="5" y="31">(a)曲げひび割れの検討【コンクリート標準　10.2.2.4】</text>
-          <text x="7" y="36">曲げひび割れの検討を省略出来る場合は、使用性の外観(曲げひび割れ）と同様である。</text>
-          <text x="7" y="41">曲げひび割れの検討に関しては、コンクリート表面の設計曲げひび割れ幅</text>
-          <text x="119" y="41">
+    
+          <text x="3" y="21">(1)曲げモーメントに関する照査</text>
+          <text x="7" y="31">a)曲げひび割れに対する部材の検討方法</text>
+          <text x="12" y="41">曲げひび割れに対する部材の検討葉、全断面を有効としたコンクリートの縁引帳</text>
+          <text x="7" y="46">応力度</text>
+          <text x="18" y="46">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b</tspan>
+          </text>
+          <text x="23" y="46">が断面高さに応じた縁引帳応力度の制限値</text>
+          <text x="87" y="46">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b1</tspan>
+          </text>
+          <text x="93" y="46">以下の場合は、永久作用に</text>
+          <text x="7" y="51">よる引帳鉄筋の応力度</text>
+          <text x="41" y="51">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">s</tspan>
+          </text>
+          <text x="47" y="51">による検討を行い、</text>
+          <text x="75" y="51">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b</tspan>
+          </text>
+          <text x="80" y="51">
+            がσ<tspan baseline-shift="0%" font-size="1.7pt">b1</tspan>
+          </text>
+          <text x="90" y="51">以上の場合には、曲げひび</text>
+          <text x="7" y="56">
+            割れ幅 W<tspan baseline-shift="0%" font-size="1.7pt">ｄ</tspan>
+            による検討を行う。</text>
+    
+          <text x="20" y="66">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b</tspan>≦
+          </text>
+          <text x="28" y="66">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b1</tspan>の場合
+          </text>
+          <text x="50" y="66">→</text>
+          <text x="60" y="66">永久作用による引帳鉄筋の応力度による検討</text>
+          <text x="20" y="71">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b</tspan>＞
+          </text>
+          <text x="28" y="71">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">b1</tspan>の場合
+          </text>
+          <text x="50" y="71">→</text>
+          <text x="60" y="71">曲げひび割れ幅による検討</text>
+    
+          <text x="7" y="81">b)永久作用による引帳鉄筋の応力度による検討</text>
+          <text x="12" y="91">永久作用による引帳鉄筋応力度</text>
+          <text x="60" y="91">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">s</tspan>
+          </text>
+          <text x="65" y="91">が永久作用による引帳鉄筋応力度の制限値</text>
+          <text x="7" y="96">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">s11</tspan>
+          </text>
+          <text x="15" y="96">に対し、以下の式を満たすことを検討する。</text>
+    
+          <text x="30" y="106">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">s</tspan> /
+          </text>
+          <text x="40" y="106">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">s11</tspan>
+          </text>
+          <text x="50" y="106">≦　1.0</text>
+          <text x="30" y="116">
+            ここに、 σ<tspan baseline-shift="0%" font-size="1.7pt">s</tspan></text>
+          <text x="50" y="116">: 永久作用による引帳鉄筋の設計応力度</text>
+          <text x="43" y="121">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">s11</tspan></text>
+          <text x="50" y="121">: 永久作用による引帳鉄筋応力度の制限値</text>
+    
+          <text x="25" y="131">永久作用による引帳鉄筋応力度の制限値 σ<tspan baseline-shift="0%" font-size="1.7pt">s11</tspan></text>
+          <text x="95" y="131">
+            (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+          </text>
+          <text x="50" y="136">鋼材の腐食に対する環境条件</text>
+          <text x="25" y="141">一般の環境</text>
+          <text x="57" y="141">腐食性環境</text>
+          <text x="87" y="141">特に厳しい腐食性環境</text>
+          <text x="33" y="146">140</text>
+          <text x="62" y="146">120</text>
+          <text x="102" y="146">100</text>
+    
+          <text x="5" y="156">c)曲げひび割れ幅の検討</text>
+          <text x="12" y="166">曲げひび割れの検討は、コンクリート表面の設計曲げひび割れ幅</text>
+          <text x="110" y="166">
             W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan>
           </text>
-          <text x="123" y="41">がひび割れんの</text>
-          <text x="5" y="46">制限値</text>
-          <text x="16" y="46">
+          <text x="114" y="166">がひび割れ幅</text>
+          <text x="5" y="171">が限界値</text>
+          <text x="19" y="171">
             W<tspan baseline-shift="0%" font-size="1.7pt">lim</tspan>
           </text>
-          <text x="22" y="46">に対して、以下に示す式により行う。</text>
-
-          <text x="7" y="51">
-            W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan>
+          <text x="25" y="171">に対して、次式の条件を満たす方法により行う。</text>
+    
+          <text x="30" y="181">
+            γ<tspan baseline-shift="0%" font-size="1.7pt">i</tspan>・
           </text>
-          <text x="12" y="51">
-            / W<tspan baseline-shift="0%" font-size="1.7pt">lim</tspan>
+    
+          <text x="37" y="181">
+            W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan> /
           </text>
-          <text x="22" y="51">≦1.0</text>
-          <text x="7" y="56">ここに、</text>
-          <text x="22" y="56">
-            W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan>
-          </text>
-          <text x="27" y="56"> : コンクリート表面の曲げひび割れ幅</text><text x="85" y="56">(mm)</text>
-          <text x="7" y="61">
-            W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan>
-          </text>
-          <text x="12" y="61">は使用性（外観）と同様に算定し、曲げひび割れの検討手順も同様である。また、</text>
-          <text x="135" y="61">
+          <text x="45" y="181">
             W<tspan baseline-shift="0%" font-size="1.7pt">lim</tspan>
           </text>
-          <text x="141" y="61">は</text>
-          <text x="5" y="66">表3.3.1に従う。なお、環境条件は一般の環境とする。</text>
-
-          <text x="20" y="74">表3.3.1 鋼材の腐食に対するコンクリートのひび割れ幅の制限値</text>
-          <text x="119" y="74">
-            W<tspan baseline-shift="0%" font-size="1.7pt">lim</tspan>
+          <text x="53" y="181">≦　1.0</text>
+          <text x="25" y="188">ここに、γ<tspan baseline-shift="0%" font-size="1.7pt">i</tspan></text>
+          <text x="45" y="188">： 構造係数(＝1.0)</text>
+          <text x="40" y="193">W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan></text>
+          <text x="45" y="193">： コンクリート表面の設計曲げひび割れ幅(mm)</text>
+          <text x="50" y="198">W<tspan baseline-shift="0%" font-size="1.7pt">d</tspan>
+            ＝1.1・</text>
+          <text x="66" y="198">k<tspan baseline-shift="0%" font-size="1.7pt">1</tspan> ・</text>
+          <text x="74" y="198">k<tspan baseline-shift="0%" font-size="1.7pt">2</tspan> ・</text>
+          <text x="82" y="198">k<tspan baseline-shift="0%" font-size="1.7pt">3</tspan> ・</text>
+          <text x="90" y="198">k<tspan baseline-shift="0%" font-size="1.7pt">4</tspan>{{'{'}}</text>
+          <text x="95" y="198">4c+0.7(</text>
+          <text x="107" y="198">C<tspan baseline-shift="0%" font-size="1.7pt">s</tspan>
+            - φ）{{'}'}}</text>
+          <text x="123" y="198">(σ<tspan baseline-shift="0%" font-size="1.7pt">se</tspan> /</text>
+          <text x="135" y="198">E<tspan baseline-shift="0%" font-size="1.7pt">s</tspan> +ε'csd)</text>
+          <text x="40" y="203">k<tspan baseline-shift="0%" font-size="1.7pt">1</tspan></text>
+          <text x="45" y="203">： 鋼材の表面形状がひび割れ幅に及ぼす影響を表す係数で、異</text>
+          <text x="50" y="208">形鉄筋の場合は1.0とする。</text>
+          <text x="40" y="213">k<tspan baseline-shift="0%" font-size="1.7pt">2</tspan></text>
+          <text x="45" y="213">： コンクリートの品質がひび割れ幅に及ぼす影響を表す係数</text>
+          <text x="80" y="218">15</text>
+          <text x="60" y="221">k<tspan baseline-shift="0%" font-size="1.7pt">2</tspan> ＝</text>
+          <text x="95" y="221">+ 0.7</text>
+          <text x="75" y="223">f'cd + 20</text>
+          <text x="40" y="228">f<tspan baseline-shift="0%" font-size="1.7pt">cd</tspan></text>
+          <text x="45" y="228">： コンクリートの設計圧縮強度</text>
+          <text x="95" y="228">
+            (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
           </text>
-
+          <text x="40" y="233">k<tspan baseline-shift="0%" font-size="1.7pt">3</tspan></text>
+          <text x="45" y="233">： 引帳鋼材の段数の影響を表す係数(＝1.0)</text>
+          <text x="40" y="238">k<tspan baseline-shift="0%" font-size="1.7pt">4</tspan></text>
+          <text x="45" y="238">： 曲げひび割れの変動を考慮する係数(＝0.85)</text>
+    
           <!--横線-->
           <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="3" y1="76" x2="150" y2="76" />
-            <line stroke-width="0.50" x1="53" y1="81" x2="150" y2="81" />
-            <line stroke-width="0.50" x1="3" y1="86" x2="150" y2="86" />
-            <line stroke-width="0.50" x1="3" y1="91" x2="150" y2="91" />
+            <line stroke-width="0.50" x1="20" y1="132" x2="130" y2="132" />
+            <line stroke-width="0.25" x1="20" y1="137" x2="130" y2="137" />
+            <line stroke-width="0.25" x1="20" y1="142" x2="130" y2="142" />
+            <line stroke-width="0.50" x1="20" y1="147" x2="130" y2="147" />
+    
+            <line stroke-width="0.30" x1="73" y1="219" x2="93" y2="219" />
           </g>
-
+    
           <!--縦線-->
           <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="3" y1="76" x2="3" y2="91" />
-            <line stroke-width="0.50" x1="53" y1="76" x2="53" y2="91" />
-            <line stroke-width="0.50" x1="78" y1="81" x2="78" y2="91" />
-            <line stroke-width="0.50" x1="103" y1="81" x2="103" y2="91" />
-            <line stroke-width="0.50" x1="150" y1="76" x2="150" y2="91" />
+            <line stroke-width="0.50" x1="20" y1="132" x2="20" y2="147" />
+            <line stroke-width="0.25" x1="50" y1="137" x2="50" y2="147" />
+            <line stroke-width="0.25" x1="80" y1="137" x2="80" y2="147" />
+            <line stroke-width="0.50" x1="130" y1="132" x2="130" y2="147" />
+    
           </g>
-
-          <text x="20" y="82">鉄筋の種類</text>
-          <text x="80" y="80">鋼材の腐食に対する環境条件</text>
-          <text x="57" y="85">一般の環境</text>
-          <text x="82" y="85">腐食性環境</text>
-          <text x="110" y="85">特に厳しい腐食性環境</text>
-          <text x="7" y="90">異形鉄筋および普通丸鋼</text>
-          <text x="60" y="90">0.005c</text>
-          <text x="85" y="90">0.004c</text>
-          <text x="120" y="90">0.0035c</text>
-
-          <text x="5" y="95">※ｃ：引張鋼材のかぶり</text>
-
-
-
-
+    
         </g>
       </svg>
+    
+    </section>
+    
+    <section class="sheet">
+      <svg width="160mm" height="260mm" viewBox="0 0 160 260" xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <!--タイトル-->
+        <g font-size="2.5pt" text-anchor="start">
+          <text x="40" y="11">c</text>
+          <text x="45" y="11">: 引帳鋼材のかぶり(mm)</text>
+          <text x="39" y="16">
+            C<tspan baseline-shift="0%" font-size="1.7pt">s</tspan></text>
+          <text x="45" y="16">: 鋼材の中心間隔(mm)</text>
+    
+          <text x="38" y="21">φ </text>
+          <text x="45" y="21">: 鋼材径(mm)</text>
+          <text x="33" y="26">
+            ε'<tspan baseline-shift="0%" font-size="1.7pt">csd</tspan></text>
+          <text x="45" y="26">: コンクリートの収縮及びクリープの影響等によるひび割れ幅</text>
+          <text x="50" y="31">の増加を考慮するための数値</text>
+          <text x="38" y="36">
+            σ<tspan baseline-shift="0%" font-size="1.7pt">se</tspan></text>
+          <text x="45" y="36">: 鋼材位置のコンクリートの応力度が0の状態からの鉄筋応力度</text>
+          <text x="50" y="41">の増加量</text>
+          <text x="70" y="41">
+            (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)
+          </text>
+          <text x="38" y="46">
+            W<tspan baseline-shift="0%" font-size="1.7pt">lim</tspan></text>
+          <text x="45" y="46">: ひび割れ幅の制限値</text>
+    
+          　　　　　 <text x="20" y="56">表3.3.1 鋼材の腐食に対するコンクリートのひび割れ幅の制限値</text>
+          <text x="119" y="56">
+            W<tspan baseline-shift="0%" font-size="1.7pt">lim</tspan></text>
+    
+          <!--横線-->
+          <g fill="none" stroke="black">
+    
+            <line stroke-width="0.50" x1="3" y1="58" x2="150" y2="58" />
+            <line stroke-width="0.25" x1="53" y1="63" x2="150" y2="63" />
+            <line stroke-width="0.25" x1="3" y1="68" x2="150" y2="68" />
+            <line stroke-width="0.25" x1="3" y1="73" x2="150" y2="73" />
+          </g>
+    
+          <!--縦線-->
+          <g fill="none" stroke="black">
+    
+            <line stroke-width="0.50" x1="3" y1="58" x2="3" y2="73" />
+            <line stroke-width="0.25" x1="53" y1="58" x2="53" y2="73" />
+            <line stroke-width="0.25" x1="78" y1="63" x2="78" y2="73" />
+            <line stroke-width="0.25" x1="103" y1="63" x2="103" y2="73" />
+            <line stroke-width="0.50" x1="150" y1="58" x2="150" y2="73" />
+          </g>
+    
+          <text x="20" y="64">鉄筋の種類</text>
+          <text x="80" y="62">鋼材の腐食に対する環境条件</text>
+          <text x="57" y="67">一般の環境</text>
+          <text x="82" y="67">腐食性環境</text>
+          <text x="110" y="67">特に厳しい腐食性環境</text>
+          <text x="20" y="72">異形鉄筋</text>
+          <text x="60" y="72">0.005c</text>
+          <text x="85" y="72">0.004c</text>
+          <text x="120" y="72">0.0035c</text>
+    
+        </g>
+      </svg>
+    
     </section>
 
     <ng-container *ngFor="let pages of serviceabilityMomentPages; index as i">

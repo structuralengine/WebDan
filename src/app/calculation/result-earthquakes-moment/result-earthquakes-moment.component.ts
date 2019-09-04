@@ -3,25 +3,26 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcEarthquakesMomentService } from './calc-earthquakes-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
-import { ResultRestorabilityMomentComponent } from '../result-restorability-moment/result-restorability-moment.component';
+import { CalcRestorabilityMomentService } from '../result-restorability-moment/calc-restorability-moment.service';
 import { from } from 'rxjs';
 
 @Component({
   selector: 'app-result-earthquakes-moment',
-  templateUrl: './result-earthquakes-moment.component.html',
+  templateUrl: '../result-restorability-moment/result-restorability-moment.component.html',
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
 export class ResultEarthquakesMomentComponent implements OnInit {
 
+  private title = "復旧性（地震時）曲げモーメントの照査";
   private isLoading = true;
   private isFulfilled = false;
   private err: string;
-  private earthquakesMomentPages: any[];
+  private restorabilityMomentPages: any[];
 
   constructor(private http: Http,
     private calc: CalcEarthquakesMomentService,
     private post: SetPostDataService,
-    private base: ResultRestorabilityMomentComponent) { }
+    private base: CalcRestorabilityMomentService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -74,7 +75,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     }
     const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.earthquakesMomentPages = this.base.setRestorabilityPages(json, postData, '復旧性（地震時）曲げモーメントの照査結果');
+    this.restorabilityMomentPages = this.base.setRestorabilityPages(json.OutputData, postData, '復旧性（地震時）曲げモーメントの照査結果');
     return true;
   }
 
