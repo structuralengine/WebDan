@@ -22,7 +22,7 @@ export class CalcSafetyMomentService {
     private force: SetDesignForceService,
     private sectin: SetSectionService,
     private safety: SetSafetyFactorService,
-    private calc: ResultDataService) {
+    private result: ResultDataService) {
     this.DesignForceList = null;
   }
 
@@ -77,7 +77,7 @@ export class CalcSafetyMomentService {
   }
 
   // サーバーに送信するデータを作成
-  public setPostData(DesignForceList: any[]): any {
+  public setPostData(DesignForceList: any[], calcTarget: string = 'Moment'): any {
     const result = {
       username: this.user.loginUserName,
       password: this.user.loginPassword,
@@ -97,7 +97,7 @@ export class CalcSafetyMomentService {
             }
              // 安全係数を position['safety_factor'], position['material_steel']
              // position['material_concrete'], position['pile_factor'] に登録する
-            this.safety.setSafetyFactor('Moment', member.g_no, position, 2);
+            this.safety.setSafetyFactor(calcTarget, member.g_no, position, 2);
             // 鉄筋の本数・断面形状を position['PostData'] に登録
             // 出力用の string を position['printData'] に登録
             this.sectin.setPostData(member.g_no, member.m_no, position);

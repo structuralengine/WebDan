@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcEarthquakesShearForceService } from './calc-earthquakes-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
-
+import { ResultSafetyShearForceComponent } from '../result-safety-shear-force/result-safety-shear-force.component';
 
 @Component({
   selector: 'app-result-earthquakes-shear-force',
@@ -14,12 +14,13 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
 
   private isLoading = true;
   private isFulfilled = false;
-  private err: string;  
+  private err: string;
   private earthquakesShearForcePages: any[];
 
   constructor(private http: Http,
-    private print: CalcEarthquakesShearForceService,
-    private post: SetPostDataService) { }
+    private calc: CalcEarthquakesShearForceService,
+    private post: SetPostDataService,
+    private base: ResultSafetyShearForceComponent) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -27,7 +28,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     this.err = '';
 
     // POST 用データを取得する
-    const postData = this.print.getPostData();
+    const postData = this.calc.getPostData();
     if (postData === null) {
       this.isLoading = false;
       this.isFulfilled = false;
@@ -50,7 +51,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
       .subscribe(
         response => {
           const result: string = response.text();
-          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
+          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
           this.isLoading = false;
         },
         error => {
@@ -70,10 +71,12 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
       this.err = response;
       return false;
     }
-        const json = this.post.parseJsonString(response);
+    const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.earthquakesShearForcePages = this.print.setEarthquakesPages(json, postData);
+    // 安全性破壊のページと同じ
+    this.earthquakesShearForcePages = this.base.getSafetyPages(json, postData, '復旧性（地震時以外）せん断力の照査結果');
     return true;
   }
+
 
 }

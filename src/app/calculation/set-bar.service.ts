@@ -254,6 +254,11 @@ export class SetBarService {
 
     // 引張（下側）鉄筋配置
     let tensionBarList: any[] = new Array();
+
+    let nAs: number = 0;
+    let nDepth: number = 0;
+    let As: number = this.save.getAs(dia1);
+
     for (let i = 0; i < n1; i++) {
 
       const Depth = dsc1 + i * space1;
@@ -270,8 +275,12 @@ export class SetBarService {
           ElasticID: 's'            // 材料番号
         };
         tensionBarList.push(Steel1);
+        nAs += As * 1;
+        nDepth += As * 1 * dst;
       }
     }
+    result['print-Vyd_d'] = nDepth / nAs;
+    result['print-Vyd_Ast'] = nAs;
 
     // 鉄筋強度の入力
     const rs = position.safety_factor.rs;
@@ -306,7 +315,7 @@ export class SetBarService {
     result['print-Ast'] = this.save.getAs(dia1) * rebar_n1;
     result['print-AstString'] = dia1 + '-' + rebar_n1 + '本';
     result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1);
-    
+
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
       result['print-Aw'] = Aw.Aw;
@@ -381,6 +390,10 @@ export class SetBarService {
 
     // 鉄筋配置
     const h: number = position.memberInfo.H;
+    let nAs: number = 0;
+    let nDepth: number = 0;
+    const As: number = this.save.getAs(dia);
+
     for (let i = 0; i < n; i++) {
 
       const Depth = dsc + i * space;
@@ -398,8 +411,15 @@ export class SetBarService {
           ElasticID: 's'            // 材料番号
         };
         result.Steels.push(Steel1);
+        if (tensionBar === true) {
+          nAs += As * 1;
+          nDepth += As * dst;
+        }
       }
     }
+    result['print-Vyd_d'] = nDepth / n;
+    result['print-Vyd_Ast'] = nAs;
+
     // 印刷用の変数に登録
     result['print-Ast'] = this.save.getAs(dia) * rebar_n;
     result['print-AstString'] = dia + '-' + rebar_n + '本';
@@ -456,11 +476,14 @@ export class SetBarService {
     }
     const sideBar = position.barData.sidebar;
 
-    const printTensionBar = {};
+    const printTensionBar: any = {};
     const tensionBarList: any[] = this.getCompresBar(tensionBar, position.material_steel, printTensionBar);
     // 有効な入力がなかった場合は null を返す.
     if (tensionBarList.length < 1) {
       return null;
+    } else {
+      result['print-Vyd_d'] = height - printTensionBar.ds;
+      result['print-Vyd_Ast'] = printTensionBar.As;
     }
 
     // 圧縮鉄筋 をセットする
@@ -542,7 +565,8 @@ export class SetBarService {
   }
 
   // 矩形。Ｔ形断面における 上側（圧縮側）の 鉄筋情報を生成する関数
-  private getCompresBar(barInfo: any, materialInfo: any[],
+  private getCompresBar(barInfo: any,
+    materialInfo: any[],
     printTensionBar: any): any[] {
 
     const result: any[] = new Array();
@@ -599,8 +623,9 @@ export class SetBarService {
 
     // 鉄筋情報を登録
     for (let i = 0; i < n; i++) {
+      const dst: number = dsc + i * space;
       const Steel1 = {
-        Depth: dsc + i * space,
+        Depth: dst,
         i: dia,
         n: Math.min(line, rebar_n),
         IsTensionBar: false,
@@ -730,7 +755,7 @@ export class SetBarService {
       AwString: '',
       fwyd: 0,
       deg: 90,
-      Ss :0      
+      Ss: 0
     };
 
     let fwyd: number;
@@ -740,7 +765,7 @@ export class SetBarService {
       fwyd = this.save.toNumber(materialInfo[3].fsy2);
     }
     if (fwyd === null) { return null; }
-    
+
     result.fwyd = fwyd;
     let dia: string = 'D' + starrup.stirrup_dia;
     if (fwyd === 235) {
@@ -762,6 +787,7 @@ export class SetBarService {
     printData['Ast'] = bars['print-Ast'];
     printData['AstString'] = bars['print-AstString'];
     printData['dst'] = bars['print-dst'];
+
     // 圧縮鉄筋
     if (target.indexOf('Asc') >= 0) {
       if ('print-Asc' in bars) {
@@ -776,7 +802,7 @@ export class SetBarService {
         printData['Ase'] = bars['ptint-Ase'];
         printData['AseString'] = bars['print-AseString'];
         printData['dse'] = bars['print-dse'];
-      }      
+      }
     }
     // 帯鉄筋
     if (target.indexOf('Aw') >= 0) {
@@ -788,6 +814,11 @@ export class SetBarService {
         printData['Ss'] = bars['print-Ss'];
       }
     }
+
+    // せん断用 引張鉄筋
+    printData['Vyd_d'] = bars['print-Vyd_d'];
+    printData['Vyd_Ast'] = bars['print-Vyd_Ast'];
+
     // 鉄筋強度
     printData['fsy'] = bars['print-fsy'];
     printData['rs'] = bars['print-rs'];
