@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcDurabilityMomentService } from './calc-durability-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
-
+import { ResultServiceabilityMomentComponent } from '../result-serviceability-moment/result-serviceability-moment.component';
 
 @Component({
   selector: 'app-result-durability-moment',
@@ -18,8 +18,9 @@ export class ResultDurabilityMomentComponent implements OnInit {
   private durabilityMomentPages: any[];
 
   constructor(private http: Http,
-              private print: CalcDurabilityMomentService,
-              private post: SetPostDataService) {
+              private calc: CalcDurabilityMomentService,
+              private post: SetPostDataService,
+              private base: ResultServiceabilityMomentComponent) {
   }
 
   ngOnInit() {
@@ -28,7 +29,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
     this.err = '';
 
     // POST 用データを取得する
-    const postData = this.print.getPostData();
+    const postData = this.calc.getPostData();
     if (postData === null) {
       this.isLoading = false;
       this.isFulfilled = false;
@@ -51,7 +52,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
       .subscribe(
         response => {
           const result: string = response.text();
-          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
+          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
           this.isLoading = false;
         },
         error => {
@@ -73,7 +74,8 @@ export class ResultDurabilityMomentComponent implements OnInit {
     }
     const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.durabilityMomentPages = this.print.setDurabilityPages(json, postData);
+    // 耐久性のページと同じ
+    this.durabilityMomentPages = this.base.setServiceabilityPages(json, postData, '使用性（外観）曲げひび割れの照査結果');
     return true;
   }
 

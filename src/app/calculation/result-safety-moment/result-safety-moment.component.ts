@@ -19,9 +19,9 @@ export class ResultSafetyMomentComponent implements OnInit {
   private safetyMomentPages: any[];
 
   constructor(private http: Http,
-    private print: CalcSafetyMomentService,
-    private calc: ResultDataService,
-    private post: SetPostDataService) { }
+              private calc: CalcSafetyMomentService,
+              private result: ResultDataService,
+              private post: SetPostDataService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -29,7 +29,7 @@ export class ResultSafetyMomentComponent implements OnInit {
     this.err = '';
 
     // POST 用データを取得する
-    const postData = this.print.getPostData();
+    const postData = this.calc.getPostData();
     if (postData === null) {
       this.isLoading = false;
       this.isFulfilled = false;
@@ -52,7 +52,7 @@ export class ResultSafetyMomentComponent implements OnInit {
       .subscribe(
         response => {
           const result: string = response.text();
-          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
+          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
           this.isLoading = false;
         },
         error => {
@@ -110,36 +110,36 @@ export class ResultSafetyMomentComponent implements OnInit {
             }
             const column: any[] = new Array();
             /////////////// タイトル ///////////////
-            column.push(this.calc.getTitleString1(member, position));
-            column.push(this.calc.getTitleString2(position, postdata));
-            column.push(this.calc.getTitleString3(position));
+            column.push(this.result.getTitleString1(member, position));
+            column.push(this.result.getTitleString2(position, postdata));
+            column.push(this.result.getTitleString3(position));
             ///////////////// 形状 /////////////////
-            column.push(this.calc.getShapeString_B(printData));
-            column.push(this.calc.getShapeString_H(printData));
-            column.push(this.calc.getShapeString_Bt(printData));
-            column.push(this.calc.getShapeString_t(printData));
+            column.push(this.result.getShapeString_B(printData));
+            column.push(this.result.getShapeString_H(printData));
+            column.push(this.result.getShapeString_Bt(printData));
+            column.push(this.result.getShapeString_t(printData));
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.calc.getAsString(printData);
+            const Ast: any = this.result.getAsString(printData);
             column.push(Ast.As);
             column.push(Ast.AsString);
             column.push(Ast.ds);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.calc.getAsString(printData, 'Asc');
+            const Asc: any = this.result.getAsString(printData, 'Asc');
             column.push(Asc.As);
             column.push(Asc.AsString);
             column.push(Asc.ds);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.calc.getAsString(printData, 'Ase');
+            const Ase: any = this.result.getAsString(printData, 'Ase');
             column.push(Ase.As);
             column.push(Ase.AsString);
             column.push(Ase.ds);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.calc.getFckString(printData);
+            const fck: any = this.result.getFckString(printData);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.calc.getFskString(printData);
+            const fsk: any = this.result.getFskString(printData);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);
@@ -168,13 +168,13 @@ export class ResultSafetyMomentComponent implements OnInit {
     return result;
   }
 
-  private getResultString(printData: any, resultData: any, safety_facto: any): any {
+  private getResultString(printData: any, resultData: any, safety_factor: any): any {
 
     const Md: number = printData.Md;
     const Mu: number = resultData.M.Mi;
-    const rb: number = safety_facto.rb;
+    const rb: number = safety_factor.rb;
     const Mud: number = Mu / rb;
-    const ri: number = safety_facto.ri;
+    const ri: number = safety_factor.ri;
     const ratio: number = Math.abs(ri * Md / Mud);
     const result: string = (ratio < 1) ? 'OK' : 'NG';
 

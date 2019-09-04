@@ -33,10 +33,14 @@ export class SetSafetyFactorService {
           range: safetyList.safety_factor[tableIndex].range
         };
         break;
-      case 'ShearForce':// せん断力の照査の場合
+      case 'ShearForce': // せん断力の照査の場合
         safety_factor = {
-          rc: safetyList.safety_factor[tableIndex].V_rc,
-          rs: safetyList.safety_factor[tableIndex].V_rs,
+          rc: safetyList.safety_factor[tableIndex].M_rc,
+          rs: safetyList.safety_factor[tableIndex].M_rs,
+          rbc: safetyList.safety_factor[tableIndex].V_rc,
+          rbs: safetyList.safety_factor[tableIndex].V_rs,
+          rbd: safetyList.safety_factor[tableIndex].V_rbv,
+          ri: safetyList.safety_factor[tableIndex].ri,
           range: safetyList.safety_factor[tableIndex].range
         };
         break;

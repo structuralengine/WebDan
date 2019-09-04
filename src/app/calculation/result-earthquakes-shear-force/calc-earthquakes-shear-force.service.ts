@@ -19,7 +19,7 @@ export class CalcEarthquakesShearForceService {
     private force: SetDesignForceService,
     private sectin: SetSectionService,
     private safety: SetSafetyFactorService,
-              private calc: ResultDataService,
+              private result: ResultDataService,
               private base: CalcSafetyShearForceService) {
       this.DesignForceList = null;
   }
@@ -79,9 +79,4 @@ export class CalcEarthquakesShearForceService {
     return this.base.setPostData(DesignForceList);
   }
 
-  // 出力テーブル用の配列にセット
-  public setEarthquakesPages(responseData: any, postData: any): any[] {
-    const result: any[] = this.base.getSafetyPages(responseData, postData,'復旧性（地震時以外）せん断力の照査結果');
-    return result;
-  }
 }

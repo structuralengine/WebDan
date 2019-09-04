@@ -3,7 +3,8 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcEarthquakesMomentService } from './calc-earthquakes-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
-
+import { ResultRestorabilityMomentComponent } from '../result-restorability-moment/result-restorability-moment.component';
+import { from } from 'rxjs';
 
 @Component({
   selector: 'app-result-earthquakes-moment',
@@ -18,8 +19,9 @@ export class ResultEarthquakesMomentComponent implements OnInit {
   private earthquakesMomentPages: any[];
 
   constructor(private http: Http,
-    private print: CalcEarthquakesMomentService,
-    private post: SetPostDataService) { }
+    private calc: CalcEarthquakesMomentService,
+    private post: SetPostDataService,
+    private base: ResultRestorabilityMomentComponent) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -27,7 +29,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     this.err = '';
 
     // POST 用データを取得する
-    const postData = this.print.getPostData();
+    const postData = this.calc.getPostData();
     if (postData === null) {
       this.isLoading = false;
       this.isFulfilled = false;
@@ -50,7 +52,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
       .subscribe(
         response => {
           const result: string = response.text();
-          this.isFulfilled = this.setPages(result, this.print.DesignForceList);
+          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
           this.isLoading = false;
         },
         error => {
@@ -70,9 +72,9 @@ export class ResultEarthquakesMomentComponent implements OnInit {
       this.err = response;
       return false;
     }
-        const json = this.post.parseJsonString(response);
+    const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.earthquakesMomentPages = this.print.setEarthquakesPages(json, postData);
+    this.earthquakesMomentPages = this.base.setRestorabilityPages(json, postData, '復旧性（地震時）曲げモーメントの照査結果');
     return true;
   }
 

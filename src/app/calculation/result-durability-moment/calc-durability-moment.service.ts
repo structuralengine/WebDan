@@ -19,7 +19,7 @@ export class CalcDurabilityMomentService {
     private force: SetDesignForceService,
     private sectin: SetSectionService,
     private safety: SetSafetyFactorService,
-    private calc: ResultDataService,
+    private result: ResultDataService,
     private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
   }
@@ -84,9 +84,6 @@ export class CalcDurabilityMomentService {
     return this.base.setPostData(DesignForceList);
   }
 
-  // 出力テーブル用の配列にセット
-  public setDurabilityPages(responseData: any, postData: any): any[] {
-    return this.base.setServiceabilityPages(responseData, postData, '使用性（外観）曲げひび割れの照査結果');
-  }
+
   
 }

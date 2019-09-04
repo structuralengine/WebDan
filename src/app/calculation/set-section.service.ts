@@ -182,16 +182,9 @@ export class SetSectionService {
       const rectArea: number = h * (b - h);
       const Area = circleArea + rectArea;
       printData['Vyd_H'] = h;
-      printData['Vyd_B'] = Area / h;
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
+      printData['Vyd_bw'] = Area / h;
+      printData['Vyd_B'] = b;
+      printData['Vyd_pc'] = printData.Ast / (printData.Vyd_bw * printData.Vyd_d);
     } else {
       return false;
     }
@@ -266,16 +259,10 @@ export class SetSectionService {
       const rectArea: number = b * (h - b);
       const Area = circleArea + rectArea;
       printData['Vyd_H'] = Area / b;
+      printData['Vyd_bw'] = b;
       printData['Vyd_B'] = b;
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
+      printData['Vyd_pc'] = printData.Ast / Area;
+
     } else {
       return false;
     }
@@ -338,16 +325,9 @@ export class SetSectionService {
       this.bar.setBarAtPrintData(printData, bars);
       // せん断照査用の換算矩形断面を算定
       printData['Vyd_H'] = h;
+      printData['Vyd_bw'] = b;
       printData['Vyd_B'] = b;
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
+      printData['Vyd_pc'] = printData.Ast / (b * printData.Vyd_d);
     } else {
       return false;
     }
@@ -410,16 +390,9 @@ export class SetSectionService {
       this.bar.setBarAtPrintData(printData, bars);
       // せん断照査用の換算矩形断面を算定
       printData['Vyd_H'] = h;
+      printData['Vyd_bw'] = b;
       printData['Vyd_B'] = b;
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
+      printData['Vyd_pc'] = printData.Ast / (b * printData.Vyd_d);
     } else {
       return false;
     }
@@ -464,16 +437,9 @@ export class SetSectionService {
       this.bar.setBarAtPrintData(printData, bars);
       // せん断照査用の換算矩形断面を算定
       printData['Vyd_H'] = h;
+      printData['Vyd_bw'] = b;
       printData['Vyd_B'] = b;
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
+      printData['Vyd_pc'] = printData.Ast / (b * printData.Vyd_d);
     } else {
       return false;
     }
@@ -539,17 +505,9 @@ export class SetSectionService {
       let Area = (h ** 2) * Math.PI / 4;
       printData['Vyd_H'] = Math.sqrt(Area);
       Area -= (b ** 2) * Math.PI / 4;
-      printData['Vyd_B'] = h - Math.sqrt((h ** 2) - Area);
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
-
+      printData['Vyd_bw'] = h - Math.sqrt((h ** 2) - Area);
+      printData['Vyd_B'] = h - b;
+      printData['Vyd_pc'] = printData.Ast / Area;
     } else {
       return false;
     }
@@ -597,17 +555,9 @@ export class SetSectionService {
       // せん断照査用の換算矩形断面を算定
       const Area = (h ** 2) * Math.PI / 4;
       printData['Vyd_H'] = Math.sqrt(Area);
-      printData['Vyd_B'] = printData.Vyd_H;
-      let n: number = 0;
-      let nDepth: number = 0;
-      for (const b of bars) {
-        if (b.IsTensionBar === true) {
-          n += b.n;
-          nDepth += (b.Depth * b.n);
-        }
-      }
-      printData['Vyd_d'] = nDepth / n;
-
+      printData['Vyd_bw'] = printData.Vyd_H;
+      printData['Vyd_B'] = h;
+      printData['Vyd_pc'] = printData.Ast / Area;
     } else {
       return false;
     }
@@ -633,10 +583,12 @@ export class SetSectionService {
     const result = new Array();
     const fck = position.material_concrete.fck;
     const rc = position.safety_factor.rc;
+    const rfck = position.pile_factor.rfck;
+    const rEc = position.pile_factor.rEc;
     const Ec = this.getEc(fck);
     const elastic = {
-      fck: fck / rc,     // コンクリート強度
-      Ec: Ec,       // コンクリートの弾性係数
+      fck: rfck * fck / rc,     // コンクリート強度
+      Ec: rEc * Ec,       // コンクリートの弾性係数
       ElasticID: 'c'      // 材料番号
     };
     result.push(elastic);
@@ -645,6 +597,14 @@ export class SetSectionService {
       printData['fck'] = fck;
       printData['rc'] = rc;
       printData['Ec'] = Ec;
+      printData['rfck'] = rfck;
+      printData['rEc'] = rEc;
+      printData['rVcd'] = position.pile_factor.rVcd;
+      for (const key of Object.keys(position.safety_factor)) {
+        if (key in printData === false) {
+          printData[key] = position.safety_factor[key];
+        }
+      }
     }
     return result;
   }
