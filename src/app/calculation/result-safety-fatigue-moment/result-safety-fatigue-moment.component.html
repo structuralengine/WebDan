@@ -4,11 +4,141 @@
 
 <ng-container *ngIf="!isLoading">
   <ng-container *ngIf="isFulfilled">
+
+      <section class="sheet">
+          <svg width="150mm" height="280mm" viewBox="0 0 150 280" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+            <!--タイトル-->
+      <g font-size="2.5pt" text-anchor="start">
+      <text x="0" y="5">3.4 安全性(疲労破壊)に関する照査</text>
+      <text x="70" y="5">【ＲＣ標準 7.3.2】</text>
+      <text x="5" y="13">(1) 曲げモーメントに対する照査 </text>
+
+      <text x="7" y="23">➀ 部材の照査</text>
+      <text x="10" y="33">曲げモーメントを受ける部材の疲労に関する照査は、設計変動応力度σsrdを</text>
+      <text x="10" y="38">設計応答値、設計疲労強度frdを豊歳係数で除した値を設計限界値とし、次式</text>
+      <text x="10" y="43">により行う。</text>
+      <text x="20" y="53">γ<tspan baseline-shift="0%" font-size="1.7pt">i</tspan>・</text>
+      <text x="30" y="53">IRd / ILd  ≦　1.0</text>
+
+      <text x="15" y="63">ここに、　　　γ<tspan baseline-shift="0%" font-size="1.7pt">i</tspan></text> 
+      <text x="40" y="63">： 構造物係数　(＝ 1.0)</text>
+      <text x="30" y="68">IRd</text> 
+      <text x="40" y="68">： 設計応答値　(＝ σsrd)</text>
+      <text x="30" y="73">ILd</text> 
+      <text x="40" y="73">： 設計限界値　(＝ frd/γb)</text>
+      <text x="30" y="78">γb</text> 
+      <text x="40" y="78">： 部材係数　(＝ 1.0)</text>
+
+      <text x="7" y="88">➁ 列車本数</text>
+      <text x="20" y="98">A列車荷重　：　旅客列車</text>
+      <text x="70" y="98">→</text>
+      <text x="80" y="98">80本/日</text>　
+      <text x="20" y="103">B列車荷重　：　貨物列車</text>
+      <text x="70" y="103">→</text>
+      <text x="80" y="103">75本/日</text>
+      
+      <text x="7" y="113">➂ 設計変動応力度σsrdと最小応力度σminの算定</text> 
+      <text x="10" y="123">標準列車荷重による鉄筋の設計変動応力度σsrdおよび最小応力度σminを</text>
+      <text x="10" y="133">算定する。鉄筋の最小応力度σminは、鉄筋に生じる最小引張応力度または</text>
+      <text x="10" y="138">永久作用による設計応力度で、圧縮が生じる場合には0とする。</text>
+
+      <text x="7" y="148">➃ 200万回 引張疲労強度fsr200の算定</text>
+      <text x="10" y="158">照査断面に配置した鉄筋の200万回強度</text>
+      <text x="70" y="158">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)を次式より求める。 </text>　
+      
+      <text x="60" y="165">
+              10<tspan baseline-shift="20%" font-size="1.7pt">ar</tspan></text>
+      <text x="100" y="165">σmin</text>
+      <text x="20" y="168">fsr200 ＝</text>
+      <text x="35" y="168">　γ1　・</text>
+      <text x="80" y="168">・　( 1  -</text>
+      <text x="110" y="168">) /　γs</text>
+      <text x="53" y="170">
+          ( 2 ｘ　10<tspan baseline-shift="20%" font-size="1.7pt">6</tspan>)</text>
+      <text x="75" y="170">
+          <tspan baseline-shift="20%" font-size="1.7pt">k</tspan></text>
+      <text x="101" y="170">fsuk</text> 
+
+      <text x="15" y="180">ここに、　　　ar</text> 
+      <text x="40" y="180">= 3.09　-  0.003 φ</text>
+      <text x="30" y="185">k</text> 
+      <text x="40" y="185">= 0.12</text>
+      <text x="25" y="190">σmin</text> 
+      <text x="40" y="190">： 鉄筋の引張最小応力度</text>
+      <text x="80" y="190">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)</text>
+      <text x="92" y="190">で圧縮を受ける場合は</text> 
+      <text x="45" y="195">0とする。</text>
+      <text x="27" y="200">fsuk</text> 
+      <text x="40" y="200">： 鉄筋の引張強度の特性値</text>
+      <text x="83" y="200">
+          (N/mm<tspan baseline-shift="20%" font-size="1.7pt">2</tspan>)</text>
+      <text x="28" y="205">γ1</text> 
+      <text x="40" y="205">： 鉄筋の継手、曲げ加工による低減係数(圧接：0.7、</text>
+      <text x="45" y="210">曲げ加工:0.65)</text>
+      <text x="28" y="215">γs</text> 
+      <text x="40" y="215">： 鉄筋の材料係数(=　1.05)</text>
+      <text x="30" y="220">φ</text> 
+      <text x="40" y="220">： 照査の対象とする鉄筋の直径(mm)</text>
+
+      <text x="7" y="230">➄ Ｓ－Ｎ線図の係数選択</text>
+      <text x="10" y="240">σsrdとfsr200の大小関係により、Ｓ－Ｎ線図の係数を下表に従い選択する。</text>
+
+      <text x="70" y="247">異　形　鉄　筋</text>
+      <text x="8" y="247">Ｓ－Ｎ線</text>
+      <text x="7" y="251">パラメータ</text>
+      <text x="30" y="251.5">γi・σsrd/(fsr200/γb)≦1.0</text>
+      <text x="90" y="251.5">γi・σsrd/(fsr200/γb)＞1.0</text>
+      <text x="13" y="256.5">a<tspan baseline-shift="20%" font-size="1.7pt">r</tspan></text>
+      <text x="13" y="261.5">k</text>
+      <text x="40" y="256.5">2.71 - 0.003 φ</text>
+      <text x="105" y="256.5">3.09 - 0.003 φ</text>
+      <text x="50" y="261.5">0.06</text>
+      <text x="115" y="261.5">0.12</text>
+
+       <!--横線-->
+       <g fill="none" stroke="black">
+          <line stroke-width="0.30" x1="50" y1="166" x2="78" y2="166" />
+          <line stroke-width="0.30" x1="99" y1="166" x2="109" y2="166" />
+
+          <line stroke-width="0.50" x1="5" y1="243" x2="150" y2="243" />
+          <line stroke-width="0.50" x1="25" y1="248" x2="150" y2="248" />
+          <line stroke-width="0.50" x1="5" y1="253" x2="150" y2="253" />
+          <line stroke-width="0.50" x1="5" y1="258" x2="150" y2="258" />
+          <line stroke-width="0.50" x1="5" y1="263" x2="150" y2="263" />
+        </g>
+       <!--縦線-->
+       <g fill="none" stroke="black">
+          <line stroke-width="0.50" x1="5" y1="243" x2="5" y2="263" />
+          <line stroke-width="0.50" x1="25" y1="243" x2="25" y2="263" />
+          <line stroke-width="0.50" x1="85" y1="248" x2="85" y2="263" />
+          <line stroke-width="0.50" x1="150" y1="243" x2="150" y2="263" />
+         </g> 
+             
+
+
     <!--  
     <section class="sheet">
     解説ページが入る
     </section>
     -->
+
+  </g>
+</svg>
+</section>
+<section class="sheet">
+    <svg width="150mm" height="280mm" viewBox="0 0 150 280" xmlns="http://www.w3.org/2000/svg"
+      xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+      <!--タイトル-->
+<g font-size="2.5pt" text-anchor="start">
+<text x="7" y="5">➅ 総等価繰返し回数の算定</text>
+
+
+</g>
+</svg>
+</section>
 
     <ng-container *ngFor="let pages of safetyFatigueMomentPages; index as i">
       <section class="sheet">
