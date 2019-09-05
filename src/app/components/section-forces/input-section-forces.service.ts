@@ -68,10 +68,6 @@ export class InputSectionForcesService extends InputDataService {
       for (let i = 0; i < new_colum['case'].length; i++) {
         new_colum['case'][i].Md = data['case' + i + '_Md'];
         new_colum['case'][i].Nd = data['case' + i + '_Nd'];
-        if ('Nmax' in new_colum['case'][i]) {
-          const keyNmax: string = 'case' + i + '_Nmax';
-          new_colum['case'][i].Nmax = data[keyNmax];
-        }
       }
       this.Mdatas.push(new_colum);
     }

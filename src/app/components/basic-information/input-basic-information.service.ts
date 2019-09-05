@@ -50,8 +50,7 @@ export class InputBasicInformationService extends InputDataService {
     switch (this.specification1_selected) {
       case 0: // 鉄道
         this.pickup_moment_title = [
-          '耐久性 縁応力度検討用', '耐久性 鉄筋応力度検討用',
-          '耐久性 （永久荷重）', '耐久性 （変動荷重）', '使用性 （外観ひび割れ）',
+          '耐久性 縁応力度検討用', '耐久性 （永久荷重）',
           '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
           '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
         ];

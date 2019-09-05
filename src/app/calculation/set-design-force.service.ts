@@ -11,19 +11,22 @@ export class SetDesignForceService {
   }
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
-  public getDesignForceList(calcTarget: string, pickupNoList: number[]): any[] {
+  public getDesignForceList(calcTarget: string, pickupNo: number): any[] {
 
+    if (this.save.toNumber(pickupNo) === null) {
+      return new Array();
+    }
     let result: any[];
     if (this.save.isManual() === true) {
-      result = this.getDesignForceFromManualInput(calcTarget, pickupNoList);
+      result = this.getDesignForceFromManualInput(calcTarget, pickupNo);
     } else {
-      result = this.getDesignForceFromPickUpData(calcTarget, pickupNoList);
+      result = this.getDesignForceFromPickUpData(calcTarget, pickupNo);
     }
     return result;
   }
 
   // 断面力手入力情報から断面力一覧を取得
-  private getDesignForceFromManualInput(calcTarget: string, pickupNoList: number[]): any[] {
+  private getDesignForceFromManualInput(calcTarget: string, pickupNo: number): any[] {
 
     // 部材グループ・照査する着目点を取得
     const result = this.getEnableMembers(calcTarget);
@@ -40,37 +43,34 @@ export class SetDesignForceService {
     }
 
     // 断面力を追加
-    for (const pickupNo of pickupNoList) {
+    for (const groupe of result) {
+      for (const member of groupe) {
+        const targetMember = force.find(function (value) {
+          return (value.m_no === member.m_no);
+        });
+        if (targetMember === undefined) {
+          return new Array(); // 存在しない要素番号がある
+        }
+        for (const position of member.positions) {
 
-      for (const groupe of result) {
-        for (const member of groupe) {
-          const targetMember = force.find(function (value) {
-            return (value.m_no === member.m_no);
-          });
-          if (targetMember === undefined) {
-            return new Array(); // 存在しない要素番号がある
+          if (targetMember.case.length < pickupNo) {
+            return new Array(); // ピックアップ番号の入力が不正
           }
-          for (const position of member.positions) {
+          // 奥行き本数
+          let n: number = this.save.toNumber(member.n);
+          if (n === null) { n = 1; }
+          if (n === 0) { n = 1; }
 
-            if (targetMember.case.length < pickupNo) {
-              return new Array(); // ピックアップ番号の入力が不正
-            }
-            // 奥行き本数
-            let n: number = this.save.toNumber(member.n);
-            if (n === null) { n = 1; }
-            if (n === 0) { n = 1; }
+          const targetForce = targetMember.case[pickupNo];
 
-            const targetForce = targetMember.case[pickupNo];
-
-            if ('designForce' in position === false) {
-              position['designForce'] = new Array();
-            }
-            const designForce = {
-              Manual: targetForce,
-              n: n
-            };
-            position['designForce'].push(designForce);
+          if ('designForce' in position === false) {
+            position['designForce'] = new Array();
           }
+          const designForce = {
+            Manual: targetForce,
+            n: n
+          };
+          position['designForce'].push(designForce);
         }
       }
     }
@@ -79,7 +79,7 @@ export class SetDesignForceService {
   }
 
   // ピックアップデータから断面力一覧を取得
-  private getDesignForceFromPickUpData(calcTarget: string, pickupNoList: number[]): any[] {
+  private getDesignForceFromPickUpData(calcTarget: string, pickupNo: number): any[] {
 
     // 部材グループ・照査する着目点を取得
     const result = this.getEnableMembers(calcTarget);
@@ -88,50 +88,47 @@ export class SetDesignForceService {
     const force: object = this.save.pickup_data;
 
     // 断面力を追加
-    for (let i = 0; i < pickupNoList.length; i++) {
-      const pickupNo: string = 'pickUpNo:' + pickupNoList[i];
-      if (pickupNo in force === false) {
-        return new Array(); // ピックアップ番号の入力が不正
-      }
-      const targetForce = force[pickupNo];
+    const pickupStr: string = 'pickUpNo:' + pickupNo;
+    if (pickupStr in force === false) {
+      return new Array(); // ピックアップ番号の入力が不正
+    }
+    const targetForce = force[pickupStr];
 
-      for (const groupe of result) {
-        for (const member of groupe) {
-          const targetMember = targetForce.find(function (value) {
-            return (value.memberNo === member.m_no);
+    for (const groupe of result) {
+      for (const member of groupe) {
+        const targetMember = targetForce.find(function (value) {
+          return (value.memberNo === member.m_no);
+        });
+        if (targetMember === undefined) {
+          return new Array(); // 存在しない要素番号がある
+        }
+        // 奥行き本数
+        let n: number = this.save.toNumber(member.n);
+        if (n === null) { n = 1; }
+        if (n === 0) { n = 1; }
+
+        for (const position of member.positions) {
+          const targetPosition = targetMember.positions.find(function (value) {
+            return (value.index === position.index);
           });
-          if (targetMember === undefined) {
-            return new Array(); // 存在しない要素番号がある
+          if (targetPosition === undefined) {
+            return new Array(); // 存在しない着目点がある
           }
-          // 奥行き本数
-          let n: number = this.save.toNumber(member.n);
-          if (n === null) { n = 1; }
-          if (n === 0) { n = 1; }
-
-          for (const position of member.positions) {
-            const targetPosition = targetMember.positions.find(function (value) {
-              return (value.index === position.index);
-            });
-            if (targetPosition === undefined) {
-              return new Array(); // 存在しない着目点がある
-            }
-            if ('designForce' in position === false) {
-              position['designForce'] = new Array();
-            }
-            const designForce = {
-              Mmax: targetPosition['M'].max,
-              Mmin: targetPosition['M'].min,
-              Smax: targetPosition['S'].max,
-              Smin: targetPosition['S'].min,
-              Nmax: targetPosition['N'].max,
-              Nmin: targetPosition['N'].min,
-              n: n
-            };
-            position['designForce'].push(designForce);
+          if ('designForce' in position === false) {
+            position['designForce'] = new Array();
           }
+          const designForce = {
+            Mmax: targetPosition['M'].max,
+            Mmin: targetPosition['M'].min,
+            Smax: targetPosition['S'].max,
+            Smin: targetPosition['S'].min,
+            Nmax: targetPosition['N'].max,
+            Nmin: targetPosition['N'].min,
+            n: n
+          };
+          position['designForce'].push(designForce);
         }
       }
-
     }
 
     return result;

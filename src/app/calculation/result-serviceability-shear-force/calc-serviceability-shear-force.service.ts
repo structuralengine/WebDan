@@ -33,15 +33,15 @@ export class CalcServiceabilityShearForceService {
 
     // せん断力が計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_shear_force === false) {
-      this.DesignForceList = new Array();
-      this.DesignForceList2 = new Array();
-      this.DesignForceList3 = new Array();
       return new Array();
     }
+    // せん断ひび割れ検討判定用
+    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[0]);
+    // 永久荷重
+    this.DesignForceList2 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
+    // 変動荷重
+    this.DesignForceList3 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
 
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', [this.save.basic.pickup_shear_force_no[0]]);
-    this.DesignForceList2 = this.force.getDesignForceList('ShearForce', [this.save.basic.pickup_shear_force_no[1]]);
-    this.DesignForceList3 = this.force.getDesignForceList('ShearForce', [this.save.basic.pickup_shear_force_no[2]]);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
@@ -90,8 +90,14 @@ export class CalcServiceabilityShearForceService {
         for (const position of member.positions) {
           for (let j = 0; j < position.PostData.length; j++) {
             const postdata = position.PostData[j];  // せん断ひび割れ検討判定用
-            const deadLoad = position.PostData0[j]; // 永久荷重
-            const liveLoad = position.PostData1[j]; // 変動荷重
+            let deadLoad = { Vd: 0 }; // 永久荷重
+            if ('PostData0' in position) {
+              deadLoad = position.PostData0[j]; // 永久荷重
+            }
+            let liveLoad = { Vd: 0 }; // 変動荷重
+            if ('PostData1' in position) {
+              liveLoad = position.PostData1[j];  
+            }
             const printData = position.printData[j];
             const resultData = responseData[i].Reactions[0];
 

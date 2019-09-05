@@ -12,7 +12,8 @@ import { Injectable } from '@angular/core';
 
 export class CalcDurabilityMomentService {
   // 使用性 曲げひび割れ
-  public DesignForceList: any[];
+  public DesignForceList: any[]; // 永久荷重
+  private DesignForceList1: any[]; // 縁応力検討用
 
   constructor(private save: SaveDataService,
     private force: SetDesignForceService,
@@ -20,6 +21,7 @@ export class CalcDurabilityMomentService {
     private result: ResultDataService,
     private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
+    this.DesignForceList1 = null;
   }
 
   // 設計断面力の集計
@@ -29,18 +31,13 @@ export class CalcDurabilityMomentService {
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
-      this.DesignForceList = new Array();
       return new Array();
     }
+    // 永久荷重
+    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
 
-    const pickupNoList: any[] = new Array();
-    pickupNoList.push(this.save.basic.pickup_moment_no[0]); // 縁応力度検討用
-    pickupNoList.push(this.save.basic.pickup_moment_no[1]); // 鉄筋応力度検討用
-    pickupNoList.push(this.save.basic.pickup_moment_no[4]); // 永久荷重
-    if (this.save.basic.pickup_moment_no[3] !== null) {
-      pickupNoList.push(this.save.basic.pickup_moment_no[3]); // 変動荷重
-    }
-    this.DesignForceList = this.force.getDesignForceList('Moment', pickupNoList);
+    // 縁応力度検討用
+    this.DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
 
 
     const result: any[] = new Array();
@@ -67,7 +64,7 @@ export class CalcDurabilityMomentService {
     this.setDesignForces(false);
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList]);
+    this.post.setPostData([this.DesignForceList, this.DesignForceList1]);
     const postData = this.post.getPostData(this.DesignForceList, 0, 'Moment');
     return postData;
   }

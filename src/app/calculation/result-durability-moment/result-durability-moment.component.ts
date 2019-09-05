@@ -3,7 +3,7 @@ import { Http, Headers, Response } from '@angular/http';
 
 import { CalcDurabilityMomentService } from './calc-durability-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
-import { ResultServiceabilityMomentComponent } from '../result-serviceability-moment/result-serviceability-moment.component';
+import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 
 @Component({
   selector: 'app-result-durability-moment',
@@ -20,7 +20,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
   constructor(private http: Http,
               private calc: CalcDurabilityMomentService,
               private post: SetPostDataService,
-              private base: ResultServiceabilityMomentComponent) {
+              private base: CalcServiceabilityMomentService) {
   }
 
   ngOnInit() {
