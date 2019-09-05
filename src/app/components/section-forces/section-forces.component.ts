@@ -30,9 +30,6 @@ export class SectionForcesComponent implements OnInit {
       for (let i = 0; i < caseList.length; i++) {
         column['case' + i + '_Md'] = caseList[i].Md;
         column['case' + i + '_Nd'] = caseList[i].Nd;
-        if ('Nmax' in caseList[i]) {
-          column['case' + i + '_Nmax'] = caseList[i].Nmax;
-        }
       }
       this.Mtable_datas.push(column);
     }

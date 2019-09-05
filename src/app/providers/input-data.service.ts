@@ -73,7 +73,7 @@ export class InputDataService {
   /// 文字列string を数値にする
   /// </summary>
   /// <param name="num">数値に変換する文字列</param>
-  public toNumber(num: string): number {
+  public toNumber(num: any): number {
     let result: number = null;
     try {
       const tmp: string = num.toString().trim();

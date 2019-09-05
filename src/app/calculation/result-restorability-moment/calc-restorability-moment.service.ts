@@ -30,13 +30,9 @@ export class CalcRestorabilityMomentService {
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
-      this.DesignForceList = new Array();
       return new Array();
     }
-
-    const pickupNoList: any[] = new Array();
-    pickupNoList.push(this.save.basic.pickup_moment_no[8]); // ピックアップNoは 曲げの8番目に保存されている
-    this.DesignForceList = this.force.getDesignForceList('Moment', pickupNoList);
+    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
