@@ -134,6 +134,89 @@
       <!--タイトル-->
 <g font-size="2.3pt" text-anchor="start">
 <text x="7" y="5">➅ 総等価繰返し回数の算定</text>
+<text x="10" y="10">標準列車荷重換算の総等価繰返し回数ΣＮを次式により算定する。</text>
+<text x="66" y="18">SA</text>
+<text x="15" y="20">ΣＮ　＝ 365 ・ T ・ jA ・ NA・（</text>
+<text x="71" y="20">)<tspan baseline-shift="20%" font-size="1.6pt">1/k</tspan></text>
+<text x="66" y="22">SC</text>
+<text x="120" y="18">SB</text>
+<text x="80" y="20"> + 365 ・ T ・ jB ・ NB・（</text>
+<text x="126" y="20">)<tspan baseline-shift="20%" font-size="1.6pt">1/k</tspan></text>
+<text x="120" y="22">SC</text>
+
+<text x="15" y="30">ここに、</text> 
+<text x="30" y="30">T</text>
+<text x="40" y="30">： 設計耐用期間　(＝ 100)</text>
+<text x="28" y="35">SA/SC</text> 
+<text x="40" y="35">： Ａ列車荷重と標準列車荷重の最大変動断面力比</text>
+<text x="28" y="40">SB/SC</text> 
+<text x="40" y="40">： Ｂ列車荷重と標準列車荷重の最大変動断面力比</text>
+<text x="28" y="45">SA,SB</text> 
+<text x="40" y="45">： 実列車荷重(Ａ列車荷重,Ｂ列車荷重)による最大変動断面力</text>
+<text x="28" y="50">SC</text> 
+<text x="40" y="50">： 標準列車荷重による最大変動断面力</text>
+<text x="28" y="55">NA,NB</text> 
+<text x="40" y="55">： SA,SBに対する列車１編成あたり等価繰返し回数(回)</text>
+<text x="28" y="60">jA,jB</text> 
+<text x="40" y="60">： 実列車の１線、１日あたりの本数(本/回)</text>
+<text x="30" y="65">k</text> 
+<text x="40" y="65">： Ｓ－Ｎ線図の勾配</text>
+
+
+<text x="7" y="75">⑦ 設計引帳疲労強度frdの算定</text>
+<text x="10" y="85">総等価繰返し回数ΣＮを用いて、字式により設計引帳疲労強度frdを求める。</text>
+<text x="50" y="92">10<tspan baseline-shift="20%" font-size="1.6pt">ar</tspan></text>
+<text x="15" y="95">frd　＝ γ1 ・ γ2 ・</text>
+<text x="51" y="98">N<tspan baseline-shift="20%" font-size="1.6pt">k</tspan></text>
+<text x="55" y="95">・ ( 1 -</text>
+<text x="70" y="92">σmin</text>
+<text x="70" y="98">fsuk</text>
+<text x="80" y="95">) / γs</text>
+
+<text x="15" y="105">ここに、</text> 
+<text x="30" y="105">frd</text>
+<text x="40" y="105">： 鉄筋の設計引帳疲労強度　(N/mm<tspan baseline-shift="20%" font-size="1.6pt">2</tspan>)</text>
+<text x="30" y="110">Ｎ</text> 
+<text x="40" y="110">： 標準列車荷重換算の総等価繰返し回数ΣＮ</text>
+<text x="28" y="115">a<tspan baseline-shift="20%" font-size="1.6pt">r</tspan>,</text> 
+<text x="32" y="115">k</text> 
+<text x="40" y="115">： Ｓ－Ｎ線図の係数</text>
+<text x="28" y="120">σmin</text> 
+<text x="40" y="120">： 鉄筋の引帳最小応力度(N/mm<tspan baseline-shift="20%" font-size="1.6pt">2</tspan>
+  )で、圧縮を受ける場合は</text>
+<text x="45" y="125">0とする。</text>
+<text x="28" y="130">fsuk</text> 
+<text x="40" y="130">： 鉄筋の引帳強度の特値(N/mm<tspan baseline-shift="20%" font-size="1.6pt">2</tspan>）</text>
+<text x="28" y="135">γ1</text> 
+<text x="40" y="135">： 鉄筋継手、曲げ加工による低減係数(圧接：0.7,</text>
+<text x="45" y="140">曲げ加工:0.65)</text>
+<text x="28" y="145">γ2</text>
+<text x="40" y="145">： 複線を支持する部材における荷重分布比aによる補正係数</text>
+
+<text x="80" y="152">1</text>
+<text x="50" y="155">γ2 ＝　（</text>
+<text x="70" y="158">a<tspan baseline-shift="20%" font-size="1.6pt">1/k</tspan>  +</text>
+<text x="85" y="158">(1-a)<tspan baseline-shift="20%" font-size="1.6pt">1/k</tspan></text>
+<text x="100" y="155">)<tspan baseline-shift="20%" font-size="1.6pt">k</tspan></text>
+
+
+<text x="28" y="165">a</text> 
+<text x="40" y="165">： 当該部材の</text>
+<text x="45" y="170">(１線載荷による最大断面力)/(複線載荷による最大断面力)</text>
+<text x="28" y="175">γs</text> 
+<text x="40" y="175">： 鉄筋の材料係数(＝　1,05)</text>
+
+ <!--横線-->
+ <g fill="none" stroke="black">
+    <line stroke-width="0.30" x1="49" y1="94" x2="55" y2="94" />
+    <line stroke-width="0.30" x1="68" y1="94" x2="78" y2="94" />
+
+    <line stroke-width="0.30" x1="68" y1="154" x2="98" y2="154" />
+  </g>
+
+  
+
+
 
 
 </g>
