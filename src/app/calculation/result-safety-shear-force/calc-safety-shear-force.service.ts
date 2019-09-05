@@ -58,7 +58,7 @@ export class CalcSafetyShearForceService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
-    const postData = this.post.getPostData(this.DesignForceList, 2, 'ShearForce');
+    const postData = this.post.getPostData(this.DesignForceList, 2, 'ShearForce', '耐力', 1);
     return postData;
   }
 
@@ -78,8 +78,8 @@ export class CalcSafetyShearForceService {
 
       for (const member of groupe) {
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData.length; j++) {
-            const postdata = position.PostData[j];
+          for (let j = 0; j < position.PostData0.length; j++) {
+            const postdata = position.PostData0[j];
             const printData = position.printData[j];
             const resultData = responseData[i].Reactions[0];
 

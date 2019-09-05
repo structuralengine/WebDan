@@ -15,14 +15,12 @@ export class CalcServiceabilityMomentService {
   public DesignForceList: any[]; // 永久荷重
   private DesignForceList1: any[];  // 縁応力検討用
 
-  // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
-  private PostedData: any; 
 
   constructor(private save: SaveDataService,
-    private force: SetDesignForceService,
-    private post: SetPostDataService,
-    private result: ResultDataService,
-    public base: CalcSafetyMomentService) {
+              private force: SetDesignForceService,
+              private post: SetPostDataService,
+              private result: ResultDataService,
+              public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
     this.DesignForceList1 = null;
   }
@@ -66,16 +64,10 @@ export class CalcServiceabilityMomentService {
     this.setDesignForces(false);
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, this.DesignForceList1]);
-    
+    const DesignForceListList = [this.DesignForceList, this.DesignForceList1];
+    this.post.setPostData(DesignForceListList);
     // POST 用
-    this.PostedData = this.post.getPostData(this.DesignForceList, 0, 'Moment', '応力度');　// 永久荷重
-    // 連結する
-    const postData = {
-      username: this.PostedData.username,
-      password: this.PostedData.password,
-      InputData: this.PostedData.InputData.concat(this.PostedData.InputData0)
-    }
+    const postData = this.post.getPostData(this.DesignForceList, 0, 'Moment', '応力度', DesignForceListList.length);
     return postData;
   }
 
@@ -86,28 +78,28 @@ export class CalcServiceabilityMomentService {
     let groupeName: string;
     let i: number = 0;
 
-    const resultDeadLoad: any[] = responseData.slice(0, this.PostedData.InputData.length);
-    const resultLiveLoad: any[] = responseData.slice(-this.PostedData.InputData0.length);
-
     for (const groupe of postData) {
       groupeName = groupe[0].g_name;
       page = { caption: title, g_name: groupeName, columns: new Array() };
 
       for (const member of groupe) {
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData.length; j++) {
+          for (let j = 0; j < position.PostData0.length; j++) {
+
             // 永久荷重
-            const postdata = position.PostData[j];  
+            const postdata = position.PostData0[j];
+
             // 縁応力検討用荷重
-            let liveLoad = postdata; 
-            if ('PostData0' in position) {
-              liveLoad = position.PostData0[j]; 
+            let liveLoad = { Md: 0, Nd: 0 };
+            if ('PostData1' in position) {
+              liveLoad = position.PostData1[j];
             }
-            // 
+
+            // 印刷用データ
             const printData = position.printData[j];
+
             // 応力度
-            const sigmaDeadLoad = resultDeadLoad[i].ResultSigma;
-            const sigmaLiveLoad = resultLiveLoad[i].ResultSigma;
+            const resultData = responseData[i].ResultSigma;
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -117,8 +109,7 @@ export class CalcServiceabilityMomentService {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            //const resultVmu: any = this.calcSigma(printData, deadLoad, liveLoad, resultData, position);
-            const resultColumn: any = this.getResultString(printData, postdata, liveLoad, position, sigmaDeadLoad, sigmaLiveLoad);
+            const resultColumn: any = this.getResultString(printData, postdata, liveLoad, position, resultData);
 
             /////////////// タイトル /////////////// 
             column.push(this.result.getTitleString1(member, position));
@@ -199,15 +190,8 @@ export class CalcServiceabilityMomentService {
   }
 
   // 計算と印刷用
-  private getResultString(
-    printData: any,
-    postdata: any,
-    liveLoad: any,
-    position: any,
-    sigmaDeadLoad: any,
-    sigmaLiveLoad: any
-    ): any {
- 
+  private getResultString(printData: any, postdata: any, liveLoad: any, position: any, resultData: any): any {
+
     const result = {
       con: { alien: 'center', value: '-' },
 
@@ -268,7 +252,7 @@ export class CalcServiceabilityMomentService {
         break;
       case 3:
         sigmal1 = 100;
-        result.con.value= '厳しい腐食';
+        result.con.value = '厳しい腐食';
         break;
     }
 
@@ -277,39 +261,111 @@ export class CalcServiceabilityMomentService {
     const fcd: number = fck / rc;
     const H: number = printData.H;
 
+    // 永久作用
+    const Md: number = postdata.Md;
+    const Nd: number = postdata.Nd;
+    result.Md = { alien: 'right', value: Md.toFixed(1) };
+    result.Nd = { alien: 'right', value: Nd.toFixed(1) };
+    // 圧縮応力度の照査
+    const Sigmac: number = this.getSigmac(resultData.sc);
+    const fcd04: number = 0.4 * fcd;
+    if (Sigmac < fcd04) {
+      result.sigma_c.value = Sigmac.toFixed(1) + '<' + fcd04.toFixed(1);
+    } else {
+      result.sigma_c.value = Sigmac.toFixed(1) + '>' + fcd04.toFixed(1);
+      result.result.value = 'NG';
+    }
+
     // 縁応力の照査
     const Mhd: number = liveLoad.Md;
-    result.Mhd = { alien: 'right', value: Mhd.toFixed(1) };
     const Nhd: number = liveLoad.Nd;
+    result.Mhd = { alien: 'right', value: Mhd.toFixed(1) };
     result.Nhd = { alien: 'right', value: Nhd.toFixed(1) };
     // 縁応力度
-    const Sigmab: number = this.getSigmab(sigmaLiveLoad)
+    const Sigmab: number = this.getSigmab(Mhd, Nhd, printData);
     // 制限値
     const Sigmabl: number = this.getSigmaBl(H, fcd);
 
     if (Sigmab < Sigmabl) {
-      result.sigma_b.value = Sigmab.toFixed() + '<' + Sigmab.toFixed();
+      result.sigma_b.value = Sigmab.toFixed(1) + '<' + Sigmabl.toFixed(1);
       // 鉄筋応力度の照査
-
+      const Sigmas: number = this.getSigmas(resultData.st, postdata.Steels);
+      if (Sigmas < sigmal1) {
+        result.sigma_s.value = Sigmas.toFixed(1) + '<' + sigmal1.toFixed(1);
+        if ( result.result.value === '-' ) {
+          result.result.value = 'OK';
+        }
+      } else {
+        result.sigma_s.value = Sigmas.toFixed(1) + '>' + sigmal1.toFixed(1);
+        result.result.value = 'NG';
+      }
       return result;
     } else {
-      result.sigma_b.value = Sigmab.toFixed() + '>' + Sigmab.toFixed();
+      result.sigma_b.value = Sigmab.toFixed(1) + '>' + Sigmabl.toFixed(1);
     }
-    // ひび割れ幅の照査    
+    // ひび割れ幅の照査
+    result.Mpd = { alien: 'right', value: Md.toFixed(1) };
+    result.Npd = { alien: 'right', value: Nd.toFixed(1) };
+
+    const Ec: number = printData.Ec;
+    const Es: number = printData.Es;
+    result.EsEc =  { alien: 'right', value: (Es / Ec).toFixed(2) };
+
+    const Sigmase: number = this.getSigmas(resultData.st, postdata.Steels);
+    result.sigma_se = { alien: 'right', value: Sigmase.toFixed(1) };
+    const c: number =  printData['Wd-c'];
+    result.c = { alien: 'right', value: c.toFixed(1) };
+    const Cs: number =  printData['Wd-Cs'];
+    result.Cs = { alien: 'right', value: Cs.toFixed() };
     
 
 
     return result;
   }
 
-  // 縁応力度を返す
-  private getSigmab(sigmaSc: any[]): number {
+  // 鉄筋の引張応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
+  private getSigmas(sigmaSt: any[], Steels: any[]): number {
+    // とりあえず最外縁の鉄筋の応力度を用いる
+    let st: number = 0;
+    let maxDepth: number = 0;
+    for (const steel of sigmaSt) {
+      if (maxDepth < steel.Depth) {
+        st = steel.s;
+        maxDepth = steel.Depth;
+      }
+    }
+    return -st;
+  }
+
+  // コンクリートの圧縮応力度を返す　(圧縮応力度がプラス+, 引張応力度がマイナス-)
+  private getSigmac(sigmaSc: any[]): number {
+
     const point1: any = sigmaSc[0];
     const point2: any = sigmaSc[1];
     const S: number = point1.s - point2.s;
-    const D: number = point2.Depth - point1.Depth;
-    
-    const result: number = S / D * point2.Depth + point2.s;
+    const DD: number = point2.Depth - point1.Depth;
+
+    let result: number = S / DD * point2.Depth + point2.s;
+    return result;
+  }
+
+  // 縁応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
+  private getSigmab(Mhd: number, Nhd: number, printData: any): number {
+    const I: number = printData.I;
+    const A: number = printData.A;
+    const Md: number = Math.abs(Mhd * 1000000);
+    const Nd: number = Nhd * 1000;
+    let e: number;
+    switch (printData.memo) {
+      case '上側引張':
+        e = printData.eu;
+        break;
+      case '下側引張':
+        e = printData.el;
+        break;
+    }
+    const Z = I / e;
+    const result = Md / Z - Nd / A;
     return result;
   }
 
@@ -322,8 +378,8 @@ export class CalcServiceabilityMomentService {
         const i = index === x.length - 1 ? x.length - 2 : index //配列の最後の値より大きい場合は、外挿のために、最後から2番目をindexにする
 
         return (y[i + 1] - y[i]) / (x[i + 1] - x[i]) * (x0 - x[i]) + y[i] //線形補間の関数を返す
-      }
-    }
+      };
+    };
 
     const x0 = [24, 27, 30, 40, 50, 60, 80];
     const y025 = [3.9, 4.1, 4.4, 5.2, 5.8, 6.5, 7.6];
@@ -345,9 +401,10 @@ export class CalcServiceabilityMomentService {
     }
     // 断面高さの線形補間関数を作成
     const x = [250, 500, 1000, 2000];
-    const linearH = linear(x, y) 
+    const linearH = linear(x, y)
 
     return linearH(H);
   }
+
 
 }

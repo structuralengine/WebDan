@@ -54,7 +54,7 @@ export class CalcEarthquakesMomentService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
-    const postData = this.post.getPostData(this.DesignForceList, 4, 'Moment');
+    const postData = this.post.getPostData(this.DesignForceList, 4, 'Moment', '耐力', 1);
     return postData;
   }
 

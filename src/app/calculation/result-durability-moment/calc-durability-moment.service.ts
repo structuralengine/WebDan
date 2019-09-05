@@ -64,8 +64,9 @@ export class CalcDurabilityMomentService {
     this.setDesignForces(false);
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, this.DesignForceList1]);
-    const postData = this.post.getPostData(this.DesignForceList, 0, 'Moment');
+    const DesignForceListList = [this.DesignForceList, this.DesignForceList1];
+    this.post.setPostData(DesignForceListList);
+    const postData = this.post.getPostData(this.DesignForceList, 0, 'Moment', '応力度', DesignForceListList.length);
     return postData;
   }
 

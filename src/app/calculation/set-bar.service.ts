@@ -279,6 +279,13 @@ export class SetBarService {
         nDepth += As * 1 * dst;
       }
     }
+    result['print-Ast-n'] = n1; // ひび割れの検討k3 に用いる鉄筋段数
+    result['print-Ast-c'] = dsc1; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    let Cs: number = this.save.toNumber(tensionBar.rebar_ss);
+    if (Cs === null) {
+      Cs = (h - (dsc1 * 2)) * Math.PI / line1;
+    }
+    result['print-Ast-Cs'] = Cs; // ひび割れの検討 に用いる鉄筋間隔
     result['print-Vyd_d'] = nDepth / nAs;
     result['print-Vyd_Ast'] = nAs;
 
@@ -315,6 +322,8 @@ export class SetBarService {
     result['print-Ast'] = this.save.getAs(dia1) * rebar_n1;
     result['print-AstString'] = dia1 + '-' + rebar_n1 + '本';
     result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1);
+    result['print-Ast-c'] = dsc1; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-Cs'] = tensionBar.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
 
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
@@ -326,8 +335,6 @@ export class SetBarService {
     }
     return result;
   }
-
-
 
   // 矩形 T形の 鉄筋のPOST用 データを登録する。
   public getCircleBar(position: any): any {
@@ -417,6 +424,7 @@ export class SetBarService {
         }
       }
     }
+    result['print-Ast-n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
     result['print-Vyd_d'] = nDepth / n;
     result['print-Vyd_Ast'] = nAs;
 
@@ -424,6 +432,12 @@ export class SetBarService {
     result['print-Ast'] = this.save.getAs(dia) * rebar_n;
     result['print-AstString'] = dia + '-' + rebar_n + '本';
     result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space);
+    result['print-Ast-c'] = dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    let Cs: number = this.save.toNumber(barInfo.rebar_ss);
+    if (Cs === null) {
+      Cs = (h - (dsc * 2)) * Math.PI / line;
+    }
+    result['print-Ast-Cs'] = Cs; // ひび割れの検討 に用いる鉄筋間隔
 
     // 基準となる 鉄筋強度
     const rs = position.safety_factor.rs;
@@ -482,6 +496,9 @@ export class SetBarService {
     if (tensionBarList.length < 1) {
       return null;
     } else {
+      result['print-Ast-n'] = printTensionBar.n; // ひび割れの検討k3 に用いる鉄筋段数
+      result['print-Ast-c'] =  printTensionBar.c; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+      result['print-Ast-Cs'] = printTensionBar.Cs; // ひび割れの検討 に用いる鉄筋間隔
       result['print-Vyd_d'] = height - printTensionBar.ds;
       result['print-Vyd_Ast'] = printTensionBar.As;
     }
@@ -589,7 +606,7 @@ export class SetBarService {
     }
 
     // 鉄筋段数
-    const n: number = Math.ceil(line / rebar_n);
+    const n: number = Math.ceil(rebar_n / line);
 
     // 鉄筋アキ
     let space: number = this.save.toNumber(barInfo.rebar_space);
@@ -639,6 +656,9 @@ export class SetBarService {
     printTensionBar['As'] = this.save.getAs(dia) * barInfo.rebar_n;
     printTensionBar['AsString'] = dia + '-' + barInfo.rebar_n + '本';
     printTensionBar['ds'] = this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space);
+    printTensionBar['n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
+    printTensionBar['c'] =  dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    printTensionBar['Cs'] = barInfo.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
 
     return result;
   }
@@ -787,6 +807,9 @@ export class SetBarService {
     printData['Ast'] = bars['print-Ast'];
     printData['AstString'] = bars['print-AstString'];
     printData['dst'] = bars['print-dst'];
+    printData['Wd-n'] = bars['print-Ast-n'];   // ひび割れの検討k3に用いる鉄筋段数
+    printData['Wd-c'] = bars['print-Ast-c'];   // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    printData['Wd-Cs'] = bars['print-Ast-Cs']; // ひび割れの検討 に用いる鉄筋間隔
 
     // 圧縮鉄筋
     if (target.indexOf('Asc') >= 0) {
@@ -833,8 +856,8 @@ export class SetBarService {
       return (value[0].g_no === g_no);
     });
     if (barList === undefined) {
-      console.log('部材グループが存在しない')
-      position.PostData = new Array();
+      console.log('部材グループが存在しない');
+      this.clearPostDataAll(position);
       return;
     }
 
@@ -909,5 +932,15 @@ export class SetBarService {
   // 角度をラジアンに変換
   public Radians(degree: number) {
     return degree * (Math.PI / 180);
+  }
+
+  private clearPostDataAll(position: any): void {
+    let i = 0;
+    let key: string = 'PostData' + i.toString();
+    while (key in position) {
+      position[key] = new Array();
+      i++;
+      key = 'PostData' + i.toString();
+    }
   }
 }

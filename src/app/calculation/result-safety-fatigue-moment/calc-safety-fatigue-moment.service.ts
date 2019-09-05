@@ -11,6 +11,9 @@ import { Injectable } from '@angular/core';
 export class CalcSafetyFatigueMomentService {
   // 安全性（疲労破壊）曲げモーメント
   public DesignForceList: any[];
+  public DesignForceList1: any[];
+  // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
+  private PostedData: any; 
 
   constructor(private save: SaveDataService,
               private force: SetDesignForceService,
@@ -30,7 +33,7 @@ export class CalcSafetyFatigueMomentService {
     // 最小応力
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[2]);
     // 最大応力
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
+    this.DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
@@ -56,8 +59,13 @@ export class CalcSafetyFatigueMomentService {
     this.setDesignForces(false);
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList]);
-    const postData = this.post.getPostData(this.DesignForceList, 1, 'Moment');
+    const DesignForceListList = [this.DesignForceList, this.DesignForceList1];
+    this.post.setPostData(DesignForceListList);
+    this.PostedData = this.post.getPostData(this.DesignForceList, 1, 'Moment', '応力度', DesignForceListList.length);
+    // 連結する
+    const postData = {
+      InputData0: this.PostedData.InputData.concat(this.PostedData.InputData0)
+    };
     return postData;
   }
 

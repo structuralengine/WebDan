@@ -67,9 +67,10 @@ export class CalcServiceabilityShearForceService {
     this.setDesignForces(false);
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, this.DesignForceList2, this.DesignForceList3]);
+    const DesignForceListList = [this.DesignForceList, this.DesignForceList2, this.DesignForceList3];
+    this.post.setPostData(DesignForceListList);
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    const postData = this.post.getPostData(this.DesignForceList, 0, 'ShearForce');
+    const postData = this.post.getPostData(this.DesignForceList, 0, 'ShearForce', '耐力', DesignForceListList.length);
     return postData;
   }
 
@@ -88,17 +89,27 @@ export class CalcServiceabilityShearForceService {
 
       for (const member of groupe) {
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData.length; j++) {
-            const postdata = position.PostData[j];  // せん断ひび割れ検討判定用
-            let deadLoad = { Vd: 0 }; // 永久荷重
-            if ('PostData0' in position) {
-              deadLoad = position.PostData0[j]; // 永久荷重
-            }
-            let liveLoad = { Vd: 0 }; // 変動荷重
+          for (let j = 0; j < position.PostData0.length; j++) {
+
+            // せん断ひび割れ検討判定用
+            const postdata = position.PostData0[j];
+
+            // 永久荷重
+            let deadLoad = { Vd: 0 }; 
             if ('PostData1' in position) {
-              liveLoad = position.PostData1[j];  
+              deadLoad = position.PostData1[j]; 
             }
+
+            // 変動荷重
+            let liveLoad = { Vd: 0 }; 
+            if ('PostData2' in position) {
+              liveLoad = position.PostData2[j];  
+            }
+
+            // 印刷用データ
             const printData = position.printData[j];
+            
+            // 解析結果
             const resultData = responseData[i].Reactions[0];
 
             if (page.columns.length > 4) {

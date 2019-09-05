@@ -33,14 +33,14 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       this.isFulfilled = false;
       return;
     }
-    if (postData.InputData.length < 1) {
+    if (postData.InputData0.length < 1) {
       this.isLoading = false;
       this.isFulfilled = false;
       return;
     }
 
     // postする
-    const inputJson: string = '=' + JSON.stringify(postData);
+    const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({
         'Content-Type': 'application/x-www-form-urlencoded',

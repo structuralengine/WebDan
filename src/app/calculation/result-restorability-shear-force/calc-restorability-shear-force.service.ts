@@ -54,7 +54,7 @@ export class CalcRestorabilityShearForceService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
-    const postData = this.post.getPostData(this.DesignForceList, 3, 'ShearForce');
+    const postData = this.post.getPostData(this.DesignForceList, 3, 'ShearForce', '耐力', 1);
     return postData;
   }
 

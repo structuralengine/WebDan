@@ -35,14 +35,16 @@ export class SetPostDataService {
     DesignForceList: any[],
     SafetyFactorINdex: number,
     calcTarget: string,
-    calcMode: string = '耐力'
+    calcMode: string,
+    concat: number
   ): any {
 
-    const result = {
-      username: this.user.loginUserName,
-      password: this.user.loginPassword,
-      InputData: new Array()
-    };
+    const result: any = {};
+
+    for (let i = 0; i < concat; i++) {
+      const key: string = 'InputData' + i.toString();
+      result[key] = new Array();
+    }
 
     for (const groupe of DesignForceList) {
       for (const member of groupe) {
@@ -54,43 +56,27 @@ export class SetPostDataService {
           // 出力用の string を position['printData'] に登録
           this.section.setPostData(member.g_no, member.m_no, position);
           // 変数に登録
-          switch (calcMode) {
-            case '耐力':
-              for (const section of position.PostData) {
-                delete section.Md;  // 設計断面力データ Md の入力がない場合、断面の耐力を計算します。
-                result.InputData.push(section);
-              }
-              break;
-            case '応力度':
-              let id = 0;
-              let key1: string = 'PostData';
-              let key2: string = 'InputData';
-              while (key1 in position) {
-                if (key2 in result === false) {
-                  result[key2] = new Array();
-                }
-                for (let i = 0; i < position[key1].length; i++) {
-                  const section: any = position[key1][i];
+          for (let i = 0; i < concat; i++) {
+            const postKey: string = 'PostData' + i.toString();
+            for (const section of position[postKey]) {
+              switch (calcMode) {
+                case '耐力':
+                  delete section.Md;  // 設計断面力データ Md の入力がない場合、断面の耐力を計算します。
+                  break;
+                case '応力度':
                   section.Md = Math.abs(section.Md);
-                  if (id > 0) {
-                    section['Sections'] = position.PostData[i].Sections;
-                    section['SectionElastic'] = position.PostData[i].SectionElastic;
-                    section['Steels'] = position.PostData[i].Steels;
-                    section['SteelElastic'] = position.PostData[i].SteelElastic;
-                  }
-                  result[key2].push(section);
-                }
-                key1 = 'PostData' + id.toString();
-                key2 = 'InputData' + id.toString();
-                id++;
+                  break;
               }
-              break;
+              const inputKey: string = 'InputData' + i.toString();
+              result[inputKey].push(section);
+            }
           }
         }
       }
     }
     return result;
   }
+
 
   // position に PostData を追加する
   // DesignForceList　を複数指定できる。最初の DesignForceList が基準になる
@@ -105,36 +91,23 @@ export class SetPostDataService {
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
           for (let fo = 0; fo < position.designForce.length; fo++) {
-            const force: any[] = new Array();
-
             // 対象の断面力を抽出する
+            const force: any[] = new Array();
             for (const target of DesignForceListList) {
-              let f: any;
+              let designForce: any;
               try {
-                f = target[ig][im].positions[ip].designForce[fo];
-              } catch{
-                f = null;
+                designForce = target[ig][im].positions[ip].designForce[fo];
+              } catch {
+                designForce = null;
               }
-              force.push(f);
+              force.push(designForce);
             }
-
             // ピックアップ断面力から設計断面力を選定する
-            const temp0: any[] = this.getSectionForce(force);
-
+            const sectionForce: any[] = this.getSectionForce(force);
             // postData に登録する
-            let id: string = '';
-            for (let it = 0; it < temp0.length; it++) {
-              const temp1 = temp0[it];
-              const key: string = 'PostData' + id;
-              if (key in position) {
-                const temp2: any[] = position.PostData.concat(temp1);
-                position.PostData = temp2;
-              } else {
-                position[key] = temp1;
-              }
-              id = it.toString();
+            for (let icase = 0; icase < sectionForce.length; icase++) {
+              position['PostData' + icase.toString()] = sectionForce[icase];
             }
-
           }
         }
       }
@@ -145,7 +118,7 @@ export class SetPostDataService {
   private getSectionForce(forceListList: any[]): any[] {
 
     // 設計断面の数をセット
-    let result: any[] = new Array();
+    const result: any[] = new Array();
 
     if ('Manual' in forceListList[0]) {
       // 断面手入力モードの場合は 設計断面 1つ
@@ -206,8 +179,7 @@ export class SetPostDataService {
             Vd: 0,
             Nd: 0
           }]);
-        }
-        else {
+        } else {
           result.push([{
             memo: '上側引張',
             Md: forceList.Mmin.Md / forceList.n,
@@ -226,4 +198,14 @@ export class SetPostDataService {
     return result;
   }
 
+  public getInputJsonString(postData: any): string {
+
+    const postObject = {
+      username: this.user.loginUserName,
+      password: this.user.loginPassword,
+      InputData: postData.InputData0
+    };
+    const inputJson: string = '=' + JSON.stringify(postObject);
+    return inputJson;
+  }
 }

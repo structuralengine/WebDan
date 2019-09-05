@@ -61,7 +61,7 @@ export class CalcSafetyFatigueShearForceService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
-    const postData = this.post.getPostData(this.DesignForceList, 1, 'ShearForce');
+    const postData = this.post.getPostData(this.DesignForceList, 1, 'ShearForce', '耐力', 1);
     return postData;
   }
     
