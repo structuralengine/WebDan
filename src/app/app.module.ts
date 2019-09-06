@@ -77,6 +77,7 @@ import { SetSafetyFactorService} from './calculation/set-safety-factor.service';
 import { SetSectionService} from './calculation/set-section.service';
 import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
+import { SetFatigueService } from './calculation/set-fatigue.service';
 
 @NgModule({
   imports: [
@@ -157,7 +158,8 @@ import { SetPostDataService} from './calculation/set-post-data.service';
     SetSafetyFactorService,
     SetSectionService,
     SetBarService,
-    SetPostDataService
+    SetPostDataService,
+    SetFatigueService
   ],
   bootstrap: [
     AppComponent

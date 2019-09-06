@@ -27,7 +27,7 @@ export class CalcRestorabilityShearForceService {
     if (this.save.calc.print_selected.calculate_shear_force === false) {
       return new Array();
     }
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[6]);
+    const DesignForce = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[6]);
 
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
@@ -49,11 +49,15 @@ export class CalcRestorabilityShearForceService {
   // サーバー POST用データを生成する
   public getPostData(): any {
 
-    // 断面力のエラーチェック
-    this.setDesignForces(false);
+    // せん断力が計算対象でない場合は処理を抜ける
+    if (this.save.calc.print_selected.calculate_shear_force === false) {
+      return null;
+    }
+    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[6]);
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
+    // POST 用
     const postData = this.post.getPostData(this.DesignForceList, 3, 'ShearForce', '耐力', 1);
     return postData;
   }

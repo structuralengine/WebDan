@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { UserInfoService } from '../providers/user-info.service';
+import { SaveDataService } from '../providers/save-data.service';
 import { SetSectionService } from './set-section.service';
 import { SetSafetyFactorService } from './set-safety-factor.service';
 
@@ -11,6 +12,7 @@ import { SetSafetyFactorService } from './set-safety-factor.service';
 export class SetPostDataService {
 
   constructor(private user: UserInfoService,
+    private save: SaveDataService,
     private section: SetSectionService,
     private safety: SetSafetyFactorService) { }
 
@@ -80,7 +82,7 @@ export class SetPostDataService {
 
   // position に PostData を追加する
   // DesignForceList　を複数指定できる。最初の DesignForceList が基準になる
-  public setPostData(DesignForceListList: any[]): void {
+  public setPostData(DesignForceListList: any[], durability: boolean = false): void {
 
     const baseDesignForceList: any[] = DesignForceListList[0];
 
@@ -90,6 +92,19 @@ export class SetPostDataService {
         const member = groupe[im];
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
+
+          // 部材・断面情報をセット
+          const memberInfo = this.save.members.member_list.find(function (value) {
+            return (value.m_no === member.m_no);
+          });
+          if (memberInfo === undefined) {
+            console.log('部材番号が存在しない');
+            continue;
+          }
+          // 断面
+          position['memberInfo'] = memberInfo;
+
+          // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < position.designForce.length; fo++) {
             // 対象の断面力を抽出する
             const force: any[] = new Array();
@@ -103,19 +118,67 @@ export class SetPostDataService {
               force.push(designForce);
             }
             // ピックアップ断面力から設計断面力を選定する
-            const sectionForce: any[] = this.getSectionForce(force);
+            let sectionForce: any[];
+            if (durability === false) {
+              sectionForce = this.getSectionForce(force, null);
+            } else {
+              sectionForce = this.getSectionForce(force, memberInfo);
+            }
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
               position['PostData' + icase.toString()] = sectionForce[icase];
             }
           }
+          // 必要ないので消す！！
+          delete position.designForce;
+        }
+      }
+    }
+
+    // PostData が１つも無い断面を削除する
+    this.deleteDisablePosition(DesignForceListList);
+
+  }
+
+  // PostData が１つも無い断面を DesignForceList から削除する
+  private deleteDisablePosition(DesignForceListList) {
+
+    const baseDesignForceList: any[] = DesignForceListList[0];
+
+    for (let ig = baseDesignForceList.length - 1; ig >= 0; ig--) {
+      const groupe = baseDesignForceList[ig];
+      for (let im = groupe.length - 1; im >= 0; im--) {
+        const member = groupe[im];
+        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
+          let position: any = member.positions[ip];
+          if ('PostData0' in position === false) {
+            for (const target of DesignForceListList) {
+              try {
+                target[ig][im].positions.splice(ip, 1);
+              } catch {}
+            }
+          }
+        }
+        if (member.positions.length < 1) {
+          for (const target of DesignForceListList) {
+            try {
+              target[ig].splice(im, 1);
+            } catch {}
+          }
+        }
+      }
+      if (groupe.length < 1) {
+        for (const target of DesignForceListList) {
+          try {
+            target.splice(ig, 1);
+          } catch {}
         }
       }
     }
   }
 
   // 設計断面力（リスト）を生成する
-  private getSectionForce(forceListList: any[]): any[] {
+  private getSectionForce(forceListList: any[], memberInfo: any): any[] {
 
     // 設計断面の数をセット
     const result: any[] = new Array();
@@ -124,21 +187,35 @@ export class SetPostDataService {
       // 断面手入力モードの場合は 設計断面 1つ
       const side = (forceListList[0].Manual.Md > 0) ? '下側引張' : '上側引張';
       for (const forceList of forceListList) {
+        let fo: any;
         if (forceList === null) {
-          result.push([{
+          fo = {
             memo: side,
             Md: 0,
             Vd: 0,
             Nd: 0
-          }]);
+          };
         } else {
-          result.push([{
+          fo = {
             memo: side,
             Md: forceList.Manual.Md / forceList.n,
             Vd: forceList.Manual.Vd / forceList.n,
             Nd: forceList.Manual.Nd / forceList.n
-          }]);
-
+          };
+        }
+        const re: any[] = new Array();
+        if (memberInfo === null) {
+          re.push(fo);
+        } else {
+          if (memberInfo.vis_u === true && side === '上側引張') {
+            re.push(fo);
+          }
+          if (memberInfo.vis_l === true && side === '下側引張') {
+            re.push(fo);
+          }
+        }
+        if (re.length > 0) {
+          result.push(re);
         }
       }
 
@@ -147,50 +224,86 @@ export class SetPostDataService {
       const side = (forceListList[0].Mmax.Md > 0) ? '下側引張' : '上側引張';
       const key: string = (Math.abs(forceListList[0].Mmax.Md) > Math.abs(forceListList[0].Mmin.Md)) ? 'Mmax' : 'Mmin';
       for (const forceList of forceListList) {
+        let fo: any;
         if (forceList === null) {
-          result.push([{
+          fo = {
             memo: side,
             Md: 0,
             Vd: 0,
             Nd: 0
-          }]);
+          };
         } else {
           const force = forceList[key];
-          result.push([{
+          fo = {
             memo: side,
             Md: force.Md / forceList.n,
             Vd: force.Vd / forceList.n,
             Nd: force.Nd / forceList.n
-          }]);
+          };
         }
+
+        const re: any[] = new Array();
+        if (memberInfo === null) {
+          re.push(fo);
+        } else {
+          if (memberInfo.vis_u === true && side === '上側引張') {
+            re.push(fo);
+          }
+          if (memberInfo.vis_l === true && side === '下側引張') {
+            re.push(fo);
+          }
+        }
+        if (re.length > 0) {
+          result.push(re);
+        }
+
       }
     } else {
       // Mmax, Mmin の符号が異なるなら 設計断面 2つ
       for (const forceList of forceListList) {
+        let upper: any;
+        let lower: any;
         if (forceList === null) {
-          result.push([{
+          upper = {
             memo: '上側引張',
             Md: 0,
             Vd: 0,
             Nd: 0
-          }, {
+          };
+          lower = {
             memo: '下側引張',
             Md: 0,
             Vd: 0,
             Nd: 0
-          }]);
+          };
         } else {
-          result.push([{
+          upper = {
             memo: '上側引張',
             Md: forceList.Mmin.Md / forceList.n,
             Vd: forceList.Mmin.Vd / forceList.n,
             Nd: forceList.Mmin.Nd / forceList.n
-          }, {
+          };
+          lower = {
             memo: '下側引張',
             Md: forceList.Mmax.Md / forceList.n,
             Vd: forceList.Mmax.Vd / forceList.n,
             Nd: forceList.Mmax.Nd / forceList.n
-          }]);
+          };
+        }
+        const re: any[] = new Array();
+        if (memberInfo === null) {
+          re.push(upper);
+          re.push(lower);
+        } else {
+          if (memberInfo.vis_u === true) {
+            re.push(upper);
+          }
+          if (memberInfo.vis_l === true) {
+            re.push(lower);
+          }
+        }
+        if (re.length > 0) {
+          result.push(re);
         }
       }
     }

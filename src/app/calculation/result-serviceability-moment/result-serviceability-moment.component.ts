@@ -11,7 +11,8 @@ import { SetPostDataService } from '../set-post-data.service';
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
 export class ResultServiceabilityMomentComponent implements OnInit {
-
+  
+  private title: string = '耐久性の照査';
   private isLoading = true;
   private isFulfilled = false;
   private err: string;

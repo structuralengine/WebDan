@@ -46,12 +46,11 @@ export class MenuComponent implements OnInit {
 
   // 新規作成
   renew(): void {
-    this.router.navigate(['/calculation-print']);
+    this.router.navigate(['/blank-page']);
     this.app.dialogClose(); // 現在表示中の画面を閉じる
     this.app.isManual = true;
     this.app.isCalculated = false;
     this.InputData.clear();
-    this.router.navigate(['/']);
   }
 
   // ファイルを開く

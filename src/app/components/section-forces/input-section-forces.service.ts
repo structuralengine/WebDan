@@ -25,9 +25,6 @@ export class InputSectionForcesService extends InputDataService {
     const rows: any = { 'm_no': m_no, 'p_name_ex': p_name_ex, case: new Array() };
     for (let i = 0; i < 10; i++) {
       const tmp = {Md: null, Nd: null };
-      if (i === 7) {
-        tmp['Nmax'] = null;
-      }
       rows['case'].push(tmp)
     }
     return rows;

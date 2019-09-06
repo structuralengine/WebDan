@@ -12,9 +12,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcServiceabilityShearForceService {
   // 耐久性 せん断ひび割れ
-  public DesignForceList: any[]; // せん断ひび割れ検討判定用
-  private DesignForceList2: any[]; // 永久荷重
-  private DesignForceList3: any[]; // 変動荷重
+  public DesignForceList: any[]; 
 
   constructor(private save: SaveDataService,
     private force: SetDesignForceService,
@@ -22,8 +20,6 @@ export class CalcServiceabilityShearForceService {
     private result: ResultDataService,
     private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
-    this.DesignForceList2 = null;
-    this.DesignForceList3 = null;
   }
 
   // 設計断面力の集計
@@ -36,11 +32,11 @@ export class CalcServiceabilityShearForceService {
       return new Array();
     }
     // せん断ひび割れ検討判定用
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[0]);
+    const DesignForce0 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[0]);
     // 永久荷重
-    this.DesignForceList2 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
+    const DesignForce1 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
     // 変動荷重
-    this.DesignForceList3 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
+    const DesignForce2 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
 
 
     const result: any[] = new Array();
@@ -63,13 +59,22 @@ export class CalcServiceabilityShearForceService {
   // サーバー POST用データを生成する
   public getPostData(): any {
 
-    // 断面力のエラーチェック
-    this.setDesignForces(false);
+    // せん断力が計算対象でない場合は処理を抜ける
+    if (this.save.calc.print_selected.calculate_shear_force === false) {
+      return null;
+    }
+    // せん断ひび割れ検討判定用
+    // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
+    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[0]);
+    // 永久荷重
+    const DesignForceList2 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
+    // 変動荷重
+    const DesignForceList3 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
 
     // サーバーに送信するデータを作成
-    const DesignForceListList = [this.DesignForceList, this.DesignForceList2, this.DesignForceList3];
+    const DesignForceListList = [this.DesignForceList, DesignForceList2, DesignForceList3];
     this.post.setPostData(DesignForceListList);
-    // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
+    // POST 用
     const postData = this.post.getPostData(this.DesignForceList, 0, 'ShearForce', '耐力', DesignForceListList.length);
     return postData;
   }

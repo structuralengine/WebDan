@@ -12,16 +12,12 @@ import { Injectable } from '@angular/core';
 
 export class CalcDurabilityMomentService {
   // 使用性 曲げひび割れ
-  public DesignForceList: any[]; // 永久荷重
-  private DesignForceList1: any[]; // 縁応力検討用
+  public DesignForceList: any[];
 
   constructor(private save: SaveDataService,
-    private force: SetDesignForceService,
-    private post: SetPostDataService,
-    private result: ResultDataService,
-    private base: CalcServiceabilityMomentService) {
+              private force: SetDesignForceService,
+              private post: SetPostDataService) {
     this.DesignForceList = null;
-    this.DesignForceList1 = null;
   }
 
   // 設計断面力の集計
@@ -34,10 +30,9 @@ export class CalcDurabilityMomentService {
       return new Array();
     }
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
-
+    const DesignForce0 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
     // 縁応力度検討用
-    this.DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+    const DesignForce1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
 
 
     const result: any[] = new Array();
@@ -60,16 +55,21 @@ export class CalcDurabilityMomentService {
   // サーバー POST用データを生成する
   public getPostData(): any {
 
-    // 断面力のエラーチェック
-    this.setDesignForces(false);
+    // 曲げモーメントが計算対象でない場合は処理を抜ける
+    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+      return null;
+    }
+    // 永久荷重
+    this.DesignForceList   = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
+    // 縁応力検討用
+    const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]); 
 
     // サーバーに送信するデータを作成
-    const DesignForceListList = [this.DesignForceList, this.DesignForceList1];
-    this.post.setPostData(DesignForceListList);
+    const DesignForceListList = [this.DesignForceList, DesignForceList1];
+    this.post.setPostData(DesignForceListList, true);
+    // POST 用
     const postData = this.post.getPostData(this.DesignForceList, 0, 'Moment', '応力度', DesignForceListList.length);
     return postData;
   }
-
-
   
 }

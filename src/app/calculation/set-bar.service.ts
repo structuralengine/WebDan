@@ -186,10 +186,13 @@ export class SetBarService {
 
     // 鉄筋強度
     let fsy1: number;
+    let fsu1: number;
     if (tensionBar.rebar_dia <= position.materialInfo[0].fsy1) {
       fsy1 = this.save.toNumber(position.materialInfo[1].fsy1);
+      fsu1 = this.save.toNumber(position.materialInfo[1].fsu1);
     } else {
       fsy1 = this.save.toNumber(position.materialInfo[1].fsy2);
+      fsu1 = this.save.toNumber(position.materialInfo[1].fsu2);
     }
     if (fsy1 === null) {
       return result;
@@ -281,6 +284,8 @@ export class SetBarService {
     }
     result['print-Ast-n'] = n1; // ひび割れの検討k3 に用いる鉄筋段数
     result['print-Ast-c'] = dsc1; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-φ'] = tensionBar.rebar_dia; // ひび割れの検討 に用いる鉄筋径
+
     let Cs: number = this.save.toNumber(tensionBar.rebar_ss);
     if (Cs === null) {
       Cs = (h - (dsc1 * 2)) * Math.PI / line1;
@@ -297,6 +302,7 @@ export class SetBarService {
       ElasticID: 's'
     });
     // 印刷用の変数に登録
+    result['print-fsu'] = fsu1;
     result['print-fsy'] = fsy1;
     result['print-rs'] = rs;
     result['print-Es'] = 200;
@@ -324,6 +330,7 @@ export class SetBarService {
     result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1);
     result['print-Ast-c'] = dsc1; // ひび割れの検討 に用いる1段目の鉄筋かぶり
     result['print-Ast-Cs'] = tensionBar.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
+    result['print-Ast-φ'] = tensionBar.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
@@ -379,10 +386,13 @@ export class SetBarService {
 
     // 鉄筋強度
     let fsy: number;
+    let fsu: number;
     if (barInfo.rebar_dia <= position.materialInfo[0].fsy1) {
       fsy = this.save.toNumber(position.materialInfo[1].fsy1);
+      fsu = this.save.toNumber(position.materialInfo[1].fsu1);
     } else {
       fsy = this.save.toNumber(position.materialInfo[1].fsy2);
+      fsu = this.save.toNumber(position.materialInfo[1].fsu2);
     }
     if (fsy === null) {
       return result;
@@ -424,20 +434,6 @@ export class SetBarService {
         }
       }
     }
-    result['print-Ast-n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
-    result['print-Vyd_d'] = nDepth / n;
-    result['print-Vyd_Ast'] = nAs;
-
-    // 印刷用の変数に登録
-    result['print-Ast'] = this.save.getAs(dia) * rebar_n;
-    result['print-AstString'] = dia + '-' + rebar_n + '本';
-    result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space);
-    result['print-Ast-c'] = dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
-    let Cs: number = this.save.toNumber(barInfo.rebar_ss);
-    if (Cs === null) {
-      Cs = (h - (dsc * 2)) * Math.PI / line;
-    }
-    result['print-Ast-Cs'] = Cs; // ひび割れの検討 に用いる鉄筋間隔
 
     // 基準となる 鉄筋強度
     const rs = position.safety_factor.rs;
@@ -448,7 +444,27 @@ export class SetBarService {
       Es: 200,
       ElasticID: 's'
     });
+
+
     // 印刷用の変数に登録
+    result['print-Vyd_d'] = nDepth / n;
+    result['print-Vyd_Ast'] = nAs;
+
+    result['print-Ast'] = this.save.getAs(dia) * rebar_n;
+    result['print-AstString'] = dia + '-' + rebar_n + '本';
+    result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space);
+
+    result['print-Ast-n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
+    result['print-Ast-c'] = dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-φ'] = barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
+
+    let Cs: number = this.save.toNumber(barInfo.rebar_ss);
+    if (Cs === null) {
+      Cs = (h - (dsc * 2)) * Math.PI / line;
+    }
+    result['print-Ast-Cs'] = Cs; // ひび割れの検討 に用いる鉄筋間隔
+
+    result['print-fsu'] = fsu;
     result['print-fsy'] = fsy;
     result['print-rs'] = rs;
     result['print-Es'] = 200;
@@ -495,12 +511,6 @@ export class SetBarService {
     // 有効な入力がなかった場合は null を返す.
     if (tensionBarList.length < 1) {
       return null;
-    } else {
-      result['print-Ast-n'] = printTensionBar.n; // ひび割れの検討k3 に用いる鉄筋段数
-      result['print-Ast-c'] =  printTensionBar.c; // ひび割れの検討 に用いる1段目の鉄筋かぶり
-      result['print-Ast-Cs'] = printTensionBar.Cs; // ひび割れの検討 に用いる鉄筋間隔
-      result['print-Vyd_d'] = height - printTensionBar.ds;
-      result['print-Vyd_Ast'] = printTensionBar.As;
     }
 
     // 圧縮鉄筋 をセットする
@@ -531,31 +541,17 @@ export class SetBarService {
       Es: 200,
       ElasticID: 's'
     });
-    // 印刷用の変数に登録
-    result['print-fsy'] = fsyk;
-    result['print-rs'] = rs;
-    result['print-Es'] = 200;
 
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
       Asc.n = Asc.n * Asc.fsyk / fsyk;
       result.Steels.push(Asc);
     }
-    if (compresBarList.length > 0) { // 印刷用の変数に登録
-      result['print-Asc'] = printCompresBar['As'];
-      result['print-AscString'] = printCompresBar['AsString'];
-      result['print-dsc'] = printCompresBar['ds'];
-    }
 
     // 側面鉄筋の登録
     for (const Ase of sideBarList) {
       Ase.n = Ase.n * Ase.fsyk / fsyk;
       result.Steels.push(Ase);
-    }
-    if (sideBarList.length > 0) { // 印刷用の変数に登録
-      result['ptint-Ase'] = printSideBar['As'];
-      result['print-AseString'] = printSideBar['AsString'];
-      result['print-dse'] = printSideBar['ds'];
     }
 
     // 引張鉄筋の登録
@@ -564,10 +560,34 @@ export class SetBarService {
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }
+
     // 印刷用の変数に登録
+    result['print-fsu'] = printTensionBar['fsu'];
+    result['print-fsy'] = printTensionBar['fsy'];
+    result['print-rs'] = rs;
+    result['print-Es'] = 200;
     result['print-Ast'] = printTensionBar['As'];
     result['print-AstString'] = printTensionBar['AsString'];
     result['print-dst'] = printTensionBar['ds'];
+
+    result['print-Ast-n'] = printTensionBar.n; // ひび割れの検討k3 に用いる鉄筋段数
+    result['print-Ast-c'] = printTensionBar.c; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-Cs'] = printTensionBar.Cs; // ひび割れの検討 に用いる鉄筋間隔
+    result['print-Ast-φ'] = printTensionBar['φ']; // ひび割れの検討 に用いる鉄筋径
+    result['print-Vyd_d'] = height - printTensionBar.ds;
+    result['print-Vyd_Ast'] = printTensionBar.As;
+
+    if (compresBarList.length > 0) { // 印刷用の変数に登録
+      result['print-Asc'] = printCompresBar['As'];
+      result['print-AscString'] = printCompresBar['AsString'];
+      result['print-dsc'] = printCompresBar['ds'];
+    }
+
+    if (sideBarList.length > 0) { // 印刷用の変数に登録
+      result['ptint-Ase'] = printSideBar['As'];
+      result['print-AseString'] = printSideBar['AsString'];
+      result['print-dse'] = printSideBar['ds'];
+    }
 
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
@@ -622,10 +642,13 @@ export class SetBarService {
 
     // 鉄筋強度
     let fsy: number;
+    let fsu: number;
     if (barInfo.rebar_dia <= materialInfo[0].fsy1) {
       fsy = this.save.toNumber(materialInfo[1].fsy1);
+      fsu = this.save.toNumber(materialInfo[1].fsu1);
     } else {
       fsy = this.save.toNumber(materialInfo[1].fsy2);
+      fsu = this.save.toNumber(materialInfo[1].fsu2);
     }
     if (fsy === null) {
       return new Array();
@@ -653,12 +676,15 @@ export class SetBarService {
       rebar_n = rebar_n - line;
     }
     // 印刷用の変数に登録
+    printTensionBar['fsy'] = fsy;
+    printTensionBar['fsu'] = fsu;
     printTensionBar['As'] = this.save.getAs(dia) * barInfo.rebar_n;
     printTensionBar['AsString'] = dia + '-' + barInfo.rebar_n + '本';
     printTensionBar['ds'] = this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space);
     printTensionBar['n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
-    printTensionBar['c'] =  dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    printTensionBar['c'] = dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
     printTensionBar['Cs'] = barInfo.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
+    printTensionBar['φ'] = barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
     return result;
   }
@@ -810,6 +836,7 @@ export class SetBarService {
     printData['Wd-n'] = bars['print-Ast-n'];   // ひび割れの検討k3に用いる鉄筋段数
     printData['Wd-c'] = bars['print-Ast-c'];   // ひび割れの検討 に用いる1段目の鉄筋かぶり
     printData['Wd-Cs'] = bars['print-Ast-Cs']; // ひび割れの検討 に用いる鉄筋間隔
+    printData['Wd-φ'] = bars['print-Ast-φ']; // ひび割れの検討 に用いる鉄筋間隔
 
     // 圧縮鉄筋
     if (target.indexOf('Asc') >= 0) {
@@ -843,6 +870,7 @@ export class SetBarService {
     printData['Vyd_Ast'] = bars['print-Vyd_Ast'];
 
     // 鉄筋強度
+    printData['fsu'] = bars['print-fsu'];
     printData['fsy'] = bars['print-fsy'];
     printData['rs'] = bars['print-rs'];
     printData['Es'] = bars['print-Es'];

@@ -7,15 +7,16 @@ import { CalcServiceabilityMomentService } from '../result-serviceability-moment
 
 @Component({
   selector: 'app-result-durability-moment',
-  templateUrl: './result-durability-moment.component.html',
+  templateUrl: '../result-serviceability-moment/result-serviceability-moment.component.html',
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
 export class ResultDurabilityMomentComponent implements OnInit {
 
+  private title: string = '使用性の検討';
   private isLoading = true;
   private isFulfilled = false;
   private err: string;
-  private durabilityMomentPages: any[];
+  private serviceabilityMomentPages: any[];
 
   constructor(private http: Http,
               private calc: CalcDurabilityMomentService,
@@ -75,7 +76,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
     const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
     // 耐久性のページと同じ
-    this.durabilityMomentPages = this.base.setServiceabilityPages(json, postData, '使用性（外観）曲げひび割れの照査結果');
+    this.serviceabilityMomentPages = this.base.setServiceabilityPages(json.OutputData, postData, '使用性（外観）曲げひび割れの照査結果');
     return true;
   }
 

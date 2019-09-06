@@ -129,35 +129,42 @@ export class ResultDataService {
     return result;
   }
 
-    // 照査表における 鉄筋強度情報を取得
-    public getFskString(printData: any): any {
-      const result = {};
-  
-      if ('fsy' in printData) {
-        result['fsy'] = { alien: 'right', value: printData.fsy.toFixed(0) };
-      } else {
-        result['fsy'] = { alien: 'center', value: '-' };
-      }
-  
-      if ('rs' in printData) {
-        result['rs'] = { alien: 'right', value: printData.rs.toFixed(2) };
-      } else {
-        result['rs'] = { alien: 'center', value: '-' };
-      }
-  
-      if ('Es' in printData) {
-        result['Es'] = { alien: 'right', value: printData.Ec.toFixed(0) };
-      } else {
-        result['Es'] = { alien: 'center', value: '-' };
-      }
-  
-      if ('fsy' in printData && 'rs' in printData) {
-        result['fsd'] = { alien: 'right', value: (printData.fsy / printData.rs).toFixed(1) };
-      } else {
-        result['fsd'] = { alien: 'center', value: '-' };
-      }
-  
-      return result;
+  // 照査表における 鉄筋強度情報を取得
+  public getFskString(printData: any): any {
+    const result = {};
+
+    if ('fsy' in printData) {
+      result['fsy'] = { alien: 'right', value: printData.fsy.toFixed(0) };
+    } else {
+      result['fsy'] = { alien: 'center', value: '-' };
     }
+
+    if ('rs' in printData) {
+      result['rs'] = { alien: 'right', value: printData.rs.toFixed(2) };
+    } else {
+      result['rs'] = { alien: 'center', value: '-' };
+    }
+
+    if ('Es' in printData) {
+      result['Es'] = { alien: 'right', value: printData.Ec.toFixed(0) };
+    } else {
+      result['Es'] = { alien: 'center', value: '-' };
+    }
+
+    if ('fsy' in printData && 'rs' in printData) {
+      result['fsd'] = { alien: 'right', value: (printData.fsy / printData.rs).toFixed(1) };
+    } else {
+      result['fsd'] = { alien: 'center', value: '-' };
+    }
+
+    if ('fsu' in printData) {
+      result['fsu'] = { alien: 'right', value: printData.fsu.toFixed(0) };
+    } else {
+      result['fsu'] = { alien: 'center', value: '-' };
+    }
+
+
+    return result;
+  }
 
 }

@@ -14,17 +14,9 @@ export class SetSectionService {
   // position に コンクリート・鉄筋情報を入力する /////////////////////////////////////////////////////////////////////
   public setPostData(g_no: number, m_no: number, position: any): void {
 
-    // 部材・断面情報をセット
-    const memberInfo = this.save.members.member_list.find(function (value) {
-      return (value.m_no === m_no);
-    });
-    if (memberInfo === undefined) {
-      console.log('部材番号が存在しない');
-      this.clearPostDataAll(position);
-      return;
-    }
-    // 断面
-    position['memberInfo'] = memberInfo;
+    // // 部材・断面情報
+    const memberInfo = position.memberInfo;
+
     // 出力用の変数の用意する
     position['printData'] = JSON.parse(
       JSON.stringify({
