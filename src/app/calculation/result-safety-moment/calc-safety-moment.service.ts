@@ -58,6 +58,10 @@ export class CalcSafetyMomentService {
       return null;
     }
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
+    
+    if(this.DesignForceList.length < 1 ){
+      return null;
+    }
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);

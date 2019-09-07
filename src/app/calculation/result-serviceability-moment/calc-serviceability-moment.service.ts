@@ -36,7 +36,6 @@ export class CalcServiceabilityMomentService {
     // 縁応力度検討用
     const DesignForce1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
 
-
     const result: any[] = new Array();
     if (this.save.isManual() === true) {
       // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
@@ -65,6 +64,10 @@ export class CalcServiceabilityMomentService {
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
     // 縁応力度検討用
     const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+
+    if (DesignForceList1.length < 1 || this.DesignForceList.length < 1) {
+      return null;
+    }
 
     // サーバーに送信するデータを作成
     const DesignForceListList = [this.DesignForceList, DesignForceList1];
@@ -96,12 +99,12 @@ export class CalcServiceabilityMomentService {
           for (let j = 0; j < position.PostData0.length; j++) {
 
             // 永久荷重
-            const postdata = position.PostData0[j];
+            const postdata0 = position.PostData0[j];
 
             // 縁応力検討用荷重
-            let liveLoad = { Md: 0, Nd: 0 };
+            let postdata1 = { Md: 0, Nd: 0 };
             if ('PostData1' in position) {
-              liveLoad = position.PostData1[j];
+              postdata1 = position.PostData1[j];
             }
 
             // 印刷用データ
@@ -118,12 +121,12 @@ export class CalcServiceabilityMomentService {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            const resultWd: any = this.calcWd(printData, postdata, liveLoad, position, resultData, isDurability);
+            const resultWd: any = this.calcWd(printData, postdata0, postdata1, position, resultData, isDurability);
             const resultColumn: any = this.getResultString(resultWd);
 
             /////////////// タイトル /////////////// 
             column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata));
+            column.push(this.result.getTitleString2(position, postdata0));
             column.push(this.result.getTitleString3(position));
             ///////////////// 形状 /////////////////
             column.push(this.result.getShapeString_B(printData));
@@ -356,7 +359,7 @@ export class CalcServiceabilityMomentService {
     return result;
   }
 
-  public calcWd(printData: any, postdata: any, liveLoad: any, position: any, resultData: any,
+  public calcWd(printData: any, postdata0: any, postdata1: any, position: any, resultData: any,
     isDurability: boolean): any {
 
     const result = {};
@@ -421,8 +424,8 @@ export class CalcServiceabilityMomentService {
 
     // 永久作用
     let Md: number;
-    if ('Md' in postdata) {
-      Md = this.save.toNumber(postdata.Md);
+    if ('Md' in postdata0) {
+      Md = this.save.toNumber(postdata0.Md);
       if (Md !== null) {
         result['Md'] = Md;
       }
@@ -430,13 +433,24 @@ export class CalcServiceabilityMomentService {
 
 
     let Nd: number;
-    if ('Nd' in postdata) {
-      Nd = this.save.toNumber(postdata.Nd);
+    if ('Nd' in postdata0) {
+      Nd = this.save.toNumber(postdata0.Nd);
       if (Nd !== null) {
         result['Nd'] = Nd;
       }
     }
     result['Nd'] = Nd;
+
+    if (resultData === null) {
+      resultData = {
+        fi: 0,
+        Md: 0,
+        Nd: 0,
+        sc: new Array(),
+        st: new Array(),
+        x: 0,
+      }
+    }
 
     // 圧縮応力度の照査
     const Sigmac: number = this.getSigmac(resultData.sc);
@@ -449,8 +463,8 @@ export class CalcServiceabilityMomentService {
 
     // 縁応力の照査
     let Mhd: number;
-    if ('Md' in liveLoad) {
-      Mhd = this.save.toNumber(liveLoad.Md);
+    if ('Md' in postdata1) {
+      Mhd = this.save.toNumber(postdata1.Md);
       if (Mhd !== null) {
         result['Mhd'] = Mhd;
       }
@@ -458,8 +472,8 @@ export class CalcServiceabilityMomentService {
 
 
     let Nhd: number;
-    if ('Nd' in liveLoad) {
-      Nhd = this.save.toNumber(liveLoad.Nd);
+    if ('Nd' in postdata1) {
+      Nhd = this.save.toNumber(postdata1.Nd);
       if (Nhd !== null) {
         result['Nhd'] = Nhd;
       }
@@ -477,7 +491,7 @@ export class CalcServiceabilityMomentService {
 
     if (Sigmab < Sigmabl) {
       // 鉄筋応力度の照査
-      const Sigmas: number = this.getSigmas(resultData.st, postdata.Steels);
+      const Sigmas: number = this.getSigmas(resultData.st, postdata0.Steels);
       if (Sigmas === null) { return result; }
       result['Sigmas'] = Sigmas;
       result['sigmal1'] = sigmal1;
@@ -503,7 +517,7 @@ export class CalcServiceabilityMomentService {
       }
     }
 
-    const Sigmase: number = this.getSigmas(resultData.st, postdata.Steels);
+    const Sigmase: number = this.getSigmas(resultData.st, postdata0.Steels);
     if (Sigmase === null) { return result; }
     result['sigma_se'] = Sigmase;
 
@@ -593,7 +607,15 @@ export class CalcServiceabilityMomentService {
 
 
   // 鉄筋の引張応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  private getSigmas(sigmaSt: any[], Steels: any[]): number {
+  public getSigmas(sigmaSt: any[], Steels: any[]): number {
+
+    if (sigmaSt === null) {
+      return null;
+    }
+    if (sigmaSt.length < 1) {
+      return 0;
+    }
+    
     try {
       // とりあえず最外縁の鉄筋の応力度を用いる
       let st: number = 0;
@@ -612,6 +634,13 @@ export class CalcServiceabilityMomentService {
 
   // コンクリートの圧縮応力度を返す　(圧縮応力度がプラス+, 引張応力度がマイナス-)
   private getSigmac(sigmaSc: any[]): number {
+
+    if (sigmaSc === null) {
+      return null;
+    }
+    if (sigmaSc.length < 1) {
+      return 0;
+    }
 
     try {
       const point1: any = sigmaSc[0];

@@ -14,6 +14,7 @@ import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-s
 export class ResultEarthquakesShearForceComponent implements OnInit {
 
   private title: string = '復旧性（地震時）';
+  private page_index = "ap_11";
   private isLoading = true;
   private isFulfilled = false;
   private err: string;

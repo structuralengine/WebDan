@@ -68,8 +68,16 @@ export class CalcServiceabilityShearForceService {
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[0]);
     // 永久荷重
     const DesignForceList2 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
+    
+    if(DesignForceList2.length < 1 || this.DesignForceList.length < 1 ){
+      return null;
+    }
+    
     // 変動荷重
-    const DesignForceList3 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
+    let DesignForceList3 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
+    if(DesignForceList3.length < 1){
+      DesignForceList3 = this.getLiveload(this.DesignForceList , DesignForceList2);
+    }
 
     // サーバーに送信するデータを作成
     const DesignForceListList = [this.DesignForceList, DesignForceList2, DesignForceList3];
@@ -79,6 +87,38 @@ export class CalcServiceabilityShearForceService {
     return postData;
   }
 
+    // 変動荷重を
+    private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
+
+      const result = JSON.parse(
+        JSON.stringify({
+          temp: maxDesignForceList
+        })
+      ).temp;
+  
+      for (let ig = 0; ig < minDesignForceList.length; ig++) {
+        const groupe = minDesignForceList[ig];
+        for (let im = 0; im < groupe.length; im++) {
+          const member = groupe[im];
+          for (let ip = 0; ip < member.positions.length; ip++) {
+            const position = member.positions[ip];
+            // 最大応力 - 最小応力 で変動荷重を求める
+            const minForce: any = position.designForce;
+            const maxForce: any = result[ig][im].positions[ip].designForce;
+            for (let i = 0; i < minForce.length; i++) {
+              for (const key1 of Object.keys(minForce[i])) {
+                if (key1 === 'n') { continue; }
+                for (const key2 of Object.keys(minForce[i][key1])) {
+                  if (key2 === 'comb') { continue; }
+                  maxForce[i][key1][key2] -= minForce[i][key1][key2];
+                }
+              }
+            }
+          }
+        }
+      }
+      return result;
+    }
 
   // 出力テーブル用の配列にセット
   public setServiceabilityPages(responseData: any, postData: any): any[] {
@@ -97,18 +137,18 @@ export class CalcServiceabilityShearForceService {
           for (let j = 0; j < position.PostData0.length; j++) {
 
             // せん断ひび割れ検討判定用
-            const postdata = position.PostData0[j];
+            const PostData0 = position.PostData0[j];
 
             // 永久荷重
-            let deadLoad = { Vd: 0 }; 
+            let PostData1 = { Vd: 0 }; 
             if ('PostData1' in position) {
-              deadLoad = position.PostData1[j]; 
+              PostData1 = position.PostData1[j]; 
             }
 
             // 変動荷重
-            let liveLoad = { Vd: 0 }; 
+            let PostData2 = { Vd: 0 }; 
             if ('PostData2' in position) {
-              liveLoad = position.PostData2[j];  
+              PostData2 = position.PostData2[j];  
             }
 
             // 印刷用データ
@@ -126,12 +166,12 @@ export class CalcServiceabilityShearForceService {
 
             /////////////// まず計算 ///////////////
             if ('La' in printData) { delete printData.La; } // Vcd を計算するので La は削除する
-            const resultVmu: any = this.calcSigma(printData, deadLoad, liveLoad, resultData, position);
+            const resultVmu: any = this.calcSigma(printData, PostData1, PostData2, resultData, position);
             const resultColumn: any = this.getResultString(resultVmu);
 
             /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata));
+            column.push(this.result.getTitleString2(position, PostData0));
             column.push(this.result.getTitleString3(position));
 
             ///////////////// 形状 /////////////////
@@ -203,16 +243,16 @@ export class CalcServiceabilityShearForceService {
     return result;
   }
 
-  public calcSigma(printData: any, deadLoad: any, liveLoad: any,
+  public calcSigma(printData: any, postdata1: any, PostData2: any,
     resultData: any, position: any): any {
 
     const result: any = this.base.calcVmu(printData, resultData, position);
 
-    let Vpd: number = this.save.toNumber(deadLoad.Vd);
+    let Vpd: number = this.save.toNumber(postdata1.Vd);
     if (Vpd === null) { Vpd = 0; }
     result['Vpd'] = Vpd;
 
-    let Vrd: number = this.save.toNumber(liveLoad.Vd);
+    let Vrd: number = this.save.toNumber(PostData2.Vd);
     if (Vrd === null) { Vrd = result.Vd - Vpd; }
     if (Vrd === 0) { Vrd = result.Vd - Vpd; }
     result['Vrd'] = Vrd;

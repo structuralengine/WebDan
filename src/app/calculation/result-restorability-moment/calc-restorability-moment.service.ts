@@ -59,6 +59,10 @@ export class CalcRestorabilityMomentService {
       return null;
     }
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+    
+    if(this.DesignForceList.length < 1 ){
+      return null;
+    }
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);

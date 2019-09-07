@@ -13,6 +13,7 @@ import { CalcServiceabilityMomentService } from '../result-serviceability-moment
 export class ResultDurabilityMomentComponent implements OnInit {
 
   private title: string = '使用性の検討';
+  private page_index = "ap_7";
   private isLoading = true;
   private isFulfilled = false;
   private err: string;

@@ -13,6 +13,7 @@ import { SetPostDataService } from '../set-post-data.service';
 export class ResultRestorabilityMomentComponent implements OnInit {
 
   private title = "復旧性（地震時以外）曲げモーメントの照査";
+  private page_index = "ap_8";
   private isLoading = true;
   private isFulfilled = false;
   private err: string;

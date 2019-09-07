@@ -82,7 +82,7 @@ export class SetPostDataService {
 
   // position に PostData を追加する
   // DesignForceList　を複数指定できる。最初の DesignForceList が基準になる
-  public setPostData(DesignForceListList: any[], durability: boolean = false): void {
+  public setPostData(DesignForceListList: any[]): void {
 
     const baseDesignForceList: any[] = DesignForceListList[0];
 
@@ -119,11 +119,7 @@ export class SetPostDataService {
             }
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
-            if (durability === false) {
-              sectionForce = this.getSectionForce(force, null);
-            } else {
-              sectionForce = this.getSectionForce(force, memberInfo);
-            }
+            sectionForce = this.getSectionForce(force);
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
               position['PostData' + icase.toString()] = sectionForce[icase];
@@ -136,12 +132,13 @@ export class SetPostDataService {
     }
 
     // PostData が１つも無い断面を削除する
-    this.deleteDisablePosition(DesignForceListList);
+    //this.deleteDisablePosition(DesignForceListList);
 
   }
 
+  /*
   // PostData が１つも無い断面を DesignForceList から削除する
-  private deleteDisablePosition(DesignForceListList) {
+  public deleteDisablePosition(DesignForceListList) {
 
     const baseDesignForceList: any[] = DesignForceListList[0];
 
@@ -176,9 +173,10 @@ export class SetPostDataService {
       }
     }
   }
+  */
 
   // 設計断面力（リスト）を生成する
-  private getSectionForce(forceListList: any[], memberInfo: any): any[] {
+  private getSectionForce(forceListList: any[]): any[] {
 
     // 設計断面の数をセット
     const result: any[] = new Array();
@@ -203,20 +201,7 @@ export class SetPostDataService {
             Nd: forceList.Manual.Nd / forceList.n
           };
         }
-        const re: any[] = new Array();
-        if (memberInfo === null) {
-          re.push(fo);
-        } else {
-          if (memberInfo.vis_u === true && side === '上側引張') {
-            re.push(fo);
-          }
-          if (memberInfo.vis_l === true && side === '下側引張') {
-            re.push(fo);
-          }
-        }
-        if (re.length > 0) {
-          result.push(re);
-        }
+        result.push([fo]);
       }
 
     } else if (Math.sign(forceListList[0].Mmax.Md) === Math.sign(forceListList[0].Mmin.Md)) {
@@ -241,22 +226,7 @@ export class SetPostDataService {
             Nd: force.Nd / forceList.n
           };
         }
-
-        const re: any[] = new Array();
-        if (memberInfo === null) {
-          re.push(fo);
-        } else {
-          if (memberInfo.vis_u === true && side === '上側引張') {
-            re.push(fo);
-          }
-          if (memberInfo.vis_l === true && side === '下側引張') {
-            re.push(fo);
-          }
-        }
-        if (re.length > 0) {
-          result.push(re);
-        }
-
+        result.push([fo]);
       }
     } else {
       // Mmax, Mmin の符号が異なるなら 設計断面 2つ
@@ -290,21 +260,7 @@ export class SetPostDataService {
             Nd: forceList.Mmax.Nd / forceList.n
           };
         }
-        const re: any[] = new Array();
-        if (memberInfo === null) {
-          re.push(upper);
-          re.push(lower);
-        } else {
-          if (memberInfo.vis_u === true) {
-            re.push(upper);
-          }
-          if (memberInfo.vis_l === true) {
-            re.push(lower);
-          }
-        }
-        if (re.length > 0) {
-          result.push(re);
-        }
+        result.push([upper,lower]);
       }
     }
 

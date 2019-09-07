@@ -8,8 +8,8 @@ import * as printJS from 'print-js';
   styleUrls: ['./result-viewer.component.scss']
 })
 export class ResultViewerComponent implements OnInit {
-
-  // 印刷時のスタイル /////////////////////////////////
+  
+   // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
   constructor() {}

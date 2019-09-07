@@ -13,6 +13,7 @@ import { SetPostDataService } from '../set-post-data.service';
 export class ResultSafetyShearForceComponent implements OnInit {
 
   private title: string = '安全性（破壊）';
+  private page_index = "ap_2";
   private isLoading = true;
   private isFulfilled = false;
   private err: string;

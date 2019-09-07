@@ -54,6 +54,10 @@ export class CalcRestorabilityShearForceService {
       return null;
     }
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[6]);
+    
+    if(this.DesignForceList.length < 1 ){
+      return null;
+    }
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);

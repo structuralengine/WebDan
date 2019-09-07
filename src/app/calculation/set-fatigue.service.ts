@@ -12,7 +12,12 @@ export class SetFatigueService {
   // 鉄筋の入力情報を セット
   public setFatigueData(g_no: number, m_no: number, position: any): any {
 
-    const temp = this.save.fatigues.getFatiguesColumns();
+    const temp = JSON.parse(
+      JSON.stringify({
+        temp: this.save.fatigues.getFatiguesColumns()
+      })
+    ).temp;
+    
     const fatigueList = temp.find(function (value) {
       return (value[0].g_no === g_no);
     });
@@ -45,7 +50,7 @@ export class SetFatigueService {
             continue;
           }
         }
-        // 鉄筋情報を集計
+        // 疲労情報を集計
         if (fatigueData === null) {
           fatigueData = fatigue;
         } else {

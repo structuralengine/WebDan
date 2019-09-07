@@ -334,9 +334,11 @@ export class SetBarService {
 
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
+      result['print-AWφ'] = Aw['AW-φ'];
       result['print-Aw'] = Aw.Aw;
       result['print-AwString'] = Aw.AwString;
       result['print-fwyd'] = Aw.fwyd;
+      result['print-fwud'] = Aw.fwud;
       result['print-deg'] = Aw.deg;
       result['print-Ss'] = Aw.Ss;
     }
@@ -471,9 +473,11 @@ export class SetBarService {
 
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
+      result['print-AWφ'] = Aw['AW-φ'];
       result['print-Aw'] = Aw.Aw;
       result['print-AwString'] = Aw.AwString;
       result['print-fwyd'] = Aw.fwyd;
+      result['print-fwud'] = Aw.fwud;
       result['print-deg'] = Aw.deg;
       result['print-Ss'] = Aw.Ss;
     }
@@ -591,9 +595,11 @@ export class SetBarService {
 
     const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
     if (Aw !== null) {
+      result['print-AWφ'] = Aw['AW-φ'];
       result['print-Aw'] = Aw.Aw;
       result['print-AwString'] = Aw.AwString;
       result['print-fwyd'] = Aw.fwyd;
+      result['print-fwud'] = Aw.fwud;
       result['print-deg'] = Aw.deg;
       result['print-Ss'] = Aw.Ss;
     }
@@ -797,22 +803,26 @@ export class SetBarService {
     if (starrup.stirrup_ss === 0) { return null; }
 
     const result = {
+      'AW-φ': 0,
       Aw: 0,
       AwString: '',
       fwyd: 0,
+      fwud: 0,
       deg: 90,
       Ss: 0
     };
 
     let fwyd: number;
+    let fwud: number;
     if (starrup.stirrup_dia <= materialInfo[0].fsy1) {
       fwyd = this.save.toNumber(materialInfo[3].fsy1);
+      fwud = this.save.toNumber(materialInfo[3].fsu1);
     } else {
       fwyd = this.save.toNumber(materialInfo[3].fsy2);
+      fwud = this.save.toNumber(materialInfo[3].fsu2);
     }
     if (fwyd === null) { return null; }
 
-    result.fwyd = fwyd;
     let dia: string = 'D' + starrup.stirrup_dia;
     if (fwyd === 235) {
       // 鉄筋強度が 235 なら 丸鋼
@@ -820,9 +830,12 @@ export class SetBarService {
     }
     const As: number = this.save.getAs(dia);
     const n: number = starrup.stirrup_n;
+    result['AW-φ'] = starrup.stirrup_dia;
     result.Aw = As * n;
     result.AwString = dia + '-' + n + '本';
     result.Ss = starrup.stirrup_ss;
+    result.fwyd = fwyd;
+    result.fwud = fwud;
 
     return result;
   }
@@ -857,9 +870,11 @@ export class SetBarService {
     // 帯鉄筋
     if (target.indexOf('Aw') >= 0) {
       if ('print-Aw' in bars) {
+        printData['AW-φ'] = bars['print-AWφ'];
         printData['Aw'] = bars['print-Aw'];
         printData['AwString'] = bars['print-AwString'];
         printData['fwyd'] = bars['print-fwyd'];
+        printData['fwud'] = bars['print-fwud'];
         printData['deg'] = bars['print-deg'];
         printData['Ss'] = bars['print-Ss'];
       }
@@ -879,7 +894,12 @@ export class SetBarService {
   // 鉄筋の入力情報を セット
   public setBarData(g_no: number, m_no: number, position: any): any {
 
-    const temp = this.save.bars.getBarsColumns();
+    const temp = JSON.parse(
+      JSON.stringify({
+        temp: this.save.bars.getBarsColumns()
+      })
+    ).temp;
+    
     const barList = temp.find(function (value) {
       return (value[0].g_no === g_no);
     });

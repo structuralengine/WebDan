@@ -1,235 +1,342 @@
-<div *ngIf="isLoading" class="spinner-border" style="width: 1rem; height: 1rem;" role="status">
+<div
+  *ngIf="isLoading"
+  class="spinner-border"
+  style="width: 1rem; height: 1rem;"
+  role="status"
+>
   <span class="sr-only">Loading...</span>
 </div>
 
 <ng-container *ngIf="!isLoading">
   <ng-container *ngIf="isFulfilled">
+    <section class="sheet" id="ap_3">
+      <svg
+        width="150mm"
+        height="280mm"
+        viewBox="0 0 150 280"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        version="1.1"
+      >
+        <!--タイトル-->
+        <g font-size="2.3pt" text-anchor="start">
+          <text x="0" y="5">3.4 安全性(疲労破壊)に関する照査</text>
+          <text x="70" y="5">【ＲＣ標準 7.3.2】</text>
+          <text x="5" y="13">(1) 曲げモーメントに対する照査</text>
 
-      <section class="sheet">
-          <svg width="150mm" height="280mm" viewBox="0 0 150 280" xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-            <!--タイトル-->
-      <g font-size="2.3pt" text-anchor="start">
-      <text x="0" y="5">3.4 安全性(疲労破壊)に関する照査</text>
-      <text x="70" y="5">【ＲＣ標準 7.3.2】</text>
-      <text x="5" y="13">(1) 曲げモーメントに対する照査 </text>
+          <text x="7" y="23">➀ 部材の照査</text>
+          <text x="10" y="33">
+            曲げモーメントを受ける部材の疲労に関する照査は、設計変動応力度σsrdを
+          </text>
+          <text x="10" y="38">
+            設計応答値、設計疲労強度frdを豊歳係数で除した値を設計限界値とし、次式
+          </text>
+          <text x="10" y="43">により行う。</text>
+          <text x="20" y="53">
+            γ
+            <tspan baseline-shift="0%" font-size="1.6pt">i</tspan>
+            ・
+          </text>
+          <text x="30" y="53">IRd / ILd ≦　1.0</text>
 
-      <text x="7" y="23">➀ 部材の照査</text>
-      <text x="10" y="33">曲げモーメントを受ける部材の疲労に関する照査は、設計変動応力度σsrdを</text>
-      <text x="10" y="38">設計応答値、設計疲労強度frdを豊歳係数で除した値を設計限界値とし、次式</text>
-      <text x="10" y="43">により行う。</text>
-      <text x="20" y="53">γ<tspan baseline-shift="0%" font-size="1.6pt">i</tspan>・</text>
-      <text x="30" y="53">IRd / ILd  ≦　1.0</text>
+          <text x="15" y="63">
+            ここに、　　　γ
+            <tspan baseline-shift="0%" font-size="1.6pt">i</tspan>
+          </text>
+          <text x="40" y="63">： 構造物係数　(＝ 1.0)</text>
+          <text x="30" y="68">IRd</text>
+          <text x="40" y="68">： 設計応答値　(＝ σsrd)</text>
+          <text x="30" y="73">ILd</text>
+          <text x="40" y="73">： 設計限界値　(＝ frd/γb)</text>
+          <text x="30" y="78">γb</text>
+          <text x="40" y="78">： 部材係数　(＝ 1.0)</text>
 
-      <text x="15" y="63">ここに、　　　γ<tspan baseline-shift="0%" font-size="1.6pt">i</tspan></text> 
-      <text x="40" y="63">： 構造物係数　(＝ 1.0)</text>
-      <text x="30" y="68">IRd</text> 
-      <text x="40" y="68">： 設計応答値　(＝ σsrd)</text>
-      <text x="30" y="73">ILd</text> 
-      <text x="40" y="73">： 設計限界値　(＝ frd/γb)</text>
-      <text x="30" y="78">γb</text> 
-      <text x="40" y="78">： 部材係数　(＝ 1.0)</text>
+          <text x="7" y="88">➁ 列車本数</text>
+          <text x="20" y="98">A列車荷重　：　旅客列車</text>
+          <text x="70" y="98">→</text>
+          <text x="80" y="98">80本/日</text>
+          <text x="20" y="103">B列車荷重　：　貨物列車</text>
+          <text x="70" y="103">→</text>
+          <text x="80" y="103">75本/日</text>
 
-      <text x="7" y="88">➁ 列車本数</text>
-      <text x="20" y="98">A列車荷重　：　旅客列車</text>
-      <text x="70" y="98">→</text>
-      <text x="80" y="98">80本/日</text>　
-      <text x="20" y="103">B列車荷重　：　貨物列車</text>
-      <text x="70" y="103">→</text>
-      <text x="80" y="103">75本/日</text>
-      
-      <text x="7" y="113">➂ 設計変動応力度σsrdと最小応力度σminの算定</text> 
-      <text x="10" y="123">標準列車荷重による鉄筋の設計変動応力度σsrdおよび最小応力度σminを</text>
-      <text x="10" y="133">算定する。鉄筋の最小応力度σminは、鉄筋に生じる最小引張応力度または</text>
-      <text x="10" y="138">永久作用による設計応力度で、圧縮が生じる場合には0とする。</text>
+          <text x="7" y="113">➂ 設計変動応力度σsrdと最小応力度σminの算定</text>
+          <text x="10" y="123">
+            標準列車荷重による鉄筋の設計変動応力度σsrdおよび最小応力度σminを
+          </text>
+          <text x="10" y="133">
+            算定する。鉄筋の最小応力度σminは、鉄筋に生じる最小引張応力度または
+          </text>
+          <text x="10" y="138">
+            永久作用による設計応力度で、圧縮が生じる場合には0とする。
+          </text>
 
-      <text x="7" y="148">➃ 200万回 引張疲労強度fsr200の算定</text>
-      <text x="10" y="158">照査断面に配置した鉄筋の200万回強度</text>
-      <text x="70" y="158">
-          (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)を次式より求める。 </text>　
-      
-      <text x="60" y="165">
-              10<tspan baseline-shift="18%" font-size="1.6pt">ar</tspan></text>
-      <text x="100" y="165">σmin</text>
-      <text x="20" y="168">fsr200 ＝</text>
-      <text x="35" y="168">　γ1　・</text>
-      <text x="80" y="168">・　( 1  -</text>
-      <text x="110" y="168">) /　γs</text>
-      <text x="53" y="170">
-          ( 2 ｘ　10<tspan baseline-shift="18%" font-size="1.6pt">6</tspan>)</text>
-      <text x="75" y="170">
-          <tspan baseline-shift="18%" font-size="1.6pt">k</tspan></text>
-      <text x="101" y="170">fsuk</text> 
+          <text x="7" y="148">➃ 200万回 引張疲労強度fsr200の算定</text>
+          <text x="10" y="158">照査断面に配置した鉄筋の200万回強度</text>
+          <text x="70" y="158">
+            (N/mm
+            <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+            )を次式より求める。
+          </text>
 
-      <text x="15" y="180">ここに、　　　ar</text> 
-      <text x="40" y="180">= 3.09　-  0.003 φ</text>
-      <text x="30" y="185">k</text> 
-      <text x="40" y="185">= 0.12</text>
-      <text x="25" y="190">σmin</text> 
-      <text x="40" y="190">： 鉄筋の引張最小応力度</text>
-      <text x="80" y="190">
-          (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)</text>
-      <text x="92" y="190">で圧縮を受ける場合は</text> 
-      <text x="45" y="195">0とする。</text>
-      <text x="27" y="200">fsuk</text> 
-      <text x="40" y="200">： 鉄筋の引張強度の特性値</text>
-      <text x="83" y="200">
-          (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)</text>
-      <text x="28" y="205">γ1</text> 
-      <text x="40" y="205">： 鉄筋の継手、曲げ加工による低減係数(圧接：0.7、</text>
-      <text x="45" y="210">曲げ加工:0.65)</text>
-      <text x="28" y="215">γs</text> 
-      <text x="40" y="215">： 鉄筋の材料係数(=　1.05)</text>
-      <text x="30" y="220">φ</text> 
-      <text x="40" y="220">： 照査の対象とする鉄筋の直径(mm)</text>
+          <text x="60" y="165">
+            10
+            <tspan baseline-shift="18%" font-size="1.6pt">ar</tspan>
+          </text>
+          <text x="100" y="165">σmin</text>
+          <text x="20" y="168">fsr200 ＝</text>
+          <text x="35" y="168">γ1　・</text>
+          <text x="80" y="168">・　( 1 -</text>
+          <text x="110" y="168">) /　γs</text>
+          <text x="53" y="170">
+            ( 2 ｘ　10
+            <tspan baseline-shift="18%" font-size="1.6pt">6</tspan>
+            )
+          </text>
+          <text x="75" y="170">
+            <tspan baseline-shift="18%" font-size="1.6pt">k</tspan>
+          </text>
+          <text x="101" y="170">fsuk</text>
 
-      <text x="7" y="230">➄ Ｓ－Ｎ線図の係数選択</text>
-      <text x="10" y="240">σsrdとfsr200の大小関係により、Ｓ－Ｎ線図の係数を下表に従い選択する。</text>
+          <text x="15" y="180">ここに、　　　ar</text>
+          <text x="40" y="180">= 3.09　- 0.003 φ</text>
+          <text x="30" y="185">k</text>
+          <text x="40" y="185">= 0.12</text>
+          <text x="25" y="190">σmin</text>
+          <text x="40" y="190">： 鉄筋の引張最小応力度</text>
+          <text x="80" y="190">
+            (N/mm
+            <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+            )
+          </text>
+          <text x="92" y="190">で圧縮を受ける場合は</text>
+          <text x="45" y="195">0とする。</text>
+          <text x="27" y="200">fsuk</text>
+          <text x="40" y="200">： 鉄筋の引張強度の特性値</text>
+          <text x="83" y="200">
+            (N/mm
+            <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+            )
+          </text>
+          <text x="28" y="205">γ1</text>
+          <text x="40" y="205">
+            ： 鉄筋の継手、曲げ加工による低減係数(圧接：0.7、
+          </text>
+          <text x="45" y="210">曲げ加工:0.65)</text>
+          <text x="28" y="215">γs</text>
+          <text x="40" y="215">： 鉄筋の材料係数(=　1.05)</text>
+          <text x="30" y="220">φ</text>
+          <text x="40" y="220">： 照査の対象とする鉄筋の直径(mm)</text>
 
-      <text x="70" y="247">異　形　鉄　筋</text>
-      <text x="8" y="247">Ｓ－Ｎ線</text>
-      <text x="7" y="251">パラメータ</text>
-      <text x="30" y="251.5">γi・σsrd/(fsr200/γb)≦1.0</text>
-      <text x="90" y="251.5">γi・σsrd/(fsr200/γb)＞1.0</text>
-      <text x="13" y="256.5">a<tspan baseline-shift="18%" font-size="1.6pt">r</tspan></text>
-      <text x="13" y="261.5">k</text>
-      <text x="40" y="256.5">2.71 - 0.003 φ</text>
-      <text x="105" y="256.5">3.09 - 0.003 φ</text>
-      <text x="50" y="261.5">0.06</text>
-      <text x="115" y="261.5">0.12</text>
+          <text x="7" y="230">➄ Ｓ－Ｎ線図の係数選択</text>
+          <text x="10" y="240">
+            σsrdとfsr200の大小関係により、Ｓ－Ｎ線図の係数を下表に従い選択する。
+          </text>
 
-       <!--横線-->
-       <g fill="none" stroke="black">
-          <line stroke-width="0.30" x1="50" y1="166" x2="78" y2="166" />
-          <line stroke-width="0.30" x1="99" y1="166" x2="109" y2="166" />
+          <text x="70" y="247">異　形　鉄　筋</text>
+          <text x="8" y="247">Ｓ－Ｎ線</text>
+          <text x="7" y="251">パラメータ</text>
+          <text x="30" y="251.5">γi・σsrd/(fsr200/γb)≦1.0</text>
+          <text x="90" y="251.5">γi・σsrd/(fsr200/γb)＞1.0</text>
+          <text x="13" y="256.5">
+            a
+            <tspan baseline-shift="18%" font-size="1.6pt">r</tspan>
+          </text>
+          <text x="13" y="261.5">k</text>
+          <text x="40" y="256.5">2.71 - 0.003 φ</text>
+          <text x="105" y="256.5">3.09 - 0.003 φ</text>
+          <text x="50" y="261.5">0.06</text>
+          <text x="115" y="261.5">0.12</text>
 
-          <line stroke-width="0.35" x1="5" y1="243" x2="150" y2="243" />
-          <line stroke-width="0.35" x1="25" y1="248" x2="150" y2="248" />
-          <line stroke-width="0.35" x1="5" y1="253" x2="150" y2="253" />
-          <line stroke-width="0.35" x1="5" y1="258" x2="150" y2="258" />
-          <line stroke-width="0.35" x1="5" y1="263" x2="150" y2="263" />
-        </g>
-       <!--縦線-->
-       <g fill="none" stroke="black">
-          <line stroke-width="0.35" x1="5" y1="243" x2="5" y2="263" />
-          <line stroke-width="0.35" x1="25" y1="243" x2="25" y2="263" />
-          <line stroke-width="0.35" x1="85" y1="248" x2="85" y2="263" />
-          <line stroke-width="0.35" x1="150" y1="243" x2="150" y2="263" />
-         </g> 
-             
+          <!--横線-->
+          <g fill="none" stroke="black">
+            <line stroke-width="0.30" x1="50" y1="166" x2="78" y2="166" />
+            <line stroke-width="0.30" x1="99" y1="166" x2="109" y2="166" />
 
+            <line stroke-width="0.35" x1="5" y1="243" x2="150" y2="243" />
+            <line stroke-width="0.35" x1="25" y1="248" x2="150" y2="248" />
+            <line stroke-width="0.35" x1="5" y1="253" x2="150" y2="253" />
+            <line stroke-width="0.35" x1="5" y1="258" x2="150" y2="258" />
+            <line stroke-width="0.35" x1="5" y1="263" x2="150" y2="263" />
+          </g>
+          <!--縦線-->
+          <g fill="none" stroke="black">
+            <line stroke-width="0.35" x1="5" y1="243" x2="5" y2="263" />
+            <line stroke-width="0.35" x1="25" y1="243" x2="25" y2="263" />
+            <line stroke-width="0.35" x1="85" y1="248" x2="85" y2="263" />
+            <line stroke-width="0.35" x1="150" y1="243" x2="150" y2="263" />
+          </g>
 
-    <!--  
+          <!--  
     <section class="sheet">
     解説ページが入る
     </section>
     -->
+        </g>
+      </svg>
+    </section>
 
-  </g>
-</svg>
-</section>
+    <section class="sheet">
+      <svg
+        width="150mm"
+        height="280mm"
+        viewBox="0 0 150 280"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        version="1.1"
+      >
+        <!--タイトル-->
+        <g font-size="2.3pt" text-anchor="start">
+          <text x="7" y="5">➅ 総等価繰返し回数の算定</text>
+          <text x="10" y="10">
+            標準列車荷重換算の総等価繰返し回数ΣＮを次式により算定する。
+          </text>
+          <text x="66" y="18">SA</text>
+          <text x="15" y="20">ΣＮ　＝ 365 ・ T ・ jA ・ NA・（</text>
+          <text x="71" y="20">
+            )
+            <tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan>
+          </text>
+          <text x="66" y="22">SC</text>
+          <text x="120" y="18">SB</text>
+          <text x="80" y="20">+ 365 ・ T ・ jB ・ NB・（</text>
+          <text x="126" y="20">
+            )
+            <tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan>
+          </text>
+          <text x="120" y="22">SC</text>
 
-<section class="sheet">
-    <svg width="150mm" height="280mm" viewBox="0 0 150 280" xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-      <!--タイトル-->
-<g font-size="2.3pt" text-anchor="start">
-<text x="7" y="5">➅ 総等価繰返し回数の算定</text>
-<text x="10" y="10">標準列車荷重換算の総等価繰返し回数ΣＮを次式により算定する。</text>
-<text x="66" y="18">SA</text>
-<text x="15" y="20">ΣＮ　＝ 365 ・ T ・ jA ・ NA・（</text>
-<text x="71" y="20">)<tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan></text>
-<text x="66" y="22">SC</text>
-<text x="120" y="18">SB</text>
-<text x="80" y="20"> + 365 ・ T ・ jB ・ NB・（</text>
-<text x="126" y="20">)<tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan></text>
-<text x="120" y="22">SC</text>
+          <text x="15" y="30">ここに、</text>
+          <text x="30" y="30">T</text>
+          <text x="40" y="30">： 設計耐用期間　(＝ 100)</text>
+          <text x="28" y="35">SA/SC</text>
+          <text x="40" y="35">
+            ： Ａ列車荷重と標準列車荷重の最大変動断面力比
+          </text>
+          <text x="28" y="40">SB/SC</text>
+          <text x="40" y="40">
+            ： Ｂ列車荷重と標準列車荷重の最大変動断面力比
+          </text>
+          <text x="28" y="45">SA,SB</text>
+          <text x="40" y="45">
+            ： 実列車荷重(Ａ列車荷重,Ｂ列車荷重)による最大変動断面力
+          </text>
+          <text x="28" y="50">SC</text>
+          <text x="40" y="50">： 標準列車荷重による最大変動断面力</text>
+          <text x="28" y="55">NA,NB</text>
+          <text x="40" y="55">
+            ： SA,SBに対する列車１編成あたり等価繰返し回数(回)
+          </text>
+          <text x="28" y="60">jA,jB</text>
+          <text x="40" y="60">： 実列車の１線、１日あたりの本数(本/回)</text>
+          <text x="30" y="65">k</text>
+          <text x="40" y="65">： Ｓ－Ｎ線図の勾配</text>
 
-<text x="15" y="30">ここに、</text> 
-<text x="30" y="30">T</text>
-<text x="40" y="30">： 設計耐用期間　(＝ 100)</text>
-<text x="28" y="35">SA/SC</text> 
-<text x="40" y="35">： Ａ列車荷重と標準列車荷重の最大変動断面力比</text>
-<text x="28" y="40">SB/SC</text> 
-<text x="40" y="40">： Ｂ列車荷重と標準列車荷重の最大変動断面力比</text>
-<text x="28" y="45">SA,SB</text> 
-<text x="40" y="45">： 実列車荷重(Ａ列車荷重,Ｂ列車荷重)による最大変動断面力</text>
-<text x="28" y="50">SC</text> 
-<text x="40" y="50">： 標準列車荷重による最大変動断面力</text>
-<text x="28" y="55">NA,NB</text> 
-<text x="40" y="55">： SA,SBに対する列車１編成あたり等価繰返し回数(回)</text>
-<text x="28" y="60">jA,jB</text> 
-<text x="40" y="60">： 実列車の１線、１日あたりの本数(本/回)</text>
-<text x="30" y="65">k</text> 
-<text x="40" y="65">： Ｓ－Ｎ線図の勾配</text>
+          <text x="7" y="75">⑦ 設計引帳疲労強度frdの算定</text>
+          <text x="10" y="85">
+            総等価繰返し回数ΣＮを用いて、字式により設計引帳疲労強度frdを求める。
+          </text>
+          <text x="50" y="92">
+            10
+            <tspan baseline-shift="18%" font-size="1.6pt">ar</tspan>
+          </text>
+          <text x="15" y="95">frd　＝ γ1 ・ γ2 ・</text>
+          <text x="51" y="98">
+            N
+            <tspan baseline-shift="18%" font-size="1.6pt">k</tspan>
+          </text>
+          <text x="55" y="95">・ ( 1 -</text>
+          <text x="70" y="92">σmin</text>
+          <text x="70" y="98">fsuk</text>
+          <text x="80" y="95">) / γs</text>
 
+          <text x="15" y="105">ここに、</text>
+          <text x="30" y="105">frd</text>
+          <text x="40" y="105">
+            ： 鉄筋の設計引帳疲労強度　(N/mm
+            <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+            )
+          </text>
+          <text x="30" y="110">Ｎ</text>
+          <text x="40" y="110">： 標準列車荷重換算の総等価繰返し回数ΣＮ</text>
+          <text x="28" y="115">
+            a
+            <tspan baseline-shift="18%" font-size="1.6pt">r</tspan>
+            ,
+          </text>
+          <text x="32" y="115">k</text>
+          <text x="40" y="115">： Ｓ－Ｎ線図の係数</text>
+          <text x="28" y="120">σmin</text>
+          <text x="40" y="120">
+            ： 鉄筋の引帳最小応力度(N/mm
+            <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+            )で、圧縮を受ける場合は
+          </text>
+          <text x="45" y="125">0とする。</text>
+          <text x="28" y="130">fsuk</text>
+          <text x="40" y="130">
+            ： 鉄筋の引帳強度の特値(N/mm
+            <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+            ）
+          </text>
+          <text x="28" y="135">γ1</text>
+          <text x="40" y="135">
+            ： 鉄筋継手、曲げ加工による低減係数(圧接：0.7,
+          </text>
+          <text x="45" y="140">曲げ加工:0.65)</text>
+          <text x="28" y="145">γ2</text>
+          <text x="40" y="145">
+            ： 複線を支持する部材における荷重分布比aによる補正係数
+          </text>
 
-<text x="7" y="75">⑦ 設計引帳疲労強度frdの算定</text>
-<text x="10" y="85">総等価繰返し回数ΣＮを用いて、字式により設計引帳疲労強度frdを求める。</text>
-<text x="50" y="92">10<tspan baseline-shift="18%" font-size="1.6pt">ar</tspan></text>
-<text x="15" y="95">frd　＝ γ1 ・ γ2 ・</text>
-<text x="51" y="98">N<tspan baseline-shift="18%" font-size="1.6pt">k</tspan></text>
-<text x="55" y="95">・ ( 1 -</text>
-<text x="70" y="92">σmin</text>
-<text x="70" y="98">fsuk</text>
-<text x="80" y="95">) / γs</text>
+          <text x="80" y="152">1</text>
+          <text x="50" y="155">γ2 ＝　（</text>
+          <text x="70" y="158">
+            a
+            <tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan>
+            +
+          </text>
+          <text x="85" y="158">
+            (1-a)
+            <tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan>
+          </text>
+          <text x="100" y="155">
+            )
+            <tspan baseline-shift="18%" font-size="1.6pt">k</tspan>
+          </text>
 
-<text x="15" y="105">ここに、</text> 
-<text x="30" y="105">frd</text>
-<text x="40" y="105">： 鉄筋の設計引帳疲労強度　(N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)</text>
-<text x="30" y="110">Ｎ</text> 
-<text x="40" y="110">： 標準列車荷重換算の総等価繰返し回数ΣＮ</text>
-<text x="28" y="115">a<tspan baseline-shift="18%" font-size="1.6pt">r</tspan>,</text> 
-<text x="32" y="115">k</text> 
-<text x="40" y="115">： Ｓ－Ｎ線図の係数</text>
-<text x="28" y="120">σmin</text> 
-<text x="40" y="120">： 鉄筋の引帳最小応力度(N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
-  )で、圧縮を受ける場合は</text>
-<text x="45" y="125">0とする。</text>
-<text x="28" y="130">fsuk</text> 
-<text x="40" y="130">： 鉄筋の引帳強度の特値(N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>）</text>
-<text x="28" y="135">γ1</text> 
-<text x="40" y="135">： 鉄筋継手、曲げ加工による低減係数(圧接：0.7,</text>
-<text x="45" y="140">曲げ加工:0.65)</text>
-<text x="28" y="145">γ2</text>
-<text x="40" y="145">： 複線を支持する部材における荷重分布比aによる補正係数</text>
+          <text x="28" y="165">a</text>
+          <text x="40" y="165">： 当該部材の</text>
+          <text x="45" y="170">
+            (１線載荷による最大断面力)/(複線載荷による最大断面力)
+          </text>
+          <text x="28" y="175">γs</text>
+          <text x="40" y="175">： 鉄筋の材料係数(＝　1,05)</text>
 
-<text x="80" y="152">1</text>
-<text x="50" y="155">γ2 ＝　（</text>
-<text x="70" y="158">a<tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan>  +</text>
-<text x="85" y="158">(1-a)<tspan baseline-shift="18%" font-size="1.6pt">1/k</tspan></text>
-<text x="100" y="155">)<tspan baseline-shift="18%" font-size="1.6pt">k</tspan></text>
+          <!--横線-->
+          <g fill="none" stroke="black">
+            <line stroke-width="0.30" x1="49" y1="94" x2="55" y2="94" />
+            <line stroke-width="0.30" x1="68" y1="94" x2="78" y2="94" />
 
-
-<text x="28" y="165">a</text> 
-<text x="40" y="165">： 当該部材の</text>
-<text x="45" y="170">(１線載荷による最大断面力)/(複線載荷による最大断面力)</text>
-<text x="28" y="175">γs</text> 
-<text x="40" y="175">： 鉄筋の材料係数(＝　1,05)</text>
-
- <!--横線-->
- <g fill="none" stroke="black">
-    <line stroke-width="0.30" x1="49" y1="94" x2="55" y2="94" />
-    <line stroke-width="0.30" x1="68" y1="94" x2="78" y2="94" />
-
-    <line stroke-width="0.30" x1="68" y1="154" x2="98" y2="154" />
-  </g>
-
-  
-
-
-
-
-</g>
-</svg>
-</section>
+            <line stroke-width="0.30" x1="68" y1="154" x2="98" y2="154" />
+          </g>
+        </g>
+      </svg>
+    </section>
 
     <ng-container *ngFor="let pages of safetyFatigueMomentPages; index as i">
       <section class="sheet">
-        <svg width="150mm" height="260mm" viewBox="0 0 150 260" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+        <svg
+          width="150mm"
+          height="260mm"
+          viewBox="0 0 150 260"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          version="1.1"
+        >
           <!--タイトル-->
-          <text x="0" y="11" font-size="2.3pt" text-anchor="start">{{pages.caption}} (その{{i+1}})</text>
+          <text x="0" y="11" font-size="2.3pt" text-anchor="start">
+            {{ pages.caption }} (その{{ i + 1 }})
+          </text>
           <!--横線-->
           <g fill="none" stroke="black">
             <line stroke-width="0.35" x1="0" y1="12" x2="150" y2="12" />
@@ -289,79 +396,113 @@
             <text x="15" y="21">位　　置</text>
             <text x="15" y="26">断面番号</text>
 
-            <text x="8" y="31">B</text><text x="20" y="31">(mm)</text>
-            <text x="8" y="36">H</text><text x="20" y="36">(mm)</text>
-            <text x="8" y="41">Bf</text><text x="20" y="41">(mm)</text>
-            <text x="8" y="46">Hf</text><text x="20" y="46">(mm)</text>
+            <text x="8" y="31">B</text>
+            <text x="20" y="31">(mm)</text>
+            <text x="8" y="36">H</text>
+            <text x="20" y="36">(mm)</text>
+            <text x="8" y="41">Bf</text>
+            <text x="20" y="41">(mm)</text>
+            <text x="8" y="46">Hf</text>
+            <text x="20" y="46">(mm)</text>
 
             <text x="8" y="51">Ast</text>
             <text x="20" y="51">
-              (mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="15" y="56">引張鉄筋</text>
-            <text x="8" y="61">dast</text><text x="20" y="61">(mm)</text>
+            <text x="8" y="61">dast</text>
+            <text x="20" y="61">(mm)</text>
 
             <text x="8" y="66">Asc</text>
             <text x="20" y="66">
-              (mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="15" y="71">圧縮鉄筋</text>
-            <text x="8" y="76">dasc</text><text x="20" y="76">(mm)</text>
+            <text x="8" y="76">dasc</text>
+            <text x="20" y="76">(mm)</text>
 
             <text x="8" y="81">Ase</text>
             <text x="20" y="81">
-              (mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="15" y="86">側方鉄筋</text>
-            <text x="8" y="91">dase</text><text x="20" y="91">(mm)</text>
+            <text x="8" y="91">dase</text>
+            <text x="20" y="91">(mm)</text>
 
             <text x="8" y="96">f'ck</text>
             <text x="20" y="96">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="15" y="101">γc</text>
             <text x="8" y="106">f'cd</text>
             <text x="20" y="106">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
 
             <text x="8" y="111">fsyk</text>
             <text x="20" y="111">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="15" y="116">γs</text>
             <text x="8" y="121">fsyd</text>
             <text x="20" y="121">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="8" y="126">fsuk</text>
             <text x="20" y="126">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
 
-            <text x="8" y="131">Mmin</text><text x="20" y="131">(kN･m)</text>
-            <text x="8" y="136">N'd</text><text x="20" y="136">(kN)</text>
+            <text x="8" y="131">Mmin</text>
+            <text x="20" y="131">(kN･m)</text>
+            <text x="8" y="136">N'd</text>
+            <text x="20" y="136">(kN)</text>
 
             <text x="8" y="141">σmin</text>
             <text x="20" y="141">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
 
-            <text x="8" y="146">Mrd</text><text x="20" y="146">(kN･m)</text>
-            <text x="8" y="151">N'd</text><text x="20" y="151">(kN)</text>
+            <text x="8" y="146">Mrd</text>
+            <text x="20" y="146">(kN･m)</text>
+            <text x="8" y="151">N'd</text>
+            <text x="20" y="151">(kN)</text>
 
             <text x="8" y="156">σ㏛d</text>
             <text x="20" y="156">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="8" y="161">fsr200</text>
             <text x="20" y="161">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="16" y="166">γi・σsrd/(fsr200/γb)</text>
             <text x="15" y="171">Κ</text>
             <text x="15" y="176">鉄筋補正　αr</text>
-            <text x="8" y="181">ΣＮ</text><text x="20" y="181">(回)</text>
+            <text x="8" y="181">ΣＮ</text>
+            <text x="20" y="181">(回)</text>
             <text x="15" y="186">NA</text>
             <text x="15" y="191">NB</text>
             <text x="15" y="196">SA/SC</text>
@@ -371,7 +512,9 @@
             <text x="15" y="216">γs</text>
             <text x="8" y="221">frd</text>
             <text x="20" y="221">
-              (N/mm<tspan baseline-shift="18%" font-size="1.6pt">2</tspan>)
+              (N/mm
+              <tspan baseline-shift="18%" font-size="1.6pt">2</tspan>
+              )
             </text>
             <text x="15" y="226">γi</text>
 
@@ -383,10 +526,22 @@
             <ng-container *ngFor="let column of pages.columns; index as c">
               <ng-container *ngFor="let item of column; index as r">
                 <ng-container *ngIf="item.value != ''">
-                  <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="48+c*24"
-                    [attr.y]="16+r*5">{{item.value}}</text>
-                  <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="42+c*24"
-                    [attr.y]="16+r*5">{{item.value}}</text>
+                  <text
+                    *ngIf="item.alien == 'right'"
+                    text-anchor="end"
+                    [attr.x]="48 + c * 24"
+                    [attr.y]="16 + r * 5"
+                  >
+                    {{ item.value }}
+                  </text>
+                  <text
+                    *ngIf="item.alien == 'center'"
+                    text-anchor="middle"
+                    [attr.x]="42 + c * 24"
+                    [attr.y]="16 + r * 5"
+                  >
+                    {{ item.value }}
+                  </text>
                 </ng-container>
               </ng-container>
             </ng-container>
@@ -394,9 +549,8 @@
         </svg>
       </section>
     </ng-container>
-
   </ng-container>
   <section *ngIf="err.length > 0" class="sheet">
-      <p >{{err}}</p>
+    <p>{{ err }}</p>
   </section>
 </ng-container>
