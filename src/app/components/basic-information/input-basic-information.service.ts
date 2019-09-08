@@ -54,10 +54,6 @@ export class InputBasicInformationService extends InputDataService {
           '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
           '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
         ];
-        this.pickup_moment_no = new Array();
-        for (let i = 0; i < this.pickup_moment_title.length; i++) {
-          this.pickup_moment_no.push(i + 1);
-        }
 
         this.pickup_shear_force_title = [
           '耐久性 せん断ひび割れ検討判定用',
@@ -65,10 +61,7 @@ export class InputBasicInformationService extends InputDataService {
           '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
           '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
         ];
-        this.pickup_shear_force_no = new Array();
-        for (let i = 0; i < this.pickup_shear_force_title.length; i++) {
-          this.pickup_shear_force_no.push(i + 1);
-        }
+ 
 
         this.specification2_list = [
           { id: 0, title: 'ＪＲ各社' },

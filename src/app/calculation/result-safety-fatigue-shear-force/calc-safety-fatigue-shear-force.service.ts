@@ -21,42 +21,15 @@ export class CalcSafetyFatigueShearForceService {
     private result: ResultDataService,
     private base: CalcSafetyShearForceService,
     private bady: CalcSafetyFatigueMomentService) {
-    this.DesignForceList = null;
-  }
+      this.DesignForceList = null;
+    }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(isPrintOut: boolean): any[] {
+  public setDesignForces(): any[] {
 
-    // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
-      return new Array();
-    }
-    // 最小応力
-    const DesignForce0 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[3]);
-    // 最大応力
-    const DesignForce1 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[4]);
-
-    const result: any[] = new Array();
-    if (this.save.isManual() === true) {
-      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-      return result;
-    }
-    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-    if (this.save.calc.print_selected.print_section_force_checked === false) {
-      return result;
-    }
-    if (isPrintOut === false) {
-      return result;
-    }
-    // ToDo: ここで、断面力テーブル用のデータを 変数 result に構築する
-
-    return result;
-  }
-
-  // サーバー POST用データを生成する
-  public getPostData(): any {
+    this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_shear_force === false) {
@@ -66,20 +39,28 @@ export class CalcSafetyFatigueShearForceService {
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[3]);
     // 最大応力
     const DesignForceList1 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[4]);
-    // POST 用
-
-    if (DesignForceList1.length < 1 || this.DesignForceList.length < 1) {
-      return null;
-    }
 
     // 変動応力
     const DesignForceList2 = this.bady.getLiveload(this.DesignForceList, DesignForceList1);
 
+    if (this.DesignForceList.length < 1) {
+      return;
+    }
+
     // サーバーに送信するデータを作成
-    const DesignForceListList = [this.DesignForceList, DesignForceList2];
-    this.post.setPostData(DesignForceListList);
+    this.post.setPostData([this.DesignForceList, DesignForceList2]);
+
+  }
+
+  // サーバー POST用データを生成する
+  public setInputData(): any {
+
+    if (this.DesignForceList.length < 1) {
+      return null;
+    }
+
     // POST 用
-    const postData = this.post.getPostData(this.DesignForceList, 1, 'ShearForce', '耐力', DesignForceListList.length);
+    const postData = this.post.setInputData(this.DesignForceList, 1, 'ShearForce', '耐力', 2);
     return postData;
   }
 

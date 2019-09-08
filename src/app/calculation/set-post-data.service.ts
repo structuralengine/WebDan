@@ -33,7 +33,7 @@ export class SetPostDataService {
   }
 
   // サーバーに送信するデータを作成
-  public getPostData(
+  public setInputData(
     DesignForceList: any[],
     SafetyFactorINdex: number,
     calcTarget: string,

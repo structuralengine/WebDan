@@ -15,15 +15,16 @@ import { from } from 'rxjs';
 export class CalcSafetyFatigueMomentService {
   // 安全性（疲労破壊）曲げモーメント
   public DesignForceList: any[];
+
   // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
   private PostedData: any;
 
   constructor(private save: SaveDataService,
-    private force: SetDesignForceService,
-    private fatigue: SetFatigueService,
-    private post: SetPostDataService,
-    private result: ResultDataService,
-    private base: CalcServiceabilityMomentService
+              private force: SetDesignForceService,
+              private fatigue: SetFatigueService,
+              private post: SetPostDataService,
+              private result: ResultDataService,
+              private base: CalcServiceabilityMomentService
   ) {
     this.DesignForceList = null;
   }
@@ -31,58 +32,37 @@ export class CalcSafetyFatigueMomentService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(isPrintOut: boolean): any[] {
+  public setDesignForces(): any[] {
+
+    this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
-      return new Array();
-    }
-    // 最小応力
-    const DesignForce0 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[2]);
-    // 最大応力
-    const DesignForce1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
-
-    const result: any[] = new Array();
-    if (this.save.isManual() === true) {
-      // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-      return result;
-    }
-    // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-    if (this.save.calc.print_selected.print_section_force_checked === false) {
-      return result;
-    }
-    if (isPrintOut === false) {
-      return result;
-    }
-    // ToDo: ここで、断面力テーブル用のデータを 変数 result に構築する
-
-    return result;
-  }
-
-  // サーバー POST用データを生成する
-  public getPostData(): any {
-
-    // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
-      return null;
+      return;
     }
     // 最小応力
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[2]);
     // 最大応力
     const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
+    // 変動応力
+    const DesignForceList2 = this.getLiveload(this.DesignForceList, DesignForceList1);
+    
+    if (this.DesignForceList.length < 1) {
+      return;
+    }
+    // サーバーに送信するデータを作成
+    this.post.setPostData([this.DesignForceList, DesignForceList2]);
+  }
 
-    if (DesignForceList1.length < 1 || this.DesignForceList.length < 1) {
+  // サーバー POST用データを生成する
+  public setInputData(): any {
+
+    if (this.DesignForceList.length < 1) {
       return null;
     }
 
-    // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList, DesignForceList1);
-
-    // サーバーに送信するデータを作成
-    const DesignForceListList = [this.DesignForceList, DesignForceList2];
-    this.post.setPostData(DesignForceListList);
     // POST 用
-    this.PostedData = this.post.getPostData(this.DesignForceList, 1, 'Moment', '応力度', DesignForceListList.length);
+    this.PostedData = this.post.setInputData(this.DesignForceList, 1, 'Moment', '応力度', 2);
     // 連結する
     const postData = {
       InputData0: this.copyInputData(this.PostedData.InputData0, this.PostedData.InputData1)

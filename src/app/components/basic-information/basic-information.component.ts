@@ -92,6 +92,17 @@ export class BasicInformationComponent implements OnInit {
   /// <param name="i">選択された番号</param>
   private initPickupTable(): void {
 
+    if(this.save.isManual() === true){
+      this.input.pickup_moment_no = new Array();
+      for (let i = 0; i < this.pickup_moment_title.length; i++) {
+        this.input.pickup_moment_no.push(i + 1);
+      }
+      this.input.pickup_shear_force_no = new Array();
+      for (let i = 0; i < this.pickup_shear_force_title.length; i++) {
+        this.input.pickup_shear_force_no.push(i + 1);
+      }
+    }
+
     this.pickup_moment_datarows = new Array();
     this.pickup_shear_force_datarows = new Array();
 

@@ -31,7 +31,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     this.err = '';
 
     // POST 用データを取得する
-    const postData = this.calc.getPostData();
+    const postData = this.calc.setInputData();
     if (postData === null) {
       this.isLoading = false;
       this.isFulfilled = false;
