@@ -25,13 +25,13 @@ export class CalcServiceabilityShearForceService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): any[] {
+  public setDesignForces(): void{
 
     this.DesignForceList= new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_shear_force === false) {
-      return null;
+      return;
     }
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
@@ -40,7 +40,7 @@ export class CalcServiceabilityShearForceService {
     const DesignForceList1 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
     
     if (this.DesignForceList.length < 1) {
-      return null;
+      return;
     }
     
     // 変動荷重

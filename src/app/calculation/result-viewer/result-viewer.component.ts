@@ -28,7 +28,7 @@ export class ResultViewerComponent implements OnInit {
     private durabilityMoment: CalcDurabilityMomentService,
     private earthquakesMoment: CalcEarthquakesMomentService,
     private earthquakesShearForce: CalcEarthquakesShearForceService,
-    private eestorabilityMoment: CalcRestorabilityMomentService,
+    private restorabilityMoment: CalcRestorabilityMomentService,
     private restorabilityShearForce: CalcRestorabilityShearForceService,
     private SafetyFatigueMoment: CalcSafetyFatigueMomentService,
     private safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
@@ -42,7 +42,7 @@ export class ResultViewerComponent implements OnInit {
     this.durabilityMoment.setDesignForces();
     this.earthquakesMoment.setDesignForces();
     this.earthquakesShearForce.setDesignForces();
-    this.eestorabilityMoment.setDesignForces();
+    this.restorabilityMoment.setDesignForces();
     this.restorabilityShearForce.setDesignForces();
     this.SafetyFatigueMoment.setDesignForces();
     this.safetyFatigueShearForce.setDesignForces();

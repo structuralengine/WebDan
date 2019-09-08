@@ -27,7 +27,7 @@ export class CalcDurabilityMomentService {
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
-      return ;
+      return;
     }
     // 永久荷重
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);

@@ -1,8 +1,8 @@
 <main class="main-container">
   <div id="print-section" class="HtmlPage">
-    <!-- 断面力一覧表 出力
-  <app-section-force-list></app-section-force-list>
--->
+    <!-- 断面力一覧表 出力-->
+    <app-section-force-list></app-section-force-list>
+
     <!-- 安全性（破壊）曲げモーメントの照査表 出力 -->
     <app-result-safety-moment></app-result-safety-moment>
     <!-- 安全性（破壊）せん断力の照査表 出力 -->
@@ -30,6 +30,7 @@
   <div class="sticky">
     <button (click)="printTest()">Print</button>
     <ul>
+      <li><a href="#ap_0">断面力一覧表</a></li>
       <li><a href="#ap_1">安全性（破壊）曲げ</a></li>
       <li><a href="#ap_2">安全性（破壊）せん断</a></li>
       <li><a href="#ap_3">安全性（疲労破壊）曲げ</a></li>

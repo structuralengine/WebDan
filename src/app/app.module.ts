@@ -70,6 +70,7 @@ import { ResultRestorabilityMomentComponent } from './calculation/result-restora
 import { ResultRestorabilityShearForceComponent } from './calculation/result-restorability-shear-force/result-restorability-shear-force.component';
 import { ResultEarthquakesMomentComponent } from './calculation/result-earthquakes-moment/result-earthquakes-moment.component';
 import { ResultEarthquakesShearForceComponent } from './calculation/result-earthquakes-shear-force/result-earthquakes-shear-force.component';
+import { ResultSummaryTableComponent } from './calculation/result-summary-table/result-summary-table.component';
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
@@ -120,6 +121,7 @@ import { SetFatigueService } from './calculation/set-fatigue.service';
     ResultRestorabilityShearForceComponent,
     ResultEarthquakesMomentComponent,
     ResultEarthquakesShearForceComponent,
+    ResultSummaryTableComponent,
     SectionForceListComponent
   ],
   entryComponents: [

@@ -19,7 +19,7 @@ export class CalcEarthquakesShearForceService {
   }
 
   // 設計断面力の集計
-  public setDesignForces(): any[] {
+  public setDesignForces(): void{
 
     this.DesignForceList = new Array();
 

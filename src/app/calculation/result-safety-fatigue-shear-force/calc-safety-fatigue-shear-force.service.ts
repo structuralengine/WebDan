@@ -27,13 +27,13 @@ export class CalcSafetyFatigueShearForceService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): any[] {
+  public setDesignForces(): void{
 
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_shear_force === false) {
-      return null;
+      return;
     }
     // 最小応力
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[3]);

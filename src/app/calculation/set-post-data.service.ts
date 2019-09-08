@@ -35,15 +35,15 @@ export class SetPostDataService {
   // サーバーに送信するデータを作成
   public setInputData(
     DesignForceList: any[],
-    SafetyFactorINdex: number,
+    SafetyFactorIndex: number,
     calcTarget: string,
     calcMode: string,
-    concat: number
+    caseCount: number
   ): any {
 
     const result: any = {};
 
-    for (let i = 0; i < concat; i++) {
+    for (let i = 0; i < caseCount; i++) {
       const key: string = 'InputData' + i.toString();
       result[key] = new Array();
     }
@@ -51,14 +51,28 @@ export class SetPostDataService {
     for (const groupe of DesignForceList) {
       for (const member of groupe) {
         for (const position of member.positions) {
+
+          // 部材・断面情報をセット
+          const memberInfo = this.save.members.member_list.find(function (value) {
+            return (value.m_no === member.m_no);
+          });
+          if (memberInfo === undefined) {
+            console.log('部材番号が存在しない');
+            continue;
+          }
+          // 断面
+          position['memberInfo'] = memberInfo;
+
           // 安全係数を position['safety_factor'], position['material_steel']
           // position['material_concrete'], position['pile_factor'] に登録する
-          this.safety.setSafetyFactor(calcTarget, member.g_no, position, SafetyFactorINdex);
+          this.safety.setSafetyFactor(calcTarget, member.g_no, position, SafetyFactorIndex);
+
           // 鉄筋の本数・断面形状を position['PostData'] に登録
           // 出力用の string を position['printData'] に登録
           this.section.setPostData(member.g_no, member.m_no, position);
+
           // 変数に登録
-          for (let i = 0; i < concat; i++) {
+          for (let i = 0; i < caseCount; i++) {
             const postKey: string = 'PostData' + i.toString();
             for (const section of position[postKey]) {
               switch (calcMode) {
@@ -92,18 +106,6 @@ export class SetPostDataService {
         const member = groupe[im];
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
-
-          // 部材・断面情報をセット
-          const memberInfo = this.save.members.member_list.find(function (value) {
-            return (value.m_no === member.m_no);
-          });
-          if (memberInfo === undefined) {
-            console.log('部材番号が存在しない');
-            continue;
-          }
-          // 断面
-          position['memberInfo'] = memberInfo;
-
           // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < position.designForce.length; fo++) {
             // 対象の断面力を抽出する
@@ -130,50 +132,7 @@ export class SetPostDataService {
         }
       }
     }
-
-    // PostData が１つも無い断面を削除する
-    //this.deleteDisablePosition(DesignForceListList);
-
   }
-
-  /*
-  // PostData が１つも無い断面を DesignForceList から削除する
-  public deleteDisablePosition(DesignForceListList) {
-
-    const baseDesignForceList: any[] = DesignForceListList[0];
-
-    for (let ig = baseDesignForceList.length - 1; ig >= 0; ig--) {
-      const groupe = baseDesignForceList[ig];
-      for (let im = groupe.length - 1; im >= 0; im--) {
-        const member = groupe[im];
-        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
-          let position: any = member.positions[ip];
-          if ('PostData0' in position === false) {
-            for (const target of DesignForceListList) {
-              try {
-                target[ig][im].positions.splice(ip, 1);
-              } catch {}
-            }
-          }
-        }
-        if (member.positions.length < 1) {
-          for (const target of DesignForceListList) {
-            try {
-              target[ig].splice(im, 1);
-            } catch {}
-          }
-        }
-      }
-      if (groupe.length < 1) {
-        for (const target of DesignForceListList) {
-          try {
-            target.splice(ig, 1);
-          } catch {}
-        }
-      }
-    }
-  }
-  */
 
   // 設計断面力（リスト）を生成する
   private getSectionForce(forceListList: any[]): any[] {

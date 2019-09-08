@@ -25,13 +25,13 @@ export class CalcServiceabilityMomentService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): any[] {
+  public setDesignForces(): void{
 
     this.DesignForceList = new Array();
   
     // 曲げモーメントが計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
-      return null;
+      return;
     }
     // 永久荷重
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
@@ -39,7 +39,7 @@ export class CalcServiceabilityMomentService {
     const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
 
     if (this.DesignForceList.length < 1) {
-      return null;
+      return;
     }
 
     // サーバーに送信するデータを作成

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SaveDataService } from '../../providers/save-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 import { CalcSafetyFatigueMomentService } from '../result-safety-fatigue-moment/calc-safety-fatigue-moment.service';
@@ -17,58 +18,65 @@ import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-fo
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
 export class SectionForceListComponent implements OnInit {
-  // 安全性（破壊）
-  private safetyMomentForces: any[];
-  private safetyShearForces: any[];
-  // 安全性（疲労破壊）
-  private safetyFatigueMomentForces: any[];
-  private safetyFatigueShearForces: any[];
-  // 耐久性
-  private serviceabilityMomentForces: any[];
-  private serviceabilityShearForces: any[];
-  // 使用性
-  private durabilityMomentForces: any[];
-  // 復旧性（地震時以外）
-  private restorabilityMomentForces: any[];
-  private restorabilityShearForces: any[];
-  // 復旧性（地震時）
-  private earthquakesMomentForces: any[];
-  private earthquakesShearForces: any[];
 
-  constructor(
-    private CalcSafetyMoment: CalcSafetyMomentService,
-    private CalcSafetyShearForce: CalcSafetyShearForceService,
-    private CalcSafetyFatigueMoment: CalcSafetyFatigueMomentService,
-    private CalcSafetyFatigueShearForce: CalcSafetyFatigueShearForceService,
-    private CalcServiceabilityMoment: CalcServiceabilityMomentService,
-    private CalcServiceabilityShearForce: CalcServiceabilityShearForceService,
-    private CalcDurabilityMoment: CalcDurabilityMomentService,
-    private CalcRestorabilityMoment: CalcRestorabilityMomentService,
-    private CalcRestorabilityShearForce: CalcRestorabilityShearForceService,
-    private CalcEarthquakesMoment: CalcEarthquakesMomentService,
-    private CalcEarthquakesShearForce: CalcEarthquakesShearForceService
-    ) { }
+  private groupe: object;
+  private isLoading = true;
+  private isFulfilled = false;
+  
+   constructor(
+    private save: SaveDataService,
+    private durabilityMoment: CalcDurabilityMomentService,
+    private earthquakesMoment: CalcEarthquakesMomentService,
+    private earthquakesShearForce: CalcEarthquakesShearForceService,
+    private restorabilityMoment: CalcRestorabilityMomentService,
+    private restorabilityShearForce: CalcRestorabilityShearForceService,
+    private SafetyFatigueMoment: CalcSafetyFatigueMomentService,
+    private safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
+    private safetyMoment: CalcSafetyMomentService,
+    private safetyShearForce: CalcSafetyShearForceService,
+    private serviceabilityMoment: CalcServiceabilityMomentService,
+    private serviceabilityShearForce: CalcServiceabilityShearForceService
+     ) {}
 
   ngOnInit() {
-    /*
+    const groupeList = this.save.members.getGroupeList();
+
+    this.groupe = {
+      serviceabilityMoment1Pages: new Array(), // 耐久性（縁応力度）  
+      serviceabilityMoment0Pages: new Array(),　// 耐久性（永久作用） 
+      safetyFatigueMomentPages: new Array(),　// 疲労破壊 （曲げ）
+
+      serviceabilityShearForcePages: new Array(), // 耐久性（せん断）
+      safetyShearForce: new Array(), // 安全性（せん断）
+    }
+
     // 安全性（破壊）
-    this.safetyMomentForces = this.CalcSafetyMoment.setDesignForces();
-    this.safetyShearForces = this.CalcSafetyShearForce.setDesignForces();
+    const safetyMomentForces = this.safetyMoment.DesignForceList;
+    const safetyShearForces = this.safetyShearForce.DesignForceList;
     // 安全性（疲労破壊）
-    this.safetyFatigueMomentForces = this.CalcSafetyFatigueMoment.setDesignForces();
-    this.safetyFatigueShearForces = this.CalcSafetyFatigueShearForce.setDesignForces();
+    const safetyFatigueMomentForces = this.SafetyFatigueMoment.DesignForceList;
+    const safetyFatigueShearForces = this.safetyFatigueShearForce.DesignForceList;
     // 耐久性
-    this.serviceabilityMomentForces = this.CalcServiceabilityMoment.setDesignForces();
-    this.serviceabilityShearForces = this.CalcServiceabilityShearForce.setDesignForces();
+    const serviceabilityMomentForces = this.serviceabilityMoment.DesignForceList;
+    const serviceabilityShearForces = this.serviceabilityShearForce.DesignForceList;
     // 使用性
-    this.durabilityMomentForces = this.CalcDurabilityMoment.setDesignForces();
+    const durabilityMomentForces = this.durabilityMoment.DesignForceList;
     // 復旧性（地震時以外）
-    this.restorabilityMomentForces = this.CalcRestorabilityMoment.setDesignForces();
-    this.restorabilityShearForces = this.CalcRestorabilityShearForce.setDesignForces();
+    const restorabilityMomentForces = this.restorabilityMoment.DesignForceList;
+    const restorabilityShearForces = this.restorabilityShearForce.DesignForceList;
     // 復旧性（地震時）
-    this.earthquakesMomentForces = this.CalcEarthquakesMoment.setDesignForces();
-    this.earthquakesShearForces = this.CalcEarthquakesShearForce.setDesignForces();
-    */
+    const earthquakesMomentForces = this.earthquakesMoment.DesignForceList;
+    const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
+
+    for(const memberList of groupeList){
+      for(const member of memberList){
+        const g_no: number = member.g_no;
+        const m_no: number = member.m_no;
+        const g_name: string = member.g_name;
+        
+      }
+    }
+
   }
 
 }
