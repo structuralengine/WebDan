@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { InputCalclationPrintService } from './input-calclation-print.service';
 import { SaveDataService } from '../../providers/save-data.service';
-import { UserInfoService } from '../../providers/user-info.service';
 
 @Component({
   selector: 'app-calculation-print',
@@ -30,8 +29,7 @@ export class CalculationPrintComponent implements OnInit {
   constructor(
     private input: InputCalclationPrintService,
     private save: SaveDataService,
-    private router: Router,
-    private user: UserInfoService ) { }
+    private router: Router ) { }
 
   ngOnInit() {
     this.isManual = this.save.isManual();
@@ -66,13 +64,6 @@ export class CalculationPrintComponent implements OnInit {
 
   // 計算開始
   onClick() {
-
-    if (this.user.loggedIn === false) {
-      window.alert('計算する前に ログインしてください');
-      // return;
-    }
-
-
     this.router.navigate(['/result-viewer']);
   }
 

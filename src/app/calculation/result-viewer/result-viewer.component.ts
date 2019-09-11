@@ -1,4 +1,6 @@
 ﻿import { Component, OnInit } from '@angular/core';
+
+import { UserInfoService } from '../../providers/user-info.service';
 import { CalcDurabilityMomentService } from '../result-durability-moment/calc-durability-moment.service';
 import { CalcEarthquakesMomentService } from '../result-earthquakes-moment/calc-earthquakes-moment.service';
 import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-force/calc-earthquakes-shear-force.service';
@@ -21,10 +23,11 @@ import * as printJS from 'print-js';
 })
 export class ResultViewerComponent implements OnInit {
   
+  private loggedIn: boolean;
    // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
-  constructor(
+  constructor(private user: UserInfoService,
     private durabilityMoment: CalcDurabilityMomentService,
     private earthquakesMoment: CalcEarthquakesMomentService,
     private earthquakesShearForce: CalcEarthquakesShearForceService,
@@ -39,6 +42,8 @@ export class ResultViewerComponent implements OnInit {
      ) {}
 
   ngOnInit() {
+    this.loggedIn = this.user.loggedIn;
+
     this.durabilityMoment.setDesignForces();
     this.earthquakesMoment.setDesignForces();
     this.earthquakesShearForce.setDesignForces();
