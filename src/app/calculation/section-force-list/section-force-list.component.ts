@@ -19,7 +19,8 @@ import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-fo
 })
 export class SectionForceListComponent implements OnInit {
 
-  private groupe: object;
+  private groupes: any[];
+  
   private isLoading = true;
   private isFulfilled = false;
   
@@ -41,14 +42,7 @@ export class SectionForceListComponent implements OnInit {
   ngOnInit() {
     const groupeList = this.save.members.getGroupeList();
 
-    this.groupe = {
-      serviceabilityMoment1Pages: new Array(), // 耐久性（縁応力度）  
-      serviceabilityMoment0Pages: new Array(),　// 耐久性（永久作用） 
-      safetyFatigueMomentPages: new Array(),　// 疲労破壊 （曲げ）
-
-      serviceabilityShearForcePages: new Array(), // 耐久性（せん断）
-      safetyShearForce: new Array(), // 安全性（せん断）
-    }
+    this.groupes = new Array();
 
     // 安全性（破壊）
     const safetyMomentForces = this.safetyMoment.DesignForceList;
@@ -68,14 +62,33 @@ export class SectionForceListComponent implements OnInit {
     const earthquakesMomentForces = this.earthquakesMoment.DesignForceList;
     const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
 
-    for(const memberList of groupeList){
-      for(const member of memberList){
+    for(const memberList of groupeList) {
+      const groupe = {
+        serviceabilityMoment1Pages: new Array(), // 耐久性（縁応力度）  
+        serviceabilityMoment0Pages: new Array(),　// 耐久性（永久作用） 
+        safetyFatigueMomentPages: new Array(),　// 疲労破壊 （曲げ）
+  
+        serviceabilityShearForcePages: new Array(), // 耐久性（せん断）
+        safetyShearForce: new Array(), // 安全性（せん断）
+      };
+
+      for (const member of memberList) {
         const g_no: number = member.g_no;
         const m_no: number = member.m_no;
         const g_name: string = member.g_name;
-        
+
+        groupe.serviceabilityMoment1Pages.push(null);
+        groupe.serviceabilityMoment0Pages.push(null);
+        groupe.safetyFatigueMomentPages.push(null);
+        groupe.serviceabilityShearForcePages.push(null);
+        groupe.safetyShearForce.push(null);
+
+
       }
     }
+
+    this.isLoading = false;
+    this.isFulfilled = true;
 
   }
 
