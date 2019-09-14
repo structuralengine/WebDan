@@ -52,17 +52,6 @@ export class SetPostDataService {
       for (const member of groupe) {
         for (const position of member.positions) {
 
-          // 部材・断面情報をセット
-          const memberInfo = this.save.members.member_list.find(function (value) {
-            return (value.m_no === member.m_no);
-          });
-          if (memberInfo === undefined) {
-            console.log('部材番号が存在しない');
-            continue;
-          }
-          // 断面
-          position['memberInfo'] = memberInfo;
-
           // 安全係数を position['safety_factor'], position['material_steel']
           // position['material_concrete'], position['pile_factor'] に登録する
           this.safety.setSafetyFactor(calcTarget, member.g_no, position, SafetyFactorIndex);
@@ -104,8 +93,18 @@ export class SetPostDataService {
       const groupe = baseDesignForceList[ig];
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
+        // 部材・断面情報をセット
+        const memberInfo = this.save.members.member_list.find(function (value) {
+          return (value.m_no === member.m_no);
+        });
+        if (memberInfo === undefined) {
+          console.log('部材番号が存在しない');
+          continue;
+        }
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
+          // 断面
+          position['memberInfo'] = memberInfo;
           // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < position.designForce.length; fo++) {
             // 対象の断面力を抽出する

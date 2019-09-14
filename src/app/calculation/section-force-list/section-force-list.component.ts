@@ -19,12 +19,11 @@ import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-fo
 })
 export class SectionForceListComponent implements OnInit {
 
-  private groupes: any[];
-  
+  private groupes: object[];
   private isLoading = true;
   private isFulfilled = false;
-  
-   constructor(
+
+  constructor(
     private save: SaveDataService,
     private durabilityMoment: CalcDurabilityMomentService,
     private earthquakesMoment: CalcEarthquakesMomentService,
@@ -37,13 +36,14 @@ export class SectionForceListComponent implements OnInit {
     private safetyShearForce: CalcSafetyShearForceService,
     private serviceabilityMoment: CalcServiceabilityMomentService,
     private serviceabilityShearForce: CalcServiceabilityShearForceService
-     ) {}
+  ) { }
 
   ngOnInit() {
-    const groupeList = this.save.members.getGroupeList();
-
     this.groupes = new Array();
 
+    const groupeList = this.save.members.getGroupeList();
+
+    const ForceList: any[] = new Array();
     // 安全性（破壊）
     const safetyMomentForces = this.safetyMoment.DesignForceList;
     const safetyShearForces = this.safetyShearForce.DesignForceList;
@@ -62,34 +62,50 @@ export class SectionForceListComponent implements OnInit {
     const earthquakesMomentForces = this.earthquakesMoment.DesignForceList;
     const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
 
-    for(const memberList of groupeList) {
-      const groupe = {
+    for (const memberList of groupeList) {
+      const groupe: any = {
         serviceabilityMoment1Pages: new Array(), // 耐久性（縁応力度）  
         serviceabilityMoment0Pages: new Array(),　// 耐久性（永久作用） 
         safetyFatigueMomentPages: new Array(),　// 疲労破壊 （曲げ）
-  
+
         serviceabilityShearForcePages: new Array(), // 耐久性（せん断）
         safetyShearForce: new Array(), // 安全性（せん断）
-      };
+      }
+
+      let serviceabilityMoment1Page: any[] = new Array();
 
       for (const member of memberList) {
-        const g_no: number = member.g_no;
-        const m_no: number = member.m_no;
-        const g_name: string = member.g_name;
-
-        groupe.serviceabilityMoment1Pages.push(null);
-        groupe.serviceabilityMoment0Pages.push(null);
-        groupe.safetyFatigueMomentPages.push(null);
-        groupe.serviceabilityShearForcePages.push(null);
-        groupe.safetyShearForce.push(null);
-
-
+        let tmp: any = undefined;
+        // 耐久性曲げモーメントの照査
+        for (const smf of serviceabilityMomentForces) {
+          tmp = smf.find(a => { return a.m_no === member.m_no; })
+          if (tmp !== undefined) {
+            break;
+          }
+        }
+        if (tmp !== undefined) {
+          for (const pos of tmp.positions) {
+            const p0: any = pos.PostData0;
+            const p1: any = pos.PostData1;
+            serviceabilityMoment1Page.push(p1);
+            if (serviceabilityMoment1Page.length > 15) {
+              groupe.serviceabilityMoment1Pages.push(serviceabilityMoment1Page);
+              serviceabilityMoment1Page = new Array();
+            }
+          }
+        }
       }
+      if(serviceabilityMoment1Page.length > 0) { 
+        groupe.serviceabilityMoment1Pages.push(serviceabilityMoment1Page);
+      }
+
+      this.groupes.push(groupe);
     }
 
     this.isLoading = false;
     this.isFulfilled = true;
 
   }
+
 
 }
