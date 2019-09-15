@@ -12,102 +12,172 @@
     <div id="ap_0"></div>
 
     <ng-container *ngFor="let groupe of groupes">
-      <ng-container *ngFor="let page of groupe.serviceabilityMoment1Pages">
-        <section class="sheet">
-          <!-- <h3 class="h3">曲げ総括表</h3> -->
-          <svg
-            width="150mm"
-            height="260mm"
-            viewBox="0 0 150 260"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            version="1.1"
-          >
-            <!--タイトル-->
-            <text x="0" y="11" font-size="2.3pt" text-anchor="start">
-              耐久性　縁引張応力度検討用
-            </text>
+      <ng-container *ngFor="let category of groupe">
+        <ng-container *ngFor="let page of category.page">
+          <section class="sheet">
+            <h3 class="h3">{{ groupe.g_name }}</h3>
+            <svg
+              width="150mm"
+              height="260mm"
+              viewBox="0 0 150 260"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+              version="1.1"
+            >
+              <!--タイトル-->
+              <text x="0" y="11" font-size="2.3pt" text-anchor="start">
+                {{ pages.title }}
+              </text>
 
-            <!--縦線-->
-            <g fill="none" stroke="black">
-              <line stroke-width="0.20" x1="7" y1="12" x2="7" y2="216" />
-              <line stroke-width="0.20" x1="14" y1="12" x2="14" y2="216" />
-              <line stroke-width="0.20" x1="28" y1="12" x2="28" y2="216" />
-              <line stroke-width="0.20" x1="49" y1="22" x2="49" y2="216" />
-              <line stroke-width="0.35" x1="59" y1="12" x2="59" y2="216" />
-              <line stroke-width="0.20" x1="77" y1="17" x2="77" y2="216" />
-              <line stroke-width="0.20" x1="95" y1="17" x2="95" y2="216" />
-              <line stroke-width="0.35" x1="104" y1="12" x2="104" y2="216" />
-              <line stroke-width="0.20" x1="122" y1="17" x2="122" y2="216" />
-              <line stroke-width="0.20" x1="140" y1="17" x2="140" y2="216" />
-            </g>
+              <!--column Header-->
+              <g font-size="2.3pt" text-anchor="middle">
+                <text x="4" y="16">部材</text>
+                <text x="4" y="20">番号</text>
+                <text x="13" y="16">算出</text>
+                <text x="13" y="20">番号</text>
 
-            <!--column Header-->
-            <g font-size="2.3pt" text-anchor="middle">
-              <text x="4" y="16">部材</text>
-              <text x="4" y="20">番号</text>
-              <text x="11" y="16">算出</text>
-              <text x="11" y="20">番号</text>
-              <text x="21" y="16">算出点</text>
-              <text x="42" y="16">算 出 点 名</text>
-              <text x="80" y="16">上　　 側</text>
-              <text x="125" y="16">下　　 側</text>
-              <text x="63" y="21">M</text>
-              <text x="71" y="21">(kN･m)</text>
-              <text x="81" y="21">N</text>
-              <text x="89" y="21">(kN)</text>
-              <text x="99" y="21">comb</text>
-              <text x="107" y="21">M</text>
-              <text x="115" y="21">(kN･m)</text>
-              <text x="125" y="21">N</text>
-              <text x="133" y="21">(kN)</text>
-              <text x="145" y="21">comb</text>
-            </g>
-
-            <ng-container *ngFor="let line of page; index as i">
+                <text x="26" y="16">算出点</text>
+                <text x="42" y="16">算 出 点 名</text>
+                <text x="80" y="16">上　　 側</text>
+                <text x="125" y="16">下　　 側</text>
+                <text x="63" y="21">M</text>
+                <text x="71" y="21">(kN･m)</text>
+                <text x="81" y="21">N</text>
+                <text x="89" y="21">(kN)</text>
+                <text x="99" y="21">comb</text>
+                <text x="107" y="21">M</text>
+                <text x="115" y="21">(kN･m)</text>
+                <text x="125" y="21">N</text>
+                <text x="133" y="21">(kN)</text>
+                <text x="145" y="21">comb</text>
+              </g>
               <!--横線-->
               <g fill="none" stroke="black">
                 <line stroke-width="0.35" x1="0" y1="12" x2="150" y2="12" />
                 <line stroke-width="0.20" x1="59" y1="17" x2="150" y2="17" />
                 <line stroke-width="0.35" x1="0" y1="22" x2="150" y2="22" />
-                <line stroke-width="0.20" x1="0" y1="34" x2="150" y2="34" />
               </g>
-              <!--column Header-->
-              <g font-size="2.3pt" text-anchor="middle">
-                <text x="5" y="26">1</text>
-                <text x="12" y="26">2</text>
-                <text x="21" y="26">0.450</text>
-                <text x="35" y="26">柱前面</text>
-                <text x="54" y="26">Mmax</text>
-                <text x="68" y="26">-1715.28</text>
-                <text x="88" y="26">-10.46</text>
-                <text x="100" y="26">7</text>
-                <text x="115" y="26">690.82</text>
-                <text x="133" y="26">-79.09</text>
-                <text x="145" y="26">7</text>
-                <text x="54" y="29.5">Nmax</text>
-                <text x="68" y="29.5">-</text>
-                <text x="88" y="29.5">-</text>
-                <text x="100" y="29.5">-</text>
-                <text x="115" y="29.5">9.63</text>
-                <text x="133" y="29.5">58.06</text>
-                <text x="145" y="29.5">7</text>
-                <text x="54" y="33">Nmin</text>
-                <text x="68" y="33">-1140.82</text>
-                <text x="88" y="33">-128.90</text>
-                <text x="100" y="33">7</text>
-                <text x="115" y="33">-</text>
-                <text x="133" y="33">-</text>
-                <text x="145" y="33">-</text>
-              </g>
-            </ng-container>
-          </svg>
-        </section>
-      </ng-container>
 
-      <ng-container *ngFor="let page of groupe.serviceabilityMoment0Pages">
+              <ng-container *ngFor="let line of page; index as r">
+                <!--横線-->
+                <g fill="none" stroke="black">
+                  <line
+                    stroke-width="0.20"
+                    x1="0"
+                    [attr.y1]="27 + r * 4"
+                    x2="150"
+                    [attr.y2]="27 + r * 4"
+                  />
+                </g>
+                <!--column Header-->
+                <g font-size="2.3pt">
+                  <text x="5" [attr.y]="26 + r * 4" text-anchor="middle">
+                    {{ line.m_no }}
+                  </text>
+                  <text x="13" [attr.y]="26 + r * 4" text-anchor="middle">
+                    {{ line.p_name }}
+                  </text>
+                  <text x="30" [attr.y]="26 + r * 4" text-anchor="end">
+                    {{ line.position }}
+                  </text>
+                  <text x="35" [attr.y]="26 + r * 4" text-anchor="start">
+                    {{ line.p_name_ex }}
+                  </text>
+                  <text x="74" [attr.y]="26 + r * 4" text-anchor="end">
+                    {{ line.upper.Md }}
+                  </text>
+                  <text x="92" [attr.y]="26 + r * 4" text-anchor="end">
+                    {{ line.upper.Nd }}
+                  </text>
+                  <text x="100" [attr.y]="26 + r * 4" text-anchor="middle">
+                    {{ line.upper.comb }}
+                  </text>
+                  <text x="119" [attr.y]="26 + r * 4" text-anchor="end">
+                    {{ line.lower.Md }}
+                  </text>
+                  <text x="137" [attr.y]="26 + r * 4" text-anchor="end">
+                    {{ line.lower.Nd }}
+                  </text>
+                  <text x="147" [attr.y]="26 + r * 4" text-anchor="middle">
+                    {{ line.lower.comb }}
+                  </text>
+                </g>
+              </ng-container>
+
+              <!--縦線-->
+              <g fill="none" stroke="black">
+                <line
+                  stroke-width="0.20"
+                  x1="7"
+                  y1="12"
+                  x2="7"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.20"
+                  x1="19"
+                  y1="12"
+                  x2="19"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.20"
+                  x1="33"
+                  y1="12"
+                  x2="33"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.35"
+                  x1="59"
+                  y1="12"
+                  x2="59"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.20"
+                  x1="77"
+                  y1="17"
+                  x2="77"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.20"
+                  x1="95"
+                  y1="17"
+                  x2="95"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.35"
+                  x1="104"
+                  y1="12"
+                  x2="104"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.20"
+                  x1="122"
+                  y1="17"
+                  x2="122"
+                  [attr.y2]="23 + page.length * 4"
+                />
+                <line
+                  stroke-width="0.20"
+                  x1="140"
+                  y1="17"
+                  x2="140"
+                  [attr.y2]="23 + page.length * 4"
+                />
+              </g>
+            </svg>
+          </section>
+        </ng-container>
+      </ng-container>
+      <!--
+        <ng-container *ngFor="let page of groupe.serviceabilityMoment0Pages">
         <section class="sheet">
-          <!-- <h3 class="h3">曲げ総括表</h3> -->
+          
           <svg
             width="150mm"
             height="260mm"
@@ -116,12 +186,12 @@
             xmlns:xlink="http://www.w3.org/1999/xlink"
             version="1.1"
           >
-            <!--タイトル-->
+            
             <text x="0" y="11" font-size="2.3pt" text-anchor="start">
               耐久性（永久荷重）
             </text>
 
-            <!--縦線-->
+            
             <g fill="none" stroke="black">
               <line stroke-width="0.20" x1="7" y1="12" x2="7" y2="216" />
               <line stroke-width="0.20" x1="14" y1="12" x2="14" y2="216" />
@@ -134,7 +204,7 @@
               <line stroke-width="0.20" x1="122" y1="17" x2="122" y2="216" />
               <line stroke-width="0.20" x1="140" y1="17" x2="140" y2="216" />
             </g>
-            <!--column Header-->
+            
             <g font-size="2.3pt" text-anchor="middle">
               <text x="4" y="16">部材</text>
               <text x="4" y="20">番号</text>
@@ -156,7 +226,7 @@
               <text x="145" y="21">comb</text>
             </g>
             <ng-container *ngFor="let line of page; index as i">
-              <!--横線-->
+              
               <g fill="none" stroke="black">
                 <line stroke-width="0.35" x1="0" y1="12" x2="150" y2="12" />
                 <line stroke-width="0.20" x1="59" y1="17" x2="150" y2="17" />
@@ -164,7 +234,7 @@
                 <line stroke-width="0.20" x1="0" y1="30" x2="150" y2="30" />
               </g>
 
-              <!--column Header-->
+              
               <g font-size="2.3pt" text-anchor="middle">
                 <text x="5" y="26">1</text>
                 <text x="12" y="26">2</text>
@@ -192,7 +262,7 @@
 
       <ng-container *ngFor="let page of groupe.safetyFatigueMomentPages">
         <section class="sheet">
-          <!-- <h3 class="h3">曲げ総括表</h3> -->
+          
           <svg
             width="150mm"
             height="260mm"
@@ -201,11 +271,11 @@
             xmlns:xlink="http://www.w3.org/1999/xlink"
             version="1.1"
           >
-            <!--タイトル-->
+            
             <text x="0" y="11" font-size="2.3pt" text-anchor="start">
               疲労破壊
             </text>
-            <!--縦線-->
+            
             <g fill="none" stroke="black">
               <line stroke-width="0.20" x1="7" y1="12" x2="7" y2="216" />
               <line stroke-width="0.20" x1="14" y1="12" x2="14" y2="216" />
@@ -241,7 +311,7 @@
             </g>
 
             <ng-container *ngFor="let line of page; index as i">
-              <!--横線-->
+              
               <g fill="none" stroke="black">
                 <line stroke-width="0.35" x1="0" y1="12" x2="150" y2="12" />
                 <line stroke-width="0.20" x1="59" y1="17" x2="150" y2="17" />
@@ -249,7 +319,7 @@
                 <line stroke-width="0.20" x1="0" y1="34" x2="150" y2="34" />
               </g>
 
-              <!--column Header-->
+              
               <g font-size="2.3pt" text-anchor="middle">
                 <text x="5" y="26">1</text>
                 <text x="12" y="26">2</text>
@@ -284,7 +354,7 @@
 
       <ng-container *ngFor="let page of groupe.serviceabilityShearForcePages">
         <section class="sheet">
-          <!-- <h3 class="h3">曲げ総括表</h3> -->
+          
           <svg
             width="150mm"
             height="260mm"
@@ -293,12 +363,12 @@
             xmlns:xlink="http://www.w3.org/1999/xlink"
             version="1.1"
           >
-            <!--タイトル-->
+            
             <text x="0" y="11" font-size="2.3pt" text-anchor="start">
               耐久性　せん断ひび割れ検討判定用
             </text>
 
-            <!--縦線-->
+            
             <g fill="none" stroke="black">
               <line stroke-width="0.20" x1="7" y1="12" x2="7" y2="216" />
               <line stroke-width="0.20" x1="14" y1="12" x2="14" y2="216" />
@@ -310,7 +380,7 @@
               <line stroke-width="0.20" x1="141" y1="17" x2="141" y2="216" />
             </g>
 
-            <!--column Header-->
+            
             <g font-size="2.3pt" text-anchor="middle">
               <text x="4" y="16">部材</text>
               <text x="4" y="20">番号</text>
@@ -328,14 +398,14 @@
               <text x="145" y="21">comb</text>
             </g>
             <ng-container *ngFor="let line of page; index as i">
-              <!--横線-->
+              
               <g fill="none" stroke="black">
                 <line stroke-width="0.35" x1="0" y1="12" x2="150" y2="12" />
                 <line stroke-width="0.20" x1="59" y1="17" x2="150" y2="17" />
                 <line stroke-width="0.35" x1="0" y1="22" x2="150" y2="22" />
                 <line stroke-width="0.20" x1="0" y1="34" x2="150" y2="34" />
               </g>
-              <!--column Header-->
+              
               <g font-size="2.3pt" text-anchor="middle">
                 <text x="5" y="26">1</text>
                 <text x="12" y="26">4</text>
@@ -364,7 +434,7 @@
 
       <ng-container *ngFor="let page of groupe.safetyShearForce">
         <section class="sheet">
-          <!-- <h3 class="h3">曲げ総括表</h3> -->
+          
           <svg
             width="150mm"
             height="260mm"
@@ -373,11 +443,11 @@
             xmlns:xlink="http://www.w3.org/1999/xlink"
             version="1.1"
           >
-            <!--タイトル-->
+            
             <text x="0" y="11" font-size="2.3pt" text-anchor="start">
               安全性（破壊）
             </text>
-            <!--column Header-->
+            
             <g font-size="2.3pt" text-anchor="middle">
               <text x="4" y="16">部材</text>
               <text x="4" y="20">番号</text>
@@ -395,7 +465,7 @@
               <text x="145" y="21">comb</text>
             </g>
 
-            <!--縦線-->
+            
             <g fill="none" stroke="black">
               <line stroke-width="0.20" x1="7" y1="12" x2="7" y2="216" />
               <line stroke-width="0.20" x1="14" y1="12" x2="14" y2="216" />
@@ -406,14 +476,14 @@
               <line stroke-width="0.20" x1="141" y1="17" x2="141" y2="216" />
             </g>
             <ng-container *ngFor="let line of page; index as i">
-              <!--横線-->
+              
               <g fill="none" stroke="black">
                 <line stroke-width="0.35" x1="0" y1="12" x2="150" y2="12" />
                 <line stroke-width="0.20" x1="59" y1="17" x2="150" y2="17" />
                 <line stroke-width="0.35" x1="0" y1="22" x2="150" y2="22" />
                 <line stroke-width="0.20" x1="0" y1="27" x2="150" y2="27" />
               </g>
-              <!--column Header-->
+              
               <g font-size="2.3pt" text-anchor="middle">
                 <text x="5" y="26">1</text>
                 <text x="12" y="26">4</text>
@@ -428,8 +498,7 @@
           </svg>
         </section>
       </ng-container>
-
+    -->
     </ng-container>
-    
   </ng-container>
 </ng-container>

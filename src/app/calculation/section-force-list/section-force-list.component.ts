@@ -11,6 +11,7 @@ import { CalcRestorabilityMomentService } from '../result-restorability-moment/c
 import { CalcRestorabilityShearForceService } from '../result-restorability-shear-force/calc-restorability-shear-force.service';
 import { CalcEarthquakesMomentService } from '../result-earthquakes-moment/calc-earthquakes-moment.service';
 import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-force/calc-earthquakes-shear-force.service';
+import { ArrayType } from '@angular/compiler';
 
 @Component({
   selector: 'app-section-force-list',
@@ -63,41 +64,19 @@ export class SectionForceListComponent implements OnInit {
     const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
 
     for (const memberList of groupeList) {
-      const groupe: any = {
-        serviceabilityMoment1Pages: new Array(), // 耐久性（縁応力度）  
-        serviceabilityMoment0Pages: new Array(),　// 耐久性（永久作用） 
-        safetyFatigueMomentPages: new Array(),　// 疲労破壊 （曲げ）
 
-        serviceabilityShearForcePages: new Array(), // 耐久性（せん断）
-        safetyShearForce: new Array(), // 安全性（せん断）
-      }
+      const groupe: any[] = new Array();
+      
+      // 耐久性曲げモーメントの照査
+      let temp: any[] = this.setPage(memberList, serviceabilityMomentForces, 2);
+      groupe.push({title:'耐久性　縁引張応力度検討用',
+                   page: temp[0]
+                  });
+      groupe.push({title:'耐久性　永久作用',
+                   page: temp[1]
+      });
+      
 
-      let serviceabilityMoment1Page: any[] = new Array();
-
-      for (const member of memberList) {
-        let tmp: any = undefined;
-        // 耐久性曲げモーメントの照査
-        for (const smf of serviceabilityMomentForces) {
-          tmp = smf.find(a => { return a.m_no === member.m_no; })
-          if (tmp !== undefined) {
-            break;
-          }
-        }
-        if (tmp !== undefined) {
-          for (const pos of tmp.positions) {
-            const p0: any = pos.PostData0;
-            const p1: any = pos.PostData1;
-            serviceabilityMoment1Page.push(p1);
-            if (serviceabilityMoment1Page.length > 15) {
-              groupe.serviceabilityMoment1Pages.push(serviceabilityMoment1Page);
-              serviceabilityMoment1Page = new Array();
-            }
-          }
-        }
-      }
-      if(serviceabilityMoment1Page.length > 0) { 
-        groupe.serviceabilityMoment1Pages.push(serviceabilityMoment1Page);
-      }
 
       this.groupes.push(groupe);
     }
@@ -107,5 +86,70 @@ export class SectionForceListComponent implements OnInit {
 
   }
 
+  private setPage(memberList: any[], forces: any[], count: number): any[] {
+
+    const result: any[] = [new Array()];
+    for(let i =1; i < count; i++){ result.push(new Array()); }
+
+    const page: any[] = new Array();
+    for (let i = 0; i < count; i++) {
+      page.push(new Array());
+    }
+
+    for (const member of memberList) {
+      let tmp: any = undefined;
+      for (const m of forces) {
+        tmp = m.find(a => { return a.m_no === member.m_no; })
+        if (tmp !== undefined) { break; }
+      }
+      if (tmp !== undefined) {
+        for (const pos of tmp.positions) {
+          const pd: any[] = [pos.PostData0];
+          for(let i =1; i < count; i++) { pd.push(pos.PostData1); }
+          for (let i = 0; i < count; i++) {
+            const p: any = {
+              m_no: member.m_no,
+              position: pos.position.toFixed(3),
+              p_name: pos.p_name,
+              p_name_ex: pos.p_name_ex
+            };
+            for (const pp of pd[i]) {
+              const pt = { Md: '-', Nd: '-', Vd: '-', comb: '-' };
+              if ('Md' in pp) { pt.Md = pp.Md.toFixed(2); }
+              if ('Nd' in pp) { pt.Nd = pp.Nd.toFixed(2); }
+              if ('Vd' in pp) { pt.Vd = pp.Vd.toFixed(2); }
+              if ('comb' in pp) { pt.comb = pp.comb; }
+              switch(pp.memo){
+                case '上側引張':
+                    p['upper'] = pt;
+                  break;
+                case '下側引張':
+                    p['lower'] = pt;
+                    break;
+                }
+              p[pp.memo] = pt;
+            }
+            if ('upper' in p === false) {
+              p['upper'] = { Md: '-', Nd: '-', Vd: '-', comb: '-' };
+            }
+            if ('lower' in p === false) {
+              p['lower'] = { Md: '-', Nd: '-', Vd: '-', comb: '-' };
+            }
+          page[i].push(p);
+            if (page[i].length > 15) { // 行数が15行以上になったらページに登録してリセット
+              result[i].push(page[i]);
+              page[i] = new Array();
+            }
+
+          }
+        }
+      }
+
+    }
+    for (let i = 0; i < result.length; i++) {
+      result[i].push(page[i]);
+    }
+    return result;
+  }
 
 }
