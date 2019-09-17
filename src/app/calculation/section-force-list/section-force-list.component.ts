@@ -44,7 +44,6 @@ export class SectionForceListComponent implements OnInit {
 
     const groupeList = this.save.members.getGroupeList();
 
-    const ForceList: any[] = new Array();
     // 安全性（破壊）
     const safetyMomentForces = this.safetyMoment.DesignForceList;
     const safetyShearForces = this.safetyShearForce.DesignForceList;
@@ -66,17 +65,82 @@ export class SectionForceListComponent implements OnInit {
     for (const memberList of groupeList) {
 
       const groupe: any[] = new Array();
-      
-      // 耐久性曲げモーメントの照査
-      let temp: any[] = this.setPage(memberList, serviceabilityMomentForces, 2);
-      groupe.push({title:'耐久性　縁引張応力度検討用',
-                   page: temp[0]
-                  });
-      groupe.push({title:'耐久性　永久作用',
-                   page: temp[1]
-      });
-      
+      let temp: any[];
 
+      // 耐久性曲げモーメントの照査
+      if (serviceabilityMomentForces.length > 0) {
+        temp = this.setPage(memberList, serviceabilityMomentForces, 2);
+        groupe.push({
+          title: '耐久性　縁引張応力度検討用',
+          g_name: memberList.g_name,
+          page: temp[0]
+        });
+        groupe.push({
+          title: '耐久性　永久作用',
+          g_name: memberList.g_name,
+          page: temp[1]
+        });
+      }
+
+      // 使用性曲げモーメントの照査
+      if (durabilityMomentForces.length > 0) {
+        temp = this.setPage(memberList, durabilityMomentForces, 2);
+        groupe.push({
+          title: '使用性　縁引張応力度検討用',
+          g_name: memberList.g_name,
+          page: temp[0]
+        });
+        groupe.push({
+          title: '使用性　永久作用',
+          g_name: memberList.g_name,
+          page: temp[1]
+        });
+      }
+
+      // 安全性（疲労破壊）曲げモーメントの照査
+      if (safetyFatigueMomentForces.length > 0) {
+        temp = this.setPage(memberList, safetyFatigueMomentForces, 2);
+        groupe.push({
+          title: '安全性（疲労破壊）最小応力',
+          g_name: memberList.g_name,
+          page: temp[0]
+        });
+        groupe.push({
+          title: '安全性（疲労破壊）最大応力',
+          g_name: memberList.g_name,
+          page: temp[1]
+        });
+      }
+
+      // 安全性（破壊）曲げモーメントの照査
+      if (safetyMomentForces.length > 0) {
+        temp = this.setPage(memberList, safetyMomentForces, 1);
+        groupe.push({
+          title: '安全性（破壊）',
+          g_name: memberList.g_name,
+          page: temp[0]
+        });
+      }
+
+      // 復旧性（地震時以外）曲げモーメントの照査
+      if (restorabilityMomentForces.length > 0) {
+        temp = this.setPage(memberList, restorabilityMomentForces, 1);
+        groupe.push({
+          title: '復旧性（地震時以外）',
+          g_name: memberList.g_name,
+          page: temp[0]
+        });
+      }
+
+      // 復旧性（地震時）曲げモーメントの照査
+      if (earthquakesMomentForces.length > 0) {
+        temp = this.setPage(memberList, earthquakesMomentForces, 1);
+        groupe.push({
+          title: '復旧性（地震時）',
+          g_name: memberList.g_name,
+          page: temp[0]
+        });
+      }
 
       this.groupes.push(groupe);
     }
@@ -86,10 +150,11 @@ export class SectionForceListComponent implements OnInit {
 
   }
 
+
   private setPage(memberList: any[], forces: any[], count: number): any[] {
 
     const result: any[] = [new Array()];
-    for(let i =1; i < count; i++){ result.push(new Array()); }
+    for (let i = 1; i < count; i++) { result.push(new Array()); }
 
     const page: any[] = new Array();
     for (let i = 0; i < count; i++) {
@@ -105,7 +170,7 @@ export class SectionForceListComponent implements OnInit {
       if (tmp !== undefined) {
         for (const pos of tmp.positions) {
           const pd: any[] = [pos.PostData0];
-          for(let i =1; i < count; i++) { pd.push(pos.PostData1); }
+          for (let i = 1; i < count; i++) { pd.push(pos.PostData1); }
           for (let i = 0; i < count; i++) {
             const p: any = {
               m_no: member.m_no,
@@ -119,14 +184,14 @@ export class SectionForceListComponent implements OnInit {
               if ('Nd' in pp) { pt.Nd = pp.Nd.toFixed(2); }
               if ('Vd' in pp) { pt.Vd = pp.Vd.toFixed(2); }
               if ('comb' in pp) { pt.comb = pp.comb; }
-              switch(pp.memo){
+              switch (pp.memo) {
                 case '上側引張':
-                    p['upper'] = pt;
+                  p['upper'] = pt;
                   break;
                 case '下側引張':
-                    p['lower'] = pt;
-                    break;
-                }
+                  p['lower'] = pt;
+                  break;
+              }
               p[pp.memo] = pt;
             }
             if ('upper' in p === false) {
@@ -135,7 +200,7 @@ export class SectionForceListComponent implements OnInit {
             if ('lower' in p === false) {
               p['lower'] = { Md: '-', Nd: '-', Vd: '-', comb: '-' };
             }
-          page[i].push(p);
+            page[i].push(p);
             if (page[i].length > 15) { // 行数が15行以上になったらページに登録してリセット
               result[i].push(page[i]);
               page[i] = new Array();
