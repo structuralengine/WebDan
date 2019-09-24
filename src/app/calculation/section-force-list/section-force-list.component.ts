@@ -21,9 +21,12 @@ import { ArrayType } from '@angular/compiler';
 export class SectionForceListComponent implements OnInit {
 
   private pages: object[];
-  
+
   private isLoading = true;
   private isFulfilled = false;
+
+  private rowCountAtPage: number = 65; // 1ページあたり 65行
+  private rowTitleRowCount: number = 6; // タイトル行は 6行分
 
   constructor(
     private save: SaveDataService,
@@ -63,88 +66,96 @@ export class SectionForceListComponent implements OnInit {
     const earthquakesMomentForces = this.earthquakesMoment.DesignForceList;
     const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
 
+
+
     for (const memberList of groupeList) {
 
-      const groupe: any[] = new Array();
-      let rows: any[];
-      let rowCount: number = 0;
+      let currentRow: number = 0;
+      const g_name: string =  memberList[0].g_name;
 
-      // 耐久性曲げモーメントの照査
-      if (serviceabilityMomentForces.length > 0) {
-        rows = this.setPage(memberList, serviceabilityMomentForces, 2);
-        groupe.push({
-          title: '耐久性　縁引張応力度検討用',
-          g_name: memberList.g_name,
-          page: rows[0]
-        });
-        groupe.push({
-          title: '耐久性　永久作用',
-          g_name: memberList.g_name,
-          page: rows[1]
-        });
-      }
-
-      // 使用性曲げモーメントの照査
-      if (durabilityMomentForces.length > 0) {
-        rows = this.setPage(memberList, durabilityMomentForces, 2);
-        groupe.push({
-          title: '使用性　縁引張応力度検討用',
-          g_name: memberList.g_name,
-          page: rows[0]
-        });
-        groupe.push({
-          title: '使用性　永久作用',
-          g_name: memberList.g_name,
-          page: rows[1]
-        });
-      }
-
-      // 安全性（疲労破壊）曲げモーメントの照査
-      if (safetyFatigueMomentForces.length > 0) {
-        rows = this.setPage(memberList, safetyFatigueMomentForces, 2);
-        groupe.push({
-          title: '安全性（疲労破壊）最小応力',
-          g_name: memberList.g_name,
-          page: rows[0]
-        });
-        groupe.push({
-          title: '安全性（疲労破壊）最大応力',
-          g_name: memberList.g_name,
-          page: rows[1]
-        });
-      }
+      let page: any = {
+        g_name: g_name,
+        tables: new Array()
+      };
 
       // 安全性（破壊）曲げモーメントの照査
       if (safetyMomentForces.length > 0) {
-        rows = this.setPage(memberList, safetyMomentForces, 1);
-        groupe.push({
-          title: '安全性（破壊）',
-          g_name: memberList.g_name,
-          page: rows[0]
-        });
+        const targetRows: any[] = this.setPage(memberList, safetyMomentForces, 1);
+        const rows: any[] = this.getTableRowsOfPage(targetRows[0], currentRow);
+        this.setTables(rows, page, g_name, '安全性（破壊）');
       }
-
       // 復旧性（地震時以外）曲げモーメントの照査
       if (restorabilityMomentForces.length > 0) {
-        rows = this.setPage(memberList, restorabilityMomentForces, 1);
-        groupe.push({
-          title: '復旧性（地震時以外）',
-          g_name: memberList.g_name,
-          page: rows[0]
-        });
+        const targetRows: any[] = this.setPage(memberList, restorabilityMomentForces, 1);
+        const rows: any[] = this.getTableRowsOfPage(targetRows[0], currentRow);
+        this.setTables(rows, page, g_name, '復旧性（地震時以外）');
       }
+      /*
+            const groupe: any[] = new Array();
+            let rows: any[];
+            let rowCount: number = 0;
+      
+            // 耐久性曲げモーメントの照査
+            if (serviceabilityMomentForces.length > 0) {
+              rows = this.setPage(memberList, serviceabilityMomentForces, 2);
+              groupe.push({
+                title: '耐久性　縁引張応力度検討用',
+                g_name: memberList.g_name,
+                page: rows[0]
+              });
+              groupe.push({
+                title: '耐久性　永久作用',
+                g_name: memberList.g_name,
+                page: rows[1]
+              });
+            }
+      
+            // 使用性曲げモーメントの照査
+            if (durabilityMomentForces.length > 0) {
+              rows = this.setPage(memberList, durabilityMomentForces, 2);
+              groupe.push({
+                title: '使用性　縁引張応力度検討用',
+                g_name: memberList.g_name,
+                page: rows[0]
+              });
+              groupe.push({
+                title: '使用性　永久作用',
+                g_name: memberList.g_name,
+                page: rows[1]
+              });
+            }
+      
+            // 安全性（疲労破壊）曲げモーメントの照査
+            if (safetyFatigueMomentForces.length > 0) {
+              rows = this.setPage(memberList, safetyFatigueMomentForces, 2);
+              groupe.push({
+                title: '安全性（疲労破壊）最小応力',
+                g_name: memberList.g_name,
+                page: rows[0]
+              });
+              groupe.push({
+                title: '安全性（疲労破壊）最大応力',
+                g_name: memberList.g_name,
+                page: rows[1]
+              });
+            }
+      
+ 
+      
 
-      // 復旧性（地震時）曲げモーメントの照査
-      if (earthquakesMomentForces.length > 0) {
-        rows = this.setPage(memberList, earthquakesMomentForces, 1);
-        groupe.push({
-          title: '復旧性（地震時）',
-          g_name: memberList.g_name,
-          page: rows[0]
-        });
-      }
+      
+            // 復旧性（地震時）曲げモーメントの照査
+            if (earthquakesMomentForces.length > 0) {
+              rows = this.setPage(memberList, earthquakesMomentForces, 1);
+              groupe.push({
+                title: '復旧性（地震時）',
+                g_name: memberList.g_name,
+                page: rows[0]
+              });
+            }
+            */
 
-      this.pages.push(groupe);
+      this.pages.push(page);
     }
 
     this.isLoading = false;
@@ -152,10 +163,78 @@ export class SectionForceListComponent implements OnInit {
 
   }
 
+  private setTables(rows: any[], page: any, g_name: string, title: string): void {
+    // 最初の１つ目のテーブルは、同じページに
+    if (rows[0] !== null) {
+      const y: number = 24 + rows[0].length * 4;
+      page.tables.push({
+        title: title,
+        rows: rows[0],
+        viewBox: '0 0 180 ' + y.toString()
+      });
+    }
+    // ２つ目以降のテーブル
+    for (let i = 1; i < rows.length; i++) {
+      // ページを登録
+      this.pages.push(page);
+      page = {
+        g_name: g_name,
+        tables: new Array()
+      };
+      // 新しいテーブルを登録
+      const y: number = 24 + rows[0].length * 4;
+      const table: any = {
+        title: title,
+        rows: rows[i],
+        viewBox: '0 0 180 ' + y.toString()
+      };
+      page.tables.push(table);
+    }
+  }
+
+  private getTableRowsOfPage(targetRows: any[], currentRow: number): any[] {
+
+    const result: any[] = new Array();
+    let rows: any[] = new Array();
+    currentRow += this.rowTitleRowCount;
+
+    if (currentRow > this.rowTitleRowCount) {
+      if (this.rowCountAtPage < currentRow + targetRows.length) {
+        // 改ページが必要
+        if (this.rowTitleRowCount + targetRows.length < this.rowCountAtPage) {
+          // 次のページに収まる
+          result.push(null);
+          result.push(targetRows);
+          currentRow += targetRows.length;
+          return;
+        }
+      }
+    }
+
+    let i: number = currentRow;
+
+    for (const row of targetRows) {
+      rows.push(row);
+      i++;
+      if (this.rowCountAtPage < i) {
+        result.push(rows);
+        rows = new Array();
+        i = this.rowTitleRowCount;
+      }
+    }
+    if (i > this.rowTitleRowCount) {
+      result.push(rows);
+    }
+    currentRow = i;
+    return result;
+  }
 
   private setPage(memberList: any[], forces: any[], count: number): any[] {
 
     const result: any[] = new Array(count);
+    for (let i = 0; i < count; i++) {
+      result[i] = new Array();
+    }
 
     for (const member of memberList) {
       let tmp: any = undefined;
@@ -168,10 +247,10 @@ export class SectionForceListComponent implements OnInit {
 
           const pd: any[] = new Array();
           for (let i = 0; i < count; i++) {
-            const key: string  = 'PostData' + i.toString();
+            const key: string = 'PostData' + i.toString();
             if (key in pos) { pd.push(pos[key]); }
           }
-          
+
           for (let i = 0; i < pd.length; i++) {
             const p: any = {
               m_no: member.m_no,

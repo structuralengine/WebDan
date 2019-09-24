@@ -55,7 +55,7 @@
               <line stroke-width="0.35" x1="0" y1="22" x2="150" y2="22" />
             </g>
 
-            <ng-container *ngFor="let row of table; index as r">
+            <ng-container *ngFor="let row of table.rows; index as r">
               <!--横線-->
               <g fill="none" stroke="black">
                 <line
@@ -108,63 +108,63 @@
                 x1="7"
                 y1="12"
                 x2="7"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.20"
                 x1="19"
                 y1="12"
                 x2="19"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.20"
                 x1="33"
                 y1="12"
                 x2="33"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.35"
                 x1="59"
                 y1="12"
                 x2="59"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.20"
                 x1="77"
                 y1="17"
                 x2="77"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.20"
                 x1="95"
                 y1="17"
                 x2="95"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.35"
                 x1="104"
                 y1="12"
                 x2="104"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.20"
                 x1="122"
                 y1="17"
                 x2="122"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
               <line
                 stroke-width="0.20"
                 x1="140"
                 y1="17"
                 x2="140"
-                [attr.y2]="23 + table.length * 4"
+                [attr.y2]="23 + table.rows.length * 4"
               />
             </g>
           </svg>
