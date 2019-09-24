@@ -291,13 +291,13 @@ export class CalcServiceabilityMomentService {
       result.c = { alien: 'right', value: re.c.toFixed(1) };
     }
     if ('Cs' in re) {
-      result.Cs = { alien: 'right', value: re.Cs.toFixed() };
+      result.Cs = { alien: 'right', value: re.Cs.toFixed(0) };
     }
     if ('fai' in re) {
-      result.fai = { alien: 'right', value: re.fai.toFixed() };
+      result.fai = { alien: 'right', value: re.fai.toFixed(0) };
     }
     if ('ecu' in re) {
-      result.ecu = { alien: 'right', value: re.ecu.toFixed() };
+      result.ecu = { alien: 'right', value: re.ecu.toFixed(0) };
     }
 
     if ('k1' in re) {
@@ -307,7 +307,7 @@ export class CalcServiceabilityMomentService {
       result.k2 = { alien: 'right', value: re.k2.toFixed(1) };
     }
     if ('n' in re) {
-      result.n = { alien: 'right', value: re.n.toFixed() };
+      result.n = { alien: 'right', value: re.n.toFixed(0) };
     }
     if ('k3' in re) {
       result.k3 = { alien: 'right', value: re.k3.toFixed(1) };

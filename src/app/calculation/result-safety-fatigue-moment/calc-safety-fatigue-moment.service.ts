@@ -540,7 +540,7 @@ export class CalcSafetyFatigueMomentService {
       result.ar = { alien: 'right', value: re.ar.toFixed(3) };
     }
     if ('N' in re) {
-      result.N = { alien: 'right', value: re.N.toFixed() };
+      result.N = { alien: 'right', value: re.N.toFixed(0) };
     }
 
     if ('NA' in re) {

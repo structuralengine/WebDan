@@ -511,7 +511,7 @@ export class CalcSafetyFatigueShearForceService {
 
     // 帯鉄筋
     if ('fwud' in re) {
-      result.fwud = { alien: 'right', value: re.fwud.toFixed() };
+      result.fwud = { alien: 'right', value: re.fwud.toFixed(0) };
     }
     if ('Aw' in re) {
       result.Aw = { alien: 'right', value: re.Aw.toFixed(1) };
@@ -586,7 +586,7 @@ export class CalcSafetyFatigueShearForceService {
       result.ar = { alien: 'right', value: re.ar.toFixed(3) };
     }
     if ('N' in re) {
-      result.N = { alien: 'right', value: re.N.toFixed() };
+      result.N = { alien: 'right', value: re.N.toFixed(0) };
     }
 
     if ('NA' in re) {
