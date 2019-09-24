@@ -14,8 +14,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
   private title: string = '耐久性の照査';
   private page_index = "ap_5";
-  private isLoading = true;
-  private isFulfilled = false;
+  public isLoading = true;
+  public isFulfilled = false;
   private err: string;
   private serviceabilityMomentPages: any[];
 

@@ -12,8 +12,8 @@ import { SetPostDataService } from '../set-post-data.service';
 })
 export class ResultSafetyMomentComponent implements OnInit {
 
-  private isLoading = true;
-  private isFulfilled = false;
+  public isLoading = true;
+  public isFulfilled = false;
   private err: string;
   private safetyMomentPages: any[];
 

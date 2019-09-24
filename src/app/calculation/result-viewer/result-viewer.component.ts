@@ -23,7 +23,7 @@ import * as printJS from 'print-js';
 })
 export class ResultViewerComponent implements OnInit {
   
-  private loggedIn: boolean;
+  public loggedIn: boolean;
    // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 

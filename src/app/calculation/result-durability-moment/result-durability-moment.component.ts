@@ -14,8 +14,8 @@ export class ResultDurabilityMomentComponent implements OnInit {
 
   private title: string = '使用性の検討';
   private page_index = "ap_7";
-  private isLoading = true;
-  private isFulfilled = false;
+  public isLoading = true;
+  public isFulfilled = false;
   private err: string;
   private serviceabilityMomentPages: any[];
 
