@@ -74,7 +74,7 @@ export class ResultViewerComponent implements OnInit {
     this.PrintCss += '}';
 
     this.PrintCss += 'h3 {';
-    this.PrintCss += '  font-size: 9pt;';
+    this.PrintCss += '  font-size: 11pt;';
     this.PrintCss += ' }';
 
     this.PrintCss += '* {';
