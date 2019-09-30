@@ -73,6 +73,10 @@ export class ResultViewerComponent implements OnInit {
     this.PrintCss += 'margin: 0;';
     this.PrintCss += '}';
 
+    this.PrintCss += 'h3 {';
+    this.PrintCss += '  font-size: 9pt;';
+    this.PrintCss += ' }';
+
     this.PrintCss += '* {';
     this.PrintCss += 'font-family:"ＭＳ 明朝", "HG明朝E", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ＭＳ Ｐ明朝", serif;';
     this.PrintCss += 'margin: 0;';

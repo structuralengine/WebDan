@@ -195,11 +195,12 @@ export class SectionForceListComponent implements OnInit {
     }
     // 最初の１つ目のテーブルは、同じページに
     if (rows[0] !== null) {
-      const y: number = 24 + rows[0].length * 4;
+      const y: number = 60 + rows[0].length * 16;
       page.tables.push({
         title: title,
         rows: rows[0],
-        viewBox: '0 0 180 ' + y.toString()
+        viewBox: '0 0 568 ' + y.toString(),
+        height:  y.toString()
       });
     }
     // ２つ目以降のテーブル
@@ -212,11 +213,12 @@ export class SectionForceListComponent implements OnInit {
         tableType: tableType
       };
       // 新しいテーブルを登録
-      const y: number = 24 + rows[0].length * 4;
+      const y: number = 60 + rows[0].length * 16;
       const table: any = {
         title: title,
         rows: rows[i],
-        viewBox: '0 0 180 ' + y.toString()
+        viewBox: '0 0 568 ' + y.toString(),
+        height:  y.toString()
       };
       page.tables.push(table);
     }

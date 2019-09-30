@@ -109,10 +109,10 @@ export class InputBarsService extends InputDataService {
         b['starrup'].stirrup_n =  column1.stirrup_n;
         b['starrup'].stirrup_ss =  column1.stirrup_ss;
 
-        b['bend'].bending_dia =  column1.bending_dia;
-        b['bend'].bending_n =  column1.bending_n;
-        b['bend'].bending_ss =  column1.bending_ss;
-        b['bend'].bending_angle =  column1.bending_angle;
+        b['bend'].bending_dia =  column2.stirrup_dia;
+        b['bend'].bending_n =  column2.stirrup_n;
+        b['bend'].bending_ss =  column2.stirrup_ss;
+        b['bend'].bending_angle =  45;
 
         b.tan   = column1.haunch_height;
 

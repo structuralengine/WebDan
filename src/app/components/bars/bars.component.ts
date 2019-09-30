@@ -57,7 +57,8 @@ export class BarsComponent implements OnInit {
           }
           // 1行目
           column1['index'] = data['index'];
-          column1['position'] = data['position'];
+          const a: number = this.input.toNumber(data['position']);
+          column1['position'] = (a===null) ? '' : a.toFixed(3);
           column1['p_name'] = data['p_name'];
           column1['p_name_ex'] = data['p_name_ex'];
           column1['bh'] = data['b'];
@@ -82,11 +83,6 @@ export class BarsComponent implements OnInit {
           column1['stirrup_n'] = data['starrup'].stirrup_n;
           column1['stirrup_ss'] = data['starrup'].stirrup_ss;
 
-          column1['bending_dia'] = data['bend'].bending_dia;
-          column1['bending_n'] = data['bend'].bending_n;
-          column1['bending_ss'] = data['bend'].bending_ss; 
-          column1['bending_angle'] = data['bend'].bending_angle;
-
           column1['tan'] = data['tan']; 
           this.table_datas[i].push(column1);
 
@@ -101,6 +97,9 @@ export class BarsComponent implements OnInit {
           column2['rebar_lines'] = data['rebar2'].rebar_lines;
           column2['rebar_space'] = data['rebar2'].rebar_space;
           column2['rebar_ss'] = data['rebar2'].rebar_ss;
+          column2['stirrup_dia'] = data['bend'].bending_dia;
+          column2['stirrup_n'] = data['bend'].bending_n;
+          column2['stirrup_ss'] = data['bend'].bending_ss; 
           column2['cos'] = data['rebar2'].cos;
           column2['enable'] = data['rebar2'].enable;
 
