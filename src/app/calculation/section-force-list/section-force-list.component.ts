@@ -195,7 +195,7 @@ export class SectionForceListComponent implements OnInit {
     }
     // 最初の１つ目のテーブルは、同じページに
     if (rows[0] !== null) {
-      const y: number = 60 + rows[0].length * 16;
+      const y: number = 70 + rows[0].length * 16;
       page.tables.push({
         title: title,
         rows: rows[0],
@@ -213,7 +213,7 @@ export class SectionForceListComponent implements OnInit {
         tableType: tableType
       };
       // 新しいテーブルを登録
-      const y: number = 60 + rows[0].length * 16;
+      const y: number = 70 + rows[0].length * 16;
       const table: any = {
         title: title,
         rows: rows[i],
