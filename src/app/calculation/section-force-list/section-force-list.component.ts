@@ -78,12 +78,12 @@ export class SectionForceListComponent implements OnInit {
       if (serviceabilityMomentForces.length > 0) {
         const targetRows: any[] = this.setPage(memberList, serviceabilityMomentForces, 2);
         
-        const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
         const rows1: any[] = t1.tableRowsOfPage;
         currentRow = t1.currentRow;
         page = this.setTables(rows1, page, g_name_moment, tableType, '耐久性　縁引張応力度検討用');
 
-        const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
+        const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
         const rows2: any[] = t2.tableRowsOfPage;
         currentRow = t2.currentRow;
         page = this.setTables(rows2, page, g_name_moment, tableType, '耐久性　永久作用');
@@ -93,12 +93,12 @@ export class SectionForceListComponent implements OnInit {
       if (durabilityMomentForces.length > 0) {
         const targetRows: any[] = this.setPage(memberList, durabilityMomentForces, 2);
 
-        const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
         const rows1: any[] = t1.tableRowsOfPage;
         currentRow = t1.currentRow;
         page = this.setTables(rows1, page, g_name_moment, tableType, '使用性　縁引張応力度検討用');
 
-        const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
+        const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
         const rows2: any[] = t2.tableRowsOfPage;
         currentRow = t2.currentRow;
         page = this.setTables(rows2, page, g_name_moment, tableType, '使用性　永久作用');
