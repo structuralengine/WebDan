@@ -25,7 +25,7 @@ export class SectionForceListComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
 
-  private rowCountAtPage: number = 57; // 1ページあたり 65行
+  private rowCountAtPage: number = 80; // 1ページあたり 75行
   private rowTitleRowCount: number = 6; // タイトル行は 6行分
 
   constructor(
@@ -174,7 +174,6 @@ export class SectionForceListComponent implements OnInit {
         const t3: any = this.getTableRowsOfPage(targetRows[2], currentRow, tableType);
         const rows3: any[] = t3.tableRowsOfPage;
         currentRow = t3.currentRow;
-
         page = this.setTables(rows3, page, g_name_shear, tableType, '耐久性　変動作用');
       }
 
@@ -191,27 +190,35 @@ export class SectionForceListComponent implements OnInit {
       // 安全性（疲労破壊）せん断力に対する照査
       if (safetyFatigueShearForces.length > 0) {
         const targetRows: any[] = this.setPage(memberList, safetyFatigueShearForces, 2);
-        let rows1: any[];
-        currentRow = this.getTableRowsOfPage(targetRows[0], currentRow, rows1, tableType);
+
+        const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const rows1: any[] = t1.tableRowsOfPage;
+        currentRow = t1.currentRow;
         page = this.setTables(rows1, page, g_name_shear, tableType, '安全性（疲労破壊）最小応力');
-        let rows2: any[];
-        currentRow = this.getTableRowsOfPage(targetRows[1], currentRow, rows2, tableType);
+
+        const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
+        const rows2: any[] = t2.tableRowsOfPage;
+        currentRow = t2.currentRow;
         page = this.setTables(rows2, page, g_name_shear, tableType, '安全性（疲労破壊）最大応力');
       }
 
       // 復旧性（地震時以外）せん断力に対する照査
       if (restorabilityShearForces.length > 0) {
         const targetRows: any[] = this.setPage(memberList, restorabilityShearForces, 1);
-        let rows: any[];
-        currentRow = this.getTableRowsOfPage(targetRows[0], currentRow, rows, tableType);
+
+        const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const rows: any[] = t.tableRowsOfPage;
+        currentRow = t.currentRow;
         page = this.setTables(rows, page, g_name_shear, tableType, '復旧性（地震時以外）');
       }
 
       // 復旧性（地震時）せん断力に対する照査
       if (earthquakesShearForces.length > 0) {
         const targetRows: any[] = this.setPage(memberList, earthquakesShearForces, 1);
-        let rows: any[];
-        currentRow = this.getTableRowsOfPage(targetRows[0], currentRow, rows, tableType);
+
+        const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const rows: any[] = t.tableRowsOfPage;
+        currentRow = t.currentRow;
         page = this.setTables(rows, page, g_name_shear, tableType, '復旧性（地震時）');
       }
 
@@ -259,7 +266,7 @@ export class SectionForceListComponent implements OnInit {
       };
       // 新しいテーブルを登録
       let y: number = 70;
-      y += (tableType===1) ? rows[0].length * 16 : rows[0].length * 32;
+      y += (tableType===1) ? rows[i].length * 16 : rows[i].length * 32;
       const table: any = {
         title: title,
         rows: rows[i],
@@ -287,8 +294,10 @@ export class SectionForceListComponent implements OnInit {
           // 次のページに収まる
           tableRowsOfPage.push(null);
           tableRowsOfPage.push(targetRows);
-          currentRow += RowsCount;
-          return;
+          currentRow = this.rowTitleRowCount + RowsCount;
+          result['currentRow'] = currentRow;
+          result['tableRowsOfPage'] = tableRowsOfPage;
+          return result;
         }
       }
     }

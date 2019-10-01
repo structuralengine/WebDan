@@ -168,7 +168,10 @@
                   <text x="115" [attr.y]="60 + r * 32" text-anchor="start">
                     {{ row.p_name_ex }}
                   </text>
-
+                  <text x="228" [attr.y]="60 + r * 32" text-anchor="middle">
+                    上側
+                  </text>
+  
                   <text x="310" [attr.y]="60 + r * 32" text-anchor="end">
                     {{ row.upper.Vd }}
                   </text>
@@ -182,18 +185,21 @@
                     {{ row.upper.comb }}
                   </text>
 
+                  <text x="228" [attr.y]="76 + r * 32" text-anchor="middle">
+                    下側
+                  </text>
                   <text x="310" [attr.y]="76 + r * 32" text-anchor="end">
-                      {{ row.lower.Vd }}
-                    </text>
-                    <text x="380" [attr.y]="76 + r * 32" text-anchor="end">
-                      {{ row.lower.Md }}
-                    </text>
-                    <text x="445" [attr.y]="76 + r * 32" text-anchor="end">
-                      {{ row.lower.Nd }}
-                    </text>
-                    <text x="470" [attr.y]="76 + r * 32" text-anchor="middle">
-                      {{ row.lower.comb }}
-                    </text>
+                    {{ row.lower.Vd }}
+                  </text>
+                  <text x="380" [attr.y]="76 + r * 32" text-anchor="end">
+                    {{ row.lower.Md }}
+                  </text>
+                  <text x="445" [attr.y]="76 + r * 32" text-anchor="end">
+                    {{ row.lower.Nd }}
+                  </text>
+                  <text x="470" [attr.y]="76 + r * 32" text-anchor="middle">
+                    {{ row.lower.comb }}
+                  </text>
                 </g>
               </ng-container>
               
