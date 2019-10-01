@@ -21,10 +21,10 @@
 
               <!--column Header-->
               <g font-size="10pt" text-anchor="middle">
-                <text x="12" y="27">部材</text>
-                <text x="12" y="43">番号</text>
-                <text x="39" y="27">算出</text>
-                <text x="39" y="43">番号</text>
+                <text x="14" y="27">部材</text>
+                <text x="14" y="43">番号</text>
+                <text x="40" y="27">算出</text>
+                <text x="40" y="43">番号</text>
 
                 <text x="80" y="27">算出点</text>
                 <text x="155" y="27">算 出 点 名</text>
@@ -120,36 +120,37 @@
 
               <!--column Header-->
               <g font-size="10pt" text-anchor="middle">
-                <text x="12" y="27">部材</text>
-                <text x="12" y="43">番号</text>
-                <text x="39" y="27">算出</text>
-                <text x="39" y="43">番号</text>
+                <text x="14" y="27">部材</text>
+                <text x="14" y="43">番号</text>
+                <text x="40" y="27">算出</text>
+                <text x="40" y="43">番号</text>
                 
                 <text x="80" y="27">算出点</text>
                 <text x="155" y="27">算 出 点 名</text>
-                <text x="299" y="27">上　　 側</text>
-                <text x="470" y="27">下　　 側</text>
+                <text x="283" y="27">V</text>
+                <text x="350" y="27">M</text>
+                <text x="420" y="27">N</text> 
+                <text x="470" y="27">comb</text>
 
-                <text x="245" y="44">V (kN)</text>
-                <text x="315" y="44">M (kN･m)</text>
-                <text x="385" y="44">N (kN)</text>
-                <text x="438" y="44">comb</text>
+                <text x="283" y="44">(kN)</text>
+                <text x="350" y="44">(kN･m)</text>
+                <text x="420" y="44">(kN)</text>
+                
               </g>
               <!--横線-->
               <g fill="none" stroke="black">
-                <line stroke-width="0.50" x1="0" y1="15" x2="568" y2="15" />
-                <line stroke-width="0.25" x1="210" y1="31" x2="568" y2="31" />
-                <line stroke-width="0.50" x1="0" y1="47" x2="568" y2="47" />
+                <line stroke-width="0.50" x1="0" y1="15" x2="490" y2="15" />
+                <line stroke-width="0.50" x1="0" y1="47" x2="490" y2="47" />
               </g>
               
               <ng-container *ngFor="let row of table.rows; index as r">
                 <!--横線-->
                 <g fill="none" stroke="black">
                   <ng-container *ngIf="r != table.rows.length-1">
-                    <line stroke-width="0.25" x1="0" [attr.y1]="63 + r * 16" x2="568" [attr.y2]="63 + r * 16" />
+                    <line stroke-width="0.25" x1="0" [attr.y1]="63 + r * 16" x2="490" [attr.y2]="63 + r * 16" />
                   </ng-container>
                   <ng-container *ngIf="r == table.rows.length-1">
-                    <line stroke-width="0.50" x1="0" [attr.y1]="63 + r * 16" x2="568" [attr.y2]="63 + r * 16" />
+                    <line stroke-width="0.50" x1="0" [attr.y1]="63 + r * 16" x2="490" [attr.y2]="63 + r * 16" />
                   </ng-container>
                 </g>
               
@@ -168,16 +169,16 @@
                     {{ row.p_name_ex }}
                   </text>
 
-                  <text x="275" [attr.y]="60 + r * 16" text-anchor="end">
+                  <text x="310" [attr.y]="60 + r * 16" text-anchor="end">
                     {{ row.upper.Vd }}
                   </text>
-                  <text x="345" [attr.y]="60 + r * 16" text-anchor="end">
+                  <text x="380" [attr.y]="60 + r * 16" text-anchor="end">
                     {{ row.upper.Md }}
                   </text>
-                  <text x="415" [attr.y]="60 + r * 16" text-anchor="end">
+                  <text x="445" [attr.y]="60 + r * 16" text-anchor="end">
                     {{ row.upper.Nd }}
                   </text>
-                  <text x="438" [attr.y]="60 + r * 16" text-anchor="middle">
+                  <text x="470" [attr.y]="60 + r * 16" text-anchor="middle">
                     {{ row.lower.comb }}
                   </text>
 
@@ -189,12 +190,11 @@
                 <line stroke-width="0.25" x1="27" y1="15" x2="27" [attr.y2]="47 + table.rows.length * 16" />
                 <line stroke-width="0.25" x1="54" y1="15" x2="54" [attr.y2]="47 + table.rows.length * 16" />
                 <line stroke-width="0.25" x1="110" y1="15" x2="110" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.50" x1="210" y1="15" x2="210" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="280" y1="31" x2="280" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="350" y1="31" x2="350" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.50" x1="385" y1="15" x2="385" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="455" y1="31" x2="455" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="525" y1="31" x2="525" [attr.y2]="47 + table.rows.length * 16" />
+                <line stroke-width="0.25" x1="210" y1="47" x2="210" [attr.y2]="47 + table.rows.length * 16" />
+                <line stroke-width="0.50" x1="245" y1="15" x2="245" [attr.y2]="47 + table.rows.length * 16" />
+                <line stroke-width="0.25" x1="315" y1="15" x2="315" [attr.y2]="47 + table.rows.length * 16" />
+                <line stroke-width="0.25" x1="385" y1="15" x2="385" [attr.y2]="47 + table.rows.length * 16" />
+                <line stroke-width="0.25" x1="450" y1="15" x2="450" [attr.y2]="47 + table.rows.length * 16" />
               </g>
             </svg>
           </ng-container>
