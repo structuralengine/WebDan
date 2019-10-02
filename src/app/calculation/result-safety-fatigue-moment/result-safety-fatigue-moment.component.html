@@ -313,7 +313,7 @@
         <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
           xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
           <!--タイトル-->
-          <text x="0" y="42" font-size="10pt" text-anchor="start">
+          <text x="0" y="42" font-size="9pt" text-anchor="start">
               {{ pages.caption }} (その{{ i + 1 }})
             </text>
             <!--横線-->
@@ -370,7 +370,7 @@
               <line stroke-width="0.25" x1="476" y1="45" x2="476" y2="896" />
             </g>
             <!--Row Header-->
-            <g font-size="10pt" text-anchor="middle">
+            <g font-size="9pt" text-anchor="middle">
               <text x="57" y="60">部材名称</text>
               <text x="57" y="79">位　　置</text>
               <text x="57" y="98">断面番号</text>
@@ -501,7 +501,7 @@
               <text x="57" y="892">照査結果</text>
             </g>
           <!--calclate-->
-          <g font-size="10pt">
+          <g font-size="9pt">
             <ng-container *ngFor="let column of pages.columns; index as c">
               <ng-container *ngFor="let item of column; index as r">
                 <ng-container *ngIf="item.value != ''">
