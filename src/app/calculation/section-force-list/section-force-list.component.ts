@@ -25,7 +25,7 @@ export class SectionForceListComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
 
-  private rowCountAtPage: number = 80; // 1ページあたり 75行
+  private rowCountAtPage: number = 70; // 1ページあたり 75行
   private rowTitleRowCount: number = 6; // タイトル行は 6行分
 
   constructor(
