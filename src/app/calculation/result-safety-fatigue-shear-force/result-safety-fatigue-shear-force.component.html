@@ -9,243 +9,112 @@
     <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
       <!--タイトル-->
-    <g font-size="10pt" text-anchor="start">
-      <text x="0" y="11">(2)せん断力に対する照査</text>
-      <text x="70" y="11">【ＲＣ標準 7.3.3】</text>
+      <g font-size="10pt" text-anchor="start">
+          <text x="0" y="42">(2)せん断力に対する照査</text>
+          <text x="265" y="42">【ＲＣ標準 7.3.3】</text>
+    
+          <text x="26" y="79">➀ 部材の照査</text>
+          <text x="38" y="117">せん断力を受け、せん断補強鉄筋を用いる部材の疲労に関する照査は、設計変動</text>
+          <text x="38" y="136">応力度σwrdを設計応答値、設計疲労強度frdを部材係数で除した値を設計</text>
+          <text x="38" y="155">限度地とし、次式により行う。</text>
+          <text x="76" y="193">γ<tspan baseline-shift="0%" font-size="8pt">i</tspan>・</text>
+          <text x="113" y="193">IRd / ILd  ≦　1.0</text>
+    
+          <text x="57" y="231">ここに、　　　γ<tspan baseline-shift="0%" font-size="8pt">i</tspan></text> 
+          <text x="151" y="231">： 構造物係数　(＝ 1.0)</text>
+          <text x="113" y="250">IRd</text> 
+          <text x="151" y="250">： 設計応答値　(＝ σwrd)</text>
+          <text x="113" y="268">ILd</text> 
+          <text x="151" y="268">： 設計限界値　(＝ frd/γb)</text>
+          <text x="113" y="287">γb</text> 
+          <text x="151" y="287">： 部材係数　(＝ 1.0)</text>
+          
+          <text x="26" y="306">➁ 列車本数</text>
+    　　　　　　 <text x="76" y="344">A列車荷重　：　旅客列車</text>
+    　　　　　　 <text x="265" y="344">→</text>
+    　　　　　　 <text x="302" y="344">80本/日</text>　
+    　　　　　　 <text x="76" y="363">B列車荷重　：　貨物列車</text>
+    　　　　　　 <text x="265" y="363">→</text>
+    　　　　　　 <text x="302" y="363">75本/日</text>　  
+    
+          <text x="26" y="401">➂ 設計変動応力度σwpdと最小応力度σminの算定</text> 
+          <text x="38" y="439">標準列車荷重による鉄筋(スターラップ)の設計変動応力度σwpd及び最小</text>
+          <text x="38" y="458">応力度σminを算定する。鉄筋(スターラップ)の最小応力度σminは、鉄筋</text>
+          <text x="38" y="476">(スターラップ)に生じる永久作用による設計応力度σwpdである。</text>
+          <text x="38" y="495">なお、σwrdおよびσwpdは、次式により算定する。</text>
+    
+          <text x="151" y="533">（Vpd+Vrd-Kr・Vcd)・S</text>
+          <text x="371" y="533">Vrd</text>
+          <text x="76" y="541">σwrd ＝</text>
+          <text x="302" y="541">・</text>
+          <text x="163" y="552">Aw・Z・(cosθ∔sinθ)</text>
+          <text x="340" y="552">Vpd+Vrd+Vcd</text>
+    
+          <text x="151" y="590">（Vpd+Vrd-Kr・Vcd)・S</text>
+          <text x="352" y="590">Vrd+Vcd</text>
+          <text x="76" y="597">σwpd ＝</text>
+          <text x="302" y="597">・</text>
+          <text x="163" y="609">Aw・Z・(cosθ∔sinθ)</text>
+          <text x="340" y="609">Vpd+Vrd+Vcd</text>
+    
+          <text x="57" y="647">ここに、　　　Vcd</text> 
+          <text x="151" y="647">： 永久作用による設計せん断力(N)</text>
+          <text x="113" y="665">Vrd</text> 
+          <text x="151" y="665">： 変動作用による設計せん断力(N)</text>
+          <text x="113" y="684">Vcd</text> 
+          <text x="151" y="684">： せん断補強鉄筋鋼材を用いない棒部材の設計せん断耐力</text>
+          <text x="170" y="703">(この場合の部材係数γbは1.3とする)</text> 
+          <text x="121" y="722">kr</text> 
+          <text x="151" y="722">： 変動作用の頻度の影響を考慮するための係数で、一般に</text>
+          <text x="170" y="741">0.5とする。</text> 
+          <text x="121" y="760">S</text> 
+          <text x="151" y="760">： せん断補強鉄筋の配置間隔(mm)</text>
+          <text x="121" y="779">Aw</text> 
+          <text x="151" y="779">： 区間Sにおけるせん断補強鉄筋の総断面積</text>
+          <text x="420" y="779">
+              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
+            </text>
+          <text x="117" y="798">θ</text> 
+          <text x="151" y="798">： せん断補強鉄筋が部材軸となす角度</text>
+          <text x="121" y="817">Z</text> 
+          <text x="151" y="817">： 圧縮応力の合力の載荷位置から引張鋼材の図心までの距離で、</text>
+          <text x="170" y="836">一般にd/1.15とする。</text> 
+          <text x="121" y="855">d</text> 
+          <text x="151" y="855">： 有効高さ(mm)</text> 
+    
+          <text x="26" y="892">➃ 200万回　引張疲労強度fsr200の算定</text> 
+          <text x="38" y="930">曲げモーメントに対する照査と同様に算定する。</text>
+    
+          <!--横線-->
+        <g fill="none" stroke="black">
+            <line stroke-width="0.30" x1="136" y1="537" x2="295" y2="537" />
+            <line stroke-width="0.30" x1="321" y1="537" x2="423" y2="537" />
 
-      <text x="7" y="21">➀ 部材の照査</text>
-      <text x="10" y="31">せん断力を受け、せん断補強鉄筋を用いる部材の疲労に関する照査は、設計変動</text>
-      <text x="10" y="36">応力度σwrdを設計応答値、設計疲労強度frdを部材係数で除した値を設計</text>
-      <text x="10" y="41">限度地とし、次式により行う。</text>
-      <text x="20" y="51">γ<tspan baseline-shift="0%" font-size="8pt">i</tspan>・</text>
-      <text x="30" y="51">IRd / ILd  ≦　1.0</text>
-
-      <text x="15" y="61">ここに、　　　γ<tspan baseline-shift="0%" font-size="8pt">i</tspan></text> 
-      <text x="40" y="61">： 構造物係数　(＝ 1.0)</text>
-      <text x="30" y="66">IRd</text> 
-      <text x="40" y="66">： 設計応答値　(＝ σwrd)</text>
-      <text x="30" y="71">ILd</text> 
-      <text x="40" y="71">： 設計限界値　(＝ frd/γb)</text>
-      <text x="30" y="76">γb</text> 
-      <text x="40" y="76">： 部材係数　(＝ 1.0)</text>
-      
-      <text x="7" y="81">➁ 列車本数</text>
-　　　　　　 <text x="20" y="91">A列車荷重　：　旅客列車</text>
-　　　　　　 <text x="70" y="91">→</text>
-　　　　　　 <text x="80" y="91">80本/日</text>　
-　　　　　　 <text x="20" y="96">B列車荷重　：　貨物列車</text>
-　　　　　　 <text x="70" y="96">→</text>
-　　　　　　 <text x="80" y="96">75本/日</text>　  
-
-      <text x="7" y="106">➂ 設計変動応力度σwpdと最小応力度σminの算定</text> 
-      <text x="10" y="116">標準列車荷重による鉄筋(スターラップ)の設計変動応力度σwpd及び最小</text>
-      <text x="10" y="121">応力度σminを算定する。鉄筋(スターラップ)の最小応力度σminは、鉄筋</text>
-      <text x="10" y="126">(スターラップ)に生じる永久作用による設計応力度σwpdである。</text>
-      <text x="10" y="131">なお、σwrdおよびσwpdは、次式により算定する。</text>
-
-      <text x="40" y="141">（Vpd+Vrd-Kr・Vcd)・S</text>
-      <text x="98" y="141">Vrd</text>
-      <text x="20" y="143">σwrd ＝</text>
-      <text x="80" y="143">・</text>
-      <text x="43" y="146">Aw・Z・(cosθ∔sinθ)</text>
-      <text x="90" y="146">Vpd+Vrd+Vcd</text>
-
-      <text x="40" y="156">（Vpd+Vrd-Kr・Vcd)・S</text>
-      <text x="93" y="156">Vrd+Vcd</text>
-      <text x="20" y="158">σwpd ＝</text>
-      <text x="80" y="158">・</text>
-      <text x="43" y="161">Aw・Z・(cosθ∔sinθ)</text>
-      <text x="90" y="161">Vpd+Vrd+Vcd</text>
-
-      <text x="15" y="171">ここに、　　　Vcd</text> 
-      <text x="40" y="171">： 永久作用による設計せん断力(N)</text>
-      <text x="30" y="176">Vrd</text> 
-      <text x="40" y="176">： 変動作用による設計せん断力(N)</text>
-      <text x="30" y="181">Vcd</text> 
-      <text x="40" y="181">： せん断補強鉄筋鋼材を用いない棒部材の設計せん断耐力</text>
-      <text x="45" y="186">(この場合の部材係数γbは1.3とする)</text> 
-      <text x="32" y="191">kr</text> 
-      <text x="40" y="191">： 変動作用の頻度の影響を考慮するための係数で、一般に</text>
-      <text x="45" y="196">0.5とする。</text> 
-      <text x="32" y="201">S</text> 
-      <text x="40" y="201">： せん断補強鉄筋の配置間隔(mm)</text>
-      <text x="32" y="206">Aw</text> 
-      <text x="40" y="206">： 区間Sにおけるせん断補強鉄筋の総断面積</text>
-      <text x="108" y="206">
-          (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-        </text>
-      <text x="31" y="211">θ</text> 
-      <text x="40" y="211">： せん断補強鉄筋が部材軸となす角度</text>
-      <text x="32" y="216">Z</text> 
-      <text x="40" y="216">： 圧縮応力の合力の載荷位置から引張鋼材の図心までの距離で、</text>
-      <text x="45" y="221">一般にd/1.15とする。</text> 
-      <text x="32" y="226">d</text> 
-      <text x="40" y="226">： 有効高さ(mm)</text> 
-
-      <text x="7" y="236">➃ 200万回　引張疲労強度fsr200の算定</text> 
-      <text x="10" y="246">曲げモーメントに対する照査と同様に算定する。</text>
-
-      <!--横線-->
-    <g fill="none" stroke="black">
-        <line stroke-width="0.30" x1="36" y1="142" x2="78" y2="142" />
-        <line stroke-width="0.30" x1="85" y1="142" x2="112" y2="142" />
-        
-      </g>
-
-     
-<!--  
-
-
-<section class="sheet">
-解説ページが入る
-</section> 
--->
-</g>
+            <line stroke-width="0.30" x1="136" y1="593" x2="295" y2="593" />
+            <line stroke-width="0.30" x1="321" y1="593" x2="423" y2="593" />
+           
+         </g>
+ 
+    </g>
 </svg>
 </section>
 
 <section class="sheet">
-    <svg width="160mm" height="260" viewBox="0 0 160 260" xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
+  <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
+  xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
       <!--タイトル-->
-    <g font-size="10pt" text-anchor="start">
-      <text x="7" y="11">➄ S-N線図の係数の選択</text>
-      <text x="10" y="21">曲げモーメントに対する照査と同様に算定する。</text>
+      <g font-size="10pt" text-anchor="start">
+          <text x="26" y="42">➄ S-N線図の係数の選択</text>
+          <text x="38" y="79">曲げモーメントに対する照査と同様に算定する。</text>
+    
+          <text x="26" y="117">➅ 総等価繰返し回数の算定</text>
+          <text x="38" y="155">曲げモーメントに対する照査と同様に算定する。</text>
+  
+          <text x="26" y="193">➆ 設計引張疲労強度frdの算定</text>
+          <text x="38" y="231">総等価繰返し回数ΣＮを用いて、設計引張疲労強度frdを求める。</text>
+          <text x="38" y="250">また、算定方法は、曲げモーメントに対する照査と同様である。</text>
 
-      <text x="7" y="31">➅ 総等価繰返し回数の算定</text>
-      <text x="10" y="41">曲げモーメントに対する照査と同様に算定する。</text>
-      <text x="0" y="51">スパンl</text>
-      <text x="15" y="51">：</text>
-      <text x="20" y="51">4.20 m,</text>
-      <text x="40" y="51">8.60 m</text>
-      <text x="0" y="61">(b)設計変動断面力：せん断力</text>
-      <text x="80" y="61">【RCマニュアル解説表7.3.4.3　p37-1】</text>
-
-      <text x="40" y="67">列車1編成当りの等価繰返し回数(回)</text>
-      <text x="112" y="67">標準列車荷重に対する断面力比</text>
-      <text x="6" y="70">部材の</text>
-      <text x="4" y="75">構造形式</text>
-      <text x="20" y="70">スパン</text>
-      <text x="22" y="75">l(m)</text>
-      <text x="33" y="72">N<tspan baseline-shift="0%" font-size="8pt">A</tspan>(k=0.06)</text>  
-      <text x="53" y="72">N<tspan baseline-shift="0%" font-size="8pt">B</tspan>(k=0.06)</text> 
-      <text x="73" y="72">N<tspan baseline-shift="0%" font-size="8pt">A</tspan>(k=0.12)</text> 
-      <text x="93" y="72">N<tspan baseline-shift="0%" font-size="8pt">B</tspan>(k=0.12)</text>
-      <text x="118" y="72">S<tspan baseline-shift="0%" font-size="8pt">A</tspan>/</text>
-      <text x="123" y="72">S<tspan baseline-shift="0%" font-size="8pt">C</tspan></text>
-      <text x="145" y="72">S<tspan baseline-shift="0%" font-size="8pt">B</tspan>/</text>
-      <text x="150" y="72">S<tspan baseline-shift="0%" font-size="8pt">C</tspan></text>
-
-      <text x="37" y="77">支点</text>
-      <text x="57" y="77">支点</text>
-      <text x="77" y="77">支点</text>
-      <text x="97" y="77">支点</text>
-      <text x="120" y="77">支点</text>
-      <text x="145" y="77">支点</text>
-      <text x="24" y="82">4</text>
-      <text x="22" y="87">4.20</text>
-      <text x="24" y="92">5</text>
-      <text x="24" y="97">8</text>
-      <text x="22" y="102">8.60</text>
-      <text x="24" y="107">9</text>
-      <text x="0" y="95">両端固定梁</text>
-      <text x="41" y="82">15.57</text>
-      <text x="41" y="87">15.06</text>
-      <text x="41" y="92">13.04</text>
-      <text x="42" y="97">7.82</text>
-      <text x="42" y="102">7.09</text>
-      <text x="42" y="107">6.60</text>
-      <text x="61" y="82">47.75</text>
-      <text x="61" y="87">46.10</text>
-      <text x="61" y="92">39.50</text>
-      <text x="62" y="97">2.56</text>
-      <text x="62" y="102">2.25</text>
-      <text x="62" y="107">2.04</text>
-      <text x="81" y="82">17.91</text>
-      <text x="81" y="87">17.40</text>
-      <text x="81" y="92">15.38</text>
-      <text x="82" y="97">9.87</text>
-      <text x="82" y="102">9.11</text>
-      <text x="82" y="107">8.61</text> 
-      <text x="101" y="82">48.63</text>
-      <text x="101" y="87">47.72</text>
-      <text x="101" y="92">44.08</text>
-      <text x="102" y="97">7.47</text>
-      <text x="102" y="102">6.61</text>
-      <text x="102" y="107">6.04</text> 
-      <text x="126" y="82">0.725</text>
-      <text x="126" y="87">0.726</text>
-      <text x="126" y="92">0.729</text>
-      <text x="126" y="97">0.655</text>
-      <text x="126" y="102">0.652</text>
-      <text x="126" y="107">0.648</text>
-      <text x="151" y="82">0.895</text>
-      <text x="151" y="87">0.894</text>
-      <text x="151" y="92">0.892</text>
-      <text x="151" y="97">0.886</text>
-      <text x="151" y="102">0.885</text>
-      <text x="151" y="107">0.885</text> 
-
-      <text x="0" y="117">スパンl =</text>
-      <text x="30" y="117">4.20 m</text>
-      <text x="5" y="122">支点 ：k=</text>
-      <text x="30" y="122">0.06</text>
-      <text x="5" y="127">ΣＮ = 365  ×  100  ×  80  ×  15.06  ×</text>
-      <text x="65" y="127">
-          0.726<tspan baseline-shift="18%" font-size="8pt">1/0.06</tspan> </text>
-      <text x="25" y="132">+  365 × 100 × 75 × 46.10 ×</text>
-      <text x="80" y="132">
-            0.894<tspan baseline-shift="18%" font-size="8pt">1/0.06</tspan></text>
-      <text x="110" y="132">＝　19710.6  ×</text>
-      <text x="140" y="132">
-            10<tspan baseline-shift="18%" font-size="8pt">3</tspan>回</text>
-
-      <text x="0" y="142">スパンl =</text>
-      <text x="30" y="142">4.20 m</text>
-      <text x="5" y="147">支点 ：k=</text>
-      <text x="30" y="147">0.06</text>
-      <text x="5" y="152">ΣＮ = 365  ×  100  ×  80  ×  7.09  ×</text>
-      <text x="65" y="152">
-          0.651<tspan baseline-shift="18%" font-size="8pt">1/0.06</tspan> </text>
-      <text x="25" y="157">+  365 × 100 × 75 × 2.25 ×</text>
-      <text x="80" y="157">
-         0.885<tspan baseline-shift="18%" font-size="8pt">1/0.06</tspan></text>
-      <text x="110" y="157">＝　820.2  ×</text>
-      <text x="140" y="157">
-        10<tspan baseline-shift="18%" font-size="8pt">3</tspan>回</text>
-
-      <text x="7" y="167">➆ 設計引張疲労強度frdの算定</text>
-      <text x="10" y="177">総等価繰返し回数ΣＮを用いて、設計引張疲労強度frdを求める。</text>
-      <text x="10" y="182">また、算定方法は、曲げモーメントに対する照査と同様である。</text>
-       
-
- 
-
-
-
-      <!--横線-->
-      <g fill="none" stroke="black">
-          <line stroke-width="0.50" x1="0" y1="63" x2="160" y2="63" />
-          <line stroke-width="0.50" x1="30" y1="68" x2="160" y2="68" />
-          <line stroke-width="0.50" x1="30" y1="73" x2="160" y2="73" />
-          <line stroke-width="0.50" x1="0" y1="78" x2="160" y2="78" />
-          <line stroke-width="0.50" x1="20" y1="93" x2="160" y2="93" />
-          <line stroke-width="0.50" x1="0" y1="108" x2="160" y2="108"/>
-         </g> 
-
-        <!--縦線-->
-        <g fill="none" stroke="black">
-          <line stroke-width="0.50" x1="20" y1="63" x2="20" y2="108" />
-          <line stroke-width="0.50" x1="30" y1="63" x2="30" y2="108" />
-          <line stroke-width="0.50" x1="50" y1="68" x2="50" y2="108" />
-          <line stroke-width="0.50" x1="70" y1="68" x2="70" y2="108" />
-          <line stroke-width="0.50" x1="90" y1="68" x2="90" y2="108" />
-          <line stroke-width="0.50" x1="110" y1="63" x2="110" y2="108" />
-          <line stroke-width="0.50" x1="135" y1="68" x2="135" y2="108" />
         </g>
-
-
-    </g>
   </svg>
   </section>
 
@@ -322,8 +191,8 @@
             <text x="57" y="72">位　　置</text>
             <text x="57" y="87">断面番号</text>
 
-            <text x="30" y="102">B Bf</text><text x="20" y="27">(mm)</text>
-            <text x="30" y="117">H Ht</text><text x="20" y="31">(mm)</text>
+            <text x="30" y="102">B Bf</text><text x="70" y="102">(mm)</text>
+            <text x="30" y="117">H Ht</text><text x="70" y="117">(mm)</text>
             <text x="57" y="132">tanθc+tanθt(mm)</text>
 
             <text x="30" y="147">Ast</text>
@@ -331,7 +200,7 @@
               (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
             </text>
             <text x="57" y="163"></text>
-            <text x="30" y="178">dast</text><text x="20" y="47">(mm)</text>
+            <text x="30" y="178">dast</text><text x="70" y="178">(mm)</text>
 
             <text x="30" y="193">f'ck</text>
             <text x="76" y="193">
@@ -365,23 +234,23 @@
             <text x="76" y="314">
               (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
             </text>
-            <text x="30" y="329">θ</text><text x="20" y="87">(° )</text>
-            <text x="30" y="344">S</text><text x="20" y="91">(mm)</text>
+            <text x="30" y="329">θ</text><text x="70" y="329">(° )</text>
+            <text x="30" y="344">S</text><text x="70" y="344">(mm)</text>
 
-            <text x="30" y="359">Vpd</text><text x="20" y="95">(kN)</text>
-            <text x="30" y="374">Mpd</text><text x="20" y="99">(kN)</text>
-            <text x="30" y="389">N'pd</text><text x="20" y="103">(kN)</text>
+            <text x="30" y="359">Vpd</text><text x="70" y="359">(kN)</text>
+            <text x="30" y="374">Mpd</text><text x="70" y="374">(kN)</text>
+            <text x="30" y="389">N'pd</text><text x="70" y="389">(kN)</text>
 
-            <text x="30" y="405">Vrd</text><text x="20" y="107">(kN)</text>
-            <text x="30" y="420">Mrd</text><text x="20" y="111">(kN)</text>
-            <text x="30" y="435">N'rd</text><text x="20" y="115">(kN)</text>
+            <text x="30" y="405">Vrd</text><text x="70" y="405">(kN)</text>
+            <text x="30" y="420">Mrd</text><text x="70" y="420">(kN)</text>
+            <text x="30" y="435">N'rd</text><text x="70" y="435">(kN)</text>
 
             <text x="30" y="450">fvcd</text>
             <text x="76" y="450">
               (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
             </text>
             <text x="57" y="465">γbc</text>
-            <text x="30" y="480">Vcd</text><text x="20" y="127">(kN)</text>
+            <text x="30" y="480">Vcd</text><text x="70" y="480">(kN)</text>
 
             <text x="57" y="495">Kr</text>
             <text x="30" y="510">σspd</text>
@@ -404,7 +273,7 @@
             <text x="30" y="571">γi・σsrd/(fsr200/γb)</text>
             <text x="57" y="586">Κ</text>
             <text x="57" y="601">鉄筋補正　αr</text>
-            <text x="30" y="616">ΣＮ</text><text x="20" y="163">(回)</text>
+            <text x="30" y="616">ΣＮ</text><text x="70" y="616">(回)</text>
             <text x="57" y="631">NA</text>
             <text x="57" y="647">NB</text>
             <text x="57" y="662">SA/SC</text>
@@ -428,9 +297,9 @@
               <ng-container *ngFor="let item of column; index as r">
                 <ng-container *ngIf="item.value != ''">
                     <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="199+c*91"
-                    [attr.y]="16+r*19">{{item.value}}</text>
+                    [attr.y]="57+r*15.1">{{item.value}}</text>
                   <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="159+c*91"
-                    [attr.y]="16+r*19">{{item.value}}</text>
+                    [attr.y]="57+r*15.1">{{item.value}}</text>
                 </ng-container>
               </ng-container>
             </ng-container>
