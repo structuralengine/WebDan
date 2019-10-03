@@ -1,7 +1,6 @@
 import { Component, ViewChild } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
-import { Router, NavigationEnd } from '@angular/router';
-import { InputDataService } from './providers/input-data.service';
+import { ConfigService } from './providers/config.service';
 
 @Component({
   selector: 'app-root',
@@ -12,13 +11,13 @@ export class AppComponent {
   baseUrl: string;
   project: string;
 
-
   isCalculated: boolean;
   isManual: boolean;
 
+  activeComponentRef: any;
+
   constructor(platformLocation: PlatformLocation,
-              private _router: Router,
-              private input: InputDataService) {
+              private config: ConfigService) {
 
     const location = (platformLocation as any).location;
     this.baseUrl = location.origin + location.pathname;
@@ -33,8 +32,17 @@ export class AppComponent {
   ngOnInit() {
   }
 
+
   dialogClose(): void {
     this.deactiveButtons();
+  }
+
+  // 画面遷移したとき現在表示中のコンポーネントを覚えておく
+  onActivate(componentRef: any): void {
+    this.config.setActiveComponent(componentRef);
+  }
+  onDeactivate(componentRef: any): void {
+    this.config.setActiveComponent(null);
   }
 
   activePageChenge(id): void {

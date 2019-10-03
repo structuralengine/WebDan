@@ -23,6 +23,7 @@ import { InputBasicInformationService } from './components/basic-information/inp
 import { InputMembersService } from './components/members/input-members.service';
 import { InputDesignPointsService } from './components/design-points/input-design-points.service';
 import { InputBarsService } from './components/bars/input-bars.service';
+import { InputSteelsService } from './components/steels/input-steels.service';
 import { InputFatiguesService } from './components/fatigues/input-fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
 import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
@@ -30,6 +31,7 @@ import { InputCalclationPrintService } from './components/calculation-print/inpu
 import { SaveDataService } from './providers/save-data.service';
 
 import { UserInfoService } from './providers/user-info.service';
+import { ConfigService } from './/providers/config.service';
 
 import { MenuComponent } from './components/menu/menu.component';
 import { LoginDialogComponent } from './components/login-dialog/login-dialog.component';
@@ -79,6 +81,7 @@ import { SetSectionService} from './calculation/set-section.service';
 import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { SetFatigueService } from './calculation/set-fatigue.service';
+import { SteelsComponent } from './components/steels/steels.component';
 
 @NgModule({
   imports: [
@@ -122,7 +125,8 @@ import { SetFatigueService } from './calculation/set-fatigue.service';
     ResultEarthquakesMomentComponent,
     ResultEarthquakesShearForceComponent,
     ResultSummaryTableComponent,
-    SectionForceListComponent
+    SectionForceListComponent,
+    SteelsComponent
   ],
   entryComponents: [
     LoginDialogComponent,
@@ -131,12 +135,14 @@ import { SetFatigueService } from './calculation/set-fatigue.service';
   ],
   providers: [
     UserInfoService,
+    ConfigService,
 
     InputDataService,
     InputBasicInformationService,
     InputMembersService,
     InputDesignPointsService,
     InputBarsService,
+    InputSteelsService,
     InputFatiguesService,
     InputSafetyFactorsMaterialStrengthsService,
     InputSectionForcesService,

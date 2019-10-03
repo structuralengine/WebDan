@@ -8,12 +8,47 @@ fieldset {
  
 }
 
+.tabContent{
+  margin: 15px;
+}
 
 .safety-factors, .material-strength {
   display: inline-block;
   margin-top: 15px;
   margin-left: 15px;
   margin-bottom: 15px;
+
+}
+
+.pile-factors {
+  display: inline-block;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 15px;
+  
+  table{
+    margin: 15px;
+  }
+
+  th {
+    border: 1px solid #cfcfcf;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+    line-height: 1.5;
+    background: #f3f3f3;
+  }
+  
+  td {
+    border: 1px solid #cfcfcf;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+    line-height: 1.5;
+    background: white;
+  }
 }
 
 .concrete-strength {
@@ -52,29 +87,6 @@ fieldset {
   float: right;
   margin-left: 15px;
 
-  table{
-    margin: 15px;
-  }
-
-  th {
-    border: 1px solid #cfcfcf;
-    font-weight: normal;
-    font-size: 14px;
-    text-align: center;
-    padding: 0;
-    line-height: 1.5;
-    background: #f3f3f3;
-  }
-  
-  td {
-    border: 1px solid #cfcfcf;
-    font-weight: normal;
-    font-size: 14px;
-    text-align: center;
-    padding: 0;
-    line-height: 1.5;
-    background: white;
-  }
 
 }
 

@@ -12,6 +12,7 @@ import { WaitDialogComponent } from '../wait-dialog/wait-dialog.component';
 import { UserInfoService } from '../../providers/user-info.service';
 import * as FileSaver from 'file-saver';
 import { SaveDataService } from '../../providers/save-data.service';
+import { ConfigService } from '../../providers/config.service';
 
 @Component({
   selector: 'app-menu',
@@ -34,7 +35,8 @@ export class MenuComponent implements OnInit {
     private InputData: SaveDataService,
     private http: Http,
     private platformLocation: PlatformLocation,
-    private router: Router) {
+    private router: Router,
+    private config: ConfigService) {
 
     this.loggedIn = this.user.loggedIn;
     this.fileName = '';
@@ -111,6 +113,7 @@ export class MenuComponent implements OnInit {
 
   // ファイルを保存
   save(): void {
+    this.config.saveActiveComponentData();
     const inputJson: string = this.InputData.getInputText();
     const blob = new window.Blob([inputJson], { type: 'text/plain' });
     if (this.fileName.length === 0) {

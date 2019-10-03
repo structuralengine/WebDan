@@ -72,8 +72,11 @@ export class DesignPointsComponent implements OnInit {
   
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
+    this.saveData();
+  }
+  public saveData(): void {
     this.input.setDesignPointColumns(this.table_datas);
   }
-
+  
 }
 

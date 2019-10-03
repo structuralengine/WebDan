@@ -1,13 +1,13 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputBarsService } from './input-bars.service';
+import { InputSteelsService } from './input-steels.service';
 
 @Component({
-  selector: 'app-bars',
-  templateUrl: './bars.component.html',
-  styleUrls: ['./bars.component.scss']
+  selector: 'app-steels',
+  templateUrl: './steels.component.html',
+  styleUrls: ['./steels.component.scss']
 })
-export class BarsComponent implements OnInit {
-  
+export class SteelsComponent implements OnInit {
+
   @ViewChild('ht_container') ht_container: ElementRef;
   hottable_height: number;
 
@@ -23,7 +23,7 @@ export class BarsComponent implements OnInit {
   };
 
 
-  constructor(private input: InputBarsService) {
+  constructor(private input: InputSteelsService) {
 
   }
 
@@ -62,46 +62,37 @@ export class BarsComponent implements OnInit {
           column1['p_name'] = data['p_name'];
           column1['p_name_ex'] = data['p_name_ex'];
           column1['bh'] = data['b'];
-          column1['haunch_height'] = data['haunch_M'];
 
-          column1['design_point_id'] = data['rebar1'].title;
-          column1['rebar_dia'] = data['rebar1'].rebar_dia;
-          column1['rebar_n'] = data['rebar1'].rebar_n;
-          column1['rebar_cover'] = data['rebar1'].rebar_cover;
-          column1['rebar_lines'] = data['rebar1'].rebar_lines;
-          column1['rebar_space'] = data['rebar1'].rebar_space;
-          column1['rebar_ss'] = data['rebar1'].rebar_ss;
-          column1['cos'] = data['rebar1'].cos;
-          column1['enable'] = data['rebar1'].enable;
+          column1['design_point_id'] = data['I'].title;
 
-          column1['side_dia'] = data['sidebar'].side_dia;
-          column1['side_n'] = data['sidebar'].side_n;
-          column1['side_cover'] = data['sidebar'].side_cover;
-          column1['side_ss'] = data['sidebar'].side_ss;
+          column1['upper_left_cover'] = data['I'].upper_cover;
 
-          column1['stirrup_dia'] = data['starrup'].stirrup_dia;
-          column1['stirrup_n'] = data['starrup'].stirrup_n;
-          column1['stirrup_ss'] = data['starrup'].stirrup_ss;
+          column1['upper_left_width'] = data['I'].upper_width;
+          column1['upper_left_thickness'] = data['I'].upper_thickness;
 
-          column1['tan'] = data['tan']; 
+          column1['web_thickness'] = data['I'].web_thickness;
+          column1['web_height'] = data['I'].web_height;
+
+          column1['lower_right_width'] = data['I'].lower_width;
+          column1['lower_right_thickness'] = data['I'].lower_thickness;
+          
           this.table_datas[i].push(column1);
 
           // 2行目
           column2['bh'] = data['h'];
-          column2['haunch_height'] = data['haunch_V'];
 
-          column2['design_point_id'] = data['rebar2'].title;
-          column2['rebar_dia'] = data['rebar2'].rebar_dia;
-          column2['rebar_n'] = data['rebar2'].rebar_n;
-          column2['rebar_cover'] = data['rebar2'].rebar_cover;
-          column2['rebar_lines'] = data['rebar2'].rebar_lines;
-          column2['rebar_space'] = data['rebar2'].rebar_space;
-          column2['rebar_ss'] = data['rebar2'].rebar_ss;
-          column2['stirrup_dia'] = data['bend'].bending_dia;
-          column2['stirrup_n'] = data['bend'].bending_n;
-          column2['stirrup_ss'] = data['bend'].bending_ss; 
-          column2['cos'] = data['rebar2'].cos;
-          column2['enable'] = data['rebar2'].enable;
+          column2['design_point_id'] = data['H'].title;
+
+          column2['upper_left_cover'] = data['H'].left_cover;
+
+          column2['upper_left_width'] = data['H'].left_width;
+          column2['upper_left_thickness'] = data['H'].left_thickness;
+
+          column2['web_thickness'] = data['H'].web_thickness;
+          column2['web_height'] = data['H'].web_height;
+
+          column2['lower_right_width'] = data['H'].right_width;
+          column2['lower_right_thickness'] = data['H'].right_thickness;
 
           this.table_datas[i].push(column2);
 
@@ -123,7 +114,7 @@ export class BarsComponent implements OnInit {
     this.saveData();
   }
   public saveData(): void {
-    this.input.setBarsColumns(this.table_datas);
+    this.input.setSteelsColumns(this.table_datas);
   }
 
 }

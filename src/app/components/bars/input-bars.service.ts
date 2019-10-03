@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
 import { InputDesignPointsService } from '../design-points/input-design-points.service';
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ export class InputBarsService extends InputDataService {
   public clear(): void {
     this.bar_list = new Array();
   }
+   
   /// <summary>
   /// bars の
   /// g_no でグループ化した配列のデータを返す関数

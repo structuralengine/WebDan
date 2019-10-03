@@ -73,7 +73,10 @@ export class BasicInformationComponent implements OnInit {
 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
+    this.saveData();
+  }
 
+  public saveData(): void {
     for (let row = 0; row < this.pickup_moment_datarows.length; row++) {
       const column = this.pickup_moment_datarows[row];
       this.input.setPickUpNoMomentColumns(row, column['pickup_no']);
@@ -83,7 +86,6 @@ export class BasicInformationComponent implements OnInit {
       const column = this.pickup_shear_force_datarows[row];
       this.input.setPickUpNoShearForceColumns(row, column['pickup_no']);
     }
-
   }
 
   /// <summary>

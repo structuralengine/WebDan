@@ -4,130 +4,183 @@
       <h3>{{ groupe[0].g_name }}</h3>
     </ng-template>
     <ng-template ngbTabContent>
+      <div class="tabContent">
+        <ngb-tabset>
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              鉄筋・コンクリート
+            </ng-template>
+            <ng-template ngbTabContent>
 
-      <div class="safety-factors">
-        <h3>安全係数</h3>
-        <div class="table-container">
-          <div class="header">
-            <table width="980px">
-              <thead>
-                <tr>
-                  <th rowspan="2" width="250px"></th>
-                  <th colspan="3">曲げ安全係数</th>
-                  <th colspan="5">せん断安全係数</th>
-                  <th rowspan="2" width="70px">係数γi</th>
-                  <th rowspan="2" width="100px">鉄筋配置</th>
-                </tr>
-                <tr>
-                  <th width="70px">γc</th>
-                  <th width="70px">γs</th>
-                  <th width="70px">γbs</th>
-                  <th width="70px">γc</th>
-                  <th width="70px">γs</th>
-                  <th width="70px">γbc</th>
-                  <th width="70px">γbs</th>
-                  <th width="70px">γbd</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-          <hot-table class="hot" [settings]="safety_factors_table_settings" [data]="safety_factors_table_datas[i]"
-            [colHeaders]="false" [rowHeaders]="false" width="980px">
-            <hot-column data="title" width="250px" [readOnly]="true"></hot-column>
-            <hot-column data="M_rc" width="70px" type="numeric"></hot-column>
-            <hot-column data="M_rs" width="70px" type="numeric"></hot-column>
-            <hot-column data="M_rbs" width="70px" type="numeric"></hot-column>
-            <hot-column data="V_rc" width="70px" type="numeric"></hot-column>
-            <hot-column data="V_rs" width="70px" type="numeric"></hot-column>
-            <hot-column data="V_rbc" width="70px" type="numeric"></hot-column>
-            <hot-column data="V_rbs" width="70px" type="numeric"></hot-column>
-            <hot-column data="V_rbv" width="70px" type="numeric"></hot-column>
-            <hot-column data="ri" width="70px" type="numeric"></hot-column>
-            <hot-column data="range" width="100px"></hot-column>
-          </hot-table>
-        </div>
-        <div class="range-fieldset">
-          <fieldset>
-            <legend>鉄筋配置</legend>
-            <ol>
-              <li>引張鉄筋</li>
-              <li>引張＋圧縮</li>
-              <li>全周鉄筋</li>
-            </ol>
-          </fieldset>
-        </div>
+              <div class="safety-factors">
+                <h3>安全係数</h3>
+                <div class="table-container">
+                  <div class="header">
+                    <table width="980px">
+                      <thead>
+                        <tr>
+                          <th rowspan="2" width="250px"></th>
+                          <th colspan="3">曲げ安全係数</th>
+                          <th colspan="5">せん断安全係数</th>
+                          <th rowspan="2" width="70px">係数γi</th>
+                          <th rowspan="2" width="100px">鉄筋配置</th>
+                        </tr>
+                        <tr>
+                          <th width="70px">γc</th>
+                          <th width="70px">γs</th>
+                          <th width="70px">γbs</th>
+                          <th width="70px">γc</th>
+                          <th width="70px">γs</th>
+                          <th width="70px">γbc</th>
+                          <th width="70px">γbs</th>
+                          <th width="70px">γbd</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                  <hot-table class="hot" [settings]="safety_factors_table_settings"
+                    [data]="safety_factors_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="980px">
+                    <hot-column data="title" width="250px" [readOnly]="true"></hot-column>
+                    <hot-column data="M_rc" width="70px" type="numeric"></hot-column>
+                    <hot-column data="M_rs" width="70px" type="numeric"></hot-column>
+                    <hot-column data="M_rbs" width="70px" type="numeric"></hot-column>
+                    <hot-column data="V_rc" width="70px" type="numeric"></hot-column>
+                    <hot-column data="V_rs" width="70px" type="numeric"></hot-column>
+                    <hot-column data="V_rbc" width="70px" type="numeric"></hot-column>
+                    <hot-column data="V_rbs" width="70px" type="numeric"></hot-column>
+                    <hot-column data="V_rbv" width="70px" type="numeric"></hot-column>
+                    <hot-column data="ri" width="70px" type="numeric"></hot-column>
+                    <hot-column data="range" width="100px"></hot-column>
+                  </hot-table>
+                </div>
+                <div class="range-fieldset">
+                  <fieldset>
+                    <legend>鉄筋配置</legend>
+                    <ol>
+                      <li>引張鉄筋</li>
+                      <li>引張＋圧縮</li>
+                      <li>全周鉄筋</li>
+                    </ol>
+                  </fieldset>
+                </div>
+              </div>
+
+              <div class="material-strength">
+                <h3>鉄筋材料強度</h3>
+                <div class="table-container">
+                  <div class="header">
+                    <table width="530px">
+                      <thead>
+                        <tr>
+                          <th width="250px">N/mm<sup>2</sup></th>
+                          <th width="140px">降伏強度</th>
+                          <th width="140px">設計引張強度</th>
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+
+                  <hot-table class="hot" [settings]="bar_strength_table_settings"
+                    [data]="bar_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="530px">
+                    <hot-column data="title" width="250px" [readOnly]="true"></hot-column>
+                    <hot-column data="fsy1" width="70px"></hot-column>
+                    <hot-column data="fsy2" width="70px"></hot-column>
+                    <hot-column data="fsu1" width="70px"></hot-column>
+                    <hot-column data="fsu2" width="70px"></hot-column>
+                  </hot-table>
+
+                  <div class="concrete-strength">
+                    <h3>コンクリート材料強度</h3>
+                    <hot-table class="hot" [settings]="concrete_strength_table_settings"
+                      [data]="concrete_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
+                      <hot-column data="title" width="390px" [readOnly]="true"></hot-column>
+                      <hot-column data="value" width="140px" type="numeric"></hot-column>
+                    </hot-table>
+                  </div>
+                </div>
+              </div>
+
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab>
+              <ng-template ngbTabTitle>
+                鉄骨
+              </ng-template>
+              <ng-template ngbTabContent>
+  
+                <div class="safety-factors">
+                  <h3>安全係数</h3>
+                  <div class="table-container">
+                    
+                    <hot-table class="hot" [settings]="safety_factors_table_settings"
+                      [data]="safety_factors_table_datas[i]" [colHeaders]="true" [rowHeaders]="false">
+                      <hot-column data="title" title=" " width="250px" [readOnly]="true"></hot-column>
+                      <hot-column data="S_rs" title="γs" width="70px" type="numeric"></hot-column>
+                      <hot-column data="S_rb" title="γb" width="70px" type="numeric"></hot-column>
+                    </hot-table>
+                  </div>
+                </div>
+  
+                <div class="material-strength">
+                  <h3>鉄骨材料強度</h3>
+                  <div class="table-container">
+                    <hot-table class="hot" [settings]="steel_strength_table_settings"
+                      [data]="steel_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
+                      <hot-column data="title" title=" " width="250px" [readOnly]="true"></hot-column>
+                      <hot-column data="SRCfsyk1" title="t≦16" width="100px"></hot-column>
+                      <hot-column data="SRCfsyk2" title="16＜t≦40" width="100px"></hot-column>
+                      <hot-column data="SRCfsyk3" title="40＜t≦75" width="100px"></hot-column>
+                    </hot-table>
+ 
+                  </div>
+                </div>
+  
+              </ng-template>
+            </ngb-tab>
+
+          <ngb-tab>
+            <ng-template ngbTabTitle>
+              杭・施工条件
+            </ng-template>
+            <ng-template ngbTabContent>
+                <div class="pile-factors">
+                <h3>杭の施工条件</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th rowspan="2" colspan="2">施工方法</th>
+                      <th colspan="3">施工修正係数ρc</th>
+                      <th rowspan="2" width="110px">せん断補強鋼材を用いない棒部材の設計せん断耐力Vcdの低減係数</th>
+                    </tr>
+                    <tr>
+                      <th width="80px">圧縮強度</th>
+                      <th width="80px">付着強度</th>
+                      <th width="80px">ヤング係数</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let item of pile_factor_list; index as j">
+                      <tr>
+                        <td width="20px">
+                          <input type="radio" name="pile_factor" id="pile_factor{{j}}"
+                            [(ngModel)]="pile_factor_selected[i]" [value]="item.id"
+                            [checked]="pile_factor_selected[i] == item.id" (change)="setPileFactor(i, j)" />
+                        </td>
+                        <td style="text-align: left" width="200px">{{item.title}}</td>
+                        <td>{{item.rfck}}</td>
+                        <td>{{item.rfbok}}</td>
+                        <td>{{item.rEc}}</td>
+                        <td>{{item.rVcd}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
       </div>
-
-      <div class="material-strength">
-        <h3>鉄筋材料強度</h3>
-        <div class="table-container">
-          <div class="header">
-            <table width="530px">
-              <thead>
-                <tr>
-                  <th width="250px">N/mm<sup>2</sup></th>
-                  <th width="140px">降伏強度</th>
-                  <th width="140px">設計引張強度</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-
-          <hot-table class="hot" [settings]="steel_strength_table_settings" [data]="steel_strength_table_datas[i]"
-            [colHeaders]="false" [rowHeaders]="false" width="530px">
-            <hot-column data="title" width="250px" [readOnly]="true"></hot-column>
-            <hot-column data="fsy1" width="70px" ></hot-column>
-            <hot-column data="fsy2" width="70px" ></hot-column>
-            <hot-column data="fsu1" width="70px" ></hot-column>
-            <hot-column data="fsu2" width="70px" ></hot-column>
-          </hot-table>
-
-          <div class="concrete-strength">
-            <h3>コンクリート材料強度</h3>
-            <hot-table class="hot" [settings]="concrete_strength_table_settings"
-              [data]="concrete_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
-              <hot-column data="title" width="390px" [readOnly]="true"></hot-column>
-              <hot-column data="value" width="140px" type="numeric"></hot-column>
-            </hot-table>
-          </div>
-        </div>
-
-        <div class="range-fieldset">
-          <fieldset>
-            <legend>杭の施工条件</legend>
-            <table>
-              <thead>
-                <tr>
-                  <th rowspan="2" colspan="2">施工方法</th>
-                  <th colspan="3">施工修正係数ρc</th>
-                  <th rowspan="2" width="110px">せん断補強鋼材を用いない棒部材の設計せん断耐力Vcdの低減係数</th>
-                </tr>
-                <tr>
-                  <th width="80px">圧縮強度</th>
-                  <th width="80px">付着強度</th>
-                  <th width="80px">ヤング係数</th>
-                </tr>
-              </thead>
-              <tbody>
-                <ng-container *ngFor="let item of pile_factor_list; index as j">
-                  <tr>
-                    <td width="20px">
-                      <input type="radio" name="pile_factor" id="pile_factor{{j}}" [(ngModel)]="pile_factor_selected[i]"
-                        [value]="item.id" [checked]="pile_factor_selected[i] == item.id" (change)="setPileFactor(i, j)" />
-                    </td>
-                    <td style="text-align: left" width="200px">{{item.title}}</td>
-                    <td>{{item.rfck}}</td>
-                    <td>{{item.rfbok}}</td>
-                    <td>{{item.rEc}}</td>
-                    <td>{{item.rVcd}}</td>
-                  </tr>
-                </ng-container>
-              </tbody>
-            </table>
-          </fieldset>
-        </div>
-      </div>
-
     </ng-template>
   </ngb-tab>
 </ngb-tabset>

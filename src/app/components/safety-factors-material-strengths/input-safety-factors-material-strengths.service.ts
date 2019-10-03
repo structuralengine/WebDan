@@ -62,13 +62,13 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       }
 
       // 鉄筋強度を保存用変数に格納する
-      target['material_steel'] = new Array();
-      for (const current_steel of current_data['material_steel']) {
+      target['material_bar'] = new Array();
+      for (const current_steel of current_data['material_bar']) {
         let temp = {};
         for( const key of Object.keys(current_steel)){
           temp[key] = this.toNumber(current_steel[key]);
         }
-        target['material_steel'].push(temp)
+        target['material_bar'].push(temp);
       }
 
       // コンクリート強度を保存用変数に格納する
@@ -92,7 +92,7 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
     const result = {
       'g_no': g_no,
       'safety_factor': this.default_safety_factor(),
-      'material_steel': this.default_material_steel(),
+      'material_bar': this.default_material_bar(),
       'material_concrete': this.default_material_concrete(),
       'pile_factor_selected': this.pile_factor_list[0].id
     }
@@ -112,7 +112,9 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
         'V_rbs': 1.00,
         'V_rbv': null,
         'ri': 1.00,
-        'range': 1
+        'range': 1,
+        'S_rs': 1.0,
+        'S_rb': 1.0
       },
       {
         'M_rc': 1.30,
@@ -124,7 +126,9 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
         'V_rbs': 1.10,
         'V_rbv': null,
         'ri': 1.10,
-        'range': 2
+        'range': 2,
+        'S_rs': 1.0,
+        'S_rb': 1.1
       },
       {
         'M_rc': 1.30,
@@ -136,7 +140,9 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
         'V_rbs': 1.10,
         'V_rbv': 1.20,
         'ri': 1.20,
-        'range': 3
+        'range': 3,
+        'S_rs': 1.05,
+        'S_rb': 1.1
       },
       {
         'M_rc': 1.30,
@@ -148,7 +154,9 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
         'V_rbs': 1.00,
         'V_rbv': 1.20,
         'ri': 1.20,
-        'range': 3
+        'range': 3,
+        'S_rs': 1.05,
+        'S_rb': 1.1
       },
       {
         'M_rc': 1.30,
@@ -160,13 +168,15 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
         'V_rbs': 1.00,
         'V_rbv': 1.20,
         'ri': 1.00,
-        'range': 3
+        'range': 3,
+        'S_rs': 1.05,
+        'S_rb': 1.1
       }
     ]
   }
 
   // 材料強度情報
-  public default_material_steel(): any[] {
+  public default_material_bar(): any[] {
     return [
       {fsy1:29,  fsu1:29},
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560},

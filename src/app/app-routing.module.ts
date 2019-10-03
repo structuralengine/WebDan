@@ -6,6 +6,7 @@ import { BasicInformationComponent } from './components/basic-information/basic-
 import { MembersComponent } from './components/members/members.component';
 import { DesignPointsComponent } from './components/design-points/design-points.component';
 import { BarsComponent } from './components/bars/bars.component';
+import { SteelsComponent } from './components/steels/steels.component';
 import { FatiguesComponent } from './components/fatigues/fatigues.component';
 import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-factors-material-strengths/safety-factors-material-strengths.component';
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
@@ -20,6 +21,7 @@ const routes: Routes = [
     { path: 'members', component: MembersComponent },
     { path: 'design-points', component: DesignPointsComponent },
     { path: 'bars', component: BarsComponent },
+    { path: 'steels', component: SteelsComponent },
     { path: 'fatigues', component: FatiguesComponent },
     { path: 'safety-factors-material-strengths', component: SafetyFactorsMaterialStrengthsComponent },
     { path: 'section-forces', component: SectionForcesComponent },

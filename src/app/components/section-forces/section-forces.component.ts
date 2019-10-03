@@ -52,8 +52,10 @@ export class SectionForcesComponent implements OnInit {
   
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy(): void {
+    this.saveData();
+  }
+  public saveData(): void {
     this.input.setMdtableColumns(this.Mtable_datas);
     this.input.setVdtableColumns(this.Vtable_datas);
   }
-
 }

@@ -115,12 +115,13 @@ export class FatiguesComponent implements OnInit {
 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
+    this.saveData();
+  }
+  public saveData(): void {
     this.input.setFatiguesColumns(this.table_datas);
     this.input.train_A_count = this.train_A_count;
     this.input.train_B_count = this.train_B_count;
     this.input.service_life = this.service_life;
-
   }
-
 
 }

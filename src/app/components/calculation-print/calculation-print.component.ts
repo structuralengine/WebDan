@@ -52,6 +52,10 @@ export class CalculationPrintComponent implements OnInit {
 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
+    this.saveData();
+  }
+
+  public saveData(): void {
     this.input.print_selected.print_calculate_checked = this.print_calculate_checked;
     this.input.print_selected.print_section_force_checked = this.print_section_force_checked;
     this.input.print_selected.print_summary_table_checked = this.print_summary_table_checked;
