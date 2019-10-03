@@ -15,6 +15,7 @@ import { from } from 'rxjs';
 export class CalcSafetyFatigueMomentService {
   // 安全性（疲労破壊）曲げモーメント
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
   private PostedData: any;
@@ -24,9 +25,9 @@ export class CalcSafetyFatigueMomentService {
               private fatigue: SetFatigueService,
               private post: SetPostDataService,
               private result: ResultDataService,
-              private base: CalcServiceabilityMomentService
-  ) {
+              private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
+    this.isEnable = false;
   }
 
   // 設計断面力の集計

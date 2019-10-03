@@ -39,18 +39,18 @@
                     </table>
                   </div>
                   <hot-table class="hot" [settings]="safety_factors_table_settings"
-                    [data]="safety_factors_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="980px">
-                    <hot-column data="title" width="250px" [readOnly]="true"></hot-column>
-                    <hot-column data="M_rc" width="70px" type="numeric"></hot-column>
-                    <hot-column data="M_rs" width="70px" type="numeric"></hot-column>
-                    <hot-column data="M_rbs" width="70px" type="numeric"></hot-column>
-                    <hot-column data="V_rc" width="70px" type="numeric"></hot-column>
-                    <hot-column data="V_rs" width="70px" type="numeric"></hot-column>
-                    <hot-column data="V_rbc" width="70px" type="numeric"></hot-column>
-                    <hot-column data="V_rbs" width="70px" type="numeric"></hot-column>
-                    <hot-column data="V_rbv" width="70px" type="numeric"></hot-column>
-                    <hot-column data="ri" width="70px" type="numeric"></hot-column>
-                    <hot-column data="range" width="100px"></hot-column>
+                    [data]="safety_factors_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="980">
+                    <hot-column data="title" width="250" [readOnly]="true"></hot-column>
+                    <hot-column data="M_rc" width="70" type="numeric"></hot-column>
+                    <hot-column data="M_rs" width="70" type="numeric"></hot-column>
+                    <hot-column data="M_rbs" width="70" type="numeric"></hot-column>
+                    <hot-column data="V_rc" width="70" type="numeric"></hot-column>
+                    <hot-column data="V_rs" width="70" type="numeric"></hot-column>
+                    <hot-column data="V_rbc" width="70" type="numeric"></hot-column>
+                    <hot-column data="V_rbs" width="70" type="numeric"></hot-column>
+                    <hot-column data="V_rbv" width="70" type="numeric"></hot-column>
+                    <hot-column data="ri" width="70" type="numeric"></hot-column>
+                    <hot-column data="range" width="100"></hot-column>
                   </hot-table>
                 </div>
                 <div class="range-fieldset">
@@ -81,20 +81,20 @@
                   </div>
 
                   <hot-table class="hot" [settings]="bar_strength_table_settings"
-                    [data]="bar_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="530px">
-                    <hot-column data="title" width="250px" [readOnly]="true"></hot-column>
-                    <hot-column data="fsy1" width="70px"></hot-column>
-                    <hot-column data="fsy2" width="70px"></hot-column>
-                    <hot-column data="fsu1" width="70px"></hot-column>
-                    <hot-column data="fsu2" width="70px"></hot-column>
+                    [data]="bar_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="530">
+                    <hot-column data="title" width="250" [readOnly]="true"></hot-column>
+                    <hot-column data="fsy1" width="70"></hot-column>
+                    <hot-column data="fsy2" width="70"></hot-column>
+                    <hot-column data="fsu1" width="70"></hot-column>
+                    <hot-column data="fsu2" width="70"></hot-column>
                   </hot-table>
 
                   <div class="concrete-strength">
                     <h3>コンクリート材料強度</h3>
                     <hot-table class="hot" [settings]="concrete_strength_table_settings"
                       [data]="concrete_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
-                      <hot-column data="title" width="390px" [readOnly]="true"></hot-column>
-                      <hot-column data="value" width="140px" type="numeric"></hot-column>
+                      <hot-column data="title" width="390" [readOnly]="true"></hot-column>
+                      <hot-column data="value" width="140" type="numeric"></hot-column>
                     </hot-table>
                   </div>
                 </div>
@@ -115,9 +115,9 @@
                     
                     <hot-table class="hot" [settings]="safety_factors_table_settings"
                       [data]="safety_factors_table_datas[i]" [colHeaders]="true" [rowHeaders]="false">
-                      <hot-column data="title" title=" " width="250px" [readOnly]="true"></hot-column>
-                      <hot-column data="S_rs" title="γs" width="70px" type="numeric"></hot-column>
-                      <hot-column data="S_rb" title="γb" width="70px" type="numeric"></hot-column>
+                      <hot-column data="title" title=" " width="250" [readOnly]="true"></hot-column>
+                      <hot-column data="S_rs" title="γs" width="70" type="numeric"></hot-column>
+                      <hot-column data="S_rb" title="γb" width="70" type="numeric"></hot-column>
                     </hot-table>
                   </div>
                 </div>
@@ -127,10 +127,10 @@
                   <div class="table-container">
                     <hot-table class="hot" [settings]="steel_strength_table_settings"
                       [data]="steel_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
-                      <hot-column data="title" title=" " width="250px" [readOnly]="true"></hot-column>
-                      <hot-column data="SRCfsyk1" title="t≦16" width="100px"></hot-column>
-                      <hot-column data="SRCfsyk2" title="16＜t≦40" width="100px"></hot-column>
-                      <hot-column data="SRCfsyk3" title="40＜t≦75" width="100px"></hot-column>
+                      <hot-column data="title" title=" " width="250" [readOnly]="true"></hot-column>
+                      <hot-column data="SRCfsyk1" title="t≦16" width="100" type="numeric"></hot-column>
+                      <hot-column data="SRCfsyk2" title="16＜t≦40" width="100" type="numeric"></hot-column>
+                      <hot-column data="SRCfsyk3" title="40＜t≦75" width="100" type="numeric"></hot-column>
                     </hot-table>
  
                   </div>

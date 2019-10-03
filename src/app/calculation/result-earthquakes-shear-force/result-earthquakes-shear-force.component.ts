@@ -45,6 +45,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     }
 
     // postする
+    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({
@@ -57,6 +58,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
           const result: string = response.text();
           this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
           this.isLoading = false;
+          this.calc.isEnable = true;
         },
         error => {
           this.err = error.toString();

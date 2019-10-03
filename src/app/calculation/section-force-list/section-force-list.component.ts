@@ -156,7 +156,8 @@ export class SectionForceListComponent implements OnInit {
 
       const g_name_shear: string = g_name + ' せん断力に対する照査';
       tableType = 2;
-
+      currentRow = 0;
+      
       // 耐久性せん断力に対する照査
       if (serviceabilityShearForces.length > 0) {
         const targetRows: any[] = this.setPage(memberList, serviceabilityShearForces, 3);

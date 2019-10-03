@@ -11,11 +11,13 @@ import { Injectable } from '@angular/core';
 export class CalcEarthquakesMomentService {
   // 復旧性（地震時）曲げモーメント
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(private save: SaveDataService,
               private force: SetDesignForceService,
               private post: SetPostDataService) {
     this.DesignForceList = null;
+    this.isEnable = false;
   }
 
   // 設計断面力の集計

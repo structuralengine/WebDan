@@ -13,6 +13,7 @@ import { Injectable } from '@angular/core';
 export class CalcSafetyShearForceService {
   // 安全性（破壊）せん断力
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(private save: SaveDataService,
               private force: SetDesignForceService,
@@ -20,6 +21,7 @@ export class CalcSafetyShearForceService {
               private result: ResultDataService,
               private bar: SetBarService) {
     this.DesignForceList = null;
+    this.isEnable = false;
   }
 
   // 設計断面力の集計

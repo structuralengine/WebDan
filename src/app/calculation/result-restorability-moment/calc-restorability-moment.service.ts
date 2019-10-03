@@ -13,6 +13,7 @@ import { Injectable } from '@angular/core';
 export class CalcRestorabilityMomentService {
   // 復旧性（地震時以外）曲げモーメント
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(
     private save: SaveDataService,
@@ -21,6 +22,7 @@ export class CalcRestorabilityMomentService {
     private result: ResultDataService,
     public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
+    this.isEnable = false;
   }
 
   // 設計断面力の集計

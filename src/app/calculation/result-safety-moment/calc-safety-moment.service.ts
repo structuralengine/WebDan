@@ -13,6 +13,7 @@ import { Injectable } from '@angular/core';
 export class CalcSafetyMomentService {
   // 安全性（破壊）曲げモーメント
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(
     private save: SaveDataService,
@@ -20,6 +21,7 @@ export class CalcSafetyMomentService {
     private post: SetPostDataService,
     private result: ResultDataService) {
     this.DesignForceList = null;
+    this.isEnable = false;
   }
 
   // 設計断面力の集計
@@ -55,8 +57,6 @@ export class CalcSafetyMomentService {
     const postData = this.post.setInputData(this.DesignForceList, 2, 'Moment', '耐力', 1);
     return postData;
   }
-
-
 
   // 出力テーブル用の配列にセット
   public setSafetyPages(responseData: any, postData: any): any[] {
@@ -171,5 +171,6 @@ export class CalcSafetyMomentService {
       result: { alien: 'center', value: result }
     };
   }
+
 }
 

@@ -13,13 +13,15 @@ import { Injectable } from '@angular/core';
 export class CalcServiceabilityMomentService {
   // 耐久性 曲げひび割れ
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(private save: SaveDataService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private result: ResultDataService,
     public base: CalcSafetyMomentService) {
-      this.DesignForceList = null;
+    this.DesignForceList = null;
+    this.isEnable = false;
     }
 
   // 設計断面力の集計

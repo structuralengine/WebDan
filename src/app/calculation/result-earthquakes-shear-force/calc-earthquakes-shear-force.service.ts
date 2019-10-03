@@ -11,11 +11,13 @@ import { Injectable } from '@angular/core';
 export class CalcEarthquakesShearForceService {
   // 復旧性（地震時）せん断力
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(private save: SaveDataService,
               private force: SetDesignForceService,
               private post: SetPostDataService) {
-      this.DesignForceList = null;
+    this.DesignForceList = null;
+    this.isEnable = false;
   }
 
   // 設計断面力の集計

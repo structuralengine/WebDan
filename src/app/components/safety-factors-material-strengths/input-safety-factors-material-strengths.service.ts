@@ -38,6 +38,21 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       result = this.default_safety_factor_material_strengths(g_no);
       this.safety_factor_material_strengths_list.push(result);
     }
+    if (('safety_factor' in result) === false) {
+      result['safety_factor'] = this.default_safety_factor();
+    }
+    if (('material_bar' in result) === false) {
+      result['material_bar'] = this.default_material_bar();
+    }
+    if (('material_steel' in result) === false) {
+      result['material_steel'] = this.default_material_steel();
+    }
+    if (('material_concrete' in result) === false) {
+      result['material_concrete'] = this.default_material_concrete();
+    }
+    if (('pile_factor_selected' in result) === false) {
+      result['pile_factor_selected'] = this.pile_factor_list[0].id;
+    }
     result['safety_factor_title'] = this.safety_factor_title;
     result['pile_factor_list'] = this.pile_factor_list;
     return result;
@@ -63,12 +78,22 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
 
       // 鉄筋強度を保存用変数に格納する
       target['material_bar'] = new Array();
-      for (const current_steel of current_data['material_bar']) {
+      for (const current_bar of current_data['material_bar']) {
         let temp = {};
-        for( const key of Object.keys(current_steel)){
-          temp[key] = this.toNumber(current_steel[key]);
+        for( const key of Object.keys(current_bar)){
+          temp[key] = this.toNumber(current_bar[key]);
         }
         target['material_bar'].push(temp);
+      }
+      
+      // 鉄骨強度を保存用変数に格納する
+      target['material_steel'] = new Array();
+      for (const current_steel of current_data['material_steel']) {
+        let temp = {};
+        for (const key of Object.keys(current_steel)) {
+          temp[key] = this.toNumber(current_steel[key]);
+        }
+        target['material_steel'].push(temp);
       }
 
       // コンクリート強度を保存用変数に格納する
@@ -93,6 +118,7 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       'g_no': g_no,
       'safety_factor': this.default_safety_factor(),
       'material_bar': this.default_material_bar(),
+      'material_steel': this.default_material_steel(),
       'material_concrete': this.default_material_concrete(),
       'pile_factor_selected': this.pile_factor_list[0].id
     }
@@ -182,6 +208,16 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560},
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560},
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560}
+    ]
+  }
+
+  // 材料強度情報
+  public default_material_steel(): any[] {
+    return [
+      { SRCfsyk1: 16, SRCfsyk2: 40, SRCfsyk3: 75 },
+      { SRCfsyk1: 245, SRCfsyk2: 235, SRCfsyk3: 215 },
+      { SRCfsyk1: 140, SRCfsyk2: 135, SRCfsyk3: 125 },
+      { SRCfsyk1: 400, SRCfsyk2: 400, SRCfsyk3: 400 }
     ]
   }
 

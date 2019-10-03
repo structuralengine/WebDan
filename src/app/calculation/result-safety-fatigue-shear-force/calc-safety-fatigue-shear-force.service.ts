@@ -14,6 +14,7 @@ import { Injectable, ViewChild } from '@angular/core';
 export class CalcSafetyFatigueShearForceService {
   // 安全性（疲労破壊）せん断力
   public DesignForceList: any[];
+  public isEnable: boolean;
 
   constructor(private save: SaveDataService,
     private force: SetDesignForceService,
@@ -21,7 +22,8 @@ export class CalcSafetyFatigueShearForceService {
     private result: ResultDataService,
     private base: CalcSafetyShearForceService,
     private bady: CalcSafetyFatigueMomentService) {
-      this.DesignForceList = null;
+    this.DesignForceList = null;
+    this.isEnable = false;
     }
 
   // 設計断面力の集計

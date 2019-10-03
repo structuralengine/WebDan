@@ -17,8 +17,9 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   pile_factor_selected: string[];
 
   safety_factors_table_settings = {
-    beforeChange: (source, changes) => {
+    beforeChange: (source, changes1, changes2) => {
       try {
+        const changes = (Array.isArray(changes1)) ? changes1 : changes2;
         for (let i = 0; i < changes.length; i++) {
           switch (changes[i][1]) {
             case 'range':
@@ -54,38 +55,46 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   };
 
   bar_strength_table_settings = {
-    beforeChange: (source, changes, hotInstance) => {
+    beforeChange: (source, changes1, changes2) => {
       try {
+        const changes = (Array.isArray(changes1)) ? changes1 : changes2;
         for (let i = 0; i < changes.length; i++) {
           if (changes[i][0] === 0) // split
           {
+            let value: string = changes[i][3].replace('D', '');
+            value = value.replace('以上', '');
+            value = value.replace('以下', '');
+            if (this.input.toNumber(value) === null) {
+              changes[i][3] = changes[i][2]; // 入力も元に戻す
+              return;
+            }
             switch (changes[i][1]) {
               case 'fsy1':
-                const next_fsy2 = this.input.getNextRebar(changes[i][3]);
+                const next_fsy2 = this.input.getNextRebar(value);
                 if (next_fsy2 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 2, 'D' + next_fsy2.D + '以下', hotInstance)
-                  changes[i][3] = 'D' + changes[i][3] + '以上';
+                  source.setDataAtCell(changes[i][0], 2, 'D' + next_fsy2.D + '以上')
+                  changes[i][3] = 'D' + value + '以下';
                 }
                 break;
               case 'fsy2':
-                const next_fsy1 = this.input.getPreviousRebar(changes[i][3]);
+                const next_fsy1 = this.input.getPreviousRebar(value);
                 if (next_fsy1 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 1, 'D' + next_fsy1.D + '以上', hotInstance)
-                  changes[i][3] = 'D' + changes[i][3] + '以下';
+                  source.setDataAtCell(changes[i][0], 1, 'D' + next_fsy1.D + '以下')
+                  changes[i][3] = 'D' + value + '以上';
                 }
                 break;
               case 'fsu1':
-                const next_fsu2 = this.input.getNextRebar(changes[i][3]);
+                const next_fsu2 = this.input.getNextRebar(value);
                 if (next_fsu2 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 4, 'D' + next_fsu2.D + '以下', hotInstance)
-                  changes[i][3] = 'D' + changes[i][3] + '以上';
+                  source.setDataAtCell(changes[i][0], 4, 'D' + next_fsu2.D + '以上')
+                  changes[i][3] = 'D' + value + '以下';
                 }
                 break;
               case 'fsu2':
-                const next_fsu1 = this.input.getPreviousRebar(changes[i][3]);
+                const next_fsu1 = this.input.getPreviousRebar(value);
                 if (next_fsu1 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 3, 'D' + next_fsu1.D + '以上', hotInstance)
-                  changes[i][3] = 'D' + changes[i][3] + '以下';
+                  source.setDataAtCell(changes[i][0], 3, 'D' + next_fsu1.D + '以下')
+                  changes[i][3] = 'D' + value + '以上';
                 }
                 break;
 
@@ -100,8 +109,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
               changes[i][3] = value;
             }
           }
-        }
-        for (let i = 0; i < changes.length; i++) {
+
           switch (changes[i][1]) {
             case 'range':
               const value: number = this.input.toNumber(changes[i][3]);
@@ -135,7 +143,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   };
 
   steel_strength_table_settings = {
-    beforeChange: (source, changes, hotInstance) => { }
+    beforeChange: (source, changes) => { }
   };
 
   concrete_strength_table_settings = {
@@ -179,19 +187,30 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
 
       // 鉄筋材料
       this.bar_strength_table_datas[i] = new Array();
-      // 鉄骨材料
-      this.steel_strength_table_datas[i] = new Array();
-
-      const steel = data['material_bar'];
+      const bar = data['material_bar'];
       // セパレータ
       this.bar_strength_table_datas[i].push(
-        this.set_steel_strength_table_split(steel[0])
+        this.set_bar_strength_table_split(bar[0])
         );
-      const titles: string[] = ['', '軸方向鉄筋', '側方向鉄筋', 'スターラップ', '折曲げ鉄筋']
-      for (let j = 1; j < steel.length; j++ ){
+      const bar_table_titles: string[] = ['', '軸方向鉄筋', '側方向鉄筋', 'スターラップ', '折曲げ鉄筋'];
+      for (let j = 1; j < bar.length; j++ ){
         this.bar_strength_table_datas[i].push(
-          this.set_steel_strength_table_column(steel[j], titles[j])
+          this.set_bar_strength_table_column(bar[j], bar_table_titles[j])
           );    
+      }
+
+      // 鉄骨材料
+      this.steel_strength_table_datas[i] = new Array();
+      const steel = data['material_steel'];
+      // セパレータ
+      this.steel_strength_table_datas[i].push(
+        this.set_steel_strength_table_split(steel[0])
+      );
+      const steel_table_titles: string[] = ['', '降伏強度', 'せん断強度', '引張強度'];
+      for (let j = 1; j < steel.length; j++) {
+        this.steel_strength_table_datas[i].push(
+          this.set_steel_strength_table_column(steel[j], steel_table_titles[j])
+        );
       }
 
       // コンクリート材料
@@ -243,7 +262,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   }
 
   // 鉄筋のセパレータをテーブル用の変数に整形する
-  private set_steel_strength_table_split(split: any): any {
+  private set_bar_strength_table_split(split: any): any {
     
     const result = {
       title: '',
@@ -269,7 +288,25 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   }
 
   // 鉄筋の軸方向鉄筋をテーブル用のデータに整形する
-  private set_steel_strength_table_column(steel: any, title: string):any{
+  private set_bar_strength_table_column(bar: any, title: string):any{
+    const result = bar;
+    result['title'] = title;
+    return result;
+  }
+
+  // 鉄骨のセパレータをテーブル用の変数に整形する
+  private set_steel_strength_table_split(split: any): any {
+
+    const result = { title: '' };
+    result['SRCfsyk1'] = 't≦' + split['SRCfsyk1'];
+    result['SRCfsyk2'] = split['SRCfsyk1'] + '＜t≦' + split['SRCfsyk2'];
+    result['SRCfsyk3'] = split['SRCfsyk2'] + '＜t≦' + split['SRCfsyk3'];
+
+    return result;
+  }
+  
+  // 鉄骨の軸方向鉄筋をテーブル用のデータに整形する
+  private set_steel_strength_table_column(steel: any, title: string): any {
     const result = steel;
     result['title'] = title;
     return result;

@@ -23,22 +23,24 @@ import * as printJS from 'print-js';
 })
 export class ResultViewerComponent implements OnInit {
   
+  // 目次 /////////////////////////////////
   public loggedIn: boolean;
-   // 印刷時のスタイル /////////////////////////////////
+
+  // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
   constructor(private user: UserInfoService,
-    private durabilityMoment: CalcDurabilityMomentService,
-    private earthquakesMoment: CalcEarthquakesMomentService,
-    private earthquakesShearForce: CalcEarthquakesShearForceService,
-    private restorabilityMoment: CalcRestorabilityMomentService,
-    private restorabilityShearForce: CalcRestorabilityShearForceService,
-    private SafetyFatigueMoment: CalcSafetyFatigueMomentService,
-    private safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
-    private safetyMoment: CalcSafetyMomentService,
-    private safetyShearForce: CalcSafetyShearForceService,
-    private serviceabilityMoment: CalcServiceabilityMomentService,
-    private serviceabilityShearForce: CalcServiceabilityShearForceService
+    public durabilityMoment: CalcDurabilityMomentService,
+    public earthquakesMoment: CalcEarthquakesMomentService,
+    public earthquakesShearForce: CalcEarthquakesShearForceService,
+    public restorabilityMoment: CalcRestorabilityMomentService,
+    public restorabilityShearForce: CalcRestorabilityShearForceService,
+    public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
+    public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
+    public safetyMoment: CalcSafetyMomentService,
+    public safetyShearForce: CalcSafetyShearForceService,
+    public serviceabilityMoment: CalcServiceabilityMomentService,
+    public serviceabilityShearForce: CalcServiceabilityShearForceService
      ) {}
 
   ngOnInit() {
