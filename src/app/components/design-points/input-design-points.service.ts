@@ -100,6 +100,7 @@ export class InputDesignPointsService extends InputDataService {
         if (p === undefined) { continue; }
         p['g_no'] = m.g_no;
         p['g_name'] = m.g_name;
+        p['shape'] = m.shape;
         p['B'] = m.B;
         p['H'] = m.H;
         p['n'] = m.n;

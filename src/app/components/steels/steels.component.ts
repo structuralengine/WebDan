@@ -14,14 +14,8 @@ export class SteelsComponent implements OnInit {
   groupe_list: any[];
   table_datas: any[][];
   mergeCells: any[][];
-
-  table_settings = {
-    beforeChange: (source, changes) => {
-    },
-    afterChange: (hotInstance, changes, source) => {
-    }
-  };
-
+  readonlyRows: boolean[][];
+  table_settings: any[];
 
   constructor(private input: InputSteelsService) {
 
@@ -31,14 +25,16 @@ export class SteelsComponent implements OnInit {
 
     const height = this.ht_container.nativeElement.offsetHeight;
     this.hottable_height = height - 250;
-
-    this.groupe_list = this.input.getBarsColumns();
+    this.table_settings = new Array();
+    this.groupe_list = this.input.getSteelColumns();
     this.table_datas = new Array(this.groupe_list.length);
     this.mergeCells = new Array(this.groupe_list.length);
+    this.readonlyRows = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
       this.mergeCells[i] = new Array();
+      this.readonlyRows[i]  = new Array();
 
       let row: number = 0;
       for (let j = 0; j < this.groupe_list[i].length; j++) {
@@ -103,9 +99,28 @@ export class SteelsComponent implements OnInit {
           for(let col= 12; col <= 18; col++) {
             this.mergeCells[i].push({row: row, col: col, rowspan: 2, colspan: 1});
           }
+          // SRCびの情報
+          if(data.shape.indexOf('SRC') >= 0) {
+            this.readonlyRows[i].push(false);
+            this.readonlyRows[i].push(false);
+          }else{
+            this.readonlyRows[i].push(true);
+            this.readonlyRows[i].push(true);
+          }
           row += 2;
         }
       }
+      this.table_settings.push({
+        beforeChange: (source, changes) => {
+        },
+        afterChange: (hotInstance, changes, source) => {
+        },
+        cells:(row, col, prop) => {
+          const cellProperties: any = {};
+          cellProperties.readOnly = this.readonlyRows[i][row];
+          return cellProperties;
+        }
+      });
     }
   }
 

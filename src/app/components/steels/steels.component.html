@@ -36,7 +36,7 @@
             </table>
           </div>
 
-          <hot-table class="hot" [settings]="table_settings" [data]="table_datas[i]" [colHeaders]="false"
+          <hot-table class="hot" [settings]="table_settings[i]" [data]="table_datas[i]" [colHeaders]="false"
             [rowHeaders]="false" height="{{hottable_height}}" width="1168">
             <!-- [mergeCells] = "mergeCells[i]" > -->
             <hot-column data="m_no" width="65" [readOnly]="true"></hot-column>

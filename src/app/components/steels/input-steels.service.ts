@@ -22,7 +22,7 @@ export class InputSteelsService extends InputDataService {
   /// bars の
   /// g_no でグループ化した配列のデータを返す関数
   /// </summary>
-  public getBarsColumns(): any[] {
+  public getSteelColumns(): any[] {
 
     const result: any[] = new Array();
 
@@ -47,6 +47,7 @@ export class InputSteelsService extends InputDataService {
             b = this.default_steels(members.m_no, position.p_name, position.position);
           }
           b.index = position['index'];
+          b.shape = members["shape"];
           b.position = position['position'];
           b.p_name_ex = position['p_name_ex'];
           b.b = members['B'];
@@ -106,6 +107,7 @@ export class InputSteelsService extends InputDataService {
   private default_steels(id: number, p_name: string, position: number): any {
     return {
       'm_no': id,
+      'shape': null,
       'index': null,
       'position': position,
       'p_name': p_name,
