@@ -120,4 +120,19 @@ export class InputMembersService extends InputDataService {
     return result;
   }
 
+  // SRC部材があるかどうか (-1: まだ不明, 0: SRC部材はない, 1: SRC部材がある)
+  public srcCount(): number {
+    let result: number = -1;
+
+    for(let i = 0; i < this.member_list.length; i++){
+      const target: string = this.member_list[i].shape;
+      if(target !== null){
+        result = 0;
+      }
+      if(target.indexOf('SRC') > 0){
+        return 1;
+      }
+    }
+    return result;
+  }
 }

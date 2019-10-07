@@ -1,6 +1,7 @@
 import { Component, ViewChild } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 import { ConfigService } from './providers/config.service';
+import { InputMembersService } from './components/members/input-members.service';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +14,13 @@ export class AppComponent {
 
   isCalculated: boolean;
   isManual: boolean;
+  isSRC: boolean;
 
   activeComponentRef: any;
 
   constructor(platformLocation: PlatformLocation,
-              private config: ConfigService) {
+              private config: ConfigService,
+              private member: InputMembersService) {
 
     const location = (platformLocation as any).location;
     this.baseUrl = location.origin + location.pathname;
@@ -26,7 +29,7 @@ export class AppComponent {
     // custom property
     this.isCalculated = false;
     this.isManual = true;
-
+    this.isSRC = (this.member.srcCount !== 0);
   }
 
   ngOnInit() {
