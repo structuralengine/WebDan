@@ -34,14 +34,14 @@ export class SteelsComponent implements OnInit {
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
       this.mergeCells[i] = new Array();
-      this.readonlyRows[i]  = new Array();
+      this.readonlyRows[i] = new Array();
 
       let row: number = 0;
       for (let j = 0; j < this.groupe_list[i].length; j++) {
         const member = this.groupe_list[i][j];
 
         const positionCount: number = member['positions'].length;
-        this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount * 2, colspan: 1});
+        this.mergeCells[i].push({ row: row, col: 0, rowspan: positionCount * 2, colspan: 1 });
 
         for (let k = 0; k < positionCount; k++) {
           const data = member['positions'][k];
@@ -54,7 +54,7 @@ export class SteelsComponent implements OnInit {
           // 1行目
           column1['index'] = data['index'];
           const a: number = this.input.toNumber(data['position']);
-          column1['position'] = (a===null) ? '' : a.toFixed(3);
+          column1['position'] = (a === null) ? '' : a.toFixed(3);
           column1['p_name'] = data['p_name'];
           column1['p_name_ex'] = data['p_name_ex'];
           column1['bh'] = data['b'];
@@ -71,7 +71,7 @@ export class SteelsComponent implements OnInit {
 
           column1['lower_right_width'] = data['I'].lower_width;
           column1['lower_right_thickness'] = data['I'].lower_thickness;
-          
+
           this.table_datas[i].push(column1);
 
           // 2行目
@@ -90,23 +90,31 @@ export class SteelsComponent implements OnInit {
           column2['lower_right_width'] = data['H'].right_width;
           column2['lower_right_thickness'] = data['H'].right_thickness;
 
+          // SRCの情報
+          if (data.shape.indexOf('SRC') >= 0) {
+            this.readonlyRows[i].push(false);
+            this.readonlyRows[i].push(false);
+          } else {
+            // SRCではない場合
+            for (const key of ['upper_left_cover', 'upper_left_width', 'upper_left_thickness',
+                               'web_thickness', 'web_height',
+                               'lower_right_width', 'lower_right_thickness']) {
+              column1[key] = null;
+              column2[key] = null;
+            }
+            this.readonlyRows[i].push(true);
+            this.readonlyRows[i].push(true);
+          }
           this.table_datas[i].push(column2);
 
           // セルの結合情報
-          for(let col= 1; col <= 2; col++) {
-            this.mergeCells[i].push({row: row, col: col, rowspan: 2, colspan: 1});
+          for (let col = 1; col <= 2; col++) {
+            this.mergeCells[i].push({ row: row, col: col, rowspan: 2, colspan: 1 });
           }
-          for(let col= 12; col <= 18; col++) {
-            this.mergeCells[i].push({row: row, col: col, rowspan: 2, colspan: 1});
+          for (let col = 12; col <= 18; col++) {
+            this.mergeCells[i].push({ row: row, col: col, rowspan: 2, colspan: 1 });
           }
-          // SRCびの情報
-          if(data.shape.indexOf('SRC') >= 0) {
-            this.readonlyRows[i].push(false);
-            this.readonlyRows[i].push(false);
-          }else{
-            this.readonlyRows[i].push(true);
-            this.readonlyRows[i].push(true);
-          }
+
           row += 2;
         }
       }
@@ -115,7 +123,7 @@ export class SteelsComponent implements OnInit {
         },
         afterChange: (hotInstance, changes, source) => {
         },
-        cells:(row, col, prop) => {
+        cells: (row, col, prop) => {
           const cellProperties: any = {};
           cellProperties.readOnly = this.readonlyRows[i][row];
           return cellProperties;

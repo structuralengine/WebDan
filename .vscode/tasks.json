@@ -21,7 +21,7 @@
         {
             "label": "ng-kill",
             "type": "shell",
-            "command": "killall ng"
+            "command": "kill $(lsof -t -i:4200)"
         }
     ]
 }
