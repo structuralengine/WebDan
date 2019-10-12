@@ -25,8 +25,10 @@
         class="btn btn-outline-primary" id="2">算出点</a>
       <a routerLink="./bars" (click)="activePageChenge(3)" routerLinkActive="selected-item"
         class="btn btn-outline-primary" id="3">鉄筋配置</a>
-      <a routerLink="./steels" (click)="activePageChenge(4)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="4">鉄骨配置</a>
+      <ng-container *ngIf="isSRC">
+        <a routerLink="./steels" (click)="activePageChenge(4)" routerLinkActive="selected-item"
+          class="btn btn-outline-primary" id="4">鉄骨配置</a>
+      </ng-container>
       <a routerLink="./fatigues" (click)="activePageChenge(5)" routerLinkActive="selected-item"
         class="btn btn-outline-primary" id="5">疲労データ</a>
       <a routerLink="./safety-factors-material-strengths" (click)="activePageChenge(6)" routerLinkActive="selected-item"
