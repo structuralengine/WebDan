@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 import { ConfigService } from './providers/config.service';
 import { InputMembersService } from './components/members/input-members.service';
@@ -8,13 +8,13 @@ import { InputMembersService } from './components/members/input-members.service'
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   baseUrl: string;
   project: string;
 
   isCalculated: boolean;
   isManual: boolean;
-  isSRC: boolean;
+  isSRC: boolean; // SRC部材 があるかどうか
 
   activeComponentRef: any;
 
@@ -32,10 +32,12 @@ export class AppComponent {
   }
 
   ngOnInit() {
-    if (this.member.srcCount() !== 0) {
-      this.isSRC = true;
-    } else {
-      this.isSRC = false;
+    this.isSRC = false;
+    for (const srcCount of this.member.getSRC()) {
+      if (srcCount > 0) {
+        this.isSRC = true;
+        break;
+      }
     }
   }
 
@@ -60,7 +62,7 @@ export class AppComponent {
   // アクティブになっているボタンを全て非アクティブにする
   deactiveButtons() {
     for (let i = 0; i <= 11; i++) {
-      let data = document.getElementById(i + '');
+      const data = document.getElementById(i + '');
       if (data != null) {
         if (data.classList.contains('active')) {
           data.classList.remove('active');

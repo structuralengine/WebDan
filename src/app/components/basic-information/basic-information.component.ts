@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InputBasicInformationService } from './input-basic-information.service';
 import { SaveDataService } from '../../providers/save-data.service';
+import { InputMembersService } from '../members/input-members.service';
 
 @Component({
   selector: 'app-basic-information',
   templateUrl: './basic-information.component.html',
   styleUrls: ['./basic-information.component.scss']
 })
-export class BasicInformationComponent implements OnInit {
+export class BasicInformationComponent implements OnInit, OnDestroy {
 
   // pickup_table に関する変数
   pickup_moment_title = 'ピックアップ (曲げ耐力用)';
@@ -16,6 +17,9 @@ export class BasicInformationComponent implements OnInit {
   pickup_shear_force_datarows: any[];
   pickup_title_column_header = '断面照査に用いる応力';
   isManual: boolean;
+  isSRC: boolean; // SRC部材 があるかどうか
+
+
   pickup_table_settings = {
     beforeChange: (source, changes) => {
 
@@ -48,7 +52,8 @@ export class BasicInformationComponent implements OnInit {
 
   constructor(
     private input: InputBasicInformationService,
-    private save: SaveDataService) {
+    private save: SaveDataService,
+    private member: InputMembersService) {
 
   }
 
@@ -65,21 +70,40 @@ export class BasicInformationComponent implements OnInit {
     //  設計条件 に関する初期化
     this.conditions_list = this.input.conditions_list;
 
+    // SRC部材 があるかどうか
+    this.isSRC = false;
+    for (const srcCount of this.member.getSRC()) {
+      if (srcCount > 0) {
+        this.isSRC = true;
+        break;
+      }
+    }
+
     // pickup_table に関する初期化
     this.initPickupTable();
 
     this.isManual = this.save.isManual();
+
   }
 
-  // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
     this.saveData();
   }
 
   public saveData(): void {
+    let i: number = 0;      
     for (let row = 0; row < this.pickup_moment_datarows.length; row++) {
       const column = this.pickup_moment_datarows[row];
-      this.input.setPickUpNoMomentColumns(row, column['pickup_no']);
+
+      if (this.specification1_selected === 0) { // 鉄道
+        if (row === 2) { //  安全性 （疲労破壊）疲労限
+          if (this.isSRC === false) { // SRC部材 がない
+            i++;
+          }
+        }
+      }
+
+      this.input.setPickUpNoMomentColumns(row + i, column['pickup_no']);
     }
 
     for (let row = 0; row < this.pickup_shear_force_datarows.length; row++) {
@@ -94,7 +118,7 @@ export class BasicInformationComponent implements OnInit {
   /// <param name="i">選択された番号</param>
   private initPickupTable(): void {
 
-    if(this.save.isManual() === true){
+    if (this.save.isManual() === true) {
       this.input.pickup_moment_no = new Array();
       for (let i = 0; i < this.pickup_moment_title.length; i++) {
         this.input.pickup_moment_no.push(i + 1);
@@ -110,6 +134,15 @@ export class BasicInformationComponent implements OnInit {
 
     for (let row = 0; row < this.input.pickup_moment_count(); row++) {
       const column = this.input.getPickUpNoMomentColumns(row);
+
+      if (this.specification1_selected === 0) { // 鉄道
+        if (row === 2) { //  安全性 （疲労破壊）疲労限
+          if (this.isSRC === false) { // SRC部材 がない
+            continue;
+          }
+        }
+      }
+      
       this.pickup_moment_datarows.push(column);
     }
 

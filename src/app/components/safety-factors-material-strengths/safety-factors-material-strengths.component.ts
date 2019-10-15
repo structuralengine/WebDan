@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
+import { InputMembersService } from '../members/input-members.service';
 
 @Component({
   selector: 'app-safety-factors-material-strengths',
@@ -15,6 +16,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   concrete_strength_table_datas: any[][];
   pile_factor_list: any[];
   pile_factor_selected: string[];
+  isSRC: boolean[]; // SRC部材 があるかどうか
 
   safety_factors_table_settings = {
     beforeChange: (source, changes1, changes2) => {
@@ -150,7 +152,8 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
     beforeChange: (source, changes) => { }
   };
 
-  constructor(private input: InputSafetyFactorsMaterialStrengthsService) {
+  constructor(private input: InputSafetyFactorsMaterialStrengthsService,
+    private member: InputMembersService) {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -162,6 +165,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
 
     // グループリストを取得
     this.groupe_list = this.input.getGroupeList();
+    const srcCount = this.member.getSRC();
 
     // 配列を作成
     this.safety_factors_table_datas = new Array();    // 安全係数
@@ -170,6 +174,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
     this.concrete_strength_table_datas = new Array(); // コンクリート材料
     this.pile_factor_list = new Array();              // 杭の施工条件
     this.pile_factor_selected = new Array();
+    this.isSRC = new Array();
 
     // 入力項目を作成
     for (let i = 0; i < this.groupe_list.length; i++) {
@@ -183,7 +188,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
       const title: string[] = data['safety_factor_title'];
       this.safety_factors_table_datas.push(
         this.set_safety_factors_table_datas(safety, title)
-        );
+      );
 
       // 鉄筋材料
       this.bar_strength_table_datas[i] = new Array();
@@ -191,12 +196,12 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
       // セパレータ
       this.bar_strength_table_datas[i].push(
         this.set_bar_strength_table_split(bar[0])
-        );
+      );
       const bar_table_titles: string[] = ['', '軸方向鉄筋', '側方向鉄筋', 'スターラップ', '折曲げ鉄筋'];
-      for (let j = 1; j < bar.length; j++ ){
+      for (let j = 1; j < bar.length; j++) {
         this.bar_strength_table_datas[i].push(
           this.set_bar_strength_table_column(bar[j], bar_table_titles[j])
-          );    
+        );
       }
 
       // 鉄骨材料
@@ -229,6 +234,12 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
       // 杭の施工条件
       this.pile_factor_list = data['pile_factor_list'];
       this.pile_factor_selected[i] = data['pile_factor_selected'];
+      if (srcCount[i] > 0) {
+        this.isSRC.push(true);
+      } else {
+        this.isSRC.push(false);
+      }
+
     }
 
   }
@@ -263,7 +274,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
 
   // 鉄筋のセパレータをテーブル用の変数に整形する
   private set_bar_strength_table_split(split: any): any {
-    
+
     const result = {
       title: '',
       fsy1: 'D' + split['fsy1'] + '以下',
@@ -279,16 +290,16 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
 
     const fsu2 = this.input.getNextRebar(split['fsu1']);
     if (fsu2 !== undefined) {
-      result['fsu2'] =  'D' + fsu2.D + '以上';
+      result['fsu2'] = 'D' + fsu2.D + '以上';
     } else {
-      result['fsu2'] ='';
-    } 
+      result['fsu2'] = '';
+    }
 
     return result;
   }
 
   // 鉄筋の軸方向鉄筋をテーブル用のデータに整形する
-  private set_bar_strength_table_column(bar: any, title: string):any{
+  private set_bar_strength_table_column(bar: any, title: string): any {
     const result = bar;
     result['title'] = title;
     return result;
@@ -304,7 +315,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
 
     return result;
   }
-  
+
   // 鉄骨の軸方向鉄筋をテーブル用のデータに整形する
   private set_steel_strength_table_column(steel: any, title: string): any {
     const result = steel;
@@ -316,7 +327,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   // 入力変更を処理する関数
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy(): void {
-    this. saveData();
+    this.saveData();
   }
   public saveData(): void {
     const result = new Array();
@@ -335,16 +346,16 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   }
 
   // 安全係数のデータを保存用に整形する
-  private get_safety_factors_table_datas(safety_factors_table_datas: any[]): any[]{
+  private get_safety_factors_table_datas(safety_factors_table_datas: any[]): any[] {
 
     const result: any[] = safety_factors_table_datas;
 
     for (const safety of result) {
 
-      if (safety.title) { 
-        delete safety.title; 
+      if (safety.title) {
+        delete safety.title;
       }
-      
+
       switch (safety.range) {
         case '引張鉄筋':
           safety.range = 1;
@@ -363,16 +374,16 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   }
 
   // 鉄筋のセパレータを保存用に整形する
-  private get_set_bar_strength_table_datas(bar_strength_table_datas: any[]): any[]{
+  private get_set_bar_strength_table_datas(bar_strength_table_datas: any[]): any[] {
 
     const result: any[] = bar_strength_table_datas;
 
-    for (const key of Object.keys(result[0])){
+    for (const key of Object.keys(result[0])) {
       result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
     }
 
-    for (let i = 1; i < result.length; i++){
-      for (const key of Object.keys(result[i])){
+    for (let i = 1; i < result.length; i++) {
+      for (const key of Object.keys(result[i])) {
         result[i][key] = this.input.toNumber(result[i][key])
       }
     }
@@ -380,30 +391,30 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
     return result;
   }
 
-    // 鉄骨のセパレータを保存用に整形する
-    private get_set_steel_strength_table_datas(steel_strength_table_datas: any[]): any[]{
+  // 鉄骨のセパレータを保存用に整形する
+  private get_set_steel_strength_table_datas(steel_strength_table_datas: any[]): any[] {
 
-      const result: any[] = steel_strength_table_datas;
-  
-      for (const key of Object.keys(result[0])){
-        result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
-      }
-  
-      for (let i = 1; i < result.length; i++){
-        for (const key of Object.keys(result[i])){
-          result[i][key] = this.input.toNumber(result[i][key])
-        }
-      }
-  
-      return result;
+    const result: any[] = steel_strength_table_datas;
+
+    for (const key of Object.keys(result[0])) {
+      result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
     }
-  
+
+    for (let i = 1; i < result.length; i++) {
+      for (const key of Object.keys(result[i])) {
+        result[i][key] = this.input.toNumber(result[i][key])
+      }
+    }
+
+    return result;
+  }
+
 
   // コンクリート材料データを保存用に整形する
-  private get_concrete_strength_table_datas(concrete_strength_table_datas: any[]): any[]{
+  private get_concrete_strength_table_datas(concrete_strength_table_datas: any[]): any[] {
     const result: any[] = concrete_strength_table_datas;
-    for (const column of result){
-      for (const key of Object.keys(column)){
+    for (const column of result) {
+      for (const key of Object.keys(column)) {
         column[key] = this.input.toNumber(column[key])
       }
     }

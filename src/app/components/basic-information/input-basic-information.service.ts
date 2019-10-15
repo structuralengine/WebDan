@@ -23,8 +23,6 @@ export class InputBasicInformationService extends InputDataService {
   // 設計条件
   public conditions_list: any[];
 
-
-
   constructor() {
     super();
     this.clear();
@@ -51,14 +49,14 @@ export class InputBasicInformationService extends InputDataService {
       case 0: // 鉄道
         this.pickup_moment_title = [
           '耐久性 縁応力度検討用', '耐久性 （永久荷重）',
-          '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
+          '安全性 （疲労破壊）疲労限', '安全性 （疲労破壊）永久作用', '安全性 （疲労破壊）変動応力',
           '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
         ];
 
         this.pickup_shear_force_title = [
           '耐久性 せん断ひび割れ検討判定用',
           '耐久性 （永久荷重）', '耐久性 （変動荷重）',
-          '安全性 （疲労破壊）最小応力', '安全性 （疲労破壊）最大応力',
+          '安全性 （疲労破壊）永久作用', '安全性 （疲労破壊）変動応力',
           '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
         ];
  

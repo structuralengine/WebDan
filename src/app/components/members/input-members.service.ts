@@ -120,18 +120,21 @@ export class InputMembersService extends InputDataService {
     return result;
   }
 
-  // SRC部材があるかどうか (-1: まだ不明, 0: SRC部材はない, 1: SRC部材がある)
-  public srcCount(): number {
-    let result: number = -1;
+  // SRC部材があるかどうか (null: まだ不明, .length===0: SRC部材はない, 1以上: SRC部材の数)
+  public getSRC(): number[] {
 
-    for(let i = 0; i < this.member_list.length; i++){
-      const target: string = this.member_list[i].shape;
-      if(target !== null){
-        result = 0;
+    let result: number[] = new Array();
+
+    const groupeList = this.getGroupeList();
+    for (const member_list of groupeList) {
+      let counter: number = null;
+      for (let i = 0; i < member_list.length; i++) {
+        const target: string = member_list[i].shape;
+        if (target.indexOf('SRC') > 0) {
+          counter = (counter === null) ? 0 : counter + 1;
+        }
       }
-      if(target.indexOf('SRC') > 0){
-        return 1;
-      }
+      result.push(counter);
     }
     return result;
   }
