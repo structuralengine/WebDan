@@ -234,6 +234,8 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
       // 杭の施工条件
       this.pile_factor_list = data['pile_factor_list'];
       this.pile_factor_selected[i] = data['pile_factor_selected'];
+
+      // SRC部材があるかどうか
       if (srcCount[i] > 0) {
         this.isSRC.push(true);
       } else {

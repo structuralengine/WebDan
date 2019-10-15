@@ -50,7 +50,8 @@ export class InputBasicInformationService extends InputDataService {
         this.pickup_moment_title = [
           '耐久性 縁応力度検討用', '耐久性 （永久荷重）',
           '安全性 （疲労破壊）疲労限', '安全性 （疲労破壊）永久作用', '安全性 （疲労破壊）変動応力',
-          '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時'
+          '安全性 （破壊）', '復旧性 （損傷）地震時以外', '復旧性 （損傷）地震時',
+          '耐久性  最小鉄筋量'
         ];
 
         this.pickup_shear_force_title = [

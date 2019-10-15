@@ -32,13 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.isSRC = false;
-    for (const srcCount of this.member.getSRC()) {
-      if (srcCount > 0) {
-        this.isSRC = true;
-        break;
-      }
-    }
+    this.isSRC = this.member.getSRC().some((v) => v > 0);
   }
 
 

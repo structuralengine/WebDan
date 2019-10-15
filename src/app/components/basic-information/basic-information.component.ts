@@ -71,13 +71,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
     this.conditions_list = this.input.conditions_list;
 
     // SRC部材 があるかどうか
-    this.isSRC = false;
-    for (const srcCount of this.member.getSRC()) {
-      if (srcCount > 0) {
-        this.isSRC = true;
-        break;
-      }
-    }
+    this.isSRC = this.member.getSRC().some((v) => v > 0);
 
     // pickup_table に関する初期化
     this.initPickupTable();
@@ -95,12 +89,10 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
     for (let row = 0; row < this.pickup_moment_datarows.length; row++) {
       const column = this.pickup_moment_datarows[row];
 
-      if (this.specification1_selected === 0) { // 鉄道
-        if (row === 2) { //  安全性 （疲労破壊）疲労限
-          if (this.isSRC === false) { // SRC部材 がない
-            i++;
-          }
-        }
+      if (this.specification1_selected === 0  // 鉄道
+        && row === 2                          // 安全性 （疲労破壊）疲労限
+        && this.isSRC === false ){            // SRC部材 がない
+          i++;
       }
 
       this.input.setPickUpNoMomentColumns(row + i, column['pickup_no']);
