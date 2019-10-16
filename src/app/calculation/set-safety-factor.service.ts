@@ -52,7 +52,7 @@ export class SetSafetyFactorService {
     position['safety_factor'] = safety_factor; // 安全係数
 
     // 材料強度 を代入する
-    position['material_steel'] = safetyList.material_steel; // 鉄筋強度
+    position['material_bar'] = safetyList.material_bar; // 鉄筋強度
     position['material_concrete'] = safetyList.material_concrete; // コンクリート強度
 
     // 杭の施工条件

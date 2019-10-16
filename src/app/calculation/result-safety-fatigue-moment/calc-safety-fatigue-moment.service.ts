@@ -41,12 +41,12 @@ export class CalcSafetyFatigueMomentService {
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
-    // 最小応力
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[2]);
-    // 最大応力
+    // 永久作用
+    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
+    // 疲労現
     const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList, DesignForceList1);
+    const DesignForceList2 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
     
     if (this.DesignForceList.length < 1) {
       return;

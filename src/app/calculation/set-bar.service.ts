@@ -248,7 +248,7 @@ export class SetBarService {
     let sideBarList: any[] = new Array();
     const printSideBar = {};
     if (position.safety_factor.range >= 3) {
-      sideBarList = this.getSideBar(sideBar, position.material_steel, '', h - b, printSideBar);
+      sideBarList = this.getSideBar(sideBar, position.material_bar, '', h - b, printSideBar);
       // 印刷用の変数に登録
       result['ptint-Ase'] = printSideBar['As'];
       result['print-AseString'] = printSideBar['AsString'];
@@ -332,7 +332,7 @@ export class SetBarService {
     result['print-Ast-Cs'] = tensionBar.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
     result['print-Ast-φ'] = tensionBar.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
-    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
+    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_bar);
     if (Aw !== null) {
       result['print-AWφ'] = Aw['AW-φ'];
       result['print-Aw'] = Aw.Aw;
@@ -471,7 +471,7 @@ export class SetBarService {
     result['print-rs'] = rs;
     result['print-Es'] = 200;
 
-    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
+    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_bar);
     if (Aw !== null) {
       result['print-AWφ'] = Aw['AW-φ'];
       result['print-Aw'] = Aw.Aw;
@@ -511,7 +511,7 @@ export class SetBarService {
     const sideBar = position.barData.sidebar;
 
     const printTensionBar: any = {};
-    const tensionBarList: any[] = this.getCompresBar(tensionBar, position.material_steel, printTensionBar);
+    const tensionBarList: any[] = this.getCompresBar(tensionBar, position.material_bar, printTensionBar);
     // 有効な入力がなかった場合は null を返す.
     if (tensionBarList.length < 1) {
       return null;
@@ -521,7 +521,7 @@ export class SetBarService {
     let compresBarList: any[] = new Array();
     const printCompresBar = {};
     if (position.safety_factor.range >= 2) {
-      compresBarList = this.getCompresBar(compresBar, position.material_steel, printCompresBar);
+      compresBarList = this.getCompresBar(compresBar, position.material_bar, printCompresBar);
     }
 
     // 側方鉄筋 をセットする
@@ -529,9 +529,9 @@ export class SetBarService {
     const printSideBar = {};
     if (position.safety_factor.range >= 3) {
       if (side === '横小判') {
-        sideBarList = this.getHorizontalOvalSideBar(sideBar, position.material_steel, tensionBar, compresBar, height, printSideBar);
+        sideBarList = this.getHorizontalOvalSideBar(sideBar, position.material_bar, tensionBar, compresBar, height, printSideBar);
       } else {
-        sideBarList = this.getSideBar(sideBar, position.material_steel, side, height, printSideBar);
+        sideBarList = this.getSideBar(sideBar, position.material_bar, side, height, printSideBar);
       }
     }
 
@@ -593,7 +593,7 @@ export class SetBarService {
       result['print-dse'] = printSideBar['ds'];
     }
 
-    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_steel);
+    const Aw: any = this.setAwprintData(position.barData.starrup, position.material_bar);
     if (Aw !== null) {
       result['print-AWφ'] = Aw['AW-φ'];
       result['print-Aw'] = Aw.Aw;
