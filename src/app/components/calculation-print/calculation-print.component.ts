@@ -19,12 +19,7 @@ export class CalculationPrintComponent implements OnInit {
   calculate_shear_force_checked: boolean;
 
   table_datas: any[];
-  table_settings = {
-    beforeChange: (source, changes) => {
-    },
-    afterChange: (hotInstance, changes, source) => {
-    }
-  };
+  table_settings = {};
 
   constructor(
     private input: InputCalclationPrintService,

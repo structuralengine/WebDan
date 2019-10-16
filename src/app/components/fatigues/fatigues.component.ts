@@ -14,12 +14,7 @@ export class FatiguesComponent implements OnInit {
   groupe_list: any[];
   table_datas: any[][];
 
-  table_settings = {
-    beforeChange: (source, changes) => {
-    },
-    afterChange: (hotInstance, changes, source) => {
-    }
-  };
+  table_settings = {};
 
   train_A_count: number;
   train_B_count: number;

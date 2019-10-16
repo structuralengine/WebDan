@@ -181,7 +181,8 @@ export class SetPostDataService {
             memo: side,
             Md: force.Md / forceList.n,
             Vd: force.Vd / forceList.n,
-            Nd: force.Nd / forceList.n
+            Nd: force.Nd / forceList.n,
+            comb: force.comb
           };
         }
         result.push([fo]);
@@ -209,13 +210,15 @@ export class SetPostDataService {
             memo: '上側引張',
             Md: forceList.Mmin.Md / forceList.n,
             Vd: forceList.Mmin.Vd / forceList.n,
-            Nd: forceList.Mmin.Nd / forceList.n
+            Nd: forceList.Mmin.Nd / forceList.n,
+            comb: forceList.Mmin.comb
           };
           lower = {
             memo: '下側引張',
             Md: forceList.Mmax.Md / forceList.n,
             Vd: forceList.Mmax.Vd / forceList.n,
-            Nd: forceList.Mmax.Nd / forceList.n
+            Nd: forceList.Mmax.Nd / forceList.n,
+            comb: forceList.Mmax.comb
           };
         }
         result.push([upper,lower]);

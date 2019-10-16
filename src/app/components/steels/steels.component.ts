@@ -119,10 +119,6 @@ export class SteelsComponent implements OnInit {
         }
       }
       this.table_settings.push({
-        beforeChange: (source, changes) => {
-        },
-        afterChange: (hotInstance, changes, source) => {
-        },
         cells: (row, col, prop) => {
           const cellProperties: any = {};
           cellProperties.readOnly = this.readonlyRows[i][row];

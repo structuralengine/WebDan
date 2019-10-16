@@ -15,13 +15,7 @@ export class BarsComponent implements OnInit {
   table_datas: any[][];
   mergeCells: any[][];
 
-  table_settings = {
-    beforeChange: (source, changes) => {
-    },
-    afterChange: (hotInstance, changes, source) => {
-    }
-  };
-
+  table_settings = {};
 
   constructor(private input: InputBarsService) {
 

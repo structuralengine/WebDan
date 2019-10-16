@@ -18,12 +18,7 @@ export class DesignPointsComponent implements OnInit {
   mergeCells: any[][];
   position_index: number[][];
 
-  table_settings = {
-    beforeChange: (source, changes) => {
-    },
-    afterChange: (hotInstance, changes, source) => {
-    }
-  };
+  table_settings = {};
 
   constructor(
     private input: InputDesignPointsService,

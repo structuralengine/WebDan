@@ -19,9 +19,16 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   isSRC: boolean[]; // SRC部材 があるかどうか
 
   safety_factors_table_settings = {
-    beforeChange: (source, changes1, changes2) => {
+    beforeChange: (... x: any[]) => {
       try {
-        const changes = (Array.isArray(changes1)) ? changes1 : changes2;
+        let changes: any = undefined;
+        for(let i = 0; i < x.length; i++){
+          if(Array.isArray(x[i])){
+            changes = x[i];
+            break;
+          }
+        }
+        if(changes === undefined){return;}
         for (let i = 0; i < changes.length; i++) {
           switch (changes[i][1]) {
             case 'range':
@@ -57,9 +64,18 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
   };
 
   bar_strength_table_settings = {
-    beforeChange: (source, changes1, changes2) => {
+    beforeChange: (... x: any[]) => {
       try {
-        const changes = (Array.isArray(changes1)) ? changes1 : changes2;
+        let source: any;
+        let changes: any = undefined;
+        for(let i = 0; i < x.length; i++){
+          if(Array.isArray(x[i])){
+            source = x[i - 1];
+            changes = x[i];
+            break;
+          }
+        }
+        if(changes === undefined){return;}
         for (let i = 0; i < changes.length; i++) {
           if (changes[i][0] === 0) // split
           {
@@ -144,13 +160,9 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
     }
   };
 
-  steel_strength_table_settings = {
-    beforeChange: (source, changes) => { }
-  };
+  steel_strength_table_settings = {};
 
-  concrete_strength_table_settings = {
-    beforeChange: (source, changes) => { }
-  };
+  concrete_strength_table_settings = {};
 
   constructor(private input: InputSafetyFactorsMaterialStrengthsService,
     private member: InputMembersService) {
@@ -381,7 +393,10 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
     const result: any[] = bar_strength_table_datas;
 
     for (const key of Object.keys(result[0])) {
-      result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
+      if(result[0][key] === null ){ continue;}
+      if(typeof result[0][key]  === "string") { 
+        result[0][key] = this.input.toNumber(result[0][key].replace('D', '').replace('以下', ''));
+      }
     }
 
     for (let i = 1; i < result.length; i++) {
@@ -399,7 +414,10 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
     const result: any[] = steel_strength_table_datas;
 
     for (const key of Object.keys(result[0])) {
-      result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
+      if(result[0][key] === null ){ continue;}
+      if(typeof result[0][key]  === "string") { 
+        result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
+      }
     }
 
     for (let i = 1; i < result.length; i++) {

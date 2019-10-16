@@ -21,9 +21,16 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
 
 
   pickup_table_settings = {
-    beforeChange: (source, changes) => {
-
+    beforeChange: (... x: any[]) => {
       try {
+        let changes: any = undefined;
+        for(let i = 0; i < x.length; i++){
+          if(Array.isArray(x[i])){
+            changes = x[i];
+            break;
+          }
+        }
+        if(changes === undefined){return;}
         for (let i = 0; i < changes.length; i++) {
           const value: number = this.input.toNumber(changes[i][3]);
           if (value === null) {

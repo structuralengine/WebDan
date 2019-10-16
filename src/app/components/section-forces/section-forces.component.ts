@@ -11,9 +11,7 @@ export class SectionForcesComponent implements OnInit {
   private hottable_height: number;
   private Mtable_datas: any[];
   private Vtable_datas: any[];
-  table_settings = {
-    beforeChange: (source, changes) => { }
-  };
+  table_settings = {};
 
   constructor(private input: InputSectionForcesService) { }
 

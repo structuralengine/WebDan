@@ -17,9 +17,16 @@ export class MembersComponent implements OnInit {
   hottable_height: number;
 
   mambers_table_settings = {
-    beforeChange: (source, changes) => {
-
+    beforeChange: (... x: any[]) => {
       try {
+        let changes: any = undefined;
+        for(let i = 0; i < x.length; i++){
+          if(Array.isArray(x[i])){
+            changes = x[i];
+            break;
+          }
+        }
+        if(changes === undefined){return;}
         for (let i = 0; i < changes.length; i++) {
           switch (changes[i][1]) {
             case 'vis_u':
