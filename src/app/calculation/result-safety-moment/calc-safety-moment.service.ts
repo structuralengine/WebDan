@@ -149,12 +149,12 @@ export class CalcSafetyMomentService {
 
   private getResultString(printData: any, resultData: any, safety_factor: any): any {
 
-    const Md: number = printData.Md;
+    const Md: number = Math.abs(printData.Md);
     const Mu: number = resultData.M.Mi;
     const rb: number = safety_factor.rb;
     const Mud: number = Mu / rb;
     const ri: number = safety_factor.ri;
-    const ratio: number = Math.abs(ri * Md / Mud);
+    const ratio: number = ri * Md / Mud;
     const result: string = (ratio < 1) ? 'OK' : 'NG';
 
     return {

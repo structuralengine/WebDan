@@ -71,10 +71,13 @@ export class SetBarService {
 
     // 鉄筋強度
     let fsy: number;
+    let ElasticID: string ;
     if (barInfo.side_dia < materialInfo[0].fsy1) {
       fsy = this.save.toNumber(materialInfo[2].fsy1);
+      ElasticID = 's1';
     } else {
       fsy = this.save.toNumber(materialInfo[2].fsy2);
+      ElasticID = 's2';
     }
     if (fsy === null) {
       return new Array();
@@ -102,7 +105,7 @@ export class SetBarService {
         i: dia,
         n: line,
         IsTensionBar: false,
-        ElasticID: 's',
+        ElasticID: ElasticID,
         fsyk: fsy
       };
       result.push(Steel1);
@@ -187,21 +190,27 @@ export class SetBarService {
     // 鉄筋強度
     let fsy1: number;
     let fsu1: number;
-    if (tensionBar.rebar_dia <= position.materialInfo[0].fsy1) {
-      fsy1 = this.save.toNumber(position.materialInfo[1].fsy1);
-      fsu1 = this.save.toNumber(position.materialInfo[1].fsu1);
+    let ElasticID1 : string;
+    if (tensionBar.rebar_dia <= position.material_bar[0].fsy1) {
+      fsy1 = this.save.toNumber(position.material_bar[1].fsy1);
+      fsu1 = this.save.toNumber(position.material_bar[1].fsu1);
+      ElasticID1 = 's1';
     } else {
-      fsy1 = this.save.toNumber(position.materialInfo[1].fsy2);
-      fsu1 = this.save.toNumber(position.materialInfo[1].fsu2);
+      fsy1 = this.save.toNumber(position.material_bar[1].fsy2);
+      fsu1 = this.save.toNumber(position.material_bar[1].fsu2);
+      ElasticID1 = 's2';
     }
     if (fsy1 === null) {
       return result;
     }
     let fsy2: number;
-    if (compresBar.rebar_dia <= position.materialInfo[0].fsy1) {
-      fsy2 = this.save.toNumber(position.materialInfo[1].fsy1);
+    let ElasticID2 : string;
+    if (compresBar.rebar_dia <= position.material_bar[0].fsy1) {
+      fsy2 = this.save.toNumber(position.material_bar[1].fsy1);
+      ElasticID2 = 's1'
     } else {
-      fsy2 = this.save.toNumber(position.materialInfo[1].fsy2);
+      fsy2 = this.save.toNumber(position.material_bar[1].fsy2);
+      ElasticID2 = 's2'
     }
     if (fsy2 === null) {
       fsy2 = fsy1;
@@ -234,7 +243,7 @@ export class SetBarService {
             i: dia2,                    // 鋼材
             n: 1,                      // 鋼材の本数
             IsTensionBar: false,      // 鋼材の引張降伏着目Flag
-            ElasticID: 's'            // 材料番号
+            ElasticID: ElasticID2            // 材料番号
           };
           compresBarList.push(Steel1);
         }
@@ -275,7 +284,7 @@ export class SetBarService {
           i: dia1,                    // 鋼材
           n: 1,                      // 鋼材の本数
           IsTensionBar: true,      // 鋼材の引張降伏着目Flag
-          ElasticID: 's'            // 材料番号
+          ElasticID: ElasticID1            // 材料番号
         };
         tensionBarList.push(Steel1);
         nAs += As * 1;
@@ -296,10 +305,17 @@ export class SetBarService {
 
     // 鉄筋強度の入力
     const rs = position.safety_factor.rs;
+    const fsk1 = this.save.toNumber(position.material_bar[1].fsy1);
+    const fsk2 = this.save.toNumber(position.material_bar[1].fsy2);
     result.SteelElastic.push({
-      fsk: fsy1 / rs,
+      fsk: fsk1 / rs,
       Es: 200,
-      ElasticID: 's'
+      ElasticID: 's1'
+    },
+    {
+      fsk: fsk2 / rs,
+      Es: 200,
+      ElasticID: 's2'
     });
     // 印刷用の変数に登録
     result['print-fsu'] = fsu1;
@@ -309,14 +325,14 @@ export class SetBarService {
 
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
-      Asc.n = Asc.n * fsy2 / fsy1;
+      Asc.n = Asc.n;
       result.Steels.push(Asc);
     }
 
     // 側面鉄筋の登録
     for (const Ase of sideBarList) {
       Ase.Depth = Ase.Depth + b / 2;
-      Ase.n = Ase.n * Ase.fsyk / fsy1;
+      Ase.n = Ase.n;
       result.Steels.push(Ase);
     }
 
@@ -389,12 +405,12 @@ export class SetBarService {
     // 鉄筋強度
     let fsy: number;
     let fsu: number;
-    if (barInfo.rebar_dia <= position.materialInfo[0].fsy1) {
-      fsy = this.save.toNumber(position.materialInfo[1].fsy1);
-      fsu = this.save.toNumber(position.materialInfo[1].fsu1);
+    if (barInfo.rebar_dia <= position.material_bar[0].fsy1) {
+      fsy = this.save.toNumber(position.material_bar[1].fsy1);
+      fsu = this.save.toNumber(position.material_bar[1].fsu1);
     } else {
-      fsy = this.save.toNumber(position.materialInfo[1].fsy2);
-      fsu = this.save.toNumber(position.materialInfo[1].fsu2);
+      fsy = this.save.toNumber(position.material_bar[1].fsy2);
+      fsu = this.save.toNumber(position.material_bar[1].fsu2);
     }
     if (fsy === null) {
       return result;
@@ -408,7 +424,12 @@ export class SetBarService {
     }
 
     // 鉄筋配置
-    const h: number = position.memberInfo.H;
+    let h: number = this.save.toNumber(position.memberInfo.H);
+    if (h === null) { 
+      h= this.save.toNumber(position.memberInfo.B);
+    }
+    if (h === null) { return result; }
+
     let nAs: number = 0;
     let nDepth: number = 0;
     const As: number = this.save.getAs(dia);
@@ -536,25 +557,31 @@ export class SetBarService {
     }
 
     // 基準となる 鉄筋強度
-    const fsyk = tensionBarList[0].fsyk;
+    const fsk1 = this.save.toNumber(position.material_bar[1].fsy1);
+    const fsk2 = this.save.toNumber(position.material_bar[1].fsy2);
     const rs = position.safety_factor.rs;
 
     // 鉄筋強度の入力
     result.SteelElastic.push({
-      fsk: fsyk / rs,
+      c: fsk1 / rs,
       Es: 200,
-      ElasticID: 's'
+      ElasticID: 's1'
+    },
+    {
+      c: fsk2 / rs,
+      Es: 200,
+      ElasticID: 's2'
     });
 
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
-      Asc.n = Asc.n * Asc.fsyk / fsyk;
+      Asc.n = Asc.n;
       result.Steels.push(Asc);
     }
 
     // 側面鉄筋の登録
     for (const Ase of sideBarList) {
-      Ase.n = Ase.n * Ase.fsyk / fsyk;
+      Ase.n = Ase.n;
       result.Steels.push(Ase);
     }
 
@@ -649,12 +676,15 @@ export class SetBarService {
     // 鉄筋強度
     let fsy: number;
     let fsu: number;
+    let ElasticID: string;
     if (barInfo.rebar_dia <= materialInfo[0].fsy1) {
       fsy = this.save.toNumber(materialInfo[1].fsy1);
       fsu = this.save.toNumber(materialInfo[1].fsu1);
+      ElasticID = 's1';
     } else {
       fsy = this.save.toNumber(materialInfo[1].fsy2);
       fsu = this.save.toNumber(materialInfo[1].fsu2);
+      ElasticID = 's2';
     }
     if (fsy === null) {
       return new Array();
@@ -675,7 +705,7 @@ export class SetBarService {
         i: dia,
         n: Math.min(line, rebar_n),
         IsTensionBar: false,
-        ElasticID: 's',
+        ElasticID: ElasticID,
         fsyk: fsy
       };
       result.push(Steel1);
@@ -735,10 +765,13 @@ export class SetBarService {
 
     // 鉄筋強度
     let fsy: number;
+    let ElasticID: string;
     if (barInfo.side_dia < materialInfo[0].fsy1) {
       fsy = this.save.toNumber(materialInfo[2].fsy1);
+      ElasticID = 's1';
     } else {
       fsy = this.save.toNumber(materialInfo[2].fsy2);
+      ElasticID = 's2';
     }
     if (fsy === null) {
       return new Array();
@@ -758,7 +791,7 @@ export class SetBarService {
         i: dia,
         n: line,
         IsTensionBar: false,
-        ElasticID: 's',
+        ElasticID: ElasticID,
         fsyk: fsy
       };
       result.push(Steel1)

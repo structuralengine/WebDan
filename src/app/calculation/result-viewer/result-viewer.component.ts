@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 
 import { UserInfoService } from '../../providers/user-info.service';
+import { InputCalclationPrintService } from '../../components/calculation-print/input-calclation-print.service';
 import { CalcDurabilityMomentService } from '../result-durability-moment/calc-durability-moment.service';
 import { CalcEarthquakesMomentService } from '../result-earthquakes-moment/calc-earthquakes-moment.service';
 import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-force/calc-earthquakes-shear-force.service';
@@ -22,14 +23,16 @@ import * as printJS from 'print-js';
   styleUrls: ['./result-viewer.component.scss']
 })
 export class ResultViewerComponent implements OnInit {
-  
+
   // 目次 /////////////////////////////////
-  public loggedIn: boolean;
+  public printcalculate: boolean;
+  public printSectionForce: boolean;
 
   // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
   constructor(private user: UserInfoService,
+    private printControl: InputCalclationPrintService,
     public durabilityMoment: CalcDurabilityMomentService,
     public earthquakesMoment: CalcEarthquakesMomentService,
     public earthquakesShearForce: CalcEarthquakesShearForceService,
@@ -41,10 +44,20 @@ export class ResultViewerComponent implements OnInit {
     public safetyShearForce: CalcSafetyShearForceService,
     public serviceabilityMoment: CalcServiceabilityMomentService,
     public serviceabilityShearForce: CalcServiceabilityShearForceService
-     ) {}
+  ) { }
 
   ngOnInit() {
-    this.loggedIn = this.user.loggedIn;
+
+    this.initPrintCss();
+
+    this.printSectionForce = this.printControl.print_selected.print_section_force_checked;
+
+    this.printcalculate = false;
+    if (this.printControl.print_selected.print_calculate_checked === true) {
+      if (this.user.loggedIn === true) {
+        this.printcalculate = true;
+      }
+    }
 
     this.durabilityMoment.setDesignForces();
     this.earthquakesMoment.setDesignForces();
@@ -58,7 +71,6 @@ export class ResultViewerComponent implements OnInit {
     this.serviceabilityMoment.setDesignForces();
     this.serviceabilityShearForce.setDesignForces();
 
-    this.initPrintCss();
   }
 
   printTest() {
@@ -69,7 +81,7 @@ export class ResultViewerComponent implements OnInit {
     });
   }
 
-  private initPrintCss(): void{
+  private initPrintCss(): void {
     this.PrintCss = '@page {';
     this.PrintCss += 'size: A4;';
     this.PrintCss += 'margin: 0;';

@@ -596,6 +596,9 @@ export class SetSectionService {
     // 断面情報を集計
     PostData['Sections'] = new Array();
     let h: number = this.save.toNumber(position.memberInfo.H);
+    if (h === null) { 
+      h= this.save.toNumber(position.memberInfo.B);
+    }
     if (h === null) { return false; }
     const x1: number = h / RCOUNT;
     let b1 = 0;

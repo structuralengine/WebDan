@@ -153,12 +153,12 @@ export class CalcRestorabilityMomentService {
 
   private getResultString(printData: any, resultData: any, safety_factor: any): any {
 
-    const Md: number = printData.Md;
+    const Md: number = Math.abs(printData.Md);
     const My: number = resultData.Y.Mi;
     const rb: number = safety_factor.rb;
     const Myd: number = My / rb;
     const ri: number = safety_factor.ri;
-    const ratio: number = Math.abs(ri * Md / Myd);
+    const ratio: number = ri * Md / Myd;
     const result: string = (ratio < 1) ? 'OK' : 'NG';
 
     return {
