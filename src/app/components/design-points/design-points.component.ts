@@ -12,6 +12,7 @@ export class DesignPointsComponent implements OnInit {
   @ViewChild('ht_container') ht_container: ElementRef;
   hottable_height: number;
   isManual:boolean;
+  is3DPickUp:boolean;
 
   groupe_list: any[];
   table_datas: any[][];
@@ -35,6 +36,8 @@ export class DesignPointsComponent implements OnInit {
     this.table_datas = new Array(this.groupe_list.length);
     this.mergeCells = new Array(this.groupe_list.length);
     this.position_index = new Array(this.groupe_list.length);
+
+    this.is3DPickUp = this.save.is3DPickUp;
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
@@ -69,6 +72,7 @@ export class DesignPointsComponent implements OnInit {
   ngOnDestroy() {
     this.saveData();
   }
+  
   public saveData(): void {
     this.input.setDesignPointColumns(this.table_datas);
   }

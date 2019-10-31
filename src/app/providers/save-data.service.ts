@@ -98,7 +98,7 @@ export class SaveDataService extends InputDataService {
 
       this.pickup_filename = filename;
       this.pickup_data = pickup_data;
-
+      this.is3DPickUp = false;
     } catch {
       this.pickup_filename = '';
       this.pickup_data = {};
@@ -111,6 +111,7 @@ export class SaveDataService extends InputDataService {
     const jsonData = {};
     jsonData['pickup_filename'] = this.pickup_filename;
     jsonData['pickup_data'] = this.pickup_data;
+    jsonData['is3DPickUp'] = this.is3DPickUp;
     jsonData['pickup_moment_no'] = this.basic.pickup_moment_no;
     jsonData['pickup_shear_force_no'] = this.basic.pickup_shear_force_no;
     jsonData['specification1_selected'] = this.basic.specification1_selected; // 適用 に関する変数
@@ -140,6 +141,7 @@ export class SaveDataService extends InputDataService {
 
     this.pickup_filename = jsonData['pickup_filename'];
     this.pickup_data = jsonData['pickup_data'];
+    this.is3DPickUp = ('is3DPickUp' in jsonData) ? jsonData['is3DPickUp'] : false;
     this.basic.pickup_moment_no = jsonData['pickup_moment_no'];
     this.basic.pickup_shear_force_no = jsonData['pickup_shear_force_no'];
     this.basic.specification1_selected = jsonData['specification1_selected']; // 適用 に関する変数

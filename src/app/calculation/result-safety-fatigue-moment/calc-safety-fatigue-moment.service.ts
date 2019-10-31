@@ -14,7 +14,8 @@ import { from } from 'rxjs';
 
 export class CalcSafetyFatigueMomentService {
   // 安全性（疲労破壊）曲げモーメント
-  public DesignForceList: any[];
+  public DesignForceList: any[]; // 永久作用
+  public DesignForceList3: any[]; // 永久+変動作用
   public isEnable: boolean;
 
   // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
@@ -33,7 +34,7 @@ export class CalcSafetyFatigueMomentService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): void{
+  public setDesignForces(): void {
 
     this.DesignForceList = new Array();
 
@@ -41,18 +42,30 @@ export class CalcSafetyFatigueMomentService {
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
+
+    // 列車本数の入力がない場合は処理を抜ける
+    if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
+        this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+      return;
+    }
+
     // 永久作用
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
     // 疲労現
     const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
+    // 永久+変動作用
+    this.DesignForceList3 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+
     // 変動応力
-    const DesignForceList2 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
-    
+    const DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList3);
+
     if (this.DesignForceList.length < 1) {
       return;
     }
+
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList, DesignForceList2]);
+
   }
 
   // サーバー POST用データを生成する
@@ -83,9 +96,9 @@ export class CalcSafetyFatigueMomentService {
     const result = InputData0.concat(InputData1);
     return result;
   }
-
-  // 変動荷重を
-  public getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
+  
+  // 変動荷重を 
+  private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 
     const result = JSON.parse(
       JSON.stringify({
@@ -97,10 +110,34 @@ export class CalcSafetyFatigueMomentService {
       const groupe = minDesignForceList[ig];
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
-        for (let ip = 0; ip < member.positions.length; ip++) {
+
+        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
+
           const position = member.positions[ip];
           // position に 疲労係数入れる
           this.fatigue.setFatigueData(member.g_no, member.m_no, position);
+
+          // もし疲労データがなかったら削除する
+          let flg = false;
+          for (const key of Object.keys(position.fatigueData.M1)) {
+            if ( this.save.toNumber(position.fatigueData.M1[key]) !== null ) {
+              flg = true;
+              break;
+            }
+          }
+          if (flg === false) {
+           for (const key of Object.keys(position.fatigueData.M2)) {
+            if ( this.save.toNumber(position.fatigueData.M2[key]) !== null ) {
+              flg = true;
+              break;
+              }
+            }
+          }
+          if ( flg === false ) {
+            member.positions.splice(ip, 1); // 削除する
+            continue;
+          }
+
           // 最大応力 - 最小応力 で変動荷重を求める
           const minForce: any = position.designForce;
           const maxForce: any = result[ig][im].positions[ip].designForce;
@@ -118,6 +155,7 @@ export class CalcSafetyFatigueMomentService {
     }
     return result;
   }
+  
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(responseData: any, postData: any): any[] {
@@ -162,7 +200,7 @@ export class CalcSafetyFatigueMomentService {
             const resultFrd: any = this.calcFrd(printData, postdata0, postdata1, position, resultMin, resultMax);
             const resultColumn: any = this.getResultString(resultFrd);
 
-            /////////////// タイトル /////////////// 
+            /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata0));
             column.push(this.result.getTitleString3(position));

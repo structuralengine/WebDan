@@ -144,16 +144,71 @@ export class SetDesignForceService {
     ).temp;
 
     // 計算対象ではない着目点を削除する
+    for (let i = result.length - 1; i >= 0; i--) {
+      // 計算・印刷画面の部材にチェックが入っていなかければ削除
+      if (this.save.calc.calc_checked[i] === false) {
+        result.splice(i, 1);
+        break;
+      }
+      const groupe = result[i];
+      for (let j = groupe.length - 1; j >= 0; j--) {
+        const positions: any[] = groupe[j].positions;
+        for (let k = positions.length - 1; k >= 0; k--) {
+          let enable = false;
+          switch (calcTarget) {
+            case 'Moment':
+              // 曲げモーメントの照査の場合
+              enable = (positions[k].isMyCalc === true || positions[k].isMzCalc === true);
+              break;
+            case 'ShearForce':
+              // せん断力の照査の場合
+              enable = (positions[k].isVyCalc === true || positions[k].isVzCalc === true);
+              break;
+          }
+          if (enable === false) {
+            positions.splice(k, 1);
+            break;
+          }
+        }
+        // 照査する着目点がなければ 対象部材を削除
+        if (positions.length === 0) {
+          groupe.splice(j, 1);
+          break;
+        }
+      }
+      // 照査する部材がなければ 対象グループを削除
+      if (groupe.length === 0) {
+        result.splice(i, 1);
+        break;
+      }
+    }
+
+    return result;
+  }
+
+  /*
+  private getEnableMembers(calcTarget: string): any[] {
+
+    const result = JSON.parse(
+      JSON.stringify({
+        temp: this.save.points.getDesignPointColumns()
+      })
+    ).temp;
+
+    // 計算対象ではない着目点を削除する
     let groupe_delete_flug: boolean = true;
+    let ii: number = 0;
+
     while (groupe_delete_flug) {
       groupe_delete_flug = false;
 
       for (let i = 0; i < result.length; i++) {
         const groupe = result[i];
         // 計算・印刷画面の部材にチェックが入っていなかければ削除
-        if (this.save.calc.calc_checked[i] === false) {
+        if (this.save.calc.calc_checked[ii] === false) {
           result.splice(i, 1);
           groupe_delete_flug = true;
+          ii++;
           break;
         }
 
@@ -203,11 +258,14 @@ export class SetDesignForceService {
         if (groupe.length === 0) {
           result.splice(i, 1);
           groupe_delete_flug = true;
+          ii++;
           break;
         }
+
+        ii++;
       }
     }
     return result;
   }
-
+  */
 }

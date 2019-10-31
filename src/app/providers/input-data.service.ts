@@ -10,6 +10,8 @@ export class InputDataService {
   // ピックアップファイル
   public pickup_filename: string;
   public pickup_data: Object;
+  public is3DPickUp: boolean;
+
   public isManual(): boolean {
     if ( this.pickup_filename.trim().length === 0 ){
       return true;
@@ -21,6 +23,7 @@ export class InputDataService {
   constructor() { 
     this.pickup_filename = '';
     this.pickup_data = {};
+    this.is3DPickUp = false;
   }
 
   public rebar_List: any[] = [

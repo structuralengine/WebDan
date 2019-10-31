@@ -3,7 +3,7 @@ import { SetDesignForceService } from '../set-design-force.service';
 import { ResultDataService } from '../result-data.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
-import { CalcSafetyFatigueMomentService } from '../result-safety-fatigue-moment/calc-safety-fatigue-moment.service';
+import { SetFatigueService } from '../set-fatigue.service';
 
 import { Injectable, ViewChild } from '@angular/core';
 
@@ -13,7 +13,8 @@ import { Injectable, ViewChild } from '@angular/core';
 
 export class CalcSafetyFatigueShearForceService {
   // 安全性（疲労破壊）せん断力
-  public DesignForceList: any[];
+  public DesignForceList: any[]; // 永久作用
+  public DesignForceList3: any[]; // 永久+変動作用
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
@@ -21,7 +22,7 @@ export class CalcSafetyFatigueShearForceService {
     private post: SetPostDataService,
     private result: ResultDataService,
     private base: CalcSafetyShearForceService,
-    private bady: CalcSafetyFatigueMomentService) {
+    private fatigue: SetFatigueService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
@@ -37,13 +38,20 @@ export class CalcSafetyFatigueShearForceService {
     if (this.save.calc.print_selected.calculate_shear_force === false) {
       return;
     }
+
+    // 列車本数の入力がない場合は処理を抜ける
+    if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
+        this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+      return;
+    }
+
     // 最小応力
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[3]);
     // 最大応力
-    const DesignForceList1 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[4]);
+    this.DesignForceList3  = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[4]);
 
     // 変動応力
-    const DesignForceList2 = this.bady.getLiveload(this.DesignForceList, DesignForceList1);
+    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3 );
 
     if (this.DesignForceList.length < 1) {
       return;
@@ -65,6 +73,65 @@ export class CalcSafetyFatigueShearForceService {
     const postData = this.post.setInputData(this.DesignForceList, 1, 'ShearForce', '耐力', 2);
     return postData;
   }
+
+ // 変動荷重を 
+ private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
+
+  const result = JSON.parse(
+    JSON.stringify({
+      temp: maxDesignForceList
+    })
+  ).temp;
+
+  for (let ig = 0; ig < minDesignForceList.length; ig++) {
+    const groupe = minDesignForceList[ig];
+    for (let im = 0; im < groupe.length; im++) {
+      const member = groupe[im];
+
+      for (let ip = member.positions.length - 1; ip >= 0; ip--) {
+
+        const position = member.positions[ip];
+        // position に 疲労係数入れる
+        this.fatigue.setFatigueData(member.g_no, member.m_no, position);
+
+        // もし疲労データがなかったら削除する
+        let flg = false;
+        for (const key of Object.keys(position.fatigueData.V1)) {
+          if ( this.save.toNumber(position.fatigueData.V1[key]) !== null ) {
+            flg = true;
+            break;
+          }
+        }
+        if (flg === false) {
+         for (const key of Object.keys(position.fatigueData.V2)) {
+          if ( this.save.toNumber(position.fatigueData.V2[key]) !== null ) {
+            flg = true;
+            break;
+            }
+          }           
+        }
+        if ( flg === false ){
+          member.positions.splice(ip, 1);// 削除する
+          continue;
+        }
+
+        // 最大応力 - 最小応力 で変動荷重を求める
+        const minForce: any = position.designForce;
+        const maxForce: any = result[ig][im].positions[ip].designForce;
+        for (let i = 0; i < minForce.length; i++) {
+          for (const key1 of Object.keys(minForce[i])) {
+            if (key1 === 'n') { continue; }
+            for (const key2 of Object.keys(minForce[i][key1])) {
+              if (key2 === 'comb') { continue; }
+              maxForce[i][key1][key2] -= minForce[i][key1][key2];
+            }
+          }
+        }
+      }
+    }
+  }
+  return result;
+}
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(responseData: any, postData: any): any[] {
