@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputBarsService } from './input-bars.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { InputBarsService } from './input-bars.service';
   templateUrl: './bars.component.html',
   styleUrls: ['./bars.component.scss']
 })
-export class BarsComponent implements OnInit {
+export class BarsComponent implements OnInit, OnDestroy {
   
   @ViewChild('ht_container') ht_container: ElementRef;
   hottable_height: number;

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
 import { InputMembersService } from '../members/input-members.service';
 
@@ -7,7 +7,7 @@ import { InputMembersService } from '../members/input-members.service';
   templateUrl: './safety-factors-material-strengths.component.html',
   styleUrls: ['./safety-factors-material-strengths.component.scss']
 })
-export class SafetyFactorsMaterialStrengthsComponent implements OnInit {
+export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestroy {
 
   groupe_list: any[];
   safety_factors_table_datas: any[][];

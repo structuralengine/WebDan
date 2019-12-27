@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputDesignPointsService } from './input-design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 
@@ -7,7 +7,7 @@ import { SaveDataService } from '../../providers/save-data.service';
   templateUrl: './design-points.component.html',
   styleUrls: ['./design-points.component.scss']
 })
-export class DesignPointsComponent implements OnInit {
+export class DesignPointsComponent implements OnInit, OnDestroy {
 
   @ViewChild('ht_container') ht_container: ElementRef;
   hottable_height: number;

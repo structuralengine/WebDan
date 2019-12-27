@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { InputCalclationPrintService } from './input-calclation-print.service';
 import { SaveDataService } from '../../providers/save-data.service';
@@ -8,7 +8,7 @@ import { SaveDataService } from '../../providers/save-data.service';
   templateUrl: './calculation-print.component.html',
   styleUrls: ['./calculation-print.component.scss']
 })
-export class CalculationPrintComponent implements OnInit {
+export class CalculationPrintComponent implements OnInit, OnDestroy {
 
   isManual: boolean;
   print_calculate_checked: boolean;

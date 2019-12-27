@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputSteelsService } from './input-steels.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { InputSteelsService } from './input-steels.service';
   templateUrl: './steels.component.html',
   styleUrls: ['./steels.component.scss']
 })
-export class SteelsComponent implements OnInit {
+export class SteelsComponent implements OnInit, OnDestroy {
 
   @ViewChild('ht_container') ht_container: ElementRef;
   hottable_height: number;

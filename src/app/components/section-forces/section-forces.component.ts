@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputSectionForcesService } from './input-section-forces.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { InputSectionForcesService } from './input-section-forces.service';
   templateUrl: './section-forces.component.html',
   styleUrls: ['./section-forces.component.scss']
 })
-export class SectionForcesComponent implements OnInit {
+export class SectionForcesComponent implements OnInit, OnDestroy {
   @ViewChild('ht_container') ht_container: ElementRef;
   private hottable_height: number;
   private Mtable_datas: any[];

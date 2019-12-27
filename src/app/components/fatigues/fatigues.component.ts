@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputFatiguesService } from './input-fatigues.service';
 
 @Component({
@@ -6,7 +6,7 @@ import { InputFatiguesService } from './input-fatigues.service';
   templateUrl: './fatigues.component.html',
   styleUrls: ['./fatigues.component.scss']
 })
-export class FatiguesComponent implements OnInit {
+export class FatiguesComponent implements OnInit, OnDestroy {
 
   @ViewChild('ht_container') ht_container: ElementRef;
   hottable_height: number;
