@@ -563,12 +563,12 @@ export class SetBarService {
 
     // 鉄筋強度の入力
     result.SteelElastic.push({
-      c: fsk1 / rs,
+      fsk: fsk1 / rs,
       Es: 200,
       ElasticID: 's1'
     },
     {
-      c: fsk2 / rs,
+      fsk: fsk2 / rs,
       Es: 200,
       ElasticID: 's2'
     });
