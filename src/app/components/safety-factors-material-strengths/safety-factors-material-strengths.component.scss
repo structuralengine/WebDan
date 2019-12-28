@@ -1,0 +1,92 @@
+legend {
+  font-size: 16px;
+  line-height: 1.1;
+}
+
+fieldset {
+  border: 1px #cacaca solid;;
+ 
+}
+
+.tabContent{
+  margin: 15px;
+}
+
+.safety-factors, .material-strength {
+  display: inline-block;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 15px;
+
+}
+
+.pile-factors {
+  display: inline-block;
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-bottom: 15px;
+  
+  table{
+    margin: 15px;
+  }
+
+  th {
+    border: 1px solid #cfcfcf;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+    line-height: 1.5;
+    background: #f3f3f3;
+  }
+  
+  td {
+    border: 1px solid #cfcfcf;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+    line-height: 1.5;
+    background: white;
+  }
+}
+
+.concrete-strength {
+  margin-top: 30px;
+}
+
+.table-container {
+  float: left;
+}
+
+.header {
+  margin-bottom: 0px;
+  padding-bottom: 0px;
+  overflow: visible;
+  box-sizing: border-box;
+  display: block;
+
+  table, th, td {
+    border: 1px solid #cfcfcf;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+    line-height: 1.5;
+    background: #f3f3f3;
+  }
+}
+
+.hot {
+  margin-top: 0px;
+  padding-top: 0px;
+  height: 100%;
+}
+
+.range-fieldset {
+  float: right;
+  margin-left: 15px;
+
+
+}
+

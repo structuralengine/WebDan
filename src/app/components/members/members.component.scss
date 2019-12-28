@@ -1,0 +1,51 @@
+p {
+  margin-top: 10px;
+ margin-bottom: 0;
+}
+
+table, th, td {
+  border: 1px solid #cfcfcf;
+  font-weight: normal;
+  font-size: 14px;
+  text-align: center;
+  padding: 0;
+}
+
+.left-table{
+  float: left;
+}
+.right-table{
+  float: left;
+  margin-left: 15px;
+}
+
+.ht-container {
+
+  margin-bottom: 0;
+  height: 65%;
+
+  .header {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    overflow: visible;
+    box-sizing: border-box;
+    display: block;
+
+    table, th, td {
+      line-height: 1.5;
+      background: #f3f3f3;
+    }
+  }
+  .hot {
+    margin-top: 0px;
+    padding-top: 0px;
+    height: 100%;
+  }
+}
+
+.footer {
+  margin-top: 10px;
+}
+
+  
+  

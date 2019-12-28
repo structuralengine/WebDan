@@ -1,0 +1,31 @@
+<div #ht_container class="ht-container">
+  <ngb-tabset>
+    <ngb-tab *ngFor="let groupe of groupe_list; index as i">
+      <ng-template ngbTabTitle>
+        <h3>{{groupe[0].g_name}}</h3>
+      </ng-template>
+      <ng-template ngbTabContent>
+        <div class="table-container">
+          <hot-table class="hot" [settings]="table_settings" [data]="table_datas[i]" height="{{hottable_height}}"
+            [colHeaders]="true" [rowHeaders]="position_index[i]"><!--  [mergeCells] ="mergeCells[i]"> -->
+            <hot-column data="m_no" title="部材番号" width="70px" type="numeric" [readOnly]="true"></hot-column>
+            <ng-container *ngIf="!isManual" >
+              <hot-column data="p_name" title="算出点" width="85px" [readOnly]="true"></hot-column>
+              <hot-column data="position" title="位置" width="110px" [readOnly]="true"></hot-column>
+            </ng-container>
+            <hot-column data="p_name_ex" title="算出点名" width="250px"></hot-column>
+            <ng-container *ngIf="!isManual" >
+              <hot-column data="isMyCalc" title="曲げ照査(y軸)" type="checkbox" width="120px" ></hot-column>
+              <hot-column data="isVyCalc" title="せん断照査(y軸)" type="checkbox" width="120px" ></hot-column>
+              <ng-container *ngIf="is3DPickUp" >
+                <hot-column data="isMzCalc" title="曲げ照査(z軸)" type="checkbox" width="120px"></hot-column>
+                <hot-column data="isVzCalc" title="せん断照査(z軸)" type="checkbox" width="120px" ></hot-column>
+              </ng-container>
+            </ng-container>
+            <hot-column data="La" title="せん断スパン(mm)" type="numeric" format="0" width="140px"></hot-column>
+          </hot-table>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+</div>

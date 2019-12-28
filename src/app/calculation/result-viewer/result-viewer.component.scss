@@ -1,0 +1,40 @@
+.sticky {
+  display: inline-block;        /* インラインブロック要素にする */
+  vertical-align:  top;
+  position: -webkit-sticky;
+  position: sticky;
+  top: 10px;
+  width: 300px;
+  margin-left: 15px;
+}
+
+h3 {
+ font-size: 11pt;
+}
+
+/* ページレイアウト (section.sheet を１ページとする) */
+.HtmlPage {
+  font-family:"ＭＳ 明朝","HG明朝E", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN",  "ＭＳ Ｐ明朝",  serif;
+  /* マージン・パディングをリセットした方がデザインしやすい */
+  margin: 0;
+  padding: 0;
+  display: inline-block;        /* インラインブロック要素にする */
+}
+
+.sheet {
+  background: white; /* 背景を白く */
+  box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3); /* ドロップシャドウ */
+  margin: 5mm auto;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
+  /* 用紙サイズ A4 */
+  height: 1123px;
+  width: 794px;
+  /* 余白サイズ */
+  padding-top: 113px;
+  padding-left: 113px;
+  padding-right: 113px;
+}
+
