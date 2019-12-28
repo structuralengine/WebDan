@@ -31,13 +31,13 @@ export class CalcEarthquakesShearForceService {
     }
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[7]);
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1 ) {
       return;
     }
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
-    
+
   }
 
   // サーバー POST用データを生成する

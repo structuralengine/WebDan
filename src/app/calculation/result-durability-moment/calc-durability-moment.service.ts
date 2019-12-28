@@ -68,8 +68,11 @@ export class CalcDurabilityMomentService {
       for (let im = groupe.length - 1; im >= 0; im--) {
         const member = groupe[im];
         for (let ip = member.positions.length - 1; ip >= 0; ip--) {
-          let position: any = member.positions[ip];
+          const position: any = member.positions[ip];
           const memberInfo = position.memberInfo;
+          if (position.PostData0 === undefined ) {
+            continue;
+          }
           const PostData0 = position.PostData0;
           const PostData1 = position.PostData1;
           for (let i = PostData0.length - 1; i >= 0; i--) {
