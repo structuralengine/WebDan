@@ -140,10 +140,17 @@ export class SetPostDataService {
     const result: any[] = new Array();
 
     if ('Manual' in forceListList[0]) {
+
       // 断面手入力モードの場合は 設計断面 1つ
-      let num: number = this.save.toNumber(forceListList[0].Manual.Md);
-      if(num === null){
-        num =0;
+      if (forceListList[0].Manual === undefined) {
+        return result;
+      }
+      let num = 0;
+      if ('Md' in forceListList[0].Manual) {
+        num = this.save.toNumber(forceListList[0].Manual.Md );
+        num = (num === null) ? 0 : num;
+      } else {
+        return result;
       }
       const side = (num > 0) ? '下側引張' : '上側引張';
       for (const forceList of forceListList) {
@@ -225,7 +232,7 @@ export class SetPostDataService {
             comb: forceList.Mmax.comb
           };
         }
-        result.push([upper,lower]);
+        result.push([upper, lower]);
       }
     }
 
