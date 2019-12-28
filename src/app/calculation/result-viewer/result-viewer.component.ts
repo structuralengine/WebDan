@@ -56,6 +56,8 @@ export class ResultViewerComponent implements OnInit {
     if (this.printControl.print_selected.print_calculate_checked === true) {
       if (this.user.loggedIn === true) {
         this.printcalculate = true;
+      } else {
+      alert("ログインしてください")
       }
     }
 
