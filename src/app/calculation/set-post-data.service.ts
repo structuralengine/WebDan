@@ -141,7 +141,11 @@ export class SetPostDataService {
 
     if ('Manual' in forceListList[0]) {
       // 断面手入力モードの場合は 設計断面 1つ
-      const side = (forceListList[0].Manual.Md > 0) ? '下側引張' : '上側引張';
+      let num: number = this.save.toNumber(forceListList[0].Manual.Md);
+      if(num === null){
+        num =0;
+      }
+      const side = (num > 0) ? '下側引張' : '上側引張';
       for (const forceList of forceListList) {
         let fo: any;
         if (forceList === null) {
