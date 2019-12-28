@@ -12,7 +12,11 @@ export class ResultDataService {
   }
   // 照査表における タイトル１行目を取得
   public getTitleString1(member: any, position: any): any {
-    const strPos: string = position.position.toFixed(3);
+
+    let strPos = "";
+    if ( this.save.toNumber(position.position) !== null ) {
+      strPos = position.position.toFixed(3);
+    }
     const m_no: string = member.m_no.toFixed(0);
     const title: string = m_no + '部材(' + strPos + ')';
     const result = { alien: 'center', value: title };

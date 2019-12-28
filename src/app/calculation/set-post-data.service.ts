@@ -51,7 +51,9 @@ export class SetPostDataService {
     for (const groupe of DesignForceList) {
       for (const member of groupe) {
         for (const position of member.positions) {
-
+          if (position.PostData0 === undefined){
+            continue;
+          }
           // 安全係数を position['safety_factor'], position['material_steel']
           // position['material_concrete'], position['pile_factor'] に登録する
           this.safety.setSafetyFactor(calcTarget, member.g_no, position, SafetyFactorIndex);
