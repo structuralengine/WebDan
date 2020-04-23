@@ -119,17 +119,19 @@ export class CalcSafetyFatigueMomentService {
 
           // もし疲労データがなかったら削除する
           let flg = false;
-          for (const key of Object.keys(position.fatigueData.M1)) {
-            if ( this.save.toNumber(position.fatigueData.M1[key]) !== null ) {
-              flg = true;
-              break;
+          if (position.fatigueData !== null){
+            for (const key of Object.keys(position.fatigueData.M1)) {
+              if ( this.save.toNumber(position.fatigueData.M1[key]) !== null ) {
+                flg = true;
+                break;
+              }
             }
-          }
-          if (flg === false) {
-           for (const key of Object.keys(position.fatigueData.M2)) {
-            if ( this.save.toNumber(position.fatigueData.M2[key]) !== null ) {
-              flg = true;
-              break;
+            if (flg === false) {
+            for (const key of Object.keys(position.fatigueData.M2)) {
+              if ( this.save.toNumber(position.fatigueData.M2[key]) !== null ) {
+                flg = true;
+                break;
+                }
               }
             }
           }
