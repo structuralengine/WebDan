@@ -243,12 +243,12 @@ export class SetPostDataService {
 
   public getInputJsonString(postData: any): string {
 
-    const postObject = {
+    const postObject =  {
       username: this.user.loginUserName,
       password: this.user.loginPassword,
       InputData: postData.InputData0
     };
-    const inputJson: string = '=' + JSON.stringify(postObject);
+    const inputJson: string = JSON.stringify(postObject);
     return inputJson;
   }
 }
