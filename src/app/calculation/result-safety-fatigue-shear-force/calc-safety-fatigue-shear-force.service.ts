@@ -96,19 +96,21 @@ export class CalcSafetyFatigueShearForceService {
 
         // もし疲労データがなかったら削除する
         let flg = false;
-        for (const key of Object.keys(position.fatigueData.V1)) {
-          if ( this.save.toNumber(position.fatigueData.V1[key]) !== null ) {
-            flg = true;
-            break;
-          }
-        }
-        if (flg === false) {
-         for (const key of Object.keys(position.fatigueData.V2)) {
-          if ( this.save.toNumber(position.fatigueData.V2[key]) !== null ) {
-            flg = true;
-            break;
+        if (position.fatigueData !== null){
+          for (const key of Object.keys(position.fatigueData.V1)) {
+            if ( this.save.toNumber(position.fatigueData.V1[key]) !== null ) {
+              flg = true;
+              break;
             }
-          }           
+          }
+          if (flg === false) {
+          for (const key of Object.keys(position.fatigueData.V2)) {
+            if ( this.save.toNumber(position.fatigueData.V2[key]) !== null ) {
+              flg = true;
+              break;
+              }
+            }           
+          }
         }
         if ( flg === false ){
           member.positions.splice(ip, 1);// 削除する
