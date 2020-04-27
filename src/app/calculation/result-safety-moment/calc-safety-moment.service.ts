@@ -35,8 +35,11 @@ export class CalcSafetyMomentService {
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
-   
+    if (this.save.isManual() === true) {
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
+    } else {
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+    }
     if(this.DesignForceList.length < 1 ){
       return;
     }
