@@ -31,12 +31,8 @@ export class CalcEarthquakesMomentService {
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
-
-    if (this.save.isManual() === true) {
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[7]);
-    } else { 
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[7]);
-    }
+    
     if(this.DesignForceList.length < 1 ){
       return;
     }

@@ -36,13 +36,8 @@ export class CalcServiceabilityMomentService {
       return;
     }
     // 永久荷重
-    if (this.save.isManual() === true) {
     this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
-    } else { 
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
-    }
     // 縁応力度検討用
-
     const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
 
     if (this.DesignForceList.length < 1) {

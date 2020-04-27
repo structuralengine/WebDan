@@ -29,11 +29,8 @@ export class CalcEarthquakesShearForceService {
     if (this.save.calc.print_selected.calculate_shear_force === false) {
       return;
     }
-    if (this.save.isManual() === true) {
     this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[7]);
-  } else { 
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[7]);
-  }
+
     if(this.DesignForceList.length < 1 ){
       return;
     }
