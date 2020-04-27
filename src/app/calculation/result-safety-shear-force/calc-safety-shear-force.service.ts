@@ -35,7 +35,11 @@ export class CalcSafetyShearForceService {
     if (this.save.calc.print_selected.calculate_shear_force === false) {
       return;
     }
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[5]);
+    if (this.save.isManual() === true) {
+      this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[4]);
+    } else { 
+      this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[5]);
+    }
 
     if(this.DesignForceList.length < 1 ){
       return;

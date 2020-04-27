@@ -17,7 +17,7 @@ export class SetPostDataService {
     private safety: SetSafetyFactorService) { }
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
-  public URL: string = 'https://structuralengine.com/RCnonlinear/api/values/';
+  public URL: string = 'https://imj7l5o0xl.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear';
 
   public parseJsonString(str: string): any {
 
