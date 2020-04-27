@@ -27,6 +27,12 @@ export class SetSectionService {
     // 鉄筋の入力情報ををセット
     this.bar.setBarData(g_no, m_no, position);
 
+    //barがnullなら処理を飛ばす
+    if (position.barData === null) {
+      this.clearPostDataAll(position);
+      return;
+    }
+    
     // POST 用の断面情報をセット
     if (memberInfo.shape.indexOf('円') >= 0) {
 
