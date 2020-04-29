@@ -78,10 +78,8 @@ export class InputBarsService extends InputDataService {
 
         if( 'm_no' in column1) {
           temp = column1.m_no;
-        } else if( typeof column1.m_no === undefined ) {
-          temp = column1.m_no;
-        }else if( column1.m_no === undefined ) {
-          temp = column1.m_no;
+        } else {
+          column1.m_no = temp;
         }
 
         const b = this.default_bars(temp, column1.p_name, column1.position);
