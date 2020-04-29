@@ -473,16 +473,7 @@ export class SetSectionService {
     let h: number = this.save.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
     if (this.save.toNumber(position.barData.haunch_M) !== null) {
-
-      //console.log(h);
-      console.log("typeof_before_haunch_M = " + (typeof position.barData.haunch_M));
-      console.log("typeof_after_haunch_M = " + (typeof (position.barData.haunch_M * 1)));
-      console.log("before is " + (typeof h));
       h += position.barData.haunch_M * 1;
-      console.log("after is " + (typeof h));
-    }
-    else{
-      //console.log("check488");
     }
     const b: number = this.save.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
