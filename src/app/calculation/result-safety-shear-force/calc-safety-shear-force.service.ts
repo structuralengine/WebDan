@@ -50,7 +50,7 @@ export class CalcSafetyShearForceService {
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
     
-    for (let i = 0; i <  this.DesignForceList[0].length; i ++){ 
+    for (let i = 0; i < this.DesignForceList[0].length; i++){ 
       const df = this.DesignForceList[0][i];
       const ps = df.positions[0];
       const pd = ps.PostData0[0];
@@ -58,20 +58,6 @@ export class CalcSafetyShearForceService {
       this.DesignForceList[0].splice(i,1);
       }
     }
-    /*console.log(this.DesignForceList);
-    console.log("----pass----pass----");
-    console.log(this.DesignForceList[0][0].positions[0].PostData0[0]);
-    console.log("----pass----pass----");
-    delete this.DesignForceList[0][0].positions[0].PostData0[0].Vd;
-    console.log(delete this.DesignForceList[0][0].positions[0].PostData0[0]);
-    delete this.DesignForceList[0][0].positions[0].PostData0[0];
-    console.log(this.DesignForceList[0][0].positions[0]);
-    console.log("----pass----pass----");                        */
-    //if (this.DesignForceList[0][0].positions[0].PostData0[0].Vd === 0){
-      //delete this.DesignForceList[0][0].positions[0].PostData0[0];
-    //}
-    //delete this.DesignForceList[0][0].positions[0].PostData0[0];
-    //console.log(this.DesignForceList[0][0].positions[0]);
   }
 
   // サーバー POST用データを生成する
