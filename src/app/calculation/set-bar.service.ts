@@ -1000,7 +1000,7 @@ export class SetBarService {
         if (typeof obj[key] === 'object') {
           this.setBarObjectValue(target[key], obj[key]);
         } else {
-          if (target[key] === null) {
+          if (target[key] === null || target[key] === '') {
             target[key] = obj[key];
           }
         }
