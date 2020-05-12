@@ -36,7 +36,12 @@ export class CalcRestorabilityMomentService {
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[6]);
+
+    if (this.save.isManual() === true) {
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
+    } else { 
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[6]);
+    }
 
     if(this.DesignForceList.length < 1 ){
       return;
@@ -44,6 +49,25 @@ export class CalcRestorabilityMomentService {
     
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
+
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
+      const df = this.DesignForceList[0][i];
+      for (let j = df.positions.length -1; j >= 0; j--){
+        const ps = df.positions[j];
+        if ( !('PostData0' in ps) ){
+          df.positions.splice(j,1);
+          continue;
+        }
+        const pd = ps.PostData0[0];
+        if (pd.Md === 0){
+          df.positions.splice(j,1);
+        }       
+      }
+      if(df.positions.length == 0){
+        this.DesignForceList[0].splice(i,1);
+      }
+    }
+
   }
 
   // サーバー POST用データを生成する

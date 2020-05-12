@@ -48,13 +48,19 @@ export class CalcSafetyFatigueMomentService {
         this.save.toNumber(this.save.fatigues.train_B_count) === null) {
       return;
     }
-
-    // 永久作用
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
-    // 疲労現
-    const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
-    // 永久+変動作用
-    this.DesignForceList3 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+    if (this.save.isManual() === true) {
+      // 永久作用
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
+      // 永久+変動作用
+      this.DesignForceList3 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[2]);
+    } else {
+      // 永久作用
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
+      // 疲労現
+      const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
+      // 永久+変動作用
+      this.DesignForceList3 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+    }
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList3);
@@ -65,6 +71,25 @@ export class CalcSafetyFatigueMomentService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList, DesignForceList2]);
+
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
+      const df = this.DesignForceList[0][i];
+      for (let j = df.positions.length -1; j >= 0; j--){
+        const ps = df.positions[j];
+        if ( !('PostData0' in ps) ){
+          df.positions.splice(j,1);
+          continue;
+        }
+        const pd = ps.PostData0[0];
+        if (pd.Md === 0){
+          df.positions.splice(j,1);
+        }       
+      }
+      if(df.positions.length == 0){
+        this.DesignForceList[0].splice(i,1);
+        this.DesignForceList3[0].splice(i,1);
+      }
+    }
 
   }
 

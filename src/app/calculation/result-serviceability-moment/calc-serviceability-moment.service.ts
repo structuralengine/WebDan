@@ -35,10 +35,19 @@ export class CalcServiceabilityMomentService {
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
-    // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
-    // 縁応力度検討用
-    const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+
+    let DesignForceList1 = null;
+    if (this.save.isManual() === true) {
+      // 永久荷重
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+      // 縁応力度検討用
+      DesignForceList1 = this.force.getDesignForceList('Moment', 0);
+    } else { 
+      // 永久荷重
+      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
+      // 縁応力度検討用
+      DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+    }
 
     if (this.DesignForceList.length < 1) {
       return;
@@ -46,6 +55,25 @@ export class CalcServiceabilityMomentService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData( [this.DesignForceList, DesignForceList1]);
+  
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
+      const df = this.DesignForceList[0][i];
+      for (let j = df.positions.length -1; j >= 0; j--){
+        const ps = df.positions[j];
+        if ( !('PostData0' in ps) ){
+          df.positions.splice(j,1);
+          continue;
+        }
+        const pd = ps.PostData0[0];
+        if (pd.Md === 0){
+          df.positions.splice(j,1);
+        }       
+      }
+      if(df.positions.length == 0){
+        this.DesignForceList[0].splice(i,1);
+      }
+    }
+
   }
 
   // サーバー POST用データを生成する

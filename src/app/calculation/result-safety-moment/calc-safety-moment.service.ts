@@ -49,6 +49,24 @@ export class CalcSafetyMomentService {
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
 
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
+      const df = this.DesignForceList[0][i];
+      for (let j = df.positions.length -1; j >= 0; j--){
+        const ps = df.positions[j];
+        if ( !('PostData0' in ps) ){
+          df.positions.splice(j,1);
+          continue;
+        }
+        const pd = ps.PostData0[0];
+        if (pd.Md === 0){
+          df.positions.splice(j,1);
+        }       
+      }
+      if(df.positions.length == 0){
+        this.DesignForceList[0].splice(i,1);
+      }
+    }
+
   }
 
   // サーバー POST用データを生成する
