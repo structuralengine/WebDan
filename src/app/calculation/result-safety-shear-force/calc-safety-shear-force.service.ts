@@ -50,14 +50,19 @@ export class CalcSafetyShearForceService {
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
     
-    for (let i = 0; i < this.DesignForceList[0].length; i++){ 
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
       const ps = df.positions[0];
+      if ( !('PostData0' in ps) ){
+        this.DesignForceList[0].splice(i,1);
+        continue;
+      }
       const pd = ps.PostData0[0];
       if (pd.Vd === 0){
       this.DesignForceList[0].splice(i,1);
       }
     }
+    
   }
 
   // サーバー POST用データを生成する

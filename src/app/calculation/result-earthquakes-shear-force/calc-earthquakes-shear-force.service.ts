@@ -29,7 +29,13 @@ export class CalcEarthquakesShearForceService {
     if (this.save.calc.print_selected.calculate_shear_force === false) {
       return;
     }
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[7]);
+
+    if (this.save.isManual() === true) {
+      this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[6]);
+    } else { 
+      this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[7]);
+    }
+
 
     if(this.DesignForceList.length < 1 ){
       return;
@@ -38,6 +44,19 @@ export class CalcEarthquakesShearForceService {
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList]);
     
+    for (let i = 0; i < this.DesignForceList[0].length; i++){ 
+      const df = this.DesignForceList[0][i];
+      const ps = df.positions[0];
+      if ( !('PostData0' in ps) ){
+        this.DesignForceList[0].splice(i,1);
+        continue;
+      }
+      const pd = ps.PostData0[0];
+      if (pd.Vd === 0){
+      this.DesignForceList[0].splice(i,1);
+      }
+    }
+
   }
 
   // サーバー POST用データを生成する
