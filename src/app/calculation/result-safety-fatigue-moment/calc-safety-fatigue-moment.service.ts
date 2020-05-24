@@ -50,19 +50,13 @@ export class CalcSafetyFatigueMomentService {
         this.save.toNumber(this.save.fatigues.train_B_count) === null) {
       return;
     }
-    if (this.save.isManual() === true) {
-      // 永久作用
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
-      // 永久+変動作用
-      this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[2]);
-    } else {
-      // 永久作用
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
-      // 疲労現
-      const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
-      // 永久+変動作用
-      this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
-    }
+
+    // 疲労現
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[2]);
+    // 永久作用
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
+    // 永久+変動作用
+    this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList3);

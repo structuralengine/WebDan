@@ -48,17 +48,9 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 最小応力
-    if (this.save.isManual() === true) {
-      this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[2]);
-    } else { 
-      this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
-    }
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
     // 最大応力
-    if (this.save.isManual() === true) {
-      this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
-    } else { 
-      this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
-    }
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3 );

@@ -34,11 +34,7 @@ export class CalcEarthquakesMomentService {
       return;
     }
 
-    if (this.save.isManual() === true) {
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
-    } else { 
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[7]);
-    }
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[7]);
     
     if(this.DesignForceList.length < 1 ){
       return;

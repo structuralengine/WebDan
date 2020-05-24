@@ -34,11 +34,7 @@ export class CalcRestorabilityShearForceService {
       return;
     }
 
-    if (this.save.isManual() === true) {
-      this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[5]);
-    } else { 
-      this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[6]);
-    }
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[6]);
 
     if(this.DesignForceList.length < 1 ){
       return;

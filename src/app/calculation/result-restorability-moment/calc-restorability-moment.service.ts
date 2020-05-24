@@ -39,11 +39,7 @@ export class CalcRestorabilityMomentService {
       return;
     }
 
-    if (this.save.isManual() === true) {
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
-    } else { 
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[6]);
-    }
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[6]);
 
     if(this.DesignForceList.length < 1 ){
       return;

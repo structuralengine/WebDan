@@ -38,11 +38,7 @@ export class CalcSafetyMomentService {
       return;
     }
 
-    if ( this.save.isManual() === true ) {
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
-    } else {
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
-    }
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
 
     if (this.DesignForceList.length < 1 ) {
       return;

@@ -38,18 +38,10 @@ export class CalcServiceabilityMomentService {
       return;
     }
 
-    let DesignForceList1 = null;
-    if (this.save.isManual() === true) {
-      // 永久荷重
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
-      // 縁応力度検討用
-      DesignForceList1 = this.force.getDesignForceList('Md', 0);
-    } else { 
-      // 永久荷重
-      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
-      // 縁応力度検討用
-      DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
-    }
+    // 永久荷重
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
+    // 縁応力度検討用
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
 
     if (this.DesignForceList.length < 1) {
       return;
