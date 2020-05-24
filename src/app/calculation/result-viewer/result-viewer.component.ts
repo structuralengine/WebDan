@@ -104,7 +104,7 @@ export class ResultViewerComponent implements OnInit {
     this.PrintCss += 'position: relative;';
     this.PrintCss += 'box-sizing: border-box;';
     this.PrintCss += 'page-break-after: always;';
-    this.PrintCss += 'padding-top: 35mm;';
+    this.PrintCss += 'padding-top: 30mm;';
     this.PrintCss += 'padding-left: 30mm;';
     this.PrintCss += 'padding-right: 30mm;';
     this.PrintCss += '}';

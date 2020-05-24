@@ -13,12 +13,12 @@ import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-s
 })
 export class ResultEarthquakesShearForceComponent implements OnInit {
 
-  private title: string = '復旧性（地震時）';
-  private page_index = "ap_11";
+  public title: string = '復旧性（地震時）';
+  public page_index = "ap_11";
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private safetyShearForcePages: any[];
+  public err: string;
+  public safetyShearForcePages: any[];
 
   constructor(private http: Http,
     private calc: CalcEarthquakesShearForceService,

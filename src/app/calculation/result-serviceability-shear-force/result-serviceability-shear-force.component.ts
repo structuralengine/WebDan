@@ -14,8 +14,8 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private serviceabilityShearForcePages: any[];
+  public err: string;
+  public serviceabilityShearForcePages: any[];
 
   constructor(private http: Http,
               private calc: CalcServiceabilityShearForceService,

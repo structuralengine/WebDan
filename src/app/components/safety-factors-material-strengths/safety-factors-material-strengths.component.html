@@ -1,7 +1,7 @@
 <ngb-tabset>
   <ngb-tab *ngFor="let groupe of groupe_list; index as i">
     <ng-template ngbTabTitle>
-      <h3>{{ groupe[0].g_name }}</h3>
+      <h5>{{ groupe[0].g_name }}</h5>
     </ng-template>
     <ng-template ngbTabContent>
       <div class="tabContent">
@@ -13,7 +13,7 @@
             <ng-template ngbTabContent>
 
               <div class="safety-factors">
-                <h3>安全係数</h3>
+                <h5>安全係数</h5>
                 <div class="table-container">
                   <div class="header">
                     <table width="980px">
@@ -66,7 +66,7 @@
               </div>
 
               <div class="material-strength">
-                <h3>鉄筋材料強度</h3>
+                <h5>鉄筋材料強度</h5>
                 <div class="table-container">
                   <div class="header">
                     <table width="530px">
@@ -90,7 +90,7 @@
                   </hot-table>
 
                   <div class="concrete-strength">
-                    <h3>コンクリート材料強度</h3>
+                    <h5>コンクリート材料強度</h5>
                     <hot-table class="hot" [settings]="concrete_strength_table_settings"
                       [data]="concrete_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
                       <hot-column data="title" width="390" [readOnly]="true"></hot-column>
@@ -110,7 +110,7 @@
               <ng-template ngbTabContent>
 
                 <div class="safety-factors">
-                  <h3>安全係数</h3>
+                  <h5>安全係数</h5>
                   <div class="table-container">
 
                     <hot-table class="hot" [settings]="safety_factors_table_settings"
@@ -123,7 +123,7 @@
                 </div>
 
                 <div class="material-strength">
-                  <h3>鉄骨材料強度</h3>
+                  <h5>鉄骨材料強度</h5>
                   <div class="table-container">
                     <hot-table class="hot" [settings]="steel_strength_table_settings"
                       [data]="steel_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false">
@@ -145,7 +145,7 @@
             </ng-template>
             <ng-template ngbTabContent>
               <div class="pile-factors">
-                <h3>杭の施工条件</h3>
+                <h5>杭の施工条件</h5>
                 <table>
                   <thead>
                     <tr>

@@ -14,8 +14,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private safetyFatigueShearForcepages: any[];
+  public err: string;
+  public safetyFatigueShearForcepages: any[];
 
   constructor(private http: Http,
     private calc: CalcSafetyFatigueShearForceService,

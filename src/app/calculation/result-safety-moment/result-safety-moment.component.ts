@@ -14,8 +14,8 @@ export class ResultSafetyMomentComponent implements OnInit {
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private safetyMomentPages: any[];
+  public err: string;
+  public safetyMomentPages: any[];
 
   constructor(private http: Http,
               private calc: CalcSafetyMomentService,

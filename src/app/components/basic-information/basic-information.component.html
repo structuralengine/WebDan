@@ -1,7 +1,7 @@
 <ng-container *ngIf="!isManual">
 <div class="left-contents">
   <section class="pickup-table">
-    <h3>{{pickup_moment_title}}</h3>
+    <h5>{{pickup_moment_title}}</h5>
     <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_moment_datarows" [colHeaders]="true"
       [rowHeaders]="true">
       <hot-column data="title" [readOnly]="true" title="{{pickup_title_column_header}}" width="270px"></hot-column>
@@ -10,7 +10,7 @@
   </section>
 
   <section class="pickup-table">
-    <h3>{{pickup_shear_force_title}}</h3>
+    <h5>{{pickup_shear_force_title}}</h5>
     <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_shear_force_datarows" [colHeaders]="true"
       [rowHeaders]="true">
       <hot-column data="title" [readOnly]="true" title="{{pickup_title_column_header}}" width="270px"></hot-column>
@@ -63,7 +63,7 @@
 -->
 
   <div class="conditions-checkbox">
-    <h3>設計条件</h3>
+    <h5>設計条件</h5>
     <ng-container *ngFor="let item of conditions_list; index as i">
       <div>
         <input type="checkbox" name="conditions{{i}}" id="conditions{{i}}" [(ngModel)]="conditions_list[i].selected"

@@ -12,12 +12,12 @@ import { SetPostDataService } from '../set-post-data.service';
 })
 export class ResultServiceabilityMomentComponent implements OnInit {
 
-  private title: string = '耐久性の照査';
-  private page_index = "ap_5";
+  public title: string = '耐久性の照査';
+  public page_index = "ap_5";
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private serviceabilityMomentPages: any[];
+  public err: string;
+  public serviceabilityMomentPages: any[];
 
   constructor(private http: Http,
     private calc: CalcServiceabilityMomentService,
