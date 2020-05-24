@@ -29,6 +29,8 @@ export class CalcServiceabilityMomentService {
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
+    this.isEnable = false;
+
     this.DesignForceList = new Array();
   
     // 曲げモーメントが計算対象でない場合は処理を抜ける
@@ -39,14 +41,14 @@ export class CalcServiceabilityMomentService {
     let DesignForceList1 = null;
     if (this.save.isManual() === true) {
       // 永久荷重
-      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
       // 縁応力度検討用
-      DesignForceList1 = this.force.getDesignForceList('Moment', 0);
+      DesignForceList1 = this.force.getDesignForceList('Md', 0);
     } else { 
       // 永久荷重
-      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
+      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
       // 縁応力度検討用
-      DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+      DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
     }
 
     if (this.DesignForceList.length < 1) {
@@ -54,7 +56,7 @@ export class CalcServiceabilityMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData( [this.DesignForceList, DesignForceList1]);
+    this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
   
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
@@ -84,7 +86,7 @@ export class CalcServiceabilityMomentService {
     }
 
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 0, 'Moment', '応力度', 2);
+    const postData = this.post.setInputData(this.DesignForceList, 0, 'Md', '応力度', 2);
     return postData;
   }
 
@@ -267,9 +269,9 @@ export class CalcServiceabilityMomentService {
     // 圧縮応力度の照査
     if ('Sigmac' in re && 'fcd04' in re) {
       if (re.Sigmac < re.fcd04) {
-        result.sigma_c.value = re.Sigmac.toFixed(1) + '<' + re.fcd04.toFixed(1);
+        result.sigma_c.value = re.Sigmac.toFixed(2) + ' < ' + re.fcd04.toFixed(1);
       } else {
-        result.sigma_c.value = re.Sigmac.toFixed(1) + '>' + re.fcd04.toFixed(1);
+        result.sigma_c.value = re.Sigmac.toFixed(2) + ' > ' + re.fcd04.toFixed(1);
         result.result.value = '(0.4fcd) NG';
       }
     }
@@ -284,22 +286,22 @@ export class CalcServiceabilityMomentService {
     // 縁応力度
     if ('Sigmab' in re && 'Sigmabl' in re) {
       if (re.Sigmab < re.Sigmabl) {
-        result.sigma_b.value = re.Sigmab.toFixed(1) + '<' + re.Sigmabl.toFixed(1);
+        result.sigma_b.value = re.Sigmab.toFixed(2) + ' < ' + re.Sigmabl.toFixed(2);
         // 鉄筋応力度の照査
         if ('Sigmas' in re && 'sigmal1' in re) {
           if (re.Sigmas < re.sigmal1) {
-            result.sigma_s.value = re.Sigmas.toFixed(1) + '<' + re.sigmal1.toFixed(1);
+            result.sigma_s.value = re.Sigmas.toFixed(1) + ' < ' + re.sigmal1.toFixed(1);
             if (result.result.value === '-') {
               result.result.value = 'OK';
             }
           } else {
-            result.sigma_s.value = re.Sigmas.toFixed(1) + '>' + re.sigmal1.toFixed(1);
+            result.sigma_s.value = re.Sigmas.toFixed(1) + ' > ' + re.sigmal1.toFixed(1);
             result.result.value = 'NG';
           }
         }
         return result;
       } else {
-        result.sigma_b.value = re.Sigmab.toFixed(1) + '>' + re.Sigmabl.toFixed(1);
+        result.sigma_b.value = re.Sigmab.toFixed(2) + ' > ' + re.Sigmabl.toFixed(2);
       }
     }
 
@@ -331,16 +333,16 @@ export class CalcServiceabilityMomentService {
     }
 
     if ('k1' in re) {
-      result.k1 = { alien: 'right', value: re.k1.toFixed(1) };
+      result.k1 = { alien: 'right', value: re.k1.toFixed(2) };
     }
     if ('k2' in re) {
-      result.k2 = { alien: 'right', value: re.k2.toFixed(1) };
+      result.k2 = { alien: 'right', value: re.k2.toFixed(3) };
     }
     if ('n' in re) {
-      result.n = { alien: 'right', value: re.n.toFixed(0) };
+      result.n = { alien: 'right', value: re.n.toFixed(3) };
     }
     if ('k3' in re) {
-      result.k3 = { alien: 'right', value: re.k3.toFixed(1) };
+      result.k3 = { alien: 'right', value: re.k3.toFixed(3) };
     }
     if ('k4' in re) {
       result.k4 = { alien: 'right', value: re.k4.toFixed(2) };
@@ -559,9 +561,9 @@ export class CalcServiceabilityMomentService {
     }
     result['fai'] = fai;
 
-    let ecu: number = position.memberInfo.ecu;
-    if ('ecu' in position.memberInfo) {
-      ecu = this.save.toNumber(position.memberInfo.ecu);
+    let ecu: number;
+    if ('ecsd' in position.memberInfo) {
+      ecu = this.save.toNumber(position.memberInfo.ecsd);
       if (ecu === null) { ecu = 450; }
     } else {
       ecu = 450;
@@ -591,8 +593,8 @@ export class CalcServiceabilityMomentService {
 
     const w1: number = 1.1 * k1 * k2 * k3 * k4;
     const w2: number = 4 * c + 0.7 * (Cs - fai);
-    const w3: number = Sigmase / Es + ecu;
-    const Wd: number = w1 * w2 * w3 / 1000000;
+    const w3: number = (Sigmase / (Es * 1000)) + (ecu / 1000000);
+    const Wd: number = w1 * w2 * w3;
     result['Wd'] = Wd;
 
     // 制限値
@@ -653,17 +655,17 @@ export class CalcServiceabilityMomentService {
       return 0;
     }
 
-    try {
+    let result: number = null;
+    if (sigmaSc.length === 1) {
+      result = sigmaSc[0].s;
+    } else {
       const point1: any = sigmaSc[0];
       const point2: any = sigmaSc[1];
       const S: number = point1.s - point2.s;
       const DD: number = point2.Depth - point1.Depth;
-
-      let result: number = S / DD * point2.Depth + point2.s;
-      return result;
-    } catch{
-      return null;
+      result = S / DD * point2.Depth + point2.s;
     }
+    return result;
 
   }
 

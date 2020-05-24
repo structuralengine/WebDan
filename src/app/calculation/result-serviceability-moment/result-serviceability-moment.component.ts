@@ -20,8 +20,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   private serviceabilityMomentPages: any[];
 
   constructor(private http: Http,
-              private calc: CalcServiceabilityMomentService,
-              private post: SetPostDataService) { }
+    private calc: CalcServiceabilityMomentService,
+    private post: SetPostDataService) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -42,7 +42,6 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({
@@ -50,18 +49,18 @@ export class ResultServiceabilityMomentComponent implements OnInit {
         'Accept': 'application/json'
       })
     })
-    .subscribe(
-      response => {
-        const result: string = response.text();
-        this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
-        this.isLoading = false;
-        this.calc.isEnable = true;
-      },
-      error => {
-        this.err = error.toString();
-        this.isLoading = false;
-        this.isFulfilled = false;
-      });
+      .subscribe(
+        response => {
+          const result: string = response.text();
+          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
+          this.isLoading = false;
+          this.calc.isEnable = true;
+        },
+        error => {
+          this.err = error.toString();
+          this.isLoading = false;
+          this.isFulfilled = false;
+        });
 
   }
 
@@ -74,7 +73,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       this.err = response;
       return false;
     }
-        const json = this.post.parseJsonString(response);
+    const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
     this.serviceabilityMomentPages = this.calc.setServiceabilityPages(json.OutputData, postData);
     return true;

@@ -34,10 +34,10 @@ export class SetDesignForceService {
     // 断面力を取得
     let force: any[];
     switch (calcTarget) {
-      case 'Moment': // 曲げモーメントの照査の場合
+      case 'Md': // 曲げモーメントの照査の場合
         force = this.save.force.Mdatas;
         break;
-      case 'ShearForce': // せん断力の照査の場合
+      case 'Nd': // せん断力の照査の場合
         force = this.save.force.Vdatas;
         break;
     }
@@ -118,12 +118,12 @@ export class SetDesignForceService {
             position['designForce'] = new Array();
           }
           const designForce = {
-            Mmax: targetPosition['M'].max,
-            Mmin: targetPosition['M'].min,
-            Smax: targetPosition['S'].max,
-            Smin: targetPosition['S'].min,
-            Nmax: targetPosition['N'].max,
-            Nmin: targetPosition['N'].min,
+            Mdmax: targetPosition['M'].max,
+            Mdmin: targetPosition['M'].min,
+            Vdmax: targetPosition['S'].max,
+            Vdmin: targetPosition['S'].min,
+            Ndmax: targetPosition['N'].max,
+            Ndmin: targetPosition['N'].min,
             n: n
           };
           position['designForce'].push(designForce);
@@ -148,7 +148,7 @@ export class SetDesignForceService {
       // 計算・印刷画面の部材にチェックが入っていなかければ削除
       if (this.save.calc.calc_checked[i] === false) {
         result.splice(i, 1);
-        break;
+        continue;
       }
       const groupe = result[i];
       for (let j = groupe.length - 1; j >= 0; j--) {
@@ -156,116 +156,33 @@ export class SetDesignForceService {
         for (let k = positions.length - 1; k >= 0; k--) {
           let enable = false;
           switch (calcTarget) {
-            case 'Moment':
+            case 'Md':
               // 曲げモーメントの照査の場合
               enable = (positions[k].isMyCalc === true || positions[k].isMzCalc === true);
               break;
-            case 'ShearForce':
+            case 'Vd':
               // せん断力の照査の場合
               enable = (positions[k].isVyCalc === true || positions[k].isVzCalc === true);
               break;
           }
           if (enable === false) {
             positions.splice(k, 1);
-            break;
+            //break;
           }
         }
         // 照査する着目点がなければ 対象部材を削除
         if (positions.length === 0) {
           groupe.splice(j, 1);
-          break;
+          //break;
         }
       }
       // 照査する部材がなければ 対象グループを削除
       if (groupe.length === 0) {
         result.splice(i, 1);
-        break;
+        //break;
       }
     }
 
     return result;
   }
-
-  /*
-  private getEnableMembers(calcTarget: string): any[] {
-
-    const result = JSON.parse(
-      JSON.stringify({
-        temp: this.save.points.getDesignPointColumns()
-      })
-    ).temp;
-
-    // 計算対象ではない着目点を削除する
-    let groupe_delete_flug: boolean = true;
-    let ii: number = 0;
-
-    while (groupe_delete_flug) {
-      groupe_delete_flug = false;
-
-      for (let i = 0; i < result.length; i++) {
-        const groupe = result[i];
-        // 計算・印刷画面の部材にチェックが入っていなかければ削除
-        if (this.save.calc.calc_checked[ii] === false) {
-          result.splice(i, 1);
-          groupe_delete_flug = true;
-          ii++;
-          break;
-        }
-
-        let member_delete_flug: boolean = true;
-        while (member_delete_flug) {
-          member_delete_flug = false;
-
-          for (let j = 0; j < groupe.length; j++) {
-            const positions: any[] = groupe[j].positions;
-
-            let position_delete_flug: boolean = true;
-            while (position_delete_flug) {
-              position_delete_flug = false;
-
-              for (let k = 0; k < positions.length; k++) {
-                let enable: boolean;
-                switch (calcTarget) {
-                  case 'Moment':
-                    // 曲げモーメントの照査の場合
-                    enable = (positions[k].isMyCalc === true || positions[k].isMzCalc === true);
-                    break;
-                  case 'ShearForce':
-                    // せん断力の照査の場合
-                    enable = (positions[k].isVyCalc === true || positions[k].isVzCalc === true);
-                    break;
-                }
-
-                if (enable === false) {
-                  positions.splice(k, 1);
-                  position_delete_flug = true;
-                  break;
-                }
-
-              }
-
-              // 照査する着目点がなければ 対象部材を削除
-              if (positions.length === 0) {
-                groupe.splice(j, 1);
-                member_delete_flug = true;
-                break;
-              }
-            }
-          }
-        }
-
-        // 照査する部材がなければ 対象グループを削除
-        if (groupe.length === 0) {
-          result.splice(i, 1);
-          groupe_delete_flug = true;
-          ii++;
-          break;
-        }
-
-        ii++;
-      }
-    }
-    return result;
-  }
-  */
 }

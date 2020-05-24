@@ -25,6 +25,8 @@ export class CalcEarthquakesMomentService {
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
+    this.isEnable = false;
+
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
@@ -33,9 +35,9 @@ export class CalcEarthquakesMomentService {
     }
 
     if (this.save.isManual() === true) {
-      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
     } else { 
-      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[7]);
+      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[7]);
     }
     
     if(this.DesignForceList.length < 1 ){
@@ -43,7 +45,7 @@ export class CalcEarthquakesMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList]);
+    this.post.setPostData([this.DesignForceList], 'Md');
 
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
@@ -72,7 +74,7 @@ export class CalcEarthquakesMomentService {
       return null;
     }
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 4, 'Moment', '耐力', 1);
+    const postData = this.post.setInputData(this.DesignForceList, 4, 'Md', '耐力', 1);
     return postData;
   }
 

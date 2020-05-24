@@ -25,6 +25,8 @@ export class CalcRestorabilityShearForceService {
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
+    this.isEnable = false;
+
     this.DesignForceList = new Array();
   
     // せん断力が計算対象でない場合は処理を抜ける
@@ -33,9 +35,9 @@ export class CalcRestorabilityShearForceService {
     }
 
     if (this.save.isManual() === true) {
-      this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[5]);
+      this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[5]);
     } else { 
-      this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[6]);
+      this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[6]);
     }
 
     if(this.DesignForceList.length < 1 ){
@@ -43,7 +45,7 @@ export class CalcRestorabilityShearForceService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList]);
+    this.post.setPostData([this.DesignForceList], 'Vd');
     
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
@@ -73,7 +75,7 @@ export class CalcRestorabilityShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 3, 'ShearForce', '耐力', 1);
+    const postData = this.post.setInputData(this.DesignForceList, 3, 'Vd', '耐力', 1);
     return postData;
   }
 

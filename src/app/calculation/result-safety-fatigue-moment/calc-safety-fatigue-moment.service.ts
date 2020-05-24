@@ -36,6 +36,8 @@ export class CalcSafetyFatigueMomentService {
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): void {
 
+    this.isEnable = false;
+
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
@@ -50,16 +52,16 @@ export class CalcSafetyFatigueMomentService {
     }
     if (this.save.isManual() === true) {
       // 永久作用
-      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
+      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
       // 永久+変動作用
-      this.DesignForceList3 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[2]);
+      this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[2]);
     } else {
       // 永久作用
-      this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[4]);
+      this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
       // 疲労現
-      const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[3]);
+      const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
       // 永久+変動作用
-      this.DesignForceList3 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[5]);
+      this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
     }
 
     // 変動応力
@@ -70,7 +72,7 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList2]);
+    this.post.setPostData([this.DesignForceList, DesignForceList2], 'Md');
 
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
@@ -101,7 +103,7 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // POST 用
-    this.PostedData = this.post.setInputData(this.DesignForceList, 1, 'Moment', '応力度', 2);
+    this.PostedData = this.post.setInputData(this.DesignForceList, 1, 'Md', '応力度', 2);
     // 連結する
     const postData = {
       InputData0: this.copyInputData(this.PostedData.InputData0, this.PostedData.InputData1)
@@ -263,8 +265,8 @@ export class CalcSafetyFatigueMomentService {
             column.push(fsk.fsd);
             column.push(fsk.fsu);
             /////////////// 照査 ///////////////
-            column.push(resultColumn.Mmin);
-            column.push(resultColumn.Nmin);
+            column.push(resultColumn.Mdmin);
+            column.push(resultColumn.Ndmin);
             column.push(resultColumn.sigma_min);
 
             column.push(resultColumn.Mrd);
@@ -321,18 +323,18 @@ export class CalcSafetyFatigueMomentService {
       }
     }
 
-    let Mmin: number = 0;
+    let Mdmin: number = 0;
     if ('Md' in postdata0) {
-      Mmin = this.save.toNumber(postdata0.Md);
-      if (Mmin !== null) {
-        result['Mmin'] = Mmin;
+      Mdmin = this.save.toNumber(postdata0.Md);
+      if (Mdmin !== null) {
+        result['Mdmin'] = Mdmin;
       }
     }
-    let Nmin: number = 0;
+    let Ndmin: number = 0;
     if ('Nd' in postdata0) {
-      Nmin = this.save.toNumber(postdata0.Nd);
-      if (Nmin !== null) {
-        result['Nmin'] = Nmin;
+      Ndmin = this.save.toNumber(postdata0.Nd);
+      if (Ndmin !== null) {
+        result['Ndmin'] = Ndmin;
       }
     }
 
@@ -540,8 +542,8 @@ export class CalcSafetyFatigueMomentService {
   private getResultString(re: any): any {
 
     const result: any = {
-      Mmin: { alien: 'center', value: '-' },
-      Nmin: { alien: 'center', value: '-' },
+      Mdmin: { alien: 'center', value: '-' },
+      Ndmin: { alien: 'center', value: '-' },
       sigma_min: { alien: 'center', value: '-' },
 
       Mrd: { alien: 'center', value: '-' },
@@ -572,11 +574,11 @@ export class CalcSafetyFatigueMomentService {
       result: { alien: 'center', value: '-' }
     };
 
-    if ('Mmin' in re) {
-      result.Mmin = { alien: 'right', value: re.Mmin.toFixed(1) };
+    if ('Mdmin' in re) {
+      result.Mdmin = { alien: 'right', value: re.Mdmin.toFixed(1) };
     }
-    if ('Nmin' in re) {
-      result.Nmin = { alien: 'right', value: re.Nmin.toFixed(1) };
+    if ('Ndmin' in re) {
+      result.Ndmin = { alien: 'right', value: re.Ndmin.toFixed(1) };
     }
     if ('sigma_min' in re) {
       result.sigma_min = { alien: 'right', value: re.sigma_min.toFixed(2) };
