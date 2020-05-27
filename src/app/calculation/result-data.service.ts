@@ -25,6 +25,7 @@ export class ResultDataService {
 
   // 照査表における タイトル２行目を取得
   public getTitleString2(position: any, postdata: any): any {
+    /*
     let side: string;
     switch (postdata.memo) {
       case '上側引張':
@@ -36,13 +37,25 @@ export class ResultDataService {
       default:
         side = '';
     }
-    const title: string = position.p_name_ex + side;
+    */
+    const title: string = position.p_name_ex;// + side;
     const result = { alien: 'center', value: title };
     return result;
   }
   // 照査表における タイトル３行目を取得
-  public getTitleString3(position: any): any {
-    const title: string = position.memberInfo.shape;
+  public getTitleString3(position: any, postdata: any): any {
+    let side: string;
+    switch (postdata.memo) {
+      case '上側引張':
+        side = '(上側)';
+        break
+      case '下側引張':
+        side = '(下側)';
+        break
+      default:
+        side = '';
+    }
+    const title: string = position.memberInfo.shape + side;
     const result = { alien: 'center', value: title };
     return result;
   }

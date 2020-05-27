@@ -22,11 +22,11 @@ export class CalcSafetyFatigueMomentService {
   private PostedData: any;
 
   constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private fatigue: SetFatigueService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private base: CalcServiceabilityMomentService) {
+    private force: SetDesignForceService,
+    private fatigue: SetFatigueService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -47,7 +47,7 @@ export class CalcSafetyFatigueMomentService {
 
     // 列車本数の入力がない場合は処理を抜ける
     if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
-        this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+      this.save.toNumber(this.save.fatigues.train_B_count) === null) {
       return;
     }
 
@@ -59,7 +59,7 @@ export class CalcSafetyFatigueMomentService {
     this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
 
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList3);
+    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3);
 
     if (this.DesignForceList.length < 1) {
       return;
@@ -70,20 +70,20 @@ export class CalcSafetyFatigueMomentService {
 
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
-      for (let j = df.positions.length -1; j >= 0; j--){
+      for (let j = df.positions.length - 1; j >= 0; j--) {
         const ps = df.positions[j];
-        if ( !('PostData0' in ps) ){
-          df.positions.splice(j,1);
+        if (!('PostData0' in ps)) {
+          df.positions.splice(j, 1);
           continue;
         }
         const pd = ps.PostData0[0];
-        if (pd.Md === 0){
-          df.positions.splice(j,1);
-        }       
+        if (pd.Md === 0) {
+          df.positions.splice(j, 1);
+        }
       }
-      if(df.positions.length == 0){
-        this.DesignForceList[0].splice(i,1);
-        this.DesignForceList3[0].splice(i,1);
+      if (df.positions.length === 0) {
+        this.DesignForceList[0].splice(i, 1);
+        this.DesignForceList3[0].splice(i, 1);
       }
     }
 
@@ -117,7 +117,7 @@ export class CalcSafetyFatigueMomentService {
     const result = InputData0.concat(InputData1);
     return result;
   }
-  
+
   // 変動荷重を 
   private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 
@@ -140,23 +140,23 @@ export class CalcSafetyFatigueMomentService {
 
           // もし疲労データがなかったら削除する
           let flg = false;
-          if (position.fatigueData !== null){
+          if (position.fatigueData !== null) {
             for (const key of Object.keys(position.fatigueData.M1)) {
-              if ( this.save.toNumber(position.fatigueData.M1[key]) !== null ) {
+              if (this.save.toNumber(position.fatigueData.M1[key]) !== null) {
                 flg = true;
                 break;
               }
             }
             if (flg === false) {
-            for (const key of Object.keys(position.fatigueData.M2)) {
-              if ( this.save.toNumber(position.fatigueData.M2[key]) !== null ) {
-                flg = true;
-                break;
+              for (const key of Object.keys(position.fatigueData.M2)) {
+                if (this.save.toNumber(position.fatigueData.M2[key]) !== null) {
+                  flg = true;
+                  break;
                 }
               }
             }
           }
-          if ( flg === false ) {
+          if (flg === false) {
             member.positions.splice(ip, 1); // 削除する
             continue;
           }
@@ -178,7 +178,7 @@ export class CalcSafetyFatigueMomentService {
     }
     return result;
   }
-  
+
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(responseData: any, postData: any): any[] {
@@ -226,7 +226,7 @@ export class CalcSafetyFatigueMomentService {
             /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, postdata0));
             ///////////////// 形状 /////////////////
             column.push(this.result.getShapeString_B(printData));
             column.push(this.result.getShapeString_H(printData));
@@ -402,7 +402,7 @@ export class CalcSafetyFatigueMomentService {
     let ar: number = 3.09 - 0.003 * fai;
 
     let reference_count: number = this.save.toNumber(this.save.fatigues.reference_count);
-    if(reference_count === null ){
+    if (reference_count === null) {
       reference_count = 2000000;
     }
     const tmp201: number = Math.pow(10, ar) / Math.pow(reference_count, k);
@@ -433,7 +433,7 @@ export class CalcSafetyFatigueMomentService {
       k = 0.12;
       ar = 3.09 - 0.003 * fai;
     }
-    
+
     // 標準列車荷重観山の総等価繰返し回数 N の計算
     let T: number;
     if ('service_life' in this.save.fatigues) {
@@ -509,7 +509,7 @@ export class CalcSafetyFatigueMomentService {
     const tmpN1: number = 365 * T * jA * NA * Math.pow(SASC, 1 / k);
     const tmpN2: number = 365 * T * jB * NB * Math.pow(SBSC, 1 / k);
     const N: number = tmpN1 + tmpN2;
-    result['N'] = N;
+    result['N'] = Math.ceil(N / 100) * 100;
 
     if (ratio200 < 1 && N <= reference_count) {
       return result;

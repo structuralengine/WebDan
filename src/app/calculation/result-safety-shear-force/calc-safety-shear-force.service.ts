@@ -115,7 +115,7 @@ export class CalcSafetyShearForceService {
             /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, postdata));
 
             ///////////////// 形状 /////////////////
             column.push(resultColumn.B);

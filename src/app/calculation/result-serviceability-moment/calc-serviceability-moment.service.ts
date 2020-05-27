@@ -132,7 +132,7 @@ export class CalcServiceabilityMomentService {
             /////////////// タイトル /////////////// 
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, postdata0));
             ///////////////// 形状 /////////////////
             column.push(this.result.getShapeString_B(printData));
             column.push(this.result.getShapeString_H(printData));
@@ -315,7 +315,7 @@ export class CalcServiceabilityMomentService {
       result.c = { alien: 'right', value: re.c.toFixed(1) };
     }
     if ('Cs' in re) {
-      result.Cs = { alien: 'right', value: re.Cs.toFixed(0) };
+      result.Cs = { alien: 'right', value: re.Cs.toFixed(1) };
     }
     if ('fai' in re) {
       result.fai = { alien: 'right', value: re.fai.toFixed(0) };

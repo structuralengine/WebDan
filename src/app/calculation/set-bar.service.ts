@@ -250,7 +250,7 @@ export class SetBarService {
       }
       result['print-Asc'] = this.save.getAs(dia2) * rebar_n2;
       result['print-AscString'] = dia2 + '-' + rebar_n2 + '本';
-      result['print-dsc'] = this.getBarCenterPosition(dsc2, rebar_n2, line2, space2);
+      result['print-dsc'] = this.getBarCenterPosition(dsc2, rebar_n2, line2, space2, 1);
     }
 
     // 側方鉄筋 をセットする
@@ -343,7 +343,7 @@ export class SetBarService {
     // 印刷用の変数に登録
     result['print-Ast'] = this.save.getAs(dia1) * rebar_n1;
     result['print-AstString'] = dia1 + '-' + rebar_n1 + '本';
-    result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1);
+    result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1, 1);
     result['print-Ast-c'] = dsc1 - (tensionBar.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
     result['print-Ast-Cs'] = tensionBar.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
     result['print-Ast-φ'] = tensionBar.rebar_dia; // ひび割れの検討 に用いる鉄筋径
@@ -361,7 +361,7 @@ export class SetBarService {
     return result;
   }
 
-  // 矩形 T形の 鉄筋のPOST用 データを登録する。
+  // 円形の 鉄筋のPOST用 データを登録する。
   public getCircleBar(position: any): any {
     const result = {
       Steels: new Array(),
@@ -475,7 +475,7 @@ export class SetBarService {
 
     result['print-Ast'] = this.save.getAs(dia) * rebar_n;
     result['print-AstString'] = dia + '-' + rebar_n + '本';
-    result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space);
+    result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space, 1);
 
     result['print-Ast-n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
     result['print-Ast-c'] = dsc - (barInfo.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
@@ -574,8 +574,13 @@ export class SetBarService {
     });
 
     // 圧縮鉄筋の登録
+    let cosAsc: number = this.save.toNumber(compresBar.cos);
+    if ( cosAsc === null ) {
+      cosAsc = 1;
+    }
     for (const Asc of compresBarList) {
-      Asc.n = Asc.n;
+      Asc.n = Asc.n * cosAsc;
+      Asc.Depth = Asc.Depth / cosAsc;
       result.Steels.push(Asc);
     }
 
@@ -586,8 +591,13 @@ export class SetBarService {
     }
 
     // 引張鉄筋の登録
+    let cosAst: number = this.save.toNumber(tensionBar.cos);
+    if ( cosAst === null ) {
+      cosAst = 1;
+    }
     for (const Ast of tensionBarList) {
-      Ast.Depth = height - Ast.Depth;
+      Ast.n = Ast.n * cosAst;
+      Ast.Depth = height - (Ast.Depth / cosAst);
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }
@@ -661,7 +671,8 @@ export class SetBarService {
     }
 
     // 鉄筋段数
-    const n: number = Math.ceil(rebar_n / line);
+    const nn: number = rebar_n / line;
+    const n: number = Math.ceil(nn);
 
     // 鉄筋アキ
     let space: number = this.save.toNumber(barInfo.rebar_space);
@@ -726,8 +737,8 @@ export class SetBarService {
     printTensionBar['As'] = this.save.getAs(dia) * barInfo.rebar_n * cos;
     printTensionBar['cos'] = cos;
     printTensionBar['AsString'] = dia + '-' + barInfo.rebar_n + '本';
-    printTensionBar['ds'] = this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space);
-    printTensionBar['n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
+    printTensionBar['ds'] = this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space, cos);
+    printTensionBar['n'] = nn; // ひび割れの検討k3 に用いる鉄筋段数
     printTensionBar['c'] = dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
     printTensionBar['Cs'] = barInfo.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
     printTensionBar['φ'] = barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
@@ -809,13 +820,13 @@ export class SetBarService {
     // 印刷用の変数に登録
     printSideBar['As'] = this.save.getAs(dia) * n;
     printSideBar['AsString'] = dia + '-' + n + '段';
-    printSideBar['ds'] = this.getBarCenterPosition(dse, n, 1, space);
+    printSideBar['ds'] = this.getBarCenterPosition(dse, n, 1, space, 1);
 
     return result;
   }
 
   // 鉄筋の重心位置を求める
-  private getBarCenterPosition(cover: number, n: number, line: number, space: number): number {
+  private getBarCenterPosition(cover: number, n: number, line: number, space: number, cos: number): number {
     // 計算する必要のない場合の処理
     if (cover === null) { return 0; }
     if (n === null || n <= 0) { return cover; }
@@ -832,7 +843,8 @@ export class SetBarService {
       PosNum += pos * num;
       reNum -= line;
     }
-    const result: number = PosNum / n;
+    let result: number = PosNum / n;
+    result /= cos;
     return result;
   }
 
