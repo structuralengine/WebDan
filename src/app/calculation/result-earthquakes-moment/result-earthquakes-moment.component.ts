@@ -13,12 +13,12 @@ import { from } from 'rxjs';
 })
 export class ResultEarthquakesMomentComponent implements OnInit {
 
-  private title = "復旧性（地震時）曲げモーメントの照査";
-  private page_index = "ap_10";
+  public title = "復旧性（地震時）曲げモーメントの照査";
+  public page_index = "ap_10";
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private restorabilityMomentPages: any[];
+  public err: string;
+  public restorabilityMomentPages: any[];
 
   constructor(private http: Http,
     private calc: CalcEarthquakesMomentService,
@@ -44,7 +44,6 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({

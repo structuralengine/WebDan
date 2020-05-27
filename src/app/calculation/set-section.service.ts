@@ -473,7 +473,7 @@ export class SetSectionService {
     let h: number = this.save.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
     if (this.save.toNumber(position.barData.haunch_M) !== null) {
-      h += position.barData.haunch_M;
+      h += position.barData.haunch_M * 1;
     }
     const b: number = this.save.toNumber(position.memberInfo.B);
     if (b === null) { return false; }

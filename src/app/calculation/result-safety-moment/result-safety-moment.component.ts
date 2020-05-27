@@ -14,8 +14,8 @@ export class ResultSafetyMomentComponent implements OnInit {
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private safetyMomentPages: any[];
+  public err: string;
+  public safetyMomentPages: any[];
 
   constructor(private http: Http,
               private calc: CalcSafetyMomentService,
@@ -40,7 +40,6 @@ export class ResultSafetyMomentComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({

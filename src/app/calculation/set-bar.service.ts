@@ -292,7 +292,7 @@ export class SetBarService {
       }
     }
     result['print-Ast-n'] = n1; // ひび割れの検討k3 に用いる鉄筋段数
-    result['print-Ast-c'] = dsc1; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-c'] = dsc1 - (tensionBar.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
     result['print-Ast-φ'] = tensionBar.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
     let Cs: number = this.save.toNumber(tensionBar.rebar_ss);
@@ -344,7 +344,7 @@ export class SetBarService {
     result['print-Ast'] = this.save.getAs(dia1) * rebar_n1;
     result['print-AstString'] = dia1 + '-' + rebar_n1 + '本';
     result['print-dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1);
-    result['print-Ast-c'] = dsc1; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-c'] = dsc1 - (tensionBar.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
     result['print-Ast-Cs'] = tensionBar.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
     result['print-Ast-φ'] = tensionBar.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
@@ -478,7 +478,7 @@ export class SetBarService {
     result['print-dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space);
 
     result['print-Ast-n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
-    result['print-Ast-c'] = dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-c'] = dsc - (barInfo.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
     result['print-Ast-φ'] = barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
     let Cs: number = this.save.toNumber(barInfo.rebar_ss);
@@ -602,7 +602,7 @@ export class SetBarService {
     result['print-dst'] = printTensionBar['ds'];
 
     result['print-Ast-n'] = printTensionBar.n; // ひび割れの検討k3 に用いる鉄筋段数
-    result['print-Ast-c'] = printTensionBar.c; // ひび割れの検討 に用いる1段目の鉄筋かぶり
+    result['print-Ast-c'] = printTensionBar.c - (printTensionBar['φ'] / 2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
     result['print-Ast-Cs'] = printTensionBar.Cs; // ひび割れの検討 に用いる鉄筋間隔
     result['print-Ast-φ'] = printTensionBar['φ']; // ひび割れの検討 に用いる鉄筋径
     result['print-Vyd_d'] = height - printTensionBar.ds;
@@ -1000,7 +1000,7 @@ export class SetBarService {
         if (typeof obj[key] === 'object') {
           this.setBarObjectValue(target[key], obj[key]);
         } else {
-          if (target[key] === null) {
+          if (target[key] === null || target[key] === '') {
             target[key] = obj[key];
           }
         }

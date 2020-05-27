@@ -32,6 +32,8 @@ export class CalcSafetyFatigueShearForceService {
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
+    this.isEnable = false;
+
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
@@ -46,9 +48,9 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 最小応力
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[3]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
     // 最大応力
-    this.DesignForceList3  = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[4]);
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3 );
@@ -58,8 +60,26 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList2]);
-
+    this.post.setPostData([this.DesignForceList, DesignForceList2], 'Vd');
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
+      const df = this.DesignForceList[0][i];
+      for (let j = df.positions.length -1; j >= 0; j--){
+        const ps = df.positions[j];
+        if ( !('PostData0' in ps) ){
+          df.positions.splice(j,1);
+          continue;
+        }
+        const pd = ps.PostData0[0];
+        if (pd.Vd === 0){
+          df.positions.splice(j,1);
+        }       
+      }
+      if(df.positions.length == 0){
+        this.DesignForceList[0].splice(i,1);
+        this.DesignForceList3[0].splice(i,1);
+      }
+    }
+   
   }
 
   // サーバー POST用データを生成する
@@ -70,7 +90,7 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 1, 'ShearForce', '耐力', 2);
+    const postData = this.post.setInputData(this.DesignForceList, 1, 'Vd', '耐力', 2);
     return postData;
   }
 

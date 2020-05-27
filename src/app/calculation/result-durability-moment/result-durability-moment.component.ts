@@ -44,7 +44,6 @@ export class ResultDurabilityMomentComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({

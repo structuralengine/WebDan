@@ -14,8 +14,8 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private serviceabilityShearForcePages: any[];
+  public err: string;
+  public serviceabilityShearForcePages: any[];
 
   constructor(private http: Http,
               private calc: CalcServiceabilityShearForceService,
@@ -40,7 +40,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({

@@ -14,8 +14,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private safetyFatigueShearForcepages: any[];
+  public err: string;
+  public safetyFatigueShearForcepages: any[];
 
   constructor(private http: Http,
     private calc: CalcSafetyFatigueShearForceService,
@@ -40,7 +40,6 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({

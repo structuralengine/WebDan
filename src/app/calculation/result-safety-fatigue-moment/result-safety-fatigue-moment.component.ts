@@ -11,11 +11,11 @@ import { SetPostDataService } from '../set-post-data.service';
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
 export class ResultSafetyFatigueMomentComponent implements OnInit {
-  private safetyFatigueMomentPages: any[];
+  public safetyFatigueMomentPages: any[];
 
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
+  public err: string;
   private safetyMomentPages: any[];
 
   constructor(private http: Http,
@@ -41,7 +41,6 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     }
 
     // postする
-    this.calc.isEnable = false;
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
       headers: new Headers({

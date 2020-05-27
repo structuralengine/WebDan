@@ -118,14 +118,27 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
   private initPickupTable(): void {
 
     if (this.save.isManual() === true) {
+      // 曲げモーメント 手入力
       this.input.pickup_moment_no = new Array();
-      for (let i = 0; i < this.pickup_moment_title.length; i++) {
-        this.input.pickup_moment_no.push(i + 1);
-      }
+      this.input.pickup_moment_no.push(0);        // 耐久性 縁応力度検討用
+      this.input.pickup_moment_no.push(1);        // 耐久性 （永久荷重）
+      this.input.pickup_moment_no.push(null);     // 安全性 （疲労破壊）疲労限
+      this.input.pickup_moment_no.push(2);        // 安全性 （疲労破壊）永久作用
+      this.input.pickup_moment_no.push(3);        // 安全性 （疲労破壊）永久＋変動
+      this.input.pickup_moment_no.push(4);        // 安全性 （破壊）
+      this.input.pickup_moment_no.push(5);        // 復旧性 （損傷）地震時以外
+      this.input.pickup_moment_no.push(6);        // 復旧性 （損傷）地震時
+      this.input.pickup_moment_no.push(null);     // 耐久性  最小鉄筋量
+      // せん断力 手入力
       this.input.pickup_shear_force_no = new Array();
-      for (let i = 0; i < this.pickup_shear_force_title.length; i++) {
-        this.input.pickup_shear_force_no.push(i + 1);
-      }
+      this.input.pickup_shear_force_no.push(0);   // 耐久性 せん断ひび割れ検討判定用
+      this.input.pickup_shear_force_no.push(1);   // 耐久性 （永久荷重）
+      this.input.pickup_shear_force_no.push(2);   // 耐久性 （変動荷重）
+      this.input.pickup_shear_force_no.push(3);   // 安全性 （疲労破壊）永久作用
+      this.input.pickup_shear_force_no.push(4);   // 安全性 （疲労破壊）永久＋変動
+      this.input.pickup_shear_force_no.push(5);   // 安全性 （破壊）
+      this.input.pickup_shear_force_no.push(6);   // 復旧性 （損傷）地震時以外
+      this.input.pickup_shear_force_no.push(7);   // 復旧性 （損傷）地震時
     }
 
     this.pickup_moment_datarows = new Array();

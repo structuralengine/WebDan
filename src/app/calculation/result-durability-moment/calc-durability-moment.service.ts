@@ -25,6 +25,8 @@ export class CalcDurabilityMomentService {
   // 設計断面力の集計
   public setDesignForces(): void {
 
+    this.isEnable = false;
+
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
@@ -32,20 +34,20 @@ export class CalcDurabilityMomentService {
       return;
     }
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[1]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
     // 縁応力検討用
-    const DesignForceList1 = this.force.getDesignForceList('Moment', this.save.basic.pickup_moment_no[0]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
 
     if (this.DesignForceList.length < 1) {
       return ;
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList,  DesignForceList1]);
+    this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
 
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition(this.DesignForceList);
-
+    
   }
 
   // サーバー POST用データを生成する
@@ -56,7 +58,7 @@ export class CalcDurabilityMomentService {
     }
 
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 0, 'Moment', '応力度', 2);
+    const postData = this.post.setInputData(this.DesignForceList, 0, 'Md', '応力度', 2);
     return postData;
   }
 

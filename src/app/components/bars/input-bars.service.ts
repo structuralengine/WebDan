@@ -69,12 +69,20 @@ export class InputBarsService extends InputDataService {
 
     this.bar_list = new Array();
 
+    let temp: number = 0;
+
     for (const groupe of table_datas) {
       for ( let i = 0; i < groupe.length; i += 2 ) {
         const column1 = groupe[i];
         const column2 = groupe[i + 1];
 
-        const b = this.default_bars(column1.m_no, column1.p_name, column1.position);
+        if( 'm_no' in column1) {
+          temp = column1.m_no;
+        } else {
+          column1.m_no = temp;
+        }
+
+        const b = this.default_bars(temp, column1.p_name, column1.position);
         b['index'] = column1.index;
         b.p_name_ex = column1.p_name_ex;
         b.b = column1.bh;

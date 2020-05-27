@@ -29,6 +29,8 @@ export class CalcServiceabilityShearForceService {
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
+    this.isEnable = false;
+
     this.DesignForceList= new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
@@ -37,22 +39,40 @@ export class CalcServiceabilityShearForceService {
     }
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    this.DesignForceList = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[0]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[0]);
     // 永久荷重
-    const DesignForceList1 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[1]);
+    const DesignForceList1 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[1]);
     
     if (this.DesignForceList.length < 1) {
       return;
     }
     
     // 変動荷重
-    let DesignForceList2 = this.force.getDesignForceList('ShearForce', this.save.basic.pickup_shear_force_no[2]);
+    let DesignForceList2 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[2]);
     if(DesignForceList2.length < 1){
       DesignForceList2 = this.getLiveload(this.DesignForceList , DesignForceList1);
     }
     
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList1, DesignForceList2]);
+    this.post.setPostData([this.DesignForceList, DesignForceList1, DesignForceList2], 'Vd');
+
+    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
+      const df = this.DesignForceList[0][i];
+      for (let j = df.positions.length -1; j >= 0; j--){
+        const ps = df.positions[j];
+        if ( !('PostData0' in ps) ){
+          df.positions.splice(j,1);
+          continue;
+        }
+        const pd = ps.PostData0[0];
+        if (pd.Vd === 0){
+          df.positions.splice(j,1);
+        }       
+      }
+      if(df.positions.length == 0){
+        this.DesignForceList[0].splice(i,1);
+      }
+    }
 
   }
 
@@ -63,7 +83,7 @@ export class CalcServiceabilityShearForceService {
       return null;
     }
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 0, 'ShearForce', '耐力', 3);
+    const postData = this.post.setInputData(this.DesignForceList, 0, 'Vd', '耐力', 3);
     return postData;
   }
 
@@ -277,7 +297,7 @@ export class CalcServiceabilityShearForceService {
     const VpdVcd: number = Vpd + result.Vcd;
     const VpdVrdVcd: number = Vpd + Vrd + result.Vcd;
 
-    const sigmaw = (VpdVrd_krVcd_s / AwZsinCos) * (VpdVcd / VpdVrdVcd);
+    const sigmaw = (VpdVrd_krVcd_s / AwZsinCos) * (VpdVcd / VpdVrdVcd) * 1000;
     result['sigmaw'] = sigmaw;
 
     // 安全率
@@ -444,7 +464,7 @@ export class CalcServiceabilityShearForceService {
     }
 
     if ('sigmaw' in re && 'sigma12' in re) {
-      const str: string = re.sigmaw.toFixed(0) +  '/' +  re.sigma12.toFixed(0);
+      const str: string = re.sigmaw.toFixed(1) +  '/' +  re.sigma12.toFixed(0);
       result.sigma = { alien: 'center', value: str };
     }
 

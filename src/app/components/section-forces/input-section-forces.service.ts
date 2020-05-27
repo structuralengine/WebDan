@@ -100,8 +100,6 @@ export class InputSectionForcesService extends InputDataService {
     }
   }
 
-  public getDesignForce(calcTarget: string){
-    
-  }
+
 
 }
