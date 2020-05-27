@@ -84,7 +84,8 @@ export class ResultDataService {
       return {
         As: { alien: 'center', value: '-' },
         AsString: { alien: 'center', value: '-' },
-        ds: { alien: 'center', value: '-' }
+        ds: { alien: 'center', value: '-' },
+        cos: { alien: 'center', value: '-' }
       };
     }
 
@@ -93,8 +94,20 @@ export class ResultDataService {
     const AsString: string = symbol + 'String';
     const ds: string = 'ds' + subscript;
 
+    const cossymbol: string = 'cos' + symbol;
+    let cosvalue: number = this.save.toNumber( printData[cossymbol]);
+    
+    if(cosvalue === null){
+      cosvalue = 1;
+    }
+
+    let Ass: string =  printData[As].toFixed(1);
+    if (cosvalue  != 1){
+      Ass = '(' + cosvalue.toFixed(3) + ')' + Ass;
+    }
+    
     const result = {
-      As: { alien: 'right', value: printData[As].toFixed(1) },
+      As: { alien: 'right', value: Ass },
       AsString: { alien: 'right', value: printData[AsString] },
       ds: { alien: 'right', value: printData[ds].toFixed(1) }
     };

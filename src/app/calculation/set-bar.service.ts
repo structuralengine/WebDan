@@ -598,6 +598,7 @@ export class SetBarService {
     result['print-rs'] = rs;
     result['print-Es'] = 200;
     result['print-Ast'] = printTensionBar['As'];
+    result['print-AstCos'] = printTensionBar['cos'];
     result['print-AstString'] = printTensionBar['AsString'];
     result['print-dst'] = printTensionBar['ds'];
 
@@ -611,6 +612,7 @@ export class SetBarService {
     if (compresBarList.length > 0) { // 印刷用の変数に登録
       result['print-Asc'] = printCompresBar['As'];
       result['print-AscString'] = printCompresBar['AsString'];
+      result['print-AscCos'] = printCompresBar['cos'];
       result['print-dsc'] = printCompresBar['ds'];
     }
 
@@ -645,9 +647,9 @@ export class SetBarService {
     if (this.save.toNumber(barInfo.rebar_dia) === null) {
       return new Array();
     }
-
-    // 鉄筋の本数の入力が ない場合は スキップ
-    let rebar_n = this.save.toNumber(barInfo.rebar_n);
+    
+    //鉄筋の本数の入力が ない場合は スキップ
+    let rebar_n = this.save.toNumber(barInfo.rebar_n );
     if (rebar_n === null) {
       return new Array();
     }
@@ -697,13 +699,19 @@ export class SetBarService {
       dia = 'R' + barInfo.rebar_dia;
     }
 
+    // cos に入力があれば本数に反映。鉄筋の本数の入力が ない場合は スキップ
+    let cos = this.save.toNumber(barInfo.cos);
+    if (cos === null) {
+      cos = 1;
+    }
+    
     // 鉄筋情報を登録
     for (let i = 0; i < n; i++) {
       const dst: number = dsc + i * space;
       const Steel1 = {
         Depth: dst,
         i: dia,
-        n: Math.min(line, rebar_n),
+        n: Math.min(line, rebar_n * cos),
         IsTensionBar: false,
         ElasticID: ElasticID,
         fsyk: fsy
@@ -711,10 +719,12 @@ export class SetBarService {
       result.push(Steel1);
       rebar_n = rebar_n - line;
     }
+
     // 印刷用の変数に登録
     printTensionBar['fsy'] = fsy;
     printTensionBar['fsu'] = fsu;
-    printTensionBar['As'] = this.save.getAs(dia) * barInfo.rebar_n;
+    printTensionBar['As'] = this.save.getAs(dia) * barInfo.rebar_n * cos;
+    printTensionBar['cos'] = cos;
     printTensionBar['AsString'] = dia + '-' + barInfo.rebar_n + '本';
     printTensionBar['ds'] = this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space);
     printTensionBar['n'] = n; // ひび割れの検討k3 に用いる鉄筋段数
@@ -878,6 +888,7 @@ export class SetBarService {
     // 引張鉄筋
     printData['Ast'] = bars['print-Ast'];
     printData['AstString'] = bars['print-AstString'];
+    printData['cosAst'] = bars['print-AstCos']; //= xxxx['cos'] = 0.949;
     printData['dst'] = bars['print-dst'];
     printData['Wd-n'] = bars['print-Ast-n'];   // ひび割れの検討k3に用いる鉄筋段数
     printData['Wd-c'] = bars['print-Ast-c'];   // ひび割れの検討 に用いる1段目の鉄筋かぶり
@@ -889,6 +900,7 @@ export class SetBarService {
       if ('print-Asc' in bars) {
         printData['Asc'] = bars['print-Asc'];
         printData['AscString'] = bars['print-AscString'];
+        printData['cosAsc'] = bars['print-AscCos'];
         printData['dsc'] = bars['print-dsc'];
       }
     }
