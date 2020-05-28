@@ -61,6 +61,18 @@ export class CalcSafetyShearForceService {
         if (pd.Vd === 0) {
           df.positions.splice(j, 1);
         }
+        if (pd.Vd === null) {
+          df.positions.splice(j, 1);
+        }
+        if (pd.Vd === "") {
+          df.positions.splice(j, 1);
+        }
+        if (pd.Vd === undefined) {
+          df.positions.splice(j, 1);
+        }
+        if (pd.Vd === NaN) {
+          df.positions.splice(j, 1);
+        }
       }
       if (df.positions.length == 0) {
         this.DesignForceList[0].splice(i, 1);
