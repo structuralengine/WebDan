@@ -136,7 +136,7 @@ export class SetPostDataService {
   }
 
   // 設計断面力（リスト）を生成する
-  private getSectionForce(forceListList: any[], calcTarget: string): any[] {
+  public getSectionForce(forceListList: any[], calcTarget: string): any[] {
 
     // 設計断面の数をセット
     const result: any[] = new Array();
