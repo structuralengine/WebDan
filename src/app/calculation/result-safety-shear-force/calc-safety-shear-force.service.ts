@@ -494,12 +494,14 @@ export class CalcSafetyShearForceService {
     source['Vhd'] = Vhd;
 
     // せん断スパン
-    let La: number = Number.MAX_VALUE;
-    if ('La' in position.barData) {
+    let La: number;
+    if ('La' in position) {
       La = this.save.toNumber(position.La);
       if (La === null) {
         La = Number.MAX_VALUE;
       } else {
+        if (La === 1)
+          La = Math.abs(Md / Vd) * 1000; // せん断スパン=1 は せん断スパンを自動で計算する
         result['La'] = La;
       }
     }
@@ -595,14 +597,6 @@ export class CalcSafetyShearForceService {
 
 
     // 部材係数
-    let rbs: number = 1;
-    if ('rbs' in printData) {
-      rbs = this.save.toNumber(printData.rbs);
-      if (rbs === null) { rbs = 1; }
-    }
-    result['rbs'] = rbs;
-    source['rbs'] = rbs;
-
     result['Mu'] = resultData.M.Mi;
     source['Mu'] = resultData.M.Mi;
 
@@ -615,6 +609,14 @@ export class CalcSafetyShearForceService {
       }
       result['rbc'] = rbc;
       source['rbc'] = rbc;
+      
+      let rbs: number = 1;
+      if ('rbs' in printData) {
+        rbs = this.save.toNumber(printData.rbs);
+        if (rbs === null) { rbs = 1; }
+      }
+      result['rbs'] = rbs;
+      source['rbs'] = rbs;
 
       const Vyd: any = this.calcVyd(source);
       for (const key of Object.keys(Vyd)) {
@@ -763,10 +765,10 @@ export class CalcSafetyShearForceService {
     result['Bd'] = Bd;
 
     let pw: number = source.Aw / (source.Width * source.Ss);
+    result['pw'] = pw;
     if (pw < 0.002) {
       pw = 0;
     }
-    result['pw'] = pw;
 
     //せん断スパン比
     let ad: number = source.La / source.d;
@@ -803,7 +805,7 @@ export class CalcSafetyShearForceService {
     result['Ba'] = Ba;
 
 
-    let Vdd = (Bd * Bn + Bw) * Bp * Ba * fdd * source.B * source.d / source.rbd;
+    let Vdd = (Bd * Bn + Bw) * Bp * Ba * fdd * source.B * source.d / source.rbc;
 
     Vdd = Vdd / 1000;
 

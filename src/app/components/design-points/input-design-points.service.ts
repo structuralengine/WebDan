@@ -104,6 +104,7 @@ export class InputDesignPointsService extends InputDataService {
         p['B'] = m.B;
         p['H'] = m.H;
         p['n'] = m.n;
+        p['m_len'] = m.m_len;
         positions.push(p);
       }
       result.push(positions);

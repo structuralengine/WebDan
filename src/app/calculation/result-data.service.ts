@@ -18,7 +18,10 @@ export class ResultDataService {
       strPos = position.position.toFixed(3);
     }
     const m_no: string = member.m_no.toFixed(0);
-    const title: string = m_no + '部材(' + strPos + ')';
+    let title: string = m_no + '部材';
+    if (member.m_len > 0) {
+      title += '(' + strPos + ')';
+    }
     const result = { alien: 'center', value: title };
     return result;
   }
