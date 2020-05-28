@@ -37,9 +37,13 @@ export class SetDesignForceService {
       case 'Md': // 曲げモーメントの照査の場合
         force = this.save.force.Mdatas;
         break;
-      case 'Nd': // せん断力の照査の場合
+      case 'Vd': // せん断力の照査の場合
         force = this.save.force.Vdatas;
         break;
+    }
+
+    if (force === undefined) {
+      return new Array(); // 断面力がない
     }
 
     // 断面力を追加
