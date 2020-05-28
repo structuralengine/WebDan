@@ -26,7 +26,7 @@ export class SetSafetyFactorService {
     }
 
     // 安全係数 を代入する
-    let safety_factor: object;
+    let safety_factor;
     switch (calcTarget) {
       case 'Md': // 曲げモーメントの照査の場合
         safety_factor = {
@@ -36,6 +36,7 @@ export class SetSafetyFactorService {
           ri: safetyList.safety_factor[tableIndex].ri,
           range: safetyList.safety_factor[tableIndex].range
         };
+
         break;
       case 'Vd': // せん断力の照査の場合
         safety_factor = {
@@ -49,6 +50,17 @@ export class SetSafetyFactorService {
         };
         break;
     }
+    if (safety_factor.rc === null || safety_factor.rs === null) {
+      console.log("安全係数がないので計算対象外")
+      let i = 0;
+      while ('PostData' + i.toString() in position) {
+        position['PostData' + i.toString()] = new Array();
+        i++;
+      }
+      return;
+    }
+
+
     position['safety_factor'] = safety_factor; // 安全係数
 
     // 材料強度 を代入する
