@@ -250,7 +250,7 @@ export class CalcSafetyFatigueShearForceService {
   }
 
   // 出力テーブル用の配列にセット
-  public setSafetyFatiguePages(responseData: any, postData: any): any[] {
+  public setSafetyFatiguePages(postData: any): any[] {
     const result: any[] = new Array();
     let page: any;
     let groupeName: string;
@@ -273,9 +273,6 @@ export class CalcSafetyFatigueShearForceService {
             // 印刷用データ
             const printData = position.printData[j];
 
-            // 解析結果
-            const resultData = responseData[i].Reactions[0];
-
             if (page.columns.length > 4) {
               result.push(page);
               page = { caption: title, g_name: groupeName, columns: new Array() };
@@ -286,7 +283,7 @@ export class CalcSafetyFatigueShearForceService {
 
             /////////////// まず計算 ///////////////
 
-            const resultFatigue: any = this.calcFatigue(printData, postdata0, postdata1, resultData, position);
+            const resultFatigue: any = this.calcFatigue(printData, postdata0, postdata1, position);
 
             const resultColumn: any = this.getResultString(resultFatigue);
 
@@ -374,10 +371,11 @@ export class CalcSafetyFatigueShearForceService {
     return result;
   }
 
-  public calcFatigue(printData: any, postdata0: any, postdata1: any,
-    resultData: any, position: any): any {
+  public calcFatigue(printData: any, postdata0: any, postdata1: any, position: any): any {
 
     if ('La' in printData) { delete printData.La; } // Vcd を計算するので La は削除する
+    if ('Nd' in printData) { printData.Nd = 0; }    // 疲労の Vcd を計算する時は βn=1
+    const resultData = { M: { Mi: 0 } };
     const result: any = this.base.calcVmu(printData, resultData, position);
 
     // 最小応力
@@ -437,8 +435,8 @@ export class CalcSafetyFatigueShearForceService {
     result['kr'] = kr;
 
     // スターラップの永久応力度
-    const tmpWrd1: number = (Vpd + Vrd - kr * result.Vcd) * result.Ss;
-    const tmpWrd2: number = result.Aw * result.z;
+    const tmpWrd1: number = Vpd + Vrd - kr * result.Vcd;
+    const tmpWrd2: number = (result.Aw * result.z) / result.Ss;
     const tmpWrd3: number = Vpd + result.Vcd;
     const tmpWrd4: number = Vpd + Vrd + result.Vcd;
     let sigma_min: number = (tmpWrd1 / tmpWrd2) * (tmpWrd3 / tmpWrd4);
@@ -480,8 +478,8 @@ export class CalcSafetyFatigueShearForceService {
     result['fwud'] = fwud;
 
     let r1: number = 1;
-    if ('r1_1' in position.memberInfo) {
-      r1 = this.save.toNumber(position.memberInfo.r1_1);
+    if ('r1_2' in position.memberInfo) {
+      r1 = this.save.toNumber(position.memberInfo.r1_2);
       if (r1 === null) { r1 = 1; }
     }
     result['r1'] = r1;
@@ -600,10 +598,6 @@ export class CalcSafetyFatigueShearForceService {
     const N: number = tmpN1 + tmpN2;
     result['N'] = Math.ceil(N / 100) * 100;
 
-    if (ratio200 < 1 && N <= reference_count) {
-      return result;
-    }
-
     // frd の計算
     const tmpR21: number = Math.pow(a, 1 / k);
     const tmpR22: number = Math.pow(1 - a, 1 / k);
@@ -616,6 +610,9 @@ export class CalcSafetyFatigueShearForceService {
     let frd: number = r1 * r2 * tmpfrd1 * tmpfrd2 / rs;
     result['frd'] = frd;
 
+    if (ratio200 < 1 && N <= reference_count) {
+      return result;
+    }
     const ratio: number = ri * sigma_rd / (frd / rb);
     result['ratio'] = ratio;
 
