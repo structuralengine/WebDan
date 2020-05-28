@@ -336,7 +336,7 @@ export class CalcSafetyFatigueShearForceService {
 
             column.push(resultColumn.sigma_min);
             column.push(resultColumn.sigma_rd);
-            column.push({ alien: 'center', value: '-' });
+            column.push(resultColumn.sigma_rd);
 
             column.push(resultColumn.fsr200);
             column.push(resultColumn.ratio200);
@@ -437,17 +437,17 @@ export class CalcSafetyFatigueShearForceService {
     result['kr'] = kr;
 
     // スターラップの永久応力度
-    const tmpWrd1: number = Vpd + Vrd - kr * result.Vcd;
-    const tmpWrd2: number = result.Aw * result.z / result.Ss;
-    const tmpWrd3: number = Vpd + Vrd + result.Vcd;
-    let sigma_min: number = (tmpWrd1 / tmpWrd2) * (Vrd / tmpWrd3);
+    const tmpWrd1: number = (Vpd + Vrd - kr * result.Vcd) * result.Ss;
+    const tmpWrd2: number = result.Aw * result.z;
+    const tmpWrd3: number = Vpd + result.Vcd;
+    const tmpWrd4: number = Vpd + Vrd + result.Vcd;
+    let sigma_min: number = (tmpWrd1 / tmpWrd2) * (tmpWrd3 / tmpWrd4);
     if (sigma_min === null) { return result; }
     sigma_min = sigma_min * 1000;
     result['sigma_min'] = sigma_min;
 
     // スターラップの変動応力度
-    const tmpWrd4: number = Vpd + result.Vcd;
-    let sigma_rd: number = (tmpWrd1 / tmpWrd2) * (tmpWrd4 / tmpWrd3);
+    let sigma_rd: number = (tmpWrd1 / tmpWrd2) * (Vrd / tmpWrd4);
     if (sigma_rd === null) { return result; }
     sigma_rd = sigma_rd * 1000;
     result['sigma_rd'] = sigma_rd;
@@ -509,7 +509,7 @@ export class CalcSafetyFatigueShearForceService {
       rb = this.save.toNumber(position.safety_factor.rb);
       if (rb === null) { rb = 1; }
     }
-// sasasasa
+
     const ratio200: number = ri * sigma_rd / (fsr200 / rb);
     result['ratio200'] = ratio200;
 
@@ -598,7 +598,7 @@ export class CalcSafetyFatigueShearForceService {
     const tmpN1: number = 365 * T * jA * NA * Math.pow(SASC, 1 / k);
     const tmpN2: number = 365 * T * jB * NB * Math.pow(SBSC, 1 / k);
     const N: number = tmpN1 + tmpN2;
-    result['N'] = N;
+    result['N'] = Math.ceil(N / 100) * 100;
 
     if (ratio200 < 1 && N <= reference_count) {
       return result;
