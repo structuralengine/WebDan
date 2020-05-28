@@ -25,12 +25,12 @@ export class CalcSafetyFatigueShearForceService {
     private fatigue: SetFatigueService) {
     this.DesignForceList = null;
     this.isEnable = false;
-    }
+  }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): void{
+  public setDesignForces(): void {
 
     this.isEnable = false;
 
@@ -43,7 +43,7 @@ export class CalcSafetyFatigueShearForceService {
 
     // 列車本数の入力がない場合は処理を抜ける
     if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
-        this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+      this.save.toNumber(this.save.fatigues.train_B_count) === null) {
       return;
     }
 
@@ -53,33 +53,35 @@ export class CalcSafetyFatigueShearForceService {
     this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
 
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3 );
+    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3);
 
     if (this.DesignForceList.length < 1) {
       return;
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList2], 'Vd');
+    this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
+
+    // Vd=0 のケースを削除する
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
-      for (let j = df.positions.length -1; j >= 0; j--){
+      for (let j = df.positions.length - 1; j >= 0; j--) {
         const ps = df.positions[j];
-        if ( !('PostData0' in ps) ){
-          df.positions.splice(j,1);
+        if (!('PostData-1' in ps)) {
+          df.positions.splice(j, 1);
           continue;
         }
-        const pd = ps.PostData0[0];
-        if (pd.Vd === 0){
-          df.positions.splice(j,1);
-        }       
+        const pd = ps['PostData-1'][0];
+        if (pd.Vd === 0) {
+          df.positions.splice(j, 1);
+        }
       }
-      if(df.positions.length == 0){
-        this.DesignForceList[0].splice(i,1);
-        this.DesignForceList3[0].splice(i,1);
+      if (df.positions.length === 0) {
+        this.DesignForceList[0].splice(i, 1);
+        this.DesignForceList3[0].splice(i, 1);
       }
     }
-   
+
   }
 
   // サーバー POST用データを生成する
@@ -90,70 +92,162 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 1, 'Vd', '耐力', 2);
+    const postData = this.post.setInputData(this.DesignForceList, 1, 'Vd', '耐力', 1);
     return postData;
   }
 
- // 変動荷重を 
- private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
+  // position に PostData を追加する
+  // SetPostDataService にある同名の関数の改良版で、
+  // DesignForceList[0]: 最大応力
+  // DesignForceList[1]: 最小応力
+  // DesignForceList[2]: 変動応力
+  public setPostData(DesignForceListList: any[]): void {
 
-  const result = JSON.parse(
-    JSON.stringify({
-      temp: maxDesignForceList
-    })
-  ).temp;
+    const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
+    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
 
-  for (let ig = 0; ig < minDesignForceList.length; ig++) {
-    const groupe = minDesignForceList[ig];
-    for (let im = 0; im < groupe.length; im++) {
-      const member = groupe[im];
+    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+      const groupe = baseDesignForceList[ig];
+      for (let im = 0; im < groupe.length; im++) {
+        const member = groupe[im];
+        // 部材・断面情報をセット
+        const memberInfo = this.save.members.member_list.find(function (value) {
+          return (value.m_no === member.m_no);
+        });
+        if (memberInfo === undefined) {
+          console.log('部材番号が存在しない');
+          continue;
+        }
+        for (let ip = 0; ip < member.positions.length; ip++) {
+          // const position = member.positions[ip];
+          const position = minDesignForceList[ig][im].positions[ip];
+          // 断面
+          position['memberInfo'] = memberInfo;
+          // ピックアップ断面力から設計断面力を選定する
+          for (let fo = 0; fo < member.positions[ip].designForce.length; fo++) {
+            // 対象の断面力を抽出する
+            const force: any[] = new Array();
+            for (const target of DesignForceListList) {
+              let designForce: any;
+              try {
+                designForce = target[ig][im].positions[ip].designForce[fo];
+              } catch {
+                designForce = null;
+              }
+              force.push(designForce);
+            }
 
-      for (let ip = member.positions.length - 1; ip >= 0; ip--) {
+            // ピックアップ断面力から設計断面力を選定する
+            let sectionForce: any[];
+            sectionForce = this.post.getSectionForce(force, 'Vd');
+            // postData に登録する
+            for (let icase = 0; icase < sectionForce.length; icase++) {
+              position['PostData' + (icase - 1).toString()] = sectionForce[icase];
+            }
+          }
+          // 必要ないので消す！！
+          delete position.designForce;
+        }
+      }
+    }
+  }
 
-        const position = member.positions[ip];
-        // position に 疲労係数入れる
-        this.fatigue.setFatigueData(member.g_no, member.m_no, position);
+  // 変動荷重を 
+  private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 
-        // もし疲労データがなかったら削除する
-        let flg = false;
-        if (position.fatigueData !== null){
-          for (const key of Object.keys(position.fatigueData.V1)) {
-            if ( this.save.toNumber(position.fatigueData.V1[key]) !== null ) {
-              flg = true;
-              break;
+    const result = JSON.parse(
+      JSON.stringify({
+        temp: maxDesignForceList
+      })
+    ).temp;
+
+    for (let ig = 0; ig < minDesignForceList.length; ig++) {
+      const groupe = minDesignForceList[ig];
+      for (let im = 0; im < groupe.length; im++) {
+        const member = groupe[im];
+
+        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
+
+          const position = member.positions[ip];
+          // position に 疲労係数入れる
+          this.fatigue.setFatigueData(member.g_no, member.m_no, position);
+
+          // もし疲労係数がなかったら削除する
+          let flg = false;
+          if (position.fatigueData !== null) {
+            for (const key of Object.keys(position.fatigueData.V1)) {
+              if (this.save.toNumber(position.fatigueData.V1[key]) !== null) {
+                flg = true;
+                break;
+              }
+            }
+            if (flg === false) {
+              for (const key of Object.keys(position.fatigueData.V2)) {
+                if (this.save.toNumber(position.fatigueData.V2[key]) !== null) {
+                  flg = true;
+                  break;
+                }
+              }
             }
           }
           if (flg === false) {
-          for (const key of Object.keys(position.fatigueData.V2)) {
-            if ( this.save.toNumber(position.fatigueData.V2[key]) !== null ) {
-              flg = true;
-              break;
-              }
-            }           
+            member.positions.splice(ip, 1); // 削除する
+            continue;
           }
-        }
-        if ( flg === false ){
-          member.positions.splice(ip, 1);// 削除する
-          continue;
-        }
 
-        // 最大応力 - 最小応力 で変動荷重を求める
-        const minForce: any = position.designForce;
-        const maxForce: any = result[ig][im].positions[ip].designForce;
-        for (let i = 0; i < minForce.length; i++) {
-          for (const key1 of Object.keys(minForce[i])) {
-            if (key1 === 'n') { continue; }
-            for (const key2 of Object.keys(minForce[i][key1])) {
-              if (key2 === 'comb') { continue; }
-              maxForce[i][key1][key2] -= minForce[i][key1][key2];
+          // 最大応力 - 最小応力 で変動荷重を求める
+          const minForce: any = position.designForce;
+          const maxForce: any = result[ig][im].positions[ip].designForce;
+          for (let i = 0; i < maxForce.length; i++) {
+            for (const key1 of Object.keys(maxForce[i])) {
+              if (key1 === 'n') { continue; }
+
+              // 最大<=>最小 反対の断面力 も探査対象にする
+              let key2: string;
+              if (key1.indexOf('max') >= 0) {
+                key2 = key1.replace('max', 'min');
+              } else {
+                key2 = key1.replace('min', 'max');
+              }
+              const force0 = maxForce[i][key1];
+              const force1 =  minForce[i][key1];
+              const force2 =  minForce[i][key2];
+
+              // 最小と最大 差が大きい方を変動作用とする
+              let Vd0: number = force0['Vd'];
+              let Vd1: number = force1['Vd'] * Math.sign(Vd0);
+              let Vd2: number = force2['Vd'] * Math.sign(Vd0);
+              Vd0 = Math.abs(Vd0);
+
+              // 最小の方が大きい場合は、比較対象から除外する
+              if ( Vd0 < Vd1) {
+                Vd1 = Vd0;
+              }
+              if ( Vd0 < Vd2) {
+                Vd2 = Vd0;
+              }
+
+              let targetMinForce: object;
+              if ( Vd0 - Vd1 > Vd0 - Vd2 ) {
+                targetMinForce = force1;
+              } else {
+                // 反対のキーを持つ最小応力が採用された場合
+                targetMinForce = force2;
+                minForce[i][key1] = minForce[i][key2]; // 反対のキーに断面力をコピーする
+              }
+
+              // 最大 - 最小 断面力の計算
+              for (const key3 of Object.keys(maxForce[i][key1])) {
+                if (key3 === 'comb') { continue; }
+                maxForce[i][key1][key3] -= targetMinForce[key3];
+              }
             }
           }
         }
       }
     }
+    return result;
   }
-  return result;
-}
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(responseData: any, postData: any): any[] {
@@ -191,8 +285,9 @@ export class CalcSafetyFatigueShearForceService {
 
 
             /////////////// まず計算 ///////////////
-            if ('La' in printData) { delete printData.La; } // Vcd を計算するので La は削除する
+
             const resultFatigue: any = this.calcFatigue(printData, postdata0, postdata1, resultData, position);
+
             const resultColumn: any = this.getResultString(resultFatigue);
 
             /////////////// タイトル ///////////////
@@ -282,24 +377,27 @@ export class CalcSafetyFatigueShearForceService {
   public calcFatigue(printData: any, postdata0: any, postdata1: any,
     resultData: any, position: any): any {
 
+    if ('La' in printData) { delete printData.La; } // Vcd を計算するので La は削除する
     const result: any = this.base.calcVmu(printData, resultData, position);
 
     // 最小応力
     let Vpd: number;
     if ('Vd' in postdata0) {
       Vpd = this.save.toNumber(postdata0.Vd);
-      if (Vpd === null) {return result;}
-    }else {
+      if (Vpd === null) { return result; }
+    } else {
       return result;
     }
     result['Vpd'] = Vpd;
+
     let Mpd: number;
-    if ('Md' in postdata0) {
-      Mpd = this.save.toNumber(postdata0.Md);
+    if ('Md' in printData) {
+      Mpd = this.save.toNumber(printData.Md);
       if (Mpd !== null) {
         result['Mpd'] = Mpd;
       }
     }
+
     let Npd: number;
     if ('Nd' in postdata0) {
       Npd = this.save.toNumber(postdata0.Nd);
@@ -311,11 +409,12 @@ export class CalcSafetyFatigueShearForceService {
     let Vrd: number;
     if ('Vd' in postdata1) {
       Vrd = this.save.toNumber(postdata1.Vd);
-      if (Vrd === null) {return result;}
-    }else {
+      if (Vrd === null) { return result; }
+    } else {
       return result;
     }
     result['Vrd'] = Vrd;
+
     let Mrd: number;
     if ('Md' in postdata1) {
       Mrd = this.save.toNumber(postdata1.Md);
@@ -323,6 +422,7 @@ export class CalcSafetyFatigueShearForceService {
         result['Mrd'] = Mrd;
       }
     }
+
     let Nrd: number;
     if ('Nd' in postdata1) {
       Nrd = this.save.toNumber(postdata1.Nd);
@@ -337,17 +437,19 @@ export class CalcSafetyFatigueShearForceService {
     result['kr'] = kr;
 
     // スターラップの永久応力度
-    const tmpWrd1: number  = Vpd + Vrd - kr * result.Vcd;
-    const tmpWrd2: number  = result.Aw * result.z / result.Ss;
-    const tmpWrd3: number  = Vpd + Vrd + result.Vcd;
-    const sigma_min: number = (tmpWrd1 / tmpWrd2) * (Vrd / tmpWrd3);
+    const tmpWrd1: number = Vpd + Vrd - kr * result.Vcd;
+    const tmpWrd2: number = result.Aw * result.z / result.Ss;
+    const tmpWrd3: number = Vpd + Vrd + result.Vcd;
+    let sigma_min: number = (tmpWrd1 / tmpWrd2) * (Vrd / tmpWrd3);
     if (sigma_min === null) { return result; }
+    sigma_min = sigma_min * 1000;
     result['sigma_min'] = sigma_min;
 
     // スターラップの変動応力度
-    const tmpWrd4: number  = Vpd + result.Vcd;
-    const sigma_rd: number = (tmpWrd1 / tmpWrd2) * (tmpWrd4 / tmpWrd3);
+    const tmpWrd4: number = Vpd + result.Vcd;
+    let sigma_rd: number = (tmpWrd1 / tmpWrd2) * (tmpWrd4 / tmpWrd3);
     if (sigma_rd === null) { return result; }
+    sigma_rd = sigma_rd * 1000;
     result['sigma_rd'] = sigma_rd;
 
     // f200 の計算
@@ -375,6 +477,7 @@ export class CalcSafetyFatigueShearForceService {
     } else {
       return result;
     }
+    result['fwud'] = fwud;
 
     let r1: number = 1;
     if ('r1_1' in position.memberInfo) {
@@ -386,7 +489,7 @@ export class CalcSafetyFatigueShearForceService {
     let ar: number = 3.09 - 0.003 * fai;
 
     let reference_count: number = this.save.toNumber(this.save.fatigues.reference_count);
-    if(reference_count === null ){
+    if (reference_count === null) {
       reference_count = 2000000;
     }
     const tmp201: number = Math.pow(10, ar) / Math.pow(reference_count, k);
@@ -406,7 +509,7 @@ export class CalcSafetyFatigueShearForceService {
       rb = this.save.toNumber(position.safety_factor.rb);
       if (rb === null) { rb = 1; }
     }
-
+// sasasasa
     const ratio200: number = ri * sigma_rd / (fsr200 / rb);
     result['ratio200'] = ratio200;
 
@@ -417,7 +520,9 @@ export class CalcSafetyFatigueShearForceService {
       k = 0.12;
       ar = 3.09 - 0.003 * fai;
     }
-    
+    result['k']  = k;
+    result['ar']  = ar;
+
     // 標準列車荷重観山の総等価繰返し回数 N の計算
     let T: number;
     if ('service_life' in this.save.fatigues) {
@@ -662,7 +767,7 @@ export class CalcSafetyFatigueShearForceService {
       result.sigma_rd = { alien: 'right', value: re.sigma_rd.toFixed(2) };
     }
 
-    
+
     if ('fsr200' in re) {
       result.fsr200 = { alien: 'right', value: re.fsr200.toFixed(2) };
     }
@@ -723,5 +828,5 @@ export class CalcSafetyFatigueShearForceService {
 
     return result;
   }
-  
+
 }

@@ -18,10 +18,10 @@ export class CalcSafetyShearForceService {
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private bar: SetBarService) {
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private bar: SetBarService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -29,7 +29,7 @@ export class CalcSafetyShearForceService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): void{
+  public setDesignForces(): void {
 
     this.isEnable = false;
 
@@ -42,7 +42,7 @@ export class CalcSafetyShearForceService {
 
     this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[5]);
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1) {
       return;
     }
 
@@ -51,28 +51,28 @@ export class CalcSafetyShearForceService {
 
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
-      for (let j = df.positions.length -1; j >= 0; j--){
+      for (let j = df.positions.length - 1; j >= 0; j--) {
         const ps = df.positions[j];
-        if ( !('PostData0' in ps) ){
-          df.positions.splice(j,1);
+        if (!('PostData0' in ps)) {
+          df.positions.splice(j, 1);
           continue;
         }
         const pd = ps.PostData0[0];
-        if (pd.Vd === 0){
-          df.positions.splice(j,1);
-        }       
+        if (pd.Vd === 0) {
+          df.positions.splice(j, 1);
+        }
       }
-      if(df.positions.length == 0){
-        this.DesignForceList[0].splice(i,1);
+      if (df.positions.length == 0) {
+        this.DesignForceList[0].splice(i, 1);
       }
     }
-    
+
   }
 
   // サーバー POST用データを生成する
   public setInputData(): any {
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1) {
       return null;
     }
 
@@ -386,7 +386,7 @@ export class CalcSafetyShearForceService {
 
   }
 
-  
+
   // 変数の整理と計算
   public calcVmu(printData: any, resultData: any, position: any): any {
 
@@ -435,7 +435,7 @@ export class CalcSafetyShearForceService {
       if (bw === null) { return result; }
     }
     result['B'] = bw;
-    source['B'] = bw; 
+    source['B'] = bw;
 
     // 引張鉄筋
     let Ast: number = 0;
@@ -487,7 +487,7 @@ export class CalcSafetyShearForceService {
       La = this.save.toNumber(position.La);
       if (La === null) {
         La = Number.MAX_VALUE;
-      }else{
+      } else {
         result['La'] = La;
       }
     }
@@ -498,9 +498,9 @@ export class CalcSafetyShearForceService {
     let Aw: number = 0;
     if ('Aw' in printData) {
       Aw = this.save.toNumber(printData.Aw);
-      if (Aw === null) { 
-        Aw = 0; 
-      }else{
+      if (Aw === null) {
+        Aw = 0;
+      } else {
         result['Aw'] = Aw;
         result['AwString'] = printData.AwString;
         result['fwyd'] = printData.fwyd;
@@ -511,20 +511,20 @@ export class CalcSafetyShearForceService {
     let fwyd: number = 0;
     if ('fwyd' in printData) {
       fwyd = this.save.toNumber(printData.fwyd);
-      if (fwyd === null) { 
+      if (fwyd === null) {
         fwyd = 0;
-       } else{
+      } else {
         result['fwyd'] = fwyd;
-       }
+      }
     }
     source['fwyd'] = fwyd;
 
     let deg: number = 90;
     if ('deg' in printData) {
       deg = this.save.toNumber(printData.deg);
-      if (deg === null) { 
+      if (deg === null) {
         deg = 90;
-      }else{
+      } else {
         result['deg'] = deg;
       }
     }
@@ -533,9 +533,9 @@ export class CalcSafetyShearForceService {
     let Ss: number = Number.MAX_VALUE;
     if ('Ss' in printData) {
       Ss = this.save.toNumber(printData.Ss);
-      if (Ss === null) { 
-        Ss = Number.MAX_VALUE; 
-      }else{
+      if (Ss === null) {
+        Ss = Number.MAX_VALUE;
+      } else {
         result['Ss'] = Ss;
       }
     }
@@ -578,8 +578,8 @@ export class CalcSafetyShearForceService {
     result['rs'] = rs;
     source['rs'] = rs;
 
-    result['fwyd'] = fsy / rs;
-    source['fwyd'] = fsy / rs;
+    result['fsyd'] = fsy / rs;
+    source['fsyd'] = fsy / rs;
 
 
     // 部材係数
@@ -603,7 +603,7 @@ export class CalcSafetyShearForceService {
       }
       result['rbc'] = rbc;
       source['rbc'] = rbc;
-  
+
       const Vyd: any = this.calcVyd(source);
       for (const key of Object.keys(Vyd)) {
         result[key] = Vyd[key];

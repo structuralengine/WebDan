@@ -207,15 +207,15 @@ export class SectionForceListComponent implements OnInit {
 
       // 安全性（疲労破壊）せん断力に対する照査
       if (safetyFatigueShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyFatigueShearForces, 2);
-        if (targetRows[0].length > 0) {
-          const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const targetRows: any[] = this.setPage(memberList, safetyFatigueShearForces, 2, -1);
+        if (targetRows[1].length > 0) {
+          const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
           page = this.setTables(rows1, page, g_name_shear, tableType, '安全性（疲労破壊）最小応力');
         }
-        if (targetRows[1].length > 0) {
-          const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
+        if (targetRows[0].length > 0) {
+          const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
           page = this.setTables(rows2, page, g_name_shear, tableType, '安全性（疲労破壊）最大応力');

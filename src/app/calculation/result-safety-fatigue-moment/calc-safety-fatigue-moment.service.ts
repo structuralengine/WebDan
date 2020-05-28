@@ -66,9 +66,9 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // サーバーに送信するデータを作成
-    // this.setPostData([this.DesignForceList, DesignForceList2, this.DesignForceList3]);
     this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
 
+    // Md=0 のケースを削除する
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
       for (let j = df.positions.length - 1; j >= 0; j--) {

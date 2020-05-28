@@ -51,7 +51,7 @@ export class SetPostDataService {
     for (const groupe of DesignForceList) {
       for (const member of groupe) {
         for (const position of member.positions) {
-          if (position.PostData0 === undefined){
+          if (position.PostData0 === undefined) {
             continue;
           }
           // 安全係数を position['safety_factor'], position['material_steel']
@@ -176,13 +176,20 @@ export class SetPostDataService {
       }
 
     } else {
-      let maxKey: string = calcTarget + 'max';      
-      let minKey: string = calcTarget + 'min';   
-      
-      if (Math.sign(forceListList[0][maxKey].Md) === Math.sign(forceListList[0][minKey].Md)) {
+      let maxKey: string = calcTarget + 'max';
+      let minKey: string = calcTarget + 'min';
+      const maxForce = forceListList[0][maxKey];
+      const minForce = forceListList[0][minKey];
+
+      if (Math.sign(maxForce.Md) === Math.sign(minForce.Md)) {
         // Mdmax, Mdmin の符号が同じなら 設計断面 1つ
-        const side = (forceListList[0][maxKey].Md > 0) ? '下側引張' : '上側引張';
-        const key: string = (Math.abs(forceListList[0][maxKey][calcTarget]) > Math.abs(forceListList[0][minKey][calcTarget])) ? maxKey : minKey;
+        const side = (maxForce.Md > 0) ? '下側引張' : '上側引張';
+        let key: string;
+        if (Math.abs(maxForce.calcTarget) > Math.abs(minForce.calcTarget)) {
+          key = maxKey;
+        } else {
+          key = minKey;
+        }
         for (const forceList of forceListList) {
           let fo: any;
           if (forceList === null) {
@@ -240,7 +247,7 @@ export class SetPostDataService {
 
   public getInputJsonString(postData: any): string {
 
-    const postObject =  {
+    const postObject = {
       username: this.user.loginUserName,
       password: this.user.loginPassword,
       InputData: postData.InputData0
