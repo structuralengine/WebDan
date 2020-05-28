@@ -165,11 +165,14 @@ export class SetPostDataService {
             Nd: 0
           };
         } else {
+          const Vd: number = this.save.toNumber(forceList.Manual.Vd / forceList.n);
+          const Md: number = this.save.toNumber(forceList.Manual.Md / forceList.n);
+          const Nd: number = this.save.toNumber(forceList.Manual.Nd / forceList.n);
           fo = {
             memo: side,
-            Md: forceList.Manual.Md / forceList.n,
-            Vd: forceList.Manual.Vd / forceList.n,
-            Nd: forceList.Manual.Nd / forceList.n
+            Md: (Md === null) ? 0: Md,
+            Vd: (Vd === null) ? 0: Vd,
+            Nd: (Nd === null) ? 0: Nd,
           };
         }
         result.push([fo]);

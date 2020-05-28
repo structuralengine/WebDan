@@ -70,6 +70,14 @@ export class SetDesignForceService {
           if ('designForce' in position === false) {
             position['designForce'] = new Array();
           }
+          //console.log('ここから');
+          for( const key of Object.keys(targetForce)){
+            let value: number = this.save.toNumber(targetForce[key]);
+            if (value === null) { value = 0; }
+            targetForce[key] = value;
+            //console.log(targetForce[key]); 
+          }
+
           const designForce = {
             Manual: targetForce,
             n: n
