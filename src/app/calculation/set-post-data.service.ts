@@ -188,7 +188,7 @@ export class SetPostDataService {
         // Mdmax, Mdmin の符号が同じなら 設計断面 1つ
         const side = (maxForce.Md > 0) ? '下側引張' : '上側引張';
         let key: string;
-        if (Math.abs(maxForce.calcTarget) > Math.abs(minForce.calcTarget)) {
+        if (Math.abs(maxForce[calcTarget]) > Math.abs(minForce[calcTarget])) {
           key = maxKey;
         } else {
           key = minKey;

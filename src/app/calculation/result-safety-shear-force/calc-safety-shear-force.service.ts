@@ -408,14 +408,16 @@ export class CalcSafetyShearForceService {
     // 断面力
     let Md: number = this.save.toNumber(printData.Md);
     let Nd: number = this.save.toNumber(printData.Nd);
-    const Vd: number = Math.abs(this.save.toNumber(printData.Vd));
+    let Vd: number = Math.abs(this.save.toNumber(printData.Vd));
     if (Md === null) { Md = 0; }
+    Md = Math.abs(Md);
     result['Md'] = Md;
     source['Md'] = Md;
     if (Nd === null) { Nd = 0; }
     result['Nd'] = Nd;
     source['Nd'] = Nd;
     if (Vd === null) { return result; }
+    Vd = Math.abs(Vd);
     result['Vd'] = Vd;
     source['Vd'] = Vd;
 
