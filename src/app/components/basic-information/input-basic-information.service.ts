@@ -4,7 +4,7 @@ import { InputDataService } from '../../providers/input-data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class InputBasicInformationService extends InputDataService {
+export class InputBasicInformationService  {
 
   // pick up table に関する変数
   public pickup_moment_title: string[];
@@ -24,7 +24,6 @@ export class InputBasicInformationService extends InputDataService {
   public conditions_list: any[];
 
   constructor() {
-    super();
     this.clear();
   }
   public clear(): void {
@@ -69,7 +68,6 @@ export class InputBasicInformationService extends InputDataService {
           '復旧性 （損傷）地震時以外',
           '復旧性 （損傷）地震時'
         ];
- 
 
         this.specification2_list = [
           { id: 0, title: 'ＪＲ各社' },
@@ -85,6 +83,27 @@ export class InputBasicInformationService extends InputDataService {
           { id: 'JR-003', title: '円形断面で鉄筋を頂点に１本配置する', selected: false },
           { id: 'JR-004', title: 'せん断耐力におけるβn算定時の Mud は軸力を考慮しない', selected: false }
         ];
+
+        this.pickup_moment_no = new Array();
+        this.pickup_moment_no.push(0);        // 耐久性 縁応力度検討用
+        this.pickup_moment_no.push(1);        // 耐久性 （永久荷重）
+        this.pickup_moment_no.push(null);     // 安全性 （疲労破壊）疲労限
+        this.pickup_moment_no.push(2);        // 安全性 （疲労破壊）永久作用
+        this.pickup_moment_no.push(3);        // 安全性 （疲労破壊）永久＋変動
+        this.pickup_moment_no.push(4);        // 安全性 （破壊）
+        this.pickup_moment_no.push(5);        // 復旧性 （損傷）地震時以外
+        this.pickup_moment_no.push(6);        // 復旧性 （損傷）地震時
+        this.pickup_moment_no.push(null);     // 耐久性  最小鉄筋量
+        // せん断力 手入力
+        this.pickup_shear_force_no = new Array();
+        this.pickup_shear_force_no.push(0);   // 耐久性 せん断ひび割れ検討判定用
+        this.pickup_shear_force_no.push(1);   // 耐久性 （永久荷重）
+        this.pickup_shear_force_no.push(2);   // 耐久性 （変動荷重）
+        this.pickup_shear_force_no.push(3);   // 安全性 （疲労破壊）永久作用
+        this.pickup_shear_force_no.push(4);   // 安全性 （疲労破壊）永久＋変動
+        this.pickup_shear_force_no.push(5);   // 安全性 （破壊）
+        this.pickup_shear_force_no.push(6);   // 復旧性 （損傷）地震時以外
+        this.pickup_shear_force_no.push(7);   // 復旧性 （損傷）地震時
 
         break;
 
@@ -116,6 +135,9 @@ export class InputBasicInformationService extends InputDataService {
   /// </summary>
   /// <param name="row">行番号</param>
   public getPickUpNoMomentColumns(row: number): any {
+    if ( this.pickup_moment_no.length === 0 ) {
+      const a = 0;
+    }
     const result = {
       row: row,
       title: this.pickup_moment_title[row],
@@ -157,6 +179,15 @@ export class InputBasicInformationService extends InputDataService {
         tmp.selected = isChecked;
         return;
       }
+    }
+  }
+
+  public setPickUpData(isManualed:boolean){
+    if (isManualed) {
+      // マニュアルモードからピックアップモードに切り替わる時
+      // マニュアルモード用のピックアップ番号をクリアする
+      this.pickup_moment_no = new Array(this.pickup_moment_title.length);
+      this.pickup_shear_force_no = new Array(this.pickup_shear_force_title.length);
     }
   }
 

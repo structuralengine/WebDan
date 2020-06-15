@@ -5,13 +5,13 @@ import {InputMembersService } from '../members/input-members.service';
 @Injectable({
   providedIn: 'root'
 })
-export class InputDesignPointsService extends InputDataService {
+export class InputDesignPointsService  {
 
   // 着目点情報
   public position_list: any[];
 
-  constructor(private members: InputMembersService) {
-    super();
+  constructor(private members: InputMembersService,
+              private helper: InputDataService) {
     this.clear();
   }
   public clear(): void {
@@ -20,7 +20,7 @@ export class InputDesignPointsService extends InputDataService {
     this.position_list = new Array();
 
     // デフォルトで、数行のデータを用意しておく
-    for (let i = 1; i <= this.DEFAULT_MEMBER_COUNT; i++) {
+    for (let i = 1; i <= this.helper.DEFAULT_MEMBER_COUNT; i++) {
       const new_point = this.default_positions(i, [this.default_position(i, '', null)]);
       new_point.positions[0].isMyCalc = true;
       new_point.positions[0].isVyCalc = true;
@@ -116,6 +116,7 @@ export class InputDesignPointsService extends InputDataService {
   /// bars の データを 保存する関数
   /// </summary>
   public setDesignPointColumns(table_datas: any[][]): void {
+    // 変更はすでに this.position_list に反映されているっぽいのでコメントアウト
 /*
     this.position_list = new Array();
 

@@ -6,13 +6,12 @@ import { Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class InputBarsService extends InputDataService {
+export class InputBarsService {
 
   // 鉄筋情報
   public bar_list: any[];
 
   constructor(private points: InputDesignPointsService) {
-    super();
     this.clear();
   }
   public clear(): void {

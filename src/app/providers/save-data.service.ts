@@ -92,7 +92,8 @@ export class SaveDataService extends InputDataService {
         p[mark]['min'] = { 'Md': minMd, 'Vd': minVd, 'Nd': minNd, 'comb': minPickupCase };
       }
 
-      this.members.setPickUpData(pickup_data);
+      this.basic.setPickUpData(this.isManual());
+      this.members.setPickUpData(pickup_data, this.isManual());
       this.points.setPickUpData(pickup_data);
       this.force.clear();
 

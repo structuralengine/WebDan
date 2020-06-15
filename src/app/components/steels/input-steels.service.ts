@@ -5,13 +5,12 @@ import { InputDesignPointsService } from '../design-points/input-design-points.s
 @Injectable({
   providedIn: 'root'
 })
-export class InputSteelsService extends InputDataService {
+export class InputSteelsService {
 
   // 鉄筋情報
   public steel_list: any[];
 
   constructor(private points: InputDesignPointsService) {
-    super();
     this.clear();
   }
   public clear(): void {
