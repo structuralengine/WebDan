@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputBarsService } from './input-bars.service';
+import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({
   selector: 'app-bars',
@@ -17,7 +18,8 @@ export class BarsComponent implements OnInit, OnDestroy {
 
   table_settings = {};
 
-  constructor(private input: InputBarsService) {
+  constructor(private input: InputBarsService,
+              private helper: InputDataService) {
 
   }
 
@@ -51,7 +53,7 @@ export class BarsComponent implements OnInit, OnDestroy {
           }
           // 1行目
           column1['index'] = data['index'];
-          const a: number = this.input.toNumber(data['position']);
+          const a: number = this.helper.toNumber(data['position']);
           column1['position'] = (a===null) ? '' : a.toFixed(3);
           column1['p_name'] = data['p_name'];
           column1['p_name_ex'] = data['p_name_ex'];
