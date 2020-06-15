@@ -6,7 +6,9 @@ import { SaveDataService } from '../providers/save-data.service';
 })
 export class SetSafetyFactorService {
 
+  private isAlert: boolean; // 一度も警告を出したことがあるか？
   constructor(private save: SaveDataService) {
+    this.isAlert = false;
   }
 
   // position.PostData0 に安全係数情報を追加する ///////////////////////////////////////////////////////
@@ -16,7 +18,11 @@ export class SetSafetyFactorService {
       return value.g_no === g_no;
     });
     if (safetyList === undefined) {
-      console.log("安全係数がないので計算対象外")
+      console.log('安全係数がないので計算できません');
+      if (this.isAlert === false) {
+        alert('安全係数がないので計算できません');
+        this.isAlert = true;
+      }
       let i: number = 0;
       while ('PostData' + i.toString() in position) {
         position['PostData' + i.toString()] = new Array();
