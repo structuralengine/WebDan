@@ -18,7 +18,7 @@ export class InputDataService {
     } else {
       return false;
     }
-  }; 
+  }
 
   constructor() { 
     this.pickup_filename = '';

@@ -53,6 +53,7 @@ export class SectionForceListComponent implements OnInit {
     const safetyShearForces = this.safetyShearForce.DesignForceList;
     // 安全性（疲労破壊）
     const safetyFatigueMomentForces = this.SafetyFatigueMoment.DesignForceList;
+    const safetyFatigueMomentForces3 = this.SafetyFatigueMoment.DesignForceList3;
     const safetyFatigueShearForces = this.safetyFatigueShearForce.DesignForceList;
     // 耐久性
     const serviceabilityMomentForces = this.serviceabilityMoment.DesignForceList;
@@ -121,20 +122,23 @@ export class SectionForceListComponent implements OnInit {
 
       // 安全性（疲労破壊）曲げモーメントの照査
       if (safetyFatigueMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyFatigueMomentForces, 2);
-        if (targetRows[0].length > 0) {
-          const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const targetRows: any[] = this.setPage(memberList, safetyFatigueMomentForces, 2, -1);
+        if (targetRows[1].length > 0) {
+          const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
           page = this.setTables(rows1, page, g_name_moment, tableType, '安全性（疲労破壊）最小応力');
         }
-        if (targetRows[1].length > 0) {
-          const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
+        if (targetRows[0].length > 0) {
+          const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
           page = this.setTables(rows2, page, g_name_moment, tableType, '安全性（疲労破壊）最大応力');
         }
+        
       }
+
+      
 
       // 復旧性（地震時以外）曲げモーメントの照査
       if (restorabilityMomentForces.length > 0) {
@@ -203,15 +207,15 @@ export class SectionForceListComponent implements OnInit {
 
       // 安全性（疲労破壊）せん断力に対する照査
       if (safetyFatigueShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyFatigueShearForces, 2);
-        if (targetRows[0].length > 0) {
-          const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
+        const targetRows: any[] = this.setPage(memberList, safetyFatigueShearForces, 2, -1);
+        if (targetRows[1].length > 0) {
+          const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
           page = this.setTables(rows1, page, g_name_shear, tableType, '安全性（疲労破壊）最小応力');
         }
-        if (targetRows[1].length > 0) {
-          const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
+        if (targetRows[0].length > 0) {
+          const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
           page = this.setTables(rows2, page, g_name_shear, tableType, '安全性（疲労破壊）最大応力');
@@ -340,10 +344,10 @@ export class SectionForceListComponent implements OnInit {
     return result;
   }
 
-  private setPage(memberList: any[], forces: any[], count: number): any[] {
+  private setPage(memberList: any[], forces: any[], count: number, count0: number = 0): any[] {
 
-    const result: any[] = new Array(count);
-    for (let i = 0; i < count; i++) {
+    const result: any[] = new Array(count - count0);
+    for (let i = 0; i < (count - count0); i++) {
       result[i] = new Array();
     }
 
@@ -357,8 +361,8 @@ export class SectionForceListComponent implements OnInit {
         for (const pos of tmp.positions) {
 
           const pd: any[] = new Array();
-          for (let i = 0; i < count; i++) {
-            const key: string = 'PostData' + i.toString();
+          for (let j = count0; j < count; j++) {
+            const key: string = 'PostData' + j.toString();
             if (key in pos) { pd.push(pos[key]); }
           }
 

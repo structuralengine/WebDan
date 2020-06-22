@@ -6,13 +6,12 @@ import { Observable, of } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class InputBarsService extends InputDataService {
+export class InputBarsService {
 
   // 鉄筋情報
   public bar_list: any[];
 
   constructor(private points: InputDesignPointsService) {
-    super();
     this.clear();
   }
   public clear(): void {
@@ -124,7 +123,7 @@ export class InputBarsService extends InputDataService {
         b['bend'].bending_ss =  column2.stirrup_ss;
         b['bend'].bending_angle =  45;
 
-        b.tan   = column1.haunch_height;
+        b.tan   = column1.tan;
 
         this.bar_list.push(b);
       }

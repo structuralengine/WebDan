@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
 import { InputMembersService } from '../members/input-members.service';
+import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({
   selector: 'app-safety-factors-material-strengths',
@@ -19,20 +20,20 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
   isSRC: boolean[]; // SRC部材 があるかどうか
 
   safety_factors_table_settings = {
-    beforeChange: (... x: any[]) => {
+    beforeChange: (...x: any[]) => {
       try {
         let changes: any = undefined;
-        for(let i = 0; i < x.length; i++){
-          if(Array.isArray(x[i])){
+        for (let i = 0; i < x.length; i++) {
+          if (Array.isArray(x[i])) {
             changes = x[i];
             break;
           }
         }
-        if(changes === undefined){return;}
+        if (changes === undefined) { return; }
         for (let i = 0; i < changes.length; i++) {
           switch (changes[i][1]) {
             case 'range':
-              const value: number = this.input.toNumber(changes[i][3]);
+              const value: number = this.helper.toNumber(changes[i][3]);
               if (value === null) {
                 changes[i][3] = changes[i][2]; // 入力も元に戻す
               } else {
@@ -64,52 +65,52 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
   };
 
   bar_strength_table_settings = {
-    beforeChange: (... x: any[]) => {
+    beforeChange: (...x: any[]) => {
       try {
         let source: any;
         let changes: any = undefined;
-        for(let i = 0; i < x.length; i++){
-          if(Array.isArray(x[i])){
+        for (let i = 0; i < x.length; i++) {
+          if (Array.isArray(x[i])) {
             source = x[i - 1];
             changes = x[i];
             break;
           }
         }
-        if(changes === undefined){return;}
+        if (changes === undefined) { return; }
         for (let i = 0; i < changes.length; i++) {
           if (changes[i][0] === 0) // split
           {
             let value: string = changes[i][3].replace('D', '');
             value = value.replace('以上', '');
             value = value.replace('以下', '');
-            if (this.input.toNumber(value) === null) {
+            if (this.helper.toNumber(value) === null) {
               changes[i][3] = changes[i][2]; // 入力も元に戻す
               return;
             }
             switch (changes[i][1]) {
               case 'fsy1':
-                const next_fsy2 = this.input.getNextRebar(value);
+                const next_fsy2 = this.helper.getNextRebar(value);
                 if (next_fsy2 !== undefined) {
                   source.setDataAtCell(changes[i][0], 2, 'D' + next_fsy2.D + '以上')
                   changes[i][3] = 'D' + value + '以下';
                 }
                 break;
               case 'fsy2':
-                const next_fsy1 = this.input.getPreviousRebar(value);
+                const next_fsy1 = this.helper.getPreviousRebar(value);
                 if (next_fsy1 !== undefined) {
                   source.setDataAtCell(changes[i][0], 1, 'D' + next_fsy1.D + '以下')
                   changes[i][3] = 'D' + value + '以上';
                 }
                 break;
               case 'fsu1':
-                const next_fsu2 = this.input.getNextRebar(value);
+                const next_fsu2 = this.helper.getNextRebar(value);
                 if (next_fsu2 !== undefined) {
                   source.setDataAtCell(changes[i][0], 4, 'D' + next_fsu2.D + '以上')
                   changes[i][3] = 'D' + value + '以下';
                 }
                 break;
               case 'fsu2':
-                const next_fsu1 = this.input.getPreviousRebar(value);
+                const next_fsu1 = this.helper.getPreviousRebar(value);
                 if (next_fsu1 !== undefined) {
                   source.setDataAtCell(changes[i][0], 3, 'D' + next_fsu1.D + '以下')
                   changes[i][3] = 'D' + value + '以上';
@@ -120,7 +121,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
               //何もしない
             }
           } else {
-            const value: number = this.input.toNumber(changes[i][3]);
+            const value: number = this.helper.toNumber(changes[i][3]);
             if (value === null) {
               changes[i][3] = changes[i][2];
             } else {
@@ -130,7 +131,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
 
           switch (changes[i][1]) {
             case 'range':
-              const value: number = this.input.toNumber(changes[i][3]);
+              const value: number = this.helper.toNumber(changes[i][3]);
               if (value === null) {
                 changes[i][3] = changes[i][2]; // 入力も元に戻す
               } else {
@@ -165,7 +166,8 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
   concrete_strength_table_settings = {};
 
   constructor(private input: InputSafetyFactorsMaterialStrengthsService,
-    private member: InputMembersService) {
+    private member: InputMembersService,
+    private helper: InputDataService) {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -295,14 +297,14 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
       fsu1: 'D' + split['fsu1'] + '以下'
     }
 
-    const fsy2 = this.input.getNextRebar(split['fsy1']);
+    const fsy2 = this.helper.getNextRebar(split['fsy1']);
     if (fsy2 !== undefined) {
       result['fsy2'] = 'D' + fsy2.D + '以上';
     } else {
       result['fsy2'] = '';
     }
 
-    const fsu2 = this.input.getNextRebar(split['fsu1']);
+    const fsu2 = this.helper.getNextRebar(split['fsu1']);
     if (fsu2 !== undefined) {
       result['fsu2'] = 'D' + fsu2.D + '以上';
     } else {
@@ -393,15 +395,15 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     const result: any[] = bar_strength_table_datas;
 
     for (const key of Object.keys(result[0])) {
-      if(result[0][key] === null ){ continue;}
-      if(typeof result[0][key]  === "string") { 
-        result[0][key] = this.input.toNumber(result[0][key].replace('D', '').replace('以下', ''));
+      if (result[0][key] === null) { continue; }
+      if (typeof result[0][key] === "string") {
+        result[0][key] = this.helper.toNumber(result[0][key].replace('D', '').replace('以下', ''));
       }
     }
 
     for (let i = 1; i < result.length; i++) {
       for (const key of Object.keys(result[i])) {
-        result[i][key] = this.input.toNumber(result[i][key])
+        result[i][key] = this.helper.toNumber(result[i][key])
       }
     }
 
@@ -414,15 +416,15 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     const result: any[] = steel_strength_table_datas;
 
     for (const key of Object.keys(result[0])) {
-      if(result[0][key] === null ){ continue;}
-      if(typeof result[0][key]  === "string") { 
-        result[0][key] = this.input.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
+      if (result[0][key] === null) { continue; }
+      if (typeof result[0][key] === "string") {
+        result[0][key] = this.helper.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
       }
     }
 
     for (let i = 1; i < result.length; i++) {
       for (const key of Object.keys(result[i])) {
-        result[i][key] = this.input.toNumber(result[i][key])
+        result[i][key] = this.helper.toNumber(result[i][key])
       }
     }
 
@@ -435,7 +437,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     const result: any[] = concrete_strength_table_datas;
     for (const column of result) {
       for (const key of Object.keys(column)) {
-        column[key] = this.input.toNumber(column[key])
+        column[key] = this.helper.toNumber(column[key])
       }
     }
     return result;

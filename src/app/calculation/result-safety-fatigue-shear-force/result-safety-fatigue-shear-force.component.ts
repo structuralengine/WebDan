@@ -39,6 +39,13 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       return;
     }
 
+      // 計算結果を集計する
+    this.safetyFatigueShearForcepages = this.calc.setSafetyFatiguePages(this.calc.DesignForceList);
+    this.isFulfilled = true;
+    this.isLoading = false;
+    this.calc.isEnable = true;
+
+    /*
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
@@ -75,6 +82,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     if (json === null) { return false; }
     this.safetyFatigueShearForcepages = this.calc.setSafetyFatiguePages(json.OutputData, postData);
     return true;
+     */
   }
 
 }

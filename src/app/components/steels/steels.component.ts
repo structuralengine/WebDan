@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputSteelsService } from './input-steels.service';
+import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({
   selector: 'app-steels',
@@ -17,7 +18,8 @@ export class SteelsComponent implements OnInit, OnDestroy {
   readonlyRows: boolean[][];
   table_settings: any[];
 
-  constructor(private input: InputSteelsService) {
+  constructor(private input: InputSteelsService,
+              private helper: InputDataService) {
 
   }
 
@@ -53,7 +55,7 @@ export class SteelsComponent implements OnInit, OnDestroy {
           }
           // 1行目
           column1['index'] = data['index'];
-          const a: number = this.input.toNumber(data['position']);
+          const a: number = this.helper.toNumber(data['position']);
           column1['position'] = (a === null) ? '' : a.toFixed(3);
           column1['p_name'] = data['p_name'];
           column1['p_name_ex'] = data['p_name_ex'];

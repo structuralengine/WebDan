@@ -6,7 +6,7 @@ import { InputMembersService } from '../members/input-members.service';
 @Injectable({
   providedIn: 'root'
 })
-export class InputSafetyFactorsMaterialStrengthsService extends InputDataService {
+export class InputSafetyFactorsMaterialStrengthsService  {
 
   // 安全係数情報
   public safety_factor_material_strengths_list: any[];
@@ -16,8 +16,8 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
 
   constructor(
     private basic: InputBasicInformationService,
-    private members: InputMembersService) {
-    super();
+    private members: InputMembersService,
+    private helper: InputDataService) {
     this.clear();
   }
   public clear(): void {
@@ -71,7 +71,7 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       for (const current_safety_factor of current_data['safety_factor']) {
         let temp = {};
         for( const key of Object.keys(current_safety_factor)){
-          temp[key] = this.toNumber(current_safety_factor[key]);
+          temp[key] = this.helper.toNumber(current_safety_factor[key]);
         }
         target['safety_factor'].push(temp)
       }
@@ -81,7 +81,7 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       for (const current_bar of current_data['material_bar']) {
         let temp = {};
         for( const key of Object.keys(current_bar)){
-          temp[key] = this.toNumber(current_bar[key]);
+          temp[key] = this.helper.toNumber(current_bar[key]);
         }
         target['material_bar'].push(temp);
       }
@@ -91,7 +91,7 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       for (const current_steel of current_data['material_steel']) {
         let temp = {};
         for (const key of Object.keys(current_steel)) {
-          temp[key] = this.toNumber(current_steel[key]);
+          temp[key] = this.helper.toNumber(current_steel[key]);
         }
         target['material_steel'].push(temp);
       }
@@ -99,8 +99,8 @@ export class InputSafetyFactorsMaterialStrengthsService extends InputDataService
       // コンクリート強度を保存用変数に格納する
       target['material_concrete'] = this.default_material_concrete();
       const current_concrete = current_data['material_concrete'];
-      target['material_concrete'].fck = this.toNumber(current_concrete[0].value);
-      target['material_concrete'].dmax = this.toNumber(current_concrete[1].value);
+      target['material_concrete'].fck = this.helper.toNumber(current_concrete[0].value);
+      target['material_concrete'].dmax = this.helper.toNumber(current_concrete[1].value);
 
       // 杭の施工条件を保存用変数に格納する
       const current_pile_factor_selected = current_data['pile_factor_selected'];

@@ -132,7 +132,7 @@ export class CalcServiceabilityMomentService {
             /////////////// タイトル /////////////// 
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, postdata0));
             ///////////////// 形状 /////////////////
             column.push(this.result.getShapeString_B(printData));
             column.push(this.result.getShapeString_H(printData));
@@ -315,7 +315,7 @@ export class CalcServiceabilityMomentService {
       result.c = { alien: 'right', value: re.c.toFixed(1) };
     }
     if ('Cs' in re) {
-      result.Cs = { alien: 'right', value: re.Cs.toFixed(0) };
+      result.Cs = { alien: 'right', value: re.Cs.toFixed(1) };
     }
     if ('fai' in re) {
       result.fai = { alien: 'right', value: re.fai.toFixed(0) };
@@ -705,22 +705,24 @@ export class CalcServiceabilityMomentService {
     const y200 = [1.8, 1.9, 2.1, 2.5, 2.9, 3.2, 3.9];
 
     // コンクリート強度の線形補間関数を作成
-    let y: number[];
+    let result: number = null;
     if (H > 2000) {
-      y = y200;
+      const linear200 = linear(x0, y200);
+      result = linear200(fck);
     } else {
       //線形補間関数を作成
+      let y: number[];
       const linear025 = linear(x0, y025);
       const linear050 = linear(x0, y050);
       const linear100 = linear(x0, y100);
       const linear200 = linear(x0, y200);
       y = [linear025(fck), linear050(fck), linear100(fck), linear200(fck)]
+      // 断面高さの線形補間関数を作成
+      const x = [250, 500, 1000, 2000];
+      const linearH = linear(x, y)
+      result = linearH(H);
     }
-    // 断面高さの線形補間関数を作成
-    const x = [250, 500, 1000, 2000];
-    const linearH = linear(x, y)
-
-    return linearH(H);
+    return result;
   }
 
 

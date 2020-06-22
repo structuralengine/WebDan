@@ -27,7 +27,7 @@ export class CalcSafetyMomentService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): void{
+  public setDesignForces(): void {
 
     this.isEnable = false;
 
@@ -113,7 +113,7 @@ export class CalcSafetyMomentService {
             /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, postdata));
             ///////////////// 形状 /////////////////
             column.push(this.result.getShapeString_B(printData));
             column.push(this.result.getShapeString_H(printData));

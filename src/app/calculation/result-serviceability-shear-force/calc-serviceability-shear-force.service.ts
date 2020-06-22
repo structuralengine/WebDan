@@ -172,7 +172,7 @@ export class CalcServiceabilityShearForceService {
             /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, PostData0));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, PostData0));
 
             ///////////////// 形状 /////////////////
             column.push(resultColumn.B);
@@ -248,19 +248,23 @@ export class CalcServiceabilityShearForceService {
 
     const result: any = this.base.calcVmu(printData, resultData, position);
 
+    let Vd: number = Math.abs(result.Vd);
+
     let Vpd: number = this.save.toNumber(postdata1.Vd);
     if (Vpd === null) { Vpd = 0; }
+    Vpd = Math.abs(Vpd);
     result['Vpd'] = Vpd;
 
     let Vrd: number = this.save.toNumber(PostData2.Vd);
-    if (Vrd === null) { Vrd = result.Vd - Vpd; }
-    if (Vrd === 0) { Vrd = result.Vd - Vpd; }
+    if (Vrd === null) { Vrd = Vd - Vpd; }
+    if (Vrd === 0) { Vrd = Vd - Vpd; }
+    Vrd = Math.abs(Vrd);
     result['Vrd'] = Vrd;
 
     let Vcd07: number = 0.7 * result.Vcd;
     result['Vcd07'] = Vcd07;
 
-    if (result.Vd <= Vcd07) {
+    if (Vd <= Vcd07) {
       result['Result'] = 'OK';
       return result;
     }

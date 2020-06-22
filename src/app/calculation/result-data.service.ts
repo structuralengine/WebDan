@@ -18,13 +18,17 @@ export class ResultDataService {
       strPos = position.position.toFixed(3);
     }
     const m_no: string = member.m_no.toFixed(0);
-    const title: string = m_no + '部材(' + strPos + ')';
+    let title: string = m_no + '部材';
+    if (member.m_len > 0) {
+      title += '(' + strPos + ')';
+    }
     const result = { alien: 'center', value: title };
     return result;
   }
 
   // 照査表における タイトル２行目を取得
   public getTitleString2(position: any, postdata: any): any {
+    /*
     let side: string;
     switch (postdata.memo) {
       case '上側引張':
@@ -36,13 +40,25 @@ export class ResultDataService {
       default:
         side = '';
     }
-    const title: string = position.p_name_ex + side;
+    */
+    const title: string = position.p_name_ex;// + side;
     const result = { alien: 'center', value: title };
     return result;
   }
   // 照査表における タイトル３行目を取得
-  public getTitleString3(position: any): any {
-    const title: string = position.memberInfo.shape;
+  public getTitleString3(position: any, postdata: any): any {
+    let side: string;
+    switch (postdata.memo) {
+      case '上側引張':
+        side = '(上側)';
+        break
+      case '下側引張':
+        side = '(下側)';
+        break
+      default:
+        side = '';
+    }
+    const title: string = position.memberInfo.shape + side;
     const result = { alien: 'center', value: title };
     return result;
   }
@@ -84,7 +100,8 @@ export class ResultDataService {
       return {
         As: { alien: 'center', value: '-' },
         AsString: { alien: 'center', value: '-' },
-        ds: { alien: 'center', value: '-' }
+        ds: { alien: 'center', value: '-' },
+        cos: { alien: 'center', value: '-' }
       };
     }
 
@@ -93,8 +110,20 @@ export class ResultDataService {
     const AsString: string = symbol + 'String';
     const ds: string = 'ds' + subscript;
 
+    const cossymbol: string = 'cos' + symbol;
+    let cosvalue: number = this.save.toNumber( printData[cossymbol]);
+    
+    if(cosvalue === null){
+      cosvalue = 1;
+    }
+
+    let Ass: string =  printData[As].toFixed(1);
+    if (cosvalue  != 1){
+      Ass = '(' + cosvalue.toFixed(3) + ')' + Ass;
+    }
+    
     const result = {
-      As: { alien: 'right', value: printData[As].toFixed(1) },
+      As: { alien: 'right', value: Ass },
       AsString: { alien: 'right', value: printData[AsString] },
       ds: { alien: 'right', value: printData[ds].toFixed(1) }
     };

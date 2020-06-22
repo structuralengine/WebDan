@@ -22,11 +22,11 @@ export class CalcSafetyFatigueMomentService {
   private PostedData: any;
 
   constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private fatigue: SetFatigueService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private base: CalcServiceabilityMomentService) {
+    private force: SetDesignForceService,
+    private fatigue: SetFatigueService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -47,7 +47,7 @@ export class CalcSafetyFatigueMomentService {
 
     // 列車本数の入力がない場合は処理を抜ける
     if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
-        this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+      this.save.toNumber(this.save.fatigues.train_B_count) === null) {
       return;
     }
 
@@ -59,31 +59,32 @@ export class CalcSafetyFatigueMomentService {
     this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
 
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList3);
+    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3);
 
     if (this.DesignForceList.length < 1) {
       return;
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList2], 'Md');
+    this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
 
+    // Md=0 のケースを削除する
     for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
       const df = this.DesignForceList[0][i];
-      for (let j = df.positions.length -1; j >= 0; j--){
+      for (let j = df.positions.length - 1; j >= 0; j--) {
         const ps = df.positions[j];
-        if ( !('PostData0' in ps) ){
-          df.positions.splice(j,1);
+        if (!('PostData-1' in ps)) {
+          df.positions.splice(j, 1);
           continue;
         }
-        const pd = ps.PostData0[0];
-        if (pd.Md === 0){
-          df.positions.splice(j,1);
-        }       
+        const pd = ps['PostData-1'][0];
+        if (pd.Md === 0) {
+          df.positions.splice(j, 1);
+        }
       }
-      if(df.positions.length == 0){
-        this.DesignForceList[0].splice(i,1);
-        this.DesignForceList3[0].splice(i,1);
+      if (df.positions.length === 0) {
+        this.DesignForceList[0].splice(i, 1);
+        this.DesignForceList3[0].splice(i, 1);
       }
     }
 
@@ -117,7 +118,66 @@ export class CalcSafetyFatigueMomentService {
     const result = InputData0.concat(InputData1);
     return result;
   }
-  
+
+  // position に PostData を追加する
+  // SetPostDataService にある同名の関数の改良版で、
+  // DesignForceList[0]: 最大応力
+  // DesignForceList[1]: 最小応力
+  // DesignForceList[2]: 変動応力
+  public setPostData(DesignForceListList: any[]): void {
+
+    const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
+    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
+
+    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+      const groupe = baseDesignForceList[ig];
+      for (let im = 0; im < groupe.length; im++) {
+        const member = groupe[im];
+        // 部材・断面情報をセット
+        const memberInfo = this.save.members.member_list.find(function (value) {
+          return (value.m_no === member.m_no);
+        });
+        if (memberInfo === undefined) {
+          console.log('部材番号が存在しない');
+          continue;
+        }
+        for (let ip = 0; ip < member.positions.length; ip++) {
+          // const position = member.positions[ip];
+          const position = minDesignForceList[ig][im].positions[ip];
+          // 断面
+          position['memberInfo'] = memberInfo;
+          // ピックアップ断面力から設計断面力を選定する
+          for (let fo = 0; fo < member.positions[ip].designForce.length; fo++) {
+            // 対象の断面力を抽出する
+            const force: any[] = new Array();
+            for (const target of DesignForceListList) {
+              let designForce: any;
+              try {
+                designForce = target[ig][im].positions[ip].designForce[fo];
+              } catch {
+                designForce = null;
+              }
+              force.push(designForce);
+            }
+
+            // ピックアップ断面力から設計断面力を選定する
+            let sectionForce: any[];
+            sectionForce = this.post.getSectionForce(force, 'Md');
+            // postData に登録する
+            for (let icase = 0; icase < sectionForce.length; icase++) {
+              position['PostData' + (icase - 1).toString()] = sectionForce[icase];
+            }
+          }
+          // 必要ないので消す！！
+          delete position.designForce;
+        }
+      }
+    }
+  }
+
+
+
+
   // 変動荷重を 
   private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 
@@ -138,25 +198,25 @@ export class CalcSafetyFatigueMomentService {
           // position に 疲労係数入れる
           this.fatigue.setFatigueData(member.g_no, member.m_no, position);
 
-          // もし疲労データがなかったら削除する
+          // もし疲労係数がなかったら削除する
           let flg = false;
-          if (position.fatigueData !== null){
+          if (position.fatigueData !== null) {
             for (const key of Object.keys(position.fatigueData.M1)) {
-              if ( this.save.toNumber(position.fatigueData.M1[key]) !== null ) {
+              if (this.save.toNumber(position.fatigueData.M1[key]) !== null) {
                 flg = true;
                 break;
               }
             }
             if (flg === false) {
-            for (const key of Object.keys(position.fatigueData.M2)) {
-              if ( this.save.toNumber(position.fatigueData.M2[key]) !== null ) {
-                flg = true;
-                break;
+              for (const key of Object.keys(position.fatigueData.M2)) {
+                if (this.save.toNumber(position.fatigueData.M2[key]) !== null) {
+                  flg = true;
+                  break;
                 }
               }
             }
           }
-          if ( flg === false ) {
+          if (flg === false) {
             member.positions.splice(ip, 1); // 削除する
             continue;
           }
@@ -164,21 +224,61 @@ export class CalcSafetyFatigueMomentService {
           // 最大応力 - 最小応力 で変動荷重を求める
           const minForce: any = position.designForce;
           const maxForce: any = result[ig][im].positions[ip].designForce;
-          for (let i = 0; i < minForce.length; i++) {
-            for (const key1 of Object.keys(minForce[i])) {
+          
+          for (let i = 0; i < maxForce.length; i++) {
+            for (const key1 of Object.keys(maxForce[i])) {
               if (key1 === 'n') { continue; }
-              for (const key2 of Object.keys(minForce[i][key1])) {
-                if (key2 === 'comb') { continue; }
-                maxForce[i][key1][key2] -= minForce[i][key1][key2];
+
+              // 最大<=>最小 反対の断面力 も探査対象にする
+              let key2: string;
+              if (key1.indexOf('max') >= 0) {
+                key2 = key1.replace('max', 'min');
+              } else {
+                key2 = key1.replace('min', 'max');
               }
+              const force0 = maxForce[i][key1];
+              const force1 =  minForce[i][key1];
+              const force2 =  minForce[i][key2];
+
+              // 最小と最大 差が大きい方を変動作用とする
+              let Md0: number = force0['Md'];
+              let Md1: number = force1['Md'] * Math.sign(Md0);
+              let Md2: number = force2['Md'] * Math.sign(Md0);
+              Md0 = Math.abs(Md0);
+
+              // 最小の方が大きい場合は、比較対象から除外する
+              if ( Md0 < Md1) {
+                Md1 = Md0;
+              }
+              if ( Md0 < Md2) {
+                Md2 = Md0;
+              }
+
+              let targetMinForce: object;
+              if ( Md0 - Md1 > Md0 - Md2 ) {
+                targetMinForce = force1;
+              } else {
+                // 反対のキーを持つ最小応力が採用された場合
+                targetMinForce = force2;
+                minForce[i][key1] = minForce[i][key2]; // 反対のキーに断面力をコピーする
+              }
+
+              // 最大 - 最小 断面力の計算
+              for (const key3 of Object.keys(maxForce[i][key1])) {
+                if (key3 === 'comb') { continue; }
+                maxForce[i][key1][key3] -= targetMinForce[key3];
+              }
+
             }
           }
+
+
         }
       }
     }
     return result;
   }
-  
+
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(responseData: any, postData: any): any[] {
@@ -226,7 +326,7 @@ export class CalcSafetyFatigueMomentService {
             /////////////// タイトル ///////////////
             column.push(this.result.getTitleString1(member, position));
             column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position));
+            column.push(this.result.getTitleString3(position, postdata0));
             ///////////////// 形状 /////////////////
             column.push(this.result.getShapeString_B(printData));
             column.push(this.result.getShapeString_H(printData));
@@ -402,7 +502,7 @@ export class CalcSafetyFatigueMomentService {
     let ar: number = 3.09 - 0.003 * fai;
 
     let reference_count: number = this.save.toNumber(this.save.fatigues.reference_count);
-    if(reference_count === null ){
+    if (reference_count === null) {
       reference_count = 2000000;
     }
     const tmp201: number = Math.pow(10, ar) / Math.pow(reference_count, k);
@@ -433,7 +533,9 @@ export class CalcSafetyFatigueMomentService {
       k = 0.12;
       ar = 3.09 - 0.003 * fai;
     }
-    
+    result['ar'] = ar;
+    result['k'] = k;
+
     // 標準列車荷重観山の総等価繰返し回数 N の計算
     let T: number;
     if ('service_life' in this.save.fatigues) {
@@ -509,7 +611,7 @@ export class CalcSafetyFatigueMomentService {
     const tmpN1: number = 365 * T * jA * NA * Math.pow(SASC, 1 / k);
     const tmpN2: number = 365 * T * jB * NB * Math.pow(SBSC, 1 / k);
     const N: number = tmpN1 + tmpN2;
-    result['N'] = N;
+    result['N'] = Math.ceil(N / 100) * 100;
 
     if (ratio200 < 1 && N <= reference_count) {
       return result;

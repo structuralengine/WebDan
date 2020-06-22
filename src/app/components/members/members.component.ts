@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { InputMembersService } from './input-members.service';
+import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({
   selector: 'app-members',
@@ -119,7 +120,7 @@ export class MembersComponent implements OnInit {
             case 'r1_3':
             case 'n':
             // 数字チェック
-            const value: number = this.input.toNumber(changes[i][3]);
+            const value: number = this.helper.toNumber(changes[i][3]);
             if (value === null) {
               changes[i][3] = null;
             }
@@ -135,7 +136,8 @@ export class MembersComponent implements OnInit {
     },
   };
 
-  constructor(private input: InputMembersService) {
+  constructor(private input: InputMembersService,
+              private helper: InputDataService) {
    }
 
   ngOnInit() {

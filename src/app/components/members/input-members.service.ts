@@ -4,21 +4,19 @@ import { InputDataService } from '../../providers/input-data.service';
 @Injectable({
   providedIn: 'root'
 })
-export class InputMembersService extends InputDataService {
+export class InputMembersService  {
 
   // 部材情報
   public member_list: any[];
 
-  constructor() {
-    super();
+  constructor(private helper: InputDataService) {
     this.clear();
   }
   public clear(): void {
     this.member_list = new Array();
     // デフォルトで、数行のデータを用意しておく
-    for (let i = 1; i <= this.DEFAULT_MEMBER_COUNT; i++) {
+    for (let i = 1; i <= this.helper.DEFAULT_MEMBER_COUNT; i++) {
       const new_member = this.default_member(i);
-      new_member.g_no = 1;
       this.member_list.push(new_member);
     }
   }
@@ -38,7 +36,7 @@ export class InputMembersService extends InputDataService {
   /// pick up ファイルをセットする関数
   /// </summary>
   /// <param name="row">行番号</param>
-  public setPickUpData(pickup_data: Object) {
+  public setPickUpData(pickup_data: Object, isManualed: boolean) {
 
     const mList: any[] = pickup_data[Object.keys(pickup_data)[0]];
 
@@ -57,7 +55,9 @@ export class InputMembersService extends InputDataService {
       // 部材長をセットする
       const pList: any[] = mList[i].positions;
       new_member.m_len = pList[pList.length - 1].position;
-      new_member.g_no = null;
+      if (isManualed) {
+        new_member.g_no = null;
+      }
       this.member_list.push(new_member);
     }
   }
@@ -91,7 +91,7 @@ export class InputMembersService extends InputDataService {
 
     const groupe_no_list: number[] = new Array();
     for (const m of this.member_list) {
-      if (this.toNumber(m['g_no']) === null) {
+      if (this.helper.toNumber(m['g_no']) === null) {
         m['g_no'] = null;
         continue;
       }

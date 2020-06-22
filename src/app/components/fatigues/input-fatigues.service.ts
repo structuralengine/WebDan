@@ -6,7 +6,7 @@ import { NumberValueAccessor } from '@angular/forms/src/directives';
 @Injectable({
   providedIn: 'root'
 })
-export class InputFatiguesService extends InputDataService {
+export class InputFatiguesService  {
 
   // 疲労情報
   public fatigue_list: any[];
@@ -16,7 +16,6 @@ export class InputFatiguesService extends InputDataService {
   public reference_count: number; // 200万回
 
   constructor(private points: InputDesignPointsService) {
-    super();
     this.clear();
   }
   public clear(): void {

@@ -5,13 +5,12 @@ import { InputDesignPointsService } from '../design-points/input-design-points.s
 @Injectable({
   providedIn: 'root'
 })
-export class InputSectionForcesService extends InputDataService {
+export class InputSectionForcesService  {
 
   public Mdatas: any[];
   public Vdatas: any[];
 
   constructor(private points: InputDesignPointsService) {
-    super();
     this.clear();
   }
   public clear(): void {
