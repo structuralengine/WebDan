@@ -758,7 +758,7 @@ export class SetBarService {
       return new Array();
     }
     // 鉄筋段数
-    const n = barInfo.sidebar_n;
+    const n = barInfo.side_n;
     if (this.save.toNumber(n) === null) {
       return new Array(); // 鉄筋段数の入力が ない場合は スキップ
     }
