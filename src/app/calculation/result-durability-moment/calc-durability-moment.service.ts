@@ -90,8 +90,23 @@ export class CalcDurabilityMomentService {
                 break;
             }
           }
-          if (position.PostData0.length < 1) {
+    if (position.PostData0.length < 1) {
             member.positions.splice(ip, 1);
+          } else {
+            for (let k = member.positions.length - 1; k >= 0; k--) {
+              const ps = member.positions[k];
+              if (!('PostData0' in ps)) {
+                member.positions.splice(k, 1);
+                continue;
+              }
+              const pd = ps.PostData0[0];
+              if (pd.Md === 0) {
+                member.positions.splice(k, 1);
+              }
+            }
+            if (position.PostData0.length < 1) {
+              member.positions.splice(ip, 1);
+            }
           }
         }
         if (member.positions.length < 1) {

@@ -48,21 +48,26 @@ export class CalcSafetyMomentService {
     this.post.setPostData([this.DesignForceList], 'Md');
 
     // 曲げモーメントが ゼロの断面を照査対象から除外する
-    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
-      const df = this.DesignForceList[0][i];
-      for (let j = df.positions.length -1; j >= 0; j--){
-        const ps = df.positions[j];
-        if ( !('PostData0' in ps) ){
-          df.positions.splice(j,1);
-          continue;
+    for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
+      for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
+        const df = this.DesignForceList[i][j];
+        for (let k = df.positions.length - 1; k >= 0; k--) {
+          const ps = df.positions[k];
+          if (!('PostData0' in ps)) {
+            df.positions.splice(k, 1);
+            continue;
+          }
+          const pd = ps.PostData0[0];
+          if (pd.Md === 0) {
+            df.positions.splice(k, 1);
+          }
         }
-        const pd = ps.PostData0[0];
-        if (pd.Md === 0){
-          df.positions.splice(j,1);
-        }       
+        if (df.positions.length == 0) {
+          this.DesignForceList[i].splice(j, 1);
+        }
       }
-      if(df.positions.length == 0){
-        this.DesignForceList[0].splice(i,1);
+      if (this.DesignForceList.length == 0) {
+        this.DesignForceList.splice(i, 1);
       }
     }
 

@@ -50,24 +50,28 @@ export class CalcServiceabilityMomentService {
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
   
-    for (let i = this.DesignForceList[0].length - 1; i >= 0; i--) {
-      const df = this.DesignForceList[0][i];
-      for (let j = df.positions.length -1; j >= 0; j--){
-        const ps = df.positions[j];
-        if ( !('PostData0' in ps) ){
-          df.positions.splice(j,1);
-          continue;
+    for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
+      for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
+        const df = this.DesignForceList[i][j];
+        for (let k = df.positions.length - 1; k >= 0; k--) {
+          const ps = df.positions[k];
+          if (!('PostData0' in ps)) {
+            df.positions.splice(k, 1);
+            continue;
+          }
+          const pd = ps.PostData0[0];
+          if (pd.Md === 0) {
+            df.positions.splice(k, 1);
+          }
         }
-        const pd = ps.PostData0[0];
-        if (pd.Md === 0){
-          df.positions.splice(j,1);
-        }       
+        if (df.positions.length == 0) {
+          this.DesignForceList[i].splice(j, 1);
+        }
       }
-      if(df.positions.length == 0){
-        this.DesignForceList[0].splice(i,1);
+      if (this.DesignForceList.length == 0) {
+        this.DesignForceList.splice(i, 1);
       }
     }
-
   }
 
   // サーバー POST用データを生成する
@@ -281,7 +285,12 @@ export class CalcServiceabilityMomentService {
         result.sigma_b.value = re.Sigmab.toFixed(2) + ' < ' + re.Sigmabl.toFixed(2);
         // 鉄筋応力度の照査
         if ('Sigmas' in re && 'sigmal1' in re) {
-          if (re.Sigmas < re.sigmal1) {
+          if (re.Sigmas < 0) {
+            result.sigma_s.value = '全断面圧縮';
+            if (result.result.value === '-') {
+              result.result.value = 'OK';
+            }
+          }else if (re.Sigmas < re.sigmal1) {
             result.sigma_s.value = re.Sigmas.toFixed(1) + ' < ' + re.sigmal1.toFixed(1);
             if (result.result.value === '-') {
               result.result.value = 'OK';

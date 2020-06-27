@@ -470,7 +470,7 @@ export class SetBarService {
 
 
     // 印刷用の変数に登録
-    result['print-Vyd_d'] = nDepth / n;
+    result['print-Vyd_d'] = nDepth / nAs;
     result['print-Vyd_Ast'] = nAs;
 
     result['print-Ast'] = this.save.getAs(dia) * rebar_n;
