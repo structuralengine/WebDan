@@ -166,7 +166,7 @@ export class ResultDataService {
     }
 
     if ('fck' in printData && 'rc' in printData) {
-      result['fcd'] = { alien: 'right', value: (printData.fck / printData.rc).toFixed(1) };
+      result['fcd'] = { alien: 'right', value: (printData.rfck * printData.fck / printData.rc).toFixed(1) };
     } else {
       result['fcd'] = { alien: 'center', value: '-' };
     }

@@ -247,10 +247,10 @@ export class CalcSafetyShearForceService {
 
     // 断面
     if ('B' in re) {
-      result.B = { alien: 'right', value: re.B.toFixed(0) };
+      result.B = { alien: 'right', value: re.B };
     }
     if ('H' in re) {
-      result.H = { alien: 'right', value: re.H.toFixed(0) };
+      result.H = { alien: 'right', value: re.H };
     }
     if ('tan' in re) {
       result.tan = { alien: 'right', value: re.tan.toFixed(1) };
@@ -446,8 +446,11 @@ export class CalcSafetyShearForceService {
 
     // 引張鉄筋
     let Ast: number = 0;
-    if ('Ast' in printData) {
+    if ('Vyd_Ast' in printData) {
       Ast = this.save.toNumber(printData.Vyd_Ast);
+      if (Ast === null) { Ast = 0; }
+    } else if ('Ast' in printData) {
+      Ast = this.save.toNumber(printData.Ast);
       if (Ast === null) { Ast = 0; }
     }
     result['Ast'] = Ast;
@@ -459,7 +462,6 @@ export class CalcSafetyShearForceService {
     if ('Vyd_d' in printData) {
       d = this.save.toNumber(printData.Vyd_d);
       if (d === null) { d = h; }
-      d = d - ((height - h) / 2);
     }
     result['d'] = d;
     source['d'] = d;
@@ -559,6 +561,21 @@ export class CalcSafetyShearForceService {
     result['fck'] = fck;
     source['fck'] = fck;
 
+    // 杭の施工条件による計数
+    let rfck: number = 1;
+    if ('rfck' in printData) {
+      rfck = this.save.toNumber(printData.rfck);
+      if (rfck === null) { rfck = 1; }
+    }
+
+    let rVcd: number = 1;
+    if ('rVcd' in printData) {
+      rVcd = this.save.toNumber(printData.rVcd);
+      if (rVcd === null) { rVcd = 1; }
+    }
+    source['rVcd'] = rVcd;
+
+
     let rc: number = 0;
     if ('rc' in printData) {
       rc = this.save.toNumber(printData.rc);
@@ -567,8 +584,8 @@ export class CalcSafetyShearForceService {
     result['rc'] = rc;
     source['rc'] = rc;
 
-    result['fcd'] = fck / rc;
-    source['fcd'] = fck / rc;
+    result['fcd'] = rfck * fck / rc;
+    source['fcd'] = rfck * fck / rc;
 
     // 鉄筋材料
     let fsy: number = 0;
@@ -709,6 +726,7 @@ export class CalcSafetyShearForceService {
 
     let Vcd = Bd * Bp * Bn * fvcd * source.B * source.d / source.rbc;
     Vcd = Vcd / 1000;
+    Vcd = Vcd * source.rVcd; // 杭の施工条件
     result['Vcd'] = Vcd;
 
     let z: number = source.d / 1.15;
