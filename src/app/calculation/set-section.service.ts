@@ -193,7 +193,9 @@ export class SetSectionService {
     }
 
     // 照査表印字のための変数 print に値を登録
-    this.bar.setBarAtPrintData(printData, bars);
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
     printData['B'] = b;
     printData['H'] = h;
     // せん断照査用の換算矩形断面を算定
@@ -277,7 +279,9 @@ export class SetSectionService {
     }
 
     // 照査表印字のための変数 print に値を登録
-    this.bar.setBarAtPrintData(printData, bars);
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
     printData['B'] = b;
     printData['H'] = h;
     // せん断照査用の換算矩形断面を算定
@@ -285,7 +289,10 @@ export class SetSectionService {
     const circleArea: number = (b ** 2) * Math.PI / 4;
     const rectArea: number = b * x;
     const Area = circleArea + rectArea;
-    printData['Vyd_H'] = Area / b;
+    const Vyd_H = Area / b;
+    const deltaH = h - Vyd_H;
+    printData.Vyd_d -= deltaH / 2;
+    printData['Vyd_H'] = Vyd_H;
     printData['Vyd_bw'] = b;
     printData['Vyd_B'] = b;
     printData['Vyd_pc'] = printData.Ast / Area;
@@ -298,7 +305,6 @@ export class SetSectionService {
     printData['I'] = a1 + a2 + a3 + a4;
     printData['eu'] = h / 2;
     printData['el'] = h / 2;
-
 
     return true;
   }
@@ -356,7 +362,9 @@ export class SetSectionService {
     }
 
     // 照査表印字のための変数 print に値を登録
-    this.bar.setBarAtPrintData(printData, bars);
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
     printData['B'] = b;
     printData['H'] = h;
     printData['Bt'] = bf;
@@ -436,7 +444,9 @@ export class SetSectionService {
     }
 
     // 照査表印字のための変数 print に値を登録
-    this.bar.setBarAtPrintData(printData, bars);
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
     printData['B'] = b;
     printData['H'] = h;
     printData['Bt'] = bf;
@@ -500,7 +510,9 @@ export class SetSectionService {
     }
 
     // 照査表印字のための変数 print に値を登録
-    this.bar.setBarAtPrintData(printData, bars);
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
     printData['B'] = b;
     printData['H'] = h;
     // せん断照査用の換算矩形断面を算定
@@ -573,16 +585,21 @@ export class SetSectionService {
     }
 
     // 照査表印字のための変数 print に値を登録  
-    this.bar.setBarAtPrintData(printData, bars, ['Ast', 'Aw']);
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
     printData['B'] = h;
     printData['H'] = b;
     // せん断照査用の換算矩形断面を算定
-    let Area = (h ** 2) * Math.PI / 4;
-    printData['Vyd_H'] = Math.sqrt(Area);
+    let Area = Math.pow(h, 2) * Math.PI / 4;
+    const Vyd_H = Math.sqrt(Area);
+    const deltaH = h - Vyd_H;
+    printData.Vyd_d -= deltaH / 2;
+    printData['Vyd_H'] = Vyd_H;
     Area -= (b ** 2) * Math.PI / 4;
     printData['Vyd_bw'] = h - Math.sqrt((h ** 2) - Area);
     printData['Vyd_B'] = h - b;
-    printData['Vyd_pc'] = printData.Ast / Area;
+    printData['Vyd_pc'] = printData.Vyd_Ast / (printData.Vyd_d * printData.Vyd_bw);
     // 断面積と断面係数
     printData['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
     printData['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
@@ -633,16 +650,22 @@ export class SetSectionService {
     } else {
       return false;
     }
-    
-    // 照査表印字のための変数 print に値を登録
-    this.bar.setBarAtPrintData(printData, bars, ['Ast', 'Aw']);
-    printData['B'] = h;
+
+    // 照査表印字のための変数 print に値を登録  
+    for (const key of Object.keys(bars.PrintData)) {
+      printData[key] = bars.PrintData[key];
+    }
+    printData['B'] = '〇 R' + h.toString();
     // せん断照査用の換算矩形断面を算定
-    const Area = (h ** 2) * Math.PI / 4;
-    printData['Vyd_H'] = Math.sqrt(Area);
-    printData['Vyd_bw'] = printData.Vyd_H;
+    const Area = Math.pow(h, 2) * Math.PI / 4;
+    const Vyd_H = Math.sqrt(Area);
+    printData['H'] = '□' + Vyd_H.toFixed(1);
+    const deltaH = h - Vyd_H;
+    printData.Vyd_d -= deltaH / 2;
+    printData['Vyd_H'] = Vyd_H;
+    printData['Vyd_bw'] = Vyd_H;
     printData['Vyd_B'] = h;
-    printData['Vyd_pc'] = printData.Ast / Area;
+    printData['Vyd_pc'] = printData.Vyd_Ast / (printData.Vyd_d * printData.Vyd_bw);
     // 断面積と断面係数
     printData['A'] = Math.pow(h, 2) * Math.PI / 4;
     printData['I'] = Math.pow(h, 4) * Math.PI / 64;

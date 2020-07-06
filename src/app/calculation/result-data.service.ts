@@ -65,12 +65,14 @@ export class ResultDataService {
 
   // 照査表における 断面幅の文字列を取得
   public getShapeString_B(printData: any): any {
+
     const result = { alien: 'right', value: printData.B };
     return result;
   }
 
   // 照査表における 断面高さの文字列を取得
   public getShapeString_H(printData: any): any {
+    
     const result = { alien: 'right', value: printData.H };
     return result;
   }
@@ -136,7 +138,12 @@ export class ResultDataService {
     const result = {};
 
     if ('fck' in printData) {
-      result['fck'] = { alien: 'right', value: printData.fck.toFixed(1) };
+      if (printData.rfck === 1) {
+        result['fck'] = { alien: 'right', value: printData.fck.toFixed(1) };
+      } else {
+        const value = printData.fck * printData.rfck;
+        result['fck'] = { alien: 'right', value: value.toFixed(1) };
+      }
     } else {
       result['fck'] = { alien: 'center', value: '-' };
     }
@@ -148,13 +155,18 @@ export class ResultDataService {
     }
 
     if ('Ec' in printData) {
-      result['Ec'] = { alien: 'right', value: printData.Ec.toFixed(1) };
+      if (printData.rEc === 1) {
+        result['Ec'] = { alien: 'right', value: printData.Ec.toFixed(1) };
+      } else {
+        const value = printData.Ec * printData.rEc;
+        result['Ec'] = { alien: 'right', value: value.toFixed(1) };
+      }
     } else {
       result['Ec'] = { alien: 'center', value: '-' };
     }
 
     if ('fck' in printData && 'rc' in printData) {
-      result['fcd'] = { alien: 'right', value: (printData.fck / printData.rc).toFixed(1) };
+      result['fcd'] = { alien: 'right', value: (printData.rfck * printData.fck / printData.rc).toFixed(1) };
     } else {
       result['fcd'] = { alien: 'center', value: '-' };
     }
