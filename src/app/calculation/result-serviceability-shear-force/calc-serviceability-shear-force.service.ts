@@ -16,10 +16,10 @@ export class CalcServiceabilityShearForceService {
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
-    private force: SetDesignForceService,
-    private post: SetPostDataService,
-    private result: ResultDataService,
-    private base: CalcSafetyShearForceService) {
+              private force: SetDesignForceService,
+              private post: SetPostDataService,
+              private result: ResultDataService,
+              private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
@@ -42,17 +42,17 @@ export class CalcServiceabilityShearForceService {
     this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[0]);
     // 永久荷重
     const DesignForceList1 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[1]);
-    
+
     if (this.DesignForceList.length < 1) {
       return;
     }
-    
+
     // 変動荷重
     let DesignForceList2 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[2]);
     if(DesignForceList2.length < 1){
       DesignForceList2 = this.getLiveload(this.DesignForceList , DesignForceList1);
     }
-    
+
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList, DesignForceList1, DesignForceList2], 'Vd');
 
@@ -70,11 +70,11 @@ export class CalcServiceabilityShearForceService {
             df.positions.splice(k, 1);
           }
         }
-        if (df.positions.length == 0) {
+        if (df.positions.length === 0) {
           this.DesignForceList[i].splice(j, 1);
         }
       }
-      if (this.DesignForceList[i].length == 0) {
+      if (this.DesignForceList[i].length === 0) {
         this.DesignForceList.splice(i, 1);
       }
     }
@@ -145,20 +145,20 @@ export class CalcServiceabilityShearForceService {
             const PostData0 = position.PostData0[j];
 
             // 永久荷重
-            let PostData1 = { Vd: 0 }; 
+            let PostData1 = { Vd: 0 };
             if ('PostData1' in position) {
-              PostData1 = position.PostData1[j]; 
+              PostData1 = position.PostData1[j];
             }
 
             // 変動荷重
-            let PostData2 = { Vd: 0 }; 
+            let PostData2 = { Vd: 0 };
             if ('PostData2' in position) {
-              PostData2 = position.PostData2[j];  
+              PostData2 = position.PostData2[j];
             }
 
             // 印刷用データ
-            const printData = position.printData[j];
-            
+            const PrintData = position.PrintData[j];
+
             // 解析結果
             const resultData = responseData[i].Reactions[0];
 
@@ -170,8 +170,8 @@ export class CalcServiceabilityShearForceService {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            if ('La' in printData) { delete printData.La; } // Vcd を計算するので La は削除する
-            const resultVmu: any = this.calcSigma(printData, PostData1, PostData2, resultData, position);
+            if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
+            const resultVmu: any = this.calcSigma(PrintData, PostData1, PostData2, resultData, position);
             const resultColumn: any = this.getResultString(resultVmu);
 
             /////////////// タイトル ///////////////
@@ -180,29 +180,29 @@ export class CalcServiceabilityShearForceService {
             column.push(this.result.getTitleString3(position, PostData0));
 
             ///////////////// 形状 /////////////////
-            column.push(resultColumn.B);
-            column.push(resultColumn.H);
+            column.push(this.base.getShapeString_B(PrintData));
+            column.push(this.base.getShapeString_H(PrintData));
             column.push(resultColumn.tan);
             /////////////// 引張鉄筋 ///////////////
             column.push(resultColumn.As);
             column.push(resultColumn.AsString);
             column.push(resultColumn.dst);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(printData, 'Asc');
+            const Asc: any = this.result.getAsString(PrintData, 'Asc');
             column.push(Asc.As);
             column.push(Asc.AsString);
             column.push(Asc.ds);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(printData, 'Ase');
+            const Ase: any = this.result.getAsString(PrintData, 'Ase');
             column.push(Ase.AsString);
             column.push(Ase.ds);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(printData);
+            const fck: any = this.result.getFckString(PrintData);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋強度情報 ///////////////
-            const fsk: any = this.result.getFskString(printData);
+            const fsk: any = this.result.getFskString(PrintData);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);
@@ -248,10 +248,10 @@ export class CalcServiceabilityShearForceService {
     return result;
   }
 
-  public calcSigma(printData: any, postdata1: any, PostData2: any,
-    resultData: any, position: any): any {
+  public calcSigma(PrintData: any, postdata1: any, PostData2: any,
+                   resultData: any, position: any): any {
 
-    const result: any = this.base.calcVmu(printData, resultData, position);
+    const result: any = this.base.calcVmu(PrintData, resultData, position);
 
     let Vd: number = Math.abs(result.Vd);
 
@@ -282,15 +282,15 @@ export class CalcServiceabilityShearForceService {
     let sigma12: number = 120;
     switch (conNum) {
       case 1:
-        sigma12 = (printData.fwyd !== 235) ? 120 : 100;
+        sigma12 = (PrintData.fwyd !== 235) ? 120 : 100;
         result['con'] = '一般の環境';
         break;
       case 2:
-        sigma12 = (printData.fwyd !== 235) ? 100 : 80;
+        sigma12 = (PrintData.fwyd !== 235) ? 100 : 80;
         result['con'] = '腐食性環境';
         break;
       case 3:
-        sigma12 = (printData.fwyd !== 235) ? 80 : 60;
+        sigma12 = (PrintData.fwyd !== 235) ? 80 : 60;
         result['con'] = '厳しい腐食';
         break;
     }

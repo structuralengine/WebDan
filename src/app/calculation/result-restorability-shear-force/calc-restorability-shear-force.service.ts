@@ -23,12 +23,12 @@ export class CalcRestorabilityShearForceService {
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
   // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
-  public setDesignForces(): void{
+  public setDesignForces(): void {
 
     this.isEnable = false;
 
     this.DesignForceList = new Array();
-  
+
     // せん断力が計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_shear_force === false) {
       return;
@@ -36,13 +36,13 @@ export class CalcRestorabilityShearForceService {
 
     this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[6]);
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1 ) {
       return;
     }
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList], 'Vd');
-    
+
     for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
       for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
         const df = this.DesignForceList[i][j];
@@ -57,11 +57,11 @@ export class CalcRestorabilityShearForceService {
             df.positions.splice(k, 1);
           }
         }
-        if (df.positions.length == 0) {
+        if (df.positions.length === 0) {
           this.DesignForceList[i].splice(j, 1);
         }
       }
-      if (this.DesignForceList[i].length == 0) {
+      if (this.DesignForceList[i].length === 0) {
         this.DesignForceList.splice(i, 1);
       }
     }
@@ -71,7 +71,7 @@ export class CalcRestorabilityShearForceService {
   // サーバー POST用データを生成する
   public setInputData(): any {
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1 ) {
       return null;
     }
 

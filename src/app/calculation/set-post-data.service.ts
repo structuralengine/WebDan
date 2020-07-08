@@ -59,7 +59,7 @@ export class SetPostDataService {
           this.safety.setSafetyFactor(calcTarget, member.g_no, position, SafetyFactorIndex);
 
           // 鉄筋の本数・断面形状を position['PostData'] に登録
-          // 出力用の string を position['printData'] に登録
+          // 出力用の string を position['PrintData'] に登録
           this.section.setPostData(member.g_no, member.m_no, position);
 
           // 変数に登録
@@ -181,13 +181,20 @@ export class SetPostDataService {
     } else {
       let maxKey: string = calcTarget + 'max';
       let minKey: string = calcTarget + 'min';
-      const maxForce = forceListList[0][maxKey];
-      const minForce = forceListList[0][minKey];
+      let maxForce = forceListList[0][maxKey];
+      let minForce = forceListList[0][minKey];
 
       if (Math.sign(maxForce.Md) === Math.sign(minForce.Md)) {
         // Mdmax, Mdmin の符号が同じなら 設計断面 1つ
         const side = (maxForce.Md > 0) ? '下側引張' : '上側引張';
         let key: string;
+
+        if (maxForce[calcTarget] === minForce[calcTarget]) { // 断面力が同じで
+          if (forceListList.length > 0) {                    // forceListList[1]がある場合
+            maxForce = forceListList[1][maxKey];             // forceListList[1]で判定する
+            minForce = forceListList[1][minKey];
+          }
+        }
         if (Math.abs(maxForce[calcTarget]) > Math.abs(minForce[calcTarget])) {
           key = maxKey;
         } else {
