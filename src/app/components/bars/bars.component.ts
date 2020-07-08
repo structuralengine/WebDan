@@ -59,7 +59,7 @@ export class BarsComponent implements OnInit, OnDestroy {
             default:
               const value: number = this.helper.toNumber(changes[i][3]);
               if( value !== null ) {
-                changes[i][3] = value.toFixed(0);
+                changes[i][3] = value;
               } else {
                 changes[i][3] = null;
               }
