@@ -4,12 +4,12 @@ import { Http, Headers, Response } from '@angular/http';
 import { CalcSafetyFatigueShearForceService } from './calc-safety-fatigue-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 
-
 @Component({
   selector: 'app-result-safety-fatigue-shear-force',
   templateUrl: './result-safety-fatigue-shear-force.component.html',
   styleUrls: ['../result-viewer/result-viewer.component.scss']
 })
+
 export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
   public isLoading = true;
@@ -18,8 +18,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public safetyFatigueShearForcepages: any[];
 
   constructor(private http: Http,
-    private calc: CalcSafetyFatigueShearForceService,
-    private post: SetPostDataService) { }
+              private calc: CalcSafetyFatigueShearForceService,
+              private post: SetPostDataService) { }
 
   ngOnInit() {
     this.isLoading = true;

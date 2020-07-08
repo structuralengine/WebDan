@@ -16,10 +16,10 @@ export class CalcServiceabilityMomentService {
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
-    private force: SetDesignForceService,
-    private post: SetPostDataService,
-    private result: ResultDataService,
-    public base: CalcSafetyMomentService) {
+              private force: SetDesignForceService,
+              private post: SetPostDataService,
+              private result: ResultDataService,
+              public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
@@ -32,7 +32,7 @@ export class CalcServiceabilityMomentService {
     this.isEnable = false;
 
     this.DesignForceList = new Array();
-  
+
     // 曲げモーメントが計算対象でない場合は処理を抜ける
     if (this.save.calc.print_selected.calculate_moment_checked === false) {
       return;
@@ -49,7 +49,7 @@ export class CalcServiceabilityMomentService {
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
-  
+
     for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
       for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
         const df = this.DesignForceList[i][j];
@@ -64,11 +64,11 @@ export class CalcServiceabilityMomentService {
             df.positions.splice(k, 1);
           }
         }
-        if (df.positions.length == 0) {
+        if (df.positions.length === 0) {
           this.DesignForceList[i].splice(j, 1);
         }
       }
-      if (this.DesignForceList.length == 0) {
+      if (this.DesignForceList.length === 0) {
         this.DesignForceList.splice(i, 1);
       }
     }
@@ -117,7 +117,7 @@ export class CalcServiceabilityMomentService {
             }
 
             // 印刷用データ
-            const printData = position.printData[j];
+            const PrintData = position.PrintData[j];
 
             // 応力度
             const resultData = responseData[i].ResultSigma;
@@ -130,7 +130,7 @@ export class CalcServiceabilityMomentService {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            const resultWd: any = this.calcWd(printData, postdata0, postdata1, position, resultData, isDurability);
+            const resultWd: any = this.calcWd(PrintData, postdata0, postdata1, position, resultData, isDurability);
             const resultColumn: any = this.getResultString(resultWd);
 
             /////////////// タイトル /////////////// 
@@ -138,32 +138,32 @@ export class CalcServiceabilityMomentService {
             column.push(this.result.getTitleString2(position, postdata0));
             column.push(this.result.getTitleString3(position, postdata0));
             ///////////////// 形状 /////////////////
-            column.push(this.result.getShapeString_B(printData));
-            column.push(this.result.getShapeString_H(printData));
-            column.push(this.result.getShapeString_Bt(printData));
-            column.push(this.result.getShapeString_t(printData));
+            column.push(this.result.getShapeString_B(PrintData));
+            column.push(this.result.getShapeString_H(PrintData));
+            column.push(this.result.getShapeString_Bt(PrintData));
+            column.push(this.result.getShapeString_t(PrintData));
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(printData);
+            const Ast: any = this.result.getAsString(PrintData);
             column.push(Ast.As);
             column.push(Ast.AsString);
             column.push(Ast.ds);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(printData, 'Asc');
+            const Asc: any = this.result.getAsString(PrintData, 'Asc');
             column.push(Asc.As);
             column.push(Asc.AsString);
             column.push(Asc.ds);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(printData, 'Ase');
+            const Ase: any = this.result.getAsString(PrintData, 'Ase');
             column.push(Ase.As);
             column.push(Ase.AsString);
             column.push(Ase.ds);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(printData);
+            const fck: any = this.result.getFckString(PrintData);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(printData);
+            const fsk: any = this.result.getFskString(PrintData);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);
@@ -282,7 +282,12 @@ export class CalcServiceabilityMomentService {
     // 縁応力度
     if ('Sigmab' in re && 'Sigmabl' in re) {
       if (re.Sigmab < re.Sigmabl) {
-        result.sigma_b.value = re.Sigmab.toFixed(2) + ' < ' + re.Sigmabl.toFixed(2);
+        let SigmabVal: number = re.Sigmab;
+        if ( SigmabVal < 0 ) {
+          SigmabVal = 0;
+        }
+        result.sigma_b.value = SigmabVal.toFixed(2) + ' < ' + re.Sigmabl.toFixed(2);
+
         // 鉄筋応力度の照査
         if ('Sigmas' in re && 'sigmal1' in re) {
           if (re.Sigmas < 0) {
@@ -290,7 +295,7 @@ export class CalcServiceabilityMomentService {
             if (result.result.value === '-') {
               result.result.value = 'OK';
             }
-          }else if (re.Sigmas < re.sigmal1) {
+          } else if (re.Sigmas < re.sigmal1) {
             result.sigma_s.value = re.Sigmas.toFixed(1) + ' < ' + re.sigmal1.toFixed(1);
             if (result.result.value === '-') {
               result.result.value = 'OK';
@@ -373,14 +378,14 @@ export class CalcServiceabilityMomentService {
     return result;
   }
 
-  public calcWd(printData: any, postdata0: any, postdata1: any, position: any, resultData: any,
-    isDurability: boolean): any {
+  public calcWd(PrintData: any, postdata0: any, postdata1: any, position: any, resultData: any,
+                isDurability: boolean): any {
 
     const result = {};
 
     // 環境条件
     let conNum: number = 1;
-    switch (printData.memo) {
+    switch (PrintData.memo) {
       case '上側引張':
         conNum = this.save.toNumber(position.memberInfo.con_u);
         break;
@@ -413,24 +418,35 @@ export class CalcServiceabilityMomentService {
     }
 
     let rc: number = 1;
-    if ('rc' in printData) {
-      rc = this.save.toNumber(printData.rc);
+    if ('rc' in PrintData) {
+      rc = this.save.toNumber(PrintData.rc);
       if (rc === null) { rc = 1; }
     }
 
     let fck: number;
-    if ('fck' in printData) {
-      fck = this.save.toNumber(printData.fck);
+    if ('fck' in PrintData) {
+      fck = this.save.toNumber(PrintData.fck);
       if (fck === null) { return result; }
     } else {
       return result;
     }
 
-    const fcd: number = fck / rc;
+    let rfck: number = 1;
+    if ('rfck' in PrintData) {
+      rfck = this.save.toNumber(PrintData.rfck);
+      if (rfck === null) { rfck = 1; }
+    }
+
+
+    const fcd: number = rfck * fck / rc;
+
 
     let H: number;
-    if ('H' in printData) {
-      H = this.save.toNumber(printData.H);
+    if ('H' in PrintData) {
+      H = this.save.toNumber(PrintData.H);
+      if (H === null) { return result; }
+    } else if ('R' in PrintData) {
+      H = this.save.toNumber(PrintData.R);
       if (H === null) { return result; }
     } else {
       return result;
@@ -444,7 +460,6 @@ export class CalcServiceabilityMomentService {
         result['Md'] = Md;
       }
     }
-
 
     let Nd: number;
     if ('Nd' in postdata0) {
@@ -463,7 +478,7 @@ export class CalcServiceabilityMomentService {
         sc: new Array(),
         st: new Array(),
         x: 0,
-      }
+      };
     }
 
     // 圧縮応力度の照査
@@ -484,7 +499,6 @@ export class CalcServiceabilityMomentService {
       }
     }
 
-
     let Nhd: number;
     if ('Nd' in postdata1) {
       Nhd = this.save.toNumber(postdata1.Nd);
@@ -493,14 +507,20 @@ export class CalcServiceabilityMomentService {
       }
     }
 
-
     // 縁応力度
-    const Sigmab: number = this.getSigmab(Mhd, Nhd, printData);
+    const Sigmab: number = this.getSigmab(Mhd, Nhd, PrintData);
     if (Sigmab === null) { return result; }
     result['Sigmab'] = Sigmab;
 
     // 制限値
-    const Sigmabl: number = this.getSigmaBl(H, fcd);
+    let Vyd_H: number; // 円形の制限値を求める時は換算矩形で求める
+    if ('Vyd_H' in PrintData) {
+      Vyd_H = this.save.toNumber(PrintData.Vyd_H);
+      if (Vyd_H === null) { return Vyd_H = H; }
+    } else {
+      Vyd_H = H;
+    }
+    const Sigmabl: number = this.getSigmaBl(Vyd_H, fcd);
     result['Sigmabl'] = Sigmabl;
 
     if (Sigmab < Sigmabl) {
@@ -517,15 +537,15 @@ export class CalcServiceabilityMomentService {
     result['Npd'] = Nd;
 
     let Es: number;
-    if ('Es' in printData) {
-      Es = this.save.toNumber(printData.Es);
+    if ('Es' in PrintData) {
+      Es = this.save.toNumber(PrintData.Es);
       if (Es === null) { return result; }
     } else {
       return result;
     }
     let Ec: number;
-    if ('Ec' in printData) {
-      Ec = this.save.toNumber(printData.Ec);
+    if ('Ec' in PrintData) {
+      Ec = this.save.toNumber(PrintData.Ec);
       if (Ec !== null) {
         result['EsEc'] = Es / Ec;
       }
@@ -536,8 +556,8 @@ export class CalcServiceabilityMomentService {
     result['sigma_se'] = Sigmase;
 
     let c: number;
-    if ('Wd-c' in printData) {
-      c = this.save.toNumber(printData['Wd-c']);
+    if ('Wd-c' in PrintData) {
+      c = this.save.toNumber(PrintData['Wd-c']);
       if (c === null) { return result; }
     } else {
       return result;
@@ -545,8 +565,8 @@ export class CalcServiceabilityMomentService {
     result['c'] = c;
 
     let Cs: number;
-    if ('Wd-Cs' in printData) {
-      Cs = this.save.toNumber(printData['Wd-Cs']);
+    if ('Wd-Cs' in PrintData) {
+      Cs = this.save.toNumber(PrintData['Wd-Cs']);
       if (Cs === null) { return result; }
     } else {
       return result;
@@ -554,8 +574,8 @@ export class CalcServiceabilityMomentService {
     result['Cs'] = Cs;
 
     let fai: number;
-    if ('Wd-φ' in printData) {
-      fai = this.save.toNumber(printData['Wd-φ']);
+    if ('Wd-φ' in PrintData) {
+      fai = this.save.toNumber(PrintData['Wd-φ']);
       if (fai === null) { return result; }
     } else {
       return result;
@@ -572,8 +592,8 @@ export class CalcServiceabilityMomentService {
     result['ecu'] = ecu;
 
     let k1: number = 1;
-    if ('fsy' in printData) {
-      const fsy: number = this.save.toNumber(printData.fsy);
+    if ('fsy' in PrintData) {
+      const fsy: number = this.save.toNumber(PrintData.fsy);
       if (fsy === 235) {
         k1 = 1.3;
       }
@@ -583,7 +603,7 @@ export class CalcServiceabilityMomentService {
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    const n: number = printData['Wd-n'];
+    const n: number = PrintData['Wd-n'];
     result['n'] = n;
 
     const k3: number = (5 * (n + 2)) / (7 * n + 8);
@@ -607,8 +627,8 @@ export class CalcServiceabilityMomentService {
     result['Wlim'] = Wlim;
 
     let ri: number = 1;
-    if ('ri' in printData) {
-      ri = this.save.toNumber(printData.ri);
+    if ('ri' in PrintData) {
+      ri = this.save.toNumber(PrintData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;
@@ -671,19 +691,19 @@ export class CalcServiceabilityMomentService {
   }
 
   // 縁応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  private getSigmab(Mhd: number, Nhd: number, printData: any): number {
+  private getSigmab(Mhd: number, Nhd: number, PrintData: any): number {
     try {
-      const I: number = printData.I;
-      const A: number = printData.A;
+      const I: number = PrintData.I;
+      const A: number = PrintData.A;
       const Md: number = Math.abs(Mhd * 1000000);
       const Nd: number = Nhd * 1000;
       let e: number;
-      switch (printData.memo) {
+      switch (PrintData.memo) {
         case '上側引張':
-          e = printData.eu;
+          e = PrintData.eu;
           break;
         case '下側引張':
-          e = printData.el;
+          e = PrintData.el;
           break;
       }
       const Z = I / e;
@@ -696,16 +716,20 @@ export class CalcServiceabilityMomentService {
   }
 
   // 縁応力度の制限値を返す
-  private getSigmaBl(H: number, fck: number): number {
+  private getSigmaBl(H: number, ffck: number): number {
 
     const linear = (x, y) => {
-      return (x0) => {
-        const index = x.reduce((pre, current, i) => current <= x0 ? i : pre, 0) //数値が何番目の配列の間かを探す
-        const i = index === x.length - 1 ? x.length - 2 : index //配列の最後の値より大きい場合は、外挿のために、最後から2番目をindexにする
-
-        return (y[i + 1] - y[i]) / (x[i + 1] - x[i]) * (x0 - x[i]) + y[i] //線形補間の関数を返す
+      return ( x0: number ) => {
+        const index = x.reduce((pre: any, current: number, i: any) => current <= x0 ? i : pre, 0); // 数値が何番目の配列の間かを探す
+        const i = index === x.length - 1 ? x.length - 2 : index;                 // 配列の最後の値より大きい場合は、外挿のために、最後から2番目をindexにする
+        return (y[i + 1] - y[i]) / (x[i + 1] - x[i]) * (x0 - x[i]) + y[i];       // 線形補間の関数を返す
       };
     };
+
+    // コンクリート強度は 24以下はない
+    let fck: number = ffck;
+    if (ffck < 24) {　fck = 24; }
+    if (ffck > 80) {  fck = 80; }
 
     const x0 = [24, 27, 30, 40, 50, 60, 80];
     const y025 = [3.9, 4.1, 4.4, 5.2, 5.8, 6.5, 7.6];
@@ -718,19 +742,23 @@ export class CalcServiceabilityMomentService {
     if (H > 2000) {
       const linear200 = linear(x0, y200);
       result = linear200(fck);
+
     } else {
-      //線形補間関数を作成
+
+      // 線形補間関数を作成
       let y: number[];
       const linear025 = linear(x0, y025);
       const linear050 = linear(x0, y050);
       const linear100 = linear(x0, y100);
       const linear200 = linear(x0, y200);
-      y = [linear025(fck), linear050(fck), linear100(fck), linear200(fck)]
+      y = [linear025(fck), linear050(fck), linear100(fck), linear200(fck)];
+
       // 断面高さの線形補間関数を作成
       const x = [250, 500, 1000, 2000];
-      const linearH = linear(x, y)
+      const linearH = linear(x, y);
       result = linearH(H);
     }
+
     return result;
   }
 

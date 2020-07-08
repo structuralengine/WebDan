@@ -313,7 +313,7 @@ export class CalcSafetyFatigueMomentService {
             const postdata1 = position.PostData1[j];
 
             // 印刷用データ
-            const printData = position.printData[j];
+            const PrintData = position.PrintData[j];
 
             // 応力度
             const resultMin = responseMin[i].ResultSigma;
@@ -327,7 +327,7 @@ export class CalcSafetyFatigueMomentService {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            const resultFrd: any = this.calcFrd(printData, postdata0, postdata1, position, resultMin, resultMax);
+            const resultFrd: any = this.calcFrd(PrintData, postdata0, postdata1, position, resultMin, resultMax);
             const resultColumn: any = this.getResultString(resultFrd);
 
             /////////////// タイトル ///////////////
@@ -335,32 +335,32 @@ export class CalcSafetyFatigueMomentService {
             column.push(this.result.getTitleString2(position, postdata0));
             column.push(this.result.getTitleString3(position, postdata0));
             ///////////////// 形状 /////////////////
-            column.push(this.result.getShapeString_B(printData));
-            column.push(this.result.getShapeString_H(printData));
-            column.push(this.result.getShapeString_Bt(printData));
-            column.push(this.result.getShapeString_t(printData));
+            column.push(this.result.getShapeString_B(PrintData));
+            column.push(this.result.getShapeString_H(PrintData));
+            column.push(this.result.getShapeString_Bt(PrintData));
+            column.push(this.result.getShapeString_t(PrintData));
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(printData);
+            const Ast: any = this.result.getAsString(PrintData);
             column.push(Ast.As);
             column.push(Ast.AsString);
             column.push(Ast.ds);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(printData, 'Asc');
+            const Asc: any = this.result.getAsString(PrintData, 'Asc');
             column.push(Asc.As);
             column.push(Asc.AsString);
             column.push(Asc.ds);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(printData, 'Ase');
+            const Ase: any = this.result.getAsString(PrintData, 'Ase');
             column.push(Ase.As);
             column.push(Ase.AsString);
             column.push(Ase.ds);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(printData);
+            const fck: any = this.result.getFckString(PrintData);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(printData);
+            const fsk: any = this.result.getFskString(PrintData);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);
@@ -409,7 +409,7 @@ export class CalcSafetyFatigueMomentService {
     return result;
   }
 
-  private calcFrd(printData: any, postdata0: any, postdata1: any, position: any, responseMin: any, responseMax: any): any {
+  private calcFrd(PrintData: any, postdata0: any, postdata1: any, position: any, responseMin: any, responseMax: any): any {
 
     const result: any = {};
 
@@ -475,8 +475,8 @@ export class CalcSafetyFatigueMomentService {
 
     // f200 の計算
     let rs: number = 1.05;
-    if ('rs' in printData) {
-      rs = this.save.toNumber(printData.rs);
+    if ('rs' in PrintData) {
+      rs = this.save.toNumber(PrintData.rs);
       if (rs === null) { rs = 1; }
     }
     result['rs'] = rs;
@@ -484,16 +484,16 @@ export class CalcSafetyFatigueMomentService {
     let k: number = 0.12;
 
     let fai: number;
-    if ('Wd-φ' in printData) {
-      fai = this.save.toNumber(printData['Wd-φ']);
+    if ('Wd-φ' in PrintData) {
+      fai = this.save.toNumber(PrintData['Wd-φ']);
       if (fai === null) { return result; }
     } else {
       return result;
     }
 
     let fsu: number;
-    if ('fsu' in printData) {
-      fsu = this.save.toNumber(printData.fsu);
+    if ('fsu' in PrintData) {
+      fsu = this.save.toNumber(PrintData.fsu);
       if (fsu === null) { return result; }
     } else {
       return result;
@@ -518,8 +518,8 @@ export class CalcSafetyFatigueMomentService {
     result['fsr200'] = fsr200;
 
     let ri: number = 1;
-    if ('ri' in printData) {
-      ri = this.save.toNumber(printData.ri);
+    if ('ri' in PrintData) {
+      ri = this.save.toNumber(PrintData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;
@@ -563,7 +563,7 @@ export class CalcSafetyFatigueMomentService {
     }
 
     let inputFatigue: any;
-    switch (printData.memo) {
+    switch (PrintData.memo) {
       case '上側引張':
         inputFatigue = position.fatigueData.M1;
         break;

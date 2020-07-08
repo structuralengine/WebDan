@@ -13,12 +13,12 @@ export class SetSectionService {
 
   // position に コンクリート・鉄筋情報を入力する /////////////////////////////////////////////////////////////////////
   public setPostData(g_no: number, m_no: number, position: any): void {
-    
+
     // 部材・断面情報
     const memberInfo = position.memberInfo;
 
     // 出力用の変数の用意する
-    position['printData'] = JSON.parse(
+    position['PrintData'] = JSON.parse(
       JSON.stringify({
         temp: position.PostData0
       })
@@ -32,7 +32,7 @@ export class SetSectionService {
       this.clearPostDataAll(position);
       return;
     }
-    
+
     // POST 用の断面情報をセット
     if (memberInfo.shape.indexOf('円') >= 0) {
 
@@ -45,7 +45,7 @@ export class SetSectionService {
             position['PostData' + i.toString()].pop();
             i++;
           }
-          position.printData.pop();
+          position.PrintData.pop();
         } else {
           // 先頭の要素を取り除く
           let i = 0;
@@ -53,7 +53,7 @@ export class SetSectionService {
             position['PostData' + i.toString()].shift();
             i++;
           }
-          position.printData.shift();
+          position.PrintData.shift();
         }
       }
       let isEnable: boolean;
@@ -123,11 +123,11 @@ export class SetSectionService {
         if (Math.abs(position.PostData0[0]) > Math.abs(position.PostData0[1])) {
           // 末尾の要素を取り除く
           this.popPostDataAll(position);
-          position.printData.pop();
+          position.PrintData.pop();
         } else {
           // 先頭の要素を取り除く
           this.shiftPostDataAll(position);
-          position.printData.shift();
+          position.PrintData.shift();
         }
       }
       let isEnable: boolean;
@@ -154,7 +154,7 @@ export class SetSectionService {
   // 横小判形断面の POST 用 データ作成
   private getHorizontalOval(position: any): boolean {
     const PostData = position.PostData0[0];
-    const printData = position.printData[0];
+    const PrintData = position.PrintData[0];
 
     const RCOUNT = 100;
 
@@ -194,23 +194,26 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = b;
-    printData['H'] = h;
+
+    PrintData['shape'] = 'HorizontalOval'; // 形状
+    PrintData['B'] = b; // 断面幅
+    PrintData['H'] = h; // 断面高さ
+
     // せん断照査用の換算矩形断面を算定
     const circleArea: number = (h ** 2) * Math.PI / 4;
     const rectArea: number = h * (b - h);
     const Area = circleArea + rectArea;
-    printData['Vyd_H'] = h;
-    printData['Vyd_bw'] = Area / h;
-    printData['Vyd_B'] = b;
-    printData['Vyd_pc'] = printData.Ast / (printData.Vyd_bw * printData.Vyd_d);
+    PrintData['Vyd_H'] = h;
+    PrintData['Vyd_B'] = Area / h;
+    PrintData['Vyd_pc'] = PrintData.Ast / (PrintData.Vyd_B * PrintData.Vyd_d);
+
     // 断面積と断面係数
-    printData['A'] = Area;
-    printData['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
-    printData['eu'] = h / 2;
-    printData['el'] = h / 2;
+    PrintData['A'] = Area;
+    PrintData['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
+    PrintData['eu'] = h / 2;
+    PrintData['el'] = h / 2;
 
     return true;
   }
@@ -218,7 +221,7 @@ export class SetSectionService {
   // 縦小判形断面の POST 用 データ作成
   private getVerticalOval(position: any): boolean {
     const PostData = position.PostData0[0];
-    const printData = position.printData[0];
+    const PrintData = position.PrintData[0];
 
     const RCOUNT = 100;
 
@@ -280,10 +283,14 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = b;
-    printData['H'] = h;
+
+    PrintData['shape'] = 'VerticalOval'; // 形状
+
+    PrintData['B'] = b;
+    PrintData['H'] = h;
+
     // せん断照査用の換算矩形断面を算定
     const x = h - b;
     const circleArea: number = (b ** 2) * Math.PI / 4;
@@ -291,20 +298,20 @@ export class SetSectionService {
     const Area = circleArea + rectArea;
     const Vyd_H = Area / b;
     const deltaH = h - Vyd_H;
-    printData.Vyd_d -= deltaH / 2;
-    printData['Vyd_H'] = Vyd_H;
-    printData['Vyd_bw'] = b;
-    printData['Vyd_B'] = b;
-    printData['Vyd_pc'] = printData.Ast / Area;
+    PrintData.Vyd_d -= deltaH / 2;
+    PrintData['Vyd_H'] = Vyd_H;
+    PrintData['Vyd_B'] = b;
+    PrintData['Vyd_pc'] = PrintData.Ast / Area;
+
     // 断面積と断面係数
-    printData['A'] = Area;
+    PrintData['A'] = Area;
     const a1: number = Math.PI * Math.pow(b, 4) / 64;
     const a2: number = x * Math.pow(b, 3) / 6;
     const a3: number = Math.PI * Math.pow(x, 2) * Math.pow(b, 2) / 16;
     const a4: number = b * Math.pow(x, 3) / 12;
-    printData['I'] = a1 + a2 + a3 + a4;
-    printData['eu'] = h / 2;
-    printData['el'] = h / 2;
+    PrintData['I'] = a1 + a2 + a3 + a4;
+    PrintData['eu'] = h / 2;
+    PrintData['el'] = h / 2;
 
     return true;
   }
@@ -312,7 +319,7 @@ export class SetSectionService {
   // T形断面の POST 用 データ作成
   private getInvertedTsection(position: any, index: number): boolean {
     const PostData = position.PostData0[index];
-    const printData = position.printData[index];
+    const PrintData = position.PrintData[index];
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
@@ -363,30 +370,33 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = b;
-    printData['H'] = h;
-    printData['Bt'] = bf;
-    printData['t'] = hf;
+
+    PrintData['shape'] = 'InvertedTsection'; // 形状
+    PrintData['B'] = b;
+    PrintData['H'] = h;
+    PrintData['Bt'] = bf;
+    PrintData['t'] = hf;
+
     // せん断照査用の換算矩形断面を算定
-    printData['Vyd_H'] = h;
-    printData['Vyd_bw'] = b;
-    printData['Vyd_B'] = b;
-    printData['Vyd_pc'] = printData.Ast / (b * printData.Vyd_d);
+    PrintData['Vyd_H'] = h;
+    PrintData['Vyd_B'] = b;
+    PrintData['Vyd_pc'] = PrintData.Ast / (b * PrintData.Vyd_d);
+
     // 断面積と断面係数
     const x: number = bf - b;
-    printData['A'] = h * b + hf * x;
+    PrintData['A'] = h * b + hf * x;
     const a1: number = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
     const a2: number = 2 * (b * h + x * hf);
     const e1: number = a1 / a2;
     const e2: number = h - e1;
-    printData['eu'] = e2;
-    printData['el'] = e1;
+    PrintData['eu'] = e2;
+    PrintData['el'] = e1;
     const a3: number = bf * Math.pow(e1, 3);
     const a4: number = x * h;
     const a5: number = b * Math.pow(e2, 3);
-    printData['I'] = (a3 - a4 + a5) / 3;
+    PrintData['I'] = (a3 - a4 + a5) / 3;
 
     return true;
   }
@@ -394,7 +404,7 @@ export class SetSectionService {
   // T形断面の POST 用 データ作成
   private getTsection(position: any, index: number): boolean {
     const PostData = position.PostData0[index];
-    const printData = position.printData[index];
+    const PrintData = position.PrintData[index];
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
@@ -445,30 +455,33 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = b;
-    printData['H'] = h;
-    printData['Bt'] = bf;
-    printData['t'] = hf;
+
+    PrintData['shape'] = 'Tsection'; // 形状
+    PrintData['B'] = b;
+    PrintData['H'] = h;
+    PrintData['Bt'] = bf;
+    PrintData['t'] = hf;
+
     // せん断照査用の換算矩形断面を算定
-    printData['Vyd_H'] = h;
-    printData['Vyd_bw'] = b;
-    printData['Vyd_B'] = b;
-    printData['Vyd_pc'] = printData.Ast / (b * printData.Vyd_d);
+    PrintData['Vyd_H'] = h;
+    PrintData['Vyd_B'] = b;
+    PrintData['Vyd_pc'] = PrintData.Ast / (b * PrintData.Vyd_d);
+
     // 断面積と断面係数
     const x: number = bf - b;
-    printData['A'] = h * b + hf * x;
+    PrintData['A'] = h * b + hf * x;
     const a1: number = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
     const a2: number = 2 * (b * h + x * hf);
     const e1: number = a1 / a2;
     const e2: number = h - e1;
-    printData['eu'] = e1;
-    printData['el'] = e2;
+    PrintData['eu'] = e1;
+    PrintData['el'] = e2;
     const a3: number = bf * Math.pow(e1, 3);
     const a4: number = x * h;
     const a5: number = b * Math.pow(e2, 3);
-    printData['I'] = (a3 - a4 + a5) / 3;
+    PrintData['I'] = (a3 - a4 + a5) / 3;
 
     return true;
   }
@@ -476,7 +489,7 @@ export class SetSectionService {
   // 矩形断面の POST 用 データ作成
   private getRectangle(position: any, index: number): boolean {
     const PostData = position.PostData0[index];
-    const printData = position.printData[index];
+    const PrintData = position.PrintData[index];
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
@@ -511,28 +524,31 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = b;
-    printData['H'] = h;
+
+    PrintData['shape'] = 'Rectangle'; // 形状
+    PrintData['B'] = b;
+    PrintData['H'] = h;
+
     // せん断照査用の換算矩形断面を算定
-    printData['Vyd_H'] = h;
-    printData['Vyd_bw'] = b;
-    printData['Vyd_B'] = b;
-    printData['Vyd_pc'] = printData.Ast / (b * printData.Vyd_d);
+    PrintData['Vyd_H'] = h;
+    PrintData['Vyd_B'] = b;
+    PrintData['Vyd_pc'] = PrintData.Ast / (b * PrintData.Vyd_d);
+
     // 断面積と断面係数
-    printData['A'] = b * h;
-    printData['I'] = b * Math.pow(h, 3) / 12;
-    printData['eu'] = h / 2;
-    printData['el'] = h / 2;
-    
+    PrintData['A'] = b * h;
+    PrintData['I'] = b * Math.pow(h, 3) / 12;
+    PrintData['eu'] = h / 2;
+    PrintData['el'] = h / 2;
+
     return true;
   }
 
   // 円環断面の POST 用 データ作成
   private getRing(position: any): boolean {
     const PostData = position.PostData0[0];
-    const printData = position.printData[0];
+    const PrintData = position.PrintData[0];
 
     const RCOUNT = 100;
 
@@ -586,25 +602,28 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録  
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = h;
-    printData['H'] = b;
+
+    PrintData['shape'] = 'Ring';  // 形状
+    PrintData['R'] = h;           // 外径
+    PrintData['r'] = b;           // 内径
+
     // せん断照査用の換算矩形断面を算定
     let Area = Math.pow(h, 2) * Math.PI / 4;
     const Vyd_H = Math.sqrt(Area);
     const deltaH = h - Vyd_H;
-    printData.Vyd_d -= deltaH / 2;
-    printData['Vyd_H'] = Vyd_H;
+    PrintData.Vyd_d -= deltaH / 2;
+    PrintData['Vyd_H'] = Vyd_H;
     Area -= (b ** 2) * Math.PI / 4;
-    printData['Vyd_bw'] = h - Math.sqrt((h ** 2) - Area);
-    printData['Vyd_B'] = h - b;
-    printData['Vyd_pc'] = printData.Vyd_Ast / (printData.Vyd_d * printData.Vyd_bw);
+    PrintData['Vyd_B'] = h - Math.sqrt((h ** 2) - Area);
+    PrintData['Vyd_pc'] = PrintData.Vyd_Ast / (PrintData.Vyd_d * PrintData.Vyd_B);
+
     // 断面積と断面係数
-    printData['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
-    printData['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
-    printData['eu'] = h / 2;
-    printData['el'] = h / 2;
+    PrintData['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
+    PrintData['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
+    PrintData['eu'] = h / 2;
+    PrintData['el'] = h / 2;
 
     return true;
   }
@@ -612,7 +631,7 @@ export class SetSectionService {
   // 円形断面の POST 用 データ作成
   private getCircle(position: any): boolean {
     const PostData = position.PostData0[0];
-    const printData = position.printData[0];
+    const PrintData = position.PrintData[0];
 
     const RCOUNT = 100;
 
@@ -653,24 +672,26 @@ export class SetSectionService {
 
     // 照査表印字のための変数 print に値を登録  
     for (const key of Object.keys(bars.PrintData)) {
-      printData[key] = bars.PrintData[key];
+      PrintData[key] = bars.PrintData[key];
     }
-    printData['B'] = '〇 R' + h.toString();
+
+    PrintData['shape'] = 'Circle'; // 形状
+    PrintData['R'] = h;
+
     // せん断照査用の換算矩形断面を算定
     const Area = Math.pow(h, 2) * Math.PI / 4;
     const Vyd_H = Math.sqrt(Area);
-    printData['H'] = '□' + Vyd_H.toFixed(1);
     const deltaH = h - Vyd_H;
-    printData.Vyd_d -= deltaH / 2;
-    printData['Vyd_H'] = Vyd_H;
-    printData['Vyd_bw'] = Vyd_H;
-    printData['Vyd_B'] = h;
-    printData['Vyd_pc'] = printData.Vyd_Ast / (printData.Vyd_d * printData.Vyd_bw);
+    PrintData.Vyd_d -= deltaH / 2;
+    PrintData['Vyd_H'] = Vyd_H;
+    PrintData['Vyd_B'] = Vyd_H;
+    PrintData['Vyd_pc'] = PrintData.Vyd_Ast / (PrintData.Vyd_d * PrintData.Vyd_B);
+
     // 断面積と断面係数
-    printData['A'] = Math.pow(h, 2) * Math.PI / 4;
-    printData['I'] = Math.pow(h, 4) * Math.PI / 64;
-    printData['eu'] = h / 2;
-    printData['el'] = h / 2;
+    PrintData['A'] = Math.pow(h, 2) * Math.PI / 4;
+    PrintData['I'] = Math.pow(h, 4) * Math.PI / 64;
+    PrintData['eu'] = h / 2;
+    PrintData['el'] = h / 2;
 
     return true;
   }
@@ -704,16 +725,16 @@ export class SetSectionService {
     result.push(elastic);
 
     // 照査表印字のための変数 print に値を登録
-    for (const printData of position.printData) {
-      printData['fck'] = fck;
-      printData['rc'] = rc;
-      printData['Ec'] = Ec;
-      printData['rfck'] = rfck;
-      printData['rEc'] = rEc;
-      printData['rVcd'] = position.pile_factor.rVcd;
+    for (const PrintData of position.PrintData) {
+      PrintData['fck'] = fck;
+      PrintData['rc'] = rc;
+      PrintData['Ec'] = Ec;
+      PrintData['rfck'] = rfck;
+      PrintData['rEc'] = rEc;
+      PrintData['rVcd'] = position.pile_factor.rVcd;
       for (const key of Object.keys(position.safety_factor)) {
-        if (key in printData === false) {
-          printData[key] = position.safety_factor[key];
+        if (key in PrintData === false) {
+          PrintData[key] = position.safety_factor[key];
         }
       }
     }

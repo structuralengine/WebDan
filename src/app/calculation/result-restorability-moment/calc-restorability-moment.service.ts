@@ -107,7 +107,7 @@ export class CalcRestorabilityMomentService {
         for (const position of member.positions) {
           for (let j = 0; j < position.PostData0.length; j++) {
             const postdata = position.PostData0[j];
-            const printData = position.printData[j];
+            const PrintData = position.PrintData[j];
             const resultData = responseData[i].Reactions[0];
 
             if (page.columns.length > 4) {
@@ -124,37 +124,37 @@ export class CalcRestorabilityMomentService {
             column.push(this.result.getTitleString2(position, postdata));
             column.push(this.result.getTitleString3(position, postdata));
             ///////////////// 形状 /////////////////
-            column.push(this.result.getShapeString_B(printData));
-            column.push(this.result.getShapeString_H(printData));
-            column.push(this.result.getShapeString_Bt(printData));
-            column.push(this.result.getShapeString_t(printData));
+            column.push(this.result.getShapeString_B(PrintData));
+            column.push(this.result.getShapeString_H(PrintData));
+            column.push(this.result.getShapeString_Bt(PrintData));
+            column.push(this.result.getShapeString_t(PrintData));
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(printData);
+            const Ast: any = this.result.getAsString(PrintData);
             column.push(Ast.As);
             column.push(Ast.AsString);
             column.push(Ast.ds);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(printData, 'Asc');
+            const Asc: any = this.result.getAsString(PrintData, 'Asc');
             column.push(Asc.As);
             column.push(Asc.AsString);
             column.push(Asc.ds);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(printData, 'Ase');
+            const Ase: any = this.result.getAsString(PrintData, 'Ase');
             column.push(Ase.As);
             column.push(Ase.AsString);
             column.push(Ase.ds);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(printData);
+            const fck: any = this.result.getFckString(PrintData);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(printData);
+            const fsk: any = this.result.getFskString(PrintData);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);
             /////////////// 照査 ///////////////
-            const resultColumn: any = this.getResultString(printData, resultData, position.safety_factor);
+            const resultColumn: any = this.getResultString(PrintData, resultData, position.safety_factor);
             column.push(resultColumn.Md);
             column.push(resultColumn.Nd);
             column.push(resultColumn.εcu);
@@ -178,9 +178,9 @@ export class CalcRestorabilityMomentService {
     return result;
   }
 
-  private getResultString(printData: any, resultData: any, safety_factor: any): any {
+  private getResultString(PrintData: any, resultData: any, safety_factor: any): any {
 
-    const Md: number = Math.abs(printData.Md);
+    const Md: number = Math.abs(PrintData.Md);
     const My: number = resultData.Y.Mi;
     const rb: number = safety_factor.rb;
     const Myd: number = My / rb;
@@ -190,7 +190,7 @@ export class CalcRestorabilityMomentService {
 
     return {
       Md: { alien: 'right', value: Md.toFixed(1) },
-      Nd: { alien: 'right', value: printData.Nd.toFixed(1) },
+      Nd: { alien: 'right', value: PrintData.Nd.toFixed(1) },
       εcu: { alien: 'right', value: resultData.Y.εc.toFixed(5) },
       εs: { alien: 'right', value: resultData.Y.εs.toFixed(5) },
       x: { alien: 'right', value: resultData.Y.x.toFixed(1) },

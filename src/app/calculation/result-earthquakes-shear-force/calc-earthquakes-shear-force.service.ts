@@ -21,7 +21,7 @@ export class CalcEarthquakesShearForceService {
   }
 
   // 設計断面力の集計
-  public setDesignForces(): void{
+  public setDesignForces(): void {
     this.isEnable = false;
 
     this.DesignForceList = new Array();
@@ -34,13 +34,13 @@ export class CalcEarthquakesShearForceService {
     this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[7]);
 
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1 ) {
       return;
     }
 
     // サーバーに送信するデータを作成
     this.post.setPostData([this.DesignForceList], 'Vd');
-    
+
     for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
       for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
         const df = this.DesignForceList[i][j];
@@ -55,11 +55,11 @@ export class CalcEarthquakesShearForceService {
             df.positions.splice(k, 1);
           }
         }
-        if (df.positions.length == 0) {
+        if (df.positions.length === 0) {
           this.DesignForceList[i].splice(j, 1);
         }
       }
-      if (this.DesignForceList[i].length == 0) {
+      if (this.DesignForceList[i].length === 0) {
         this.DesignForceList.splice(i, 1);
       }
     }
@@ -69,7 +69,7 @@ export class CalcEarthquakesShearForceService {
   // サーバー POST用データを生成する
   public setInputData(): any {
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1 ) {
       return null;
     }
     // POST 用
