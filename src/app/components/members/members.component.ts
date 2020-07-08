@@ -109,15 +109,29 @@ export class MembersComponent implements OnInit {
                   changes[i][3] = '';
               }
               break;
+            case 'kr':
+              const value1: number = this.helper.toNumber(changes[i][3]);
+              if( value1 !== null ) {
+                changes[i][3] = value1.toFixed(1);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+            case 'r1_1':
+            case 'r1_2':
+            case 'r1_3':
+              const value2: number = this.helper.toNumber(changes[i][3]);
+              if( value2 !== null ) {
+                changes[i][3] = value2.toFixed(2);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
             case 'B':
             case 'H':
             case 'Bt':
             case 't':
             case 'ecsd':
-            case 'kr':
-            case 'r1_1':
-            case 'r1_2':
-            case 'r1_3':
             case 'n':
             // 数字チェック
             const value: number = this.helper.toNumber(changes[i][3]);

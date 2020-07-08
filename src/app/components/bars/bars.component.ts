@@ -16,7 +16,61 @@ export class BarsComponent implements OnInit, OnDestroy {
   table_datas: any[][];
   mergeCells: any[][];
 
-  table_settings = {};
+  table_settings = {
+    beforeChange: (...x: any[]) => {
+      try {
+        let changes: any = undefined;
+        for (let i = 0; i < x.length; i++) {
+          if (Array.isArray(x[i])) {
+            changes = x[i];
+            break;
+          }
+        }
+        if (changes === undefined) { return; }
+        for (let i = 0; i < changes.length; i++) {
+          switch (changes[i][1]) {
+            case 'rebar_dia':
+            case 'side_dia':
+            case 'stirrup_dia':
+              // 鉄筋径の規格以外は入力させない
+              const value0: number = this.input.matchBarSize(changes[i][3]);
+              if( value0 !== null ) {
+                changes[i][3] = value0;
+              }else{
+                changes[i][3] = '';
+              }
+              break;
+            case 'cos':
+              const value1: number = this.helper.toNumber(changes[i][3]);
+              if( value1 !== null ) {
+                changes[i][3] = value1.toFixed(3);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+            case 'tan':
+              const value2: number = this.helper.toNumber(changes[i][3]);
+              if( value2 !== null ) {
+                changes[i][3] = value2.toFixed(3);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+            default:
+              const value: number = this.helper.toNumber(changes[i][3]);
+              if( value !== null ) {
+                changes[i][3] = value.toFixed(0);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  };
 
   constructor(private input: InputBarsService,
               private helper: InputDataService) {

@@ -53,7 +53,13 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
               }
               break;
             default:
-            //何もしない
+              const value1: number = this.helper.toNumber(changes[i][3]);
+              if( value1 !== null ) {
+                changes[i][3] = value1.toFixed(2);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
           }
 
         }

@@ -11,7 +11,8 @@ export class InputBarsService {
   // 鉄筋情報
   public bar_list: any[];
 
-  constructor(private points: InputDesignPointsService) {
+  constructor(private input: InputDataService,
+              private points: InputDesignPointsService) {
     this.clear();
   }
   public clear(): void {
@@ -189,5 +190,18 @@ export class InputBarsService {
       'bending_ss': null,
       'bending_angle': null
     };
+  }
+
+  public matchBarSize(dia: any): number {
+
+    let result: number = null;
+    const temp = this.input.toNumber(dia);
+    for ( const d of this.input.rebar_List ){
+      if ( d.D === temp){
+        result = temp;
+        break;
+      }       
+    }
+    return result;
   }
 }

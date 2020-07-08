@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputFatiguesService } from './input-fatigues.service';
+import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({
   selector: 'app-fatigues',
@@ -14,14 +15,58 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   groupe_list: any[];
   table_datas: any[][];
 
-  table_settings = {};
+  table_settings = {
+    beforeChange: (...x: any[]) => {
+      try {
+        let changes: any = undefined;
+        for (let i = 0; i < x.length; i++) {
+          if (Array.isArray(x[i])) {
+            changes = x[i];
+            break;
+          }
+        }
+        if (changes === undefined) { return; }
+        for (let i = 0; i < changes.length; i++) {
+          switch (changes[i][1]) {
+            case 'M_SA':
+            case 'M_SB':
+            case 'M_A':
+            case 'M_B':
+            case 'V_SA':
+            case 'V_SB':
+            case 'V_A':
+            case 'V_B':
+              const value1: number = this.helper.toNumber(changes[i][3]);
+              if( value1 !== null ) {
+                changes[i][3] = value1.toFixed(3);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+            default:
+              const value2: number = this.helper.toNumber(changes[i][3]);
+              if( value2 !== null ) {
+                changes[i][3] = value2.toFixed(2);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+  };
 
   train_A_count: number;
   train_B_count: number;
   service_life: number;
   reference_count: number;
 
-  constructor(private input: InputFatiguesService) {
+  constructor(
+    private input: InputFatiguesService,
+    private helper: InputDataService) {
 
   }
 

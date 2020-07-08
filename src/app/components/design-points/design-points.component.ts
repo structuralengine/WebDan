@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputDesignPointsService } from './input-design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
+import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({
   selector: 'app-design-points',
@@ -19,11 +20,40 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   mergeCells: any[][];
   position_index: number[][];
 
-  table_settings = {};
+  table_settings = {
+    beforeChange: (...x: any[]) => {
+      try {
+        let changes: any = undefined;
+        for (let i = 0; i < x.length; i++) {
+          if (Array.isArray(x[i])) {
+            changes = x[i];
+            break;
+          }
+        }
+        if (changes === undefined) { return; }
+        for (let i = 0; i < changes.length; i++) {
+          switch (changes[i][1]) {
+            case 'La':
+              const value1: number = this.helper.toNumber(changes[i][3]);
+              if( value1 !== null ) {
+                changes[i][3] = value1.toFixed(1);
+              } else {
+                changes[i][3] = null;
+              }
+              break;
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    },
+
+  };
 
   constructor(
     private input: InputDesignPointsService,
-    private save: SaveDataService ) { }
+    private save: SaveDataService,
+    private helper: InputDataService) { }
 
   ngOnInit() {
     
