@@ -41,24 +41,24 @@ export class MembersComponent implements OnInit {
                 const row = changes[i][0];
                 if (row === j) { continue; }                     // 同じ行は比較しない
                 const targetColumn  = this.input.member_list[j];
-                if (targetColumn['g_no'] === null) { continue; } // 初期値は対象にしない
+                if (targetColumn.g_id.trim().length === 0) { continue; } // 初期値は対象にしない
                 const changesColumn = this.input.member_list[row];
-                if (targetColumn['g_no'] === changesColumn['g_no']) {
-                  targetColumn['g_name'] = changes[i][3];
+                if (targetColumn.g_id.toString() === changesColumn.g_id.toString()) {
+                  targetColumn.g_name = changes[i][3].trim();
                 }
               }
               break;
 
-            case 'g_no':
+            case 'g_id':
               // 他の共通断面
               if ( changes[i][3] === null) { continue; }         // 初期値は対象にしない
               for ( let j = 0; j < this.mambers_table_datarows.length; j++) {
                 const row = changes[i][0];
                 if (row === j) { continue; }                      // 同じ行は比較しない
                 const targetColumn  = this.input.member_list[j];
-                if (targetColumn['g_no'] === null) { continue; }  // 初期値は対象にしない
-                if (targetColumn['g_no'] === changes[i][3]) {
-                  this.input.member_list[row]['g_name'] = targetColumn['g_name'];
+                if (targetColumn.g_id.trim().length === 0) { continue; } // 初期値は対象にしない
+                if (targetColumn.g_id.toString() === changes[i][3].trim().toString()) {
+                  this.input.member_list[row].g_name = targetColumn.g_name.trim();
                 }
               }
               break;

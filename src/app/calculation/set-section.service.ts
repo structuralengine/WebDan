@@ -12,7 +12,7 @@ export class SetSectionService {
   }
 
   // position に コンクリート・鉄筋情報を入力する /////////////////////////////////////////////////////////////////////
-  public setPostData(g_no: number, m_no: number, position: any): void {
+  public setPostData(g_id: string, m_no: number, position: any): void {
 
     // 部材・断面情報
     const memberInfo = position.memberInfo;
@@ -25,7 +25,7 @@ export class SetSectionService {
     ).temp;
 
     // 鉄筋の入力情報ををセット
-    this.bar.setBarData(g_no, m_no, position);
+    this.bar.setBarData(g_id, m_no, position);
 
     //barがnullなら処理を飛ばす
     if (position.barData === null) {

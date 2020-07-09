@@ -17,6 +17,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   private safetyMomentPages: any[];
+  public NA: number; // A列車の回数
+  public NB: number; // B列車の回数
 
   constructor(private http: Http,
     private calc: CalcSafetyFatigueMomentService,
@@ -27,6 +29,10 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     this.isFulfilled = false;
     this.err = '';
 
+    const trainCount: number[] = this.calc.getTrainCount();
+    this.NA = trainCount[0];
+    this.NB = trainCount[1];
+    
     // POST 用データを取得する
     const postData = this.calc.setInputData();
     if (postData === null) {

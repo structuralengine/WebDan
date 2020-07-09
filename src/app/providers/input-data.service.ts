@@ -47,6 +47,7 @@ export class InputDataService {
     });
     return result;
   }
+
   public getNextRebar(Dia: any): any {
     let result = undefined;
     const d: number = this.toNumber(Dia);
@@ -59,6 +60,7 @@ export class InputDataService {
     }
     return result;
   }
+
   public getPreviousRebar(Dia: any): any {
     let result = undefined;
     const d: number = this.toNumber(Dia);
@@ -72,6 +74,24 @@ export class InputDataService {
     return result;
   }
 
+  // グループ番号の入力から番号のみ取り出す
+  public getGroupeNo(value: any): number {
+    // null だったら
+    if (value === null) {
+      return null;
+    }
+    // string に変換
+    const str: string = value.toString().trim();
+    if (str.length === 0) {
+      return null;
+    }
+    // 正規表現を使って数字だけ取り出す
+    const res: string = str.replace(/[^0-9]/g, '');
+    // 数値型　に変換
+    let result: number = this.toNumber(res);
+
+    return result;
+  }
   /// <summary>
   /// 文字列string を数値にする
   /// </summary>

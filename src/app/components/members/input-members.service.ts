@@ -24,7 +24,7 @@ export class InputMembersService  {
   // 部材情報
   private default_member(id: number): any {
     return {
-      'm_no': id, 'm_len': null, 'g_no': null, 'g_name': null, 'shape': '',
+      'm_no': id, 'm_len': null, 'g_id': '', 'g_name': '', 'shape': '',
       'B': null, 'H': null, 'Bt': null, 't': null,
       'con_u': null, 'con_l': null, 'con_s': null,
       'vis_u': false, 'vis_l': false, 'ecsd': null, 'kr': null,
@@ -56,7 +56,7 @@ export class InputMembersService  {
       const pList: any[] = mList[i].positions;
       new_member.m_len = pList[pList.length - 1].position;
       if (isManualed) {
-        new_member.g_no = null;
+        new_member.g_id = '';
       }
       this.member_list.push(new_member);
     }
@@ -89,20 +89,24 @@ export class InputMembersService  {
   // 存在するグループ番号を列挙する
   public getGroupeList(): any[] {
 
-    const groupe_no_list: number[] = new Array();
+    const groupe_id_list: string[] = new Array();
     for (const m of this.member_list) {
-      if (this.helper.toNumber(m['g_no']) === null) {
-        m['g_no'] = null;
+      if (m.g_id.trim().length === 0) {
+        m.g_id = '';
         continue;
       }
-      const g: number = m['g_no'];
-      if (groupe_no_list.find(function (value) {
-        return value === g;
+      const id: string = m.g_id;
+      if (groupe_id_list.find( (value) => {
+        return value === id;
       }) === undefined) {
-        groupe_no_list.push(g);
+        groupe_id_list.push(id);
       }
     }
-    groupe_no_list.sort(function (a, b) {
+
+    // グループ番号順に並べる
+    groupe_id_list.sort((strA, strB) => {
+      const a: number = this.helper.getGroupeNo(strA);
+      const b: number = this.helper.getGroupeNo(strB);
       if (a < b) { return -1; }
       if (a > b) { return 1; }
       return 0;
@@ -110,10 +114,10 @@ export class InputMembersService  {
 
     // グループ番号を持つ部材のリストを返す
     const result: any[] = new Array();
-    for (const no of groupe_no_list) {
+    for (const id of groupe_id_list) {
       // グループ番号を持つ部材のリスト
-      const members: any[] = this.member_list.filter(function (item, index) {
-        if (item.g_no === no) { return item; }
+      const members: any[] = this.member_list.filter( (item, index) => {
+        if (item.g_id === id) { return item; }
       });
       result.push(members);
     }

@@ -80,8 +80,30 @@ export class FatiguesComponent implements OnInit, OnDestroy {
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
-      for (let j = 0; j < this.groupe_list[i].length; j++) {
-        const member = this.groupe_list[i][j];
+      const groupe = this.groupe_list[i];
+
+      // グループタイプ によって 上側・下側の表示を 右側・左側 等にする
+      let upperSideName: string = '上';
+      let bottomSideName: string = '下';
+      if (groupe[0].g_id.toUpperCase().indexOf('R') >= 0) {
+        upperSideName = '外';
+        bottomSideName = '内';
+      }
+      if (groupe[0].g_id.toUpperCase().indexOf('L') >= 0) {
+        upperSideName = '内';
+        bottomSideName = '外';
+      }
+      if (groupe[0].g_id.toUpperCase().indexOf('P') >= 0) {
+        upperSideName = '右';
+        bottomSideName = '左';
+      }
+      if (groupe[0].g_id.toUpperCase().indexOf('C') >= 0) {
+        upperSideName = '右';
+        bottomSideName = '左';
+      }
+
+      for (let j = 0; j < groupe.length; j++) {
+        const member = groupe[j];
         for (let k = 0; k < member['positions'].length; k++) {
           const data = member['positions'][k];
           const column1 = {};
@@ -98,7 +120,7 @@ export class FatiguesComponent implements OnInit, OnDestroy {
 
 
           column1['bh'] = data['b'];
-          column1['design_point_id'] = data['title1'];
+          column1['design_point_id'] = upperSideName; // data['title1'];
 
           column1['M_SA'] = data['M1'].SA;
           column1['M_SB'] = data['M1'].SB;
@@ -122,7 +144,7 @@ export class FatiguesComponent implements OnInit, OnDestroy {
 
           // 2行目
           column2['bh'] = data['h'];
-          column2['design_point_id'] = data['title2'];
+          column2['design_point_id'] = bottomSideName; // data['title2'];
 
           column2['M_SA'] = data['M2'].SA;
           column2['M_SB'] = data['M2'].SB;

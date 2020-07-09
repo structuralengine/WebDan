@@ -201,7 +201,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
 
       const g = this.groupe_list[i];
 
-      const data = this.input.getTableColumns(g[0].g_no);
+      const data = this.input.getTableColumns(g[0].g_id);
 
       // 安全係数
       const safety: any[] = data['safety_factor'];
@@ -356,7 +356,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     for (let i = 0; i < this.groupe_list.length; i++) {
       const g = this.groupe_list[i];
       result.push({
-        'g_no': g[0].g_no,
+        'g_id': g[0].g_id,
         'safety_factor': this.get_safety_factors_table_datas(this.safety_factors_table_datas[i]),
         'material_bar': this.get_set_bar_strength_table_datas(this.bar_strength_table_datas[i]),
         'material_steel': this.get_set_steel_strength_table_datas(this.steel_strength_table_datas[i]),

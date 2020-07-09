@@ -909,7 +909,7 @@ export class SetBarService {
   }
 
   // 鉄筋の入力情報を セット
-  public setBarData(g_no: number, m_no: number, position: any): any {
+  public setBarData(g_id: string, m_no: number, position: any): any {
 
     const temp = JSON.parse(
       JSON.stringify({
@@ -918,7 +918,7 @@ export class SetBarService {
     ).temp;
     
     const barList = temp.find(function (value) {
-      return (value[0].g_no === g_no);
+      return (value[0].g_id.toString() === g_id);
     });
     if (barList === undefined) {
       console.log('部材グループが存在しない');
@@ -984,7 +984,7 @@ export class SetBarService {
         if (typeof obj[key] === 'object') {
           this.setBarObjectValue(target[key], obj[key]);
         } else {
-          if (target[key] === null || target[key] === '') {
+          if (target[key] === null || target[key].length === 0) {
             target[key] = obj[key];
           }
         }

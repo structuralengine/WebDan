@@ -29,7 +29,7 @@ export class InputFatiguesService  {
 
   /// <summary>
   /// fatigues の
-  /// g_no でグループ化した配列のデータを返す関数
+  /// g_id でグループ化した配列のデータを返す関数
   /// </summary>
   public getFatiguesColumns(): any[] {
 
@@ -43,7 +43,7 @@ export class InputFatiguesService  {
     for (const groupe of design_points) {
       const member_list = new Array();
       for (const members of groupe) {
-        const position_list = { g_name: members['g_name'], g_no: members['g_no'], positions: new Array() };
+        const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
         for (const position of members['positions']) {
           if (position['isMyCalc'] !== true && position['isVyCalc'] !== true
              && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {

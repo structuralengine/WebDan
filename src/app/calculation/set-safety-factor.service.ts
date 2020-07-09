@@ -12,10 +12,10 @@ export class SetSafetyFactorService {
   }
 
   // position.PostData0 に安全係数情報を追加する ///////////////////////////////////////////////////////
-  public setSafetyFactor(calcTarget: string, g_no: number, position: any, tableIndex: number): void {
+  public setSafetyFactor(calcTarget: string, g_id: string, position: any, tableIndex: number): void {
 
     const safetyList = this.save.safety.safety_factor_material_strengths_list.find(function (value) {
-      return value.g_no === g_no;
+      return value.g_id.toString() === g_id;
     });
     if (safetyList === undefined) {
       console.log('安全係数がないので計算できません');

@@ -70,95 +70,127 @@ export class SectionForceListComponent implements OnInit {
     for (const memberList of groupeList) {
 
       let currentRow: number = 0;
+
+      // グループタイプ によって 上側・下側の表示を 右側・左側 等にする
+      const g_id: string = memberList[0].g_id;
+      let upperSideName: string = '上　　 側';
+      let bottomSideName: string = '下　　 側';
+      let upperName: string = '上側';
+      let bottomName: string = '下側';
+      if (g_id.toUpperCase().indexOf('R') >= 0) {
+        upperSideName = '外　　 側';
+        bottomSideName = '内　　 側';
+        upperName = '外側';
+        bottomName = '内側';
+      }
+      if (g_id.toUpperCase().indexOf('L') >= 0) {
+        upperSideName = '内　　 側';
+        bottomSideName = '外　　 側';
+        upperName = '内側';
+        bottomName = '外側';
+      }
+      if (g_id.toUpperCase().indexOf('P') >= 0) {
+        upperSideName = '右　　 側';
+        bottomSideName = '左　　 側';
+        upperName = '右側';
+        bottomName = '左側';
+      }
+      if (g_id.toUpperCase().indexOf('C') >= 0) {
+        upperSideName = '右　　 側';
+        bottomSideName = '左　　 側';
+        upperName = '右側';
+        bottomName = '左側';
+      }
+
+
       const g_name: string = memberList[0].g_name;
+
       let page: any = null;
       const g_name_moment: string = g_name + ' 曲げモーメントの照査';
       let tableType: number = 1;
 
       // 耐久性曲げモーメントの照査
       if (serviceabilityMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, serviceabilityMomentForces, 2);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, serviceabilityMomentForces, 2);
         if (targetRows[1].length > 0) {
           const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
-          page = this.setTables(rows1, page, g_name_moment, tableType, '耐久性　縁引張応力度検討用');
+          page = this.setTables(rows1, page, g_name_moment, upperSideName, bottomSideName, tableType, '耐久性　縁引張応力度検討用');
         }
         if (targetRows[0].length > 0) {
           const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
-          page = this.setTables(rows2, page, g_name_moment, tableType, '耐久性　永久作用');
+          page = this.setTables(rows2, page, g_name_moment, upperSideName, bottomSideName, tableType, '耐久性　永久作用');
         }
       }
 
       // 使用性曲げモーメントの照査
       if (durabilityMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, durabilityMomentForces, 2);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, durabilityMomentForces, 2);
         if (targetRows[1].length > 0) {
           const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
-          page = this.setTables(rows1, page, g_name_moment, tableType, '使用性　縁引張応力度検討用');
+          page = this.setTables(rows1, page, g_name_moment, upperSideName, bottomSideName, tableType, '使用性　縁引張応力度検討用');
         }
         if (targetRows[0].length > 0) {
           const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
-          page = this.setTables(rows2, page, g_name_moment, tableType, '使用性　永久作用');
+          page = this.setTables(rows2, page, g_name_moment, upperSideName, bottomSideName, tableType, '使用性　永久作用');
         }
       }
 
       // 安全性（破壊）曲げモーメントの照査
       if (safetyMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyMomentForces, 1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, safetyMomentForces, 1);
         if (targetRows[0].length > 0) {
           const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows: any[] = t.tableRowsOfPage;
           currentRow = t.currentRow;
-          page = this.setTables(rows, page, g_name_moment, tableType, '安全性（破壊）');
+          page = this.setTables(rows, page, g_name_moment, upperSideName, bottomSideName, tableType, '安全性（破壊）');
         }
       }
 
       // 安全性（疲労破壊）曲げモーメントの照査
       if (safetyFatigueMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyFatigueMomentForces, 2, -1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, safetyFatigueMomentForces, 2, -1);
         if (targetRows[1].length > 0) {
           const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
-          page = this.setTables(rows1, page, g_name_moment, tableType, '安全性（疲労破壊）最小応力');
+          page = this.setTables(rows1, page, g_name_moment, upperSideName, bottomSideName, tableType, '安全性（疲労破壊）最小応力');
         }
         if (targetRows[0].length > 0) {
           const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
-          page = this.setTables(rows2, page, g_name_moment, tableType, '安全性（疲労破壊）最大応力');
+          page = this.setTables(rows2, page, g_name_moment, upperSideName, bottomSideName,  tableType, '安全性（疲労破壊）最大応力');
         }
         
       }
 
-      
-
       // 復旧性（地震時以外）曲げモーメントの照査
       if (restorabilityMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, restorabilityMomentForces, 1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, restorabilityMomentForces, 1);
         if (targetRows[0].length > 0) {
           const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows: any[] = t.tableRowsOfPage;
           currentRow = t.currentRow;
-          page = this.setTables(rows, page, g_name_moment, tableType, '復旧性（地震時以外）');
+          page = this.setTables(rows, page, g_name_moment, upperSideName, bottomSideName,  tableType, '復旧性（地震時以外）');
         }
       }
 
       // 復旧性（地震時）曲げモーメントの照査
       if (earthquakesMomentForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, earthquakesMomentForces, 1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, earthquakesMomentForces, 1);
         if (targetRows[0].length > 0) {
           const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows: any[] = t.tableRowsOfPage;
           currentRow = t.currentRow;
-          page = this.setTables(rows, page, g_name_moment, tableType, '復旧性（地震時）');
+          page = this.setTables(rows, page, g_name_moment, upperSideName, bottomSideName,  tableType, '復旧性（地震時）');
         }
       }
 
@@ -173,74 +205,74 @@ export class SectionForceListComponent implements OnInit {
 
       // 耐久性せん断力に対する照査
       if (serviceabilityShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, serviceabilityShearForces, 3);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, serviceabilityShearForces, 3);
         if (targetRows[0].length > 0) {
           const t1: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
-          page = this.setTables(rows1, page, g_name_shear, tableType, '耐久性　ひび割れ照査必要性の検討用');
+          page = this.setTables(rows1, page, g_name_shear, upperSideName, bottomSideName,  tableType, '耐久性　ひび割れ照査必要性の検討用');
         }
         if (targetRows[1].length > 0) {
           const t2: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
-          page = this.setTables(rows2, page, g_name_shear, tableType, '耐久性　永久作用');
+          page = this.setTables(rows2, page, g_name_shear, upperSideName, bottomSideName,  tableType, '耐久性　永久作用');
         }
         if (targetRows[2].length > 0) {
           const t3: any = this.getTableRowsOfPage(targetRows[2], currentRow, tableType);
           const rows3: any[] = t3.tableRowsOfPage;
           currentRow = t3.currentRow;
-          page = this.setTables(rows3, page, g_name_shear, tableType, '耐久性　変動作用');
+          page = this.setTables(rows3, page, g_name_shear, upperSideName, bottomSideName,  tableType, '耐久性　変動作用');
         }
       }
 
       // 安全性（破壊）せん断力に対する照査
       if (safetyShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyShearForces, 1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, safetyShearForces, 1);
         if (targetRows[0].length > 0) {
           const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows: any[] = t.tableRowsOfPage;
           currentRow = t.currentRow;
-          page = this.setTables(rows, page, g_name_shear, tableType, '安全性（破壊）');
+          page = this.setTables(rows, page, g_name_shear, upperSideName, bottomSideName,  tableType, '安全性（破壊）');
         }
       }
 
       // 安全性（疲労破壊）せん断力に対する照査
       if (safetyFatigueShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, safetyFatigueShearForces, 2, -1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, safetyFatigueShearForces, 2, -1);
         if (targetRows[1].length > 0) {
           const t1: any = this.getTableRowsOfPage(targetRows[1], currentRow, tableType);
           const rows1: any[] = t1.tableRowsOfPage;
           currentRow = t1.currentRow;
-          page = this.setTables(rows1, page, g_name_shear, tableType, '安全性（疲労破壊）最小応力');
+          page = this.setTables(rows1, page, g_name_shear, upperSideName, bottomSideName,  tableType, '安全性（疲労破壊）最小応力');
         }
         if (targetRows[0].length > 0) {
           const t2: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows2: any[] = t2.tableRowsOfPage;
           currentRow = t2.currentRow;
-          page = this.setTables(rows2, page, g_name_shear, tableType, '安全性（疲労破壊）最大応力');
+          page = this.setTables(rows2, page, g_name_shear, upperSideName, bottomSideName,  tableType, '安全性（疲労破壊）最大応力');
         }
       }
 
       // 復旧性（地震時以外）せん断力に対する照査
       if (restorabilityShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, restorabilityShearForces, 1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, restorabilityShearForces, 1);
         if (targetRows[0].length > 0) {
           const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows: any[] = t.tableRowsOfPage;
           currentRow = t.currentRow;
-          page = this.setTables(rows, page, g_name_shear, tableType, '復旧性（地震時以外）');
+          page = this.setTables(rows, page, g_name_shear, upperSideName, bottomSideName, tableType, '復旧性（地震時以外）');
         }
       }
 
       // 復旧性（地震時）せん断力に対する照査
       if (earthquakesShearForces.length > 0) {
-        const targetRows: any[] = this.setPage(memberList, earthquakesShearForces, 1);
+        const targetRows: any[] = this.setPage(memberList, upperName, bottomName, earthquakesShearForces, 1);
         if (targetRows[0].length > 0) {
           const t: any = this.getTableRowsOfPage(targetRows[0], currentRow, tableType);
           const rows: any[] = t.tableRowsOfPage;
           currentRow = t.currentRow;
-          page = this.setTables(rows, page, g_name_shear, tableType, '復旧性（地震時）');
+          page = this.setTables(rows, page, g_name_shear, upperSideName, bottomSideName,  tableType, '復旧性（地震時）');
         }
       }
 
@@ -257,7 +289,8 @@ export class SectionForceListComponent implements OnInit {
   }
 
   private setTables(rows: any[], page: any, g_name: string,
-    tableType: number, title: string): any {
+                    upperSideName: string, bottomSideName: string,
+                    tableType: number, title: string): any {
 
     if (page === null) {
       page = {
@@ -272,6 +305,8 @@ export class SectionForceListComponent implements OnInit {
       y += (tableType === 1) ? rows[0].length * 16 : rows[0].length * 32;
       page.tables.push({
         title: title,
+        upperSideName: upperSideName,
+        bottomSideName: bottomSideName,
         rows: rows[0],
         viewBox: '0 0 568 ' + y.toString(),
         height: y.toString()
@@ -291,6 +326,8 @@ export class SectionForceListComponent implements OnInit {
       y += (tableType === 1) ? rows[i].length * 16 : rows[i].length * 32;
       const table: any = {
         title: title,
+        upperSideName: upperSideName,
+        bottomSideName: bottomSideName,
         rows: rows[i],
         viewBox: '0 0 568 ' + y.toString(),
         height: y.toString()
@@ -344,7 +381,10 @@ export class SectionForceListComponent implements OnInit {
     return result;
   }
 
-  private setPage(memberList: any[], forces: any[], count: number, count0: number = 0): any[] {
+  private setPage(memberList: any[],
+                  upperName: string, bottomName: string,
+                  forces: any[],
+                  count: number, count0: number = 0): any[] {
 
     const result: any[] = new Array(count - count0);
     for (let i = 0; i < (count - count0); i++) {
@@ -371,7 +411,9 @@ export class SectionForceListComponent implements OnInit {
               m_no: member.m_no,
               position: pos.position.toFixed(3),
               p_name: pos.p_name,
-              p_name_ex: pos.p_name_ex
+              p_name_ex: pos.p_name_ex,
+              upperSideName: upperName,
+              bottomSideName: bottomName
             };
 
             for (const pp of pd[i]) {

@@ -14,8 +14,8 @@ export class InputDesignPointsService {
     private helper: InputDataService) {
     this.clear();
   }
-  public clear(): void {
 
+  public clear(): void {
     // 部材, 着目点 入力画面に関する初期化
     this.position_list = new Array();
 
@@ -82,7 +82,7 @@ export class InputDesignPointsService {
 
   /// <summary>
   /// design-point の
-  /// g_no でグループ化した配列のデータを返す関数
+  /// g_id でグループ化した配列のデータを返す関数
   /// </summary>
   public getDesignPointColumns(): any[] {
 
@@ -96,7 +96,7 @@ export class InputDesignPointsService {
           return value.m_no === m.m_no;
         });
         if (p === undefined) { continue; }
-        p['g_no'] = m.g_no;
+        p['g_id'] = m.g_id;
         p['g_name'] = m.g_name;
         p['shape'] = m.shape;
         p['B'] = m.B;

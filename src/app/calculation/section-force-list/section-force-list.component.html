@@ -28,8 +28,8 @@
 
                 <text x="80" y="27">算出点</text>
                 <text x="155" y="27">算 出 点 名</text>
-                <text x="299" y="27">上　　 側</text>
-                <text x="470" y="27">下　　 側</text>
+                <text x="299" y="27">{{table.upperSideName}}</text>
+                <text x="470" y="27">{{table.bottomSideName}}</text>
 
                 <text x="245" y="44">M (kN･m)</text>
                 <text x="315" y="44">N (kN)</text>
@@ -169,7 +169,7 @@
                     {{ row.p_name_ex }}
                   </text>
                   <text x="228" [attr.y]="60 + r * 32" text-anchor="middle">
-                    上側
+                    {{ row.upperSideName }}
                   </text>
   
                   <text x="310" [attr.y]="60 + r * 32" text-anchor="end">
@@ -186,7 +186,7 @@
                   </text>
 
                   <text x="228" [attr.y]="76 + r * 32" text-anchor="middle">
-                    下側
+                    {{ row.bottomSideName }}
                   </text>
                   <text x="310" [attr.y]="76 + r * 32" text-anchor="end">
                     {{ row.lower.Vd }}

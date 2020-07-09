@@ -29,13 +29,13 @@ export class InputSafetyFactorsMaterialStrengthsService  {
     return this.members.getGroupeList();
   }
 
-  public getTableColumns(g_no: number): any {
+  public getTableColumns(g_id: string): any {
 
     let result = this.safety_factor_material_strengths_list.find(function (value) {
-      return value.g_no === g_no;
+      return value.g_id.toString() === g_id;
     });
     if (result === undefined) {
-      result = this.default_safety_factor_material_strengths(g_no);
+      result = this.default_safety_factor_material_strengths(g_id);
       this.safety_factor_material_strengths_list.push(result);
     }
     if (('safety_factor' in result) === false) {
@@ -64,7 +64,7 @@ export class InputSafetyFactorsMaterialStrengthsService  {
 
     for (const current_data of data) {
 
-      const target = { 'g_no': current_data['g_no']};
+      const target = { 'g_id': current_data.g_id};
 
       // 安全係数を保存用変数に格納する
       target['safety_factor'] = new Array();
@@ -112,10 +112,10 @@ export class InputSafetyFactorsMaterialStrengthsService  {
   }
 
 
-  private default_safety_factor_material_strengths(g_no: number): any {
+  private default_safety_factor_material_strengths(g_id: string): any {
 
     const result = {
-      'g_no': g_no,
+      'g_id': g_id,
       'safety_factor': this.default_safety_factor(),
       'material_bar': this.default_material_bar(),
       'material_steel': this.default_material_steel(),

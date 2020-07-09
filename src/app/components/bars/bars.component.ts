@@ -15,6 +15,7 @@ export class BarsComponent implements OnInit, OnDestroy {
   groupe_list: any[];
   table_datas: any[][];
   mergeCells: any[][];
+  side_cover: string[];
 
   table_settings = {
     beforeChange: (...x: any[]) => {
@@ -85,14 +86,42 @@ export class BarsComponent implements OnInit, OnDestroy {
     this.groupe_list = this.input.getBarsColumns();
     this.table_datas = new Array(this.groupe_list.length);
     this.mergeCells = new Array(this.groupe_list.length);
+    this.side_cover = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
       this.mergeCells[i] = new Array();
 
+      const groupe = this.groupe_list[i];
+
+      // グループタイプ によって 上側・下側の表示を 右側・左側 等にする
+      let upperSideName: string = '上';
+      let bottomSideName: string = '下';
+      this.side_cover[i] = "上端位置";
+      if (groupe[0].g_id.toUpperCase().indexOf('R') >= 0) {
+        upperSideName = '外';
+        bottomSideName = '内';
+        this.side_cover[i] = "外端位置";
+      }
+      if (groupe[0].g_id.toUpperCase().indexOf('L') >= 0) {
+        upperSideName = '内';
+        bottomSideName = '外';
+        this.side_cover[i] = "内端位置";
+      }
+      if (groupe[0].g_id.toUpperCase().indexOf('P') >= 0) {
+        upperSideName = '右';
+        bottomSideName = '左';
+        this.side_cover[i] = "右端位置";
+      }
+      if (groupe[0].g_id.toUpperCase().indexOf('C') >= 0) {
+        upperSideName = '右';
+        bottomSideName = '左';
+        this.side_cover[i] = "右端位置";
+      }
+
       let row: number = 0;
-      for (let j = 0; j < this.groupe_list[i].length; j++) {
-        const member = this.groupe_list[i][j];
+      for (let j = 0; j < groupe.length; j++) {
+        const member = groupe[j];
 
         const positionCount: number = member['positions'].length;
         this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount * 2, colspan: 1});
@@ -114,7 +143,7 @@ export class BarsComponent implements OnInit, OnDestroy {
           column1['bh'] = data['b'];
           column1['haunch_height'] = data['haunch_M'];
 
-          column1['design_point_id'] = data['rebar1'].title;
+          column1['design_point_id'] = upperSideName;// data['rebar1'].title;
           column1['rebar_dia'] = data['rebar1'].rebar_dia;
           column1['rebar_n'] = data['rebar1'].rebar_n;
           column1['rebar_cover'] = data['rebar1'].rebar_cover;
@@ -140,7 +169,7 @@ export class BarsComponent implements OnInit, OnDestroy {
           column2['bh'] = data['h'];
           column2['haunch_height'] = data['haunch_V'];
 
-          column2['design_point_id'] = data['rebar2'].title;
+          column2['design_point_id'] = bottomSideName;// data['rebar2'].title;
           column2['rebar_dia'] = data['rebar2'].rebar_dia;
           column2['rebar_n'] = data['rebar2'].rebar_n;
           column2['rebar_cover'] = data['rebar2'].rebar_cover;

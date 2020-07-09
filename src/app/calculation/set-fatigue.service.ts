@@ -10,7 +10,7 @@ export class SetFatigueService {
   }
 
   // 鉄筋の入力情報を セット
-  public setFatigueData(g_no: number, m_no: number, position: any): any {
+  public setFatigueData(g_id: string, m_no: number, position: any): any {
 
     const temp = JSON.parse(
       JSON.stringify({
@@ -19,7 +19,7 @@ export class SetFatigueService {
     ).temp;
     
     const fatigueList = temp.find(function (value) {
-      return (value[0].g_no === g_no);
+      return (value[0].g_id.toString() === g_id);
     });
     if (fatigueList === undefined) {
       console.log('部材グループが存在しない');

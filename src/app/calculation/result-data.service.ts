@@ -28,32 +28,43 @@ export class ResultDataService {
 
   // 照査表における タイトル２行目を取得
   public getTitleString2(position: any, postdata: any): any {
-    /*
-    let side: string;
-    switch (postdata.memo) {
-      case '上側引張':
-        side = '(上側)';
-        break
-      case '下側引張':
-        side = '(下側)';
-        break
-      default:
-        side = '';
-    }
-    */
+
     const title: string = position.p_name_ex;// + side;
     const result = { alien: 'center', value: title };
     return result;
   }
   // 照査表における タイトル３行目を取得
-  public getTitleString3(position: any, postdata: any): any {
+  public getTitleString3( position: any, postdata: any): any {
+
+    const g_id: string = position.memberInfo.g_id;
     let side: string;
+
+    // グループタイプ によって 上側・下側の表示を 右側・左側 等にする
+    let upperSideName: string = '(上側)';
+    let bottomSideName: string = '(下側)';
+    if (g_id.toUpperCase().indexOf('R') >= 0) {
+      upperSideName = '(外側)';
+      bottomSideName = '(内側)';
+    }
+    if (g_id.toUpperCase().indexOf('L') >= 0) {
+      upperSideName = '(内側)';
+      bottomSideName = '(外側)';
+    }
+    if (g_id.toUpperCase().indexOf('P') >= 0) {
+      upperSideName = '';
+      bottomSideName = '';
+    }
+    if (g_id.toUpperCase().indexOf('C') >= 0) {
+      upperSideName = '';
+      bottomSideName = '';
+    }
+
     switch (postdata.memo) {
       case '上側引張':
-        side = '(上側)';
+        side = upperSideName;
         break;
       case '下側引張':
-        side = '(下側)';
+        side = bottomSideName;
         break;
       default:
         side = '';

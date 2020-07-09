@@ -16,6 +16,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public safetyFatigueShearForcepages: any[];
+  public NA: number; // A列車の回数
+  public NB: number; // B列車の回数
 
   constructor(private http: Http,
               private calc: CalcSafetyFatigueShearForceService,
@@ -25,6 +27,10 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     this.isLoading = true;
     this.isFulfilled = false;
     this.err = '';
+
+    const trainCount: number[] = this.calc.getTrainCount();
+    this.NA = trainCount[0];
+    this.NB = trainCount[1];
 
     // POST 用データを取得する
     const postData = this.calc.setInputData();
@@ -44,7 +50,10 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     this.isFulfilled = true;
     this.isLoading = false;
     this.calc.isEnable = true;
-
+    
+    this.NA = 80;
+    this.NB = 80;
+    
     /*
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);

@@ -30,6 +30,24 @@ export class CalcSafetyFatigueMomentService {
     this.DesignForceList = null;
     this.isEnable = false;
   }
+  
+  // 列車本数を返す関数
+  public getTrainCount(): number[] {
+    const result = new Array(2);
+    let jA = 0;
+    if ('train_A_count' in this.save.fatigues) {
+      jA = this.save.toNumber(this.save.fatigues.train_A_count);
+      if (jA === null) { jA = 0; }
+    }
+    let jB = 0;
+    if ('train_B_count' in this.save.fatigues) {
+      jB = this.save.toNumber(this.save.fatigues.train_B_count);
+      if (jB === null) { jB = 0; }
+    }
+    result[0] = jA;
+    result[1] = jB;
+    return result;
+  }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
@@ -169,7 +187,7 @@ export class CalcSafetyFatigueMomentService {
 
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
-            sectionForce = this.post.getSectionForce(force, 'Md');
+            sectionForce = this.post.getSectionForce(force, member.g_id, 'Md');
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
               position['PostData' + (icase - 1).toString()] = sectionForce[icase];
@@ -203,7 +221,7 @@ export class CalcSafetyFatigueMomentService {
 
           const position = member.positions[ip];
           // position に 疲労係数入れる
-          this.fatigue.setFatigueData(member.g_no, member.m_no, position);
+          this.fatigue.setFatigueData(member.g_id, member.m_no, position);
 
           // もし疲労係数がなかったら削除する
           let flg = false;
@@ -551,16 +569,10 @@ export class CalcSafetyFatigueMomentService {
     } else {
       return result;
     }
-    let jA: number = 0;
-    if ('train_A_count' in this.save.fatigues) {
-      jA = this.save.toNumber(this.save.fatigues.train_A_count);
-      if (jA === null) { jA = 0; }
-    }
-    let jB: number = 0;
-    if ('train_B_count' in this.save.fatigues) {
-      jB = this.save.toNumber(this.save.fatigues.train_B_count);
-      if (jB === null) { jB = 0; }
-    }
+    
+    const j = this.getTrainCount();
+    let jA = j[0];
+    let jB = j[1];
 
     let inputFatigue: any;
     switch (PrintData.memo) {
