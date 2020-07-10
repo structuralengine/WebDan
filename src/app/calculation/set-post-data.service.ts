@@ -93,8 +93,10 @@ export class SetPostDataService {
 
     for (let ig = 0; ig < baseDesignForceList.length; ig++) {
       const groupe = baseDesignForceList[ig];
+
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
+
         // 部材・断面情報をセット
         const memberInfo = this.save.members.member_list.find(function (value) {
           return (value.m_no === member.m_no);
@@ -103,10 +105,13 @@ export class SetPostDataService {
           console.log('部材番号が存在しない');
           continue;
         }
+
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
+
           // 断面
           position['memberInfo'] = memberInfo;
+
           // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < position.designForce.length; fo++) {
             // 対象の断面力を抽出する
@@ -120,19 +125,54 @@ export class SetPostDataService {
               }
               force.push(designForce);
             }
+
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
             sectionForce = this.getSectionForce(force, member.g_id, calcTarget);
+
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
               position['PostData' + icase.toString()] = sectionForce[icase];
             }
+
           }
           // 必要ないので消す！！
           delete position.designForce;
+
         }
       }
     }
+
+    // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
+    this.setMaxPosition(DesignForceListList, calcTarget); 
+
+  }
+
+  // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
+  private setMaxPosition(DesignForceListList: any[], calcTarget: string): void{
+    
+    const baseDesignForceList: any[] = DesignForceListList[0];
+
+    for (const groupe of baseDesignForceList) {
+
+      for (let im = 0; im < groupe.length; im++) {
+        const member = groupe[im];
+
+        for (let ip = 0; ip < member.positions.length; ip++) {
+          const position = member.positions[ip];
+
+          if (position.isMax === false) {
+            continue;
+          } 
+
+////////////////////////// sasasasasasasa
+
+        }
+
+      }
+
+    }
+
   }
 
   // 設計断面力（リスト）を生成する
@@ -188,21 +228,25 @@ export class SetPostDataService {
       let minForce = forceListList[0][minKey];
       
       // グループid に "P" が含まれていたら Max Min の大きい方だけを計算する
-      let g_id_Mode_P: boolean = false;
-      if (g_id.toUpperCase().indexOf('P') >= 0) {
-        g_id_Mode_P = true;
-      }
+      const g_id_Mode_P: boolean = (g_id.toUpperCase().indexOf('P') >= 0) ? true : false;
 
       if (g_id_Mode_P === true || Math.sign(maxForce.Md) === Math.sign(minForce.Md)) {
+        // Mdmax, Mdmin の符号が同じなら 設計断面 1つ
 
         if (maxForce[calcTarget] === minForce[calcTarget]) { // 断面力が同じで
           if (forceListList.length > 0) {                    // forceListList[1]がある場合
-            maxForce = forceListList[1][maxKey];             // forceListList[1]で判定する
-            minForce = forceListList[1][minKey];
+            if (forceListList[1] !== undefined) {
+              // forceListList[1]で判定する
+              if (maxKey in forceListList[1]) {
+                maxForce = forceListList[1][maxKey];
+              }
+              if (minKey in forceListList[1]) {
+                minForce = forceListList[1][minKey];
+              }
+            }
           }
         }
-
-        // Mdmax, Mdmin の符号が同じなら 設計断面 1つ
+        
         let side: string;
         let key: string;
 
@@ -213,30 +257,51 @@ export class SetPostDataService {
           key = minKey;
           side = (minForce.Md > 0) ? '下側引張' : '上側引張';
         }
+
         for (const forceList of forceListList) {
-          let fo: any;
+          let f: any;
           if (forceList === null) {
-            fo = { memo: side, Md: 0, Vd: 0, Nd: 0 };
+            f = {
+              memo: side,
+              isMax: false,
+              Md: 0,
+              Vd: 0,
+              Nd: 0
+            };
           } else {
             const force = forceList[key];
-            fo = {
+            f = {
               memo: side,
+              isMax: false,
               Md: force.Md / forceList.n,
               Vd: force.Vd / forceList.n,
               Nd: force.Nd / forceList.n,
               comb: force.comb
             };
           }
-          result.push([fo]);
+          result.push([f]);
         }
+
       } else {
         // Mdmax, Mdmin の符号が異なるなら 設計断面 2つ
         for (const forceList of forceListList) {
           let upper: any;
           let lower: any;
           if (forceList === null) {
-            upper = { memo: '上側引張', Md: 0, Vd: 0, Nd: 0 };
-            lower = { memo: '下側引張', Md: 0, Vd: 0, Nd: 0 };
+            upper = {
+              memo: '上側引張',
+              isMax: false,
+              Md: 0,
+              Vd: 0,
+              Nd: 0
+            };
+            lower = {
+              memo: '下側引張',
+              isMax: false,
+              Md: 0,
+              Vd: 0,
+              Nd: 0
+            };
           } else {
             let forceMin = forceList[minKey];
             let forceMax = forceList[maxKey];
@@ -247,6 +312,7 @@ export class SetPostDataService {
             }
             upper = {
               memo: '上側引張',
+              isMax: false,
               Md: forceMin.Md / forceList.n,
               Vd: forceMin.Vd / forceList.n,
               Nd: forceMin.Nd / forceList.n,
@@ -254,6 +320,7 @@ export class SetPostDataService {
             };
             lower = {
               memo: '下側引張',
+              isMax: false,
               Md: forceMax.Md / forceList.n,
               Vd: forceMax.Vd / forceList.n,
               Nd: forceMax.Nd / forceList.n,

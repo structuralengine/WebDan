@@ -108,7 +108,7 @@ export class SetDesignForceService {
 
     for (const groupe of result) {
       for (const member of groupe) {
-        const targetMember = targetForce.find(function (value) {
+        const targetMember = targetForce.find( (value) => {
           return (value.memberNo === member.m_no);
         });
         if (targetMember === undefined) {
@@ -120,7 +120,7 @@ export class SetDesignForceService {
         if (n === 0) { n = 1; }
 
         for (const position of member.positions) {
-          const targetPosition = targetMember.positions.find(function (value) {
+          const targetPosition = targetMember.positions.find( (value) => {
             return (value.index === position.index);
           });
           if (targetPosition === undefined) {
@@ -136,7 +136,8 @@ export class SetDesignForceService {
             Vdmin: targetPosition['S'].min,
             Ndmax: targetPosition['N'].max,
             Ndmin: targetPosition['N'].min,
-            n: n
+            n: n,
+            isMax: position.isMax
           };
           position['designForce'].push(designForce);
         }
@@ -162,37 +163,67 @@ export class SetDesignForceService {
         result.splice(i, 1);
         continue;
       }
+
       const groupe = result[i];
       for (let j = groupe.length - 1; j >= 0; j--) {
+
         const positions: any[] = groupe[j].positions;
-        for (let k = positions.length - 1; k >= 0; k--) {
-          let enable = false;
-          switch (calcTarget) {
-            case 'Md':
-              // 曲げモーメントの照査の場合
-              enable = (positions[k].isMyCalc === true || positions[k].isMzCalc === true);
-              break;
-            case 'Vd':
-              // せん断力の照査の場合
-              enable = (positions[k].isVyCalc === true || positions[k].isVzCalc === true);
-              break;
+        let maxFlag: boolean = false; 
+        
+        for (const pos of positions) {
+
+          if (maxFlag === true) {
+            pos['enable'] = maxFlag;
+          } else {
+            switch (calcTarget) {
+              case 'Md':  // 曲げモーメントの照査の場合
+                pos['enable'] = (pos.isMyCalc === true || pos.isMzCalc === true);
+                break;
+              case 'Vd': // せん断力の照査の場合
+                pos['enable'] = (pos.isVyCalc === true || pos.isVzCalc === true);
+                break;
+            }
           }
-          if (enable === false) {
+
+          const p_name_ex: string = (pos.p_name_ex === null) ? '' : pos.p_name_ex.toString().toUpperCase();
+
+          if (pos.enable === true && p_name_ex.indexOf('MAX') >= 0) {
+            // 着目点名(p_name_ex) に MAX というキーワードが入っていたら END まで対象とする
+            maxFlag = true;
+          }
+
+          pos['isMax'] = maxFlag;  // MAX 区間中は isMaxフラグを付ける
+
+          if (p_name_ex.indexOf('END') >= 0) {
+            maxFlag = false;
+          }
+
+
+        }
+
+        // 不要なポジションを削除する
+        for (let k = positions.length - 1; k >= 0; k--) {
+          if (positions[k].enable === false) {
             positions.splice(k, 1);
-            //break;
+          } else {
+            delete positions[k].enable;
           }
         }
+
         // 照査する着目点がなければ 対象部材を削除
         if (positions.length === 0) {
           groupe.splice(j, 1);
           //break;
         }
+
       }
+
       // 照査する部材がなければ 対象グループを削除
       if (groupe.length === 0) {
         result.splice(i, 1);
         //break;
       }
+
     }
 
     return result;
