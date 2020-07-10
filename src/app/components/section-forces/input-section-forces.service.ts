@@ -45,7 +45,7 @@ export class InputSectionForcesService  {
     const pp = this.points.position_list;
     for (const p of this.points.position_list) {
       const p0 = p['positions'][0];
-      let new_colum: any = old_Mdatas.find(function (value) {
+      let new_colum: any = old_Mdatas.find( (value) => {
         return value.m_no === p.m_no;
       });
       if (new_colum === undefined) {
@@ -74,7 +74,7 @@ export class InputSectionForcesService  {
     this.Vdatas = new Array();
     for (const p of this.points.position_list) {
       const p0 = p['positions'][0];
-      let new_colum: any = old_Vdatas.find(function (value) {
+      let new_colum: any = old_Vdatas.find( (value) => {
         return value.m_no === p.m_no;
       });
       if (new_colum === undefined) {

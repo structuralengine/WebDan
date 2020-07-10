@@ -46,7 +46,7 @@ export class InputMembersService  {
 
     // 部材番号、部材長 をセットする
     for (let i = 0; i < mList.length; i++) {
-      let new_member = old_member_list.find(function (value) {
+      let new_member = old_member_list.find( (value) => {
         return value.m_no === mList[i].memberNo;
       });
       if (new_member === undefined) {
@@ -69,7 +69,7 @@ export class InputMembersService  {
   /// <param name="row">行番号</param>
   public getMemberTableColumns(row: number): any {
 
-    const r = this.member_list.filter(function (item, index) {
+    const r = this.member_list.filter( (item, index) => {
       if (item.m_no === row) { return item; }
     });
 

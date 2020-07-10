@@ -46,7 +46,7 @@ export class InputBarsService {
             }
           }
 
-          let b = old_bar_list.find(function (value) {
+          let b = old_bar_list.find( (value) => {
             return (value.m_no === members.m_no && value.p_name === position.p_name);
           });
           if (b === undefined) {
@@ -80,7 +80,7 @@ export class InputBarsService {
       for (const members of groupe) {
         const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
         for (const position of members['positions']) {
-          let b = old_bar_list.find(function (value) {
+          let b = old_bar_list.find( (value) => {
             return (value.m_no === members.m_no && value.p_name === position.p_name);
           });
           if (b === undefined) {

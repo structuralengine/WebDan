@@ -98,10 +98,10 @@ export class SetBarService {
     let Num: number = 0;
     for (let deg = start_deg; deg <= end_deg; deg += steps_deg) {
 
-      const dst = (Rt / 2) - (Math.cos(this.Radians(deg)) * Rt / 2) + dsc;
+      const dt = (Rt / 2) - (Math.cos(this.Radians(deg)) * Rt / 2) + dsc;
 
       const Steel1 = {
-        Depth: dst,
+        Depth: dt,
         i: dia,
         n: line,
         IsTensionBar: false,
@@ -111,7 +111,7 @@ export class SetBarService {
       result.push(Steel1);
 
       Num += line;
-      Dsn += dst * line;
+      Dsn += dt * line;
     }
 
     // 印刷用の変数に登録

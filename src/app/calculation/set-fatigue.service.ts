@@ -18,7 +18,7 @@ export class SetFatigueService {
       })
     ).temp;
     
-    const fatigueList = temp.find(function (value) {
+    const fatigueList = temp.find( (value) => {
       return (value[0].g_id.toString() === g_id);
     });
     if (fatigueList === undefined) {

@@ -31,7 +31,7 @@ export class InputSafetyFactorsMaterialStrengthsService  {
 
   public getTableColumns(g_id: string): any {
 
-    let result = this.safety_factor_material_strengths_list.find(function (value) {
+    let result = this.safety_factor_material_strengths_list.find( (value) => {
       return value.g_id.toString() === g_id;
     });
     if (result === undefined) {

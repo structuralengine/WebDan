@@ -42,7 +42,7 @@ export class InputDataService {
     ];
 
   public getRebar(Dia: number): any {
-    const result = this.rebar_List.find(function (value) {
+    const result = this.rebar_List.find( (value) => {
       return value.D === Dia;
     });
     return result;

@@ -84,7 +84,7 @@ export class SetSectionService {
     } else if (memberInfo.shape.indexOf('T') >= 0) {
 
       // Ｔ形に関する 設計条件を確認する
-      let condition = this.save.basic.conditions_list.find(function (value) {
+      let condition = this.save.basic.conditions_list.find((value) => {
         return (value.id === 'JR-002');
       });
       if (condition === undefined) {

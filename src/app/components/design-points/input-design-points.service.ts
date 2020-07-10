@@ -57,7 +57,7 @@ export class InputDesignPointsService {
     this.position_list = new Array();
     for (let i = 0; i < mList.length; i++) {
       // 部材番号 をセットする
-      let new_member = old_member_list.find(function (value) {
+      let new_member = old_member_list.find( (value) => {
         return value.m_no === mList[i].memberNo;
       });
       if (new_member === undefined) {
@@ -67,7 +67,7 @@ export class InputDesignPointsService {
       const old_position_list = new_member['positions'];
       new_member['positions'] = new Array();
       for (const target of mList[i].positions) {
-        let new_position = old_position_list.find(function (value) {
+        let new_position = old_position_list.find( (value) => {
             return value.index === target.index;
         });
         if (new_position === undefined) {
@@ -92,7 +92,7 @@ export class InputDesignPointsService {
     for (const members of this.members.getGroupeList()) {
       const positions = new Array();
       for (const m of members) {
-        const p = this.position_list.find(function (value) {
+        const p = this.position_list.find( (value) => {
           return value.m_no === m.m_no;
         });
         if (p === undefined) { continue; }

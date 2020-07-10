@@ -39,7 +39,7 @@ export class InputSteelsService {
             && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
             continue;
           }
-          let b = old_steel_list.find(function (value) {
+          let b = old_steel_list.find( (value) => {
             return (value.m_no === members.m_no && value.p_name === position.p_name);
           });
           if (b === undefined) {

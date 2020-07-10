@@ -69,7 +69,7 @@ export class SaveDataService extends InputDataService {
           index = 1;
         }
 
-        let m = pickup_data[pickUpNo].find(function (value) {
+        let m = pickup_data[pickUpNo].find( (value) => {
           return value.memberNo === memberNo;
         });
         if (m === undefined) {
@@ -77,7 +77,7 @@ export class SaveDataService extends InputDataService {
           pickup_data[pickUpNo].push(m);
         }
 
-        let p = m['positions'].find(function (value) {
+        let p = m['positions'].find( (value) => {
           return value.p_name === p_name;
         });
         if (p === undefined) {
@@ -175,7 +175,7 @@ export class SaveDataService extends InputDataService {
     } else if (strAs.indexOf('D') >= 0) {
       const fai: number = this.toNumber(strAs.replace('D', ''));
       if (fai === null) { return 0; }
-      let reverInfo = this.rebar_List.find(function (value) {
+      let reverInfo = this.rebar_List.find( (value) => {
         return value.D === fai;
       });
       if (reverInfo === undefined)  { return 0; }

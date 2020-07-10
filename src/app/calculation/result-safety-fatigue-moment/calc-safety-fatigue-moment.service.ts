@@ -30,7 +30,7 @@ export class CalcSafetyFatigueMomentService {
     this.DesignForceList = null;
     this.isEnable = false;
   }
-  
+
   // 列車本数を返す関数
   public getTrainCount(): number[] {
     const result = new Array(2);
@@ -159,7 +159,7 @@ export class CalcSafetyFatigueMomentService {
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
         // 部材・断面情報をセット
-        const memberInfo = this.save.members.member_list.find(function (value) {
+        const memberInfo = this.save.members.member_list.find( (value) => {
           return (value.m_no === member.m_no);
         });
         if (memberInfo === undefined) {
@@ -268,7 +268,7 @@ export class CalcSafetyFatigueMomentService {
 
 
 
-  // 変動荷重を 
+  // 変動荷重を
   private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 
     const result = JSON.parse(
@@ -314,7 +314,7 @@ export class CalcSafetyFatigueMomentService {
           // 最大応力 - 最小応力 で変動荷重を求める
           const minForce: any = position.designForce;
           const maxForce: any = result[ig][im].positions[ip].designForce;
-          
+
           for (let i = 0; i < maxForce.length; i++) {
             for (const key1 of Object.keys(maxForce[i])) {
               if (key1 === 'n') { continue; }
@@ -634,7 +634,7 @@ export class CalcSafetyFatigueMomentService {
     } else {
       return result;
     }
-    
+
     const j = this.getTrainCount();
     let jA = j[0];
     let jB = j[1];
