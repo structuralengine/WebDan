@@ -23,7 +23,7 @@ export class InputBarsService {
   /// bars の
   /// g_id でグループ化した配列のデータを返す関数
   /// </summary>
-  public getBarsColumns(): any[] {
+  public getBarsColumns(isAll: boolean = false): any[] {
 
     const result: any[] = new Array();
 
@@ -37,10 +37,15 @@ export class InputBarsService {
       for (const members of groupe) {
         const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
         for (const position of members['positions']) {
-          if (position['isMyCalc'] !== true && position['isVyCalc'] !== true
-            && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
-            continue;
+
+          if ( isAll === false ) {
+            // 計算対象ではない、カラムは省略する
+            if (position['isMyCalc'] !== true && position['isVyCalc'] !== true
+              && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
+              continue;
+            }
           }
+
           let b = old_bar_list.find(function (value) {
             return (value.m_no === members.m_no && value.p_name === position.p_name);
           });
@@ -61,6 +66,39 @@ export class InputBarsService {
     return result;
   }
 
+  public getAllColumnsBar(): any[] {
+
+    const result: any[] = new Array();
+
+    const old_bar_list = this.bar_list.slice(0, this.bar_list.length);
+    // this.bar_list = new Array();
+
+    const design_points: any[] = this.points.getDesignPointColumns();
+
+    for (const groupe of design_points) {
+      const member_list = new Array();
+      for (const members of groupe) {
+        const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
+        for (const position of members['positions']) {
+          let b = old_bar_list.find(function (value) {
+            return (value.m_no === members.m_no && value.p_name === position.p_name);
+          });
+          if (b === undefined) {
+            b = this.default_bars(members.m_no, position.p_name, position.position);
+          }
+          b.index = position['index'];
+          b.position = position['position'];
+          b.p_name_ex = position['p_name_ex'];
+          b.b = members['B'];
+          b.h = members['H'];
+          position_list['positions'].push(b);
+        }
+        member_list.push(position_list);
+      }
+      result.push(member_list);
+    }
+    return result;
+  }
 
   /// <summary>
   /// bars の データを 保存する関数

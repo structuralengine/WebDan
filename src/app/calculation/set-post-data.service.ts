@@ -12,9 +12,9 @@ import { SetSafetyFactorService } from './set-safety-factor.service';
 export class SetPostDataService {
 
   constructor(private user: UserInfoService,
-    private save: SaveDataService,
-    private section: SetSectionService,
-    private safety: SetSafetyFactorService) { }
+              private save: SaveDataService,
+              private section: SetSectionService,
+              private safety: SetSafetyFactorService) { }
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
   public URL: string = 'https://imj7l5o0xl.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear';
@@ -98,7 +98,7 @@ export class SetPostDataService {
         const member = groupe[im];
 
         // 部材・断面情報をセット
-        const memberInfo = this.save.members.member_list.find(function (value) {
+        const memberInfo = this.save.members.member_list.find( (value) => {
           return (value.m_no === member.m_no);
         });
         if (memberInfo === undefined) {
@@ -144,34 +144,216 @@ export class SetPostDataService {
     }
 
     // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-    this.setMaxPosition(DesignForceListList, calcTarget); 
+    this.setMaxPosition(DesignForceListList, calcTarget);
+
+  }
+
+  // MAX区間(isMax) の着目点一覧を取得する
+  public getMaxPositionList(baseDesignForceList: any[], calcTarget: string): any {
+
+    // maxグループの部材リストを作成する
+    const maxIndexList = {};
+    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+      const groupe = baseDesignForceList[ig];
+      let mIList: any[] = new Array();
+      let flg: boolean = false;
+      for (let im = 0; im < groupe.length; im++) {
+        for (let ip = 0; ip < groupe[im].positions.length; ip++) {
+          const position = groupe[im].positions[ip];
+          if ( position.isMax === true) {
+            mIList.push({im, ip});
+            flg = true;
+          } else if ( flg === true ) {
+            flg = false;
+            if ( !(ig in maxIndexList)) {
+              maxIndexList[ig] = new Array();
+            }
+            maxIndexList[ig].push(mIList);
+            mIList = new Array();
+          }
+        }
+      }
+      // flg が trueのままだったら 追加して終わる
+      if ( flg === true ) {
+        if ( !(ig in maxIndexList)) {
+          maxIndexList[ig] = new Array();
+        }
+        maxIndexList[ig].push(mIList);
+      }
+    }
+
+    // maxグループの部材リストの中で最も大きい断面力を持つ行を選ぶ
+    const maxPositionList = {};
+    for (const ig of Object.keys(maxIndexList)) {
+      for (const list of maxIndexList[ig]) {
+
+        let upper: any = null;
+        let bottom: any = null;
+
+        let keys = list[0];
+        let member = baseDesignForceList[ig][keys.im];
+        let position = member.positions[keys.ip];
+        const name: string = position.p_name_ex;
+
+        for ( keys of list) {
+          member = baseDesignForceList[ig][keys.im];
+          position = member.positions[keys.ip];
+
+          // グループid に "P" が含まれていたら Max Min の大きい方だけを計算する
+          const g_id_Mode_P: boolean = (member.g_id.toUpperCase().indexOf('P') >= 0) ? true : false;
+
+          for ( const force of position.PostData0) {
+            switch (force.memo) {
+              case '上側引張':
+                if ( upper === null ) {
+                  upper = position;
+                  upper['keyForce'] = force;
+                  upper.p_name_ex = name;
+                } else if (calcTarget === 'Md') {
+                  if (upper.keyForce[calcTarget] > force[calcTarget]) {
+                    upper = position;
+                    upper.keyForce = force;
+                    upper.p_name_ex = name;
+                  }
+                } else {
+                  if (Math.abs(upper.keyForce[calcTarget]) < Math.abs(force[calcTarget])) {
+                    upper = position;
+                    upper.keyForce = force;
+                    upper.p_name_ex = name;
+                  }
+                }
+                break;
+              default: // '下側引張':
+              if ( bottom === null ) {
+                bottom = position;
+                bottom['keyForce'] = force;
+                bottom.p_name_ex = name;
+              } else if (calcTarget === 'Md') {
+                if (bottom.keyForce[calcTarget] < force[calcTarget]) {
+                  bottom = position;
+                  bottom.keyForce = force;
+                  bottom.p_name_ex = name;
+                }
+              } else {
+                if (Math.abs(bottom.keyForce[calcTarget]) < Math.abs(force[calcTarget])) {
+                  bottom = position;
+                  bottom.keyForce = force;
+                  bottom.p_name_ex = name;
+                }
+              }
+              break;
+            }
+
+            if (upper === null) {
+              upper = this.copy(bottom);
+            } else if (bottom === null) {
+              bottom = this.copy(upper);
+            }
+
+            // グループid に "P" が含まれていたら Max Min の大きい方だけを計算する
+            if ( g_id_Mode_P ===  true) {
+              const u = Math.abs(upper.PostData0[calcTarget]);
+              const b = Math.abs(bottom.PostData0[calcTarget]);
+              if ( b === u ) {
+                // pass
+              } else if (b < u) {
+                upper = this.copy(bottom);
+              } else {
+                bottom = this.copy(upper);
+              }
+            }
+
+            // upper の下側引張　を削除する
+            let i = 0;
+            let key: string = 'PostData' + i.toString();
+            while (key in upper) {
+              const p = upper[key];
+              for (let j = p.length - 1; j >= 0; j--) {
+                if ( p[j].memo === '下側引張' ) {
+                  p.splice(j, 1);
+                }
+              }
+              i++;
+              key = 'PostData' + i.toString();
+            }
+
+            // bottom の上側引張　を削除する
+            i = 0;
+            key = 'PostData' + i.toString();
+            while (key in bottom) {
+              const p = bottom[key];
+              for (let j = p.length - 1; j >= 0; j--) {
+                if ( p[j].memo === '上側引張' ) {
+                  p.splice(j, 1);
+                }
+              }
+              i++;
+              key = 'PostData' + i.toString();
+            }
+            if (upper.PostData0.length === 0) {
+              upper = bottom;
+            }
+            if (bottom.PostData0.length === 0) {
+              bottom = upper;
+            }
+          }
+        }
+        if ( !(ig in maxPositionList)) {
+          maxPositionList[ig] = new Array();
+        }
+        maxPositionList[ig].push({upper, bottom});
+      }
+    }
+
+    return maxPositionList;
 
   }
 
   // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-  private setMaxPosition(DesignForceListList: any[], calcTarget: string): void{
-    
+  private setMaxPosition(DesignForceListList: any[], calcTarget: string): void {
+
     const baseDesignForceList: any[] = DesignForceListList[0];
 
-    for (const groupe of baseDesignForceList) {
+    // MAX区間(isMax) の着目点一覧を取得する
+    const maxPositionList = this.getMaxPositionList(baseDesignForceList, calcTarget);
 
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
+    // isMax フラグの付いた部材のうち最大でない部材を除外する
+    const result: any[] = new Array();
+    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+      const groupe = baseDesignForceList[ig];
 
-        for (let ip = 0; ip < member.positions.length; ip++) {
-          const position = member.positions[ip];
+      const tempg: any[] = new Array();
+      for (const member of groupe) {
 
-          if (position.isMax === false) {
-            continue;
-          } 
+        const tempm: any[] = new Array();
+        for (const position of member.positions) {
 
-////////////////////////// sasasasasasasa
-
+          if ( position.isMax === true) {
+            for ( const boj of maxPositionList[ig]) {
+              if (position.index === boj.upper.index) {
+                tempm.push(position);
+              }
+              if ( boj.upper.index !== boj.bottom.index) {
+                if (position.index === boj.bottom.index) {
+                  tempm.push(position);
+                }
+              }
+            }
+          } else {
+            tempm.push(position);
+          }
         }
-
+        if (tempm.length > 0 ) {
+          member.positions = tempm;
+          tempg.push(member);
+        }
       }
-
+      if (tempg.length > 0 ) {
+        result.push(tempg);
+      }
     }
+
+    DesignForceListList[0] = result;
 
   }
 
@@ -226,7 +408,7 @@ export class SetPostDataService {
       if (!(minKey in forceListList[0])) { return result; }
       let maxForce = forceListList[0][maxKey];
       let minForce = forceListList[0][minKey];
-      
+
       // グループid に "P" が含まれていたら Max Min の大きい方だけを計算する
       const g_id_Mode_P: boolean = (g_id.toUpperCase().indexOf('P') >= 0) ? true : false;
 
@@ -246,7 +428,7 @@ export class SetPostDataService {
             }
           }
         }
-        
+
         let side: string;
         let key: string;
 
@@ -263,7 +445,6 @@ export class SetPostDataService {
           if (forceList === null) {
             f = {
               memo: side,
-              isMax: false,
               Md: 0,
               Vd: 0,
               Nd: 0
@@ -272,7 +453,6 @@ export class SetPostDataService {
             const force = forceList[key];
             f = {
               memo: side,
-              isMax: false,
               Md: force.Md / forceList.n,
               Vd: force.Vd / forceList.n,
               Nd: force.Nd / forceList.n,
@@ -290,14 +470,12 @@ export class SetPostDataService {
           if (forceList === null) {
             upper = {
               memo: '上側引張',
-              isMax: false,
               Md: 0,
               Vd: 0,
               Nd: 0
             };
             lower = {
               memo: '下側引張',
-              isMax: false,
               Md: 0,
               Vd: 0,
               Nd: 0
@@ -312,7 +490,6 @@ export class SetPostDataService {
             }
             upper = {
               memo: '上側引張',
-              isMax: false,
               Md: forceMin.Md / forceList.n,
               Vd: forceMin.Vd / forceList.n,
               Nd: forceMin.Nd / forceList.n,
@@ -320,7 +497,6 @@ export class SetPostDataService {
             };
             lower = {
               memo: '下側引張',
-              isMax: false,
               Md: forceMax.Md / forceList.n,
               Vd: forceMax.Vd / forceList.n,
               Nd: forceMax.Nd / forceList.n,
@@ -346,6 +522,14 @@ export class SetPostDataService {
     return inputJson;
   }
 
+  private copy(obj: any): any {
+    const result = JSON.parse(
+      JSON.stringify({
+        temp: obj
+      })
+    ).temp;
+    return result;
+  }
 
 
 }

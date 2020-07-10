@@ -18,10 +18,10 @@ export class CalcSafetyShearForceService {
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
-    private force: SetDesignForceService,
-    private post: SetPostDataService,
-    private result: ResultDataService,
-    private bar: SetBarService) {
+              private force: SetDesignForceService,
+              private post: SetPostDataService,
+              private result: ResultDataService,
+              private bar: SetBarService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -63,11 +63,11 @@ export class CalcSafetyShearForceService {
             df.positions.splice(k, 1);
           }
         }
-        if (df.positions.length == 0) {
+        if (df.positions.length === 0) {
           this.DesignForceList[i].splice(j, 1);
         }
       }
-      if (this.DesignForceList[i].length == 0) {
+      if (this.DesignForceList[i].length === 0) {
         this.DesignForceList.splice(i, 1);
       }
     }

@@ -35,8 +35,8 @@ export class CalcEarthquakesMomentService {
     }
 
     this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[7]);
-    
-    if(this.DesignForceList.length < 1 ){
+
+    if (this.DesignForceList.length < 1 ){
       return;
     }
 
@@ -57,11 +57,11 @@ export class CalcEarthquakesMomentService {
             df.positions.splice(k, 1);
           }
         }
-        if (df.positions.length == 0) {
+        if (df.positions.length === 0) {
           this.DesignForceList[i].splice(j, 1);
         }
       }
-      if (this.DesignForceList.length == 0) {
+      if (this.DesignForceList.length === 0) {
         this.DesignForceList.splice(i, 1);
       }
     }

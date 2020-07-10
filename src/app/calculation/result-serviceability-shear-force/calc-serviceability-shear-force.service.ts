@@ -12,7 +12,7 @@ import { Injectable } from '@angular/core';
 
 export class CalcServiceabilityShearForceService {
   // 耐久性 せん断ひび割れ
-  public DesignForceList: any[]; 
+  public DesignForceList: any[];
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
@@ -84,7 +84,7 @@ export class CalcServiceabilityShearForceService {
   // サーバー POST用データを生成する
   public setInputData(): any {
 
-    if(this.DesignForceList.length < 1 ){
+    if (this.DesignForceList.length < 1 ) {
       return null;
     }
     // POST 用

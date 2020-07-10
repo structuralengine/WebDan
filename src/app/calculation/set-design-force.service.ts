@@ -49,7 +49,7 @@ export class SetDesignForceService {
     // 断面力を追加
     for (const groupe of result) {
       for (const member of groupe) {
-        const targetMember = force.find(function (value) {
+        const targetMember = force.find( (value) => {
           return (value.m_no === member.m_no);
         });
         if (targetMember === undefined) {
@@ -70,18 +70,18 @@ export class SetDesignForceService {
           if ('designForce' in position === false) {
             position['designForce'] = new Array();
           }
-          //console.log('ここから');
-          for( const key of Object.keys(targetForce)){
+
+          for ( const key of Object.keys(targetForce)) {
             let value: number = this.save.toNumber(targetForce[key]);
             if (value === null) { value = 0; }
             targetForce[key] = value;
-            //console.log(targetForce[key]); 
           }
 
           const designForce = {
             Manual: targetForce,
             n: n
           };
+
           position['designForce'].push(designForce);
         }
       }
@@ -136,8 +136,7 @@ export class SetDesignForceService {
             Vdmin: targetPosition['S'].min,
             Ndmax: targetPosition['N'].max,
             Ndmin: targetPosition['N'].min,
-            n: n,
-            isMax: position.isMax
+            n: n
           };
           position['designForce'].push(designForce);
         }
@@ -168,8 +167,8 @@ export class SetDesignForceService {
       for (let j = groupe.length - 1; j >= 0; j--) {
 
         const positions: any[] = groupe[j].positions;
-        let maxFlag: boolean = false; 
-        
+        let maxFlag: boolean = false;
+
         for (const pos of positions) {
 
           if (maxFlag === true) {
@@ -213,7 +212,6 @@ export class SetDesignForceService {
         // 照査する着目点がなければ 対象部材を削除
         if (positions.length === 0) {
           groupe.splice(j, 1);
-          //break;
         }
 
       }
@@ -221,7 +219,6 @@ export class SetDesignForceService {
       // 照査する部材がなければ 対象グループを削除
       if (groupe.length === 0) {
         result.splice(i, 1);
-        //break;
       }
 
     }

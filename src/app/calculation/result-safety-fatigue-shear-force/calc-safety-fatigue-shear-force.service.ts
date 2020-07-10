@@ -176,6 +176,71 @@ export class CalcSafetyFatigueShearForceService {
         }
       }
     }
+    // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
+    this.setMaxPosition(DesignForceListList);
+
+  }
+
+  // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
+  private setMaxPosition(DesignForceListList: any[]): void {
+
+    const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
+    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
+
+    const maxPositionList = this.post.getMaxPositionList(baseDesignForceList, 'Vd');
+
+    // isMax フラグの付いた部材のうち最大でない部材を除外する
+    const result0: any[] = new Array();
+    const result1: any[] = new Array();
+    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+      const groupe = baseDesignForceList[ig];
+
+      const tempg0: any[] = new Array();
+      const tempg1: any[] = new Array();
+      for (let im = 0; im < groupe.length; im++) {
+        const member0 = groupe[im];
+        const member1 = minDesignForceList[ig][im];
+
+        const tempm0: any[] = new Array();
+        const tempm1: any[] = new Array();
+        for (let ip = 0; ip < member0.positions.length; ip++) {
+          const position0 = member0.positions[ip];
+          const position1 = member1.positions[ip];
+
+          if ( position0.isMax === true) {
+            for ( const boj of maxPositionList[ig]) {
+              if (position0.index === boj.upper.index) {
+                tempm0.push(position0);
+                tempm1.push(position1);
+              }
+              if ( boj.upper.index !== boj.bottom.index) {
+                if (position0.index === boj.bottom.index) {
+                  tempm0.push(position0);
+                  tempm1.push(position1);
+                }
+              }
+            }
+          } else {
+            tempm0.push(position0);
+            tempm1.push(position1);
+          }
+        }
+        if (tempm0.length > 0 ) {
+          member0.positions = tempm0;
+          tempg0.push(member0);
+          member1.positions = tempm1;
+          tempg1.push(member1);
+        }
+      }
+      if (tempg0.length > 0 ) {
+        result0.push(tempg0);
+        result1.push(tempg1);
+      }
+    }
+
+    DesignForceListList[0] = result0;
+    DesignForceListList[1] = result1;
+
   }
 
   // 変動荷重を

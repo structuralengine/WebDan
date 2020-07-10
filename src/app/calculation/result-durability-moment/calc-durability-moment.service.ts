@@ -47,7 +47,7 @@ export class CalcDurabilityMomentService {
 
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition(this.DesignForceList);
-    
+
   }
 
   // サーバー POST用データを生成する
@@ -90,7 +90,7 @@ export class CalcDurabilityMomentService {
                 break;
             }
           }
-    if (position.PostData0.length < 1) {
+          if (position.PostData0.length < 1) {
             member.positions.splice(ip, 1);
           } else {
             for (let k = member.positions.length - 1; k >= 0; k--) {
@@ -115,7 +115,7 @@ export class CalcDurabilityMomentService {
       }
       if (groupe.length < 1) {
         DesignForceList.splice(ig, 1);
-      }     
+      }
     }
   }
 }

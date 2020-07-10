@@ -913,11 +913,11 @@ export class SetBarService {
 
     const temp = JSON.parse(
       JSON.stringify({
-        temp: this.save.bars.getBarsColumns()
+        temp: this.save.bars.getBarsColumns(true)
       })
     ).temp;
-    
-    const barList = temp.find(function (value) {
+
+    const barList = temp.find( (value) => {
       return (value[0].g_id.toString() === g_id);
     });
     if (barList === undefined) {
