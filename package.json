@@ -43,6 +43,7 @@
     "hammerjs": "^2.0.8",
     "handsontable": "^6.2.2",
     "numbro": "^2.1.1",
+    "pdfmake": "^0.1.66",
     "print-js": "^1.0.61",
     "rxjs": "~6.3.3",
     "tslib": "^1.9.0",

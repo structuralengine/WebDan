@@ -13,6 +13,7 @@ import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-mom
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 import { CalcServiceabilityShearForceService } from '../result-serviceability-shear-force/calc-serviceability-shear-force.service';
+declare let pdfMake: any ;
 
 import * as printJS from 'print-js';
 // import printJS = require("print-js");
@@ -32,19 +33,19 @@ export class ResultViewerComponent implements OnInit {
   private PrintCss: string;
 
   constructor(private user: UserInfoService,
-    private printControl: InputCalclationPrintService,
-    public durabilityMoment: CalcDurabilityMomentService,
-    public earthquakesMoment: CalcEarthquakesMomentService,
-    public earthquakesShearForce: CalcEarthquakesShearForceService,
-    public restorabilityMoment: CalcRestorabilityMomentService,
-    public restorabilityShearForce: CalcRestorabilityShearForceService,
-    public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
-    public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
-    public safetyMoment: CalcSafetyMomentService,
-    public safetyShearForce: CalcSafetyShearForceService,
-    public serviceabilityMoment: CalcServiceabilityMomentService,
-    public serviceabilityShearForce: CalcServiceabilityShearForceService
-  ) { }
+              private printControl: InputCalclationPrintService,
+              public durabilityMoment: CalcDurabilityMomentService,
+              public earthquakesMoment: CalcEarthquakesMomentService,
+              public earthquakesShearForce: CalcEarthquakesShearForceService,
+              public restorabilityMoment: CalcRestorabilityMomentService,
+              public restorabilityShearForce: CalcRestorabilityShearForceService,
+              public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
+              public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
+              public safetyMoment: CalcSafetyMomentService,
+              public safetyShearForce: CalcSafetyShearForceService,
+              public serviceabilityMoment: CalcServiceabilityMomentService,
+              public serviceabilityShearForce: CalcServiceabilityShearForceService) {
+   }
 
   ngOnInit() {
 
@@ -74,6 +75,102 @@ export class ResultViewerComponent implements OnInit {
     this.serviceabilityMoment.setDesignForces();
     this.serviceabilityShearForce.setDesignForces();
 
+    /*
+    pdfMake.fonts = {
+      GenShin: {
+      normal: 'GenShinGothic-Normal-Sub.ttf',
+      bold: 'GenShinGothic-Normal-Sub.ttf',
+      italics: 'GenShinGothic-Normal-Sub.ttf',
+      bolditalics: 'GenShinGothic-Normal-Sub.ttf'
+      }
+    };
+  }
+
+  public openPDF(): void {
+    const documentDefinition = {
+      content: [
+        {
+          text: 'RESUME',
+          bold: true,
+          fontSize: 20,
+          alignment: 'center',
+          margin: [0, 0, 0, 20]
+        },
+        {
+          columns: [
+            [{
+              text: 'this.resume.name',
+              style: 'name'
+            },
+            {
+              text: 'this.resume.address'
+            },
+            {
+              text: 'Email : ' + 'this.resume.email',
+            }
+            ]
+          ]
+        },
+        {
+          text: 'Skills',
+          style: 'header'
+        },
+        {
+          text: '日本語テスト',
+          style: 'header'
+        },
+        {
+          text: 'ログインしてください',
+          style: 'header'
+        },
+        {
+          text: 'Other Details',
+          style: 'header'
+        },
+        {
+          text: 'Signature',
+          style: 'sign'
+        },
+      ],
+      info: {
+        title: '_RESUME',
+        author: 'this.resume.name',
+        subject: 'RESUME',
+        keywords: 'RESUME, ONLINE RESUME',
+      },
+      styles: {
+        header: {
+          fontSize: 18,
+          bold: true,
+          margin: [0, 20, 0, 10],
+          decoration: 'underline'
+        },
+        name: {
+          fontSize: 16,
+          bold: true
+        },
+        jobTitle: {
+          fontSize: 14,
+          bold: true,
+          italics: true
+        },
+        sign: {
+          margin: [0, 50, 0, 10],
+          alignment: 'right',
+          italics: true
+        },
+        tableHeader: {
+          bold: true,
+        }
+      }
+    };
+
+    documentDefinition['defaultStyle'] = {
+      font: 'GenShin',
+    }
+
+    pdfMake.createPdf(documentDefinition).open()
+    */
   }
 
   printTest() {

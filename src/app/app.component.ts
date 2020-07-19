@@ -29,6 +29,7 @@ export class AppComponent implements OnInit {
     // custom property
     this.isCalculated = false;
     this.isManual = true;
+
   }
 
   ngOnInit() {
