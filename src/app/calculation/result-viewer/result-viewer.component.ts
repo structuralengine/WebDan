@@ -13,7 +13,10 @@ import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-mom
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 import { CalcServiceabilityShearForceService } from '../result-serviceability-shear-force/calc-serviceability-shear-force.service';
-declare let pdfMake: any ;
+
+import * as pdfMake from 'pdfmake/build/pdfmake.js';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
+import * as  htmlToPdfmake from "html-to-pdfmake";
 
 import * as printJS from 'print-js';
 // import printJS = require("print-js");
@@ -75,15 +78,16 @@ export class ResultViewerComponent implements OnInit {
     this.serviceabilityMoment.setDesignForces();
     this.serviceabilityShearForce.setDesignForces();
 
-    /*
+    pdfMake.vfs = pdfFonts.pdfMake.vfs;
     pdfMake.fonts = {
       GenShin: {
-      normal: 'GenShinGothic-Normal-Sub.ttf',
-      bold: 'GenShinGothic-Normal-Sub.ttf',
-      italics: 'GenShinGothic-Normal-Sub.ttf',
-      bolditalics: 'GenShinGothic-Normal-Sub.ttf'
+        normal: 'GenShinGothic-Normal-Sub.ttf',
+        bold: 'GenShinGothic-Normal-Sub.ttf',
+        italics: 'GenShinGothic-Normal-Sub.ttf',
+        bolditalics: 'GenShinGothic-Normal-Sub.ttf'
       }
     };
+
   }
 
   public openPDF(): void {
@@ -164,13 +168,15 @@ export class ResultViewerComponent implements OnInit {
         }
       }
     };
-
+   
+    /*
     documentDefinition['defaultStyle'] = {
       font: 'GenShin',
     }
-
-    pdfMake.createPdf(documentDefinition).open()
     */
+
+   pdfMake.createPdf(documentDefinition).open()
+
   }
 
   printTest() {
