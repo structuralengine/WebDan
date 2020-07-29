@@ -376,8 +376,8 @@ export class CalcSafetyFatigueMomentService {
 
     let page: any;
     let groupeName: string;
-    let i: number = 0;
-    const title: string = '安全性（疲労破壊）曲げモーメントの照査結果';
+    let i = 0;
+    const title = '安全性（疲労破壊）曲げモーメントの照査結果';
 
     const responseMin = responseData.slice(0, this.PostedData.InputData0.length);
     const responseMax = responseData.slice(-this.PostedData.InputData1.length);
@@ -504,17 +504,17 @@ export class CalcSafetyFatigueMomentService {
         sc: new Array(),
         st: new Array(),
         x: 0,
-      }
+      };
     }
 
-    let Mdmin: number = 0;
+    let Mdmin = 0;
     if ('Md' in postdata0) {
       Mdmin = this.save.toNumber(postdata0.Md);
       if (Mdmin !== null) {
         result['Mdmin'] = Mdmin;
       }
     }
-    let Ndmin: number = 0;
+    let Ndmin = 0;
     if ('Nd' in postdata0) {
       Ndmin = this.save.toNumber(postdata0.Nd);
       if (Ndmin !== null) {
@@ -534,17 +534,17 @@ export class CalcSafetyFatigueMomentService {
         sc: new Array(),
         st: new Array(),
         x: 0,
-      }
+      };
     }
 
-    let Mrd: number = 0;
+    let Mrd = 0;
     if ('Md' in postdata1) {
       Mrd = this.save.toNumber(postdata1.Md);
       if (Mrd !== null) {
         result['Mrd'] = Mrd;
       }
     }
-    let Nrd: number = 0;
+    let Nrd = 0;
     if ('Nd' in postdata1) {
       Nrd = this.save.toNumber(postdata1.Nd);
       if (Nrd !== null) {
@@ -557,14 +557,14 @@ export class CalcSafetyFatigueMomentService {
     result['sigma_rd'] = sigma_rd;
 
     // f200 の計算
-    let rs: number = 1.05;
+    let rs = 1.05;
     if ('rs' in PrintData) {
       rs = this.save.toNumber(PrintData.rs);
       if (rs === null) { rs = 1; }
     }
     result['rs'] = rs;
 
-    let k: number = 0.12;
+    let k = 0.12;
 
     let fai: number;
     if ('Wd-φ' in PrintData) {
@@ -582,7 +582,7 @@ export class CalcSafetyFatigueMomentService {
       return result;
     }
 
-    let r1: number = 1;
+    let r1 = 1;
     if ('r1_1' in position.memberInfo) {
       r1 = this.save.toNumber(position.memberInfo.r1_1);
       if (r1 === null) { r1 = 1; }
@@ -597,17 +597,17 @@ export class CalcSafetyFatigueMomentService {
     }
     const tmp201: number = Math.pow(10, ar) / Math.pow(reference_count, k);
     const tmp202: number = 1 - sigma_min / fsu;
-    let fsr200: number = r1 * tmp201 * tmp202 / rs;
+    const fsr200: number = r1 * tmp201 * tmp202 / rs;
     result['fsr200'] = fsr200;
 
-    let ri: number = 1;
+    let ri = 1;
     if ('ri' in PrintData) {
       ri = this.save.toNumber(PrintData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;
 
-    let rb: number = 1;
+    let rb = 1;
     if ('rb' in position.safety_factor) {
       rb = this.save.toNumber(position.safety_factor.rb);
       if (rb === null) { rb = 1; }
@@ -636,8 +636,8 @@ export class CalcSafetyFatigueMomentService {
     }
 
     const j = this.getTrainCount();
-    let jA = j[0];
-    let jB = j[1];
+    const jA = j[0];
+    const jB = j[1];
 
     let inputFatigue: any;
     switch (PrintData.memo) {
@@ -672,8 +672,8 @@ export class CalcSafetyFatigueMomentService {
     } else {
       result['b'] = b;
     }
-    let NA: number = 0;
-    let NB: number = 0;
+    let NA = 0;
+    let NB = 0;
     if (k === 0.06) {
       NA = this.save.toNumber(inputFatigue.NA06);
       NB = this.save.toNumber(inputFatigue.NB06);
@@ -710,7 +710,7 @@ export class CalcSafetyFatigueMomentService {
 
     const tmpfrd1: number = Math.pow(10, ar) / Math.pow(N, k);
     const tmpfrd2: number = 1 - sigma_min / fsu;
-    let frd: number = r1 * r2 * tmpfrd1 * tmpfrd2 / rs;
+    const frd: number = r1 * r2 * tmpfrd1 * tmpfrd2 / rs;
     result['frd'] = frd;
 
     const ratio: number = ri * sigma_rd / (frd / rb);
@@ -818,7 +818,7 @@ export class CalcSafetyFatigueMomentService {
     if ('ri' in re) {
       result.ri = { alien: 'right', value: re.ri.toFixed(2) };
     }
-    let ratio: number = 0;
+    let ratio = 0;
     if ('ratio' in re) {
       result.ratio.value = re.ratio.toFixed(3);
       ratio = re.ratio;

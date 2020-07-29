@@ -130,11 +130,11 @@ export class SetBarService {
       PrintData: {}
     };
 
-    let h: number = this.save.toNumber(position.memberInfo.H);
-    let b: number = this.save.toNumber(position.memberInfo.B);
+    const h: number = this.save.toNumber(position.memberInfo.H);
+    const b: number = this.save.toNumber(position.memberInfo.B);
 
-    let tensionBar: any = position.barData.rebar1;
-    let compresBar: any = position.barData.rebar2;
+    const tensionBar: any = position.barData.rebar1;
+    const compresBar: any = position.barData.rebar2;
     const sideBar = position.barData.sidebar;
 
     // 鉄筋径の入力が ない場合は スキップ
@@ -191,7 +191,7 @@ export class SetBarService {
     // 鉄筋強度
     let fsy1: number;
     let fsu1: number;
-    let ElasticID1 : string;
+    let ElasticID1: string;
     if (tensionBar.rebar_dia <= position.material_bar[0].fsy1) {
       fsy1 = this.save.toNumber(position.material_bar[1].fsy1);
       fsu1 = this.save.toNumber(position.material_bar[1].fsu1);
@@ -205,7 +205,7 @@ export class SetBarService {
       return result;
     }
     let fsy2: number;
-    let ElasticID2 : string;
+    let ElasticID2: string;
     if (compresBar.rebar_dia <= position.material_bar[0].fsy1) {
       fsy2 = this.save.toNumber(position.material_bar[1].fsy1);
       ElasticID2 = 's1'
@@ -228,7 +228,7 @@ export class SetBarService {
     }
 
     // 圧縮（上側）鉄筋配置
-    let compresBarList: any[] = new Array();
+    const compresBarList: any[] = new Array();
     if (position.safety_factor.range >= 2) {
 
       for (let i = 0; i < n2; i++) {
@@ -266,11 +266,11 @@ export class SetBarService {
     }
 
     // 引張（下側）鉄筋配置
-    let tensionBarList: any[] = new Array();
+    const tensionBarList: any[] = new Array();
 
     let nAs: number = 0;
     let nDepth: number = 0;
-    let As: number = this.save.getAs(dia1);
+    const As: number = this.save.getAs(dia1);
 
     for (let i = 0; i < n1; i++) {
 
@@ -370,7 +370,7 @@ export class SetBarService {
       PrintData: {}
     };
 
-    let barInfo: any = position.barData.rebar1;
+    const barInfo: any = position.barData.rebar1;
 
     // 鉄筋径の入力が ない場合は スキップ
     if (this.save.toNumber(barInfo.rebar_dia) === null) {

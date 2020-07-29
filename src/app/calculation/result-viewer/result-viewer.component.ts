@@ -1,4 +1,4 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 
 import { UserInfoService } from '../../providers/user-info.service';
 import { InputCalclationPrintService } from '../../components/calculation-print/input-calclation-print.service';
@@ -15,7 +15,6 @@ import { CalcServiceabilityMomentService } from '../result-serviceability-moment
 import { CalcServiceabilityShearForceService } from '../result-serviceability-shear-force/calc-serviceability-shear-force.service';
 
 import * as printJS from 'print-js';
-// import printJS = require("print-js");
 
 @Component({
   selector: 'app-result-viewer',
@@ -23,6 +22,8 @@ import * as printJS from 'print-js';
   styleUrls: ['./result-viewer.component.scss']
 })
 export class ResultViewerComponent implements OnInit {
+
+  @ViewChild('print_section') print_section: ElementRef;
 
   // 目次 /////////////////////////////////
   public printcalculate: boolean;
@@ -32,18 +33,18 @@ export class ResultViewerComponent implements OnInit {
   private PrintCss: string;
 
   constructor(private user: UserInfoService,
-    private printControl: InputCalclationPrintService,
-    public durabilityMoment: CalcDurabilityMomentService,
-    public earthquakesMoment: CalcEarthquakesMomentService,
-    public earthquakesShearForce: CalcEarthquakesShearForceService,
-    public restorabilityMoment: CalcRestorabilityMomentService,
-    public restorabilityShearForce: CalcRestorabilityShearForceService,
-    public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
-    public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
-    public safetyMoment: CalcSafetyMomentService,
-    public safetyShearForce: CalcSafetyShearForceService,
-    public serviceabilityMoment: CalcServiceabilityMomentService,
-    public serviceabilityShearForce: CalcServiceabilityShearForceService
+              private printControl: InputCalclationPrintService,
+              public durabilityMoment: CalcDurabilityMomentService,
+              public earthquakesMoment: CalcEarthquakesMomentService,
+              public earthquakesShearForce: CalcEarthquakesShearForceService,
+              public restorabilityMoment: CalcRestorabilityMomentService,
+              public restorabilityShearForce: CalcRestorabilityShearForceService,
+              public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
+              public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
+              public safetyMoment: CalcSafetyMomentService,
+              public safetyShearForce: CalcSafetyShearForceService,
+              public serviceabilityMoment: CalcServiceabilityMomentService,
+              public serviceabilityShearForce: CalcServiceabilityShearForceService
   ) { }
 
   ngOnInit() {
@@ -76,9 +77,9 @@ export class ResultViewerComponent implements OnInit {
 
   }
 
-  printTest() {
+  public printTest() {
     printJS({
-      printable: 'print-section',
+      printable: 'print_section',
       type: 'html',
       style: this.PrintCss
     });

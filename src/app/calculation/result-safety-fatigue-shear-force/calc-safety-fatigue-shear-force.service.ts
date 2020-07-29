@@ -583,7 +583,7 @@ export class CalcSafetyFatigueShearForceService {
     }
     const tmp201: number = Math.pow(10, ar) / Math.pow(reference_count, k);
     const tmp202: number = 1 - sigma_min / fwud;
-    let fsr200: number = r1 * tmp201 * tmp202 / rs;
+    const fsr200: number = r1 * tmp201 * tmp202 / rs;
     result['fsr200'] = fsr200;
 
     let ri = 1;
@@ -621,8 +621,8 @@ export class CalcSafetyFatigueShearForceService {
       return result;
     }
     const j = this.getTrainCount();
-    let jA = j[0];
-    let jB = j[1];
+    const jA = j[0];
+    const jB = j[1];
 
     let inputFatigue: any;
     switch (PrintData.memo) {
@@ -691,7 +691,7 @@ export class CalcSafetyFatigueShearForceService {
 
     const tmpfrd1: number = Math.pow(10, ar) / Math.pow(N, k);
     const tmpfrd2: number = 1 - sigma_min / fwud;
-    let frd: number = r1 * r2 * tmpfrd1 * tmpfrd2 / rs;
+    const frd: number = r1 * r2 * tmpfrd1 * tmpfrd2 / rs;
     result['frd'] = frd;
 
     if (ratio200 < 1 && N <= reference_count) {
