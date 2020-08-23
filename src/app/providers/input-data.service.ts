@@ -10,7 +10,6 @@ export class InputDataService {
   // ピックアップファイル
   public pickup_filename: string;
   public pickup_data: Object;
-  public is3DPickUp: boolean;
 
   public isManual(): boolean {
     if ( this.pickup_filename.trim().length === 0 ){
@@ -23,7 +22,26 @@ export class InputDataService {
   constructor() { 
     this.pickup_filename = '';
     this.pickup_data = {};
-    this.is3DPickUp = false;
+  }
+
+  public is3DPickUp(): boolean {
+    switch (this.getExt(this.pickup_filename)){
+      case 'csv':
+        return true;
+        break;
+      default:
+        return false;
+    }
+  }
+
+  
+  // ファイル名から拡張子を取得する関数
+  public getExt(filename: string): string {
+    const pos = filename.lastIndexOf('.');
+    if (pos === -1) {
+      return '';
+    }
+    return filename.slice(pos + 1);
   }
 
   public rebar_List: any[] = [

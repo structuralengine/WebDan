@@ -41,6 +41,18 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
                 changes[i][3] = null;
               }
               break;
+            case 'isMyCalc':
+              const my: boolean = changes[i][3];
+              break;
+            case 'isVyCalc':
+              const vy: boolean = changes[i][3];
+              break;
+            case 'isMzCalc':
+              const mz: boolean = changes[i][3];
+              break;
+            case 'isVzCalc':
+              const vz: boolean = changes[i][3];
+              break;
           }
         }
       } catch (e) {
@@ -67,7 +79,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
     this.mergeCells = new Array(this.groupe_list.length);
     this.position_index = new Array(this.groupe_list.length);
 
-    this.is3DPickUp = this.save.is3DPickUp;
+    this.is3DPickUp = this.save.is3DPickUp();
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       this.table_datas[i] = new Array();
@@ -89,6 +101,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
             // 最初の行には 部材番号を表示する
             column['m_no'] = member['m_no'];
           }
+
           this.table_datas[i].push(column);
           this.position_index[i].push(column.index)
 

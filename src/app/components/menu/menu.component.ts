@@ -117,7 +117,7 @@ export class MenuComponent implements OnInit {
     const inputJson: string = this.InputData.getInputText();
     const blob = new window.Blob([inputJson], { type: 'text/plain' });
     if (this.fileName.length === 0) {
-      this.fileName = 'WebDan.json';
+      this.fileName = 'WebDan.wdj';
     }
     FileSaver.saveAs(blob, this.fileName);
   }

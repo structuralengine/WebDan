@@ -124,7 +124,6 @@ export class SaveDataService extends InputDataService {
 
       this.pickup_filename = filename;
       this.pickup_data = pickup_data;
-      this.is3DPickUp = false;
     } catch {
       this.pickup_filename = '';
       this.pickup_data = {};
@@ -230,14 +229,6 @@ export class SaveDataService extends InputDataService {
     return result;
   }
 
-  // ファイル名から拡張子を取得する関数
-  private getExt(filename: string): string {
-    const pos = filename.lastIndexOf('.');
-    if (pos === -1) {
-      return '';
-    }
-    return filename.slice(pos + 1);
-  }
 
   public readInputData(inputText: string) {
     this.clear();
@@ -245,7 +236,6 @@ export class SaveDataService extends InputDataService {
 
     this.pickup_filename = jsonData['pickup_filename'];
     this.pickup_data = jsonData['pickup_data'];
-    this.is3DPickUp = ('is3DPickUp' in jsonData) ? jsonData['is3DPickUp'] : false;
     this.basic.pickup_moment_no = jsonData['pickup_moment_no'];
     this.basic.pickup_shear_force_no = jsonData['pickup_shear_force_no'];
     this.basic.specification1_selected = jsonData['specification1_selected']; // 適用 に関する変数
