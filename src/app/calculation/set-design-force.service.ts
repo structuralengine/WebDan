@@ -49,7 +49,7 @@ export class SetDesignForceService {
     // 断面力を追加
     for (const groupe of result) {
       for (const member of groupe) {
-        const targetMember = force.find( (value) => {
+        const targetMember = force.find((value) => {
           return (value.m_no === member.m_no);
         });
         if (targetMember === undefined) {
@@ -71,7 +71,7 @@ export class SetDesignForceService {
             position['designForce'] = new Array();
           }
 
-          for ( const key of Object.keys(targetForce)) {
+          for (const key of Object.keys(targetForce)) {
             let value: number = this.save.toNumber(targetForce[key]);
             if (value === null) { value = 0; }
             targetForce[key] = value;
@@ -108,7 +108,7 @@ export class SetDesignForceService {
 
     for (const groupe of result) {
       for (const member of groupe) {
-        const targetMember = targetForce.find( (value) => {
+        const targetMember = targetForce.find((value) => {
           return (value.memberNo === member.m_no);
         });
         if (targetMember === undefined) {
@@ -120,7 +120,7 @@ export class SetDesignForceService {
         if (n === 0) { n = 1; }
 
         for (const position of member.positions) {
-          const targetPosition = targetMember.positions.find( (value) => {
+          const targetPosition = targetMember.positions.find((value) => {
             return (value.index === position.index);
           });
           if (targetPosition === undefined) {
@@ -129,15 +129,48 @@ export class SetDesignForceService {
           if ('designForce' in position === false) {
             position['designForce'] = new Array();
           }
-          const designForce = {
-            Mdmax: targetPosition['M'].max,
-            Mdmin: targetPosition['M'].min,
-            Vdmax: targetPosition['S'].max,
-            Vdmin: targetPosition['S'].min,
-            Ndmax: targetPosition['N'].max,
-            Ndmin: targetPosition['N'].min,
-            n: n
+
+          let mKey1: string = 'my';
+          let mKey2: string = 'Mdy';
+          if (position.isMzCalc === true) {
+            mKey1 = 'mz';
+            mKey2 = 'Mdz';
+          } else if (position.isVzCalc === true) {
+            mKey1 = 'mz';
+            mKey2 = 'Mdz';
+          }
+
+          let vKey1: string = 'fy';
+          let vKey2: string = 'Vdy';
+          if (position.isVzCalc === true) {
+            vKey1 = 'fz';
+            vKey2 = 'Vdz';
+          } else if (position.isMzCalc === true) {
+            vKey1 = 'fz';
+            vKey2 = 'Vdz';
+          }
+
+          const temp = {
+            Mdmax: targetPosition[mKey1].max,
+            Mdmin: targetPosition[mKey1].min,
+            Vdmax: targetPosition[vKey1].max,
+            Vdmin: targetPosition[vKey1].min,
+            Ndmax: targetPosition['fx'].max,
+            Ndmin: targetPosition['fx'].min
           };
+
+          const designForce = { n };
+
+          for (const key of Object.keys(temp)) {
+            const tmp = temp[key];
+            designForce[key] = {
+              comb: tmp.comb,
+              Md: tmp[mKey2],
+              Nd: tmp.Nd,
+              Vd: tmp[vKey2]
+            };
+          }
+
           position['designForce'].push(designForce);
         }
       }

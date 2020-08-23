@@ -49,47 +49,72 @@ export class SaveDataService extends InputDataService {
       for (let i = 1; i < tmp.length; ++i) {
         const line = tmp[i];
         if (line.trim().length === 0) { continue; }
-        const pickUpNo: string = 'pickUpNo:' + line.slice(0, 5).trim();
-        const mark: string = line.slice(5, 10).trim();
-        const memberNo: number = this.toNumber(line.slice(10, 15));
-        const maxPickupCase: string = line.slice(15, 20).trim();
-        const minPickupCase: string = line.slice(20, 25).trim();
-        const p_name: string = line.slice(25, 30).trim();
-        const position: number = this.toNumber(line.slice(30, 40));
-        const maxMd: number = this.toNumber(line.slice(40, 50));
-        const maxVd: number = this.toNumber(line.slice(50, 60));
-        const maxNd: number = -1 * this.toNumber(line.slice(60, 70)); // このソフトでは 圧縮がプラス(+)
-        const minMd: number = this.toNumber(line.slice(70, 80));
-        const minVd: number = this.toNumber(line.slice(80, 90));
-        const minNd: number = -1 * this.toNumber(line.slice(90, 100)); // このソフトでは 圧縮がプラス(+)
+
+        let data: any;
+        switch (this.getExt(filename)){
+          case 'pik':
+            data = this.pikFileRead(line);
+            break;
+          case 'csv':
+            data = this.csvFileRead(line);
+            break;
+          default:
+            this.pickup_filename = '';
+            this.pickup_data = {};
+            return;
+        }
+
         index += 1;
 
-        if (pickUpNo in pickup_data === false) {
-          pickup_data[pickUpNo] = new Array();
+        if (data.pickUpNo in pickup_data === false) {
+          pickup_data[data.pickUpNo] = new Array();
           index = 1;
         }
 
-        let m = pickup_data[pickUpNo].find( (value) => {
-          return value.memberNo === memberNo;
+        let m = pickup_data[data.pickUpNo].find( (value) => {
+          return value.memberNo === data.memberNo;
         });
         if (m === undefined) {
-          m = { memberNo: memberNo, positions: [] };
-          pickup_data[pickUpNo].push(m);
+          m = { memberNo: data.memberNo, positions: [] };
+          pickup_data[data.pickUpNo].push(m);
         }
 
         let p = m['positions'].find( (value) => {
-          return value.p_name === p_name;
+          return value.p_name === data.p_name;
         });
         if (p === undefined) {
-          p = { p_name: p_name, index: index, position: position };
+          p = {
+            p_name: data.p_name,
+            index: index,
+            position: data.position
+          };
           m['positions'].push(p);
         }
 
-        if (mark in p === false) {
-          p[mark] = {};
+        if (data.mark in p === false) {
+          p[data.mark] = {};
         }
-        p[mark]['max'] = { 'Md': maxMd, 'Vd': maxVd, 'Nd': maxNd, 'comb': maxPickupCase };
-        p[mark]['min'] = { 'Md': minMd, 'Vd': minVd, 'Nd': minNd, 'comb': minPickupCase };
+
+        p[data.mark]['max'] = {
+          Mtd: data.maxMdx,
+          Mdy: data.maxMdy,
+          Mdz: data.maxMdz,
+          Vdy: data.maxVdy,
+          Vdz: data.maxVdz,
+          Nd: data.maxNd,
+          comb: data.maxPickupCase
+        };
+
+        p[data.mark]['min'] = {
+          Mtd: data.minMdx,
+          Mdy: data.minMdy,
+          Mdz: data.minMdz,
+          Vdy: data.minVdy,
+          Vdz: data.minVdz,
+          Nd: data.minNd,
+          comb: data.minPickupCase
+        };
+
       }
 
       this.basic.setPickUpData(this.isManual());
@@ -105,6 +130,75 @@ export class SaveDataService extends InputDataService {
       this.pickup_data = {};
     }
 
+  }
+
+  // .pik 形式のファイルを 1行読む
+  private pikFileRead(line: string): any {
+
+    const mark: string = line.slice(5, 10).trim();
+    let ma: string = mark;
+    switch ( mark ) {
+      case 'M':
+        ma = 'my';
+        break;
+      case 'S':
+        ma = 'fy';
+        break;
+      case 'N':
+        ma = 'fx';
+        break;
+    }
+
+    return {
+      pickUpNo: 'pickUpNo:' + line.slice(0, 5).trim(),
+      mark: ma,
+      memberNo: this.toNumber(line.slice(10, 15)),
+      maxPickupCase: line.slice(15, 20).trim(),
+      minPickupCase: line.slice(20, 25).trim(),
+      p_name: line.slice(25, 30).trim(),
+      position: this.toNumber(line.slice(30, 40)),
+      maxMdx: 0,
+      maxMdy: this.toNumber(line.slice(40, 50)),
+      maxMdz: 0,
+      maxVdy: this.toNumber(line.slice(50, 60)),
+      maxVdz: 0,
+      maxNd: -1 * this.toNumber(line.slice(60, 70)),
+      minMdx: 0,
+      minMdy: this.toNumber(line.slice(70, 80)),
+      minMdz: 0,
+      minVdy: this.toNumber(line.slice(80, 90)),
+      minVdz: 0,
+      minNd: -1 * this.toNumber(line.slice(90, 100))
+    };
+    // ※ このソフトでは 圧縮がプラス(+)
+  }
+
+  // .csv 形式のファイルを 1行読む
+  private csvFileRead(tmp: string): any {
+
+    const line = tmp.split(',');
+    return {
+      pickUpNo: 'pickUpNo:' + line[0].trim(),
+      mark: line[1].trim(),
+      memberNo: line[2].trim(),
+      maxPickupCase: line[3].trim(),
+      minPickupCase: line[4].trim(),
+      p_name: line[5].trim(),
+      position: this.toNumber(line[6]),
+      maxNd: -1 * this.toNumber(line[7]),
+      maxVdy: this.toNumber(line[8]),
+      maxVdz: this.toNumber(line[9]),
+      maxMdx: this.toNumber(line[10]),
+      maxMdy: this.toNumber(line[11]),
+      maxMdz: this.toNumber(line[12]),
+      minNd: -1 * this.toNumber(line[13]),
+      minVdy: this.toNumber(line[14]),
+      minVdz: this.toNumber(line[15]),
+      minMdx: this.toNumber(line[16]),
+      minMdy: this.toNumber(line[17]),
+      minMdz: this.toNumber(line[18])
+    };
+    // ※ このソフトでは 圧縮がプラス(+)
   }
 
   // ファイルに保存用データを生成
@@ -134,6 +228,15 @@ export class SaveDataService extends InputDataService {
     // string 型にする
     const result: string = JSON.stringify(jsonData);
     return result;
+  }
+
+  // ファイル名から拡張子を取得する関数
+  private getExt(filename: string): string {
+    const pos = filename.lastIndexOf('.');
+    if (pos === -1) {
+      return '';
+    }
+    return filename.slice(pos + 1);
   }
 
   public readInputData(inputText: string) {

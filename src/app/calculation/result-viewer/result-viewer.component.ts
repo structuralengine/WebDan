@@ -55,12 +55,16 @@ export class ResultViewerComponent implements OnInit {
 
     this.printcalculate = false;
     if (this.printControl.print_selected.print_calculate_checked === true) {
+      /*
       if (this.user.loggedIn === true) {
+      */
         this.printcalculate = true;
+      /*
       } else {
         alert('ログインしてください');
         return;
       }
+      */
     }
 
     this.durabilityMoment.setDesignForces();

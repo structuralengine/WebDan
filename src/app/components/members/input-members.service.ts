@@ -91,10 +91,12 @@ export class InputMembersService  {
 
     const groupe_id_list: string[] = new Array();
     for (const m of this.member_list) {
-      if (m.g_id.trim().length === 0) {
+
+      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
         m.g_id = '';
         continue;
       }
+ 
       const id: string = m.g_id;
       if (groupe_id_list.find( (value) => {
         return value === id;
