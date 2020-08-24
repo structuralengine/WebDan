@@ -58,6 +58,7 @@ export class MenuComponent implements OnInit {
   // ファイルを開く
   open(evt) {
     const file = evt.target.files[0];
+    const modalRef = this.modalService.open(WaitDialogComponent);
     this.fileName = file.name;
     evt.target.value = '';
     this.router.navigate(['/blank-page']);
@@ -68,13 +69,18 @@ export class MenuComponent implements OnInit {
         this.app.isManual = this.InputData.isManual();
         this.app.isCalculated = false;
         this.pickup_file_name = this.InputData.pickup_filename;
+        modalRef.close();
       })
-      .catch(err => console.log(err));
+      .catch(err => {
+        modalRef.close();
+        console.log(err)
+      });
   }
 
   // ピックアップファイルを開く
   pickup(evt) {
     const file = evt.target.files[0];
+    const modalRef = this.modalService.open(WaitDialogComponent);
     evt.target.value = '';
     this.fileToText(file)
       .then(text => {
@@ -88,10 +94,12 @@ export class MenuComponent implements OnInit {
         } else {
           this.router.navigate(['/']);
         }
+        modalRef.close();
       })
       .catch(err => {
         this.app.isManual = this.InputData.isManual();
         this.app.isCalculated = false;
+        modalRef.close();
         console.log(err);
       });
   }

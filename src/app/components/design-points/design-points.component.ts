@@ -23,14 +23,19 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   table_settings = {
     beforeChange: (...x: any[]) => {
       try {
-        let changes: any = undefined;
+        let changes: any = null;
+        let target: any = null;
         for (let i = 0; i < x.length; i++) {
+          if ('guid' in x[i]){
+            target = x[i];
+          }
           if (Array.isArray(x[i])) {
             changes = x[i];
             break;
           }
         }
-        if (changes === undefined) { return; }
+        if (target === null) { return; }
+        if (changes === null) { return; }
         for (let i = 0; i < changes.length; i++) {
           switch (changes[i][1]) {
             case 'La':
@@ -42,16 +47,28 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
               }
               break;
             case 'isMyCalc':
-              const my: boolean = changes[i][3];
+              if( changes[i][3] === true){
+                const row: number = changes[i][0];
+                target.setDataAtCell(row, 7, false);
+              }
               break;
             case 'isVyCalc':
-              const vy: boolean = changes[i][3];
+              if( changes[i][3] === true){
+                const row: number = changes[i][0];
+                target.setDataAtCell(row, 8, false);
+              }
               break;
             case 'isMzCalc':
-              const mz: boolean = changes[i][3];
+              if( changes[i][3] === true){
+                const row: number = changes[i][0];
+                target.setDataAtCell(row, 5, false);
+              }
               break;
             case 'isVzCalc':
-              const vz: boolean = changes[i][3];
+              if( changes[i][3] === true){
+                const row: number = changes[i][0];
+                target.setDataAtCell(row, 6, false);
+              }
               break;
           }
         }
@@ -59,7 +76,17 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
         console.log(e);
       }
     },
-
+    afterChange: (...x: any[]) => {
+      let changes: any = null;
+      for (let i = 0; i < x.length; i++) {
+        if (Array.isArray(x[i])) {
+          changes = x[i];
+          break;
+        }
+      }
+      if (changes === null) { return; }
+      
+    }
   };
 
   constructor(
