@@ -1,6 +1,7 @@
 ﻿import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Http, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { UserInfoService } from '../../providers/user-info.service';
 
 
@@ -19,7 +20,7 @@ export class LoginDialogComponent implements OnInit {
   connecting: boolean;
 
   constructor(public activeModal: NgbActiveModal,
-    private http: Http,
+    private http: HttpClient,
     private user: UserInfoService) {
     this.loginError = false;
     this.connecting = false;
@@ -42,24 +43,24 @@ export class LoginDialogComponent implements OnInit {
     const url = 'https://structuralengine.com/my-module/get_points_balance.php?id=' + this.loginUserName + '&ps=' + this.loginPassword;
 
     this.http.get(url, {
-      headers: new Headers({
+      headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded'
       })
     })
       .subscribe(
         response => {
           // 通信成功時の処理（成功コールバック）
-          const response_text = JSON.parse(response.text());
+          const response_text = response;
           if ('error' in response_text) {
-            this.errorMessage = response_text.error;
+            this.errorMessage = response_text['error'];
             this.loginError = true;
             this.connecting = false;
 
           } else {
             this.user.loginUserName = this.loginUserName;
             this.user.loginPassword = this.loginPassword;
-            this.user.user_id = response_text.user_id;
-            this.user.purchase_value = response_text.purchase_value;
+            this.user.user_id = response_text['user_id'];
+            this.user.purchase_value = response_text['purchase_value'];
             this.user.loggedIn = true;
             this.activeModal.close('Submit');
           }

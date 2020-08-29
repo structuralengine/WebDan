@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { CalcEarthquakesMomentService } from './calc-earthquakes-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
@@ -20,7 +20,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
   public err: string;
   public restorabilityMomentPages: any[];
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
     private calc: CalcEarthquakesMomentService,
     private post: SetPostDataService,
     private base: CalcRestorabilityMomentService) { }
@@ -46,14 +46,14 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, {
-      headers: new Headers({
+      headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',
         'Accept': 'application/json'
       })
     })
       .subscribe(
         response => {
-          const result: string = response.text();
+          const result: string = JSON.stringify(response);
           this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
           this.isLoading = false;
           this.calc.isEnable = true;

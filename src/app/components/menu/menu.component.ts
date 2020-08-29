@@ -2,7 +2,8 @@
 import { PlatformLocation } from '@angular/common';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from '../../app.component';
-import { Http, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 
 import { ResultViewerComponent } from '../../calculation/result-viewer/result-viewer.component';
@@ -33,7 +34,7 @@ export class MenuComponent implements OnInit {
     private app: AppComponent,
     private user: UserInfoService,
     private InputData: SaveDataService,
-    private http: Http,
+    private http: HttpClient,
     private platformLocation: PlatformLocation,
     private router: Router,
     private config: ConfigService) {
@@ -148,19 +149,19 @@ export class MenuComponent implements OnInit {
     const url = 'https://structuralengine.com/my-module/get_points_balance.php?id=' 
               + this.user.loginUserName + '&ps=' + this.user.loginPassword;
     this.http.get(url, {
-      headers: new Headers({
+      headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded'
       })
     })
       .subscribe(
         response => {
           // 通信成功時の処理（成功コールバック）
-          const response_text = JSON.parse(response.text());
+          const response_text = response;
           if ('error' in response_text) {
-            this.user.errorMessage = response_text.error;
+            this.user.errorMessage = response_text['error'];
           } else {
-            this.user.user_id = response_text.user_id;
-            this.user.purchase_value = response_text.purchase_value;
+            this.user.user_id = response_text['user_id'];
+            this.user.purchase_value = response_text['purchase_value'];
             this.user.loggedIn = true;
             this.userPoint = this.user.purchase_value.toString();
           }

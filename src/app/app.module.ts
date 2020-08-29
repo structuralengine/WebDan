@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule, HttpClient } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -89,7 +88,6 @@ import { SteelsComponent } from './components/steels/steels.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    HttpModule,
     AppRoutingModule,
     DragDropModule,
     BrowserAnimationsModule,

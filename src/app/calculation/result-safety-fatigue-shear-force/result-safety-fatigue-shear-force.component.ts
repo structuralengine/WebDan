@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { CalcSafetyFatigueShearForceService } from './calc-safety-fatigue-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
@@ -19,7 +19,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
 
-  constructor(private http: Http,
+  constructor(private http: HttpClient,
               private calc: CalcSafetyFatigueShearForceService,
               private post: SetPostDataService) { }
 
@@ -53,45 +53,6 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     
     this.NA = 80;
     this.NB = 80;
-    
-    /*
-    // postする
-    const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, {
-      headers: new Headers({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      })
-    })
-      .subscribe(
-        response => {
-          const result: string = response.text();
-          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
-          this.isLoading = false;
-          this.calc.isEnable = true;
-        },
-        error => {
-          this.err = error.toString();
-          this.isLoading = false;
-          this.isFulfilled = false;
-        });
-
-  }
-
-  // 計算結果を集計する
-  private setPages(response: string, postData: any): boolean {
-    if (response === null) {
-      return false;
-    }
-    if (response.slice(0, 7).indexOf('Error') >= 0) {
-      this.err = response;
-      return false;
-    }
-    const json = this.post.parseJsonString(response);
-    if (json === null) { return false; }
-    this.safetyFatigueShearForcepages = this.calc.setSafetyFatiguePages(json.OutputData, postData);
-    return true;
-     */
   }
 
 }

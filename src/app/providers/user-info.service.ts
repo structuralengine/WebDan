@@ -1,5 +1,6 @@
 ﻿import { Injectable } from '@angular/core';
-import { Http, Headers } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 
 @Injectable({
@@ -14,7 +15,7 @@ export class UserInfoService {
   loggedIn: boolean;
   errorMessage: string;
 
-  constructor(private http: Http) { 
+  constructor(private http: HttpClient) { 
     this.clear();
   }
 
@@ -31,20 +32,20 @@ export class UserInfoService {
     const url = 'https://structuralengine.com/my-module/get_points_balance.php?id=' + this.loginUserName + '&ps=' + this.loginPassword;
 
     this.http.get(url, {
-      headers: new Headers({
+      headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded'
       })
     })
       .subscribe(
         response => {
           // 通信成功時の処理（成功コールバック）
-          const response_text = JSON.parse(response.text());
+          const response_text = response;
           if ('error' in response_text) {
-            this.errorMessage = response_text.error;
+            this.errorMessage = response_text['error'];
             this.loggedIn = false;
           } else {
-            this.user_id = response_text.user_id;
-            this.purchase_value = response_text.purchase_value;
+            this.user_id = response_text['user_id'];
+            this.purchase_value = response_text['purchase_value'];
             this.loggedIn = true;
           }
         },
