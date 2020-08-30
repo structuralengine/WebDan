@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { InputMembersService } from './input-members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import * as jexcel from 'jexcel';
 
 @Component({
   selector: 'app-members',
@@ -12,9 +13,12 @@ import { InputDataService } from 'src/app/providers/input-data.service';
 export class MembersComponent implements OnInit {
 
   mambers_table_datarows: any[];
+  @ViewChild("spreadsheet") spreadsheet: ElementRef;
 
+/*
   @ViewChild('ht_container') ht_container: ElementRef;
   @ViewChild('header') header: ElementRef;
+
   hottable_height: number;
 
   mambers_table_settings = {
@@ -149,17 +153,17 @@ export class MembersComponent implements OnInit {
     afterChange: (hotInstance, changes, source) => {
     },
   };
-
+*/
   constructor(private input: InputMembersService,
               private helper: InputDataService) {
    }
 
   ngOnInit() {
-
+    /*  
     const ht_container_height = this.ht_container.nativeElement.offsetHeight;
     const header_height = this.header.nativeElement.offsetHeight;
     this.hottable_height = ht_container_height - header_height;
-
+    */
     // テーブルの初期化
     this.mambers_table_datarows = new Array();
     for (let i = 0; i < this.input.member_list.length; i++) {
@@ -169,9 +173,50 @@ export class MembersComponent implements OnInit {
     }
 
   }
-  
-  public saveData(): void {
 
+  ngAfterViewInit() {
+    jexcel(this.spreadsheet.nativeElement, {
+     data: this.mambers_table_datarows,
+     nestedHeaders:[[
+          { title: '部材', rowspan: '2' },
+          { title: '部材', rowspan: '2' },
+          { title: 'グループ', rowspan: '2' },
+          { title: '部材', rowspan: '2' },
+          { title: '断面', rowspan: '2' },
+          { title: '断面(mm)', colspan: '4' },
+          { title: '環境条件', colspan: '3' },
+          { title: '外観', colspan: '2' },
+          { title: 'ひび割', rowspan: '2' },
+          { title: 'せん断', rowspan: '2' },
+          { title: '曲げ加工 r1', colspan: '3' },
+          { title: '部材', rowspan: '2' },
+    ]],
+    columns: [
+        { type: "numeric",  title: "番号"            , readOnly: true},
+        { type: "numeric",  title: "長", mask:'#.000', readOnly: true},
+        { type: "text",     title: "No"},
+        { type: "text",     title: "名"},
+        { type: "text",     title: "形状"},
+        { type: "numeric",  title: "B"},
+        { type: "numeric",  title: "H"},
+        { type: "numeric",  title: "Bt"},
+        { type: "numeric",  title: "t"},
+        { type: "numeric",  title: "上側"},
+        { type: "numeric",  title: "下側"},
+        { type: "numeric",  title: "せん断"},
+        { type: "checkbox", title: "上側"},
+        { type: "checkbox", title: "下側"},
+        { type: "numeric",  title: "εcsd"},
+        { type: "numeric",  title: "kr"},
+        { type: "numeric",  title:" 軸鉄筋"},
+        { type: "numeric",  title: "帯筋"},
+        { type: "numeric",  title: "折曲げ"},
+        { type: "numeric",  title: "数"},
+       
+      ],
+      colWidths: [ 60, 85, 85, 110, 80, 70, 70, 70, 70, 60, 60, 60, 50, 50, 70, 70, 70, 70, 70, 80 ],
+    });
   }
+  
 
 }
