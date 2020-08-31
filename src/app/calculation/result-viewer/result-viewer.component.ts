@@ -23,7 +23,7 @@ import * as printJS from 'print-js';
 })
 export class ResultViewerComponent implements OnInit {
 
-  @ViewChild('print_section') print_section: ElementRef;
+  @ViewChild('print_section', { static: true }) print_section: ElementRef;
 
   // 目次 /////////////////////////////////
   public printcalculate: boolean;

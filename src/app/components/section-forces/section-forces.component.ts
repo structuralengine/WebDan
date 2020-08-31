@@ -7,7 +7,7 @@ import { InputSectionForcesService } from './input-section-forces.service';
   styleUrls: ['./section-forces.component.scss']
 })
 export class SectionForcesComponent implements OnInit, OnDestroy {
-  @ViewChild('ht_container') ht_container: ElementRef;
+  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
   private hottable_height: number;
   private Mtable_datas: any[];
   private Vtable_datas: any[];

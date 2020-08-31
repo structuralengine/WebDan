@@ -5,7 +5,6 @@ import { SetPostDataService } from '../set-post-data.service';
 import { SetBarService } from '../set-bar.service';
 
 import { Injectable } from '@angular/core';
-import { addAllToArray } from '@angular/core/src/render3/util';
 import { range } from 'rxjs';
 
 @Injectable({

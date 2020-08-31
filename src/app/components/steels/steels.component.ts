@@ -9,7 +9,7 @@ import { InputDataService } from 'src/app/providers/input-data.service';
 })
 export class SteelsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('ht_container') ht_container: ElementRef;
+  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
   hottable_height: number;
 
   groupe_list: any[];

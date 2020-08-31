@@ -13,8 +13,8 @@ export class MembersComponent implements OnInit {
 
   mambers_table_datarows: any[];
 
-  @ViewChild('ht_container') ht_container: ElementRef;
-  @ViewChild('header') header: ElementRef;
+  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
+  @ViewChild('header', { static: true }) header: ElementRef;
   hottable_height: number;
 
   mambers_table_settings = {

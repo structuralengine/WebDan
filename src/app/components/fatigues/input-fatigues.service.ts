@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
 import { InputDesignPointsService } from '../design-points/input-design-points.service';
-import { NumberValueAccessor } from '@angular/forms/src/directives';
 
 @Injectable({
   providedIn: 'root'
