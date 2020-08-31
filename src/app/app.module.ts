@@ -91,7 +91,7 @@ import { SteelsComponent } from './components/steels/steels.component';
     AppRoutingModule,
     DragDropModule,
     BrowserAnimationsModule,
-    NgbModule.forRoot(),
+    NgbModule,
     HotTableModule
   ],
   declarations: [
