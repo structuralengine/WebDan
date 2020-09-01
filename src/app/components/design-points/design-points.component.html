@@ -7,7 +7,7 @@
       <ng-template ngbTabContent>
         <div class="table-container">
           <hot-table class="hot{{i}}" [settings]="table_settings" [data]="table_datas[i]" height="{{hottable_height}}"
-            [colHeaders]="true" [rowHeaders]="position_index[i]"><!--  [mergeCells] ="mergeCells[i]"> -->
+            [colHeaders]="true" [rowHeaders]="position_index[i]" licenseKey="non-commercial-and-evaluation">
             <hot-column data="m_no" title="部材番号" width="70px" type="numeric" [readOnly]="true"></hot-column>
             <ng-container *ngIf="!isManual" >
               <hot-column data="p_name" title="算出点" width="85px" [readOnly]="true"></hot-column>
