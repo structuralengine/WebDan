@@ -16,7 +16,7 @@ export class MembersComponent implements OnInit {
 
   mambers_table_datarows: any[];
   hottable_height: number;
-  myHeaders: any
+  
 
   mambers_table_settings = {
     beforeChange: (... x: any[]) => {
@@ -153,22 +153,18 @@ export class MembersComponent implements OnInit {
 
   constructor(private input: InputMembersService,
               private helper: InputDataService) {
-
-    this.myHeaders = [
+    /*
+    nestedHeaders = [
       [ {label: '部材', rowspan: 2}, {label: '部材長', rowspan: 2}, {label: 'グループ', rowspan: 2},
         {label: '部材名', rowspan: 2}, {label: '断面', rowspan: 2}, {label: '断面(mm)', colspan: 4}, {label: '環境条件', colspan: 3}, {label: '外観', colspan: 2},
         'ひび割', 'せん断', {label: '曲げ加工 r1', colspan: 3}, {label: '部材', rowspan: 2}],
       ['番号', '', 'No', '', '形状', 'B', 'H', 'Bt', 't', '上側', '下側', 'せん断', '上側', '下側', 'εcsd', 'kr', '軸鉄筋', '帯筋', '折曲げ', '数']
     ];
-            
+    */
   }
 
   ngOnInit() {
-/*
-    const ht_container_height = this.ht_container.nativeElement.offsetHeight;
-    const header_height = this.header.nativeElement.offsetHeight;
-    this.hottable_height = ht_container_height - header_height;
-*/
+
     // テーブルの初期化
     this.mambers_table_datarows = new Array();
     for (let i = 0; i < this.input.member_list.length; i++) {

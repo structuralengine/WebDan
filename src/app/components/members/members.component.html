@@ -1,5 +1,5 @@
 <div #ht_container class="ht-container">
-  <!--
+  
   <div #header  class="header">
     <table width="1405px">
       <thead>
@@ -36,9 +36,9 @@
       </thead>
     </table>
   </div>
--->
+
   <hot-table class="hot" [settings]="mambers_table_settings" [data]="mambers_table_datarows" [colHeaders]="false"
-    [rowHeaders]="true" [nestedHeaders] = "myHeaders" width="1435"
+    [rowHeaders]="false" width="1435"
     licenseKey="non-commercial-and-evaluation">
 
     <hot-column data="m_no" width="60px" type="numeric" [readOnly]="true" style="background: #f3f3f3;"></hot-column>
