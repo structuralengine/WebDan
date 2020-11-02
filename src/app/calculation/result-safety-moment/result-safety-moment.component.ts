@@ -41,6 +41,7 @@ export class ResultSafetyMomentComponent implements OnInit {
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
+    console.log(inputJson);
     this.http.post(this.post.URL, inputJson, {
       headers: new HttpHeaders({
         'Content-Type': 'application/x-www-form-urlencoded',

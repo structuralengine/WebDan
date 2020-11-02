@@ -150,14 +150,33 @@ export class SetDesignForceService {
             vKey2 = 'Vdz';
           }
 
-          const temp = {
-            Mdmax: targetPosition[mKey1].max,
-            Mdmin: targetPosition[mKey1].min,
-            Vdmax: targetPosition[vKey1].max,
-            Vdmin: targetPosition[vKey1].min,
-            Ndmax: targetPosition['fx'].max,
-            Ndmin: targetPosition['fx'].min
-          };
+          let temp = {
+            Mdmax: 0,
+            Mdmin: 0,
+            Vdmax: 0,
+            Vdmin: 0,
+            Ndmax: 0,
+            Ndmin: 0
+          }
+          if (!( mKey1 in targetPosition )) {
+            temp = {
+              Mdmax: targetPosition['M'].max,
+              Mdmin: targetPosition['M'].min,
+              Vdmax: targetPosition['S'].max,
+              Vdmin: targetPosition['S'].min,
+              Ndmax: targetPosition['N'].max,
+              Ndmin: targetPosition['N'].min
+            };
+          } else {
+            temp = {
+              Mdmax: targetPosition[mKey1].max,
+              Mdmin: targetPosition[mKey1].min,
+              Vdmax: targetPosition[vKey1].max,
+              Vdmin: targetPosition[vKey1].min,
+              Ndmax: targetPosition['fx'].max,
+              Ndmin: targetPosition['fx'].min
+            };
+          }
 
           const designForce = { n };
 
