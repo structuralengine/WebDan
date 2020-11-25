@@ -46,6 +46,10 @@ export class CalcEarthquakesShearForceService {
         const df = this.DesignForceList[i][j];
         for (let k = df.positions.length - 1; k >= 0; k--) {
           const ps = df.positions[k];
+          if (ps === undefined) {
+            df.positions.splice(k, 1);
+            continue;
+          }             
           if (!('PostData0' in ps)) {
             df.positions.splice(k, 1);
             continue;

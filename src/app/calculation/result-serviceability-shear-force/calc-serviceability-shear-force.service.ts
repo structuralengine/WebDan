@@ -61,6 +61,10 @@ export class CalcServiceabilityShearForceService {
         const df = this.DesignForceList[i][j];
         for (let k = df.positions.length - 1; k >= 0; k--) {
           const ps = df.positions[k];
+          if (ps === undefined) {
+            df.positions.splice(k, 1);
+            continue;
+          }   
           if (!('PostData0' in ps)) {
             df.positions.splice(k, 1);
             continue;
@@ -107,6 +111,10 @@ export class CalcServiceabilityShearForceService {
           const member = groupe[im];
           for (let ip = 0; ip < member.positions.length; ip++) {
             const position = member.positions[ip];
+            if (position === undefined) {
+              console.log('着目点が存在しない');
+              continue;
+            }
             // 最大応力 - 最小応力 で変動荷重を求める
             const minForce: any = position.designForce;
             const maxForce: any = result[ig][im].positions[ip].designForce;

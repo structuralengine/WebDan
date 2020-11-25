@@ -92,6 +92,10 @@ export class CalcSafetyFatigueMomentService {
         const df = this.DesignForceList[i][j];
         for (let k = df.positions.length - 1; k >= 0; k--) {
           const ps = df.positions[k];
+          if (ps === undefined) {
+            df.positions.splice(k, 1);
+            continue;
+          }   
           if (!('PostData-1' in ps)) {
             df.positions.splice(k, 1);
             continue;
@@ -169,7 +173,11 @@ export class CalcSafetyFatigueMomentService {
         for (let ip = 0; ip < member.positions.length; ip++) {
           // const position = member.positions[ip];
           const position = minDesignForceList[ig][im].positions[ip];
-          // 断面
+          if (position === undefined) {
+            console.log('着目点が存在しない');
+            continue;
+          }
+            // 断面
           position['memberInfo'] = memberInfo;
           // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < member.positions[ip].designForce.length; fo++) {
@@ -285,6 +293,10 @@ export class CalcSafetyFatigueMomentService {
         for (let ip = member.positions.length - 1; ip >= 0; ip--) {
 
           const position = member.positions[ip];
+          if (position === undefined) {
+            console.log('着目点が存在しない');
+            continue;
+          }
           // position に 疲労係数入れる
           this.fatigue.setFatigueData(member.g_id, member.m_no, position);
 

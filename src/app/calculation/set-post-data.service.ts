@@ -108,7 +108,10 @@ export class SetPostDataService {
 
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
-
+          if (position === undefined) {
+            console.log('着目点が存在しない');
+            continue;
+          }
           // 断面
           position['memberInfo'] = memberInfo;
 
