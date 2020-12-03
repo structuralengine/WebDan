@@ -14,8 +14,8 @@ import { from } from 'rxjs';
 
 export class CalcSafetyFatigueMomentService {
   // 安全性（疲労破壊）曲げモーメント
-  public DesignForceList: any[]; // 永久作用
-  public DesignForceList3: any[]; // 永久+変動作用
+  public DesignForceList: any[];  // 永久+変動作用
+  public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
 
   // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
@@ -28,6 +28,7 @@ export class CalcSafetyFatigueMomentService {
               private result: ResultDataService,
               private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
+    this.DesignForceList3 = null;
     this.isEnable = false;
   }
 
@@ -72,53 +73,19 @@ export class CalcSafetyFatigueMomentService {
     // 疲労現
     const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[2]);
     // 永久作用
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
     // 永久+変動作用
-    this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
 
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3);
+    const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
 
     if (this.DesignForceList.length < 1) {
       return;
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2], 'Md');
-
-    /*
-    // サーバーに送信するデータを作成
-    this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
-    // Md=0 のケースを削除する
-    for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
-      for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
-        const df = this.DesignForceList[i][j];
-        for (let k = df.positions.length - 1; k >= 0; k--) {
-          const ps = df.positions[k];
-          if (ps === undefined) {
-            df.positions.splice(k, 1);
-            continue;
-          }   
-          if (!('PostData-1' in ps)) {
-            df.positions.splice(k, 1);
-            continue;
-          }
-          const pd = ps['PostData-1'][0];
-          if (pd.Md === 0) {
-            df.positions.splice(k, 1);
-          }
-        }
-        if (df.positions.length === 0) {
-          this.DesignForceList[i].splice(j, 1);
-          this.DesignForceList3[i].splice(j, 1);
-        }
-      }
-      if (this.DesignForceList.length === 0) {
-        this.DesignForceList.splice(i, 1);
-        this.DesignForceList3.splice(i, 1);
-      }
-    }
-    */
+    this.post.setPostData([this.DesignForceList, this.DesignForceList3, DesignForceList2], 'Md');
 
   }
 
@@ -289,12 +256,12 @@ export class CalcSafetyFatigueMomentService {
 
     const result = JSON.parse(
       JSON.stringify({
-        temp: maxDesignForceList
+        temp: minDesignForceList
       })
     ).temp;
 
-    for (let ig = 0; ig < minDesignForceList.length; ig++) {
-      const groupe = minDesignForceList[ig];
+    for (let ig = 0; ig < maxDesignForceList.length; ig++) {
+      const groupe = maxDesignForceList[ig];
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
 
@@ -332,8 +299,8 @@ export class CalcSafetyFatigueMomentService {
           }
 
           // 最大応力 - 最小応力 で変動荷重を求める
-          const minForce: any = position.designForce;
-          const maxForce: any = result[ig][im].positions[ip].designForce;
+          const maxForce: any = position.designForce;
+          const minForce: any = result[ig][im].positions[ip].designForce;
 
           for (let i = 0; i < maxForce.length; i++) {
             for (const key1 of Object.keys(maxForce[i])) {
@@ -399,8 +366,8 @@ export class CalcSafetyFatigueMomentService {
     let i = 0;
     const title = '安全性（疲労破壊）曲げモーメントの照査結果';
 
-    const responseMin = responseData.slice(0, this.PostedData.InputData0.length);
-    const responseMax = responseData.slice(-this.PostedData.InputData1.length);
+    const responseMax = responseData.slice(0, this.PostedData.InputData0.length);
+    const responseMin = responseData.slice(-this.PostedData.InputData1.length);
 
     for (const groupe of postData) {
       groupeName = groupe[0].g_name;
@@ -411,9 +378,9 @@ export class CalcSafetyFatigueMomentService {
           for (let j = 0; j < position.PostData0.length; j++) {
 
             // 最小応力
-            const postdata0 = position.PostData0[j];
+            const postdata0 = position.PostData1[j];
             // 変動応力
-            const postdata1 = position.PostData1[j];
+            const postdata1 = position.PostData0[j];
 
             // 印刷用データ
             const PrintData = position.PrintData[j];
@@ -587,8 +554,8 @@ export class CalcSafetyFatigueMomentService {
     let k = 0.12;
 
     let fai: number;
-    if ('Wd-φ' in PrintData) {
-      fai = this.save.toNumber(PrintData['Wd-φ']);
+    if ('Ast-φ' in PrintData) {
+      fai = this.save.toNumber(PrintData['Ast-φ']);
       if (fai === null) { return result; }
     } else {
       return result;

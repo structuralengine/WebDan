@@ -13,8 +13,8 @@ import { Injectable, ViewChild } from '@angular/core';
 
 export class CalcSafetyFatigueShearForceService {
   // 安全性（疲労破壊）せん断力
-  public DesignForceList: any[]; // 永久作用
-  public DesignForceList3: any[]; // 永久+変動作用
+  public DesignForceList: any[];  // 永久+変動作用
+  public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
@@ -24,6 +24,7 @@ export class CalcSafetyFatigueShearForceService {
               private base: CalcSafetyShearForceService,
               private fatigue: SetFatigueService) {
     this.DesignForceList = null;
+    this.DesignForceList3 = null;
     this.isEnable = false;
   }
 
@@ -66,51 +67,19 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 最小応力
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
     // 最大応力
-    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
 
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList, this.DesignForceList3);
+    const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
 
     if (this.DesignForceList.length < 1) {
       return;
     }
 
     // サーバーに送信するデータを作成
-    this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
-
-    // Vd=0 のケースを削除する
-    for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
-      for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
-        const df = this.DesignForceList[i][j];
-        for (let k = df.positions.length - 1; k >= 0; k--) {
-          const ps = df.positions[k];
-          if (ps === undefined) {
-            df.positions.splice(k, 1);
-            continue;
-          }   
-          if (!('PostData-1' in ps)) {
-            df.positions.splice(k, 1);
-            continue;
-          }
-          const pd = ps['PostData-1'][0];
-          if (pd.Vd === 0) {
-            df.positions.splice(k, 1);
-          }
-        }
-        if (df.positions.length === 0) {
-          this.DesignForceList[i].splice(j, 1);
-          this.DesignForceList3[i].splice(j, 1);
-        }
-      }
-      if (this.DesignForceList[i].length === 0) {
-        this.DesignForceList.splice(i, 1);
-        this.DesignForceList3.splice(i, 1);
-      }
-    }
-
-
+    this.post.setPostData([this.DesignForceList, this.DesignForceList3, DesignForceList2], 'Vd');
 
   }
 
@@ -126,142 +95,17 @@ export class CalcSafetyFatigueShearForceService {
     return postData;
   }
 
-  // position に PostData を追加する
-  // SetPostDataService にある同名の関数の改良版で、
-  // DesignForceList[0]: 最大応力
-  // DesignForceList[1]: 最小応力
-  // DesignForceList[2]: 変動応力
-  public setPostData(DesignForceListList: any[]): void {
-
-    const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
-    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
-
-    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
-      const groupe = baseDesignForceList[ig];
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
-        // 部材・断面情報をセット
-        const memberInfo = this.save.members.member_list.find((value) => {
-          return (value.m_no === member.m_no);
-        });
-        if (memberInfo === undefined) {
-          console.log('部材番号が存在しない');
-          continue;
-        }
-        for (let ip = 0; ip < member.positions.length; ip++) {
-          // const position = member.positions[ip];
-          const position = minDesignForceList[ig][im].positions[ip];
-          if (position === undefined) {
-            console.log('着目点が存在しない');
-            continue;
-          }
-          // 断面
-          position.memberInfo = memberInfo;
-          // ピックアップ断面力から設計断面力を選定する
-          for (let fo = 0; fo < member.positions[ip].designForce.length; fo++) {
-            // 対象の断面力を抽出する
-            const force: any[] = new Array();
-            for (const target of DesignForceListList) {
-              let designForce: any;
-              try {
-                designForce = target[ig][im].positions[ip].designForce[fo];
-              } catch {
-                designForce = null;
-              }
-              force.push(designForce);
-            }
-
-            // ピックアップ断面力から設計断面力を選定する
-            let sectionForce: any[];
-            sectionForce = this.post.getSectionForce(force, member.g_id, 'Vd');
-            // postData に登録する
-            for (let icase = 0; icase < sectionForce.length; icase++) {
-              position['PostData' + (icase - 1).toString()] = sectionForce[icase];
-            }
-          }
-          // 必要ないので消す！！
-          delete position.designForce;
-        }
-      }
-    }
-    // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-    this.setMaxPosition(DesignForceListList);
-
-  }
-
-  // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-  private setMaxPosition(DesignForceListList: any[]): void {
-
-    const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
-    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
-
-    const maxPositionList = this.post.getMaxPositionList(baseDesignForceList, 'Vd');
-
-    // isMax フラグの付いた部材のうち最大でない部材を除外する
-    const result0: any[] = new Array();
-    const result1: any[] = new Array();
-    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
-      const groupe = baseDesignForceList[ig];
-
-      const tempg0: any[] = new Array();
-      const tempg1: any[] = new Array();
-      for (let im = 0; im < groupe.length; im++) {
-        const member0 = groupe[im];
-        const member1 = minDesignForceList[ig][im];
-
-        const tempm0: any[] = new Array();
-        const tempm1: any[] = new Array();
-        for (let ip = 0; ip < member0.positions.length; ip++) {
-          const position0 = member0.positions[ip];
-          const position1 = member1.positions[ip];
-
-          if ( position0.isMax === true) {
-            for ( const boj of maxPositionList[ig]) {
-              if (position0.index === boj.upper.index) {
-                tempm0.push(position0);
-                tempm1.push(position1);
-              }
-              if ( boj.upper.index !== boj.bottom.index) {
-                if (position0.index === boj.bottom.index) {
-                  tempm0.push(position0);
-                  tempm1.push(position1);
-                }
-              }
-            }
-          } else {
-            tempm0.push(position0);
-            tempm1.push(position1);
-          }
-        }
-        if (tempm0.length > 0 ) {
-          member0.positions = tempm0;
-          tempg0.push(member0);
-          member1.positions = tempm1;
-          tempg1.push(member1);
-        }
-      }
-      if (tempg0.length > 0 ) {
-        result0.push(tempg0);
-        result1.push(tempg1);
-      }
-    }
-
-    DesignForceListList[0] = result0;
-    DesignForceListList[1] = result1;
-
-  }
-
   // 変動荷重を
   private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 
     const result = JSON.parse(
       JSON.stringify({
-        temp: maxDesignForceList
+        temp: minDesignForceList
       })
     ).temp;
 
-    for (let ig = 0; ig < minDesignForceList.length; ig++) {
-      const groupe = minDesignForceList[ig];
+    for (let ig = 0; ig < maxDesignForceList.length; ig++) {
+      const groupe = maxDesignForceList[ig];
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
 
@@ -299,8 +143,8 @@ export class CalcSafetyFatigueShearForceService {
           }
 
           // 最大応力 - 最小応力 で変動荷重を求める
-          const minForce: any = position.designForce;
-          const maxForce: any = result[ig][im].positions[ip].designForce;
+          const maxForce: any = position.designForce;
+          const minForce: any = result[ig][im].positions[ip].designForce;
           for (let i = 0; i < maxForce.length; i++) {
             for (const key1 of Object.keys(maxForce[i])) {
               if (key1 === 'n') { continue; }
@@ -369,9 +213,9 @@ export class CalcSafetyFatigueShearForceService {
           for (let j = 0; j < position.PostData0.length; j++) {
 
             // 最小応力
-            const postdata0 = position.PostData0[j];
+            const postdata0 = position.PostData1[j];
             // 変動応力
-            const postdata1 = position.PostData1[j];
+            const postdata1 = position.PostData0[j];
 
             // 印刷用データ
             const PrintData = position.PrintData[j];
@@ -483,7 +327,7 @@ export class CalcSafetyFatigueShearForceService {
 
     // 最小応力
     let Vpd: number;
-    if ('Vd' in postdata0) {
+    if ('Vd' in postdata1) {
       Vpd = this.save.toNumber(postdata0.Vd);
       if (Vpd === null) { return result; }
     } else {
