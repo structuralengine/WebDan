@@ -84,8 +84,11 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
+    this.post.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2], 'Md');
 
+    /*
+    // サーバーに送信するデータを作成
+    this.setPostData([this.DesignForceList3, this.DesignForceList, DesignForceList2]);
     // Md=0 のケースを削除する
     for (let i = this.DesignForceList.length - 1; i >= 0; i--) {
       for (let j = this.DesignForceList[i].length - 1; j >= 0; j--) {
@@ -115,7 +118,7 @@ export class CalcSafetyFatigueMomentService {
         this.DesignForceList3.splice(i, 1);
       }
     }
-
+    */
 
   }
 
@@ -160,8 +163,10 @@ export class CalcSafetyFatigueMomentService {
 
     for (let ig = 0; ig < baseDesignForceList.length; ig++) {
       const groupe = baseDesignForceList[ig];
+
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
+        
         // 部材・断面情報をセット
         const memberInfo = this.save.members.member_list.find( (value) => {
           return (value.m_no === member.m_no);
@@ -170,15 +175,17 @@ export class CalcSafetyFatigueMomentService {
           console.log('部材番号が存在しない');
           continue;
         }
+
         for (let ip = 0; ip < member.positions.length; ip++) {
           // const position = member.positions[ip];
-          const position = minDesignForceList[ig][im].positions[ip];
+          const position = baseDesignForceList[ig][im].positions[ip];
           if (position === undefined) {
             console.log('着目点が存在しない');
             continue;
           }
-            // 断面
+          // 断面
           position['memberInfo'] = memberInfo;
+
           // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < member.positions[ip].designForce.length; fo++) {
             // 対象の断面力を抽出する
@@ -196,6 +203,7 @@ export class CalcSafetyFatigueMomentService {
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
             sectionForce = this.post.getSectionForce(force, member.g_id, 'Md');
+            
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
               position['PostData' + (icase - 1).toString()] = sectionForce[icase];
@@ -207,7 +215,7 @@ export class CalcSafetyFatigueMomentService {
       }
     }
     // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-    this.setMaxPosition(DesignForceListList);
+    this.setMaxPosition([DesignForceListList, minDesignForceList]);
 
   }
 

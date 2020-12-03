@@ -149,7 +149,48 @@ export class SetPostDataService {
     // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
     this.setMaxPosition(DesignForceListList, calcTarget);
 
+    // Md=0 のケースを削除する
+    this.deleteEmptyForce(DesignForceListList, calcTarget);
+
   }
+
+  private  deleteEmptyForce(DesignForceListList: any[], calcTarget: string): void {
+
+    const baseDesignForceList = DesignForceListList[0];
+
+    // Md=0 のケースを削除する
+    for (let i = baseDesignForceList.length - 1; i >= 0; i--) {
+      for (let j = baseDesignForceList[i].length - 1; j >= 0; j--) {
+        const df = baseDesignForceList[i][j];
+        for (let k = df.positions.length - 1; k >= 0; k--) {
+          const ps = df.positions[k];
+          if (ps === undefined) {
+            df.positions.splice(k, 1);
+            continue;
+          }   
+          if (!('PostData0' in ps)) {
+            df.positions.splice(k, 1);
+            continue;
+          }
+          const pd = ps['PostData0'][0];
+          if (pd[calcTarget] === 0) {
+            df.positions.splice(k, 1);
+          }
+        }
+        if (df.positions.length === 0) {
+          for( const dl of DesignForceListList){
+            dl[i].splice(j, 1);
+          }
+        }
+      }
+      if (baseDesignForceList.length === 0) {
+        for( const dl of DesignForceListList){
+          dl.splice(i, 1);
+        }
+      }
+    }
+  }
+
 
   // MAX区間(isMax) の着目点一覧を取得する
   public getMaxPositionList(baseDesignForceList: any[], calcTarget: string): any {
@@ -315,48 +356,61 @@ export class SetPostDataService {
   // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
   private setMaxPosition(DesignForceListList: any[], calcTarget: string): void {
 
-    const baseDesignForceList: any[] = DesignForceListList[0];
-
     // MAX区間(isMax) の着目点一覧を取得する
-    const maxPositionList = this.getMaxPositionList(baseDesignForceList, calcTarget);
+    const maxPositionList = this.getMaxPositionList(DesignForceListList[0], calcTarget);
 
     // isMax フラグの付いた部材のうち最大でない部材を除外する
-    const result: any[] = new Array();
-    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
-      const groupe = baseDesignForceList[ig];
+    const results: any[] = new Array(DesignForceListList.length).fill(new Array());
 
-      const tempg: any[] = new Array();
-      for (const member of groupe) {
+    for (let ig = 0; ig < DesignForceListList[0].length; ig++) {
+      const groupe = DesignForceListList[0][ig];
 
-        const tempm: any[] = new Array();
-        for (const position of member.positions) {
+      const tempgs: any[] = new Array(DesignForceListList.length).fill(new Array());
+      for (let im = 0; im < groupe.length; im++) {
+
+        const members: any[] = new Array();
+        for (const df of DesignForceListList){
+          members.push(df[ig][im]);
+        }       
+
+        const tempms: any[] = new Array(DesignForceListList.length).fill(new Array());
+        for(let i=0; i< members.length; i++){
+          for (let ip = 0; ip < members[0].positions.length; ip++) {
+          const position = members[i].positions[ip];
 
           if ( position.isMax === true) {
             for ( const boj of maxPositionList[ig]) {
               if (position.index === boj.upper.index) {
-                tempm.push(position);
+                tempms[i].push(position);
               }
               if ( boj.upper.index !== boj.bottom.index) {
                 if (position.index === boj.bottom.index) {
-                  tempm.push(position);
+                  tempms[i].push(position);
                 }
               }
             }
           } else {
-            tempm.push(position);
+            tempms[i].push(position);
           }
         }
-        if (tempm.length > 0 ) {
-          member.positions = tempm;
-          tempg.push(member);
+        }
+        if (tempms[0].length > 0 ) {
+          for (let i = 0; i < DesignForceListList.length; i++){
+            members[i].positions = tempms[i];
+            tempgs[i].push(members[i]);
+          }
         }
       }
-      if (tempg.length > 0 ) {
-        result.push(tempg);
+      if (tempgs[0].length > 0 ) {
+        for (let i = 0; i < DesignForceListList.length; i++){
+          results[i].push(tempgs[i]);
+        }
       }
     }
 
-    DesignForceListList[0] = result;
+    for (let i = 0; i < DesignForceListList.length; i++){
+      DesignForceListList[i] = results[i];
+    }
 
   }
 
