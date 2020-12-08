@@ -585,7 +585,7 @@ export class CalcServiceabilityMomentService {
     result['n'] = n;
 
     const k3: number = (5 * (n + 2)) / (7 * n + 8);
-    result['k3'] = k3;
+    result['k3'] = k3; 
 
     const k4: number = 0.85;
     result['k4'] = k4;
