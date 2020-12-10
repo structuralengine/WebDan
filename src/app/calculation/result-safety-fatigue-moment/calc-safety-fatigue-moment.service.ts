@@ -248,9 +248,6 @@ export class CalcSafetyFatigueMomentService {
 
   }
 
-
-
-
   // 変動荷重を
   private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
 

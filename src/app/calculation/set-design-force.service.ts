@@ -35,10 +35,18 @@ export class SetDesignForceService {
     let force: any[];
     switch (calcTarget) {
       case 'Md': // 曲げモーメントの照査の場合
-        force = this.save.force.Mdatas;
+        force = JSON.parse(
+          JSON.stringify({
+            temp: this.save.force.Mdatas
+          })
+        ).temp;
         break;
       case 'Vd': // せん断力の照査の場合
-        force = this.save.force.Vdatas;
+        force = JSON.parse(
+          JSON.stringify({
+            temp: this.save.force.Vdatas
+          })
+        ).temp;
         break;
     }
 
