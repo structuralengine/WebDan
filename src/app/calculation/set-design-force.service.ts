@@ -105,7 +105,11 @@ export class SetDesignForceService {
     const result = this.getEnableMembers(calcTarget);
 
     // 断面力を取得
-    const force: object = this.save.pickup_data;
+    const force: object = JSON.parse(
+      JSON.stringify({
+        temp: this.save.pickup_data
+      })
+    ).temp;
 
     // 断面力を追加
     const pickupStr: string = 'pickUpNo:' + pickupNo;
