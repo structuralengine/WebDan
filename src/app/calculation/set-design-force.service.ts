@@ -35,10 +35,18 @@ export class SetDesignForceService {
     let force: any[];
     switch (calcTarget) {
       case 'Md': // 曲げモーメントの照査の場合
-        force = this.save.force.Mdatas;
+        force = JSON.parse(
+          JSON.stringify({
+            temp: this.save.force.Mdatas
+          })
+        ).temp;
         break;
       case 'Vd': // せん断力の照査の場合
-        force = this.save.force.Vdatas;
+        force = JSON.parse(
+          JSON.stringify({
+            temp: this.save.force.Vdatas
+          })
+        ).temp;
         break;
     }
 
@@ -97,7 +105,11 @@ export class SetDesignForceService {
     const result = this.getEnableMembers(calcTarget);
 
     // 断面力を取得
-    const force: object = this.save.pickup_data;
+    const force: object = JSON.parse(
+      JSON.stringify({
+        temp: this.save.pickup_data
+      })
+    ).temp;
 
     // 断面力を追加
     const pickupStr: string = 'pickUpNo:' + pickupNo;
