@@ -534,8 +534,8 @@ export class CalcServiceabilityMomentService {
     result['sigma_se'] = Sigmase;
 
     let c: number;
-    if ('Wd-c' in PrintData) {
-      c = this.save.toNumber(PrintData['Wd-c']);
+    if ('Ast-c' in PrintData) {
+      c = this.save.toNumber(PrintData['Ast-c']);
       if (c === null) { return result; }
     } else {
       return result;
@@ -543,8 +543,8 @@ export class CalcServiceabilityMomentService {
     result['c'] = c;
 
     let Cs: number;
-    if ('Wd-Cs' in PrintData) {
-      Cs = this.save.toNumber(PrintData['Wd-Cs']);
+    if ('Ast-Cs' in PrintData) {
+      Cs = this.save.toNumber(PrintData['Ast-Cs']);
       if (Cs === null) { return result; }
     } else {
       return result;
@@ -581,11 +581,11 @@ export class CalcServiceabilityMomentService {
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    const n: number = PrintData['Wd-n'];
+    const n: number = PrintData['Ast-n'];
     result['n'] = n;
 
     const k3: number = (5 * (n + 2)) / (7 * n + 8);
-    result['k3'] = k3;
+    result['k3'] = k3; 
 
     const k4: number = 0.85;
     result['k4'] = k4;
