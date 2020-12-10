@@ -476,7 +476,7 @@ export class SetBarService {
     // 印刷用の変数に登録
     result.PrintData['Vyd_d'] = nDepth / nAs;
     result.PrintData['Vyd_Ast'] = nAs;
-    const vyd_n: number = nAs / As;
+    const vyd_n: number = Math.round(nAs / As * 100) / 100;
     result.PrintData['Vyd_AstString'] = dia + '-' + vyd_n + '本';
 
     result.PrintData['Ast'] = this.save.getAs(dia) * rebar_n;
