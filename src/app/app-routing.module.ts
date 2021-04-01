@@ -16,7 +16,7 @@ import { ResultViewerComponent } from './calculation/result-viewer/result-viewer
 
 
 const routes: Routes = [
-    { path: '', redirectTo: '/basic-information', pathMatch: 'full' },
+    { path: '', redirectTo: '/members', pathMatch: 'full' },
     { path: 'basic-information', component: BasicInformationComponent },
     { path: 'members', component: MembersComponent },
     { path: 'design-points', component: DesignPointsComponent },

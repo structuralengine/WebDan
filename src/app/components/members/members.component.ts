@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { InputMembersService } from './input-members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import * as jexcel from 'jexcel';
 
 @Component({
   selector: 'app-members',
@@ -11,8 +12,8 @@ import { InputDataService } from 'src/app/providers/input-data.service';
 
 export class MembersComponent implements OnInit {
 
-  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
-  @ViewChild('header', { static: true }) header: ElementRef;
+  @ViewChild("spreadsheet") spreadsheet: ElementRef;
+
 
   mambers_table_datarows: any[];
   hottable_height: number;
@@ -160,6 +161,13 @@ export class MembersComponent implements OnInit {
         'ひび割', 'せん断', {label: '曲げ加工 r1', colspan: 3}, {label: '部材', rowspan: 2}],
       ['番号', '', 'No', '', '形状', 'B', 'H', 'Bt', 't', '上側', '下側', 'せん断', '上側', '下側', 'εcsd', 'kr', '軸鉄筋', '帯筋', '折曲げ', '数']
     ];
+
+          nestedHeaders: [
+        [ {title: '部材長', rowspan: '2'}, {title: 'グループ', rowspan: '2'}, {title: '部材名', rowspan: '2'}, {title: '断面', rowspan: '2'}, 
+          {title: '断面(mm)', colspan: '4'}, {title: '環境条件', colspan: '3'}, {title: '外観', colspan: '2'},
+          'ひび割', 'せん断', {title: '曲げ加工 r1', colspan: 3}, {title: '部材', rowspan: 2}],
+        [ '', 'No', '', '形状', 'B', 'H', 'Bt', 't', '上側', '下側', 'せん断', '上側', '下側', 'εcsd', 'kr', '軸鉄筋', '帯筋', '折曲げ', '数']
+      ],
     */
   }
 
@@ -169,12 +177,59 @@ export class MembersComponent implements OnInit {
     this.mambers_table_datarows = new Array();
     for (let i = 0; i < this.input.member_list.length; i++) {
       const row = this.input.member_list[i];
-      const column = this.input.getMemberTableColumns(row.m_no);
+      const column1 = this.input.getMemberTableColumns(row.m_no);
+      const column: any[] = new Array();
+      for(let col = 1; col < column1.length; col++){
+        column.push(column1[col]);
+      }
       this.mambers_table_datarows.push(column);
     }
 
   }
   
+  ngAfterViewInit() {
+    jexcel(this.spreadsheet.nativeElement, {
+      data: this.mambers_table_datarows,
+      columns: [
+        { type: 'numeric', width: 85 },   // m_len
+        { type: 'numeric', width: 85 },   // g_id
+        { type: 'numeric', width: 110 },  // g_name
+        { type: 'numeric', width: 80 },   // shape
+
+        { type: 'numeric', width: 70 },   // B
+        { type: 'numeric', width: 70 },   // H
+        { type: 'numeric', width: 70 },   // Bt
+        { type: 'numeric', width: 70 },   // t
+        
+        { type: 'numeric', width: 60 },   // con_u
+        { type: 'numeric', width: 60 },   // con_l
+        { type: 'numeric', width: 60 },   // con_s
+        
+        { type: 'checkbox', width: 50 },   // vis_u
+        { type: 'checkbox', width: 50 },   // vis_l
+        
+        { type: 'numeric', width: 70 },   // ecsd
+        { type: 'numeric', width: 70 },   // kr
+        { type: 'numeric', width: 70 },   // r1_1
+        { type: 'numeric', width: 70 },   // r1_2
+        { type: 'numeric', width: 70 },   // r1_3
+        { type: 'numeric', width: 80 },   // n
+      ],
+      nestedHeaders: [
+        [ {title: '部材長', rowspan: '2'}, {title: 'グループ', rowspan: '2'}, {title: '部材名', rowspan: '2'}, {title: '断面', rowspan: '2'}, 
+          {title: '断面(mm)', colspan: '4'}, {title: '環境条件', colspan: '3'}, {title: '外観', colspan: '2'},
+          {title: 'ひび割'}, {title: 'せん断'}, {title: '曲げ加工 r1', colspan: 3}, {title: '部材', rowspan: 2}],
+
+        [ {title: ''}, {title: 'No'}, {title: ''}, {title: '形状'}, 
+          {title: 'B'}, {title: 'H'}, {title: 'Bt'}, {title: 't'}, {title: '上側'}, {title: '下側'}, 
+          {title: 'せん断'}, {title: '上側'}, {title: '下側'}, {title: 'εcsd'}, {title: 'kr'}, 
+          {title: '軸鉄筋'}, {title: '帯筋'}, {title: '折曲げ'}, {title: '数'}]
+      ],
+      minDimensions: [2, 20]
+    });
+  }
+
+
   public saveData(): void {
 
   }
