@@ -19,40 +19,13 @@ table, th, td {
   margin-left: 15px;
 }
 
-.ht-container {
+.spreadsheet-container {
 
   margin-bottom: 0;
   height: 65%;
 
-  .header {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-    overflow: visible;
-    box-sizing: border-box;
-    display: block;
-
-    table, th, td {
-      line-height: 1.5;
-      background: #f3f3f3;
-    }
-  }
-  .hot {
-    margin-top: 0px;
-    padding-top: 0px;
-    height: 100%;
-  }
 }
 
 .footer {
   margin-top: 10px;
-}
-
-/* 指定列の色変更（jsとかでちゃんと定義して処理したほうが良いかも） */
-#spreadsheet tbody.draggable td[data-X="5"],
-#spreadsheet tbody.draggable td[data-X="6"],
-#spreadsheet tbody.draggable td[data-X="8"],
-#spreadsheet tbody.draggable td[data-X="9"],
-#spreadsheet tbody.draggable td[data-X="10"]  {
-    color:#000;
-    background-color: #ff9;
 }

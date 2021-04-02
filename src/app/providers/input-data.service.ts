@@ -6,7 +6,7 @@ import { ɵangular_packages_platform_browser_platform_browser_k } from '@angular
 })
 export class InputDataService {
 
-  public DEFAULT_MEMBER_COUNT: number = 25;
+  public DEFAULT_MEMBER_COUNT: number = 20;
   // ピックアップファイル
   public pickup_filename: string;
   public pickup_data: Object;

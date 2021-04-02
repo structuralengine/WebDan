@@ -69,20 +69,34 @@ export class InputMembersService  {
   /// <param name="row">行番号</param>
   public getMemberTableColumns(row: number): any {
 
-    const r = this.member_list.filter( (item, index) => {
-      if (item.m_no === row) { return item; }
-    });
+    const r = this.member_list.find((item) => item.m_no === row);
 
-    if (r === undefined) { return null; }
-
-    let result: any = r[0];
-
-    // 対象データが無かった時に処理
-    if (result == null) {
-      result = this.default_member(row);
-      this.member_list.push(result);
+    if (r === undefined) { 
+      return new Array(20);
     }
-    return result;
+
+    return [
+      r.m_no,
+      r.m_len,
+      r.g_id,
+      r.g_name,
+      r.shape,
+      r.B,
+      r.H,
+      r.Bt,
+      r.t,
+      r.con_u,
+      r.con_l,
+      r.con_s,
+      r.vis_u,
+      r.vis_l,
+      r.ecsd,
+      r.kr,
+      r.r1_1,
+      r.r1_2,
+      r.r1_3,
+      r.n
+    ];
   }
 
 
