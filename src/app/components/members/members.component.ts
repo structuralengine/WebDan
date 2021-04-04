@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { InputMembersService } from './input-members.service';
+import { InputMembersService } from './members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import { AppComponent } from 'src/app/app.component';
+import pq from "pqgrid";
 
 @Component({
   selector: 'app-members',
@@ -11,13 +14,52 @@ import { InputDataService } from 'src/app/providers/input-data.service';
 
 export class MembersComponent implements OnInit {
 
-  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
-  @ViewChild('header', { static: true }) header: ElementRef;
+  @ViewChild('grid') grid: SheetComponent;
 
-  mambers_table_datarows: any[];
-  hottable_height: number;
-  
+  private mambers_table_datarows: any[] = [];
 
+  private columnHeaders: object[] = [
+    { title: "部材\n番号", align: "center", dataType: "integer", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "部材長", dataType: "float", format: "#.000", dataIndx: "m_len", editable: false, sortable: false, width: 90, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "グループNo", align: "center", dataType: "integer", dataIndx: "g_id", sortable: false, width: 85 },
+    { title: "部材名", align: "center", dataType: "string", dataIndx: "g_name", sortable: false, width: 110 },
+    { title: "断面形状", dataType: "string", dataIndx: "shape", sortable: false, width: 80 },
+    {
+      title: "断面(mm)", align: "center", colModel: [
+        { title: "B", width: 70 },
+        { title: "H", width: 70 },
+        { title: "Bt", width: 70 },
+        { title: "t", width: 70 }
+      ]
+    },
+    {
+      title: "環境条件", align: "center", colModel: [
+        { title: "上側", dataType: "integer", dataIndx: "con_u", sortable: false, width: 60 },
+        { title: "下側", dataType: "integer", dataIndx: "con_l", sortable: false, width: 60 },
+        { title: "せん断", dataType: "integer", dataIndx: "con_s", sortable: false, width: 60 }
+      ]
+    },
+    {
+      title: "外観", align: "center", colModel: [
+        { title: "上側", align: "center", dataType: "bool", dataIndx: "vis_u", type: 'checkbox', sortable: false, width: 50 },
+        { title: "下側", align: "center", dataType: "bool", dataIndx: "vis_l", type: 'checkbox', sortable: false, width: 50 }
+      ]
+    },
+    { title: "ひび割\nεcsd", align: "center", dataType: "integer", dataIndx: "ecsd", sortable: false, width: 70 },
+    { title: "せん断\nkr", dataType: "float", format: "#.0", dataIndx: "kr", sortable: false, width: 70 },
+    {
+      title: "曲げ加工 r1", align: "center", colModel: [
+        { title: "軸鉄筋", dataType: "float", format: "#.00", dataIndx: "r1_1", sortable: false, width: 60 },
+        { title: "帯筋", dataType: "float", format: "#.00", dataIndx: "r1_2", sortable: false, width: 60 },
+        { title: "折曲げ", dataType: "float", format: "#.00", dataIndx: "r1_3", sortable: false, width: 60 }
+      ]
+    },
+    { title: "部材数", align: "center", dataType: "float", dataIndx: "n", sortable: false, width: 80 },
+  ];
+
+  private ROWS_COUNT = 0;
+
+  /*
   mambers_table_settings = {
     beforeChange: (... x: any[]) => {
       try {
@@ -150,33 +192,72 @@ export class MembersComponent implements OnInit {
     afterChange: (hotInstance, changes, source) => {
     },
   };
+  */
 
   constructor(private input: InputMembersService,
-              private helper: InputDataService) {
-    /*
-    nestedHeaders = [
-      [ {label: '部材', rowspan: 2}, {label: '部材長', rowspan: 2}, {label: 'グループ', rowspan: 2},
-        {label: '部材名', rowspan: 2}, {label: '断面', rowspan: 2}, {label: '断面(mm)', colspan: 4}, {label: '環境条件', colspan: 3}, {label: '外観', colspan: 2},
-        'ひび割', 'せん断', {label: '曲げ加工 r1', colspan: 3}, {label: '部材', rowspan: 2}],
-      ['番号', '', 'No', '', '形状', 'B', 'H', 'Bt', 't', '上側', '下側', 'せん断', '上側', '下側', 'εcsd', 'kr', '軸鉄筋', '帯筋', '折曲げ', '数']
-    ];
-    */
+    private app: AppComponent,
+    private helper: InputDataService) {
   }
 
   ngOnInit() {
-
-    // テーブルの初期化
-    this.mambers_table_datarows = new Array();
-    for (let i = 0; i < this.input.member_list.length; i++) {
-      const row = this.input.member_list[i];
-      const column = this.input.getMemberTableColumns(row.m_no);
-      this.mambers_table_datarows.push(column);
-    }
-
+    this.ROWS_COUNT = this.rowsCount();
   }
-  
+
+  // 指定行row 以降のデータを読み取る
+  private loadData(row: number): void {
+    for (let i = this.mambers_table_datarows.length + 1; i <= row; i++) {
+      const node = this.input.getMemberTableColumns(i);
+      this.mambers_table_datarows.push(node);
+    }
+  }
+
   public saveData(): void {
 
   }
+
+  // 表の高さを計算する
+  private tableHeight(): number {
+    let containerHeight = this.app.getWindowHeight();
+    containerHeight -= 360;
+    return containerHeight;
+  }
+  // 表高さに合わせた行数を計算する
+  private rowsCount(): number {
+    const containerHeight = this.tableHeight();
+    return Math.round(containerHeight / 30);
+  }
+
+  // グリッドの設定
+  options: pq.gridT.options = {
+    showTop: false,
+    reactive: true,
+    sortable: false,
+    locale: "jp",
+    height: this.tableHeight().toString(),
+    numberCell: { show: false }, // 行番号
+    colModel: this.columnHeaders,
+    dataModel: { data: this.mambers_table_datarows },
+    beforeTableView: (evt, ui) => { // 無限ループ
+      const finalV = ui.finalV;
+      const dataV = this.mambers_table_datarows.length;
+      if (ui.initV == null) {
+        return;
+      }
+      if (finalV >= dataV - 1) {
+        this.loadData(dataV + this.ROWS_COUNT);
+        this.grid.refreshDataAndView();
+      }
+    },
+    selectChange: (evt, ui) => {
+      for (const range of ui.selection.iCells.ranges){
+        if(range.c2 < 2){ 
+          // 左の2行は全行選択にしたい
+        }
+      }
+    },
+    change: (evt, ui) => {
+      
+    }
+  };
 
 }

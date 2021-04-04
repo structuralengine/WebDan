@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PlatformLocation } from '@angular/common';
 import { ConfigService } from './providers/config.service';
-import { InputMembersService } from './components/members/input-members.service';
+import { InputMembersService } from './components/members/members.service';
 
 @Component({
   selector: 'app-root',
@@ -65,5 +65,8 @@ export class AppComponent implements OnInit {
     }
   }
 
+  public getWindowHeight(): number {
+    return window.innerHeight;
+  }
 
 }

@@ -1,5 +1,6 @@
+<!-- 
 <div #ht_container class="ht-container">
-  
+ 
   <div #header  class="header">
     <table width="1405px">
       <thead>
@@ -36,7 +37,6 @@
       </thead>
     </table>
   </div>
-
   <hot-table class="hot" [settings]="mambers_table_settings" [data]="mambers_table_datarows" [colHeaders]="false"
     [rowHeaders]="false" width="1435"
     licenseKey="non-commercial-and-evaluation">
@@ -63,7 +63,14 @@
     <hot-column data="r1_3" width="70px" format="0.00"></hot-column>
     <hot-column data="n" width="80px" type="numeric"></hot-column>
   </hot-table>
+ 
 </div>
+--> 
+
+<div class="datasheet_inner">
+  <app-sheet  #grid [options]="options"></app-sheet>
+</div>
+
 <div class="footer">
   <div class="left-table">
   <p>断面形状</p>

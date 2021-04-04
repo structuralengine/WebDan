@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InputBasicInformationService } from './input-basic-information.service';
 import { SaveDataService } from '../../providers/save-data.service';
-import { InputMembersService } from '../members/input-members.service';
+import { InputMembersService } from '../members/members.service';
 
 @Component({
   selector: 'app-basic-information',

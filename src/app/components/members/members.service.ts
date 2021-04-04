@@ -14,11 +14,6 @@ export class InputMembersService  {
   }
   public clear(): void {
     this.member_list = new Array();
-    // デフォルトで、数行のデータを用意しておく
-    for (let i = 1; i <= this.helper.DEFAULT_MEMBER_COUNT; i++) {
-      const new_member = this.default_member(i);
-      this.member_list.push(new_member);
-    }
   }
 
   // 部材情報
@@ -69,19 +64,18 @@ export class InputMembersService  {
   /// <param name="row">行番号</param>
   public getMemberTableColumns(row: number): any {
 
-    const r = this.member_list.filter( (item, index) => {
-      if (item.m_no === row) { return item; }
-    });
+    const r = this.member_list.find( (item) => item.m_no === row );
 
-    if (r === undefined) { return null; }
-
-    let result: any = r[0];
+    let result: any;
 
     // 対象データが無かった時に処理
-    if (result == null) {
+    if (r !== undefined) {
+      result = r;
+    } else {
       result = this.default_member(row);
       this.member_list.push(result);
     }
+
     return result;
   }
 

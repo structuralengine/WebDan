@@ -19,7 +19,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InputDataService } from './providers/input-data.service';
 import { InputBasicInformationService } from './components/basic-information/input-basic-information.service';
-import { InputMembersService } from './components/members/input-members.service';
+import { InputMembersService } from './components/members/members.service';
 import { InputDesignPointsService } from './components/design-points/input-design-points.service';
 import { InputBarsService } from './components/bars/input-bars.service';
 import { InputSteelsService } from './components/steels/input-steels.service';
@@ -81,6 +81,7 @@ import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { SetFatigueService } from './calculation/set-fatigue.service';
 import { SteelsComponent } from './components/steels/steels.component';
+import { SheetComponent } from './components/sheet/sheet.component';
 
 @NgModule({
   imports: [
@@ -110,6 +111,8 @@ import { SteelsComponent } from './components/steels/steels.component';
     SectionForcesComponent,
     CalculationPrintComponent,
     BlankPageComponent,
+
+    SheetComponent,
 
     ResultSafetyMomentComponent,
     ResultSafetyShearForceComponent,

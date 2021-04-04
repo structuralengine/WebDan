@@ -1,23 +1,5 @@
-p {
-  margin-top: 10px;
- margin-bottom: 0;
-}
+/*
 
-table, th, td {
-  border: 1px solid #cfcfcf;
-  font-weight: normal;
-  font-size: 14px;
-  text-align: center;
-  padding: 0;
-}
-
-.left-table{
-  float: left;
-}
-.right-table{
-  float: left;
-  margin-left: 15px;
-}
 
 .ht-container {
 
@@ -42,9 +24,31 @@ table, th, td {
     height: 100%;
   }
 }
+*/
 
 .footer {
   margin-top: 10px;
+
+  p {
+    margin-top: 10px;
+   margin-bottom: 0;
+  }
+  
+  table, th, td {
+    border: 1px solid #cfcfcf;
+    font-weight: normal;
+    font-size: 14px;
+    text-align: center;
+    padding: 0;
+  }
+  
+  .left-table{
+    float: left;
+  }
+  .right-table{
+    float: left;
+    margin-left: 15px;
+  }
 }
 
   

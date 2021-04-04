@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
 import { InputBasicInformationService } from '../basic-information/input-basic-information.service';
-import { InputMembersService } from '../members/input-members.service';
+import { InputMembersService } from '../members/members.service';
 
 @Injectable({
   providedIn: 'root'

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
-import { InputMembersService } from '../members/input-members.service';
+import { InputMembersService } from '../members/members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({

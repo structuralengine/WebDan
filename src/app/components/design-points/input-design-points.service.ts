@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
-import { InputMembersService } from '../members/input-members.service';
+import { InputMembersService } from '../members/members.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,12 +20,12 @@ export class InputDesignPointsService {
     this.position_list = new Array();
 
     // デフォルトで、数行のデータを用意しておく
-    for (let i = 1; i <= this.helper.DEFAULT_MEMBER_COUNT; i++) {
-      const new_point = this.default_positions(i, [this.default_position(i, '', null)]);
-      new_point.positions[0].isMyCalc = true;
-      new_point.positions[0].isVyCalc = true;
-      this.position_list.push(new_point);
-    }
+    // for (let i = 1; i <= this.helper.DEFAULT_MEMBER_COUNT; i++) {
+    //   const new_point = this.default_positions(i, [this.default_position(i, '', null)]);
+    //   new_point.positions[0].isMyCalc = true;
+    //   new_point.positions[0].isVyCalc = true;
+    //   this.position_list.push(new_point);
+    // }
   }
 
   // 着目点情報
