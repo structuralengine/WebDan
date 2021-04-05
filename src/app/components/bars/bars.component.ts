@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputBarsService } from './input-bars.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-bars',
@@ -8,6 +10,55 @@ import { InputDataService } from 'src/app/providers/input-data.service';
   styleUrls: ['./bars.component.scss']
 })
 export class BarsComponent implements OnInit, OnDestroy {
+
+  @ViewChild('grid') grid: SheetComponent;
+
+  private columnHeaders: object[] = [
+    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "位置", dataType: "center", dataIndx: "position", editable: false, sortable: false, width: 110, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", editable: false, sortable: false, width: 85, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' }  },
+    {
+      title: "断面", align: "center", colModel: [
+        { title: "B", dataType: "center", dataIndx: "bh", editable: false, sortable: false,width: 85 },
+        { title: "H", dataType: "center", dataIndx: "bh", editable: false, sortable: false,width: 85 },
+      ]
+    },
+    {
+      title: "ハンチ高", align: "center", colModel: [
+        { title: "曲げ", dataType: "center", format: "#.00", dataIndx: "haunch_height", sortable: false, width: 85 },
+        { title: "せん断", dataType: "center", format: "#.00", dataIndx: "haunch_height", sortable: false, width: 85 },
+      ]
+    },
+    { title: "位置", align: "center", dataType: "center", dataIndx: "design_point_id", editable: false, sortable: false, width: 40 },
+    {
+      title: "軸方向鉄筋", align: "center", colModel: [
+        { title: "鉄筋径", align: "center", dataType: "bool", dataIndx: "rebar_dia",  sortable: false, width: 70 },
+        { title: "本数", align: "center", dataType: "bool", dataIndx: "rebar_n",  sortable: false, width: 70 },
+        { title: "かぶり1\n断目", align: "center", dataType: "bool", dataIndx: "rebar_cover", sortable: false, width: 70 },
+        { title: "ならび\n本数", align: "center", dataType: "bool", dataIndx: "rebar_lines",  sortable: false, width: 70 },
+        { title: "アキ", align: "center", dataType: "bool", dataIndx: "rebar_space", type: 'checkbox', sortable: false, width: 70 },
+        { title: "間隔", align: "center", dataType: "bool", dataIndx: "rebar_ss", type: 'checkbox', sortable: false, width: 70 }
+      ]
+    },
+    {
+      title: "側方鉄筋", align: "center", colModel: [
+        { title: "鉄筋径", dataType: "float", format: "#.00", dataIndx: "side_dia", sortable: false, width: 70 },
+        { title: "本数片", dataType: "float", format: "#.00", dataIndx: "side_n", sortable: false, width: 70 },
+        { title: "右端位置", dataType: "float", format: "#.00", dataIndx: "side_cover", sortable: false, width: 70 },
+        { title: "間隔", dataType: "float", format: "#.00", dataIndx: "side_ss", sortable: false, width: 70 }
+      ]
+    },
+    {
+      title: "せん断補強鉄筋", align: "center", colModel: [
+        { title: "鉄筋径", dataType: "float", format: "#.00", dataIndx: "stirrup_dia", sortable: false, width: 70 },
+        { title: "本数", dataType: "float", format: "#.00", dataIndx: "stirrup_n", sortable: false, width: 70 },
+        { title: "間隔", dataType: "float", format: "#.00", dataIndx: "stirrup_ss", sortable: false, width: 70 }
+      ]
+    },
+    { title: "主鉄筋の斜率", align: "center", dataType: "float", dataIndx: "cos", sortable: false, width: 85 },
+    { title: "tanγ+tanβ", align: "center", dataType: "float", dataIndx: "tan", sortable: false, width: 85 },
+    { title: "処理", align: "center", dataType: "float", dataIndx: "enable", type: 'checkbox', sortable: false, width: 40 },
+  ];
   
   @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
   hottable_height: number;
@@ -205,4 +256,15 @@ export class BarsComponent implements OnInit, OnDestroy {
     this.input.setBarsColumns(this.table_datas);
   }
 
+
+  // グリッドの設定
+  options: pq.gridT.options = {
+    showTop: false,
+    reactive: true,
+    sortable: false,
+    locale: "jp",
+    numberCell: { show: false }, // 行番号
+    colModel: this.columnHeaders,
+    dataModel: { data: [] },
+  };
 }

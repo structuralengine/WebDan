@@ -2,6 +2,8 @@ import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/co
 import { InputDesignPointsService } from './input-design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-design-points',
@@ -9,6 +11,18 @@ import { InputDataService } from 'src/app/providers/input-data.service';
   styleUrls: ['./design-points.component.scss']
 })
 export class DesignPointsComponent implements OnInit, OnDestroy {
+
+  @ViewChild('grid') grid: SheetComponent;
+
+  private columnHeaders: object[] = [
+    { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 70, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "せん断スパン長(mm)", dataType: "center", dataIndx: "La", sortable: false, width: 140 },
+    { title: "算出点", dataType: "center", dataIndx: "p_name", sortable: false, width: 85 },
+    { title: "位置", dataType: "center", dataIndx: "position", sortable: false, width: 110 },
+    { title: "曲げ照査(y軸)", dataType: "center", dataIndx: "isMyCalc", sortable: false, width: 120 },
+    { title: "せん断照査(y軸)", dataType: "center", dataIndx: "isVyCalc", sortable: false, width: 120 },
+  ];
 
   @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
   hottable_height: number;
@@ -146,6 +160,17 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   public saveData(): void {
     this.input.setDesignPointColumns(this.table_datas);
   }
+
+    // グリッドの設定
+    options: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders,
+      dataModel: { data: [] },
+    };
   
 }
 

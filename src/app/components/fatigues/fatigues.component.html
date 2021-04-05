@@ -24,53 +24,11 @@
       </ng-template>
       <ng-template ngbTabContent>
         <div class="table-container">
-          <div class="header">
-            <table width="1665px">
-              <thead>
-                <tr>
-                  <th rowspan="3" width="60px">部材番号</th>
-                  <th rowspan="3" width="110px">位置</th>
-                  <th rowspan="3" width="250px">算出点名</th>
-                  <th width="85px">断面</th>
-                  <th rowspan="3" width="40px">位置</th>
-                  <th colspan="8">曲げ用</th>
-                  <th colspan="8">せん断用</th>
-                </tr>
-                <tr>
-                  <th>B</th>
-                  <th rowspan="2" width="70px">SA/SC</th>
-                  <th rowspan="2" width="70px">SB/SC</th>
-                  <th colspan="2">κ=0.06</th>
-                  <th colspan="2">κ=0.12</th>
-                  <th colspan="2">複線補正r2</th>
 
-                  <th rowspan="2" width="70px">SA/SC</th>
-                  <th rowspan="2" width="70px">SB/SC</th>
-                  <th colspan="2">κ=0.06</th>
-                  <th colspan="2">κ=0.12</th>
-                  <th colspan="2">複線補正r2</th>
-                </tr>
-                <tr>
-                  <th>H</th>
-                  <th width="70px">NA</th>
-                  <th width="70px">NB</th>
-                  <th width="70px">NA</th>
-                  <th width="70px">NB</th>
-                  <th width="70px">α</th>
-                  <th width="70px">β</th>
 
-                  <th width="70px">NA</th>
-                  <th width="70px">NB</th>
-                  <th width="70px">NA</th>
-                  <th width="70px">NB</th>
-                  <th width="70px">α</th>
-                  <th width="70px">β</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
+          <app-sheet  #grid [options]="options"></app-sheet>
 
-          <hot-table
+          <!-- <hot-table
             class="hot"
             [settings]="table_settings"
             [data]="table_datas[i]"
@@ -114,7 +72,7 @@
             <hot-column data="V_NB12" width="70"></hot-column>
             <hot-column data="V_A" width="70"></hot-column>
             <hot-column data="V_B" width="70"></hot-column>
-          </hot-table>
+          </hot-table> -->
         </div>
       </ng-template>
     </ngb-tab>

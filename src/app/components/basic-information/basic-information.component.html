@@ -2,20 +2,22 @@
 <div class="left-contents">
   <section class="pickup-table">
     <h5>{{pickup_moment_title}}</h5>
-    <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_moment_datarows" [colHeaders]="true"
+    <app-sheet  #grid_moment [options]="options"></app-sheet>
+    <!-- <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_moment_datarows" [colHeaders]="true"
       [rowHeaders]="true" licenseKey="non-commercial-and-evaluation">
       <hot-column data="title" [readOnly]="true" title="{{pickup_title_column_header}}" width="270px"></hot-column>
       <hot-column data="pickup_no" title="Pickup No" [readOnly]="isManual"></hot-column>
-    </hot-table>
+    </hot-table> -->
   </section>
 
   <section class="pickup-table">
     <h5>{{pickup_shear_force_title}}</h5>
-    <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_shear_force_datarows" [colHeaders]="true"
+    <app-sheet  #grid_shear_force [options]="options"></app-sheet>
+    <!-- <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_shear_force_datarows" [colHeaders]="true"
       [rowHeaders]="true" licenseKey="non-commercial-and-evaluation">
       <hot-column data="title" [readOnly]="true" title="{{pickup_title_column_header}}" width="270px"></hot-column>
       <hot-column data="pickup_no" title="Pickup No" [readOnly]="isManual"></hot-column>
-    </hot-table>
+    </hot-table> -->
   </section>
 </div>
 </ng-container>

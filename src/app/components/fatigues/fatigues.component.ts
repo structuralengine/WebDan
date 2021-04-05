@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputFatiguesService } from './input-fatigues.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-fatigues',
@@ -8,6 +10,57 @@ import { InputDataService } from 'src/app/providers/input-data.service';
   styleUrls: ['./fatigues.component.scss']
 })
 export class FatiguesComponent implements OnInit, OnDestroy {
+
+  @ViewChild('grid') grid: SheetComponent;
+
+  private columnHeaders: object[] = [
+    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "位置", dataType: "float", dataIndx: "position", editable: false, sortable: false, width: 110, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "算出点名", dataType: "integer", dataIndx: "p_name_ex", editable: false, sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' }  },
+    {
+      title: "断面", align: "center", dataIndx: "bh", colModel: [
+        { title: "B", width: 85 },
+        { title: "H", width: 85 }
+      ]
+    },
+    { title: "位置", dataType: "integer", dataIndx: "design_point_id", sortable: false, width: 40 },
+    {
+      title: "曲げ用", align: "center", colModel: [
+        { title: "SA/SC", dataType: "integer", dataIndx: "M_SA", sortable: false, width: 70 },
+        { title: "SB/SC", dataType: "integer", dataIndx: "M_SB", sortable: false, width: 70 },
+        { title: "k=0.06", dataType: "integer", width: 70 , colModel: [
+          { title: "NA", dataType: "integer", dataIndx: "M_NA06", sortable: false, width: 70 },
+          { title: "NB", dataType: "integer", dataIndx: "M_NB06", sortable: false, width: 70 }
+        ]},
+        { title: "k=0.12", dataType: "integer", width: 70 , colModel: [
+          { title: "NA", dataType: "integer", dataIndx: "M_NA12", sortable: false, width: 70 },
+          { title: "NB", dataType: "integer", dataIndx: "M_NB12", sortable: false, width: 70 }
+        ]},
+        { title: "複線補正r2", dataType: "integer", width: 70 , colModel: [
+          { title: "α", dataType: "integer", dataIndx: "M_A", sortable: false, width: 70 },
+          { title: "β", dataType: "integer", dataIndx: "M_B", sortable: false, width: 70 }
+        ]},
+      ]
+    },
+    {
+      title: "せん断用", align: "center", colModel: [
+        { title: "SA/SC", align: "center", dataType: "bool", dataIndx: "V_SA",  sortable: false, width: 50 },
+        { title: "SB/SC", align: "center", dataType: "bool", dataIndx: "V_SB",  sortable: false, width: 50 },
+        { title: "k=0.06", dataType: "integer", width: 70 , colModel: [
+          { title: "NA", dataType: "integer", dataIndx: "V_NA06", sortable: false, width: 70 },
+          { title: "NB", dataType: "integer", dataIndx: "V_NB06", sortable: false, width: 70 }
+        ]},
+        { title: "k=0.12", dataType: "integer", width: 70 , colModel: [
+          { title: "NA", dataType: "integer", dataIndx: "V_NA12", sortable: false, width: 70 },
+          { title: "NB", dataType: "integer", dataIndx: "V_NB12", sortable: false, width: 70 }
+        ]},
+        { title: "複線補正r2", dataType: "integer", width: 70 , colModel: [
+          { title: "α", dataType: "integer", dataIndx: "V_A", sortable: false, width: 70 },
+          { title: "β", dataType: "integer", dataIndx: "V_B", sortable: false, width: 70 }
+        ]},
+      ]
+    },
+  ];
 
   @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
   hottable_height: number;
@@ -185,5 +238,16 @@ export class FatiguesComponent implements OnInit, OnDestroy {
     this.input.train_B_count = this.train_B_count;
     this.input.service_life = this.service_life;
   }
+
+    // グリッドの設定
+    options: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders,
+      dataModel: { data: [] },
+    };
 
 }

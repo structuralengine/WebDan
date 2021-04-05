@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { InputCalclationPrintService } from './input-calclation-print.service';
 import { SaveDataService } from '../../providers/save-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-calculation-print',
@@ -9,6 +11,13 @@ import { SaveDataService } from '../../providers/save-data.service';
   styleUrls: ['./calculation-print.component.scss']
 })
 export class CalculationPrintComponent implements OnInit, OnDestroy {
+
+  @ViewChild('grid') grid: SheetComponent;
+
+  private columnHeaders: object[] = [
+    { title: "", dataType: "left", format: "#.000", dataIndx: "calc_checked", type: 'checkbox', sortable: false, width: 70 },
+    { title: "", dataType: "string", dataIndx: "g_name", editable: false, sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+  ];
 
   isManual: boolean;
   print_calculate_checked: boolean;
@@ -65,6 +74,17 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
   onClick() {
     this.router.navigate(['/result-viewer']);
   }
+
+    // グリッドの設定
+    options: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders,
+      dataModel: { data: [] },
+    };
 
 
 

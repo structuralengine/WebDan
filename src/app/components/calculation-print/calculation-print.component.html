@@ -77,7 +77,10 @@
   <fieldset>
     <legend>部材</legend>
     <div class="hot" >
-      <hot-table
+
+      <app-sheet  #grid [options]="options"></app-sheet>
+
+      <!-- <hot-table
         class="hot"
         [settings]="table_settings"
         [data]="table_datas"
@@ -86,7 +89,7 @@
         licenseKey="non-commercial-and-evaluation">
         <hot-column data="calc_checked" width="70px" type="checkbox"></hot-column>
         <hot-column data="g_name" width="250px" [readOnly]="true"></hot-column>
-      </hot-table>
+      </hot-table> -->
     </div>
   </fieldset>
 </div>

@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
 import { InputMembersService } from '../members/members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-safety-factors-material-strengths',
@@ -9,6 +11,60 @@ import { InputDataService } from 'src/app/providers/input-data.service';
   styleUrls: ['./safety-factors-material-strengths.component.scss']
 })
 export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestroy {
+
+  @ViewChild('grid_safety_factors') grid_safety_factors: SheetComponent;
+  @ViewChild('grid_bar_strength') grid_bar_strength: SheetComponent;
+  @ViewChild('grid_concrete_strength') grid_concrete_strength: SheetComponent;
+  @ViewChild('grid_pile_factors') grid_pile_factors: SheetComponent;
+
+  private columnHeaders1: object[] = [
+    { title: "", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 250 },
+    {
+      title: "曲げ安全係数", align: "center", colModel: [
+        { title: "γc", dataType: "integer", dataIndx: "M_rc", sortable: false, width: 70 },
+        { title: "γs", dataType: "integer", dataIndx: "M_rs", sortable: false, width: 70 },
+        { title: "γbs", dataType: "integer", dataIndx: "M_rbs", sortable: false, width: 70 }
+      ]
+    },
+    {
+      title: "せん断安全係数", align: "center", colModel: [
+        { title: "γc", align: "center", dataType: "bool", dataIndx: "V_rc", sortable: false, width: 70 },
+        { title: "γs", align: "center", dataType: "bool", dataIndx: "V_rs", sortable: false, width: 70 },
+        { title: "γbc", align: "center", dataType: "bool", dataIndx: "V_rbc", sortable: false, width: 70 },
+        { title: "γbs", align: "center", dataType: "bool", dataIndx: "V_rbs", sortable: false, width: 70 },
+        { title: "γbd", align: "center", dataType: "bool", dataIndx: "V_rbv", sortable: false, width: 70 }
+      ]
+    },
+    { title: "係数γi", align: "center", dataType: "integer", dataIndx: "ri", sortable: false, width: 70 },
+    { title: "鉄筋配置", dataType: "float", format: "#.0", dataIndx: "range", sortable: false, width: 100 },
+  ];
+
+  private columnHeaders2: object[] = [
+    { title: "N/mm<sup>2</sup>", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 250 },
+    { title: "降伏強度", align: "center", dataType: "integer", sortable: false, width: 140, colModel: [
+      { title: "D29以下", align: "center", dataType: "bool", dataIndx: "fsy1", sortable: false, width: 70 },
+      { title: "D32以上", align: "center", dataType: "bool", dataIndx: "fsy2", sortable: false, width: 70 }
+    ]},
+    { title: "設計引張強度", dataType: "float", format: "#.0", sortable: false, width: 140, colModel: [
+      { title: "D29以下", align: "center", dataType: "bool", dataIndx: "fsu1", sortable: false, width: 70 },
+      { title: "D32以上", align: "center", dataType: "bool", dataIndx: "fsu2", sortable: false, width: 70 }
+    ]},
+  ];
+
+  private columnHeaders3: object[] = [
+    { title: "", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 390 },
+    { title: "", dataType: "string", dataIndx: "value", sortable: false, width: 140 },
+  ];
+
+  private columnHeaders4: object[] = [
+    { title: "施工方法", align: "left", dataType: "string", dataIndx: "id", editable: false, sortable: false, width: 200 },
+    { title: "施工修正係数pc", align: "center", dataType: "integer", sortable: false, colModel: [
+      { title: "圧縮強度", align: "center", dataType: "bool", dataIndx: "rfck", sortable: false, width: 80 },
+      { title: "付着強度", align: "center", dataType: "bool", dataIndx: "rfbok", sortable: false, width: 80 },
+      { title: "ヤング係数", align: "center", dataType: "bool", dataIndx: "rEc", sortable: false, width: 80 }
+    ]},
+    { title: "せん断補強鋼材を用いない棒部材の設計せん断耐力Vcdの低減係数", align: "left", dataType: "string", dataIndx: "rVcd", editable: false, sortable: false, width: 110 },
+  ];
 
   groupe_list: any[];
   safety_factors_table_datas: any[][];
@@ -456,4 +512,41 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     this.pile_factor_selected[i] = id;
   }
 
+    // グリッドの設定
+    options1: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders1,
+      dataModel: { data: [] },
+    };
+    options2: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders2,
+      dataModel: { data: [] },
+    };
+    options3: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders3,
+      dataModel: { data: [] },
+    };
+    options4: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders4,
+      dataModel: { data: [] },
+    };
 }

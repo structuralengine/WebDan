@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { InputBasicInformationService } from './input-basic-information.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { InputMembersService } from '../members/members.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-basic-information',
@@ -9,6 +11,20 @@ import { InputMembersService } from '../members/members.service';
   styleUrls: ['./basic-information.component.scss']
 })
 export class BasicInformationComponent implements OnInit, OnDestroy {
+
+  @ViewChild('grid_moment') grid_moment: SheetComponent;
+  @ViewChild('grid_shear_force') grid_shear_force: SheetComponent;
+
+  private columnHeaders1: object[] = [
+    { title: "断面照査に用いる応力", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 270, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "Pickup No", dataType: "float", format: "#.000", dataIndx: "pickup_no",  sortable: false },
+  ];
+
+  private columnHeaders2: object[] = [
+    { title: "断面照査に用いる応力", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 270, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "Pickup No", dataType: "float", format: "#.000", dataIndx: "pickup_no",  sortable: false },
+  ];
+
 
   // pickup_table に関する変数
   pickup_moment_title = 'ピックアップ (曲げ耐力用)';
@@ -183,6 +199,17 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
     this.input.setConditions(id, isChecked);
     this.conditions_list = this.input.conditions_list;
   }
+
+    // グリッドの設定
+    options: pq.gridT.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: "jp",
+      numberCell: { show: true }, // 行番号
+      colModel: this.columnHeaders1,
+      dataModel: { data: [] },
+    };
 
 
 
