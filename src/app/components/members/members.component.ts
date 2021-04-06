@@ -19,8 +19,8 @@ export class MembersComponent implements OnInit {
   private mambers_table_datarows: any[] = [];
 
   private columnHeaders: object[] = [
-    { title: "部材\n番号", align: "center", dataType: "integer", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: { 'background': 'rgba(170, 170, 170)' }, styleHead: { 'background': 'rgba(170, 170, 170)' } },
-    { title: "部材長", dataType: "float", format: "#.000", dataIndx: "m_len", editable: false, sortable: false, width: 90, style: { 'background': 'rgba(170, 170, 170)' }, styleHead: { 'background': 'rgba(170, 170, 170)' } },
+    { title: "部材\n番号", align: "center", dataType: "integer", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: "部材長", dataType: "float", format: "#.000", dataIndx: "m_len", editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: "グループNo", align: "center", dataType: "string", dataIndx: "g_id", sortable: false, width: 85 },
     { title: "部材名", align: "center", dataType: "string", dataIndx: "g_name", sortable: false, width: 110 },
     { title: "断面形状", dataType: "string", dataIndx: "shape", sortable: false, width: 80 },
@@ -206,6 +206,6 @@ export class MembersComponent implements OnInit {
       }
 
     }
-  }
+  };
 
 }

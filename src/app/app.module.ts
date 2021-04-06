@@ -18,7 +18,7 @@ import { HotTableModule } from '@handsontable/angular';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { InputDataService } from './providers/input-data.service';
-import { InputBasicInformationService } from './components/basic-information/input-basic-information.service';
+import { InputBasicInformationService } from './components/basic-information/basic-information.service';
 import { InputMembersService } from './components/members/members.service';
 import { InputDesignPointsService } from './components/design-points/input-design-points.service';
 import { InputBarsService } from './components/bars/input-bars.service';

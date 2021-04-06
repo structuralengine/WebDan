@@ -122,28 +122,17 @@ export class InputBasicInformationService  {
 
   }
 
-  public pickup_moment_count(): number {
-    return this.pickup_moment_title.length;
-  }
-  public pickup_shear_force_count(): number {
-    return this.pickup_shear_force_title.length;
-  }
-
   /// <summary>
   /// basic-information.component の
   /// pickup_moment_datarows のデータを返す関数
   /// </summary>
   /// <param name="row">行番号</param>
   public getPickUpNoMomentColumns(row: number): any {
-    if ( this.pickup_moment_no.length === 0 ) {
-      const a = 0;
-    }
-    const result = {
+    return {
       row: row,
       title: this.pickup_moment_title[row],
       pickup_no: this.pickup_moment_no[row]
     };
-    return result;
   }
   public setPickUpNoMomentColumns(row: number, value: number): void {
     this.pickup_moment_no[row] = value;
@@ -155,12 +144,11 @@ export class InputBasicInformationService  {
   /// </summary>
   /// <param name="row">行番号</param>
   public getPickUpNoShearForceColumns(row: number): any {
-    const result = {
+    return {
       row: row,
       title: this.pickup_shear_force_title[row],
       pickup_no: this.pickup_shear_force_no[row]
     };
-    return result;
   }
 
   public setPickUpNoShearForceColumns(row: number, value: number): void {
