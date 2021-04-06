@@ -7,7 +7,7 @@ import { InputFatiguesService } from '../components/fatigues/input-fatigues.serv
 import { InputMembersService } from '../components/members/members.service';
 import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
 import { InputSectionForcesService } from '../components/section-forces/input-section-forces.service';
-import { InputCalclationPrintService } from '../components/calculation-print/input-calclation-print.service';
+import { InputCalclationPrintService } from '../components/calculation-print/calclation-print.service';
 
 @Injectable({
   providedIn: 'root'

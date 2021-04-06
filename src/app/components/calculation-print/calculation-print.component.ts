@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { InputCalclationPrintService } from './input-calclation-print.service';
+import { InputCalclationPrintService } from './calclation-print.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
@@ -16,7 +16,7 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
 
   private columnHeaders: object[] = [
     { title: "", dataType: "left", format: "#.000", dataIndx: "calc_checked", type: 'checkbox', sortable: false, width: 70 },
-    { title: "", dataType: "string", dataIndx: "g_name", editable: false, sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "", dataType: "string", dataIndx: "g_name", editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
   ];
 
   isManual: boolean;

@@ -14,9 +14,9 @@ export class BarsComponent implements OnInit, OnDestroy {
   @ViewChild('grid') grid: SheetComponent;
 
   private columnHeaders: object[] = [
-    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
-    { title: "位置", dataType: "center", dataIndx: "position", editable: false, sortable: false, width: 110, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
-    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", editable: false, sortable: false, width: 85, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' }  },
+    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: "位置", dataType: "center", dataIndx: "position", editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", editable: false, sortable: false, width: 85, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     {
       title: "断面", align: "center", colModel: [
         { title: "B", dataType: "center", dataIndx: "bh", editable: false, sortable: false,width: 85 },

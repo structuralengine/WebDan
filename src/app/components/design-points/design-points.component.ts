@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { InputDesignPointsService } from './input-design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
@@ -12,11 +12,12 @@ import pq from 'pqgrid';
 })
 export class DesignPointsComponent implements OnInit, OnDestroy {
 
-  @ViewChild('grid') grid: SheetComponent;
+  @ViewChildren('grid') items: QueryList;
+  //@ViewChild('grid') grid: SheetComponent;
 
   private columnHeaders: object[] = [
-    { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 70, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
-    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
+    { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 70, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
     { title: "せん断スパン長(mm)", dataType: "center", dataIndx: "La", sortable: false, width: 140 },
     { title: "算出点", dataType: "center", dataIndx: "p_name", sortable: false, width: 85 },
     { title: "位置", dataType: "center", dataIndx: "position", sortable: false, width: 110 },

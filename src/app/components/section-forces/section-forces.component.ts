@@ -14,8 +14,8 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
   @ViewChild('grid_Vtable_datas') grid_Vtable_datas: SheetComponent;
 
   private columnHeaders1: object[] = [
-    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 50, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
-    { title: "算出点名", dataType: "integer", dataIndx: "p_name_ex", editable: false, sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' }  },
+    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 50, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: "算出点名", dataType: "integer", dataIndx: "p_name_ex", editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     {
       title: "耐久性・使用性", align: "center", colModel: [
         { title: "縁応力検討用", dataType: "integer", sortable: false, colModel: [
@@ -60,8 +60,8 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
   ];
 
   private columnHeaders2: object[] = [
-    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 50, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' } },
-    { title: "算出点名", dataType: "integer", dataIndx: "p_name_ex", editable: false, sortable: false, width: 250, style: {'background': 'rgba(170, 170, 170)' }, styleHead: {'background': 'rgba(170, 170, 170)' }  },
+    { title: "部材\n番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 50, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: "算出点名", dataType: "integer", dataIndx: "p_name_ex", editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     {
       title: "耐久性・使用性", align: "center", colModel: [
         { title: "設計耐力検討用", dataType: "integer", sortable: false, colModel: [
