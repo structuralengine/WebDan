@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { InputDesignPointsService } from './input-design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
@@ -10,20 +10,12 @@ import pq from 'pqgrid';
   templateUrl: './design-points.component.html',
   styleUrls: ['./design-points.component.scss']
 })
-export class DesignPointsComponent implements OnInit, OnDestroy {
+export class DesignPointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChildren('grid') items: QueryList;
-  //@ViewChild('grid') grid: SheetComponent;
+  @ViewChildren('grid') grids: QueryList<SheetComponent>;
+  public options: pq.gridT.options[] = new Array();
 
-  private columnHeaders: object[] = [
-    { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", editable: false, sortable: false, width: 70, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
-    { title: "算出点名", dataType: "center", dataIndx: "p_name_ex", sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
-    { title: "せん断スパン長(mm)", dataType: "center", dataIndx: "La", sortable: false, width: 140 },
-    { title: "算出点", dataType: "center", dataIndx: "p_name", sortable: false, width: 85 },
-    { title: "位置", dataType: "center", dataIndx: "position", sortable: false, width: 110 },
-    { title: "曲げ照査(y軸)", dataType: "center", dataIndx: "isMyCalc", sortable: false, width: 120 },
-    { title: "せん断照査(y軸)", dataType: "center", dataIndx: "isVyCalc", sortable: false, width: 120 },
-  ];
+  private columnHeaders: object[] = [];
 
   @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
   hottable_height: number;
@@ -35,84 +27,35 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   mergeCells: any[][];
   position_index: number[][];
 
-  table_settings = {
-    beforeChange: (...x: any[]) => {
-      try {
-        let changes: any = null;
-        let target: any = null;
-        for (let i = 0; i < x.length; i++) {
-          if ('guid' in x[i]){
-            target = x[i];
-          }
-          if (Array.isArray(x[i])) {
-            changes = x[i];
-            break;
-          }
-        }
-        if (target === null) { return; }
-        if (changes === null) { return; }
-        for (let i = 0; i < changes.length; i++) {
-          switch (changes[i][1]) {
-            case 'La':
-              const value1: number = this.helper.toNumber(changes[i][3]);
-              if( value1 !== null ) {
-                changes[i][3] = value1.toFixed(1);
-              } else {
-                changes[i][3] = null;
-              }
-              break;
-            case 'isMyCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 7, false);
-              }
-              break;
-            case 'isVyCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 8, false);
-              }
-              break;
-            case 'isMzCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 5, false);
-              }
-              break;
-            case 'isVzCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 6, false);
-              }
-              break;
-          }
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    afterChange: (...x: any[]) => {
-      let changes: any = null;
-      for (let i = 0; i < x.length; i++) {
-        if (Array.isArray(x[i])) {
-          changes = x[i];
-          break;
-        }
-      }
-      if (changes === null) { return; }
-      
-    }
-  };
-
   constructor(
     private input: InputDesignPointsService,
     private save: SaveDataService,
     private helper: InputDataService) { }
 
   ngOnInit() {
-    
-    this.isManual = this.save.isManual();
 
+    this.isManual = this.save.isManual();
+    if(this.isManual){
+      this.columnHeaders = [
+        { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+        { title: "算出点名", dataType: "string", dataIndx: "p_name_ex", sortable: false, width: 250 },
+        { title: "曲げ照査", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
+        { title: "せん断照査", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 },
+        { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
+      ];
+    }else {
+      this.columnHeaders = [
+        { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+        { title: "算出点", dataType: "string", dataIndx: "p_name", sortable: false, width: 85, editable: false, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }},
+        { title: "位置", dataType: "float", format: "#.000", dataIndx: "position", sortable: false, width: 110,editable: false, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+        { title: "算出点名", dataType: "string", dataIndx: "p_name_ex", sortable: false, width: 250 },
+        { title: "曲げ照査(y軸)", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
+        { title: "せん断照査(y軸)", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 },
+        { title: "曲げ照査(z軸)", align: "center", dataType: "bool", dataIndx: "isMzCalc", type: 'checkbox', sortable: false, width: 120 },
+        { title: "せん断照査(z軸)", align: "center", dataType: "bool", dataIndx: "isVzCalc", type: 'checkbox', sortable: false, width: 120 },
+        { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
+      ];
+    }
     const height = this.ht_container.nativeElement.offsetHeight;
     this.hottable_height = height - 180;
 
@@ -128,7 +71,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
       this.mergeCells[i] = new Array();
       this.position_index[i] = new Array();
 
-      let row: number = 0;     
+      let row: number = 0;
       for (let j = 0; j < this.groupe_list[i].length; j++) {
         const member = this.groupe_list[i][j];
 
@@ -150,9 +93,28 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
           row++;
         }
       }
+
+      // グリッドの設定
+      this.options.push({
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: "jp",
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders,
+        dataModel: { data: this.table_datas[i] },
+      });
+
     }
   }
   
+  ngAfterViewInit(){
+    this.grids.forEach((grid, i, array)=>{
+      grid.options =this.options[i];
+      grid.refreshDataAndView();
+    });
+  }
+
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
     this.saveData();
@@ -161,17 +123,6 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   public saveData(): void {
     this.input.setDesignPointColumns(this.table_datas);
   }
-
-    // グリッドの設定
-    options: pq.gridT.options = {
-      showTop: false,
-      reactive: true,
-      sortable: false,
-      locale: "jp",
-      numberCell: { show: false }, // 行番号
-      colModel: this.columnHeaders,
-      dataModel: { data: [] },
-    };
   
 }
 
