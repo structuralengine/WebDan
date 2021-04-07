@@ -337,6 +337,8 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
 
       // グリッドの設定
       this.options1.push({
+        width: 985,
+        height: 235,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -375,7 +377,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
         numberCell: { show: false }, // 行番号
         colModel: this.columnHeaders4,
         dataModel: { data: this.safety_factors_table_datas[i] },
-      });    
+      });
       this.options5.push({
         showTop: false,
         reactive: true,
@@ -384,13 +386,12 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
         numberCell: { show: false }, // 行番号
         colModel: this.columnHeaders5,
         dataModel: { data: this.steel_strength_table_datas[i] },
-      });              
+      });
     }
 
   }
 
   ngAfterViewInit() {
-    
     this.grid1.forEach((grid, i, array) => {
       grid.options = this.options1[i];
       grid.refreshDataAndView();

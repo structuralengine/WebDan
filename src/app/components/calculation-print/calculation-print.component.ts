@@ -12,13 +12,6 @@ import pq from 'pqgrid';
 })
 export class CalculationPrintComponent implements OnInit, OnDestroy {
 
-  @ViewChild('grid') grid: SheetComponent;
-
-  private columnHeaders: object[] = [
-    { title: "", dataType: "left", format: "#.000", dataIndx: "calc_checked", type: 'checkbox', sortable: false, width: 70 },
-    { title: "", dataType: "string", dataIndx: "g_name", editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
-  ];
-
   isManual: boolean;
   print_calculate_checked: boolean;
   print_section_force_checked: boolean;
@@ -74,18 +67,5 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
   onClick() {
     this.router.navigate(['/result-viewer']);
   }
-
-    // グリッドの設定
-    options: pq.gridT.options = {
-      showTop: false,
-      reactive: true,
-      sortable: false,
-      locale: "jp",
-      numberCell: { show: false }, // 行番号
-      colModel: this.columnHeaders,
-      dataModel: { data: [] },
-    };
-
-
 
 }

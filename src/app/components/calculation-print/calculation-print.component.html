@@ -77,19 +77,24 @@
   <fieldset>
     <legend>部材</legend>
     <div class="hot" >
-
-      <app-sheet  #grid [options]="options"></app-sheet>
-
-      <!-- <hot-table
-        class="hot"
-        [settings]="table_settings"
-        [data]="table_datas"
-        [colHeaders]="false"
-        [rowHeaders]="false"
-        licenseKey="non-commercial-and-evaluation">
-        <hot-column data="calc_checked" width="70px" type="checkbox"></hot-column>
-        <hot-column data="g_name" width="250px" [readOnly]="true"></hot-column>
-      </hot-table> -->
+      <table>
+        <tbody>
+          <ng-container *ngFor="let item of table_datas; index as j">
+            <tr>
+              <td width="70px">
+                <input type="checkbox" 
+                [value]="item.calc_checked" 
+                [(ngModel)]="item.calc_checked"
+                [checked]="item.calc_checked" 
+              />
+              </td>
+              <td width="250px">
+                {{item.g_name}}
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
     </div>
   </fieldset>
 </div>
