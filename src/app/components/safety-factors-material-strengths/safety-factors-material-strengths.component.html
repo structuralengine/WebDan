@@ -1,7 +1,7 @@
 <ngb-tabset>
   <ngb-tab *ngFor="let groupe of groupe_list; index as i">
     <ng-template ngbTabTitle>
-      <h5>{{ groupe[0].g_name }}</h5>
+      <h5 *ngIf="groupe?.length > 0">{{ groupe[0].g_name }}</h5>
     </ng-template>
     <ng-template ngbTabContent>
       <div class="tabContent">
@@ -15,44 +15,7 @@
               <div class="safety-factors">
                 <h5>安全係数</h5>
                 <div class="table-container">
-                  <div class="header">
-                    <table width="980px">
-                      <thead>
-                        <tr>
-                          <th rowspan="2" width="250px"></th>
-                          <th colspan="3">曲げ安全係数</th>
-                          <th colspan="5">せん断安全係数</th>
-                          <th rowspan="2" width="70px">係数γi</th>
-                          <th rowspan="2" width="100px">鉄筋配置</th>
-                        </tr>
-                        <tr>
-                          <th width="70px">γc</th>
-                          <th width="70px">γs</th>
-                          <th width="70px">γbs</th>
-                          <th width="70px">γc</th>
-                          <th width="70px">γs</th>
-                          <th width="70px">γbc</th>
-                          <th width="70px">γbs</th>
-                          <th width="70px">γbd</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                  <hot-table class="hot" [settings]="safety_factors_table_settings"
-                    [data]="safety_factors_table_datas[i]" [colHeaders]="false" [rowHeaders]="false" width="980"
-                    licenseKey="non-commercial-and-evaluation">
-                    <hot-column data="title" width="250" [readOnly]="true"></hot-column>
-                    <hot-column data="M_rc" width="70"></hot-column>
-                    <hot-column data="M_rs" width="70"></hot-column>
-                    <hot-column data="M_rbs" width="70"></hot-column>
-                    <hot-column data="V_rc" width="70"></hot-column>
-                    <hot-column data="V_rs" width="70"></hot-column>
-                    <hot-column data="V_rbc" width="70"></hot-column>
-                    <hot-column data="V_rbs" width="70"></hot-column>
-                    <hot-column data="V_rbv" width="70"></hot-column>
-                    <hot-column data="ri" width="70"></hot-column>
-                    <hot-column data="range" width="100"></hot-column>
-                  </hot-table>
+                  <app-sheet #grid1 [options]="options1[i]"></app-sheet>
                 </div>
                 <div class="range-fieldset">
                   <fieldset>
@@ -69,81 +32,40 @@
               <div class="material-strength">
                 <h5>鉄筋材料強度</h5>
                 <div class="table-container">
-                  <div class="header">
-                    <table width="530px">
-                      <thead>
-                        <tr>
-                          <th width="250px">N/mm<sup>2</sup></th>
-                          <th width="140px">降伏強度</th>
-                          <th width="140px">設計引張強度</th>
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-
-                  <hot-table class="hot" [settings]="bar_strength_table_settings" [data]="bar_strength_table_datas[i]"
-                    [colHeaders]="false" [rowHeaders]="false" width="530"
-                    licenseKey="non-commercial-and-evaluation">
-                    <hot-column data="title" width="250" [readOnly]="true"></hot-column>
-                    <hot-column data="fsy1" width="70"></hot-column>
-                    <hot-column data="fsy2" width="70"></hot-column>
-                    <hot-column data="fsu1" width="70"></hot-column>
-                    <hot-column data="fsu2" width="70"></hot-column>
-                  </hot-table>
-
+                  <app-sheet #grid2 [options]="options2[i]"></app-sheet>
                   <div class="concrete-strength">
                     <h5>コンクリート材料強度</h5>
-                    <hot-table class="hot" [settings]="concrete_strength_table_settings"
-                      [data]="concrete_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false"
-                      licenseKey="non-commercial-and-evaluation">
-                      <hot-column data="title" width="390" [readOnly]="true"></hot-column>
-                      <hot-column data="value" width="140" type="numeric"></hot-column>
-                    </hot-table>
+                    <app-sheet #grid3 [options]="options3[i]"></app-sheet>
                   </div>
                 </div>
               </div>
 
             </ng-template>
           </ngb-tab>
-          <ng-container *ngIf="isSRC[i]">
-            <ngb-tab>
-              <ng-template ngbTabTitle>
-                鉄骨
-              </ng-template>
-              <ng-template ngbTabContent>
 
-                <div class="safety-factors">
-                  <h5>安全係数</h5>
-                  <div class="table-container">
+          <ngb-tab *ngIf="isSRC[i]">
+            <ng-template ngbTabTitle>
+              鉄骨
+            </ng-template>
+            <ng-template ngbTabContent>
 
-                    <hot-table class="hot" [settings]="safety_factors_table_settings"
-                      [data]="safety_factors_table_datas[i]" [colHeaders]="true" [rowHeaders]="false"
-                      licenseKey="non-commercial-and-evaluation">
-                      <hot-column data="title" title=" " width="250" [readOnly]="true"></hot-column>
-                      <hot-column data="S_rs" title="γs" width="70" type="numeric"></hot-column>
-                      <hot-column data="S_rb" title="γb" width="70" type="numeric"></hot-column>
-                    </hot-table>
-                  </div>
+              <div class="safety-factors">
+                <h5>安全係数</h5>
+                <div class="table-container">
+                  <app-sheet #grid4 [options]="options4[i]"></app-sheet>
                 </div>
+              </div>
 
-                <div class="material-strength">
-                  <h5>鉄骨材料強度</h5>
-                  <div class="table-container">
-                    <hot-table class="hot" [settings]="steel_strength_table_settings"
-                      [data]="steel_strength_table_datas[i]" [colHeaders]="false" [rowHeaders]="false"
-                      licenseKey="non-commercial-and-evaluation">
-                      <hot-column data="title" title=" " width="250" [readOnly]="true"></hot-column>
-                      <hot-column data="SRCfsyk1" title="t≦16" width="100" type="numeric"></hot-column>
-                      <hot-column data="SRCfsyk2" title="16＜t≦40" width="100" type="numeric"></hot-column>
-                      <hot-column data="SRCfsyk3" title="40＜t≦75" width="100" type="numeric"></hot-column>
-                    </hot-table>
-
-                  </div>
+              <div class="material-strength">
+                <h5>鉄骨材料強度</h5>
+                <div class="table-container">
+                  <app-sheet #grid5 [options]="options4[i]"></app-sheet>
                 </div>
+              </div>
 
-              </ng-template>
-            </ngb-tab>
-          </ng-container>
+            </ng-template>
+          </ngb-tab>
+          
           <ngb-tab>
             <ng-template ngbTabTitle>
               杭・施工条件

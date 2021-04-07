@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
-import { InputCalclationPrintService } from './input-calclation-print.service';
+import { InputCalclationPrintService } from './calclation-print.service';
 import { SaveDataService } from '../../providers/save-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-calculation-print',
@@ -65,7 +67,5 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
   onClick() {
     this.router.navigate(['/result-viewer']);
   }
-
-
 
 }
