@@ -3,7 +3,7 @@ import { InputMembersService } from './members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import { AppComponent } from 'src/app/app.component';
-import pq from "pqgrid";
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-members',
@@ -19,42 +19,42 @@ export class MembersComponent implements OnInit {
   private mambers_table_datarows: any[] = [];
 
   private columnHeaders: object[] = [
-    { title: "部材\n番号", align: "center", dataType: "integer", dataIndx: "m_no", editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: "部材長", dataType: "float", format: "#.000", dataIndx: "m_len", editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: "グループNo", align: "center", dataType: "string", dataIndx: "g_id", sortable: false, width: 85 },
-    { title: "部材名", align: "center", dataType: "string", dataIndx: "g_name", sortable: false, width: 110 },
-    { title: "断面形状", dataType: "string", dataIndx: "shape", sortable: false, width: 80 },
+    { title: '部材\n番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: '部材長', dataType: 'float', format: '#.000', dataIndx: 'm_len', editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: 'グループNo', align: 'center', dataType: 'string', dataIndx: 'g_id', sortable: false, width: 85 },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
+    { title: '断面形状', dataType: 'string', dataIndx: 'shape', sortable: false, width: 80 },
     {
-      title: "断面(mm)", align: "center", colModel: [
-        { title: "B", width: 70 },
-        { title: "H", width: 70 },
-        { title: "Bt", width: 70 },
-        { title: "t", width: 70 }
+      title: '断面(mm)', align: 'center', colModel: [
+        { title: 'B', width: 70 },
+        { title: 'H', width: 70 },
+        { title: 'Bt', width: 70 },
+        { title: 't', width: 70 }
       ]
     },
     {
-      title: "環境条件", align: "center", colModel: [
-        { title: "上側", dataType: "integer", dataIndx: "con_u", sortable: false, width: 60 },
-        { title: "下側", dataType: "integer", dataIndx: "con_l", sortable: false, width: 60 },
-        { title: "せん断", dataType: "integer", dataIndx: "con_s", sortable: false, width: 60 }
+      title: '環境条件', align: 'center', colModel: [
+        { title: '上側', dataType: 'integer', dataIndx: 'con_u', sortable: false, width: 60 },
+        { title: '下側', dataType: 'integer', dataIndx: 'con_l', sortable: false, width: 60 },
+        { title: 'せん断', dataType: 'integer', dataIndx: 'con_s', sortable: false, width: 60 }
       ]
     },
     {
-      title: "外観", align: "center", colModel: [
-        { title: "上側", align: "center", dataType: "bool", dataIndx: "vis_u", type: 'checkbox', sortable: false, width: 50 },
-        { title: "下側", align: "center", dataType: "bool", dataIndx: "vis_l", type: 'checkbox', sortable: false, width: 50 }
+      title: '外観', align: 'center', colModel: [
+        { title: '上側', align: 'center', dataType: 'bool', dataIndx: 'vis_u', type: 'checkbox', sortable: false, width: 50 },
+        { title: '下側', align: 'center', dataType: 'bool', dataIndx: 'vis_l', type: 'checkbox', sortable: false, width: 50 }
       ]
     },
-    { title: "ひび割\nεcsd", align: "center", dataType: "integer", dataIndx: "ecsd", sortable: false, width: 70 },
-    { title: "せん断\nkr", dataType: "float", format: "#.0", dataIndx: "kr", sortable: false, width: 70 },
+    { title: 'ひび割\nεcsd', align: 'center', dataType: 'integer', dataIndx: 'ecsd', sortable: false, width: 70 },
+    { title: 'せん断\nkr', dataType: 'float', format: '#.0', dataIndx: 'kr', sortable: false, width: 70 },
     {
-      title: "曲げ加工 r1", align: "center", colModel: [
-        { title: "軸鉄筋", dataType: "float", format: "#.00", dataIndx: "r1_1", sortable: false, width: 60 },
-        { title: "帯筋", dataType: "float", format: "#.00", dataIndx: "r1_2", sortable: false, width: 60 },
-        { title: "折曲げ", dataType: "float", format: "#.00", dataIndx: "r1_3", sortable: false, width: 60 }
+      title: '曲げ加工 r1', align: 'center', colModel: [
+        { title: '軸鉄筋', dataType: 'float', format: '#.00', dataIndx: 'r1_1', sortable: false, width: 60 },
+        { title: '帯筋', dataType: 'float', format: '#.00', dataIndx: 'r1_2', sortable: false, width: 60 },
+        { title: '折曲げ', dataType: 'float', format: '#.00', dataIndx: 'r1_3', sortable: false, width: 60 }
       ]
     },
-    { title: "部材数", align: "center", dataType: "float", dataIndx: "n", sortable: false, width: 80 },
+    { title: '部材数', align: 'center', dataType: 'float', dataIndx: 'n', sortable: false, width: 80 },
   ];
 
   private ROWS_COUNT = 0;
@@ -97,7 +97,7 @@ export class MembersComponent implements OnInit {
     showTop: false,
     reactive: true,
     sortable: false,
-    locale: "jp",
+    locale: 'jp',
     height: this.tableHeight().toString(),
     numberCell: { show: false }, // 行番号
     colModel: this.columnHeaders,

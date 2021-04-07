@@ -23,7 +23,7 @@ import { InputMembersService } from './components/members/members.service';
 import { InputDesignPointsService } from './components/design-points/input-design-points.service';
 import { InputBarsService } from './components/bars/bars.service';
 import { InputSteelsService } from './components/steels/input-steels.service';
-import { InputFatiguesService } from './components/fatigues/input-fatigues.service';
+import { InputFatiguesService } from './components/fatigues/fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
 import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
 import { InputCalclationPrintService } from './components/calculation-print/calclation-print.service';

@@ -3,7 +3,7 @@ import { InputDataService } from './input-data.service';
 import { InputBarsService } from '../components/bars/bars.service';
 import { InputBasicInformationService } from '../components/basic-information/basic-information.service';
 import { InputDesignPointsService } from '../components/design-points/input-design-points.service';
-import { InputFatiguesService } from '../components/fatigues/input-fatigues.service';
+import { InputFatiguesService } from '../components/fatigues/fatigues.service';
 import { InputMembersService } from '../components/members/members.service';
 import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
 import { InputSectionForcesService } from '../components/section-forces/input-section-forces.service';

@@ -3,7 +3,7 @@ import { InputBasicInformationService } from './basic-information.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { InputMembersService } from '../members/members.service';
 import { SheetComponent } from '../sheet/sheet.component';
-import pq from "pqgrid";
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-basic-information',
@@ -16,8 +16,8 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   @ViewChild('grid2') grid2: SheetComponent;
 
   private columnHeaders: object[] = [
-    { title: "断面照査に用いる応力", dataType: "string",  dataIndx: "title", editable: false, sortable: false, width: 270, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: "Pickup No",          dataType: "integer", dataIndx: "pickup_no", sortable: false, width: 148 },
+    { title: '断面照査に用いる応力', dataType: 'string',  dataIndx: 'title', editable: false, sortable: false, width: 270, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: 'Pickup No', align: 'center', dataType: 'integer', dataIndx: 'pickup_no', sortable: false, width: 148 },
   ];
 
   // pickup_table に関する変数
@@ -103,7 +103,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <summary>
   /// pick up table の初期化関数
   /// </summary>
-  /// <param name="i">選択された番号</param>
+  /// <param name='i'>選択された番号</param>
   private initPickupTable(): void {
 
     this.pickup_moment_datarows = new Array();
@@ -132,7 +132,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <summary>
   /// 適用 変更時の処理
   /// </summary>
-  /// <param name="i">選択された番号</param>
+  /// <param name='i'>選択された番号</param>
   public setSpecification1(i: number): void {
 
     this.input.specification1_selected = i;
@@ -157,7 +157,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <summary>
   /// 仕様 変更時の処理
   /// </summary>
-  /// <param name="i">選択された番号</param>
+  /// <param name='i'>選択された番号</param>
   public setSpecification2(i: number): void {
     this.input.specification2_selected = i;
   }
@@ -165,8 +165,8 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <summary>
   /// 設計条件 変更時の処理
   /// </summary>
-  /// <param name="item">変更されたアイテム</param>
-  /// <param name="isChecked">チェックボックスの状態</param>
+  /// <param name='item'>変更されたアイテム</param>
+  /// <param name='isChecked'>チェックボックスの状態</param>
   public conditionsCheckChanged(id: string, isChecked: boolean) {
     this.input.setConditions(id, isChecked);
     this.input.conditions_list = this.input.conditions_list;
@@ -178,7 +178,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
     showTop: false,
     reactive: true,
     sortable: false,
-    locale: "jp",
+    locale: 'jp',
     numberCell: { show: true }, // 行番号
     colModel: this.columnHeaders,
     dataModel: { data: this.pickup_moment_datarows },
@@ -190,7 +190,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
     showTop: false,
     reactive: true,
     sortable: false,
-    locale: "jp",
+    locale: 'jp',
     numberCell: { show: true }, // 行番号
     colModel: this.columnHeaders,
     dataModel: { data: this.pickup_shear_force_datarows },

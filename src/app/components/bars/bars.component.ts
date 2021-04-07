@@ -14,7 +14,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren('grid') grids: QueryList<SheetComponent>;
   public options: pq.gridT.options[] = new Array();
-  private BeamHHeader = [
+  private BeamHeaders: object[] = [
     { title: '部材\n番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
@@ -51,70 +51,10 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
     { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
   ];
 
-
   public groupe_list: any[];
   private table_datas: any[][];
   private mergeCells: any[][];
   private side_cover: string[];
-
-
-  /*
-    table_settings = {
-      beforeChange: (...x: any[]) => {
-        try {
-          let changes: any = undefined;
-          for (let i = 0; i < x.length; i++) {
-            if (Array.isArray(x[i])) {
-              changes = x[i];
-              break;
-            }
-          }
-          if (changes === undefined) { return; }
-          for (let i = 0; i < changes.length; i++) {
-            switch (changes[i][1]) {
-              case 'rebar_dia':
-              case 'side_dia':
-              case 'stirrup_dia':
-                // 鉄筋径の規格以外は入力させない
-                const value0: number = this.input.matchBarSize(changes[i][3]);
-                if( value0 !== null ) {
-                  changes[i][3] = value0;
-                }else{
-                  changes[i][3] = '';
-                }
-                break;
-              case 'cos':
-                const value1: number = this.helper.toNumber(changes[i][3]);
-                if( value1 !== null ) {
-                  changes[i][3] = value1.toFixed(3);
-                } else {
-                  changes[i][3] = null;
-                }
-                break;
-              case 'tan':
-                const value2: number = this.helper.toNumber(changes[i][3]);
-                if( value2 !== null ) {
-                  changes[i][3] = value2.toFixed(3);
-                } else {
-                  changes[i][3] = null;
-                }
-                break;
-              default:
-                const value: number = this.helper.toNumber(changes[i][3]);
-                if( value !== null ) {
-                  changes[i][3] = value;
-                } else {
-                  changes[i][3] = null;
-                }
-                break;
-            }
-          }
-        } catch (e) {
-          console.log(e);
-        }
-      },
-    };
-  */
 
   constructor(
     private app: AppComponent,
@@ -245,8 +185,23 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
         locale: 'jp',
         height: this.tableHeight().toString(),
         numberCell: { show: false }, // 行番号
-        colModel: this.BeamHHeader,
+        colModel: this.BeamHeaders,
         dataModel: { data: this.table_datas[i] },
+        change: (evt, ui) => {
+          for (const property of ui.updateList) {
+            for (const key of Object.keys(property.newRow)) {
+              const old = property.oldRow[key];
+              if (key === 'rebar_dia' || key === 'side_dia' || key === 'stirrup_dia') {
+                // 鉄筋径の規格以外は入力させない
+                const value0 = this.input.matchBarSize(property.newRow[key]);
+                const j = property.rowIndx;
+                if( value0 === null ) {
+                  this.table_datas[i][j][key] = old;
+                }
+              }
+            }
+          }
+        }
       });
     }
   }
