@@ -21,7 +21,7 @@ import { InputDataService } from './providers/input-data.service';
 import { InputBasicInformationService } from './components/basic-information/basic-information.service';
 import { InputMembersService } from './components/members/members.service';
 import { InputDesignPointsService } from './components/design-points/input-design-points.service';
-import { InputBarsService } from './components/bars/input-bars.service';
+import { InputBarsService } from './components/bars/bars.service';
 import { InputSteelsService } from './components/steels/input-steels.service';
 import { InputFatiguesService } from './components/fatigues/input-fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';

@@ -37,7 +37,5 @@ export class SheetComponent implements AfterViewInit, OnChanges {
       return;
     }
     this.grid.refreshDataAndView();
-    console.log('refreshDataAndView');
-
   }
 }
