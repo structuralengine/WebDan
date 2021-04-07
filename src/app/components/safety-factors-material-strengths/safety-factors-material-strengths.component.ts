@@ -1,5 +1,5 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { InputSafetyFactorsMaterialStrengthsService } from './input-safety-factors-material-strengths.service'
+import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { InputSafetyFactorsMaterialStrengthsService } from './safety-factors-material-strengths.service'
 import { InputMembersService } from '../members/members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
@@ -10,71 +10,85 @@ import pq from 'pqgrid';
   templateUrl: './safety-factors-material-strengths.component.html',
   styleUrls: ['./safety-factors-material-strengths.component.scss']
 })
-export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestroy {
+export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @ViewChild('grid_safety_factors') grid_safety_factors: SheetComponent;
-  @ViewChild('grid_bar_strength') grid_bar_strength: SheetComponent;
-  @ViewChild('grid_concrete_strength') grid_concrete_strength: SheetComponent;
-  @ViewChild('grid_pile_factors') grid_pile_factors: SheetComponent;
-
+  // 安全係数
+  @ViewChildren('grid1') grid1: QueryList<SheetComponent>;
+  public options1: pq.gridT.options[] = new Array(); 
   private columnHeaders1: object[] = [
-    { title: "", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 250 },
-    {
-      title: "曲げ安全係数", align: "center", colModel: [
-        { title: "γc", dataType: "integer", dataIndx: "M_rc", sortable: false, width: 70 },
-        { title: "γs", dataType: "integer", dataIndx: "M_rs", sortable: false, width: 70 },
-        { title: "γbs", dataType: "integer", dataIndx: "M_rbs", sortable: false, width: 70 }
-      ]
-    },
-    {
-      title: "せん断安全係数", align: "center", colModel: [
-        { title: "γc", align: "center", dataType: "bool", dataIndx: "V_rc", sortable: false, width: 70 },
-        { title: "γs", align: "center", dataType: "bool", dataIndx: "V_rs", sortable: false, width: 70 },
-        { title: "γbc", align: "center", dataType: "bool", dataIndx: "V_rbc", sortable: false, width: 70 },
-        { title: "γbs", align: "center", dataType: "bool", dataIndx: "V_rbs", sortable: false, width: 70 },
-        { title: "γbd", align: "center", dataType: "bool", dataIndx: "V_rbv", sortable: false, width: 70 }
-      ]
-    },
-    { title: "係数γi", align: "center", dataType: "integer", dataIndx: "ri", sortable: false, width: 70 },
-    { title: "鉄筋配置", dataType: "float", format: "#.0", dataIndx: "range", sortable: false, width: 100 },
+    { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: '曲げ安全係数', align: 'center', colModel: [
+      { title: 'γc',  dataType: 'float', 'format':'#.00', dataIndx: 'M_rc', sortable: false, width: 70 },
+      { title: 'γs',  dataType: 'float', 'format':'#.00', dataIndx: 'M_rs', sortable: false, width: 70 },
+      { title: 'γbs', dataType: 'float', 'format':'#.00', dataIndx: 'M_rbs', sortable: false, width: 70 }
+    ]},
+    { title: 'せん断安全係数', align: 'center', colModel: [
+      { title: 'γc',  dataType: 'float', 'format':'#.00', dataIndx: 'V_rc', sortable: false, width: 70 },
+      { title: 'γs',  dataType: 'float', 'format':'#.00', dataIndx: 'V_rs', sortable: false, width: 70 },
+      { title: 'γbc', dataType: 'float', 'format':'#.00', dataIndx: 'V_rbc', sortable: false, width: 70 },
+      { title: 'γbs', dataType: 'float', 'format':'#.00', dataIndx: 'V_rbs', sortable: false, width: 70 },
+      { title: 'γbd', dataType: 'float', 'format':'#.00', dataIndx: 'V_rbv', sortable: false, width: 70 }
+    ]},
+    { title: '係数γi', dataType: 'float', 'format':'#.00', dataIndx: 'ri', sortable: false, width: 70 },
+    { title: '鉄筋配置', dataType: 'string'              , dataIndx: 'range', sortable: false, width: 100 },
   ];
 
+  // 鉄筋材料強度
+  @ViewChildren('grid2') grid2: QueryList<SheetComponent>;
+  public options2: pq.gridT.options[] = new Array();
   private columnHeaders2: object[] = [
-    { title: "N/mm<sup>2</sup>", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 250 },
-    { title: "降伏強度", align: "center", dataType: "integer", sortable: false, width: 140, colModel: [
-      { title: "D29以下", align: "center", dataType: "bool", dataIndx: "fsy1", sortable: false, width: 70 },
-      { title: "D32以上", align: "center", dataType: "bool", dataIndx: "fsy2", sortable: false, width: 70 }
+    { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: '降伏強度', align: 'center', colModel: [
+      { title: 'D29以下', dataType: 'float', dataIndx: 'fsy1', sortable: false, width: 70 },
+      { title: 'D32以上', dataType: 'float', dataIndx: 'fsy2', sortable: false, width: 70 }
     ]},
-    { title: "設計引張強度", dataType: "float", format: "#.0", sortable: false, width: 140, colModel: [
-      { title: "D29以下", align: "center", dataType: "bool", dataIndx: "fsu1", sortable: false, width: 70 },
-      { title: "D32以上", align: "center", dataType: "bool", dataIndx: "fsu2", sortable: false, width: 70 }
+    { title: '設計引張強度', align: 'center', colModel: [
+      { title: 'D29以下', dataType: 'float', dataIndx: 'fsu1', sortable: false, width: 70 },
+      { title: 'D32以上', dataType: 'float', dataIndx: 'fsu2', sortable: false, width: 70 }
     ]},
   ];
 
+  // コンクリート材料強度
+  @ViewChildren('grid3') grid3: QueryList<SheetComponent>;
+  public options3: pq.gridT.options[] = new Array();
   private columnHeaders3: object[] = [
-    { title: "", align: "left", dataType: "string", dataIndx: "title", editable: false, sortable: false, width: 390 },
-    { title: "", dataType: "string", dataIndx: "value", sortable: false, width: 140 },
+    { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 390 },
+    { title: '', dataType: 'float', dataIndx: 'value', sortable: false, width: 140 },
   ];
 
+  // 鉄骨 - 安全係数
+  @ViewChildren('grid4') grid4: QueryList<SheetComponent>;
+  public options4: pq.gridT.options[] = new Array();
   private columnHeaders4: object[] = [
-    { title: "施工方法", align: "left", dataType: "string", dataIndx: "id", editable: false, sortable: false, width: 200 },
-    { title: "施工修正係数pc", align: "center", dataType: "integer", sortable: false, colModel: [
-      { title: "圧縮強度", align: "center", dataType: "bool", dataIndx: "rfck", sortable: false, width: 80 },
-      { title: "付着強度", align: "center", dataType: "bool", dataIndx: "rfbok", sortable: false, width: 80 },
-      { title: "ヤング係数", align: "center", dataType: "bool", dataIndx: "rEc", sortable: false, width: 80 }
-    ]},
-    { title: "せん断補強鋼材を用いない棒部材の設計せん断耐力Vcdの低減係数", align: "left", dataType: "string", dataIndx: "rVcd", editable: false, sortable: false, width: 110 },
+    { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: 'γs', dataType: 'float', 'format':'#.00', dataIndx: 'S_rs', sortable: false, width: 70 },
+    { title: 'γb', dataType: 'float', 'format':'#.00', dataIndx: 'S_rb', sortable: false, width: 70 }
   ];
 
-  groupe_list: any[];
-  safety_factors_table_datas: any[][];
-  bar_strength_table_datas: any[][];
-  steel_strength_table_datas: any[][];
-  concrete_strength_table_datas: any[][];
-  pile_factor_list: any[];
-  pile_factor_selected: string[];
-  isSRC: boolean[]; // SRC部材 があるかどうか
+  // 鉄骨材料強度
+  @ViewChildren('grid5') grid5: QueryList<SheetComponent>;
+  public options5: pq.gridT.options[] = new Array();
+  private columnHeaders5: object[] = [
+    { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: 't≦16',     dataType: 'float', dataIndx: 'SRCfsyk1', sortable: false, width: 100 },
+    { title: '16＜t≦40', dataType: 'float', dataIndx: 'SRCfsyk2', sortable: false, width: 100 },
+    { title: '40＜t≦75', dataType: 'float', dataIndx: 'SRCfsyk3', sortable: false, width: 100 }
+  ];
 
+
+  public groupe_list: any[];
+
+  private safety_factors_table_datas: any[][];    // 安全係数
+  private bar_strength_table_datas: any[][];      // 鉄筋材料強度
+  private concrete_strength_table_datas: any[][]; // コンクリート材料強度
+  private steel_strength_table_datas: any[][];    // 鉄骨材料強度
+
+  public pile_factor_list: any[]; // 杭の施工条件
+  public pile_factor_selected: string[];
+
+  private isSRC: boolean[]; // SRC部材 があるかどうか
+
+  /*
   safety_factors_table_settings = {
     beforeChange: (...x: any[]) => {
       try {
@@ -95,13 +109,13 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
               } else {
                 switch (value) {
                   case 1:
-                    changes[i][3] = "引張鉄筋";
+                    changes[i][3] = '引張鉄筋';
                     break;
                   case 2:
-                    changes[i][3] = "引張＋圧縮";
+                    changes[i][3] = '引張＋圧縮';
                     break;
                   case 3:
-                    changes[i][3] = "全周鉄筋";
+                    changes[i][3] = '全周鉄筋';
                     break;
                   default:
                     changes[i][3] = changes[i][2]; // 入力も元に戻す
@@ -199,13 +213,13 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
               } else {
                 switch (value) {
                   case 1:
-                    changes[i][3] = "引張鉄筋";
+                    changes[i][3] = '引張鉄筋';
                     break;
                   case 2:
-                    changes[i][3] = "引張＋圧縮";
+                    changes[i][3] = '引張＋圧縮';
                     break;
                   case 3:
-                    changes[i][3] = "全周鉄筋";
+                    changes[i][3] = '全周鉄筋';
                     break;
                   default:
                     changes[i][3] = changes[i][2]; // 入力も元に戻す
@@ -222,12 +236,12 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
       }
     }
   };
-
   steel_strength_table_settings = {};
-
   concrete_strength_table_settings = {};
+  */
 
-  constructor(private input: InputSafetyFactorsMaterialStrengthsService,
+  constructor(
+    private input: InputSafetyFactorsMaterialStrengthsService,
     private member: InputMembersService,
     private helper: InputDataService) {
   }
@@ -245,19 +259,21 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
 
     // 配列を作成
     this.safety_factors_table_datas = new Array();    // 安全係数
-    this.bar_strength_table_datas = new Array();    // 鉄筋材料
-    this.steel_strength_table_datas = new Array();    // 鉄骨材料
+    this.bar_strength_table_datas = new Array();      // 鉄筋材料
     this.concrete_strength_table_datas = new Array(); // コンクリート材料
+    this.steel_strength_table_datas = new Array();    // 鉄骨材料
+
     this.pile_factor_list = new Array();              // 杭の施工条件
     this.pile_factor_selected = new Array();
+
     this.isSRC = new Array();
 
     // 入力項目を作成
     for (let i = 0; i < this.groupe_list.length; i++) {
 
-      const g = this.groupe_list[i];
-
-      const data = this.input.getTableColumns(g[0].g_id);
+      const groupe = this.groupe_list[i];
+      
+      const data = this.input.getTableColumns(groupe[0].g_id);
 
       // 安全係数
       const safety: any[] = data['safety_factor'];
@@ -269,10 +285,10 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
       // 鉄筋材料
       this.bar_strength_table_datas[i] = new Array();
       const bar = data['material_bar'];
-      // セパレータ
+      /*/ セパレータ
       this.bar_strength_table_datas[i].push(
         this.set_bar_strength_table_split(bar[0])
-      );
+      );*/
       const bar_table_titles: string[] = ['', '軸方向鉄筋', '側方向鉄筋', 'スターラップ', '折曲げ鉄筋'];
       for (let j = 1; j < bar.length; j++) {
         this.bar_strength_table_datas[i].push(
@@ -310,6 +326,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
       // 杭の施工条件
       this.pile_factor_list = data['pile_factor_list'];
       this.pile_factor_selected[i] = data['pile_factor_selected'];
+      
 
       // SRC部材があるかどうか
       if (srcCount[i] > 0) {
@@ -318,8 +335,82 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
         this.isSRC.push(false);
       }
 
+      // グリッドの設定
+      this.options1.push({
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: 'jp',
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders1,
+        dataModel: { data: this.safety_factors_table_datas[i] },
+      });
+      this.options2.push({
+        width: 532,
+        height: 185,
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: 'jp',
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders2,
+        dataModel: { data: this.bar_strength_table_datas[i] },
+      });
+      this.options3.push({
+        width: 532,
+        height: 95,
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: 'jp',
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders3,
+        dataModel: { data: this.concrete_strength_table_datas[i] },
+      });  
+      this.options4.push({
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: 'jp',
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders4,
+        dataModel: { data: this.safety_factors_table_datas[i] },
+      });    
+      this.options5.push({
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: 'jp',
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders5,
+        dataModel: { data: this.steel_strength_table_datas[i] },
+      });              
     }
 
+  }
+
+  ngAfterViewInit() {
+    
+    this.grid1.forEach((grid, i, array) => {
+      grid.options = this.options1[i];
+      grid.refreshDataAndView();
+    });
+    this.grid2.forEach((grid, i, array) => {
+      grid.options = this.options2[i];
+      grid.refreshDataAndView();
+    });
+    this.grid3.forEach((grid, i, array) => {
+      grid.options = this.options3[i];
+      grid.refreshDataAndView();
+    });
+    this.grid4.forEach((grid, i, array) => {
+      grid.options = this.options4[i];
+      grid.refreshDataAndView();
+    });
+    this.grid5.forEach((grid, i, array) => {
+      grid.options = this.options5[i];
+      grid.refreshDataAndView();
+    });
   }
 
   // 安全係数のデータをテーブル用の変数に整形する
@@ -458,7 +549,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
 
     for (const key of Object.keys(result[0])) {
       if (result[0][key] === null) { continue; }
-      if (typeof result[0][key] === "string") {
+      if (typeof result[0][key] === 'string') {
         result[0][key] = this.helper.toNumber(result[0][key].replace('D', '').replace('以下', ''));
       }
     }
@@ -479,7 +570,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
 
     for (const key of Object.keys(result[0])) {
       if (result[0][key] === null) { continue; }
-      if (typeof result[0][key] === "string") {
+      if (typeof result[0][key] === 'string') {
         result[0][key] = this.helper.toNumber(result[0][key].toString().replace('D', '').replace('以下', ''))
       }
     }
@@ -512,41 +603,4 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     this.pile_factor_selected[i] = id;
   }
 
-    // グリッドの設定
-    options1: pq.gridT.options = {
-      showTop: false,
-      reactive: true,
-      sortable: false,
-      locale: "jp",
-      numberCell: { show: false }, // 行番号
-      colModel: this.columnHeaders1,
-      dataModel: { data: [] },
-    };
-    options2: pq.gridT.options = {
-      showTop: false,
-      reactive: true,
-      sortable: false,
-      locale: "jp",
-      numberCell: { show: false }, // 行番号
-      colModel: this.columnHeaders2,
-      dataModel: { data: [] },
-    };
-    options3: pq.gridT.options = {
-      showTop: false,
-      reactive: true,
-      sortable: false,
-      locale: "jp",
-      numberCell: { show: false }, // 行番号
-      colModel: this.columnHeaders3,
-      dataModel: { data: [] },
-    };
-    options4: pq.gridT.options = {
-      showTop: false,
-      reactive: true,
-      sortable: false,
-      locale: "jp",
-      numberCell: { show: false }, // 行番号
-      colModel: this.columnHeaders4,
-      dataModel: { data: [] },
-    };
 }

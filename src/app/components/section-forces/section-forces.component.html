@@ -6,29 +6,7 @@
       </ng-template>
       <ng-template ngbTabContent>
         <div class="table-container">
-
-          <app-sheet  #grid_Mtable_datas [options]="options1"></app-sheet>
-
-          <!-- <hot-table class="hot" [settings]="table_settings" [data]="Mtable_datas" height="{{hottable_height}}"
-            [colHeaders]="false" [rowHeaders]="false" width="1280"
-            licenseKey="non-commercial-and-evaluation">
-            <hot-column data="m_no" width="50" type="numeric" [readOnly]="true" ></hot-column>
-            <hot-column data="p_name_ex" width="250" [readOnly]="true"></hot-column>
-            <hot-column data="case0_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case0_Nd" type="numeric" width="70"></hot-column>
-            <hot-column data="case1_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case1_Nd" type="numeric" width="70"></hot-column>
-            <hot-column data="case2_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case2_Nd" type="numeric" width="70"></hot-column>
-            <hot-column data="case3_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case3_Nd" type="numeric" width="70"></hot-column>
-            <hot-column data="case4_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case4_Nd" type="numeric" width="70"></hot-column>
-            <hot-column data="case5_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case5_Nd" type="numeric" width="70"></hot-column>
-            <hot-column data="case6_Md" type="numeric" width="70"></hot-column>
-            <hot-column data="case6_Nd" type="numeric" width="70"></hot-column>
-          </hot-table> -->
+          <app-sheet #grid1 [options]="options1"></app-sheet>
         </div>
       </ng-template>
     </ngb-tab>
@@ -38,41 +16,9 @@
         <h5>せん断照査</h5>
       </ng-template>
       <ng-template ngbTabContent>
-          <div class="table-container">
-
-              <app-sheet  #grid_Vtable_datas [options]="options2"></app-sheet>
-
-              <!-- <hot-table class="hot" [settings]="table_settings" [data]="Vtable_datas" height="{{hottable_height}}"
-              [colHeaders]="false" [rowHeaders]="false" width="1980"
-              licenseKey="non-commercial-and-evaluation">
-              <hot-column data="m_no" width="50" type="numeric" [readOnly]="true"></hot-column>
-              <hot-column data="p_name_ex" width="250" [readOnly]="true"></hot-column>
-              <hot-column data="case0_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case0_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case0_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case1_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case1_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case1_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case2_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case2_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case2_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case3_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case3_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case3_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case4_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case4_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case4_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case5_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case5_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case5_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case6_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case6_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case6_Nd" type="numeric" width="70"></hot-column>
-              <hot-column data="case7_Vd" type="numeric" width="70"></hot-column>
-              <hot-column data="case7_Md" type="numeric" width="70"></hot-column>
-              <hot-column data="case7_Nd" type="numeric" width="70"></hot-column>
-            </hot-table> -->
-            </div>
+        <div class="table-container">
+          <app-sheet #grid2 [options]="options2"></app-sheet>
+        </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

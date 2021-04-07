@@ -15,9 +15,6 @@ import pq from 'pqgrid';
 export class MembersComponent implements OnInit {
 
   @ViewChild('grid') grid: SheetComponent;
-
-  private mambers_table_datarows: any[] = [];
-
   private columnHeaders: object[] = [
     { title: '部材\n番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: '部材長', dataType: 'float', format: '#.000', dataIndx: 'm_len', editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
@@ -58,9 +55,11 @@ export class MembersComponent implements OnInit {
   ];
 
   private ROWS_COUNT = 0;
+  private mambers_table_datarows: any[] = [];
 
-  constructor(private input: InputMembersService,
+  constructor(
     private app: AppComponent,
+    private input: InputMembersService,
     private helper: InputDataService) {
   }
 
