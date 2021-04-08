@@ -10,7 +10,7 @@ import 'pqgrid/localize/pq-localize-ja.js';
   templateUrl: './sheet.component.html',
   styleUrls: ['./sheet.component.scss']
 })
-export class SheetComponent implements OnInit, AfterViewInit, OnChanges {
+export class SheetComponent implements AfterViewInit, OnChanges {
 
   @ViewChild('pqgrid') div: ElementRef;
   @Input() options:any;
@@ -21,10 +21,10 @@ export class SheetComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   ngOnChanges(obj: SimpleChanges){
-      //debugger;
-      if( !obj.options.firstChange ){//grid is destroyed and recreated only when whole options object is changed to new reference.
-          this.grid.destroy();
-          this.createGrid();
+      if( !obj.options.firstChange ){
+        //grid is destroyed and recreated only when whole options object is changed to new reference.
+        this.grid.destroy();
+        this.createGrid();
       }
   }
 
