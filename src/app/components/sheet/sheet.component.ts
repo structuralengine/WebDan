@@ -10,7 +10,7 @@ import 'pqgrid/localize/pq-localize-ja.js';
   templateUrl: './sheet.component.html',
   styleUrls: ['./sheet.component.scss']
 })
-export class SheetComponent implements AfterViewInit, OnChanges {
+export class SheetComponent implements OnInit, AfterViewInit, OnChanges {
 
   @ViewChild('pqgrid') div: ElementRef;
   @Input() options:any;
@@ -28,7 +28,7 @@ export class SheetComponent implements AfterViewInit, OnChanges {
       }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit(){ 
       this.createGrid();
   }
 
