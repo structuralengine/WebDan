@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { InputMembersService } from './members.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import { AppComponent } from 'src/app/app.component';
 import pq from 'pqgrid';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Component({
   selector: 'app-members',
@@ -15,6 +16,7 @@ import pq from 'pqgrid';
 export class MembersComponent implements OnInit {
 
   @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
   private columnHeaders: object[] = [
     { title: '部材\n番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: '部材長', dataType: 'float', format: '#.000', dataIndx: 'm_len', editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
@@ -59,14 +61,142 @@ export class MembersComponent implements OnInit {
 
   constructor(
     private app: AppComponent,
+    private save: SaveDataService,
     private input: InputMembersService,
     private helper: InputDataService) {
   }
 
   ngOnInit() {
-    this.ROWS_COUNT = this.rowsCount();
-  }
+    
+    // グリッドの基本的な オプションを登録する
+    this.options = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: 'jp',
+      height: this.tableHeight().toString(),
+      width: 'auto',
+      numberCell: { show: false }, // 行番号
+      colModel: this.columnHeaders,
+      change: (evt, ui) => {
+        for (const property of ui.updateList) {
+          for (const key of Object.keys(property.newRow)) {
+            const old = property.oldRow[key];
+            if (key === 'g_id') {
+              // 他の共通断面
+              const value = this.helper.getGroupeNo(property.newRow[key]);
+              if (value === null) { continue; }         // 初期値は対象にしない
+              for (let j = 0; j < this.mambers_table_datarows.length; j++) {
+                if (property.rowIndx === j) { continue; }                      // 同じ行は比較しない
+                const targetColumn = this.mambers_table_datarows[j];
+                const target = this.helper.getGroupeNo(targetColumn.g_id);
+                if (target === null) { continue; } // 初期値は対象にしない
+                if (target === value) {
+                  const i = property.rowIndx;
+                  this.mambers_table_datarows[i].g_name = targetColumn.g_name;
+                }
+              }
+            } else if (key === 'g_name') {
+              // 他の共通断面
+              let value = property.newRow[key];
+              if (value === null) { continue; }         // 初期値は対象にしない
+              value = value.trim();
+              if (value === '') { continue; }
+              for (let j = 0; j < this.mambers_table_datarows.length; j++) {
+                const targetColumn = this.mambers_table_datarows[j];
+                if (property.rowIndx === j) {
+                  targetColumn.g_name = value;
+                  continue;
+                }                      // 同じ行は比較しない
+                const target = this.helper.getGroupeNo(targetColumn.g_id);
+                if (this.helper.getGroupeNo(target) === null) { continue; } // 初期値は対象にしない
+                const row = property.rowIndx;
+                const changesColumn = this.mambers_table_datarows[row];
+                const current = this.helper.getGroupeNo(changesColumn.g_id);
+                if (target === current) {
+                  targetColumn.g_name = value;
+                }
+              }
+            } else if (key === 'shape') {
+              let value = property.newRow[key];
+              const row = property.rowIndx;
+              if (value === null) { continue; }         // 初期値は対象にしない
+              value = value.trim();
+              switch (value) {
+                case '1':
+                case 'RC-矩形':
+                  this.mambers_table_datarows[row].shape = 'RC-矩形';
+                  break;
+                case '2':
+                case 'RC-T形':
+                  this.mambers_table_datarows[row].shape = 'RC-T形';
+                  break;
+                case '3':
+                case 'RC-円形':
+                  this.mambers_table_datarows[row].shape = 'RC-円形';
+                  break;
+                case '4':
+                case 'RC-小判':
+                  this.mambers_table_datarows[row].shape = 'RC-小判';
+                  break;
+                case '11':
+                case 'SRC-矩形':
+                  this.mambers_table_datarows[row].shape = 'SRC-矩形';
+                  break;
+                case '12':
+                case 'SRC-T形':
+                  this.mambers_table_datarows[row].shape = 'SRC-T形';
+                  break;
+                case '13':
+                case 'SRC-円形':
+                  this.mambers_table_datarows[row].shape = 'SRC-円形';
+                  break;
+                default:
+                  this.mambers_table_datarows[row].shape = '';
+              }
+            } else if (key === 'con_u' || key === 'con_u' || key === 'con_u') {
+              const value = this.helper.toNumber(property.newRow[key]);
+              if (value === null) { continue; }         // 初期値は対象にしない
+              const row = property.rowIndx;
+              switch (value) {
+                case 1:
+                case 2:
+                case 3:
+                  break;
+                default:
+                  this.mambers_table_datarows[row][key] = null;
+              }
+            }
+          }
+        }
+  
+      }
+    };
 
+    // データを読み込む
+    if (this.save.isManual() === true) {
+      // 断面手入力モードの場合は、無限ループ
+      this.ROWS_COUNT = this.rowsCount();
+      this.options['beforeTableView'] =  (evt, ui) => { 
+        const finalV = ui.finalV;
+        const dataV = this.mambers_table_datarows.length;
+        if (ui.initV == null) {
+          return;
+        }
+        if (finalV >= dataV - 1) {
+          this.loadData(dataV + this.ROWS_COUNT);
+          this.grid.refreshDataAndView();
+        }
+      }
+    } else {
+      // ピックアップファイルを使う場合
+      this.mambers_table_datarows = this.input.member_list;
+    }
+
+    // データを登録する
+    this.options['dataModel'] = { data: this.mambers_table_datarows };
+  }
+  
   // 指定行row 以降のデータを読み取る
   private loadData(row: number): void {
     for (let i = this.mambers_table_datarows.length + 1; i <= row; i++) {
@@ -76,7 +206,9 @@ export class MembersComponent implements OnInit {
   }
 
   public saveData(): void {
-
+    // データは 記憶領域と直接結合しているため終了時にセーブする必要ない
+    // ただし、表示画面の saveData() を呼ぶ関数が parent に存在しているため
+    // この関数の定義だけは必要
   }
 
   // 表の高さを計算する
@@ -85,126 +217,11 @@ export class MembersComponent implements OnInit {
     containerHeight -= 360;
     return containerHeight;
   }
+
   // 表高さに合わせた行数を計算する
   private rowsCount(): number {
     const containerHeight = this.tableHeight();
     return Math.round(containerHeight / 30);
   }
-
-  // グリッドの設定
-  options: pq.gridT.options = {
-    showTop: false,
-    reactive: true,
-    sortable: false,
-    locale: 'jp',
-    height: this.tableHeight().toString(),
-    numberCell: { show: false }, // 行番号
-    colModel: this.columnHeaders,
-    dataModel: { data: this.mambers_table_datarows },
-    beforeTableView: (evt, ui) => { // 無限ループ
-      const finalV = ui.finalV;
-      const dataV = this.mambers_table_datarows.length;
-      if (ui.initV == null) {
-        return;
-      }
-      if (finalV >= dataV - 1) {
-        this.loadData(dataV + this.ROWS_COUNT);
-        this.grid.refreshDataAndView();
-      }
-    },
-    change: (evt, ui) => {
-      for (const property of ui.updateList) {
-        for (const key of Object.keys(property.newRow)) {
-          const old = property.oldRow[key];
-          if (key === 'g_id') {
-            // 他の共通断面
-            const value = this.helper.getGroupeNo(property.newRow[key]);
-            if (value === null) { continue; }         // 初期値は対象にしない
-            for (let j = 0; j < this.mambers_table_datarows.length; j++) {
-              if (property.rowIndx === j) { continue; }                      // 同じ行は比較しない
-              const targetColumn = this.mambers_table_datarows[j];
-              const target = this.helper.getGroupeNo(targetColumn.g_id);
-              if (target === null) { continue; } // 初期値は対象にしない
-              if (target === value) {
-                const i = property.rowIndx;
-                this.mambers_table_datarows[i].g_name = targetColumn.g_name;
-              }
-            }
-          } else if (key === 'g_name') {
-            // 他の共通断面
-            let value = property.newRow[key];
-            if (value === null) { continue; }         // 初期値は対象にしない
-            value = value.trim();
-            if (value === '') { continue; }
-            for (let j = 0; j < this.mambers_table_datarows.length; j++) {
-              const targetColumn = this.mambers_table_datarows[j];
-              if (property.rowIndx === j) {
-                targetColumn.g_name = value;
-                continue;
-              }                      // 同じ行は比較しない
-              const target = this.helper.getGroupeNo(targetColumn.g_id);
-              if (this.helper.getGroupeNo(target) === null) { continue; } // 初期値は対象にしない
-              const row = property.rowIndx;
-              const changesColumn = this.mambers_table_datarows[row];
-              const current = this.helper.getGroupeNo(changesColumn.g_id);
-              if (target === current) {
-                targetColumn.g_name = value;
-              }
-            }
-          } else if (key === 'shape') {
-            let value = property.newRow[key];
-            const row = property.rowIndx;
-            if (value === null) { continue; }         // 初期値は対象にしない
-            value = value.trim();
-            switch (value) {
-              case '1':
-              case 'RC-矩形':
-                this.mambers_table_datarows[row].shape = 'RC-矩形';
-                break;
-              case '2':
-              case 'RC-T形':
-                this.mambers_table_datarows[row].shape = 'RC-T形';
-                break;
-              case '3':
-              case 'RC-円形':
-                this.mambers_table_datarows[row].shape = 'RC-円形';
-                break;
-              case '4':
-              case 'RC-小判':
-                this.mambers_table_datarows[row].shape = 'RC-小判';
-                break;
-              case '11':
-              case 'SRC-矩形':
-                this.mambers_table_datarows[row].shape = 'SRC-矩形';
-                break;
-              case '12':
-              case 'SRC-T形':
-                this.mambers_table_datarows[row].shape = 'SRC-T形';
-                break;
-              case '13':
-              case 'SRC-円形':
-                this.mambers_table_datarows[row].shape = 'SRC-円形';
-                break;
-              default:
-                this.mambers_table_datarows[row].shape = '';
-            }
-          } else if (key === 'con_u' || key === 'con_u' || key === 'con_u') {
-            const value = this.helper.toNumber(property.newRow[key]);
-            if (value === null) { continue; }         // 初期値は対象にしない
-            const row = property.rowIndx;
-            switch (value) {
-              case 1:
-              case 2:
-              case 3:
-                break;
-              default:
-                this.mambers_table_datarows[row][key] = null;
-            }
-          }
-        }
-      }
-
-    }
-  };
 
 }

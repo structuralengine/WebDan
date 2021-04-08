@@ -21,14 +21,14 @@ export class SheetComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(obj: SimpleChanges){
-      //debugger;
-      if( !obj.options.firstChange ){//grid is destroyed and recreated only when whole options object is changed to new reference.
-          this.grid.destroy();
-          this.createGrid();
+      if( !obj.options.firstChange ){
+        //grid is destroyed and recreated only when whole options object is changed to new reference.
+        this.grid.destroy();
+        this.createGrid();
       }
   }
 
-  ngAfterViewInit(){
+  ngAfterViewInit(){ 
       this.createGrid();
   }
 
