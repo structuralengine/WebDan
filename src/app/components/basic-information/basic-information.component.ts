@@ -18,29 +18,11 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
     { title: 'Pickup No', align: 'center', dataType: 'integer', dataIndx: 'pickup_no', sortable: false, width: 148 },
   ];
   private pickup_moment_datarows: any[] = [];
-  public options1: pq.gridT.options = {
-    height: 290,
-    showTop: false,
-    reactive: true,
-    sortable: false,
-    locale: 'jp',
-    numberCell: { show: true }, // 行番号
-    colModel: this.columnHeaders,
-    dataModel: { data: this.pickup_moment_datarows },
-  };
+  public options1: pq.gridT.options;
 
   @ViewChild('grid2') grid2: SheetComponent;
   private pickup_shear_force_datarows: any[] = [];
-  public options2: pq.gridT.options = {
-    height: 290,
-    showTop: false,
-    reactive: true,
-    sortable: false,
-    locale: 'jp',
-    numberCell: { show: true }, // 行番号
-    colModel: this.columnHeaders,
-    dataModel: { data: this.pickup_shear_force_datarows },
-  };
+  public options2: pq.gridT.options;
 
   public isManual: boolean;
   public isSRC: boolean; // SRC部材 があるかどうか
@@ -81,11 +63,35 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
 
     this.isManual = this.save.isManual();
 
+    this.initPickupTable();
+    
+    this.options1 = {
+      height: 290,
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: 'jp',
+      numberCell: { show: true }, // 行番号
+      colModel: this.columnHeaders,
+      dataModel: { data: this.pickup_moment_datarows },
+    };
+
+    this.options2 = {
+      height: 290,
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: 'jp',
+      numberCell: { show: true }, // 行番号
+      colModel: this.columnHeaders,
+      dataModel: { data: this.pickup_shear_force_datarows },
+    };
+
   }
 
   ngAfterViewInit(){
     if(this.isManual === false) {
-      this.initPickupTable();
+      
 
       this.grid1.options = this.options1;
       this.grid1.refreshDataAndView();

@@ -547,14 +547,16 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
   private get_set_bar_strength_table_datas(bar_strength_table_datas: any[]): any[] {
 
     const result: any[] = bar_strength_table_datas;
-
+    /*
     for (const key of Object.keys(result[0])) {
       if (result[0][key] === null) { continue; }
       if (typeof result[0][key] === 'string') {
         result[0][key] = this.helper.toNumber(result[0][key].replace('D', '').replace('以下', ''));
       }
     }
-
+    */
+    result.unshift({fsy1: 25, fsu1: 25});
+    //
     for (let i = 1; i < result.length; i++) {
       for (const key of Object.keys(result[i])) {
         result[i][key] = this.helper.toNumber(result[i][key])

@@ -204,7 +204,7 @@ export class InputSafetyFactorsMaterialStrengthsService  {
   // 材料強度情報
   public default_material_bar(): any[] {
     return [
-      {fsy1:29,  fsu1:29},
+      {fsy1:25,  fsu1:25},
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560},
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560},
       {fsy1:345, fsy2:390, fsu1:490, fsu2:560}
