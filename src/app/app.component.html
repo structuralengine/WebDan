@@ -10,7 +10,13 @@
         </svg>
       </h1>
     </div>
-    <app-menu></app-menu>
+    <div class="c-headerBar__shopTitle">
+      <span>断面性能照査プログラム</span>
+    </div>
+    <div class="c-headerBar__userMenu">
+      <app-menu></app-menu>
+    </div>
+
   </div>
 </div>
 
@@ -22,33 +28,14 @@
         <li class="c-mainNavArea__navItem">
           <a routerLink="./basic-information" routerLinkActive="selected-item" (click)="activePageChenge(0)" id="0"
             class="c-mainNavArea__navItemTitle">
-            <i class="fa fa-home fa-fw" aria-hidden="true"></i>
             <span>基本データ</span>
           </a>
         </li>
         <li class="c-mainNavArea__navItem">
           <a routerLink="./members" routerLinkActive="selected-item" (click)="activePageChenge(1)" id="1"
-            class="c-mainNavArea__navItemTitle collapsed" data-toggle="collapse" aria-expanded="false"
-            aria-controls="nav-product">
+            class="c-mainNavArea__navItemTitle is-active">
             <span>部材・断面</span>
           </a>
-          <ul class="collapse " id="nav-product">
-            <li>
-              <a href="">
-                <span>柱</span>
-              </a>
-            </li>
-            <li>
-              <a href="">
-                <span>杭</span>
-              </a>
-            </li>
-            <li>
-              <a href="">
-                <span>フーチング</span>
-              </a>
-            </li>
-          </ul>
         </li>
         <li class="c-mainNavArea__navItem">
           <a routerLink="./bars" routerLinkActive="selected-item" (click)="activePageChenge(3)" id="3"
@@ -89,7 +76,6 @@
       </ul>
     </nav>
   </div>
-  <div class="c-curtain"></div>
   <div class="c-contentsArea">
     <router-outlet (activate)='onActivate($event)' (deactivate)='onDeactivate($event)'></router-outlet>
   </div>

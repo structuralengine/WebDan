@@ -8,7 +8,7 @@
 
   <div class="col-xs-4 margin">
     <div ngbDropdown class="d-inline-block">
-      <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>ファイル</button>
+      <button class="btn btn-light" id="dropdownBasic1" ngbDropdownToggle>ファイル</button>
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
         <button ngbDropdownItem (click)="renew()">新規作成</button>
 
@@ -33,18 +33,19 @@
 
   <div class="col-xs-4 margin">
     <div *ngIf="!loggedIn" class="d-inline-block">
-      <button (click)="logIn()" class="btn btn-outline-primary">ログイン</button>
+      <button (click)="logIn()" class="btn btn-light">ログイン</button>
     </div>
     <div *ngIf="loggedIn" class="d-inline-block">
       <div class="logout-button">
-        <button (click)="logOut()" class="btn btn-outline-primary">ログアウト</button>
+        <button (click)="logOut()" class="btn btn-light">ログアウト</button>
       </div>
     </div>
   </div>
 
   <div class="col-xs-4 margin">
     <div class="d-inline-block">
-      <button class="btn btn-outline-primary" onClick="window.open('https://doboku-design-program.slack.com/archives/C019HF34FPE','_blank')" >ヘルプ</button>
+      <button class="btn btn-light"
+        onClick="window.open('https://note.com/structuralengine/m/mc45d22ca1ba2','_blank')">ヘルプ</button>
     </div>
   </div>
 

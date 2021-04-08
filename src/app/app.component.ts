@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
 
   activePageChenge(id): void {
     this.deactiveButtons();
-    document.getElementById(id).classList.add('active');
+    document.getElementById(id).classList.add('is-active');
   }
 
   // アクティブになっているボタンを全て非アクティブにする
@@ -58,8 +58,8 @@ export class AppComponent implements OnInit {
     for (let i = 0; i <= 11; i++) {
       const data = document.getElementById(i + '');
       if (data != null) {
-        if (data.classList.contains('active')) {
-          data.classList.remove('active');
+        if (data.classList.contains('is-active')) {
+          data.classList.remove('is-active');
         }
       }
     }
