@@ -1,7 +1,3 @@
-// @import "../library/_variable";
-// @import "../mixin/_media";
-
-
 .c-headerBar {
   width: 100%;
   height: 65px;
@@ -262,7 +258,7 @@
 
 .c-contentsArea {
   margin-left: 220px;
-  background: #afeeee;
+  background: #fff;
   &__cols {
     display: table;
     padding: 0 15px 60px;
