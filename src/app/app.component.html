@@ -1,46 +1,96 @@
-<div class="header">
-  <div class="container">
-    <div class="liner">
-      <svg width="48" height="48" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="th"
-        class="svg-inline--fa fa-th fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-        <path fill="currentColor"
-          d="M149.333 56v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 240v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm32-240v80c0 13.255 10.745 24 24 24H488c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24zm-32 80V56c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm-205.334 56H24c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24zM0 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zm386.667-56H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zm0 160H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zM181.333 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24z">
-        </path>
-      </svg>
-      <div class="title-and-menu">
-        <h1>断面照査プログラム ver.1.0.6</h1>
-        <app-menu></app-menu>
-      </div>
+<div class="c-headerBar">
+  <div class="c-headerBar__container">
+    <div class="c-headerBar__logo">
+      <h1>
+        <svg width="48" height="48" aria-hidden="true" focusable="false" data-prefix="fas" data-icon="th"
+          class="svg-inline--fa fa-th fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path fill="currentColor"
+            d="M149.333 56v80c0 13.255-10.745 24-24 24H24c-13.255 0-24-10.745-24-24V56c0-13.255 10.745-24 24-24h101.333c13.255 0 24 10.745 24 24zm181.334 240v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm32-240v80c0 13.255 10.745 24 24 24H488c13.255 0 24-10.745 24-24V56c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24zm-32 80V56c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.256 0 24.001-10.745 24.001-24zm-205.334 56H24c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24zM0 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H24c-13.255 0-24 10.745-24 24zm386.667-56H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zm0 160H488c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H386.667c-13.255 0-24 10.745-24 24v80c0 13.255 10.745 24 24 24zM181.333 376v80c0 13.255 10.745 24 24 24h101.333c13.255 0 24-10.745 24-24v-80c0-13.255-10.745-24-24-24H205.333c-13.255 0-24 10.745-24 24z">
+          </path>
+        </svg>
+      </h1>
     </div>
-  </div>
-</div>
-<div class="container">
-  <div class="btn-group">
-    <nav>
-      <a routerLink="./basic-information" (click)="activePageChenge(0)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="0">基本データ</a>
-      <a routerLink="./members" (click)="activePageChenge(1)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="1">部材・断面</a>
-      <a routerLink="./design-points" (click)="activePageChenge(2)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="2">算出点</a>
-      <a routerLink="./bars" (click)="activePageChenge(3)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="3">鉄筋配置</a>
-      <ng-container *ngIf="isSRC">
-        <a routerLink="./steels" (click)="activePageChenge(4)" routerLinkActive="selected-item"
-          class="btn btn-outline-primary" id="4">鉄骨配置</a>
-      </ng-container>
-      <a routerLink="./fatigues" (click)="activePageChenge(5)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="5">疲労データ</a>
-      <a routerLink="./safety-factors-material-strengths" (click)="activePageChenge(6)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="6">安全係数・材料強度</a>
-      <a routerLink="./section-forces" (click)="activePageChenge(7)" routerLinkActive="selected-item" *ngIf="isManual"
-        class="btn btn-outline-primary" id="7">断面力</a>
-      <a routerLink="./calculation-print" (click)="activePageChenge(8)" routerLinkActive="selected-item"
-        class="btn btn-outline-primary" id="8">計算・印刷</a>
-    </nav>
+    <app-menu></app-menu>
   </div>
 </div>
 
-<div class="router-container" id="router-container">
-  <router-outlet (activate)='onActivate($event)' (deactivate)='onDeactivate($event)'></router-outlet>
+<div class="c-container">
+  <div class="c-mainNavArea">
+    <nav>
+      <ul class="c-mainNavArea__nav">
+        <!-- ホーム -->
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./basic-information" routerLinkActive="selected-item" (click)="activePageChenge(0)" id="0"
+            class="c-mainNavArea__navItemTitle">
+            <i class="fa fa-home fa-fw" aria-hidden="true"></i>
+            <span>基本データ</span>
+          </a>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./members" routerLinkActive="selected-item" (click)="activePageChenge(1)" id="1"
+            class="c-mainNavArea__navItemTitle collapsed" data-toggle="collapse" aria-expanded="false"
+            aria-controls="nav-product">
+            <span>部材・断面</span>
+          </a>
+          <ul class="collapse " id="nav-product">
+            <li>
+              <a href="">
+                <span>柱</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <span>杭</span>
+              </a>
+            </li>
+            <li>
+              <a href="">
+                <span>フーチング</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./bars" routerLinkActive="selected-item" (click)="activePageChenge(3)" id="3"
+            class="c-mainNavArea__navItemTitle">
+            <span>鉄筋配置</span>
+          </a>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./steels" routerLinkActive="selected-item" (click)="activePageChenge(4)" id="4"
+            class="c-mainNavArea__navItemTitle">
+            <span>鉄骨配置</span>
+          </a>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./fatigues" routerLinkActive="selected-item" (click)="activePageChenge(5)" id="5"
+            class="c-mainNavArea__navItemTitle">
+            <span>疲労データ</span>
+          </a>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./safety-factors-material-strengths" routerLinkActive="selected-item"
+            (click)="activePageChenge(6)" id="6" class="c-mainNavArea__navItemTitle">
+            <span>安全係数・材料強度</span>
+          </a>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./section-forces" routerLinkActive="selected-item" (click)="activePageChenge(7)" id="7"
+            class="c-mainNavArea__navItemTitle">
+            <span>断面力</span>
+          </a>
+        </li>
+        <li class="c-mainNavArea__navItem">
+          <a routerLink="./calculation-print" routerLinkActive="selected-item" (click)="activePageChenge(8)" id="8"
+            class="c-mainNavArea__navItemTitle">
+            <span>計算・印刷</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+  <div class="c-curtain"></div>
+  <div class="c-contentsArea">
+    <router-outlet (activate)='onActivate($event)' (deactivate)='onDeactivate($event)'></router-outlet>
+  </div>
 </div>
