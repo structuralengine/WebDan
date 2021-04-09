@@ -63,19 +63,29 @@ export class MenuComponent implements OnInit {
     this.fileName = file.name;
     evt.target.value = '';
     this.router.navigate(['/blank-page']);
-    this.fileToText(file)
-      .then(text => {
-        this.app.dialogClose(); // 現在表示中の画面を閉じる
-        this.InputData.readInputData(text); // データを読み込む
-        this.app.isManual = this.InputData.isManual();
-        this.app.isCalculated = false;
-        this.pickup_file_name = this.InputData.pickup_filename;
-        modalRef.close();
-      })
-      .catch(err => {
-        modalRef.close();
-        console.log(err)
-      });
+    let error = null;
+    switch( this.InputData.getExt(this.fileName)){
+      case 'dsd':
+        this.fileToBinary(file)
+        .then(buff  => { this.InputData.readDsdData(buff); })
+        .catch(err => { error = err; });
+        break;
+      default:
+        this.fileToText(file)
+        .then(text => { this.InputData.readInputData(text); })
+        .catch(err => { error = err; });
+    }
+
+    // 後処理
+    if( error === null ){
+      this.app.dialogClose(); // 現在表示中の画面を閉じる
+      this.app.isManual = this.InputData.isManual();
+      this.app.isCalculated = false;
+      this.pickup_file_name = this.InputData.pickup_filename;
+    } else {
+      console.log(error)
+    }
+    modalRef.close();
   }
 
   // ピックアップファイルを開く
@@ -109,6 +119,20 @@ export class MenuComponent implements OnInit {
   private fileToText(file): any {
     const reader = new FileReader();
     reader.readAsText(file);
+    return new Promise((resolve, reject) => {
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+    });
+  }
+
+  // バイナリのファイルを読み込む
+  private fileToBinary(file): any {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
     return new Promise((resolve, reject) => {
       reader.onload = () => {
         resolve(reader.result);

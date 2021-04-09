@@ -8,6 +8,7 @@ import { InputMembersService } from '../components/members/members.service';
 import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputSectionForcesService } from '../components/section-forces/input-section-forces.service';
 import { InputCalclationPrintService } from '../components/calculation-print/calclation-print.service';
+import { InputCrackSettingsService } from '../components/crack-settings/crack-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class SaveDataService extends InputDataService {
     public bars: InputBarsService,
     public basic: InputBasicInformationService,
     public points: InputDesignPointsService,
+    public crack: InputCrackSettingsService,
     public fatigues: InputFatiguesService,
     public members: InputMembersService,
     public safety: InputSafetyFactorsMaterialStrengthsService,
@@ -31,6 +33,7 @@ export class SaveDataService extends InputDataService {
     this.pickup_filename = '';
     this.basic.clear();
     this.members.clear();
+    this.crack.clear();
     this.points.clear();
     this.bars.clear();
     this.fatigues.clear();
@@ -203,25 +206,45 @@ export class SaveDataService extends InputDataService {
   // ファイルに保存用データを生成
   public getInputText(): string {
     const jsonData = {};
+
+    // ピックアップ断面力
     jsonData['pickup_filename'] = this.pickup_filename;
     jsonData['pickup_data'] = this.pickup_data;
-    jsonData['is3DPickUp'] = this.is3DPickUp;
-    jsonData['pickup_moment_no'] = this.basic.pickup_moment_no;
-    jsonData['pickup_shear_force_no'] = this.basic.pickup_shear_force_no;
+
+    // 設計条件
+    jsonData['pickup_moment_no'] = this.basic.pickup_moment_no;               // ピックアップ番号 曲げモーメント
+    jsonData['pickup_shear_force_no'] = this.basic.pickup_shear_force_no;     // ピックアップ番号 せん断力
     jsonData['specification1_selected'] = this.basic.specification1_selected; // 適用 に関する変数
     jsonData['specification2_selected'] = this.basic.specification2_selected; // 仕様 に関する変数
     jsonData['conditions_list'] = this.basic.conditions_list;                 // 設計条件
-    jsonData['member_list'] = this.members.member_list;                         // 部材情報
-    jsonData['position_list'] = this.points.position_list;                     // 着目点情報
-    jsonData['bar_list'] = this.bars.bar_list;                               // 鉄筋情報
-    jsonData['fatigue_list'] = this.fatigues.fatigue_list;                       // 疲労情報
+
+    // 部材情報
+    jsonData['member_list'] = this.members.member_list;                         
+
+    // ひび割れ情報
+    jsonData['crack_list'] = this.crack.crack_list;                         
+
+    // 着目点情報
+    jsonData['position_list'] = this.points.position_list;                     
+
+    // 鉄筋情報
+    jsonData['bar_list'] = this.bars.bar_list;                               
+
+    // 疲労情報
+    jsonData['fatigue_list'] = this.fatigues.fatigue_list;                       
     jsonData['train_A_count'] = this.fatigues.train_A_count;
     jsonData['train_B_count'] = this.fatigues.train_B_count;
     jsonData['service_life'] = this.fatigues.service_life;
     jsonData['fatigue_reference_count'] = this.fatigues.reference_count;
-    jsonData['safety_factor_material_strengths'] = this.safety.safety_factor_material_strengths_list;                     // 安全係数情報
+
+    // 安全係数情報
+    jsonData['safety_factor_material_strengths'] = this.safety.safety_factor_material_strengths_list;                     
+
+    // 断面力手入力情報
     jsonData['manual_moment_force'] = this.force.Mdatas;
     jsonData['manual_shear_force'] = this.force.Vdatas;
+
+    // 計算印刷設定
     jsonData['print_selected'] = this.calc.print_selected;
 
     // string 型にする
@@ -229,32 +252,65 @@ export class SaveDataService extends InputDataService {
     return result;
   }
 
+  // DSD データを読み込む
+  public readDsdData(buff: any) {
+    const dataView = new DataView(buff);
+    const unitfix32 = dataView.getUint32(0);
+    const strfix32 = String.fromCharCode.apply("", new Uint32Array(unitfix32))
+    console.log(dataView.getUint32(0));
+  }
 
   public readInputData(inputText: string) {
     this.clear();
     const jsonData: {} = JSON.parse(inputText);
 
+    // ピックアップ断面力
     this.pickup_filename = jsonData['pickup_filename'];
     this.pickup_data = jsonData['pickup_data'];
-    this.basic.pickup_moment_no = jsonData['pickup_moment_no'];
-    this.basic.pickup_shear_force_no = jsonData['pickup_shear_force_no'];
+
+    // 設計条件
+    this.basic.pickup_moment_no = jsonData['pickup_moment_no'];// ピックアップ番号 曲げモーメント
+    this.basic.pickup_shear_force_no = jsonData['pickup_shear_force_no'];// ピックアップ番号 せん断力
     this.basic.specification1_selected = jsonData['specification1_selected']; // 適用 に関する変数
     this.basic.specification2_selected = jsonData['specification2_selected']; // 仕様 に関する変数
     this.basic.conditions_list = jsonData['conditions_list'];                 // 設計条件
-    this.members.member_list = jsonData['member_list'];                         // 部材情報
-    this.points.position_list = jsonData['position_list'];                     // 着目点情報
-    this.bars.bar_list = jsonData['bar_list'];                               // 鉄筋情報
-    this.fatigues.fatigue_list = jsonData['fatigue_list'];                       // 疲労情報
+
+    // 部材情報
+    this.members.member_list = jsonData['member_list'];
+    
+    // ひび割れ情報
+    if('crack_list' in jsonData){
+      this.crack.crack_list = jsonData['crack_list'];                         
+    } else{
+      this.crack.clear();
+    }
+
+    // 着目点情報
+    this.points.position_list = jsonData['position_list'];
+
+    // 鉄筋情報
+    this.bars.bar_list = jsonData['bar_list'];
+
+    // 疲労情報
+    this.fatigues.fatigue_list = jsonData['fatigue_list'];                     
     this.fatigues.train_A_count = ('train_A_count' in jsonData) ? jsonData['train_A_count'] : null;
     this.fatigues.train_B_count = ('train_B_count' in jsonData) ? jsonData['train_B_count'] : null;
     this.fatigues.service_life = ('service_life' in jsonData) ? jsonData['service_life'] : null;
     this.fatigues.reference_count = ('fatigue_reference_count' in jsonData) ? jsonData['fatigue_reference_count'] : null;
-    this.safety.safety_factor_material_strengths_list = jsonData['safety_factor_material_strengths'];                     // 安全係数情報
+
+    // 安全係数情報
+    this.safety.safety_factor_material_strengths_list = jsonData['safety_factor_material_strengths'];
+    
+    // 断面力手入力情報
     this.force.Mdatas = jsonData['manual_moment_force'];
     this.force.Vdatas = jsonData['manual_shear_force'];
+
+    // 計算印刷設定
     this.calc.print_selected = jsonData['print_selected'];
   }
 
+
+  // 鉄筋の断面積
   public getAs(strAs: string): number {
     let result: number = 0;
     if (strAs.indexOf('φ') >= 0) {

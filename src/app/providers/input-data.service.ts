@@ -40,7 +40,8 @@ export class InputDataService {
     if (pos === -1) {
       return '';
     }
-    return filename.slice(pos + 1);
+    const ext = filename.slice(pos + 1);
+    return ext.toLowerCase();
   }
 
   public rebar_List: any[] = [
