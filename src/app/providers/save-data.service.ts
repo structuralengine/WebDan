@@ -219,26 +219,26 @@ export class SaveDataService extends InputDataService {
     jsonData['conditions_list'] = this.basic.conditions_list;                 // 設計条件
 
     // 部材情報
-    jsonData['member_list'] = this.members.member_list;                         
+    jsonData['member_list'] = this.members.member_list;
 
     // ひび割れ情報
-    jsonData['crack_list'] = this.crack.crack_list;                         
+    jsonData['crack_list'] = this.crack.crack_list;
 
     // 着目点情報
-    jsonData['position_list'] = this.points.position_list;                     
+    jsonData['position_list'] = this.points.position_list;
 
     // 鉄筋情報
-    jsonData['bar_list'] = this.bars.bar_list;                               
+    jsonData['bar_list'] = this.bars.bar_list;
 
     // 疲労情報
-    jsonData['fatigue_list'] = this.fatigues.fatigue_list;                       
+    jsonData['fatigue_list'] = this.fatigues.fatigue_list;
     jsonData['train_A_count'] = this.fatigues.train_A_count;
     jsonData['train_B_count'] = this.fatigues.train_B_count;
     jsonData['service_life'] = this.fatigues.service_life;
     jsonData['fatigue_reference_count'] = this.fatigues.reference_count;
 
     // 安全係数情報
-    jsonData['safety_factor_material_strengths'] = this.safety.safety_factor_material_strengths_list;                     
+    jsonData['safety_factor_material_strengths'] = this.safety.safety_factor_material_strengths_list;
 
     // 断面力手入力情報
     jsonData['manual_moment_force'] = this.force.Mdatas;
@@ -253,11 +253,11 @@ export class SaveDataService extends InputDataService {
   }
 
   // DSD データを読み込む
-  public readDsdData(buff: any) {
-    const dataView = new DataView(buff);
-    const unitfix32 = dataView.getUint32(0);
-    const strfix32 = String.fromCharCode.apply("", new Uint32Array(unitfix32))
-    console.log(dataView.getUint32(0));
+  public readDsdData(buff: ArrayBuffer) {
+    const a = new Int16Array(buff, 0, 32);
+    // const dataView = new DataView(buff, 0, 64);
+    const strfix32 = String.fromCharCode.apply("", a)
+    console.log(strfix32);
   }
 
   public readInputData(inputText: string) {
@@ -277,10 +277,10 @@ export class SaveDataService extends InputDataService {
 
     // 部材情報
     this.members.member_list = jsonData['member_list'];
-    
+
     // ひび割れ情報
     if('crack_list' in jsonData){
-      this.crack.crack_list = jsonData['crack_list'];                         
+      this.crack.crack_list = jsonData['crack_list'];
     } else{
       this.crack.clear();
     }
@@ -292,7 +292,7 @@ export class SaveDataService extends InputDataService {
     this.bars.bar_list = jsonData['bar_list'];
 
     // 疲労情報
-    this.fatigues.fatigue_list = jsonData['fatigue_list'];                     
+    this.fatigues.fatigue_list = jsonData['fatigue_list'];
     this.fatigues.train_A_count = ('train_A_count' in jsonData) ? jsonData['train_A_count'] : null;
     this.fatigues.train_B_count = ('train_B_count' in jsonData) ? jsonData['train_B_count'] : null;
     this.fatigues.service_life = ('service_life' in jsonData) ? jsonData['service_life'] : null;
@@ -300,7 +300,7 @@ export class SaveDataService extends InputDataService {
 
     // 安全係数情報
     this.safety.safety_factor_material_strengths_list = jsonData['safety_factor_material_strengths'];
-    
+
     // 断面力手入力情報
     this.force.Mdatas = jsonData['manual_moment_force'];
     this.force.Vdatas = jsonData['manual_shear_force'];
