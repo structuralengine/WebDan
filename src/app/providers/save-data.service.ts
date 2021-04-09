@@ -348,84 +348,88 @@ export class SaveDataService extends InputDataService {
   //////////////////////////////////////////////////////////////////
   //////////////////////////////////////////////////////////////////
   // DSD データを読み込む
-  public readDsdData(buff: ArrayBuffer) {
+  public readDsdData(arrayBuffer: ArrayBuffer) {
 
-    let byteOffset: number = 0;
-    const obj = this.IsDSDFile(buff, byteOffset);
-    byteOffset = obj.byteOffset;
-    const datVersID: string = obj.datVersID;
-    const isManualInput = (obj.isManualInput > 0)
+    const buff: any = {
+      u8array: new Uint8Array(arrayBuffer),
+      byteOffset: 0
+    };
+    
+    const obj = this.IsDSDFile(buff);
+    buff['datVersID'] = obj.datVersID;
+    buff['isManualInput'] = (obj.isManualInput > 0);
+    
     // 断面力手入力モード
-    if( isManualInput ){
-      this.FrmManualGetTEdata(buff, byteOffset , datVersID, obj.isManualInput);
+    if( buff.isManualInput ){
+      this.FrmManualGetTEdata(buff, obj.isManualInput);
     }
 
   }
 
-  private FrmManualGetTEdata(buff: ArrayBuffer, byteOffset: number, 
-                              datVersID: string, NumManualDt: number): void {
-    const isOlder316 = this.isOlder('3.1.7', datVersID);
-    const isOlder324 = this.isOlder('3.2.4', datVersID);
-    const isOlder327 = this.isOlder('3.2.7', datVersID);
-    const isOlder328 = this.isOlder('3.2.8', datVersID);
+  private FrmManualGetTEdata(buff: any, NumManualDt: number): void {
+
+    const isOlder316 = this.isOlder('3.1.7', buff.datVersID);
+    const isOlder324 = this.isOlder('3.2.4', buff.datVersID);
+    const isOlder327 = this.isOlder('3.2.7', buff.datVersID);
+    const isOlder328 = this.isOlder('3.2.8', buff.datVersID);
     let strfix10: string;
     let strfix32: string;
 
     for(let i = 0; i < NumManualDt; i++){
-      strfix10 = this.readString(buff, byteOffset, 10);
-      byteOffset += 10;
-      strfix32 = this.readString(buff, byteOffset, 32);
-      byteOffset += 32;
-      strfix32 = this.readString(buff, byteOffset, 32);
-      byteOffset += 32;
+      strfix10 = this.readString(buff, 10);
+      strfix32 = this.readString(buff, 32);
+      strfix32 = this.readString(buff, 32);
 
       let sHAND_MageDAN: number;
       for(let j = 0; j <= 10; j++){
-        sHAND_MageDAN = this.readSingle(buff, byteOffset);
-        sHAND_MageDAN = this.readSingle(buff, byteOffset);
+        sHAND_MageDAN = this.readSingle(buff);
+        sHAND_MageDAN = this.readSingle(buff);
       }
       let sHAND_SenDAN: number;
       for(let j = 0; j <= 7; j++){
-        sHAND_SenDAN = this.readSingle(buff, byteOffset);
-        sHAND_SenDAN = this.readSingle(buff, byteOffset);
+        sHAND_SenDAN = this.readSingle(buff);
+        sHAND_SenDAN = this.readSingle(buff);
         
       }
     }
 
   }
 
-  private IsDSDFile(buff: ArrayBuffer, byteOffset: number): any {
+  private IsDSDFile(buff: any): any {
     // バージョンを調べる
-    const strfix32 = this.readString(buff, byteOffset, 32);
+    const strfix32 = this.readString(buff, 32);
     const strT: string[] = strfix32.replace("WINDAN", "").trim().split(" ");
     return {
       datVersID: strT[0],
-      isManualInput: this.toNumber(strT[1]),
-      byteOffset: byteOffset+32
+      isManualInput: this.toNumber(strT[1])
     };
   }
 
-  private readString(buff: ArrayBuffer, byteOffset: number, length: number): string {
-
-    const strfix = String.fromCharCode.apply( "",
-      new Uint8Array(buff, byteOffset, length));
-
-    const a = buff.slice(length);
-    buff = a;
-  
-    return Encord.convert(strfix, 'unicode', 'sjis');
+  private readString(buff: any, length: number): string {
+    let str: string = '';
+    while(str.length < length){
+      const s = Encord.convert(
+        String.fromCharCode.apply( "", buff.u8array.slice(0, 2)), 'unicode', 'sjis');
+      if(str.length + s.length > length) {
+        // 文字数が超えたら
+        str += Encord.convert(
+          String.fromCharCode.apply( "", buff.u8array.slice(0, 1)), 'unicode', 'sjis');
+        buff.u8array = buff.u8array.slice(1);
+        break;
+      }
+      str += s;
+      buff.u8array = buff.u8array.slice(2);
+    }
+    return str;
   }
 
-  private readSingle(buff: ArrayBuffer, byteOffset: number): number {
-    let view = new DataView(new Uint8Array(buff, byteOffset, 4));
-    let num = view.getFloat32(0);
-
-    for(let i = 1; i<40; i++){
-      view = new DataView(new Uint8Array(buff, byteOffset+1, 4));
-      num = view.getFloat32(0);
-    }
-
-
+  private readSingle(buff: any): number {
+    const length: number = 4;
+    const data =  buff.u8array.slice(0, length);
+    const b  = data.buffer;
+    const view = new DataView(b);
+    const num = view.getFloat32(0);
+    buff.u8array = buff.u8array.slice(length);
     return num;
   }
 
