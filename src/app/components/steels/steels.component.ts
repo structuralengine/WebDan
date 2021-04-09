@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { InputSteelsService } from './input-steels.service';
+import { InputSteelsService } from './steels.service';
 import { InputDataService } from 'src/app/providers/input-data.service';
 
 @Component({

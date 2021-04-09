@@ -18,7 +18,7 @@ export class MembersComponent implements OnInit {
   @ViewChild('grid') grid: SheetComponent;
   public options: pq.gridT.options;
   private columnHeaders: object[] = [
-    { title: '部材\n番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+    { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: '部材長', dataType: 'float', format: '#.000', dataIndx: 'm_len', editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
     { title: 'グループNo', align: 'center', dataType: 'string', dataIndx: 'g_id', sortable: false, width: 85 },
     { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
@@ -44,8 +44,8 @@ export class MembersComponent implements OnInit {
         { title: '下側', align: 'center', dataType: 'bool', dataIndx: 'vis_l', type: 'checkbox', sortable: false, width: 50 }
       ]
     },
-    { title: 'ひび割\nεcsd', align: 'center', dataType: 'integer', dataIndx: 'ecsd', sortable: false, width: 70 },
-    { title: 'せん断\nkr', dataType: 'float', format: '#.0', dataIndx: 'kr', sortable: false, width: 70 },
+    { title: 'ひび割<br/>εcsd', align: 'center', dataType: 'integer', dataIndx: 'ecsd', sortable: false, width: 70 },
+    { title: 'せん断<br/>kr', dataType: 'float', format: '#.0', dataIndx: 'kr', sortable: false, width: 70 },
     {
       title: '曲げ加工 r1', align: 'center', colModel: [
         { title: '軸鉄筋', dataType: 'float', format: '#.00', dataIndx: 'r1_1', sortable: false, width: 60 },

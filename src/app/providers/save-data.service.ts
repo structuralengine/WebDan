@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { InputDataService } from './input-data.service';
 import { InputBarsService } from '../components/bars/bars.service';
 import { InputBasicInformationService } from '../components/basic-information/basic-information.service';
-import { InputDesignPointsService } from '../components/design-points/input-design-points.service';
+import { InputDesignPointsService } from '../components/design-points/design-points.service';
 import { InputFatiguesService } from '../components/fatigues/fatigues.service';
 import { InputMembersService } from '../components/members/members.service';
 import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/safety-factors-material-strengths.service';

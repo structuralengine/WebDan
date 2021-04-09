@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
-import { InputDesignPointsService } from '../design-points/input-design-points.service';
+import { InputDesignPointsService } from '../design-points/design-points.service';
 import { Observable, of } from 'rxjs';
 
 @Injectable({

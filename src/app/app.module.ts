@@ -20,9 +20,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { InputDataService } from './providers/input-data.service';
 import { InputBasicInformationService } from './components/basic-information/basic-information.service';
 import { InputMembersService } from './components/members/members.service';
-import { InputDesignPointsService } from './components/design-points/input-design-points.service';
+import { InputDesignPointsService } from './components/design-points/design-points.service';
 import { InputBarsService } from './components/bars/bars.service';
-import { InputSteelsService } from './components/steels/input-steels.service';
+import { InputSteelsService } from './components/steels/steels.service';
 import { InputFatiguesService } from './components/fatigues/fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
@@ -44,7 +44,10 @@ import { BarsComponent } from './components/bars/bars.component';
 import { FatiguesComponent } from './components/fatigues/fatigues.component';
 import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-factors-material-strengths/safety-factors-material-strengths.component';
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
+import { SteelsComponent } from './components/steels/steels.component';
+import { CrackSettingsComponent } from './components/crack-settings/crack-settings.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
+import { SheetComponent } from './components/sheet/sheet.component';
 
 import { ResultDataService } from './calculation/result-data.service';
 import { CalcSafetyMomentService } from './calculation/result-safety-moment/calc-safety-moment.service';
@@ -80,8 +83,6 @@ import { SetSectionService} from './calculation/set-section.service';
 import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { SetFatigueService } from './calculation/set-fatigue.service';
-import { SteelsComponent } from './components/steels/steels.component';
-import { SheetComponent } from './components/sheet/sheet.component';
 
 @NgModule({
   imports: [
@@ -127,7 +128,8 @@ import { SheetComponent } from './components/sheet/sheet.component';
     ResultEarthquakesShearForceComponent,
     ResultSummaryTableComponent,
     SectionForceListComponent,
-    SteelsComponent
+    SteelsComponent,
+    CrackSettingsComponent
   ],
   entryComponents: [
     LoginDialogComponent,
