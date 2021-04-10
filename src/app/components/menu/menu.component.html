@@ -12,14 +12,14 @@
       <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
         <button ngbDropdownItem (click)="renew()">新規作成</button>
 
-        <label>
+        <label style="width: 100%;">
           <span ngbDropdownItem>
             ファイルを開く
             <input type="file" accept="application/wdj" (change)="open($event)" style="display:none" />
           </span>
         </label>
 
-        <label>
+        <label style="width: 100%;">
           <span ngbDropdownItem>
             pickupファイルを開く
             <input type="file" accept="text/pik" (change)="pickup($event)" style="display:none" />

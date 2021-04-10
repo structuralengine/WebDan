@@ -69,7 +69,13 @@ export class MenuComponent implements OnInit {
     switch( this.InputData.getExt(this.fileName)){
       case 'dsd':
         this.fileToBinary(file)
-        .then(buff  => { this.dsdData.readDsdData(buff); })
+        .then(buff  => { 
+          const pik =this.dsdData.readDsdData(buff);
+          if (pik !== null){
+            this.pickup_file_name = pik + ' を開いてください！';
+            alert(this.pickup_file_name);
+          }
+        })
         .catch(err => { error = err; });
         break;
       default:
