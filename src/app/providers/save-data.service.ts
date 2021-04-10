@@ -10,8 +10,6 @@ import { InputSectionForcesService } from "../components/section-forces/input-se
 import { InputCalclationPrintService } from "../components/calculation-print/calclation-print.service";
 import { InputCrackSettingsService } from "../components/crack-settings/crack-settings.service";
 
-import * as Encord from 'encoding-japanese';
-
 @Injectable({
   providedIn: "root",
 })
@@ -251,9 +249,13 @@ export class SaveDataService extends InputDataService {
     return result;
   }
 
+  // インプットデータを読み込む
   public readInputData(inputText: string) {
-    this.clear();
     const jsonData: {} = JSON.parse(inputText);
+    this.setInputData(jsonData);
+  }
+  public setInputData(jsonData: any) {
+    this.clear();
 
     // ピックアップ断面力
     this.pickup_filename = jsonData["pickup_filename"];
@@ -307,6 +309,7 @@ export class SaveDataService extends InputDataService {
     this.calc.print_selected = jsonData["print_selected"];
   }
 
+
   // 鉄筋の断面積
   public getAs(strAs: string): number {
     let result: number = 0;
@@ -343,107 +346,5 @@ export class SaveDataService extends InputDataService {
     return result;
   }
 
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////////
-  // DSD データを読み込む
-  public readDsdData(arrayBuffer: ArrayBuffer) {
-
-    const buff: any = {
-      u8array: new Uint8Array(arrayBuffer),
-      byteOffset: 0
-    };
-    
-    const obj = this.IsDSDFile(buff);
-    buff['datVersID'] = obj.datVersID;
-    buff['isManualInput'] = (obj.isManualInput > 0);
-    
-    // 断面力手入力モード
-    if( buff.isManualInput ){
-      this.FrmManualGetTEdata(buff, obj.isManualInput);
-    }
-
-  }
-
-  private FrmManualGetTEdata(buff: any, NumManualDt: number): void {
-
-    const isOlder316 = this.isOlder('3.1.7', buff.datVersID);
-    const isOlder324 = this.isOlder('3.2.4', buff.datVersID);
-    const isOlder327 = this.isOlder('3.2.7', buff.datVersID);
-    const isOlder328 = this.isOlder('3.2.8', buff.datVersID);
-    let strfix10: string;
-    let strfix32: string;
-
-    for(let i = 0; i < NumManualDt; i++){
-      strfix10 = this.readString(buff, 10);
-      strfix32 = this.readString(buff, 32);
-      strfix32 = this.readString(buff, 32);
-
-      let sHAND_MageDAN: number;
-      for(let j = 0; j <= 10; j++){
-        sHAND_MageDAN = this.readSingle(buff);
-        sHAND_MageDAN = this.readSingle(buff);
-      }
-      let sHAND_SenDAN: number;
-      for(let j = 0; j <= 7; j++){
-        sHAND_SenDAN = this.readSingle(buff);
-        sHAND_SenDAN = this.readSingle(buff);
-        
-      }
-    }
-
-  }
-
-  private IsDSDFile(buff: any): any {
-    // バージョンを調べる
-    const strfix32 = this.readString(buff, 32);
-    const strT: string[] = strfix32.replace("WINDAN", "").trim().split(" ");
-    return {
-      datVersID: strT[0],
-      isManualInput: this.toNumber(strT[1])
-    };
-  }
-
-  private readString(buff: any, length: number): string {
-    let str: string = '';
-    while(str.length < length){
-      const s = Encord.convert(
-        String.fromCharCode.apply( "", buff.u8array.slice(0, 2)), 'unicode', 'sjis');
-      if(str.length + s.length > length) {
-        // 文字数が超えたら
-        str += Encord.convert(
-          String.fromCharCode.apply( "", buff.u8array.slice(0, 1)), 'unicode', 'sjis');
-        buff.u8array = buff.u8array.slice(1);
-        break;
-      }
-      str += s;
-      buff.u8array = buff.u8array.slice(2);
-    }
-    return str;
-  }
-
-  private readSingle(buff: any): number {
-    const length: number = 4;
-    const data =  buff.u8array.slice(0, length);
-    const b  = data.buffer;
-    const view = new DataView(b);
-    const num = view.getFloat32(0);
-    buff.u8array = buff.u8array.slice(length);
-    return num;
-  }
-
-  // バージョン文字列比較処理
-  private isOlder(a: string, b: string): boolean {
-    if (a === b) return false;
-    const aUnits = a.split(".");
-    const bUnits = b.split(".");
-    // 探索幅に従ってユニット毎に比較していく
-    for (var i = 0; i < Math.min(aUnits.length, bUnits.length); i++) {
-      if (parseInt(aUnits[i]) > parseInt(bUnits[i])) return true; // A > B
-      if (parseInt(aUnits[i]) < parseInt(bUnits[i])) return false;  // A < B
-    }
-    return false;
-  }
 
 }

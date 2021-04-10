@@ -14,6 +14,7 @@ import { UserInfoService } from '../../providers/user-info.service';
 import * as FileSaver from 'file-saver';
 import { SaveDataService } from '../../providers/save-data.service';
 import { ConfigService } from '../../providers/config.service';
+import { DsdDataService } from 'src/app/providers/dsd-data.service';
 
 @Component({
   selector: 'app-menu',
@@ -34,6 +35,7 @@ export class MenuComponent implements OnInit {
     private app: AppComponent,
     private user: UserInfoService,
     private InputData: SaveDataService,
+    private dsdData: DsdDataService,
     private http: HttpClient,
     private platformLocation: PlatformLocation,
     private router: Router,
@@ -67,7 +69,7 @@ export class MenuComponent implements OnInit {
     switch( this.InputData.getExt(this.fileName)){
       case 'dsd':
         this.fileToBinary(file)
-        .then(buff  => { this.InputData.readDsdData(buff); })
+        .then(buff  => { this.dsdData.readDsdData(buff); })
         .catch(err => { error = err; });
         break;
       default:
