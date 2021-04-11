@@ -16,6 +16,9 @@ import { SaveDataService } from '../../providers/save-data.service';
 import { ConfigService } from '../../providers/config.service';
 import { DsdDataService } from 'src/app/providers/dsd-data.service';
 
+import { AuthService } from '../../core/auth.service';
+import firebase from 'firebase';
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -29,6 +32,8 @@ export class MenuComponent implements OnInit {
   fileName: string;
   baseUrl: string;
   pickup_file_name: string;
+  amount: number;
+
 
   constructor(
     private modalService: NgbModal,
@@ -39,7 +44,8 @@ export class MenuComponent implements OnInit {
     private http: HttpClient,
     private platformLocation: PlatformLocation,
     private router: Router,
-    private config: ConfigService) {
+    private config: ConfigService,
+    public auth: AuthService) {
 
     this.loggedIn = this.user.loggedIn;
     this.fileName = '';
@@ -164,45 +170,22 @@ export class MenuComponent implements OnInit {
   }
 
   // ログイン関係
-  private logIn(): void {
+  logIn(): void {
     this.modalService.open(LoginDialogComponent).result.then((result) => {
       this.loggedIn = this.user.loggedIn;
-      if (this.loggedIn === true) {
-        this.loginUserName = this.user.loginUserName;
-        this.userPoint = this.user.purchase_value.toString();
-      }
+      setTimeout(() => {
+        if (this.loggedIn === true) {
+          this.userPoint = this.user.purchase_value.toString();
+          this.amount = this.auth.amount;
+        }
+      }, 200);
     });
-    // 「ユーザー名」入力ボックスにフォーカスを当てる
-    document.getElementById('user_name_id').focus();
   }
 
-  // ユーザーポイントを更新
-  private setUserPoint() {
-    const url = 'https://structuralengine.com/my-module/get_points_balance.php?id=' 
-              + this.user.loginUserName + '&ps=' + this.user.loginPassword;
-    this.http.get(url, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded'
-      })
-    })
-      .subscribe(
-        response => {
-          // 通信成功時の処理（成功コールバック）
-          const response_text = response;
-          if ('error' in response_text) {
-            this.user.errorMessage = response_text['error'];
-          } else {
-            this.user.user_id = response_text['user_id'];
-            this.user.purchase_value = response_text['purchase_value'];
-            this.user.loggedIn = true;
-            this.userPoint = this.user.purchase_value.toString();
-          }
-        },
-        error => {
-          // 通信失敗時の処理（失敗コールバック）
-          this.user.errorMessage = error.statusText;
-        }
-      );
+  logOut(): void {
+    this.loggedIn = false;
+    this.user.clear();
+    this.auth.signOut();
   }
 
 

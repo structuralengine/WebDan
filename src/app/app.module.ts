@@ -9,6 +9,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { CoreModule } from './core/core.module';
+import { AngularFireModule } from '@angular/fire';
+import { AuthGuard } from './guard/auth.guard';
+
 
 import { WebviewDirective } from './directives/webview.directive';
 
@@ -83,6 +87,7 @@ import { SetSectionService} from './calculation/set-section.service';
 import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { SetFatigueService } from './calculation/set-fatigue.service';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   imports: [
@@ -94,7 +99,9 @@ import { SetFatigueService } from './calculation/set-fatigue.service';
     DragDropModule,
     BrowserAnimationsModule,
     NgbModule,
-    HotTableModule
+    HotTableModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    CoreModule,
   ],
   declarations: [
     AppComponent,
@@ -139,6 +146,7 @@ import { SetFatigueService } from './calculation/set-fatigue.service';
   providers: [
     UserInfoService,
     ConfigService,
+    AuthGuard,
 
     InputDataService,
     InputBasicInformationService,
