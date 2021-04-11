@@ -78,8 +78,7 @@ export class MenuComponent implements OnInit {
         .then(buff  => { 
           const pik =this.dsdData.readDsdData(buff);
           if (pik !== null){
-            this.pickup_file_name = pik + ' を開いてください！';
-            alert(this.pickup_file_name);
+            alert(pik + ' を開いてください！');
           }
         })
         .catch(err => { error = err; });
