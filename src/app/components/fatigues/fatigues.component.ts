@@ -42,6 +42,13 @@ export class FatiguesComponent implements OnInit, OnDestroy {
             { title: 'β', dataType: 'float', format: '#.000', dataIndx: 'M_B', sortable: false, width: 70 }
           ]
         },
+        {
+          title: '曲げ加工 r1', align: 'center', colModel: [
+            { title: '軸鉄筋', dataType: 'float', format: '#.00', dataIndx: 'r1_1', sortable: false, width: 60 },
+            { title: '帯筋', dataType: 'float', format: '#.00', dataIndx: 'r1_2', sortable: false, width: 60 },
+            { title: '折曲げ', dataType: 'float', format: '#.00', dataIndx: 'r1_3', sortable: false, width: 60 }
+          ]
+        },
       ]
     },
     {
@@ -64,6 +71,13 @@ export class FatiguesComponent implements OnInit, OnDestroy {
           title: '複線補正r2', align: 'center', colModel: [
             { title: 'α', dataType: 'float', format: '#.000', dataIndx: 'V_A', sortable: false, width: 70 },
             { title: 'β', dataType: 'float', format: '#.000', dataIndx: 'V_B', sortable: false, width: 70 }
+          ]
+        },
+        {
+          title: '曲げ加工 r1', align: 'center', colModel: [
+            { title: '軸鉄筋', dataType: 'float', format: '#.00', dataIndx: 'r1_1', sortable: false, width: 60 },
+            { title: '帯筋', dataType: 'float', format: '#.00', dataIndx: 'r1_2', sortable: false, width: 60 },
+            { title: '折曲げ', dataType: 'float', format: '#.00', dataIndx: 'r1_3', sortable: false, width: 60 }
           ]
         },
       ]

@@ -270,6 +270,8 @@ export class SaveDataService extends InputDataService {
 
     // 部材情報
     this.members.member_list = jsonData["member_list"];
+    // 着目点情報
+    this.points.position_list = jsonData["position_list"];
 
     // ひび割れ情報
     if ("crack_list" in jsonData) {
@@ -278,8 +280,6 @@ export class SaveDataService extends InputDataService {
       this.crack.clear();
     }
 
-    // 着目点情報
-    this.points.position_list = jsonData["position_list"];
 
     // 鉄筋情報
     this.bars.bar_list = jsonData["bar_list"];
@@ -307,8 +307,29 @@ export class SaveDataService extends InputDataService {
 
     // 計算印刷設定
     this.calc.print_selected = jsonData["print_selected"];
+
+    //　部材グループの変更に対してもろもろ再設定を行う
+    this.setGroupeList();
   }
 
+  //　部材グループの変更に対してもろもろ再設定を行う
+  public setGroupeList(): void{
+    // 部材データ
+    this.members.setGroupeList();
+    // 算出点データ
+    this.points.setDesignPointData();
+    // 鉄筋データ
+
+    // 鉄骨データ
+
+    // ひび割れデータ
+
+    // 疲労データ
+
+    // 安全係数データ
+
+
+  }
 
   // 鉄筋の断面積
   public getAs(strAs: string): number {

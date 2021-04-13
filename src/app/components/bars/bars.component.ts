@@ -14,42 +14,9 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChildren('grid') grids: QueryList<SheetComponent>;
   public options: pq.gridT.options[] = new Array();
-  private BeamHeaders: object[] = [
-    { title: '部材\n番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: '断面\nB\nH', align: 'center', dataType: 'float', dataIndx: 'bh', editable: false, sortable: false, width: 85, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: 'ハンチ高\n曲げ\nせん断', align: 'center', dataType: 'float', dataIndx: 'haunch_height', sortable: false, width: 85 },
-    { title: '位置', align: 'center', dataType: 'string', dataIndx: 'design_point_id', editable: false, sortable: false, width: 40, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    {
-      title: '軸方向鉄筋', align: 'center', colModel: [
-        { title: '鉄筋径', dataType: 'integer', dataIndx: 'rebar_dia', sortable: false, width: 70 },
-        { title: '本数', dataType: 'float', dataIndx: 'rebar_n', sortable: false, width: 70 },
-        { title: 'かぶり1\n断目', dataType: 'float', dataIndx: 'rebar_cover', sortable: false, width: 70 },
-        { title: 'ならび\n本数', dataType: 'float', dataIndx: 'rebar_lines', sortable: false, width: 70 },
-        { title: 'アキ', dataType: 'float', dataIndx: 'rebar_space', sortable: false, width: 70 },
-        { title: '間隔', dataType: 'float', dataIndx: 'rebar_ss', sortable: false, width: 70 }
-      ]
-    },
-    {
-      title: '側方鉄筋', align: 'center', colModel: [
-        { title: '鉄筋径', dataType: 'integer', dataIndx: 'side_dia', sortable: false, width: 70 },
-        { title: '本数片', dataType: 'float', dataIndx: 'side_n', sortable: false, width: 70 },
-        { title: '右端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
-        { title: '間隔', dataType: 'float', dataIndx: 'side_ss', sortable: false, width: 70 }
-      ]
-    },
-    {
-      title: 'せん断補強鉄筋', align: 'center', colModel: [
-        { title: '鉄筋径', dataType: 'integer', dataIndx: 'stirrup_dia', sortable: false, width: 70 },
-        { title: '本数', dataType: 'float', dataIndx: 'stirrup_n', sortable: false, width: 70 },
-        { title: '間隔', dataType: 'float', dataIndx: 'stirrup_ss', sortable: false, width: 70 }
-      ]
-    },
-    { title: '主鉄筋の斜率', dataType: 'float', dataIndx: 'cos', sortable: false, width: 85 },
-    { title: 'tanγ+tanβ', dataType: 'float', dataIndx: 'tan', sortable: false, width: 85 },
-    { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
-  ];
+  private beamHeaders: object[] = new Array();
+  private columnHeaders: object[] = new Array();
+  private pileHeaders: object[] = new Array();
 
   public groupe_list: any[];
   private table_datas: any[][];
@@ -59,9 +26,52 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private app: AppComponent,
     private input: InputBarsService,
-    private helper: InputDataService) { }
+    private save: InputDataService) { }
 
   ngOnInit() {
+
+    if (this.save.isManual()) {
+      // 断面力手入力モードの場合
+      this.beamHeaders = [
+        { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: '断面<br/>B<br/>H', align: 'center', dataType: 'float', dataIndx: 'bh', editable: false, sortable: false, width: 85, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: 'ハンチ高<br/>曲げ<br/>せん断', align: 'center', dataType: 'float', dataIndx: 'haunch_height', sortable: false, width: 85 },
+        { title: '位置', align: 'center', dataType: 'string', dataIndx: 'design_point_id', editable: false, sortable: false, width: 40, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        {
+          title: '軸方向鉄筋', align: 'center', colModel: [
+            { title: '鉄筋径', dataType: 'integer', dataIndx: 'rebar_dia', sortable: false, width: 70 },
+            { title: '本数', dataType: 'float', dataIndx: 'rebar_n', sortable: false, width: 70 },
+            { title: 'かぶり1<br/>断目', dataType: 'float', dataIndx: 'rebar_cover', sortable: false, width: 70 },
+            { title: 'ならび<br/>本数', dataType: 'float', dataIndx: 'rebar_lines', sortable: false, width: 70 },
+            { title: 'アキ', dataType: 'float', dataIndx: 'rebar_space', sortable: false, width: 70 },
+            { title: '間隔', dataType: 'float', dataIndx: 'rebar_ss', sortable: false, width: 70 }
+          ]
+        },
+        {
+          title: '側方鉄筋', align: 'center', colModel: [
+            { title: '鉄筋径', dataType: 'integer', dataIndx: 'side_dia', sortable: false, width: 70 },
+            { title: '本数片', dataType: 'float', dataIndx: 'side_n', sortable: false, width: 70 },
+            { title: '右端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
+            { title: '間隔', dataType: 'float', dataIndx: 'side_ss', sortable: false, width: 70 }
+          ]
+        },
+        {
+          title: 'せん断補強鉄筋', align: 'center', colModel: [
+            { title: '鉄筋径', dataType: 'integer', dataIndx: 'stirrup_dia', sortable: false, width: 70 },
+            { title: '本数', dataType: 'float', dataIndx: 'stirrup_n', sortable: false, width: 70 },
+            { title: '間隔', dataType: 'float', dataIndx: 'stirrup_ss', sortable: false, width: 70 }
+          ]
+        },
+        { title: '主鉄筋の斜率', dataType: 'float', dataIndx: 'cos', sortable: false, width: 85 },
+        { title: 'tanγ+tanβ', dataType: 'float', dataIndx: 'tan', sortable: false, width: 85 },
+        { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
+      ];
+    } else {
+      
+    }
+
 
     this.groupe_list = this.input.getBarsColumns();
     this.table_datas = new Array(this.groupe_list.length);
@@ -117,7 +127,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             // 1行目
             column1['index'] = data['index'];
-            const a: number = this.helper.toNumber(data['position']);
+            const a: number = this.save.toNumber(data['position']);
             column1['position'] = (a === null) ? '' : a.toFixed(3);
             column1['p_name'] = data['p_name'];
             column1['p_name_ex'] = data['p_name_ex'];
@@ -226,5 +236,22 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
     let containerHeight = this.app.getWindowHeight();
     containerHeight -= 230;
     return containerHeight;
+  }
+
+  public getGroupeName(i: number): string {
+    const target = this.groupe_list[i];
+    const first = target[0];
+    let result: string = '';
+    if(first.g_name === null){
+      result = first.g_id;
+    } else if(first.g_name === ''){
+      result = first.g_id;
+    } else {
+      result = first.g_name;
+    }
+    if(result === ''){
+      result = 'No' + i;
+    }
+    return result;
   }
 }

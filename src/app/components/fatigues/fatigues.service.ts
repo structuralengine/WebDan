@@ -45,7 +45,7 @@ export class InputFatiguesService  {
         const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
         for (const position of members['positions']) {
           if (position['isMyCalc'] !== true && position['isVyCalc'] !== true
-             && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
+              && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
             continue;
           }
           let b = old_fatigue_list.find( (value) => {

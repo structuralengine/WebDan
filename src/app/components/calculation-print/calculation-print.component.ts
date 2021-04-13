@@ -12,7 +12,6 @@ import pq from 'pqgrid';
 })
 export class CalculationPrintComponent implements OnInit, OnDestroy {
 
-  isManual: boolean;
   print_calculate_checked: boolean;
   print_section_force_checked: boolean;
   print_summary_table_checked: boolean;
@@ -29,7 +28,6 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
     private router: Router ) { }
 
   ngOnInit() {
-    this.isManual = this.save.isManual();
 
     this.print_calculate_checked = this.input.print_selected.print_calculate_checked;
     this.print_section_force_checked = this.input.print_selected.print_section_force_checked;
@@ -66,6 +64,10 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
   // 計算開始
   onClick() {
     this.router.navigate(['/result-viewer']);
+  }
+
+  public isManual(): boolean{
+    return this.save.isManual();
   }
 
 }

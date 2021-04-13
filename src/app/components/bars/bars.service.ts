@@ -11,7 +11,7 @@ export class InputBarsService {
   // 鉄筋情報
   public bar_list: any[];
 
-  constructor(private input: InputDataService,
+  constructor(private helper: InputDataService,
               private points: InputDesignPointsService) {
     this.clear();
   }
@@ -233,8 +233,8 @@ export class InputBarsService {
   public matchBarSize(dia: any): number {
 
     let result: number = null;
-    const temp = this.input.toNumber(dia);
-    for ( const d of this.input.rebar_List ){
+    const temp = this.helper.toNumber(dia);
+    for ( const d of this.helper.rebar_List ){
       if ( d.D === temp){
         result = temp;
         break;

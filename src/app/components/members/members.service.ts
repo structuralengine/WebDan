@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
+import { InputDesignPointsService } from '../design-points/design-points.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,22 +9,23 @@ export class InputMembersService  {
 
   // 部材情報
   public member_list: any[];
+  private groupe_list: any[];
 
-  constructor(private helper: InputDataService) {
+  constructor(
+    // private points: InputDesignPointsService,
+    private helper: InputDataService) {
     this.clear();
   }
   public clear(): void {
     this.member_list = new Array();
+    this.groupe_list = new Array();
   }
 
   // 部材情報
-  private default_member(id: number): any {
+  private default_member(row: number): any {
     return {
-      'm_no': id, 'm_len': null, 'g_id': '', 'g_name': '', 'shape': '',
+      'm_no': row, 'm_len': null, 'g_id': '', 'g_name': '', 'shape': '',
       'B': null, 'H': null, 'Bt': null, 't': null,
-      'con_u': null, 'con_l': null, 'con_s': null,
-      'vis_u': false, 'vis_l': false, 'ecsd': null, 'kr': null,
-      'r1_1': null, 'r1_2': null, 'r1_3': null, 'n': null
     };
   }
 
@@ -71,17 +73,22 @@ export class InputMembersService  {
     // 対象データが無かった時に処理
     if (r !== undefined) {
       result = r;
+      if(this.helper.toNumber(result.g_id) === null){
+        result.g_id = '';
+      }
     } else {
       result = this.default_member(row);
       this.member_list.push(result);
     }
-
     return result;
   }
 
+  public getGroupeList(): any[] {
+    return this.groupe_list;
+  }
 
   // 存在するグループ番号を列挙する
-  public getGroupeList(): any[] {
+  public setGroupeList(): void {
 
     const groupe_id_list: string[] = new Array();
     for (const m of this.member_list) {
@@ -100,24 +107,24 @@ export class InputMembersService  {
     }
 
     // グループ番号順に並べる
-    groupe_id_list.sort((strA, strB) => {
-      const a: number = this.helper.getGroupeNo(strA);
-      const b: number = this.helper.getGroupeNo(strB);
-      if (a < b) { return -1; }
-      if (a > b) { return 1; }
-      return 0;
-    });
+    groupe_id_list.sort();
 
     // グループ番号を持つ部材のリストを返す
-    const result: any[] = new Array();
+    this.groupe_list = new Array();
     for (const id of groupe_id_list) {
       // グループ番号を持つ部材のリスト
       const members: any[] = this.member_list.filter( (item, index) => {
         if (item.g_id === id) { return item; }
       });
-      result.push(members);
+      this.groupe_list.push(members);
     }
-    return result;
+
+    // その他の関連のあるデータに対して変更通知をする
+    /// 算出点
+    // this.points.setDesignPointData();
+    /// 鉄筋
+    /// 鉄骨
+
   }
 
   // SRC部材があるかどうか (null: まだ不明, .length===0: SRC部材はない, 1以上: SRC部材の数)

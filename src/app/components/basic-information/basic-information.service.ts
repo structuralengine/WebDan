@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { InputDataService } from '../../providers/input-data.service';
 
 @Injectable({
   providedIn: 'root'

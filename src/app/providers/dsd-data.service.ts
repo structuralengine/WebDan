@@ -571,13 +571,6 @@ export class DsdDataService {
     return num;
   }
 
-  // Double型の情報を バイナリから読み取る
-  private readDouble(buff: any): number {
-    const view = this.getDataView(buff, 8);
-    const num = view.getFloat64(0);
-    return num;
-  }
-
   private getDataView(buff, length: number): DataView {
     const data = buff.u8array.slice(0, length);
     const re = data.reverse();

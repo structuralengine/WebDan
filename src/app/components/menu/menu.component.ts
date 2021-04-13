@@ -59,7 +59,6 @@ export class MenuComponent implements OnInit {
   renew(): void {
     this.router.navigate(['/blank-page']);
     this.app.dialogClose(); // 現在表示中の画面を閉じる
-    this.app.isManual = true;
     this.app.isCalculated = false;
     this.InputData.clear();
   }
@@ -92,7 +91,6 @@ export class MenuComponent implements OnInit {
     // 後処理
     if( error === null ){
       this.app.dialogClose(); // 現在表示中の画面を閉じる
-      this.app.isManual = this.InputData.isManual();
       this.app.isCalculated = false;
       this.pickup_file_name = this.InputData.pickup_filename;
     } else {
@@ -111,7 +109,6 @@ export class MenuComponent implements OnInit {
         this.app.dialogClose(); // 現在表示中の画面を閉じる
         this.InputData.readPickUpData(text, file.name); // データを読み込む
         this.pickup_file_name = this.InputData.pickup_filename;
-        this.app.isManual = false;
         this.app.isCalculated = false;
         if (this.router.url === this.router.config[0].redirectTo ) {
           this.router.navigate(['/blank-page']);
@@ -121,7 +118,6 @@ export class MenuComponent implements OnInit {
         modalRef.close();
       })
       .catch(err => {
-        this.app.isManual = this.InputData.isManual();
         this.app.isCalculated = false;
         modalRef.close();
         console.log(err);

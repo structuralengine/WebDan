@@ -12,6 +12,7 @@ import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-fac
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
 import { ResultViewerComponent } from './calculation/result-viewer/result-viewer.component';
+import { CrackSettingsComponent } from './components/crack-settings/crack-settings.component';
 
 
 
@@ -22,6 +23,7 @@ const routes: Routes = [
     { path: 'design-points', component: DesignPointsComponent },
     { path: 'bars', component: BarsComponent },
     { path: 'steels', component: SteelsComponent },
+    { path: 'crack', component: CrackSettingsComponent },
     { path: 'fatigues', component: FatiguesComponent },
     { path: 'safety-factors-material-strengths', component: SafetyFactorsMaterialStrengthsComponent },
     { path: 'section-forces', component: SectionForcesComponent },

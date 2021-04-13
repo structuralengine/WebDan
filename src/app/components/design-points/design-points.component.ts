@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { InputDesignPointsService } from './design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 import { AppComponent } from 'src/app/app.component';
@@ -25,18 +24,15 @@ export class DesignPointsComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private app: AppComponent,
     private input: InputDesignPointsService,
-    private save: SaveDataService,
-    private helper: InputDataService) { }
+    private save: SaveDataService) { }
 
   ngOnInit() {
 
     if (this.save.isManual()) {
       // 断面力手入力モードの場合
       this.columnHeaders = [
-        { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
         { title: "算出点名", dataType: "string", dataIndx: "p_name_ex", sortable: false, width: 250 },
-        { title: "曲げ照査", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
-        { title: "せん断照査", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 },
         { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
       ];
     } else {
@@ -128,7 +124,6 @@ export class DesignPointsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   public saveData(): void {
-    this.input.setDesignPointColumns(this.table_datas);
   }
 
   // 表の高さを計算する
@@ -136,6 +131,23 @@ export class DesignPointsComponent implements OnInit, AfterViewInit, OnDestroy {
     let containerHeight = this.app.getWindowHeight();
     containerHeight -= 230;
     return containerHeight;
+  }
+
+  public getGroupeName(i: number): string {
+    const target = this.groupe_list[i];
+    const first = target[0];
+    let result: string = '';
+    if(first.g_name === null){
+      result = first.g_id;
+    } else if(first.g_name === ''){
+      result = first.g_id;
+    } else {
+      result = first.g_name;
+    }
+    if(result === ''){
+      result = 'No' + i;
+    }
+    return result;
   }
 }
 

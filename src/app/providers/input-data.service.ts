@@ -18,22 +18,19 @@ export class InputDataService {
     }
   }
 
-  constructor() { 
+  constructor() {
     this.pickup_filename = '';
     this.pickup_data = {};
   }
-
+  // 3次元解析のピックアップデータかどうか判定する
   public is3DPickUp(): boolean {
-    switch (this.getExt(this.pickup_filename)){
-      case 'csv':
-        return true;
-        break;
-      default:
-        return false;
+    if (this.getExt(this.pickup_filename)=== 'csv') {
+      return true;
     }
+    return false;
   }
 
-  
+
   // ファイル名から拡張子を取得する関数
   public getExt(filename: string): string {
     const pos = filename.lastIndexOf('.');

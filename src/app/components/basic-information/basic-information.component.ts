@@ -24,7 +24,6 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   private pickup_shear_force_datarows: any[] = [];
   public options2: pq.gridT.options;
 
-  public isManual: boolean;
   public isSRC: boolean; // SRC部材 があるかどうか
 
   // 適用 に関する変数
@@ -61,8 +60,6 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
     // SRC部材 があるかどうか
     this.isSRC = this.member.getSRC().some((v) => v > 0);
 
-    this.isManual = this.save.isManual();
-
     this.initPickupTable();
     
     this.options1 = {
@@ -89,10 +86,12 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
 
   }
 
-  ngAfterViewInit(){
-    if(this.isManual === false) {
-      
+  public isManual(): boolean{
+    return this.save.isManual();
+  }
 
+  ngAfterViewInit(){
+    if(this.isManual() === false) {
       this.grid1.options = this.options1;
       this.grid1.refreshDataAndView();
 

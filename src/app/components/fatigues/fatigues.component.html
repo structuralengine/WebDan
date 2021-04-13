@@ -1,22 +1,21 @@
+<div class="form-container">
+  <form>
+    <div class="input-container">
+      <label>耐用年数：</label>
+      <input id="T" name="T" type="text" [(ngModel)]="service_life" />
+    </div>
+    <div class="input-container">
+      <label>jA：</label>
+      <input id="jA" name="jA" type="text" [(ngModel)]="train_A_count" />
+    </div>
+    <div class="input-container">
+      <label>jB：</label>
+      <input id="jB" name="jB" type="text" [(ngModel)]="train_B_count" />
+    </div>
+  </form>
+</div>
+
 <div #ht_container class="ht-container">
-
-  <div class="form-container">
-    <form>
-      <div class="input-container">
-        <label>耐用年数：</label>
-        <input id="T" name="T" type="text" [(ngModel)]="service_life" />
-      </div>
-      <div class="input-container">
-        <label>jA：</label>
-        <input id="jA" name="jA" type="text" [(ngModel)]="train_A_count" />
-      </div>
-      <div class="input-container">
-        <label>jB：</label>
-        <input id="jB" name="jB" type="text" [(ngModel)]="train_B_count" />
-      </div>
-    </form>
-  </div>
-
   <ngb-tabset>
     <ngb-tab *ngFor="let groupe of groupe_list; index as i">
       <ng-template ngbTabTitle>
