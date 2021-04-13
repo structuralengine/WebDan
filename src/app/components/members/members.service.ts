@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { InputDataService } from '../../providers/input-data.service';
-import { InputDesignPointsService } from '../design-points/design-points.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +11,6 @@ export class InputMembersService  {
   private groupe_list: any[];
 
   constructor(
-    // private points: InputDesignPointsService,
     private helper: InputDataService) {
     this.clear();
   }
@@ -59,11 +57,8 @@ export class InputMembersService  {
     }
   }
 
-  /// <summary>
   /// basic-information.component の
   /// pickup_moment_datarows のデータを返す関数
-  /// </summary>
-  /// <param name="row">行番号</param>
   public getMemberTableColumns(row: number): any {
 
     const r = this.member_list.find( (item) => item.m_no === row );
