@@ -27,8 +27,7 @@ export class InputMembersService  {
     };
   }
 
-  /// basic-information.component の
-  /// pickup_moment_datarows のデータを返す関数
+  // member_list から 指定行 のデータを返す関数
   public getMemberTableColumns(row: number): any {
 
     const r = this.member_list.find( (item) => item.m_no === row );
