@@ -39,7 +39,27 @@ export class InputSectionForcesService  {
     return rows;
   }
 
-  public getMdtableColumns(): any[] {
+  public getMdtableColumns(row: number): any[] {
+    
+    const r = this.Mdatas.find( (item) => item.m_no === row );
+
+    let result: any;
+
+    // 対象データが無かった時に処理
+    if (r !== undefined) {
+      result = r;
+      if(result.g_no === null){
+        result.g_id = '';
+      }
+    } else {
+      result = this.default_m_column(row);
+      this.Mdatas.push(result);
+    }
+    return result;
+
+
+    
+
     const old_Mdatas = this.Mdatas.slice(0, this.Mdatas.length);
     this.Mdatas = new Array();
     const pp = this.points.position_list;
@@ -54,6 +74,20 @@ export class InputSectionForcesService  {
       new_colum.p_name_ex = p0.p_name_ex;
       this.Mdatas.push(new_colum);
     }
+
+    for (const data of this.save.force.getMdtableColumns()) {
+      const column = { 'm_no': data['m_no'] };
+      column['p_name_ex'] = data['p_name_ex'];
+      const caseList: any[] = data['case'];
+      for (let i = 0; i < caseList.length; i++) {
+        column['case' + i + '_Md'] = caseList[i].Md;
+        column['case' + i + '_Nd'] = caseList[i].Nd;
+      }
+      this.Mtable_datas.push(column);
+    }
+
+
+
     return this.Mdatas;
   }
 
