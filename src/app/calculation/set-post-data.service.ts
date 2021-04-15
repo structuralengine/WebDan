@@ -4,6 +4,7 @@ import { UserInfoService } from '../providers/user-info.service';
 import { SaveDataService } from '../providers/save-data.service';
 import { SetSectionService } from './set-section.service';
 import { SetSafetyFactorService } from './set-safety-factor.service';
+import { DataHelperModule } from '../providers/data-helper.module';
 
 
 @Injectable({
@@ -13,6 +14,7 @@ export class SetPostDataService {
 
   constructor(private user: UserInfoService,
               private save: SaveDataService,
+              private helper: DataHelperModule,
               private section: SetSectionService,
               private safety: SetSafetyFactorService) { }
 
@@ -428,7 +430,7 @@ export class SetPostDataService {
       }
       let num = 0;
       if ('Md' in forceListList[0].Manual) {
-        num = this.save.toNumber(forceListList[0].Manual.Md);
+        num = this.helper.toNumber(forceListList[0].Manual.Md);
         num = (num === null) ? 0 : num;
       } else {
         return result;
@@ -444,9 +446,9 @@ export class SetPostDataService {
             Nd: 0
           };
         } else {
-          const Vd: number = this.save.toNumber(forceList.Manual.Vd / forceList.n);
-          const Md: number = this.save.toNumber(forceList.Manual.Md / forceList.n);
-          const Nd: number = this.save.toNumber(forceList.Manual.Nd / forceList.n);
+          const Vd: number = this.helper.toNumber(forceList.Manual.Vd / forceList.n);
+          const Md: number = this.helper.toNumber(forceList.Manual.Md / forceList.n);
+          const Nd: number = this.helper.toNumber(forceList.Manual.Nd / forceList.n);
           fo = {
             memo: side,
             Md: (Md === null) ? 0: Md,

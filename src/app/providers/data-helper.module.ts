@@ -1,35 +1,14 @@
-import { Injectable } from '@angular/core';
-import { ɵangular_packages_platform_browser_platform_browser_k } from '@angular/platform-browser';
+import { NgModule } from "@angular/core";
 
-@Injectable({
-  providedIn: 'root'
+@NgModule({
+  imports: [],
+  exports: [],
 })
-export class InputDataService {
+export class DataHelperModule {
 
-  // ピックアップファイル
-  public pickup_filename: string;
-  public pickup_data: Object;
+  constructor() {}
 
-  public isManual(): boolean {
-    if ( this.pickup_filename.trim().length === 0 ){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  constructor() {
-    this.pickup_filename = '';
-    this.pickup_data = {};
-  }
-  // 3次元解析のピックアップデータかどうか判定する
-  public is3DPickUp(): boolean {
-    if (this.getExt(this.pickup_filename)=== 'csv') {
-      return true;
-    }
-    return false;
-  }
-
+  
 
   // ファイル名から拡張子を取得する関数
   public getExt(filename: string): string {
@@ -89,24 +68,6 @@ export class InputDataService {
     return result;
   }
 
-  // グループ番号の入力から番号のみ取り出す
-  public getGroupeNo(value: any): number {
-    // null だったら
-    if (value === null) {
-      return null;
-    }
-    // string に変換
-    const str: string = value.toString().trim();
-    if (str.length === 0) {
-      return null;
-    }
-    // 正規表現を使って数字だけ取り出す
-    const res: string = str.replace(/[^0-9]/g, '');
-    // 数値型　に変換
-    let result: number = this.toNumber(res);
-
-    return result;
-  }
   /// <summary>
   /// 文字列string を数値にする
   /// </summary>

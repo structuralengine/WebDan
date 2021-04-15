@@ -81,7 +81,7 @@
             <span>安全係数・材料強度</span>
           </a>
         </li>
-        <li class="c-mainNavArea__navItem">
+        <li *ngIf="isManual()" class="c-mainNavArea__navItem">
           <a routerLink="./section-forces" routerLinkActive="selected-item"
             (click)="activePageChenge(8)" id="8"
             class="c-mainNavArea__navItemTitle">

@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from '../providers/data-helper.module';
 import { SaveDataService } from '../providers/save-data.service';
 import { SetBarService } from './set-bar.service';
 
@@ -7,7 +8,9 @@ import { SetBarService } from './set-bar.service';
 })
 export class SetSectionService {
 
-  constructor(private save: SaveDataService,
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule,
     private bar: SetBarService) {
   }
 
@@ -160,9 +163,9 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
-    let b: number = this.save.toNumber(position.memberInfo.B);
+    let b: number = this.helper.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
 
     const steps = 180 / RCOUNT;
@@ -227,9 +230,9 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
-    let b: number = this.save.toNumber(position.memberInfo.B);
+    let b: number = this.helper.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
 
     const steps = 180 / RCOUNT;
@@ -323,16 +326,16 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
-    if (this.save.toNumber(position.barData.haunch_M) !== null) {
+    if (this.helper.toNumber(position.barData.haunch_M) !== null) {
       h += position.barData.haunch_M;
     }
-    const b: number = this.save.toNumber(position.memberInfo.B);
+    const b: number = this.helper.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
-    let bf: number = this.save.toNumber(position.memberInfo.Bt);
+    let bf: number = this.helper.toNumber(position.memberInfo.Bt);
     if (bf === b) { bf = null; }
-    let hf: number = this.save.toNumber(position.memberInfo.t);
+    let hf: number = this.helper.toNumber(position.memberInfo.t);
     if (bf === null && hf == null) {
       return this.getRectangle(position, index);
     }
@@ -408,16 +411,16 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
-    if (this.save.toNumber(position.barData.haunch_M) !== null) {
+    if (this.helper.toNumber(position.barData.haunch_M) !== null) {
       h += position.barData.haunch_M;
     }
-    const b: number = this.save.toNumber(position.memberInfo.B);
+    const b: number = this.helper.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
-    let bf: number = this.save.toNumber(position.memberInfo.Bt);
+    let bf: number = this.helper.toNumber(position.memberInfo.Bt);
     if (bf === b) { bf = null; }
-    let hf: number = this.save.toNumber(position.memberInfo.t);
+    let hf: number = this.helper.toNumber(position.memberInfo.t);
     if (bf === null && hf == null) {
       return this.getRectangle(position, index);
     }
@@ -493,12 +496,12 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
-    if (this.save.toNumber(position.barData.haunch_M) !== null) {
+    if (this.helper.toNumber(position.barData.haunch_M) !== null) {
       h += position.barData.haunch_M * 1;
     }
-    const b: number = this.save.toNumber(position.memberInfo.B);
+    const b: number = this.helper.toNumber(position.memberInfo.B);
     if (b === null) { return false; }
 
     const section = {
@@ -554,9 +557,9 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { return false; }
-    let b: number = this.save.toNumber(position.memberInfo.B);
+    let b: number = this.helper.toNumber(position.memberInfo.B);
     if (b === null) { return this.getCircle(position); }
     const x1: number = h / RCOUNT;
     const x3: number = (h - b) / 2;
@@ -637,9 +640,9 @@ export class SetSectionService {
 
     // 断面情報を集計
     PostData['Sections'] = new Array();
-    let h: number = this.save.toNumber(position.memberInfo.H);
+    let h: number = this.helper.toNumber(position.memberInfo.H);
     if (h === null) { 
-      h = this.save.toNumber(position.memberInfo.B);
+      h = this.helper.toNumber(position.memberInfo.B);
     }
     if (h === null) { return false; }
     const x1: number = h / RCOUNT;

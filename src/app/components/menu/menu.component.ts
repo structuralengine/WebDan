@@ -18,6 +18,7 @@ import { DsdDataService } from 'src/app/providers/dsd-data.service';
 
 import { AuthService } from '../../core/auth.service';
 import firebase from 'firebase';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Component({
   selector: 'app-menu',
@@ -40,6 +41,7 @@ export class MenuComponent implements OnInit {
     private app: AppComponent,
     private user: UserInfoService,
     private InputData: SaveDataService,
+    private helper: DataHelperModule,
     private dsdData: DsdDataService,
     private http: HttpClient,
     private platformLocation: PlatformLocation,
@@ -58,8 +60,8 @@ export class MenuComponent implements OnInit {
   // 新規作成
   renew(): void {
     this.router.navigate(['/blank-page']);
-    this.app.dialogClose(); // 現在表示中の画面を閉じる
-    this.app.isCalculated = false;
+    this.app.deactiveButtons(); 
+
     this.InputData.clear();
   }
 
@@ -69,9 +71,12 @@ export class MenuComponent implements OnInit {
     const modalRef = this.modalService.open(WaitDialogComponent);
     this.fileName = file.name;
     evt.target.value = '';
+
     this.router.navigate(['/blank-page']);
+    this.app.deactiveButtons(); 
+    
     let error = null;
-    switch( this.InputData.getExt(this.fileName)){
+    switch( this.helper.getExt(this.fileName)){
       case 'dsd':
         this.fileToBinary(file)
         .then(buff  => { 
@@ -90,8 +95,6 @@ export class MenuComponent implements OnInit {
 
     // 後処理
     if( error === null ){
-      this.app.dialogClose(); // 現在表示中の画面を閉じる
-      this.app.isCalculated = false;
       this.pickup_file_name = this.InputData.pickup_filename;
     } else {
       console.log(error)
@@ -106,19 +109,17 @@ export class MenuComponent implements OnInit {
     evt.target.value = '';
     this.fileToText(file)
       .then(text => {
-        this.app.dialogClose(); // 現在表示中の画面を閉じる
         this.InputData.readPickUpData(text, file.name); // データを読み込む
         this.pickup_file_name = this.InputData.pickup_filename;
-        this.app.isCalculated = false;
         if (this.router.url === this.router.config[0].redirectTo ) {
           this.router.navigate(['/blank-page']);
+          this.app.deactiveButtons(); 
         } else {
           this.router.navigate(['/']);
         }
         modalRef.close();
       })
       .catch(err => {
-        this.app.isCalculated = false;
         modalRef.close();
         console.log(err);
       });
@@ -154,7 +155,7 @@ export class MenuComponent implements OnInit {
 
 
   // ファイルを保存
-  save(): void {
+  public save(): void {
     this.config.saveActiveComponentData();
     const inputJson: string = this.InputData.getInputText();
     const blob = new window.Blob([inputJson], { type: 'text/plain' });

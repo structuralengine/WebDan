@@ -1,9 +1,10 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { InputFatiguesService } from './fatigues.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 import { AppComponent } from 'src/app/app.component';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Component({
   selector: 'app-fatigues',
@@ -92,9 +93,8 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   public service_life: number;
 
   constructor(
-    private app: AppComponent,
     private input: InputFatiguesService,
-    private helper: InputDataService) { }
+    private save: SaveDataService) { }
 
   ngOnInit() {
 
@@ -229,7 +229,7 @@ export class FatiguesComponent implements OnInit, OnDestroy {
 
   // 表の高さを計算する
   private tableHeight(): number {
-    let containerHeight = this.app.getWindowHeight();
+    let containerHeight = window.innerHeight;
     containerHeight -= 230;
     return containerHeight;
   }

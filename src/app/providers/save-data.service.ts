@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { InputDataService } from "./input-data.service";
+import { DataHelperModule } from "./data-helper.module";
 import { InputBarsService } from "../components/bars/bars.service";
 import { InputBasicInformationService } from "../components/basic-information/basic-information.service";
 import { InputDesignPointsService } from "../components/design-points/design-points.service";
@@ -13,8 +13,14 @@ import { InputCrackSettingsService } from "../components/crack-settings/crack-se
 @Injectable({
   providedIn: "root",
 })
-export class SaveDataService extends InputDataService {
+export class SaveDataService {
+
+  // ピックアップファイル
+  public pickup_filename: string;
+  public pickup_data: Object;
+
   constructor(
+    public helper: DataHelperModule,
     public bars: InputBarsService,
     public basic: InputBasicInformationService,
     public points: InputDesignPointsService,
@@ -23,13 +29,13 @@ export class SaveDataService extends InputDataService {
     public members: InputMembersService,
     public safety: InputSafetyFactorsMaterialStrengthsService,
     public force: InputSectionForcesService,
-    public calc: InputCalclationPrintService
-  ) {
-    super();
+    public calc: InputCalclationPrintService) {
+      this.clear();
   }
 
   public clear(): void {
-    this.pickup_filename = "";
+    this.pickup_filename = '';
+    this.pickup_data = {};
     this.basic.clear();
     this.members.clear();
     this.crack.clear();
@@ -38,6 +44,22 @@ export class SaveDataService extends InputDataService {
     this.fatigues.clear();
     this.safety.clear();
   }
+
+  public isManual(): boolean {
+    if ( this.pickup_filename.trim().length === 0 ){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+// 3次元解析のピックアップデータかどうか判定する
+public is3DPickUp(): boolean {
+  if (this.helper.getExt(this.pickup_filename)=== 'csv') {
+    return true;
+  }
+  return false;
+}
 
   // ピックアップファイルを読み込む
   public readPickUpData(str: string, filename: string) {
@@ -53,7 +75,7 @@ export class SaveDataService extends InputDataService {
         }
 
         let data: any;
-        switch (this.getExt(filename)) {
+        switch (this.helper.getExt(filename)) {
           case "pik":
             data = this.pikFileRead(line);
             break;
@@ -150,23 +172,23 @@ export class SaveDataService extends InputDataService {
     return {
       pickUpNo: "pickUpNo:" + line.slice(0, 5).trim(),
       mark: ma,
-      memberNo: this.toNumber(line.slice(10, 15)),
+      memberNo: this.helper.toNumber(line.slice(10, 15)),
       maxPickupCase: line.slice(15, 20).trim(),
       minPickupCase: line.slice(20, 25).trim(),
       p_name: line.slice(25, 30).trim(),
-      position: this.toNumber(line.slice(30, 40)),
+      position: this.helper.toNumber(line.slice(30, 40)),
       maxMdx: 0,
-      maxMdy: this.toNumber(line.slice(40, 50)),
+      maxMdy: this.helper.toNumber(line.slice(40, 50)),
       maxMdz: 0,
-      maxVdy: this.toNumber(line.slice(50, 60)),
+      maxVdy: this.helper.toNumber(line.slice(50, 60)),
       maxVdz: 0,
-      maxNd: -1 * this.toNumber(line.slice(60, 70)),
+      maxNd: -1 * this.helper.toNumber(line.slice(60, 70)),
       minMdx: 0,
-      minMdy: this.toNumber(line.slice(70, 80)),
+      minMdy: this.helper.toNumber(line.slice(70, 80)),
       minMdz: 0,
-      minVdy: this.toNumber(line.slice(80, 90)),
+      minVdy: this.helper.toNumber(line.slice(80, 90)),
       minVdz: 0,
-      minNd: -1 * this.toNumber(line.slice(90, 100)),
+      minNd: -1 * this.helper.toNumber(line.slice(90, 100)),
     };
     // ※ このソフトでは 圧縮がプラス(+)
   }
@@ -181,19 +203,19 @@ export class SaveDataService extends InputDataService {
       maxPickupCase: line[3].trim(),
       minPickupCase: line[4].trim(),
       p_name: line[5].trim(),
-      position: this.toNumber(line[6]),
-      maxNd: -1 * this.toNumber(line[7]),
-      maxVdy: this.toNumber(line[8]),
-      maxVdz: this.toNumber(line[9]),
-      maxMdx: this.toNumber(line[10]),
-      maxMdy: this.toNumber(line[11]),
-      maxMdz: this.toNumber(line[12]),
-      minNd: -1 * this.toNumber(line[13]),
-      minVdy: this.toNumber(line[14]),
-      minVdz: this.toNumber(line[15]),
-      minMdx: this.toNumber(line[16]),
-      minMdy: this.toNumber(line[17]),
-      minMdz: this.toNumber(line[18]),
+      position: this.helper.toNumber(line[6]),
+      maxNd: -1 * this.helper.toNumber(line[7]),
+      maxVdy: this.helper.toNumber(line[8]),
+      maxVdz: this.helper.toNumber(line[9]),
+      maxMdx: this.helper.toNumber(line[10]),
+      maxMdy: this.helper.toNumber(line[11]),
+      maxMdz: this.helper.toNumber(line[12]),
+      minNd: -1 * this.helper.toNumber(line[13]),
+      minVdy: this.helper.toNumber(line[14]),
+      minVdz: this.helper.toNumber(line[15]),
+      minMdx: this.helper.toNumber(line[16]),
+      minMdy: this.helper.toNumber(line[17]),
+      minMdz: this.helper.toNumber(line[18]),
     };
     // ※ このソフトでは 圧縮がプラス(+)
   }
@@ -312,12 +334,50 @@ export class SaveDataService extends InputDataService {
     this.setGroupeList();
   }
 
-  //　部材グループの変更に対してもろもろ再設定を行う
+  // 鉄筋の断面積
+  public getAs(strAs: string): number {
+    let result: number = 0;
+    if (strAs.indexOf("φ") >= 0) {
+      const fai: number = this.helper.toNumber(strAs.replace("φ", ""));
+      if (fai === null) {
+        return 0;
+      }
+      result = (fai ** 2 * Math.PI) / 4;
+    } else if (strAs.indexOf("R") >= 0) {
+      const fai: number = this.helper.toNumber(strAs.replace("R", ""));
+      if (fai === null) {
+        return 0;
+      }
+      result = (fai ** 2 * Math.PI) / 4;
+    } else if (strAs.indexOf("D") >= 0) {
+      const fai: number = this.helper.toNumber(strAs.replace("D", ""));
+      if (fai === null) {
+        return 0;
+      }
+      let reverInfo = this.helper.rebar_List.find((value) => {
+        return value.D === fai;
+      });
+      if (reverInfo === undefined) {
+        return 0;
+      }
+      result = reverInfo.As;
+    } else {
+      result = this.helper.toNumber(strAs);
+      if (result === null) {
+        return 0;
+      }
+    }
+    return result;
+  }
+
+
+  // 部材の入力を保存したタイミングで
+  // グループ変更に対してもろもろ再設定を行う
   public setGroupeList(): void{
     // 部材データ
     this.members.setGroupeList();
     // 算出点データ
-    this.points.setDesignPointData();
+    this.points.setGroupeList();
     // 鉄筋データ
 
     // 鉄骨データ
@@ -330,42 +390,5 @@ export class SaveDataService extends InputDataService {
 
 
   }
-
-  // 鉄筋の断面積
-  public getAs(strAs: string): number {
-    let result: number = 0;
-    if (strAs.indexOf("φ") >= 0) {
-      const fai: number = this.toNumber(strAs.replace("φ", ""));
-      if (fai === null) {
-        return 0;
-      }
-      result = (fai ** 2 * Math.PI) / 4;
-    } else if (strAs.indexOf("R") >= 0) {
-      const fai: number = this.toNumber(strAs.replace("R", ""));
-      if (fai === null) {
-        return 0;
-      }
-      result = (fai ** 2 * Math.PI) / 4;
-    } else if (strAs.indexOf("D") >= 0) {
-      const fai: number = this.toNumber(strAs.replace("D", ""));
-      if (fai === null) {
-        return 0;
-      }
-      let reverInfo = this.rebar_List.find((value) => {
-        return value.D === fai;
-      });
-      if (reverInfo === undefined) {
-        return 0;
-      }
-      result = reverInfo.As;
-    } else {
-      result = this.toNumber(strAs);
-      if (result === null) {
-        return 0;
-      }
-    }
-    return result;
-  }
-
 
 }

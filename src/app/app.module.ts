@@ -21,7 +21,7 @@ import { HotTableModule } from '@handsontable/angular';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { InputDataService } from './providers/input-data.service';
+import { DataHelperModule } from './providers/data-helper.module';
 import { InputBasicInformationService } from './components/basic-information/basic-information.service';
 import { InputMembersService } from './components/members/members.service';
 import { InputDesignPointsService } from './components/design-points/design-points.service';
@@ -102,6 +102,7 @@ import { environment } from 'src/environments/environment';
     HotTableModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule,
+    DataHelperModule
   ],
   declarations: [
     AppComponent,
@@ -148,7 +149,6 @@ import { environment } from 'src/environments/environment';
     ConfigService,
     AuthGuard,
 
-    InputDataService,
     InputBasicInformationService,
     InputMembersService,
     InputDesignPointsService,

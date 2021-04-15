@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { InputSafetyFactorsMaterialStrengthsService } from './safety-factors-material-strengths.service'
 import { InputMembersService } from '../members/members.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 
@@ -243,7 +243,7 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
   constructor(
     private input: InputSafetyFactorsMaterialStrengthsService,
     private member: InputMembersService,
-    private helper: InputDataService) {
+    private helper: DataHelperModule) {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////

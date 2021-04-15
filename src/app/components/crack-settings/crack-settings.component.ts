@@ -1,9 +1,7 @@
 import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import pq from 'pqgrid';
-import { AppComponent } from 'src/app/app.component';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SaveDataService } from 'src/app/providers/save-data.service';
-import { InputMembersService } from '../members/members.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import { InputCrackSettingsService } from './crack-settings.service';
 
@@ -41,9 +39,9 @@ export class CrackSettingsComponent implements OnInit {
   private table_datas: any[][];
 
   constructor(
-    private app: AppComponent,
     private input: InputCrackSettingsService,
-    private helper: InputDataService) { }
+    private save: SaveDataService,
+    public helper: DataHelperModule) { }
 
   ngOnInit() {
 
@@ -194,7 +192,7 @@ export class CrackSettingsComponent implements OnInit {
 
   // 表の高さを計算する
   private tableHeight(): number {
-    let containerHeight = this.app.getWindowHeight();
+    let containerHeight = window.innerHeight;
     containerHeight -= 230;
     return containerHeight;
   }

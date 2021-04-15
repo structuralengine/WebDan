@@ -22,7 +22,6 @@ export class DesignPointsComponent implements OnInit, AfterViewInit, OnDestroy {
   private position_index: number[][];
 
   constructor(
-    private app: AppComponent,
     private input: InputDesignPointsService,
     private save: SaveDataService) { }
 
@@ -128,7 +127,7 @@ export class DesignPointsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 表の高さを計算する
   private tableHeight(): number {
-    let containerHeight = this.app.getWindowHeight();
+    let containerHeight = window.innerHeight;
     containerHeight -= 230;
     return containerHeight;
   }

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InputDataService } from '../../providers/input-data.service';
+import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputBasicInformationService } from '../basic-information/basic-information.service';
 import { InputMembersService } from '../members/members.service';
 
@@ -17,7 +17,7 @@ export class InputSafetyFactorsMaterialStrengthsService  {
   constructor(
     private basic: InputBasicInformationService,
     private members: InputMembersService,
-    private helper: InputDataService) {
+    private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {

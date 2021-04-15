@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InputDataService } from '../../providers/input-data.service';
+import { DataHelperModule } from '../../providers/data-helper.module';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class InputMembersService  {
   private groupe_list: any[];
 
   constructor(
-    private helper: InputDataService) {
+    private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {
@@ -22,7 +22,7 @@ export class InputMembersService  {
   // 部材情報
   private default_member(row: number): any {
     return {
-      'm_no': row, 'm_len': null, 'g_id': '', 'g_name': '', 'shape': '',
+      'm_no': row, 'm_len': null, 'g_no': null, 'g_id': '', 'g_name': '', 'shape': '',
       'B': null, 'H': null, 'Bt': null, 't': null,
     };
   }
@@ -68,7 +68,7 @@ export class InputMembersService  {
     // 対象データが無かった時に処理
     if (r !== undefined) {
       result = r;
-      if(this.helper.toNumber(result.g_id) === null){
+      if(result.g_no === null){
         result.g_id = '';
       }
     } else {
@@ -114,12 +114,6 @@ export class InputMembersService  {
       this.groupe_list.push(members);
     }
 
-    // その他の関連のあるデータに対して変更通知をする
-    /// 算出点
-    // this.points.setDesignPointData();
-    /// 鉄筋
-    /// 鉄骨
-
   }
 
   // SRC部材があるかどうか (null: まだ不明, .length===0: SRC部材はない, 1以上: SRC部材の数)
@@ -140,4 +134,45 @@ export class InputMembersService  {
     }
     return result;
   }
+
+  
+  // 部材に何か入力されたタイミング
+  // 1行でも有効なデータ存在したら true
+  public checkMemberEnables(): boolean {
+    for(const columns of this.member_list){
+      if ( this.isEnable(columns)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // 有効なデータ存在したら true
+  public isEnable(columns) {
+    if(columns.g_name !== null && columns.g_name !== undefined){
+      if(columns.g_name.trim().length > 0){
+        return true;
+      }
+    }
+    if(columns.shape !== null && columns.shape !== undefined){
+      if(columns.shape.trim().length > 0){
+        return true;
+      }
+    }
+    if(columns.B !== null && columns.B !== undefined){
+      return true;
+    }
+    if(columns.H !== null && columns.H !== undefined){
+      return true;
+    }
+    if(columns.Bt !== null && columns.Bt !== undefined){
+      return true;
+    }
+    if(columns.t !== null && columns.t !== undefined){
+      return true;
+    }
+
+    return false;
+  }
+
 }

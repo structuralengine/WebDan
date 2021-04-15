@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
 import { InputBarsService } from './bars.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
-import { AppComponent } from 'src/app/app.component';
+import { SaveDataService } from 'src/app/providers/save-data.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Component({
   selector: 'app-bars',
@@ -24,54 +24,58 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
   private side_cover: string[];
 
   constructor(
-    private app: AppComponent,
     private input: InputBarsService,
-    private save: InputDataService) { }
+    private save: SaveDataService,
+    private helper: DataHelperModule) { }
 
   ngOnInit() {
 
     if (this.save.isManual()) {
       // 断面力手入力モードの場合
       this.beamHeaders = [
-        { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: '断面<br/>B<br/>H', align: 'center', dataType: 'float', dataIndx: 'bh', editable: false, sortable: false, width: 85, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: 'ハンチ高<br/>曲げ<br/>せん断', align: 'center', dataType: 'float', dataIndx: 'haunch_height', sortable: false, width: 85 },
-        { title: '位置', align: 'center', dataType: 'string', dataIndx: 'design_point_id', editable: false, sortable: false, width: 40, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        {
-          title: '軸方向鉄筋', align: 'center', colModel: [
-            { title: '鉄筋径', dataType: 'integer', dataIndx: 'rebar_dia', sortable: false, width: 70 },
-            { title: '本数', dataType: 'float', dataIndx: 'rebar_n', sortable: false, width: 70 },
-            { title: 'かぶり1<br/>断目', dataType: 'float', dataIndx: 'rebar_cover', sortable: false, width: 70 },
-            { title: 'ならび<br/>本数', dataType: 'float', dataIndx: 'rebar_lines', sortable: false, width: 70 },
-            { title: 'アキ', dataType: 'float', dataIndx: 'rebar_space', sortable: false, width: 70 },
-            { title: '間隔', dataType: 'float', dataIndx: 'rebar_ss', sortable: false, width: 70 }
-          ]
-        },
-        {
-          title: '側方鉄筋', align: 'center', colModel: [
-            { title: '鉄筋径', dataType: 'integer', dataIndx: 'side_dia', sortable: false, width: 70 },
-            { title: '本数片', dataType: 'float', dataIndx: 'side_n', sortable: false, width: 70 },
-            { title: '右端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
-            { title: '間隔', dataType: 'float', dataIndx: 'side_ss', sortable: false, width: 70 }
-          ]
-        },
-        {
-          title: 'せん断補強鉄筋', align: 'center', colModel: [
-            { title: '鉄筋径', dataType: 'integer', dataIndx: 'stirrup_dia', sortable: false, width: 70 },
-            { title: '本数', dataType: 'float', dataIndx: 'stirrup_n', sortable: false, width: 70 },
-            { title: '間隔', dataType: 'float', dataIndx: 'stirrup_ss', sortable: false, width: 70 }
-          ]
-        },
-        { title: '主鉄筋の斜率', dataType: 'float', dataIndx: 'cos', sortable: false, width: 85 },
-        { title: 'tanγ+tanβ', dataType: 'float', dataIndx: 'tan', sortable: false, width: 85 },
-        { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
+        { title: '', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       ];
     } else {
-      
+      this.beamHeaders = [
+        { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      ];    
     }
-
+    // 共通する項目
+    this.beamHeaders.push(
+      { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      { title: '断面<br/>B<br/>H', align: 'center', dataType: 'float', dataIndx: 'bh', editable: false, sortable: false, width: 85, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      { title: 'ハンチ高<br/>曲げ<br/>せん断', align: 'center', dataType: 'float', dataIndx: 'haunch_height', sortable: false, width: 85 },
+      { title: '位置', align: 'center', dataType: 'string', dataIndx: 'design_point_id', editable: false, sortable: false, width: 40, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      {
+        title: '軸方向鉄筋', align: 'center', colModel: [
+          { title: '鉄筋径', dataType: 'integer', dataIndx: 'rebar_dia', sortable: false, width: 70 },
+          { title: '本数', dataType: 'float', dataIndx: 'rebar_n', sortable: false, width: 70 },
+          { title: 'かぶり1<br/>断目', dataType: 'float', dataIndx: 'rebar_cover', sortable: false, width: 70 },
+          { title: 'ならび<br/>本数', dataType: 'float', dataIndx: 'rebar_lines', sortable: false, width: 70 },
+          { title: 'アキ', dataType: 'float', dataIndx: 'rebar_space', sortable: false, width: 70 },
+          { title: '間隔', dataType: 'float', dataIndx: 'rebar_ss', sortable: false, width: 70 }
+        ]
+      },
+      {
+        title: '側方鉄筋', align: 'center', colModel: [
+          { title: '鉄筋径', dataType: 'integer', dataIndx: 'side_dia', sortable: false, width: 70 },
+          { title: '本数片', dataType: 'float', dataIndx: 'side_n', sortable: false, width: 70 },
+          { title: '右端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
+          { title: '間隔', dataType: 'float', dataIndx: 'side_ss', sortable: false, width: 70 }
+        ]
+      },
+      {
+        title: 'せん断補強鉄筋', align: 'center', colModel: [
+          { title: '鉄筋径', dataType: 'integer', dataIndx: 'stirrup_dia', sortable: false, width: 70 },
+          { title: '本数', dataType: 'float', dataIndx: 'stirrup_n', sortable: false, width: 70 },
+          { title: '間隔', dataType: 'float', dataIndx: 'stirrup_ss', sortable: false, width: 70 }
+        ]
+      },
+      { title: '主鉄筋の斜率', dataType: 'float', dataIndx: 'cos', sortable: false, width: 85 },
+      { title: 'tanγ+tanβ', dataType: 'float', dataIndx: 'tan', sortable: false, width: 85 },
+      { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
+    );
 
     this.groupe_list = this.input.getBarsColumns();
     this.table_datas = new Array(this.groupe_list.length);
@@ -127,7 +131,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
             }
             // 1行目
             column1['index'] = data['index'];
-            const a: number = this.save.toNumber(data['position']);
+            const a: number = this.helper.toNumber(data['position']);
             column1['position'] = (a === null) ? '' : a.toFixed(3);
             column1['p_name'] = data['p_name'];
             column1['p_name_ex'] = data['p_name_ex'];
@@ -195,7 +199,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
         locale: 'jp',
         height: this.tableHeight().toString(),
         numberCell: { show: false }, // 行番号
-        colModel: this.BeamHeaders,
+        colModel: this.beamHeaders,
         dataModel: { data: this.table_datas[i] },
         change: (evt, ui) => {
           for (const property of ui.updateList) {
@@ -233,7 +237,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // 表の高さを計算する
   private tableHeight(): number {
-    let containerHeight = this.app.getWindowHeight();
+    let containerHeight = window.innerHeight;
     containerHeight -= 230;
     return containerHeight;
   }

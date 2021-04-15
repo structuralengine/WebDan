@@ -5,6 +5,7 @@ import { SetPostDataService } from '../set-post-data.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +16,13 @@ export class CalcServiceabilityShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private base: CalcSafetyShearForceService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule,
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
@@ -236,12 +239,12 @@ export class CalcServiceabilityShearForceService {
 
     let Vd: number = Math.abs(result.Vd);
 
-    let Vpd: number = this.save.toNumber(postdata1.Vd);
+    let Vpd: number = this.helper.toNumber(postdata1.Vd);
     if (Vpd === null) { Vpd = 0; }
     Vpd = Math.abs(Vpd);
     result['Vpd'] = Vpd;
 
-    let Vrd: number = this.save.toNumber(PostData2.Vd);
+    let Vrd: number = this.helper.toNumber(PostData2.Vd);
     if (Vrd === null) { Vrd = Vd - Vpd; }
     if (Vrd === 0) { Vrd = Vd - Vpd; }
     Vrd = Math.abs(Vrd);
@@ -256,7 +259,7 @@ export class CalcServiceabilityShearForceService {
     }
 
     // 環境条件
-    let conNum: number = this.save.toNumber(position.memberInfo.con_s);
+    let conNum: number = this.helper.toNumber(position.memberInfo.con_s);
     if (conNum === null) { conNum = 1; }
 
     // 制限値
@@ -278,7 +281,7 @@ export class CalcServiceabilityShearForceService {
     result['sigma12'] = sigma12;
 
     // せん断補強鉄筋の設計応力度
-    let kr: number = this.save.toNumber(position.memberInfo.kr);
+    let kr: number = this.helper.toNumber(position.memberInfo.kr);
     if (kr === null) { kr = 0.5; }
     result['kr'] = kr;
 

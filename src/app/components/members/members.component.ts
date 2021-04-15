@@ -5,6 +5,7 @@ import { AppComponent } from 'src/app/app.component';
 import pq from 'pqgrid';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 import { CalcRestorabilityMomentService } from 'src/app/calculation/result-restorability-moment/calc-restorability-moment.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Component({
   selector: 'app-members',
@@ -23,13 +24,14 @@ export class MembersComponent implements OnInit, OnDestroy {
   private mambers_table_datarows: any[] = [];
 
   constructor(
-    private app: AppComponent,
     private save: SaveDataService,
-    private input: InputMembersService) {
+    private helper: DataHelperModule,
+    private input: InputMembersService,
+    private app: AppComponent) {
   }
 
   ngOnInit() {
-    if(this.save.isManual() ){
+    if (this.save.isManual()) {
       // 断面力て入力モードの場合の項目
       this.columnHeaders = [];
     } else {
@@ -40,7 +42,7 @@ export class MembersComponent implements OnInit, OnDestroy {
       ];
     }
     this.columnHeaders.push(
-      { title: 'グループNo', align: 'center', dataType: 'string', dataIndx: 'g_id', sortable: false, width: 85 },
+      { title: 'グループNo', align: 'center', dataType: 'integer', dataIndx: 'g_no', sortable: false, width: 85 },
       { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
       { title: '断面形状', dataType: 'string', dataIndx: 'shape', sortable: false, width: 80 },
       {
@@ -69,10 +71,11 @@ export class MembersComponent implements OnInit, OnDestroy {
         for (const property of ui.updateList) {
           for (const key of Object.keys(property.newRow)) {
             const old = property.oldRow[key];
+            let value = property.newRow[key];
             const i = property.rowIndx;
-            if (key === 'g_id') {
+
+            if (key === 'g_no') {
               // 他の共通断面
-              const value = this.save.getGroupeNo(property.newRow[key]);
               if (value === null) {
                 this.mambers_table_datarows[i].g_id = '';
                 continue;
@@ -81,16 +84,21 @@ export class MembersComponent implements OnInit, OnDestroy {
               for (let j = 0; j < this.mambers_table_datarows.length; j++) {
                 if (property.rowIndx === j) { continue; }                      // 同じ行は比較しない
                 const targetColumn = this.mambers_table_datarows[j];
-                const target = this.save.getGroupeNo(targetColumn.g_id);
+                const target = targetColumn.g_no;
                 if (target === null) { continue; } // 初期値は対象にしない
                 if (target === value) {
                   this.mambers_table_datarows[i].g_name = targetColumn.g_name;
                 }
               }
               this.mambers_table_datarows[i].g_id = value.toString();
-            } else if (key === 'g_name') {
+
+            } else if (this.mambers_table_datarows[i].g_no === null) {
+              this.mambers_table_datarows[i].g_id = 'row' + this.mambers_table_datarows[i].m_no; //仮のグループid
+            }
+
+            if (key === 'g_name') {
               // 他の共通断面
-              let value = property.newRow[key];
+
               if (value === null) { continue; }         // 初期値は対象にしない
               value = value.trim();
               if (value === '') { continue; }
@@ -100,16 +108,17 @@ export class MembersComponent implements OnInit, OnDestroy {
                   targetColumn.g_name = value;
                   continue;
                 }                      // 同じ行は比較しない
-                const target = this.save.getGroupeNo(targetColumn.g_id);
-                if (this.save.getGroupeNo(target) === null) { continue; } // 初期値は対象にしない
+                if (targetColumn.g_no === null) { continue; } // 初期値は対象にしない
                 const row = property.rowIndx;
                 const changesColumn = this.mambers_table_datarows[row];
-                const current = this.save.getGroupeNo(changesColumn.g_id);
-                if (target === current) {
+                if (targetColumn.g_no === changesColumn.g_no) {
                   targetColumn.g_name = value;
                 }
               }
-            } else if (key === 'shape') {
+
+            }
+
+            if (key === 'shape') {
               let value = property.newRow[key];
               const row = property.rowIndx;
               if (value === null) { continue; }         // 初期値は対象にしない
@@ -147,11 +156,12 @@ export class MembersComponent implements OnInit, OnDestroy {
                   this.mambers_table_datarows[row].shape = '';
               }
             }
-            if(this.isEnable(this.mambers_table_datarows[i])){
-              this.app.memberEnable(true)
-            }
+
           }
         }
+
+        // 何か変更があったら判定する
+        this.app.memberEnable(this.input.checkMemberEnables())
 
       }
     };
@@ -160,7 +170,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     if (this.save.isManual() === true) {
       // 断面手入力モードの場合は、無限ループ
       this.ROWS_COUNT = this.rowsCount();
-      this.options['beforeTableView'] =  (evt, ui) => {
+      this.options['beforeTableView'] = (evt, ui) => {
         const dataV = this.mambers_table_datarows.length;
         if (ui.initV == null) {
           return;
@@ -194,16 +204,16 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   public saveData(): void {
 
-    if ( !this.save.isManual()){
+    if (!this.save.isManual()) {
       this.save.setGroupeList();
       return;
     }
     // 断面力て入力モードの場合に適用する
     for (let i = this.input.member_list.length - 1; i >= 0; i--) {
       const columns = this.input.member_list[i];
-      if ( this.isEnable(columns)){
+      if (this.input.isEnable(columns)) {
         // グループNo の入力がない入力行には、仮のグループid をつける
-        if( this.save.toNumber(columns.g_id) === null){
+        if (columns.g_no === null) {
           columns.g_id = 'row' + columns.m_no; //仮のグループid
         }
       } else {
@@ -213,35 +223,11 @@ export class MembersComponent implements OnInit, OnDestroy {
     this.save.setGroupeList();
   }
 
-  private isEnable(columns: any) {
-    const result: boolean = false;
-    if(columns.g_name !== null){
-      if(columns.g_name.trim().length > 0){
-        return true;
-      }
-    }
-    if(columns.shape !== null){
-      if(columns.shape.trim().length > 0){
-        return true;
-      }
-    }
-    if(columns.B !== null){
-      return true;
-    }
-    if(columns.H !== null){
-      return true;
-    }
-    if(columns.Bt !== null){
-      return true;
-    }
-    if(columns.t !== null){
-      return true;
-    }
-    return false;
-  }
+
+
   // 表の高さを計算する
   private tableHeight(): number {
-    let containerHeight = this.app.getWindowHeight();
+    let containerHeight = window.innerHeight;
     containerHeight -= 280;
     return containerHeight;
   }

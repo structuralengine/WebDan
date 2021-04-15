@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from '../providers/data-helper.module';
 import { SaveDataService } from '../providers/save-data.service';
 
 @Injectable({
@@ -7,13 +8,15 @@ import { SaveDataService } from '../providers/save-data.service';
 export class SetDesignForceService {
 
 
-  constructor(private save: SaveDataService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule) {
   }
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
   public getDesignForceList(calcTarget: string, pickupNo: number): any[] {
 
-    if (this.save.toNumber(pickupNo) === null) {
+    if (this.helper.toNumber(pickupNo) === null) {
       return new Array();
     }
     let result: any[];
@@ -69,7 +72,7 @@ export class SetDesignForceService {
             return new Array(); // ピックアップ番号の入力が不正
           }
           // 奥行き本数
-          let n: number = this.save.toNumber(member.n);
+          let n: number = this.helper.toNumber(member.n);
           if (n === null) { n = 1; }
           if (n === 0) { n = 1; }
 
@@ -80,7 +83,7 @@ export class SetDesignForceService {
           }
 
           for (const key of Object.keys(targetForce)) {
-            let value: number = this.save.toNumber(targetForce[key]);
+            let value: number = this.helper.toNumber(targetForce[key]);
             if (value === null) { value = 0; }
             targetForce[key] = value;
           }
@@ -127,7 +130,7 @@ export class SetDesignForceService {
           return new Array(); // 存在しない要素番号がある
         }
         // 奥行き本数
-        let n: number = this.save.toNumber(member.n);
+        let n: number = this.helper.toNumber(member.n);
         if (n === null) { n = 1; }
         if (n === 0) { n = 1; }
 

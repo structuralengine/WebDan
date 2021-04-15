@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { InputDataService } from "src/app/providers/input-data.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 import { InputDesignPointsService } from "../design-points/design-points.service";
 
 @Injectable({

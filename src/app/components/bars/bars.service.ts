@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InputDataService } from '../../providers/input-data.service';
+import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputDesignPointsService } from '../design-points/design-points.service';
 import { Observable, of } from 'rxjs';
 
@@ -11,7 +11,7 @@ export class InputBarsService {
   // 鉄筋情報
   public bar_list: any[];
 
-  constructor(private helper: InputDataService,
+  constructor(private helper: DataHelperModule,
               private points: InputDesignPointsService) {
     this.clear();
   }

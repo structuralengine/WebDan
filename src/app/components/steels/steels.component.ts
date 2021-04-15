@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputSteelsService } from './steels.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Component({
   selector: 'app-steels',
@@ -19,7 +19,7 @@ export class SteelsComponent implements OnInit, OnDestroy {
   table_settings: any[];
 
   constructor(private input: InputSteelsService,
-              private helper: InputDataService) {
+              private helper: DataHelperModule) {
 
   }
 

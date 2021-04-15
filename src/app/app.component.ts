@@ -1,58 +1,39 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { PlatformLocation } from "@angular/common";
+import { Component } from "@angular/core";
+import { InputDesignPointsService } from "./components/design-points/design-points.service";
 import { ConfigService } from "./providers/config.service";
-import { InputMembersService } from "./components/members/members.service";
+import { SaveDataService } from "./providers/save-data.service";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent implements OnInit {
-  baseUrl: string;
-  project: string;
-
-  isCalculated: boolean;
-  isSRC: boolean; // SRC部材 があるかどうか
-
-  activeComponentRef: any;
+export class AppComponent {
 
   constructor(
-    platformLocation: PlatformLocation,
     private config: ConfigService,
-    private member: InputMembersService
-  ) {
-    const location = (platformLocation as any).location;
-    this.baseUrl = location.origin + location.pathname;
-    console.log("baseUrl", this.baseUrl);
+    private save: SaveDataService,
+    public points: InputDesignPointsService) { }
 
-    // custom property
-    this.isCalculated = false;
-  }
-
-  ngOnInit() {
-    this.isSRC = this.member.getSRC().some((v) => v > 0);
-  }
-
-  dialogClose(): void {
-    this.deactiveButtons();
+  public isManual(): boolean{
+    return this.save.isManual();
   }
 
   // 画面遷移したとき現在表示中のコンポーネントを覚えておく
-  onActivate(componentRef: any): void {
+  public onActivate(componentRef: any): void {
     this.config.setActiveComponent(componentRef);
   }
-  onDeactivate(componentRef: any): void {
+  public onDeactivate(componentRef: any): void {
     this.config.setActiveComponent(null);
   }
 
-  activePageChenge(id: string): void {
+  public activePageChenge(id: number): void {
     this.deactiveButtons();
-    document.getElementById(id).classList.add("is-active");
+    document.getElementById(id.toString()).classList.add("is-active");
   }
 
   // アクティブになっているボタンを全て非アクティブにする
-  deactiveButtons() {
+  public deactiveButtons() {
     for (let i = 0; i <= 9; i++) {
       const data = document.getElementById(i + "");
       if (data != null) {
@@ -63,17 +44,14 @@ export class AppComponent implements OnInit {
     }
   }
 
-  public getWindowHeight(): number {
-    return window.innerHeight;
-  }
-
   // 部材に何か入力されたら呼ばれる
+  // 有効な入力行があったら次のボタンを有効にする
   private isMemberEnable = false;
   public memberEnable(flg: boolean): void {
     if (this.isMemberEnable === flg) {
       return;
     }
-    for (const id of ['2', '3',　'4', '5',　'6', '7']) {
+    for (const id of ['2', '7']) {
       const data = document.getElementById(id);
       if (data != null) {
         if (flg === true) {
@@ -87,7 +65,34 @@ export class AppComponent implements OnInit {
         }
       }
     }
-
     this.isMemberEnable = flg;
+    this.save.setGroupeList();
+    this.designPointEnable(this.points.designPointChange());
   }
+
+  // 算出点に何か入力されたら呼ばれる
+  // 有効な入力行があったら次のボタンを有効にする
+  private isDesignPointEnable = false;
+  public designPointEnable(flg: boolean): void {
+    if (this.isDesignPointEnable === flg) {
+      return;
+    }
+    for (const id of ['3', '4', '5', '6', '4', '9']) {
+      const data = document.getElementById(id);
+      if (data != null) {
+        if (flg === true) {
+          if (data.classList.contains("disabled")) {
+            data.classList.remove("disabled");
+          }
+        } else {
+          if (!data.classList.contains("disabled")) {
+            data.classList.add("disabled");
+          }
+        }
+      }
+    }
+    this.isDesignPointEnable = flg;
+  }
+
+
 }

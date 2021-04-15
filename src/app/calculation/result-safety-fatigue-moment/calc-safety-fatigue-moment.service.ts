@@ -7,6 +7,7 @@ import { CalcServiceabilityMomentService } from '../result-serviceability-moment
 
 import { Injectable } from '@angular/core';
 import { from } from 'rxjs';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Injectable({
   providedIn: 'root'
@@ -21,12 +22,14 @@ export class CalcSafetyFatigueMomentService {
   // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
   private PostedData: any;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private fatigue: SetFatigueService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private base: CalcServiceabilityMomentService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule,
+    private force: SetDesignForceService,
+    private fatigue: SetFatigueService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private base: CalcServiceabilityMomentService) {
     this.DesignForceList = null;
     this.DesignForceList3 = null;
     this.isEnable = false;
@@ -37,12 +40,12 @@ export class CalcSafetyFatigueMomentService {
     const result = new Array(2);
     let jA = 0;
     if ('train_A_count' in this.save.fatigues) {
-      jA = this.save.toNumber(this.save.fatigues.train_A_count);
+      jA = this.helper.toNumber(this.save.fatigues.train_A_count);
       if (jA === null) { jA = 0; }
     }
     let jB = 0;
     if ('train_B_count' in this.save.fatigues) {
-      jB = this.save.toNumber(this.save.fatigues.train_B_count);
+      jB = this.helper.toNumber(this.save.fatigues.train_B_count);
       if (jB === null) { jB = 0; }
     }
     result[0] = jA;
@@ -65,8 +68,8 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // 列車本数の入力がない場合は処理を抜ける
-    if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
-      this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+    if (this.helper.toNumber(this.save.fatigues.train_A_count) === null &&
+      this.helper.toNumber(this.save.fatigues.train_B_count) === null) {
       return;
     }
 
@@ -276,14 +279,14 @@ export class CalcSafetyFatigueMomentService {
           let flg = false;
           if (position.fatigueData !== null) {
             for (const key of Object.keys(position.fatigueData.M1)) {
-              if (this.save.toNumber(position.fatigueData.M1[key]) !== null) {
+              if (this.helper.toNumber(position.fatigueData.M1[key]) !== null) {
                 flg = true;
                 break;
               }
             }
             if (flg === false) {
               for (const key of Object.keys(position.fatigueData.M2)) {
-                if (this.save.toNumber(position.fatigueData.M2[key]) !== null) {
+                if (this.helper.toNumber(position.fatigueData.M2[key]) !== null) {
                   flg = true;
                   break;
                 }
@@ -493,14 +496,14 @@ export class CalcSafetyFatigueMomentService {
 
     let Mdmin = 0;
     if ('Md' in postdata0) {
-      Mdmin = this.save.toNumber(postdata0.Md);
+      Mdmin = this.helper.toNumber(postdata0.Md);
       if (Mdmin !== null) {
         result['Mdmin'] = Mdmin;
       }
     }
     let Ndmin = 0;
     if ('Nd' in postdata0) {
-      Ndmin = this.save.toNumber(postdata0.Nd);
+      Ndmin = this.helper.toNumber(postdata0.Nd);
       if (Ndmin !== null) {
         result['Ndmin'] = Ndmin;
       }
@@ -523,14 +526,14 @@ export class CalcSafetyFatigueMomentService {
 
     let Mrd = 0;
     if ('Md' in postdata1) {
-      Mrd = this.save.toNumber(postdata1.Md);
+      Mrd = this.helper.toNumber(postdata1.Md);
       if (Mrd !== null) {
         result['Mrd'] = Mrd;
       }
     }
     let Nrd = 0;
     if ('Nd' in postdata1) {
-      Nrd = this.save.toNumber(postdata1.Nd);
+      Nrd = this.helper.toNumber(postdata1.Nd);
       if (Nrd !== null) {
         result['Nrd'] = Nrd;
       }
@@ -543,7 +546,7 @@ export class CalcSafetyFatigueMomentService {
     // f200 の計算
     let rs = 1.05;
     if ('rs' in PrintData) {
-      rs = this.save.toNumber(PrintData.rs);
+      rs = this.helper.toNumber(PrintData.rs);
       if (rs === null) { rs = 1; }
     }
     result['rs'] = rs;
@@ -552,7 +555,7 @@ export class CalcSafetyFatigueMomentService {
 
     let fai: number;
     if ('Ast-φ' in PrintData) {
-      fai = this.save.toNumber(PrintData['Ast-φ']);
+      fai = this.helper.toNumber(PrintData['Ast-φ']);
       if (fai === null) { return result; }
     } else {
       return result;
@@ -560,7 +563,7 @@ export class CalcSafetyFatigueMomentService {
 
     let fsu: number;
     if ('fsu' in PrintData) {
-      fsu = this.save.toNumber(PrintData.fsu);
+      fsu = this.helper.toNumber(PrintData.fsu);
       if (fsu === null) { return result; }
     } else {
       return result;
@@ -568,14 +571,14 @@ export class CalcSafetyFatigueMomentService {
 
     let r1 = 1;
     if ('r1_1' in position.memberInfo) {
-      r1 = this.save.toNumber(position.memberInfo.r1_1);
+      r1 = this.helper.toNumber(position.memberInfo.r1_1);
       if (r1 === null) { r1 = 1; }
     }
     result['r1'] = r1;
 
     let ar: number = 3.09 - 0.003 * fai;
 
-    let reference_count: number = this.save.toNumber(this.save.fatigues.reference_count);
+    let reference_count: number = this.helper.toNumber(this.save.fatigues.reference_count);
     if (reference_count === null) {
       reference_count = 2000000;
     }
@@ -586,14 +589,14 @@ export class CalcSafetyFatigueMomentService {
 
     let ri = 1;
     if ('ri' in PrintData) {
-      ri = this.save.toNumber(PrintData.ri);
+      ri = this.helper.toNumber(PrintData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;
 
     let rb = 1;
     if ('rb' in position.safety_factor) {
-      rb = this.save.toNumber(position.safety_factor.rb);
+      rb = this.helper.toNumber(position.safety_factor.rb);
       if (rb === null) { rb = 1; }
     }
 
@@ -613,7 +616,7 @@ export class CalcSafetyFatigueMomentService {
     // 標準列車荷重観山の総等価繰返し回数 N の計算
     let T: number;
     if ('service_life' in this.save.fatigues) {
-      T = this.save.toNumber(this.save.fatigues.service_life);
+      T = this.helper.toNumber(this.save.fatigues.service_life);
       if (T === null) { return result; }
     } else {
       return result;
@@ -632,25 +635,25 @@ export class CalcSafetyFatigueMomentService {
         inputFatigue = position.fatigueData.M2;
         break;
     }
-    let SASC: number = this.save.toNumber(inputFatigue.SA);
+    let SASC: number = this.helper.toNumber(inputFatigue.SA);
     if (SASC === null) {
       SASC = 1;
     } else {
       result['SASC'] = SASC;
     }
-    let SBSC: number = this.save.toNumber(inputFatigue.SB);
+    let SBSC: number = this.helper.toNumber(inputFatigue.SB);
     if (SBSC === null) {
       SBSC = 1;
     } else {
       result['SBSC'] = SBSC;
     }
-    let a: number = this.save.toNumber(inputFatigue.A);
+    let a: number = this.helper.toNumber(inputFatigue.A);
     if (a === null) {
       a = 1;
     } else {
       result['a'] = a;
     }
-    let b: number = this.save.toNumber(inputFatigue.B);
+    let b: number = this.helper.toNumber(inputFatigue.B);
     if (b === null) {
       b = 1;
     } else {
@@ -659,11 +662,11 @@ export class CalcSafetyFatigueMomentService {
     let NA = 0;
     let NB = 0;
     if (k === 0.06) {
-      NA = this.save.toNumber(inputFatigue.NA06);
-      NB = this.save.toNumber(inputFatigue.NB06);
+      NA = this.helper.toNumber(inputFatigue.NA06);
+      NB = this.helper.toNumber(inputFatigue.NB06);
     } else {
-      NA = this.save.toNumber(inputFatigue.NA12);
-      NB = this.save.toNumber(inputFatigue.NB12);
+      NA = this.helper.toNumber(inputFatigue.NA12);
+      NB = this.helper.toNumber(inputFatigue.NB12);
     }
     if (NA === null) {
       NA = 0;

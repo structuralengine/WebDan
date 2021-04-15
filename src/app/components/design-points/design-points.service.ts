@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InputDataService } from '../../providers/input-data.service';
+import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputMembersService } from '../members/members.service';
 
 @Injectable({
@@ -13,7 +13,7 @@ export class InputDesignPointsService {
 
   constructor(
     private members: InputMembersService,
-    private helper: InputDataService) {
+    private helper: DataHelperModule) {
     this.clear();
   }
 
@@ -77,11 +77,11 @@ export class InputDesignPointsService {
       }
       this.position_list.push(new_member);
     }
-    this.setDesignPointData()
+    this.setGroupeList()
   }
 
   // 部材グループに再編
-  public setDesignPointData(): void {
+  public setGroupeList(): void {
 
     this.position_groupe = new Array();
 
@@ -119,10 +119,33 @@ export class InputDesignPointsService {
   /// </summary>
   public getDesignPointColumns(): any[] {
     if(this.position_groupe.length === 0){
-      this.setDesignPointData();
+      this.setGroupeList();
     }
     return this.position_groupe;
   }
 
+  // 算出点に何か入力されたタイミング
+  // 1行でも有効なデータ存在したら true
+  public designPointChange(): boolean{
+    for(const groupe_list of this.position_groupe){
+      for(const member of groupe_list){
+        for(const data of member.positions){
+          if(data.isMyCalc === true){
+            return true;
+          }
+          if(data.isVyCalc === true){
+            return true;
+          }
+          if(data.isMzCalc === true){
+            return true;
+          }
+          if(data.isVzCalc === true){
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
 
 }
