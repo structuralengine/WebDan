@@ -27,6 +27,28 @@ export class InputMembersService  {
     };
   }
 
+  /// basic-information.component の
+  /// pickup_moment_datarows のデータを返す関数
+  public getMemberTableColumns(row: number): any {
+
+    const r = this.member_list.find( (item) => item.m_no === row );
+
+    let result: any;
+
+    // 対象データが無かった時に処理
+    if (r !== undefined) {
+      result = r;
+      if(result.g_no === null){
+        result.g_id = '';
+      }
+    } else {
+      result = this.default_member(row);
+      this.member_list.push(result);
+    }
+    return result;
+  }
+
+
   /// pick up ファイルをセットする関数
   public setPickUpData(pickup_data: Object, isManualed: boolean) {
 
@@ -54,80 +76,7 @@ export class InputMembersService  {
     }
   }
 
-  /// basic-information.component の
-  /// pickup_moment_datarows のデータを返す関数
-  public getMemberTableColumns(row: number): any {
 
-    const r = this.member_list.find( (item) => item.m_no === row );
-
-    let result: any;
-
-    // 対象データが無かった時に処理
-    if (r !== undefined) {
-      result = r;
-      if(result.g_no === null){
-        result.g_id = '';
-      }
-    } else {
-      result = this.default_member(row);
-      this.member_list.push(result);
-    }
-    return result;
-  }
-
-  public getGroupeList(): any[] {
-
-    const groupe_id_list: string[] = new Array();
-    for (const m of this.member_list) {
-
-      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
-        m.g_id = '';
-        continue;
-      }
- 
-      const id: string = m.g_id;
-      if (groupe_id_list.find((value)=>value===id) === undefined) {
-        groupe_id_list.push(id);
-      }
-    }
-
-    // グループ番号順に並べる
-    groupe_id_list.sort();
-
-    // グループ番号を持つ部材のリストを返す
-    const groupe_list = new Array();
-    for (const id of groupe_id_list) {
-      // グループ番号を持つ部材のリスト
-      const members: any[] = this.member_list.filter( (item, index) => {
-        if (item.g_id === id) { return item; }
-      });
-      groupe_list.push(members);
-    }
-
-    return groupe_list;
-
-  }
-
-  // SRC部材があるかどうか (null: まだ不明, .length===0: SRC部材はない, 1以上: SRC部材の数)
-  public getSRC(): number[] {
-
-    let result: number[] = new Array();
-
-    const groupeList = this.getGroupeList();
-    for (const member_list of groupeList) {
-      let counter: number = null;
-      for (let i = 0; i < member_list.length; i++) {
-        const target: string = member_list[i].shape;
-        if (target.indexOf('SRC') > 0) {
-          counter = (counter === null) ? 0 : counter + 1;
-        }
-      }
-      result.push(counter);
-    }
-    return result;
-  }
-
-  
   // 部材に何か入力されたタイミング
   // 1行でも有効なデータ存在したら true
   public checkMemberEnables(): boolean {

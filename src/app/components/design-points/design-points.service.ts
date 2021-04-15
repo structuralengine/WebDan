@@ -8,7 +8,8 @@ import { InputMembersService } from '../members/members.service';
 export class InputDesignPointsService {
 
   // 着目点情報
-  public position_list: any[];   // 通し番号順（これがファイル保存対象）
+  public position_list: any[];
+  // { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
     private members: InputMembersService,
@@ -22,21 +23,12 @@ export class InputDesignPointsService {
   }
 
   // 着目点情報
-  private default_positions(id: number, positions = []): any {
+  private default_position(id: number): any {
     return {
-      m_no: id,
-      positions
-    };
-  }
-  private default_position(
-    index: number,
-    p_name: string = null,
-    position: number = null): any {
-
-    return {
-      index: index,
-      p_name: p_name,
-      position: position,
+      index: id,
+      m_no: null,
+      p_name: null,
+      position: null,
       p_name_ex: null,
       isMyCalc: null,
       isVyCalc: null,

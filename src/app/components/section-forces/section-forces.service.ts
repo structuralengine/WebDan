@@ -1,47 +1,75 @@
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 import { Injectable } from '@angular/core';
-import { DataHelperModule } from '../../providers/data-helper.module';
-import { InputDesignPointsService } from '../design-points/design-points.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InputSectionForcesService  {
 
-  public Mdatas: any[];
-  public Vdatas: any[];
+  public moment_force: any[];
+  public shear_force: any[];
 
-  constructor(private points: InputDesignPointsService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {
-    this.Mdatas = new Array();
-    this.Vdatas = new Array();
+    this.moment_force = new Array();
+    this.shear_force = new Array();
   }
 
-
+  // 曲げモーメント １入力行のデフォルト値
+  // { m_no, p_name_ex, case: [{Md, Nd}, {Md, Nd}, ...] }
   private default_m_column(m_no: number, p_name_ex: string): any {
 
-    const rows: any = { 'm_no': m_no, 'p_name_ex': p_name_ex, case: new Array() };
-    for (let i = 0; i < 10; i++) {
-      const tmp = {Md: null, Nd: null };
-      rows['case'].push(tmp)
+    const rows: any = { m_no, p_name_ex, case: new Array() };
+
+    switch(this.save.basic.specification1_selected){
+      case 0: // 鉄道
+        for (let i = 0; i < 10; i++) {
+          const tmp = {Md: null, Nd: null };
+          rows.case.push(tmp)
+        }
+        break;
+      case 1: // 道路
+        break;
     }
     return rows;
   }
 
+  // せん断力 １入力行のデフォルト値
+  // { m_no, p_name_ex, case: [{Vd, Md, Nd}, {Vd, Md, Nd}, ...] }
   private default_v_column(m_no: number, p_name_ex: string): any {
 
-    const rows: any = { 'm_no': m_no, 'p_name_ex': p_name_ex, case: new Array() };
-    for (let i = 0; i < 8; i++) {
-      const tmp = {Vd: null, Md: null, Nd: null};
-      rows['case'].push(tmp)
+    const rows: any = { m_no, p_name_ex, case: new Array() };
+
+    switch(this.save.basic.specification1_selected){
+      case 0: // 鉄道
+      for (let i = 0; i < 8; i++) {
+        const tmp = {Vd: null, Md: null, Nd: null};
+        rows.case.push(tmp)
+      }
+        break;
+      case 1: // 道路
+        break;
     }
     return rows;
   }
 
-  public getMdtableColumns(row: number): any[] {
-    
-    const r = this.Mdatas.find( (item) => item.m_no === row );
+  // member_list から 指定行 のデータを返す関数
+  public getTable1Columns(row: number): any[] {
+
+    // 
+    const design_point = this.save.points.position_list.find( (item)=>item.m_no === row );
+    let p_name_ex = '';
+    if (design_point !== undefined) {
+      p_name_ex = design_point.positions[0].p_name_ex;
+    }
+
+    const r = this.moment_force.find( (item) => item.m_no === row );
 
     let result: any;
 
@@ -53,26 +81,26 @@ export class InputSectionForcesService  {
       }
     } else {
       result = this.default_m_column(row);
-      this.Mdatas.push(result);
+      this.moment_force.push(result);
     }
     return result;
 
 
     
 
-    const old_Mdatas = this.Mdatas.slice(0, this.Mdatas.length);
-    this.Mdatas = new Array();
+    const old_moment_force = this.moment_force.slice(0, this.moment_force.length);
+    this.moment_force = new Array();
     const pp = this.points.position_list;
     for (const p of this.points.position_list) {
       const p0 = p['positions'][0];
-      let new_colum: any = old_Mdatas.find( (value) => {
+      let new_colum: any = old_moment_force.find( (value) => {
         return value.m_no === p.m_no;
       });
       if (new_colum === undefined) {
         new_colum = this.default_v_column(p.m_no, p0.p_name_ex);
       }
       new_colum.p_name_ex = p0.p_name_ex;
-      this.Mdatas.push(new_colum);
+      this.moment_force.push(new_colum);
     }
 
     for (const data of this.save.force.getMdtableColumns()) {
@@ -88,40 +116,40 @@ export class InputSectionForcesService  {
 
 
 
-    return this.Mdatas;
+    return this.moment_force;
   }
 
   public setMdtableColumns(Mtable_datas: any[]) {
-    this.Mdatas = new Array();
+    this.moment_force = new Array();
     for (const data of Mtable_datas) {
       const new_colum = this.default_m_column(data.m_no, data.p_name_ex);
       for (let i = 0; i < new_colum['case'].length; i++) {
         new_colum['case'][i].Md = data['case' + i + '_Md'];
         new_colum['case'][i].Nd = data['case' + i + '_Nd'];
       }
-      this.Mdatas.push(new_colum);
+      this.moment_force.push(new_colum);
     }
   }
 
-  public getVdtableColumns(): any[] {
-    const old_Vdatas = this.Vdatas.slice(0, this.Vdatas.length);
-    this.Vdatas = new Array();
+  public getTable2Columns(): any[] {
+    const old_shear_force = this.shear_force.slice(0, this.shear_force.length);
+    this.shear_force = new Array();
     for (const p of this.points.position_list) {
       const p0 = p['positions'][0];
-      let new_colum: any = old_Vdatas.find( (value) => {
+      let new_colum: any = old_shear_force.find( (value) => {
         return value.m_no === p.m_no;
       });
       if (new_colum === undefined) {
         new_colum = this.default_m_column(p.m_no, p0.p_name_ex);
       }
       new_colum.p_name_ex = p0.p_name_ex;
-      this.Vdatas.push(new_colum);
+      this.shear_force.push(new_colum);
     }
-    return this.Vdatas;
+    return this.shear_force;
   }
 
   public setVdtableColumns(Vtable_datas: any[]) {
-    this.Vdatas = new Array();
+    this.shear_force = new Array();
     for (const data of Vtable_datas) {
       const new_colum = this.default_v_column(data.m_no, data.p_name_ex);
       for (let i = 0; i < new_colum['case'].length; i++) {
@@ -129,7 +157,7 @@ export class InputSectionForcesService  {
         new_colum['case'][i].Md = data['case' + i + '_Md'];
         new_colum['case'][i].Nd = data['case' + i + '_Nd'];
       }
-      this.Vdatas.push(new_colum);
+      this.shear_force.push(new_colum);
     }
   }
 

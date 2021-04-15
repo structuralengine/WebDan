@@ -40,14 +40,14 @@ export class SetDesignForceService {
       case 'Md': // 曲げモーメントの照査の場合
         force = JSON.parse(
           JSON.stringify({
-            temp: this.save.force.Mdatas
+            temp: this.save.force.moment_force
           })
         ).temp;
         break;
       case 'Vd': // せん断力の照査の場合
         force = JSON.parse(
           JSON.stringify({
-            temp: this.save.force.Vdatas
+            temp: this.save.force.shear_force
           })
         ).temp;
         break;

@@ -6,7 +6,7 @@ import { InputDesignPointsService } from "../components/design-points/design-poi
 import { InputFatiguesService } from "../components/fatigues/fatigues.service";
 import { InputMembersService } from "../components/members/members.service";
 import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
-import { InputSectionForcesService } from "../components/section-forces/input-section-forces.service";
+import { InputSectionForcesService } from "../components/section-forces/section-forces.service";
 import { InputCalclationPrintService } from "../components/calculation-print/calclation-print.service";
 import { InputCrackSettingsService } from "../components/crack-settings/crack-settings.service";
 import { InputSteelsService } from "../components/steels/steels.service";
@@ -15,7 +15,6 @@ import { InputSteelsService } from "../components/steels/steels.service";
   providedIn: "root",
 })
 export class SaveDataService {
-
   // ピックアップファイル
   public pickup_filename: string;
   public pickup_data: Object;
@@ -31,12 +30,13 @@ export class SaveDataService {
     public members: InputMembersService,
     public safety: InputSafetyFactorsMaterialStrengthsService,
     public force: InputSectionForcesService,
-    public calc: InputCalclationPrintService) {
-      this.clear();
+    public calc: InputCalclationPrintService
+  ) {
+    this.clear();
   }
 
   public clear(): void {
-    this.pickup_filename = '';
+    this.pickup_filename = "";
     this.pickup_data = {};
     this.basic.clear();
     this.members.clear();
@@ -47,21 +47,22 @@ export class SaveDataService {
     this.safety.clear();
   }
 
+  // 断面力て入力モードかどうか判定する
   public isManual(): boolean {
-    if ( this.pickup_filename.trim().length === 0 ){
+    if (this.pickup_filename.trim().length === 0) {
       return true;
     } else {
       return false;
     }
   }
 
-// 3次元解析のピックアップデータかどうか判定する
-public is3DPickUp(): boolean {
-  if (this.helper.getExt(this.pickup_filename)=== 'csv') {
-    return true;
+  // 3次元解析のピックアップデータかどうか判定する
+  public is3DPickUp(): boolean {
+    if (this.helper.getExt(this.pickup_filename) === "csv") {
+      return true;
+    }
+    return false;
   }
-  return false;
-}
 
   // ピックアップファイルを読み込む
   public readPickUpData(str: string, filename: string) {
@@ -79,10 +80,10 @@ public is3DPickUp(): boolean {
         let data: any;
         switch (this.helper.getExt(filename)) {
           case "pik":
-            data = this.pikFileRead(line);
+            data = this.pikFileRead(line); // 2次元（平面）解析のピックアップデータ
             break;
           case "csv":
-            data = this.csvFileRead(line);
+            data = this.csvFileRead(line); // 3次元（立体）解析のピックアップデータ
             break;
           default:
             this.pickup_filename = "";
@@ -262,8 +263,8 @@ public is3DPickUp(): boolean {
     ] = this.safety.safety_factor_material_strengths_list;
 
     // 断面力手入力情報
-    jsonData["manual_moment_force"] = this.force.Mdatas;
-    jsonData["manual_shear_force"] = this.force.Vdatas;
+    jsonData["manual_moment_force"] = this.force.moment_force;
+    jsonData["manual_shear_force"] = this.force.shear_force;
 
     // 計算印刷設定
     jsonData["print_selected"] = this.calc.print_selected;
@@ -304,7 +305,6 @@ public is3DPickUp(): boolean {
       this.crack.clear();
     }
 
-
     // 鉄筋情報
     this.bars.bar_list = jsonData["bar_list"];
 
@@ -326,12 +326,11 @@ public is3DPickUp(): boolean {
       jsonData["safety_factor_material_strengths"];
 
     // 断面力手入力情報
-    this.force.Mdatas = jsonData["manual_moment_force"];
-    this.force.Vdatas = jsonData["manual_shear_force"];
+    this.force.moment_force = jsonData["manual_moment_force"];
+    this.force.shear_force = jsonData["manual_shear_force"];
 
     // 計算印刷設定
     this.calc.print_selected = jsonData["print_selected"];
-
   }
 
   // 鉄筋の断面積
@@ -370,5 +369,34 @@ public is3DPickUp(): boolean {
     return result;
   }
 
+  // グループ別 部材情報{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t} の配列
+  public getGroupeList(): any[] {
+
+    const id_list: string[] = new Array();
+    for (const m of this.members.member_list) {
+
+      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
+        continue;
+      }
+
+      if (id_list.find((value)=>value===m.g_id) === undefined) {
+        id_list.push(m.g_id);
+      }
+    }
+
+    // グループ番号順に並べる
+    id_list.sort();
+
+    // グループ番号を持つ部材のリストを返す
+    const result = new Array();
+    for (const id of id_list) {
+      // グループ番号を持つ部材のリスト
+      const members: any[] = this.members.member_list.filter( (item, index) => {
+        if (item.g_id === id) { return item; }
+      });
+      result.push(members);
+    }
+    return result;
+  }
 
 }

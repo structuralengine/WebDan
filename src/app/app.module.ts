@@ -29,7 +29,7 @@ import { InputBarsService } from './components/bars/bars.service';
 import { InputSteelsService } from './components/steels/steels.service';
 import { InputFatiguesService } from './components/fatigues/fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/safety-factors-material-strengths.service';
-import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
+import { InputSectionForcesService } from './components/section-forces/section-forces.service';
 import { InputCalclationPrintService } from './components/calculation-print/calclation-print.service';
 import { SaveDataService } from './providers/save-data.service';
 
