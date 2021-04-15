@@ -9,6 +9,7 @@ import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety
 import { InputSectionForcesService } from "../components/section-forces/input-section-forces.service";
 import { InputCalclationPrintService } from "../components/calculation-print/calclation-print.service";
 import { InputCrackSettingsService } from "../components/crack-settings/crack-settings.service";
+import { InputSteelsService } from "../components/steels/steels.service";
 
 @Injectable({
   providedIn: "root",
@@ -22,6 +23,7 @@ export class SaveDataService {
   constructor(
     public helper: DataHelperModule,
     public bars: InputBarsService,
+    public steel: InputSteelsService,
     public basic: InputBasicInformationService,
     public points: InputDesignPointsService,
     public crack: InputCrackSettingsService,
@@ -330,8 +332,6 @@ public is3DPickUp(): boolean {
     // 計算印刷設定
     this.calc.print_selected = jsonData["print_selected"];
 
-    //　部材グループの変更に対してもろもろ再設定を行う
-    this.setGroupeList();
   }
 
   // 鉄筋の断面積
@@ -370,25 +370,5 @@ public is3DPickUp(): boolean {
     return result;
   }
 
-
-  // 部材の入力を保存したタイミングで
-  // グループ変更に対してもろもろ再設定を行う
-  public setGroupeList(): void{
-    // 部材データ
-    this.members.setGroupeList();
-    // 算出点データ
-    this.points.setGroupeList();
-    // 鉄筋データ
-
-    // 鉄骨データ
-
-    // ひび割れデータ
-
-    // 疲労データ
-
-    // 安全係数データ
-
-
-  }
 
 }

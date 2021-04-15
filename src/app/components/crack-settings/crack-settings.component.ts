@@ -39,13 +39,12 @@ export class CrackSettingsComponent implements OnInit {
   private table_datas: any[][];
 
   constructor(
-    private input: InputCrackSettingsService,
     private save: SaveDataService,
     public helper: DataHelperModule) { }
 
   ngOnInit() {
 
-    this.groupe_list = this.input.getCrackColumns();
+    this.groupe_list = this.save.crack.getCrackColumns();
     this.table_datas = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
@@ -187,7 +186,7 @@ export class CrackSettingsComponent implements OnInit {
   }
 
   public saveData(): void {
-    this.input.setCrackColumns(this.table_datas);
+    this.save.crack.setCrackColumns(this.table_datas);
   }
 
   // 表の高さを計算する

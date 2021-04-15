@@ -38,27 +38,25 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   conditions_list: any[];
 
   constructor(
-    private input: InputBasicInformationService,
-    private save: SaveDataService,
-    private member: InputMembersService) {
+    private save: SaveDataService) {
 
   }
 
   ngOnInit() {
 
     // 適用 に関する変数 の初期化
-    this.specification1_selected = this.input.specification1_selected;
-    this.specification1_list = this.input.specification1_list;
+    this.specification1_selected = this.save.basic.specification1_selected;
+    this.specification1_list = this.save.basic.specification1_list;
 
     // 仕様 に関する変数 の初期化
-    this.specification2_selected = this.input.specification2_selected;
-    this.specification2_list = this.input.specification2_list;
+    this.specification2_selected = this.save.basic.specification2_selected;
+    this.specification2_list = this.save.basic.specification2_list;
 
     //  設計条件 に関する初期化
-    this.conditions_list = this.input.conditions_list;
+    this.conditions_list = this.save.basic.conditions_list;
 
     // SRC部材 があるかどうか
-    this.isSRC = this.member.getSRC().some((v) => v > 0);
+    this.isSRC = this.save.members.getSRC().some((v) => v > 0);
 
     this.initPickupTable();
     
@@ -109,18 +107,18 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
     for (let row = 0; row < this.pickup_moment_datarows.length; row++) {
       const column = this.pickup_moment_datarows[row];
 
-      if (this.input.specification1_selected === 0  // 鉄道
+      if (this.save.basic.specification1_selected === 0  // 鉄道
         && row === 2                          // 安全性 （疲労破壊）疲労限
         && this.isSRC === false) {            // SRC部材 がない
         i++;
       }
 
-      this.input.setPickUpNoMomentColumns(row + i, column['pickup_no']);
+      this.save.basic.setPickUpNoMomentColumns(row + i, column['pickup_no']);
     }
 
     for (let row = 0; row < this.pickup_shear_force_datarows.length; row++) {
       const column = this.pickup_shear_force_datarows[row];
-      this.input.setPickUpNoShearForceColumns(row, column['pickup_no']);
+      this.save.basic.setPickUpNoShearForceColumns(row, column['pickup_no']);
     }
   }
 
@@ -133,11 +131,11 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
     this.pickup_moment_datarows = new Array();
     this.pickup_shear_force_datarows = new Array();
 
-    for (let row = 0; row < this.input.pickup_moment_title.length; row++) {
-      const column = this.input.getPickUpNoMomentColumns(row);
+    for (let row = 0; row < this.save.basic.pickup_moment_title.length; row++) {
+      const column = this.save.basic.getPickUpNoMomentColumns(row);
 
       if (row === 2) { //  安全性 （疲労破壊）疲労限
-        if (this.input.specification1_selected === 0) { // 鉄道
+        if (this.save.basic.specification1_selected === 0) { // 鉄道
           if (this.isSRC === false) { // SRC部材 がない
             continue;
           }
@@ -146,8 +144,8 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
       this.pickup_moment_datarows.push(column);
     }
 
-    for (let row = 0; row < this.input.pickup_shear_force_title.length; row++) {
-      const column = this.input.getPickUpNoShearForceColumns(row);
+    for (let row = 0; row < this.save.basic.pickup_shear_force_title.length; row++) {
+      const column = this.save.basic.getPickUpNoShearForceColumns(row);
       this.pickup_shear_force_datarows.push(column);
     }
 
@@ -159,19 +157,19 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <param name='i'>選択された番号</param>
   public setSpecification1(i: number): void {
 
-    this.input.specification1_selected = i;
-    this.input.initSpecificationTitles();
+    this.save.basic.specification1_selected = i;
+    this.save.basic.initSpecificationTitles();
 
     // 適用 に関する変数 の初期化
-    this.input.specification1_selected = i;
-    this.input.specification1_list = this.input.specification1_list;
+    this.save.basic.specification1_selected = i;
+    this.save.basic.specification1_list = this.save.basic.specification1_list;
 
     // 仕様 に関する変数 の初期化
-    this.setSpecification2(this.input.specification2_selected);
-    this.input.specification2_list = this.input.specification2_list;
+    this.setSpecification2(this.save.basic.specification2_selected);
+    this.save.basic.specification2_list = this.save.basic.specification2_list;
 
     //  設計条件 に関する初期化
-    this.input.conditions_list = this.input.conditions_list;
+    this.save.basic.conditions_list = this.save.basic.conditions_list;
 
     // pickup_table に関する初期化
     this.initPickupTable();
@@ -183,7 +181,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// </summary>
   /// <param name='i'>選択された番号</param>
   public setSpecification2(i: number): void {
-    this.input.specification2_selected = i;
+    this.save.basic.specification2_selected = i;
   }
 
   /// <summary>
@@ -192,8 +190,8 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <param name='item'>変更されたアイテム</param>
   /// <param name='isChecked'>チェックボックスの状態</param>
   public conditionsCheckChanged(id: string, isChecked: boolean) {
-    this.input.setConditions(id, isChecked);
-    this.input.conditions_list = this.input.conditions_list;
+    this.save.basic.setConditions(id, isChecked);
+    this.save.basic.conditions_list = this.save.basic.conditions_list;
   }
 
 }

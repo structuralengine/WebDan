@@ -23,21 +23,20 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
   table_settings = {};
 
   constructor(
-    private input: InputCalclationPrintService,
     private save: SaveDataService,
     private router: Router ) { }
 
   ngOnInit() {
 
-    this.print_calculate_checked = this.input.print_selected.print_calculate_checked;
-    this.print_section_force_checked = this.input.print_selected.print_section_force_checked;
-    this.print_summary_table_checked = this.input.print_selected.print_summary_table_checked;
+    this.print_calculate_checked = this.save.calc.print_selected.print_calculate_checked;
+    this.print_section_force_checked = this.save.calc.print_selected.print_section_force_checked;
+    this.print_summary_table_checked = this.save.calc.print_selected.print_summary_table_checked;
 
-    this.calculate_moment_checked = this.input.print_selected.calculate_moment_checked;
-    this.calculate_shear_force_checked = this.input.print_selected.calculate_shear_force;
+    this.calculate_moment_checked = this.save.calc.print_selected.calculate_moment_checked;
+    this.calculate_shear_force_checked = this.save.calc.print_selected.calculate_shear_force;
 
     this.table_datas = new Array();
-    for ( const data of this.input.getColumnData()) {
+    for ( const data of this.save.calc.getColumnData()) {
       this.table_datas.push({
         'calc_checked': data.checked,
         'g_name': data.g_name
@@ -51,14 +50,14 @@ export class CalculationPrintComponent implements OnInit, OnDestroy {
   }
 
   public saveData(): void {
-    this.input.print_selected.print_calculate_checked = this.print_calculate_checked;
-    this.input.print_selected.print_section_force_checked = this.print_section_force_checked;
-    this.input.print_selected.print_summary_table_checked = this.print_summary_table_checked;
+    this.save.calc.print_selected.print_calculate_checked = this.print_calculate_checked;
+    this.save.calc.print_selected.print_section_force_checked = this.print_section_force_checked;
+    this.save.calc.print_selected.print_summary_table_checked = this.print_summary_table_checked;
 
-    this.input.print_selected.calculate_moment_checked = this.calculate_moment_checked;
-    this.input.print_selected.calculate_shear_force = this.calculate_shear_force_checked;
+    this.save.calc.print_selected.calculate_moment_checked = this.calculate_moment_checked;
+    this.save.calc.print_selected.calculate_shear_force = this.calculate_shear_force_checked;
 
-    this.input.setColumnData(this.table_datas);
+    this.save.calc.setColumnData(this.table_datas);
   }
 
   // 計算開始

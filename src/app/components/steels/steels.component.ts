@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { InputSteelsService } from './steels.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Component({
   selector: 'app-steels',
@@ -18,7 +19,7 @@ export class SteelsComponent implements OnInit, OnDestroy {
   readonlyRows: boolean[][];
   table_settings: any[];
 
-  constructor(private input: InputSteelsService,
+  constructor(private save: SaveDataService,
               private helper: DataHelperModule) {
 
   }
@@ -28,7 +29,7 @@ export class SteelsComponent implements OnInit, OnDestroy {
     const height = this.ht_container.nativeElement.offsetHeight;
     this.hottable_height = height - 250;
     this.table_settings = new Array();
-    this.groupe_list = this.input.getSteelColumns();
+    this.groupe_list = this.save.steel.getSteelColumns();
     this.table_datas = new Array(this.groupe_list.length);
     this.mergeCells = new Array(this.groupe_list.length);
     this.readonlyRows = new Array(this.groupe_list.length);
@@ -135,7 +136,7 @@ export class SteelsComponent implements OnInit, OnDestroy {
     this.saveData();
   }
   public saveData(): void {
-    this.input.setSteelsColumns(this.table_datas);
+    this.save.steel.setSteelsColumns(this.table_datas);
   }
 
 }

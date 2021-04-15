@@ -8,29 +8,26 @@ export class InputMembersService  {
 
   // 部材情報
   public member_list: any[];
-  private groupe_list: any[];
 
-  constructor(
-    private helper: DataHelperModule) {
+  constructor(private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {
     this.member_list = new Array();
-    this.groupe_list = new Array();
   }
 
   // 部材情報
   private default_member(row: number): any {
+    // メモ:
+    // g_no: 表面上の(member.component だけで用いる)グループ番号
+    // g_id: 本当のグループ番号
     return {
       'm_no': row, 'm_len': null, 'g_no': null, 'g_id': '', 'g_name': '', 'shape': '',
       'B': null, 'H': null, 'Bt': null, 't': null,
     };
   }
 
-  /// <summary>
   /// pick up ファイルをセットする関数
-  /// </summary>
-  /// <param name="row">行番号</param>
   public setPickUpData(pickup_data: Object, isManualed: boolean) {
 
     const mList: any[] = pickup_data[Object.keys(pickup_data)[0]];
@@ -79,11 +76,6 @@ export class InputMembersService  {
   }
 
   public getGroupeList(): any[] {
-    return this.groupe_list;
-  }
-
-  // 存在するグループ番号を列挙する
-  public setGroupeList(): void {
 
     const groupe_id_list: string[] = new Array();
     for (const m of this.member_list) {
@@ -94,9 +86,7 @@ export class InputMembersService  {
       }
  
       const id: string = m.g_id;
-      if (groupe_id_list.find( (value) => {
-        return value === id;
-      }) === undefined) {
+      if (groupe_id_list.find((value)=>value===id) === undefined) {
         groupe_id_list.push(id);
       }
     }
@@ -105,14 +95,16 @@ export class InputMembersService  {
     groupe_id_list.sort();
 
     // グループ番号を持つ部材のリストを返す
-    this.groupe_list = new Array();
+    const groupe_list = new Array();
     for (const id of groupe_id_list) {
       // グループ番号を持つ部材のリスト
       const members: any[] = this.member_list.filter( (item, index) => {
         if (item.g_id === id) { return item; }
       });
-      this.groupe_list.push(members);
+      groupe_list.push(members);
     }
+
+    return groupe_list;
 
   }
 

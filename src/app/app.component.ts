@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { InputDesignPointsService } from "./components/design-points/design-points.service";
+import { InputMembersService } from "./components/members/members.service";
 import { ConfigService } from "./providers/config.service";
 import { SaveDataService } from "./providers/save-data.service";
 
@@ -12,8 +13,7 @@ export class AppComponent {
 
   constructor(
     private config: ConfigService,
-    private save: SaveDataService,
-    public points: InputDesignPointsService) { }
+    private save: SaveDataService) { }
 
   public isManual(): boolean{
     return this.save.isManual();
@@ -47,52 +47,53 @@ export class AppComponent {
   // 部材に何か入力されたら呼ばれる
   // 有効な入力行があったら次のボタンを有効にする
   private isMemberEnable = false;
-  public memberEnable(flg: boolean): void {
-    if (this.isMemberEnable === flg) {
-      return;
-    }
-    for (const id of ['2', '7']) {
-      const data = document.getElementById(id);
-      if (data != null) {
-        if (flg === true) {
-          if (data.classList.contains("disabled")) {
-            data.classList.remove("disabled");
-          }
-        } else {
-          if (!data.classList.contains("disabled")) {
-            data.classList.add("disabled");
+  public memberChange(): void {
+
+    const flg: boolean = this.save.members.checkMemberEnables()
+    if (this.isMemberEnable !== flg) {
+      for (const id of ['2', '7']) {
+        const data = document.getElementById(id);
+        if (data != null) {
+          if (flg === true) {
+            if (data.classList.contains("disabled")) {
+              data.classList.remove("disabled");
+            }
+          } else {
+            if (!data.classList.contains("disabled")) {
+              data.classList.add("disabled");
+            }
           }
         }
       }
-    }
-    this.isMemberEnable = flg;
-    this.save.setGroupeList();
-    this.designPointEnable(this.points.designPointChange());
+      this.isMemberEnable = flg;
+    } 
+    this.designPointChange();
   }
 
   // 算出点に何か入力されたら呼ばれる
   // 有効な入力行があったら次のボタンを有効にする
   private isDesignPointEnable = false;
-  public designPointEnable(flg: boolean): void {
-    if (this.isDesignPointEnable === flg) {
-      return;
-    }
-    for (const id of ['3', '4', '5', '6', '4', '9']) {
-      const data = document.getElementById(id);
-      if (data != null) {
-        if (flg === true) {
-          if (data.classList.contains("disabled")) {
-            data.classList.remove("disabled");
-          }
-        } else {
-          if (!data.classList.contains("disabled")) {
-            data.classList.add("disabled");
+  public designPointChange(): void {
+
+    const flg: boolean = this.save.points.designPointChange();
+    if (this.isDesignPointEnable !== flg) {
+      for (const id of ['3', '4', '5', '6', '4', '9']) {
+        const data = document.getElementById(id);
+        if (data != null) {
+          if (flg === true) {
+            if (data.classList.contains("disabled")) {
+              data.classList.remove("disabled");
+            }
+          } else {
+            if (!data.classList.contains("disabled")) {
+              data.classList.add("disabled");
+            }
           }
         }
       }
+      this.isDesignPointEnable = flg;
     }
-    this.isDesignPointEnable = flg;
-  }
+}
 
 
 }

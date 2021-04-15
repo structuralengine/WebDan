@@ -93,12 +93,11 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   public service_life: number;
 
   constructor(
-    private input: InputFatiguesService,
     private save: SaveDataService) { }
 
   ngOnInit() {
 
-    this.groupe_list = this.input.getFatiguesColumns();
+    this.groupe_list = this.save.fatigues.getFatiguesColumns();
     this.table_datas = new Array(this.groupe_list.length);
 
     for (let i = 0; i < this.groupe_list.length; i++) {
@@ -203,9 +202,9 @@ export class FatiguesComponent implements OnInit, OnDestroy {
         dataModel: { data: this.table_datas[i] },
       });
     }
-    this.train_A_count = this.input.train_A_count;
-    this.train_B_count = this.input.train_B_count;
-    this.service_life = this.input.service_life;
+    this.train_A_count = this.save.fatigues.train_A_count;
+    this.train_B_count = this.save.fatigues.train_B_count;
+    this.service_life = this.save.fatigues.service_life;
   }
 
   ngAfterViewInit() {
@@ -221,10 +220,10 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   }
 
   public saveData(): void {
-    this.input.setFatiguesColumns(this.table_datas);
-    this.input.train_A_count = this.train_A_count;
-    this.input.train_B_count = this.train_B_count;
-    this.input.service_life = this.service_life;
+    this.save.fatigues.setFatiguesColumns(this.table_datas);
+    this.save.fatigues.train_A_count = this.train_A_count;
+    this.save.fatigues.train_B_count = this.train_B_count;
+    this.save.fatigues.service_life = this.service_life;
   }
 
   // 表の高さを計算する

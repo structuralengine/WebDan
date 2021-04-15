@@ -24,7 +24,6 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
   private side_cover: string[];
 
   constructor(
-    private input: InputBarsService,
     private save: SaveDataService,
     private helper: DataHelperModule) { }
 
@@ -77,7 +76,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
       { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
     );
 
-    this.groupe_list = this.input.getBarsColumns();
+    this.groupe_list = this.save.bars.getBarsColumns();
     this.table_datas = new Array(this.groupe_list.length);
     this.mergeCells = new Array(this.groupe_list.length);
     this.side_cover = new Array(this.groupe_list.length);
@@ -207,7 +206,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
               const old = property.oldRow[key];
               if (key === 'rebar_dia' || key === 'side_dia' || key === 'stirrup_dia') {
                 // 鉄筋径の規格以外は入力させない
-                const value0 = this.input.matchBarSize(property.newRow[key]);
+                const value0 = this.save.bars.matchBarSize(property.newRow[key]);
                 const j = property.rowIndx;
                 if( value0 === null ) {
                   this.table_datas[i][j][key] = old;
@@ -232,7 +231,7 @@ export class BarsComponent implements OnInit, AfterViewInit, OnDestroy {
     this.saveData();
   }
   public saveData(): void {
-    this.input.setBarsColumns(this.table_datas);
+    this.save.bars.setBarsColumns(this.table_datas);
   }
 
   // 表の高さを計算する

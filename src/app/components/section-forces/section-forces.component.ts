@@ -1,19 +1,18 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, AfterViewInit } from '@angular/core';
-import pq from 'pqgrid';
-import { AppComponent } from 'src/app/app.component';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
-import { InputSectionForcesService } from './input-section-forces.service';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-section-forces',
   templateUrl: './section-forces.component.html',
   styleUrls: ['./section-forces.component.scss']
 })
-export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SectionForcesComponent implements OnInit, OnDestroy {
 
   @ViewChild('grid1') grid1: SheetComponent;
   private columnHeaders1: object[] = [
-    { title: '部材<br/>番号', align: 'center', dataType: 'string', dataIndx: 'm_no', editable: false, sortable: false, width: 50, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
     { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '縁応力検討用', align: 'center', colModel: [
@@ -52,21 +51,13 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
       ]},
     ]}
   ];
+  private M_ROWS_COUNT = 0;
   private Mtable_datas: any[] = [];
-  public options1: pq.gridT.options = {
-    showTop: false,
-    reactive: true,
-    sortable: false,
-    locale: 'jp',
-    height: this.tableHeight().toString(),
-    numberCell: { show: false }, // 行番号
-    colModel: this.columnHeaders1,
-    dataModel: { data: this.Mtable_datas },
-  };
+  public options1: pq.gridT.options;
 
   @ViewChild('grid2') grid2: SheetComponent;
   private columnHeaders2: object[] = [
-    { title: '部材<br/>番号', align: 'center', dataType: 'string', dataIndx: 'm_no', editable: false, sortable: false, width: 50, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' } },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
     { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '設計耐力検討用', align: 'center', colModel: [
@@ -117,6 +108,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
       ]},
     ]},
   ];
+  private V_ROWS_COUNT = 0;
   private Vtable_datas: any[] = [];
   public options2: pq.gridT.options = {
     showTop: false,
@@ -124,20 +116,42 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
     sortable: false,
     locale: 'jp',
     height: this.tableHeight().toString(),
-    numberCell: { show: false }, // 行番号
+    numberCell: { show: true }, // 行番号
     colModel: this.columnHeaders2,
     dataModel: { data: this.Vtable_datas },
   };
 
-  constructor(
-    private app: AppComponent,
-    private input: InputSectionForcesService) { }
+  constructor(private save: SaveDataService) { }
 
   ngOnInit() {
 
     // 曲げモーメントの初期化
+    this.options1 = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: 'jp',
+      height: this.tableHeight().toString(),
+      numberCell: { show: true }, // 行番号
+      colModel: this.columnHeaders1,
+      beforeTableView:(evt, ui) => {
+        const dataV = this.Mtable_datas.length;
+        if (ui.initV == null) {
+          return;
+        }
+        if (ui.finalV >= dataV - 1) {
+          this.loadData1(dataV + this.M_ROWS_COUNT);
+          this.grid1.refreshDataAndView();
+        }
+      }
+    };
+
+    // データを登録する
+    this.options1['dataModel'] = { data: this.Mtable_datas };
+
+
     this.Mtable_datas = new Array();
-    for (const data of this.input.getMdtableColumns()) {
+    for (const data of this.save.force.getMdtableColumns()) {
       const column = { 'm_no': data['m_no'] };
       column['p_name_ex'] = data['p_name_ex'];
       const caseList: any[] = data['case'];
@@ -150,7 +164,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
     // せん断力の初期化
     this.Vtable_datas = new Array();
-    for (const data of this.input.getVdtableColumns()) {
+    for (const data of this.save.force.getVdtableColumns()) {
       const column = { 'm_no': data['m_no'] };
       column['p_name_ex'] = data['p_name_ex'];
       const caseList: any[] = data['case'];
@@ -161,22 +175,36 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
       }
       this.Vtable_datas.push(column);
     }
-  }
 
-  ngAfterViewInit() {
     this.grid1.options = this.options1;
     this.grid1.refreshDataAndView();
     this.grid2.options = this.options2;
     this.grid2.refreshDataAndView();
+
   }
 
+  // 指定行row 以降のデータを読み取る
+  private loadData1(row: number): void {
+    for (let i = this.Mtable_datas.length + 1; i <= row; i++) {
+      const column = this.save.force.getMdtableColumns(i);
+      this.Mtable_datas.push(column);
+    }
+  }
+  private loadData2(row: number): void {
+    for (let i = this.Mtable_datas.length + 1; i <= row; i++) {
+      const column = this.save.force.getVdtableColumns(i);
+      this.Vtable_datas.push(column);
+    }
+  }
+
+  
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy(): void {
     this.saveData();
   }
   public saveData(): void {
-    this.input.setMdtableColumns(this.Mtable_datas);
-    this.input.setVdtableColumns(this.Vtable_datas);
+    this.save.force.setMdtableColumns(this.Mtable_datas);
+    this.save.force.setVdtableColumns(this.Vtable_datas);
   }
 
   // 表の高さを計算する

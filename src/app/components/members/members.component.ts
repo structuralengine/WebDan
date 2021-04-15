@@ -16,21 +16,21 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 export class MembersComponent implements OnInit, OnDestroy {
 
+  // データグリッドの設定変数
   @ViewChild('grid') grid: SheetComponent;
   public options: pq.gridT.options;
   private columnHeaders: object[] = [];
-
+  // このページで表示するデータ
   private ROWS_COUNT = 0;
-  private mambers_table_datarows: any[] = [];
+  private table_datas: any[] = [];
 
   constructor(
     private save: SaveDataService,
-    private helper: DataHelperModule,
-    private input: InputMembersService,
     private app: AppComponent) {
   }
 
   ngOnInit() {
+
     if (this.save.isManual()) {
       // 断面力て入力モードの場合の項目
       this.columnHeaders = [];
@@ -56,7 +56,6 @@ export class MembersComponent implements OnInit, OnDestroy {
       { title: '部材数', align: 'center', dataType: 'float', dataIndx: 'n', sortable: false, width: 80 },
     );
 
-
     // グリッドの基本的な オプションを登録する
     this.options = {
       showTop: false,
@@ -77,23 +76,23 @@ export class MembersComponent implements OnInit, OnDestroy {
             if (key === 'g_no') {
               // 他の共通断面
               if (value === null) {
-                this.mambers_table_datarows[i].g_id = '';
+                this.table_datas[i].g_id = '';
                 continue;
               }
               // 初期値は対象にしない
-              for (let j = 0; j < this.mambers_table_datarows.length; j++) {
+              for (let j = 0; j < this.table_datas.length; j++) {
                 if (property.rowIndx === j) { continue; }                      // 同じ行は比較しない
-                const targetColumn = this.mambers_table_datarows[j];
+                const targetColumn = this.table_datas[j];
                 const target = targetColumn.g_no;
                 if (target === null) { continue; } // 初期値は対象にしない
                 if (target === value) {
-                  this.mambers_table_datarows[i].g_name = targetColumn.g_name;
+                  this.table_datas[i].g_name = targetColumn.g_name;
                 }
               }
-              this.mambers_table_datarows[i].g_id = value.toString();
+              this.table_datas[i].g_id = value.toString();
 
-            } else if (this.mambers_table_datarows[i].g_no === null) {
-              this.mambers_table_datarows[i].g_id = 'row' + this.mambers_table_datarows[i].m_no; //仮のグループid
+            } else if (this.table_datas[i].g_no === null) {
+              this.table_datas[i].g_id = 'row' + this.table_datas[i].m_no; //仮のグループid
             }
 
             if (key === 'g_name') {
@@ -102,15 +101,15 @@ export class MembersComponent implements OnInit, OnDestroy {
               if (value === null) { continue; }         // 初期値は対象にしない
               value = value.trim();
               if (value === '') { continue; }
-              for (let j = 0; j < this.mambers_table_datarows.length; j++) {
-                const targetColumn = this.mambers_table_datarows[j];
+              for (let j = 0; j < this.table_datas.length; j++) {
+                const targetColumn = this.table_datas[j];
                 if (property.rowIndx === j) {
                   targetColumn.g_name = value;
                   continue;
                 }                      // 同じ行は比較しない
                 if (targetColumn.g_no === null) { continue; } // 初期値は対象にしない
                 const row = property.rowIndx;
-                const changesColumn = this.mambers_table_datarows[row];
+                const changesColumn = this.table_datas[row];
                 if (targetColumn.g_no === changesColumn.g_no) {
                   targetColumn.g_name = value;
                 }
@@ -126,34 +125,34 @@ export class MembersComponent implements OnInit, OnDestroy {
               switch (value) {
                 case '1':
                 case 'RC-矩形':
-                  this.mambers_table_datarows[row].shape = 'RC-矩形';
+                  this.table_datas[row].shape = 'RC-矩形';
                   break;
                 case '2':
                 case 'RC-T形':
-                  this.mambers_table_datarows[row].shape = 'RC-T形';
+                  this.table_datas[row].shape = 'RC-T形';
                   break;
                 case '3':
                 case 'RC-円形':
-                  this.mambers_table_datarows[row].shape = 'RC-円形';
+                  this.table_datas[row].shape = 'RC-円形';
                   break;
                 case '4':
                 case 'RC-小判':
-                  this.mambers_table_datarows[row].shape = 'RC-小判';
+                  this.table_datas[row].shape = 'RC-小判';
                   break;
                 case '11':
                 case 'SRC-矩形':
-                  this.mambers_table_datarows[row].shape = 'SRC-矩形';
+                  this.table_datas[row].shape = 'SRC-矩形';
                   break;
                 case '12':
                 case 'SRC-T形':
-                  this.mambers_table_datarows[row].shape = 'SRC-T形';
+                  this.table_datas[row].shape = 'SRC-T形';
                   break;
                 case '13':
                 case 'SRC-円形':
-                  this.mambers_table_datarows[row].shape = 'SRC-円形';
+                  this.table_datas[row].shape = 'SRC-円形';
                   break;
                 default:
-                  this.mambers_table_datarows[row].shape = '';
+                  this.table_datas[row].shape = '';
               }
             }
 
@@ -161,17 +160,17 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
 
         // 何か変更があったら判定する
-        this.app.memberEnable(this.input.checkMemberEnables())
+        this.app.memberChange();
 
       }
     };
 
     // データを読み込む
     if (this.save.isManual() === true) {
-      // 断面手入力モードの場合は、無限ループ
+      // 断面手入力モードの場合は、無限行
       this.ROWS_COUNT = this.rowsCount();
       this.options['beforeTableView'] = (evt, ui) => {
-        const dataV = this.mambers_table_datarows.length;
+        const dataV = this.table_datas.length;
         if (ui.initV == null) {
           return;
         }
@@ -182,18 +181,18 @@ export class MembersComponent implements OnInit, OnDestroy {
       }
     } else {
       // ピックアップファイルを使う場合
-      this.mambers_table_datarows = this.input.member_list;
+      this.table_datas = this.save.members.member_list;
     }
 
     // データを登録する
-    this.options['dataModel'] = { data: this.mambers_table_datarows };
+    this.options['dataModel'] = { data: this.table_datas };
   }
 
   // 指定行row 以降のデータを読み取る
   private loadData(row: number): void {
-    for (let i = this.mambers_table_datarows.length + 1; i <= row; i++) {
-      const node = this.input.getMemberTableColumns(i);
-      this.mambers_table_datarows.push(node);
+    for (let i = this.table_datas.length + 1; i <= row; i++) {
+      const column = this.save.members.getMemberTableColumns(i);
+      this.table_datas.push(column);
     }
   }
 
@@ -205,25 +204,21 @@ export class MembersComponent implements OnInit, OnDestroy {
   public saveData(): void {
 
     if (!this.save.isManual()) {
-      this.save.setGroupeList();
       return;
     }
     // 断面力て入力モードの場合に適用する
-    for (let i = this.input.member_list.length - 1; i >= 0; i--) {
-      const columns = this.input.member_list[i];
-      if (this.input.isEnable(columns)) {
+    for (let i = this.save.members.member_list.length - 1; i >= 0; i--) {
+      const columns = this.save.members.member_list[i];
+      if (this.save.members.isEnable(columns)) {
         // グループNo の入力がない入力行には、仮のグループid をつける
         if (columns.g_no === null) {
           columns.g_id = 'row' + columns.m_no; //仮のグループid
         }
       } else {
-        this.input.member_list.splice(i, 1); // 有効な入力が何もない行は削除する
+        this.save.members.member_list.splice(i, 1); // 有効な入力が何もない行は削除する
       }
     }
-    this.save.setGroupeList();
   }
-
-
 
   // 表の高さを計算する
   private tableHeight(): number {
