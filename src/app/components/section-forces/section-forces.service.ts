@@ -27,16 +27,21 @@ export class InputSectionForcesService  {
 
     const rows: any = { m_no, p_name_ex: '', case: new Array() };
 
+    let counter: number = 10;
     switch(this.save.basic.specification1_selected){
       case 0: // 鉄道
-        for (let i = 0; i < 10; i++) {
-          const tmp = {Md: null, Nd: null };
-          rows.case.push(tmp)
-        }
+        counter = 10;
         break;
       case 1: // 道路
+        counter = 10; // まだ作成していない
         break;
     }
+
+    for (let i = 0; i < counter; i++) {
+      const tmp = {Md: null, Nd: null };
+      rows.case.push(tmp)
+    }
+
     return rows;
   }
 
@@ -46,16 +51,21 @@ export class InputSectionForcesService  {
 
     const rows: any = { m_no, p_name_ex: '', case: new Array() };
 
+    let counter: number = 8;
     switch(this.save.basic.specification1_selected){
       case 0: // 鉄道
-      for (let i = 0; i < 8; i++) {
-        const tmp = {Vd: null, Md: null, Nd: null};
-        rows.case.push(tmp)
-      }
+        counter = 8;
         break;
       case 1: // 道路
+        counter = 8; // まだ作成していない
         break;
     }
+
+    for (let i = 0; i < counter; i++) {
+      const tmp = {Vd: null, Md: null, Nd: null};
+      rows.case.push(tmp)
+    }
+
     return rows;
   }
 

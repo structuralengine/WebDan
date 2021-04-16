@@ -20,12 +20,12 @@ export class SaveDataService {
   public pickup_data: Object;
   //={
   //  1:[
-  //    { index: 1, memberNo, p_name, position, 
-  //      M:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }, 
+  //    { index: 1, memberNo, p_name, position,
+  //      M:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
   //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
-  //      S:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }, 
+  //      S:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
   //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
-  //      N:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }, 
+  //      N:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
   //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
   //    },
   //    { index: 2, memberNo, ...
@@ -84,8 +84,9 @@ export class SaveDataService {
     try {
       const tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
-      const pickup_data = {};
+      const pickup1 = {};
       let index: number = 1;
+
       for (let i = 1; i < tmp.length; ++i) {
         const line = tmp[i];
         if (line.trim().length === 0) {
@@ -106,34 +107,25 @@ export class SaveDataService {
             return;
         }
 
-        if (data.pickUpNo in pickup_data === false) {
-          pickup_data[data.pickUpNo] = new Array();
+        if (data.pickUpNo in pickup1 === false) {
+          pickup1[data.pickUpNo] = new Array();
+        }
+        const pickup2 = pickup1[data.pickUpNo];
+
+        let pickup3 = pickup2.find((v)=>v.index===index);
+        if (pickup3===undefined) {
+          pickup3 = { index, memberNo: data.memberNo, p_name: data.p_name, position: data.position };
+          pickup2.push(pickup3);
+        }
+
+        if (data.mark in pickup3 === false) {
+          pickup3[data.mark] = {max: {}, min: {}};
+          pickup3.index = 1;
           index = 1;
         }
+        const pickup4 = pickup3[data.mark];
 
-        let m = pickup_data[data.pickUpNo].find((value) => 
-        value.memberNo === data.memberNo );
-        if (m === undefined) {
-          m = { memberNo: data.memberNo, positions: [] };
-          pickup_data[data.pickUpNo].push(m);
-        }
-
-        let p = m["positions"].find((value) => 
-          value.p_name === data.p_name );
-        if (p === undefined) {
-          p = {
-            p_name: data.p_name,
-            index: index,
-            position: data.position,
-          };
-          m["positions"].push(p);
-        }
-
-        if (data.mark in p === false) {
-          p[data.mark] = {};
-        }
-
-        p[data.mark]["max"] = {
+        pickup4.max = {
           Mtd: data.maxMdx,
           Mdy: data.maxMdy,
           Mdz: data.maxMdz,
@@ -143,7 +135,7 @@ export class SaveDataService {
           comb: data.maxPickupCase,
         };
 
-        p[data.mark]["min"] = {
+        pickup4.min = {
           Mtd: data.minMdx,
           Mdy: data.minMdy,
           Mdz: data.minMdz,
@@ -157,12 +149,12 @@ export class SaveDataService {
       }
 
       this.basic.setPickUpData(this.isManual());
-      this.members.setPickUpData(pickup_data, this.isManual());
-      this.points.setPickUpData(pickup_data);
+      this.members.setPickUpData(pickup1, this.isManual());
+      this.points.setPickUpData(pickup1);
       this.force.clear();
 
       this.pickup_filename = filename;
-      this.pickup_data = pickup_data;
+      this.pickup_data = pickup1;
     } catch {
       this.pickup_filename = "";
       this.pickup_data = {};

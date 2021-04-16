@@ -39,32 +39,27 @@ export class InputDesignPointsService {
   }
 
   // pick up ファイルをセットする関数
-
   public setPickUpData(pickup_data: Object) {
 
-    const memberList: any[] = pickup_data[Object.keys(pickup_data)[0]];
+    const pickup_points: any[] = pickup_data[Object.keys(pickup_data)[0]];
 
     // 初期化する
     const old_position_list = this.position_list.slice(0, this.position_list.length);
     this.position_list = new Array();
 
     // 着目点リストを作成する
-    for (let i = 0; i < memberList.length; i++) {
+    for(const pickup_point of pickup_points){
       // 部材番号 をセットする
-      let new_member = old_position_list.find((t) => t.m_no === memberList[i].memberNo);
+      let new_member = old_position_list.find((t) => t.index === pickup_point.index);
       if (new_member === undefined) {
-        new_member = this.default_position(memberList[i].memberNo);
+        new_member = this.default_position(pickup_point.index);
       }
-      // positions を代入
-      // const old_position_list = new_member['positions'];
-      new_member['positions'] = new Array();
-      for (const target of memberList[i].positions) {
-        let new_position = old_position_list.find((t)=>t.index === target.index);
-        if (new_position === undefined) {
-          new_position = this.default_position(target.index, target.p_name, target.position);
-        }
-        new_member['positions'].push(new_position);
-      }
+      // ピックアップファイルから情報を取得する
+      new_member.m_no = pickup_point.memberNo;
+      new_member.p_name = pickup_point.p_name;
+      new_member.position = pickup_point.position;
+
+      // 登録する
       this.position_list.push(new_member);
     }
   }
