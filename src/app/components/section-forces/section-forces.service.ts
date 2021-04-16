@@ -23,9 +23,9 @@ export class InputSectionForcesService  {
 
   // 曲げモーメント １入力行のデフォルト値
   // { m_no, p_name_ex, case: [{Md, Nd}, {Md, Nd}, ...] }
-  private default_m_column(m_no: number, p_name_ex: string): any {
+  private default_m_column(m_no: number): any {
 
-    const rows: any = { m_no, p_name_ex, case: new Array() };
+    const rows: any = { m_no, p_name_ex: '', case: new Array() };
 
     switch(this.save.basic.specification1_selected){
       case 0: // 鉄道
@@ -42,9 +42,9 @@ export class InputSectionForcesService  {
 
   // せん断力 １入力行のデフォルト値
   // { m_no, p_name_ex, case: [{Vd, Md, Nd}, {Vd, Md, Nd}, ...] }
-  private default_v_column(m_no: number, p_name_ex: string): any {
+  private default_v_column(m_no: number): any {
 
-    const rows: any = { m_no, p_name_ex, case: new Array() };
+    const rows: any = { m_no, p_name_ex: '', case: new Array() };
 
     switch(this.save.basic.specification1_selected){
       case 0: // 鉄道
@@ -63,24 +63,19 @@ export class InputSectionForcesService  {
   public getTable1Columns(row: number): any[] {
 
     // 
-    const design_point = this.save.points.position_list.find( (item)=>item.m_no === row );
-    let p_name_ex = '';
-    if (design_point !== undefined) {
-      p_name_ex = design_point.positions[0].p_name_ex;
-    }
+    const design_point = this.save.points.getDesignPointColumns(row);
 
-    const r = this.moment_force.find( (item) => item.m_no === row );
-
-    let result: any;
+    let result = this.default_m_column(row, p_name_ex);
 
     // 対象データが無かった時に処理
-    if (r !== undefined) {
+    if (design_point !== undefined) {
+      const p_name_ex = design_point.p_name_ex;
       result = r;
       if(result.g_no === null){
         result.g_id = '';
       }
     } else {
-      result = this.default_m_column(row);
+      result = this.default_m_column(row, p_name_ex);
       this.moment_force.push(result);
     }
     return result;
@@ -111,7 +106,7 @@ export class InputSectionForcesService  {
         column['case' + i + '_Md'] = caseList[i].Md;
         column['case' + i + '_Nd'] = caseList[i].Nd;
       }
-      this.Mtable_datas.push(column);
+      this.table_datas1.push(column);
     }
 
 
@@ -119,9 +114,9 @@ export class InputSectionForcesService  {
     return this.moment_force;
   }
 
-  public setMdtableColumns(Mtable_datas: any[]) {
+  public setMdtableColumns(table_datas1: any[]) {
     this.moment_force = new Array();
-    for (const data of Mtable_datas) {
+    for (const data of table_datas1) {
       const new_colum = this.default_m_column(data.m_no, data.p_name_ex);
       for (let i = 0; i < new_colum['case'].length; i++) {
         new_colum['case'][i].Md = data['case' + i + '_Md'];
@@ -148,9 +143,9 @@ export class InputSectionForcesService  {
     return this.shear_force;
   }
 
-  public setVdtableColumns(Vtable_datas: any[]) {
+  public setVdtableColumns(table_datas2: any[]) {
     this.shear_force = new Array();
-    for (const data of Vtable_datas) {
+    for (const data of table_datas2) {
       const new_colum = this.default_v_column(data.m_no, data.p_name_ex);
       for (let i = 0; i < new_colum['case'].length; i++) {
         new_colum['case'][i].Vd = data['case' + i + '_Vd'];

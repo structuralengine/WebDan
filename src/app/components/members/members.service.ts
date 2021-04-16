@@ -30,13 +30,10 @@ export class InputMembersService  {
   // member_list から 指定行 のデータを返す関数
   public getMemberTableColumns(row: number): any {
 
-    const r = this.member_list.find( (item) => item.m_no === row );
-
-    let result: any;
+    let result = this.member_list.find( (item) => item.m_no === row );
 
     // 対象データが無かった時に処理
-    if (r !== undefined) {
-      result = r;
+    if (result !== undefined) {
       if(result.g_no === null){
         result.g_id = '';
       }

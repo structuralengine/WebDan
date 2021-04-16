@@ -18,6 +18,21 @@ export class SaveDataService {
   // ピックアップファイル
   public pickup_filename: string;
   public pickup_data: Object;
+  //={
+  //  1:[
+  //    { index: 1, memberNo, p_name, position, 
+  //      M:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }, 
+  //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
+  //      S:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }, 
+  //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
+  //      N:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }, 
+  //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
+  //    },
+  //    { index: 2, memberNo, ...
+  //  ],
+  //  2:[
+  //    ...
+  // }
 
   constructor(
     public helper: DataHelperModule,
@@ -70,7 +85,7 @@ export class SaveDataService {
       const tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
       const pickup_data = {};
-      let index: number = 0;
+      let index: number = 1;
       for (let i = 1; i < tmp.length; ++i) {
         const line = tmp[i];
         if (line.trim().length === 0) {
@@ -91,24 +106,20 @@ export class SaveDataService {
             return;
         }
 
-        index += 1;
-
         if (data.pickUpNo in pickup_data === false) {
           pickup_data[data.pickUpNo] = new Array();
           index = 1;
         }
 
-        let m = pickup_data[data.pickUpNo].find((value) => {
-          return value.memberNo === data.memberNo;
-        });
+        let m = pickup_data[data.pickUpNo].find((value) => 
+        value.memberNo === data.memberNo );
         if (m === undefined) {
           m = { memberNo: data.memberNo, positions: [] };
           pickup_data[data.pickUpNo].push(m);
         }
 
-        let p = m["positions"].find((value) => {
-          return value.p_name === data.p_name;
-        });
+        let p = m["positions"].find((value) => 
+          value.p_name === data.p_name );
         if (p === undefined) {
           p = {
             p_name: data.p_name,
@@ -141,6 +152,8 @@ export class SaveDataService {
           Nd: data.minNd,
           comb: data.minPickupCase,
         };
+
+        index += 1;
       }
 
       this.basic.setPickUpData(this.isManual());

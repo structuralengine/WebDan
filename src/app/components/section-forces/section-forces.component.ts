@@ -10,6 +10,9 @@ import pq from 'pqgrid';
 })
 export class SectionForcesComponent implements OnInit, OnDestroy {
 
+  constructor(private save: SaveDataService) { }
+
+  // 曲げモーメントのグリッド設定変数
   @ViewChild('grid1') grid1: SheetComponent;
   private columnHeaders1: object[] = [
     { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
@@ -51,10 +54,11 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       ]},
     ]}
   ];
-  private M_ROWS_COUNT = 0;
-  private Mtable_datas: any[] = [];
+  private ROWS_COUNT1 = 0;
+  private table_datas1: any[] = [];
   public options1: pq.gridT.options;
 
+  // せん断力のグリッド設定変数
   @ViewChild('grid2') grid2: SheetComponent;
   private columnHeaders2: object[] = [
     { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
@@ -108,24 +112,16 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       ]},
     ]},
   ];
-  private V_ROWS_COUNT = 0;
-  private Vtable_datas: any[] = [];
-  public options2: pq.gridT.options = {
-    showTop: false,
-    reactive: true,
-    sortable: false,
-    locale: 'jp',
-    height: this.tableHeight().toString(),
-    numberCell: { show: true }, // 行番号
-    colModel: this.columnHeaders2,
-    dataModel: { data: this.Vtable_datas },
-  };
+  private ROWS_COUNT2 = 0;
+  private table_datas2: any[] = [];
+  public options2: pq.gridT.options;
 
-  constructor(private save: SaveDataService) { }
 
   ngOnInit() {
 
-    // 曲げモーメントの初期化
+    this.ROWS_COUNT1 = this.ROWS_COUNT2 = this.rowsCount();
+
+    // 曲げモーメントグリッドの初期化 --------------------------------------
     this.options1 = {
       showTop: false,
       reactive: true,
@@ -135,65 +131,61 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       numberCell: { show: true }, // 行番号
       colModel: this.columnHeaders1,
       beforeTableView:(evt, ui) => {
-        const dataV = this.Mtable_datas.length;
+        const dataV = this.table_datas1.length;
         if (ui.initV == null) {
           return;
         }
         if (ui.finalV >= dataV - 1) {
-          this.loadData1(dataV + this.M_ROWS_COUNT);
+          this.loadData1(dataV + this.ROWS_COUNT1);
           this.grid1.refreshDataAndView();
         }
       }
     };
 
     // データを登録する
-    this.options1['dataModel'] = { data: this.Mtable_datas };
+    this.options1['dataModel'] = { data: this.table_datas1 };
 
 
-    this.Mtable_datas = new Array();
-    for (const data of this.save.force.getMdtableColumns()) {
-      const column = { 'm_no': data['m_no'] };
-      column['p_name_ex'] = data['p_name_ex'];
-      const caseList: any[] = data['case'];
-      for (let i = 0; i < caseList.length; i++) {
-        column['case' + i + '_Md'] = caseList[i].Md;
-        column['case' + i + '_Nd'] = caseList[i].Nd;
+    // せん断力グリッドの初期化 ------------------------------------------
+    this.options2 = {
+      showTop: false,
+      reactive: true,
+      sortable: false,
+      locale: 'jp',
+      height: this.tableHeight().toString(),
+      numberCell: { show: true }, // 行番号
+      colModel: this.columnHeaders2,
+      beforeTableView:(evt, ui) => {
+        const dataV = this.table_datas2.length;
+        if (ui.initV == null) {
+          return;
+        }
+        if (ui.finalV >= dataV - 1) {
+          this.loadData2(dataV + this.ROWS_COUNT2);
+          this.grid2.refreshDataAndView();
+        }
       }
-      this.Mtable_datas.push(column);
-    }
+    };
 
-    // せん断力の初期化
-    this.Vtable_datas = new Array();
-    for (const data of this.save.force.getVdtableColumns()) {
-      const column = { 'm_no': data['m_no'] };
-      column['p_name_ex'] = data['p_name_ex'];
-      const caseList: any[] = data['case'];
-      for (let i = 0; i < caseList.length; i++) {
-        column['case' + i + '_Vd'] = caseList[i].Vd;
-        column['case' + i + '_Md'] = caseList[i].Md;
-        column['case' + i + '_Nd'] = caseList[i].Nd;
-      }
-      this.Vtable_datas.push(column);
-    }
+    // データを登録する
+    this.options2['dataModel'] = { data: this.table_datas2 };
 
-    this.grid1.options = this.options1;
-    this.grid1.refreshDataAndView();
-    this.grid2.options = this.options2;
-    this.grid2.refreshDataAndView();
 
   }
 
-  // 指定行row 以降のデータを読み取る
+  // 指定行row まで、曲げモーメント入力データを読み取る
   private loadData1(row: number): void {
-    for (let i = this.Mtable_datas.length + 1; i <= row; i++) {
-      const column = this.save.force.getMdtableColumns(i);
-      this.Mtable_datas.push(column);
+    for (let i = this.table_datas1.length + 1; i <= row; i++) {
+      const column = this.save.force.getTable1Columns(i);
+      this.table_datas1.push(column);
     }
   }
+
+  // 指定行row まで、せん断力入力データを読み取る
   private loadData2(row: number): void {
-    for (let i = this.Mtable_datas.length + 1; i <= row; i++) {
-      const column = this.save.force.getVdtableColumns(i);
-      this.Vtable_datas.push(column);
+    for (let i = this.table_datas1.length + 1; i <= row; i++) {
+      const column = this.save.force.getTable1Co2umns(i);
+      this.table_datas2.push(column);
     }
   }
 
@@ -203,8 +195,6 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
     this.saveData();
   }
   public saveData(): void {
-    this.save.force.setMdtableColumns(this.Mtable_datas);
-    this.save.force.setVdtableColumns(this.Vtable_datas);
   }
 
   // 表の高さを計算する
@@ -212,6 +202,12 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
     let containerHeight = window.innerHeight;
     containerHeight -= 360;
     return containerHeight;
+  }
+
+  // 表高さに合わせた行数を計算する
+  private rowsCount(): number {
+    const containerHeight = this.tableHeight();
+    return Math.round(containerHeight / 30);
   }
 
 }
