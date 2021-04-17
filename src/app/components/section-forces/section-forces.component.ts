@@ -177,18 +177,6 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
     this.grid2.options = this.options2;
   }
 
-  public tab(index: number){
-    switch (index) {
-      case 1:
-        // this.grid1.refreshDataAndView();
-        break
-      case 2:
-        // this.grid2.refreshDataAndView();
-        break
-      default:
-        console.log(index);
-      }
-  }
 
 
   // 指定行row まで、曲げモーメント入力データを読み取る
