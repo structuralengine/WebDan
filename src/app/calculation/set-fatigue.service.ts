@@ -14,7 +14,7 @@ export class SetFatigueService {
 
     const temp = JSON.parse(
       JSON.stringify({
-        temp: this.save.fatigues.getFatiguesColumns()
+        temp: this.save.fatigues.fatigue_list
       })
     ).temp;
     

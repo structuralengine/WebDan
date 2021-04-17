@@ -86,160 +86,6 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
   public pile_factor_list: any[]; // 杭の施工条件
   public pile_factor_selected: string[];
 
-  private isSRC: boolean[]; // SRC部材 があるかどうか
-
-  /*
-  safety_factors_table_settings = {
-    beforeChange: (...x: any[]) => {
-      try {
-        let changes: any = undefined;
-        for (let i = 0; i < x.length; i++) {
-          if (Array.isArray(x[i])) {
-            changes = x[i];
-            break;
-          }
-        }
-        if (changes === undefined) { return; }
-        for (let i = 0; i < changes.length; i++) {
-          switch (changes[i][1]) {
-            case 'range':
-              const value: number = this.helper.toNumber(changes[i][3]);
-              if (value === null) {
-                changes[i][3] = changes[i][2]; // 入力も元に戻す
-              } else {
-                switch (value) {
-                  case 1:
-                    changes[i][3] = '引張鉄筋';
-                    break;
-                  case 2:
-                    changes[i][3] = '引張＋圧縮';
-                    break;
-                  case 3:
-                    changes[i][3] = '全周鉄筋';
-                    break;
-                  default:
-                    changes[i][3] = changes[i][2]; // 入力も元に戻す
-                }
-              }
-              break;
-            default:
-              const value1: number = this.helper.toNumber(changes[i][3]);
-              if( value1 !== null ) {
-                changes[i][3] = value1.toFixed(2);
-              } else {
-                changes[i][3] = null;
-              }
-              break;
-          }
-
-        }
-
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
-
-  bar_strength_table_settings = {
-    beforeChange: (...x: any[]) => {
-      try {
-        let source: any;
-        let changes: any = undefined;
-        for (let i = 0; i < x.length; i++) {
-          if (Array.isArray(x[i])) {
-            source = x[i - 1];
-            changes = x[i];
-            break;
-          }
-        }
-        if (changes === undefined) { return; }
-        for (let i = 0; i < changes.length; i++) {
-          if (changes[i][0] === 0) // split
-          {
-            let value: string = changes[i][3].replace('D', '');
-            value = value.replace('以上', '');
-            value = value.replace('以下', '');
-            if (this.helper.toNumber(value) === null) {
-              changes[i][3] = changes[i][2]; // 入力も元に戻す
-              return;
-            }
-            switch (changes[i][1]) {
-              case 'fsy1':
-                const next_fsy2 = this.helper.getNextRebar(value);
-                if (next_fsy2 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 2, 'D' + next_fsy2.D + '以上')
-                  changes[i][3] = 'D' + value + '以下';
-                }
-                break;
-              case 'fsy2':
-                const next_fsy1 = this.helper.getPreviousRebar(value);
-                if (next_fsy1 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 1, 'D' + next_fsy1.D + '以下')
-                  changes[i][3] = 'D' + value + '以上';
-                }
-                break;
-              case 'fsu1':
-                const next_fsu2 = this.helper.getNextRebar(value);
-                if (next_fsu2 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 4, 'D' + next_fsu2.D + '以上')
-                  changes[i][3] = 'D' + value + '以下';
-                }
-                break;
-              case 'fsu2':
-                const next_fsu1 = this.helper.getPreviousRebar(value);
-                if (next_fsu1 !== undefined) {
-                  source.setDataAtCell(changes[i][0], 3, 'D' + next_fsu1.D + '以下')
-                  changes[i][3] = 'D' + value + '以上';
-                }
-                break;
-
-              default:
-              //何もしない
-            }
-          } else {
-            const value: number = this.helper.toNumber(changes[i][3]);
-            if (value === null) {
-              changes[i][3] = changes[i][2];
-            } else {
-              changes[i][3] = value;
-            }
-          }
-
-          switch (changes[i][1]) {
-            case 'range':
-              const value: number = this.helper.toNumber(changes[i][3]);
-              if (value === null) {
-                changes[i][3] = changes[i][2]; // 入力も元に戻す
-              } else {
-                switch (value) {
-                  case 1:
-                    changes[i][3] = '引張鉄筋';
-                    break;
-                  case 2:
-                    changes[i][3] = '引張＋圧縮';
-                    break;
-                  case 3:
-                    changes[i][3] = '全周鉄筋';
-                    break;
-                  default:
-                    changes[i][3] = changes[i][2]; // 入力も元に戻す
-                }
-              }
-              break;
-            default:
-            //何もしない
-          }
-
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    }
-  };
-  steel_strength_table_settings = {};
-  concrete_strength_table_settings = {};
-  */
-
   constructor(
     private input: InputSafetyFactorsMaterialStrengthsService,
     private member: InputMembersService,
@@ -255,7 +101,6 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
 
     // グループリストを取得
     this.groupe_list = this.input.getGroupeList();
-    const srcCount = this.member.getSRC();
 
     // 配列を作成
     this.safety_factors_table_datas = new Array();    // 安全係数
@@ -265,8 +110,6 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
 
     this.pile_factor_list = new Array();              // 杭の施工条件
     this.pile_factor_selected = new Array();
-
-    this.isSRC = new Array();
 
     // 入力項目を作成
     for (let i = 0; i < this.groupe_list.length; i++) {
@@ -327,14 +170,6 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
       this.pile_factor_list = data['pile_factor_list'];
       this.pile_factor_selected[i] = data['pile_factor_selected'];
       
-
-      // SRC部材があるかどうか
-      if (srcCount[i] > 0) {
-        this.isSRC.push(true);
-      } else {
-        this.isSRC.push(false);
-      }
-
       // グリッドの設定
       this.options1.push({
         width: 985,

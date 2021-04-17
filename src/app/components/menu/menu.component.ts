@@ -29,7 +29,7 @@ export class MenuComponent implements OnInit {
 
   loginUserName: string;
   userPoint: string;
-  loggedIn: boolean;
+  public loggedIn: boolean = false;
   fileName: string;
   baseUrl: string;
   pickup_file_name: string;

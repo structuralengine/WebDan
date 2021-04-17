@@ -179,6 +179,7 @@ export class MembersComponent implements OnInit, OnDestroy {
           this.grid.refreshDataAndView();
         }
       }
+      this.loadData(this.ROWS_COUNT);
     } else {
       // ピックアップファイルを使う場合
       this.table_datas = this.save.members.member_list;
@@ -186,6 +187,8 @@ export class MembersComponent implements OnInit, OnDestroy {
 
     // データを登録する
     this.options['dataModel'] = { data: this.table_datas };
+
+
   }
 
   // 指定行row 以降のデータを読み取る

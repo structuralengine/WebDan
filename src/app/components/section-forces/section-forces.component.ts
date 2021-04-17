@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
@@ -8,7 +8,7 @@ import pq from 'pqgrid';
   templateUrl: './section-forces.component.html',
   styleUrls: ['./section-forces.component.scss']
 })
-export class SectionForcesComponent implements OnInit, OnDestroy {
+export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(private save: SaveDataService) { }
 
@@ -118,8 +118,12 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    // データを登録する
+    this.ROWS_COUNT1 = this.rowsCount();
+    this.loadData1(this.ROWS_COUNT1);
 
-    this.ROWS_COUNT1 = this.ROWS_COUNT2 = this.rowsCount();
+    this.ROWS_COUNT2 = this.rowsCount();
+    this.loadData2(this.ROWS_COUNT2);
 
     // 曲げモーメントグリッドの初期化 --------------------------------------
     this.options1 = {
@@ -130,6 +134,7 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       height: this.tableHeight().toString(),
       numberCell: { show: true }, // 行番号
       colModel: this.columnHeaders1,
+      dataModel: { data: this.table_datas1 },
       beforeTableView:(evt, ui) => {
         const dataV = this.table_datas1.length;
         if (ui.initV == null) {
@@ -142,10 +147,6 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       }
     };
 
-    // データを登録する
-    this.options1['dataModel'] = { data: this.table_datas1 };
-
-
     // せん断力グリッドの初期化 ------------------------------------------
     this.options2 = {
       showTop: false,
@@ -155,6 +156,7 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       height: this.tableHeight().toString(),
       numberCell: { show: true }, // 行番号
       colModel: this.columnHeaders2,
+      dataModel: { data: this.table_datas2 },
       beforeTableView:(evt, ui) => {
         const dataV = this.table_datas2.length;
         if (ui.initV == null) {
@@ -167,11 +169,27 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
       }
     };
 
-    // データを登録する
-    this.options2['dataModel'] = { data: this.table_datas2 };
-
-
   }
+
+ 
+  ngAfterViewInit(){
+    this.grid1.options = this.options1;
+    this.grid2.options = this.options2;
+  }
+
+  public tab(index: number){
+    switch (index) {
+      case 1:
+        // this.grid1.refreshDataAndView();
+        break
+      case 2:
+        // this.grid2.refreshDataAndView();
+        break
+      default:
+        console.log(index);
+      }
+  }
+
 
   // 指定行row まで、曲げモーメント入力データを読み取る
   private loadData1(row: number): void {
@@ -184,18 +202,21 @@ export class SectionForcesComponent implements OnInit, OnDestroy {
   // 指定行row まで、せん断力入力データを読み取る
   private loadData2(row: number): void {
     for (let i = this.table_datas1.length + 1; i <= row; i++) {
-      const column = this.save.force.getTable1Co2umns(i);
+      const column = this.save.force.getTable2Columns(i);
       this.table_datas2.push(column);
     }
   }
 
-  
+ 
   // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy(): void {
     this.saveData();
   }
   public saveData(): void {
+    this.save.force.setTable1Columns(this.table_datas1);
+    this.save.force.setTable2Columns(this.table_datas2);
   }
+
 
   // 表の高さを計算する
   private tableHeight(): number {

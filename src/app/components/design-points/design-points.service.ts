@@ -22,8 +22,20 @@ export class InputDesignPointsService {
     this.position_list = new Array();
   }
 
+  public getDesignPointColumns(id: number): any {
+    let result = this.position_list.find((value)=> value.index === id);
+
+    if(result === undefined){
+      result = this.default_position(id);
+      this.position_list.push(result);
+    }
+
+    return result;
+  }
+
+
   // 着目点情報
-  private default_position(id: number): any {
+  public default_position(id: number): any {
     return {
       index: id,
       m_no: null,
@@ -64,38 +76,29 @@ export class InputDesignPointsService {
     }
   }
 
-  /// g_id でグループ化した配列のデータを返す関数
-  public getDesignPointColumns(index: number): any {
-
-    let result = this.position_list.find( (item) => item.index === index );
-
-    // 対象データが無かった時に処理
-    if (result === undefined) {
-      result = this.default_position(index);
-      this.position_list.push(result);
-    }
-
-    return result;
-
-  }
-
   // 算出点に何か入力されたタイミング
   // 1行でも計算する断面が存在したら true
   public designPointChange(): boolean{
+    for(const columns of this.position_list){
+      if ( this.isEnable(columns)){
+        return true;
+      }
+    }
+    return false;
+  }
 
-    for(const data of this.position_list){
-      if(data.isMyCalc === true){
-        return true;
-      }
-      if(data.isVyCalc === true){
-        return true;
-      }
-      if(data.isMzCalc === true){
-        return true;
-      }
-      if(data.isVzCalc === true){
-        return true;
-      }
+  public isEnable(data: any): boolean {
+    if(data.isMyCalc === true){
+      return true;
+    }
+    if(data.isVyCalc === true){
+      return true;
+    }
+    if(data.isMzCalc === true){
+      return true;
+    }
+    if(data.isVzCalc === true){
+      return true;
     }
     return false;
   }

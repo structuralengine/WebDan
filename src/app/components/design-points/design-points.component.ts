@@ -16,15 +16,60 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   public options: pq.gridT.options[] = new Array();
   private columnHeaders: object[] = [];
   // このページで表示するデータ
-  public groupe_list: any[];
-  private table_datas: any[][];
+  private table_datas: any[];
 
   constructor(
     private save: SaveDataService) { }
 
   ngOnInit() {
 
-    if (this.save.isManual()) {
+    this.setTitle(this.save.isManual());
+
+    this.table_datas = new Array();
+
+    // グリッド用データの作成
+    let index = 1;
+    for( const groupe of this.save.getGroupeList()){
+      for ( const member of groupe) {
+        const position = member.positions;
+        if (position.length <= 0) {
+          // position が 0行 だったら 空のデータを1行追加する
+          const column = this.save.points.default_position(index); 
+          column.m_no = member.m_no;
+          position.push(column);
+          index++;
+        } else {
+          // index を振りなおす
+          for (const position of member.positions){
+            position.index = index;
+            index++;
+          }
+        }
+      }
+      this.table_datas.push(groupe)
+    }
+
+    // グリッドの設定
+    this.options = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      const op = {
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: "jp",
+        height: this.tableHeight().toString(),
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders,
+        dataModel: { data: this.table_datas[i] },
+      };
+      this.options.push(op);
+      this.grids[i].options = op;
+    }
+
+  }
+
+  private setTitle(isManual: boolean): void{
+    if (isManual) {
       // 断面力手入力モードの場合
       this.columnHeaders = [
         { title: "", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
@@ -58,51 +103,10 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
         { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 }
       );
     }
-
-    this.groupe_list = this.save.points.getDesignPointColumns();
-    this.table_datas = new Array(this.groupe_list.length);
-
-    for (let i = 0; i < this.groupe_list.length; i++) {
-      this.table_datas[i] = new Array();
-
-      let row: number = 0;
-      for (let j = 0; j < this.groupe_list[i].length; j++) {
-        const member = this.groupe_list[i][j];
-
-        const positionCount: number = member['positions'].length;
-
-        for (let k = 0; k < positionCount; k++) {
-          const column = member['positions'][k];
-          if (k === 0) {
-            // 最初の行には 部材番号を表示する
-            column['m_no'] = member['m_no'];
-          }
-
-          this.table_datas[i].push(column);
-
-          row++;
-        }
-      }
-
-      // グリッドの設定
-      this.options.push({
-        showTop: false,
-        reactive: true,
-        sortable: false,
-        locale: "jp",
-        height: this.tableHeight().toString(),
-        numberCell: { show: false }, // 行番号
-        colModel: this.columnHeaders,
-        dataModel: { data: this.table_datas[i] },
-      });
-
-      this.grids[i].options = this.options[i];
-
-    }
   }
 
   public getGroupeName(i: number): string {
-    const target = this.groupe_list[i];
+    const target = this.table_datas[i];
     const first = target[0];
     let result: string = '';
     if(first.g_name === null){

@@ -46,7 +46,7 @@ export class SectionForceListComponent implements OnInit {
   ngOnInit() {
     this.pages = new Array();
 
-    const groupeList = this.save.members.getGroupeList();
+    const groupeList = this.save.getGroupeList();
 
     // 安全性（破壊）
     const safetyMomentForces = this.safetyMoment.DesignForceList;

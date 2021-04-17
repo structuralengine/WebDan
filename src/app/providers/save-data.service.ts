@@ -375,7 +375,7 @@ export class SaveDataService {
   }
 
   // グループ別 部材情報{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t} の配列
-  public getGroupeList(): any[] {
+  private getGroupeMemberList(): any[] {
 
     const id_list: string[] = new Array();
     for (const m of this.members.member_list) {
@@ -396,12 +396,42 @@ export class SaveDataService {
     const result = new Array();
     for (const id of id_list) {
       // グループ番号を持つ部材のリスト
-      const members: any[] = this.members.member_list.filter( (item, index) => {
-        if (item.g_id === id) { return item; }
-      });
+      const members: any[] = this.members.member_list.filter( 
+        item => item.g_id === id);
       result.push(members);
     }
     return result;
+  }
+
+  // グループ別 部材情報
+  //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t, 
+  //   positions:[
+  //    { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
+  //    ...
+  //   }, ...
+  public getGroupeList(): any[] {
+
+    const groupe_list: any[] = this.getGroupeMemberList();
+    const position_list = this.points.position_list;
+
+    for(const groupe of groupe_list) {
+
+      for ( const member of groupe) {
+        member['positions'] = new Array();
+
+        // 同じ要素番号のものを探す
+        const position: any[] = position_list.filter( 
+          item => item.m_no === member.m_no );
+
+        // 対象データが無かった時に処理
+        if (position.length > 0) {
+          member.positions.push(position);
+        }
+      }
+
+    }
+
+    return groupe_list;
   }
 
 }
