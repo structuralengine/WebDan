@@ -50,9 +50,10 @@ export class FatiguesComponent implements OnInit, OnDestroy {
       this.grids[i].options = op;
     }
 
-    this.train_A_count = this.fatigues.fatigues.train_A_count;
-    this.train_B_count = this.fatigues.fatigues.train_B_count;
-    this.service_life = this.fatigues.fatigues.service_life;
+    const fatigues = this.fatigues.getSaveData();
+    this.train_A_count = fatigues.fatigues.train_A_count;
+    this.train_B_count = fatigues.fatigues.train_B_count;
+    this.service_life = fatigues.fatigues.service_life;
   }
 
   private setTitle(isManual: boolean): void{
@@ -67,6 +68,7 @@ export class FatiguesComponent implements OnInit, OnDestroy {
         { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       ];
     }
+
     // 共通する項目
     this.columnHeaders.push(
       { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
@@ -143,6 +145,12 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   }
 
   public saveData(): void {
+    this.fatigues.setSaveData({
+      table_datas: this.table_datas,
+      train_A_count: this.train_A_count,
+      train_B_count: this.train_B_count,
+      service_life: this.service_life
+    });
   }
 
   // 表の高さを計算する
@@ -168,5 +176,5 @@ export class FatiguesComponent implements OnInit, OnDestroy {
     }
     return result;
   }
-  
+
 }

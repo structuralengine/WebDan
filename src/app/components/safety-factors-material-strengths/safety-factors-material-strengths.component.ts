@@ -441,4 +441,20 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, AfterVie
     this.pile_factor_selected[i] = id;
   }
 
+  public getGroupeName(i: number): string {
+    const target = this.groupe_list[i];
+    const first = target[0];
+    let result: string = '';
+    if(first.g_name === null){
+      result = first.g_id;
+    } else if(first.g_name === ''){
+      result = first.g_id;
+    } else {
+      result = first.g_name;
+    }
+    if(result === ''){
+      result = 'No' + i;
+    }
+    return result;
+  }
 }

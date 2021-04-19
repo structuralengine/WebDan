@@ -1,7 +1,7 @@
 <ngb-tabset>
   <ngb-tab *ngFor="let groupe of groupe_list; index as i">
     <ng-template ngbTabTitle>
-      <h5 *ngIf="groupe?.length > 0">{{ groupe[0].g_name }}</h5>
+      <h5>{{getGroupeName(i)}}</h5>
     </ng-template>
     <ng-template ngbTabContent>
       <div class="tabContent">
@@ -65,7 +65,7 @@
 
             </ng-template>
           </ngb-tab>
-          
+
           <ngb-tab>
             <ng-template ngbTabTitle>
               杭・施工条件
