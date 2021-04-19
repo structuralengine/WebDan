@@ -6,11 +6,11 @@ import { Injectable } from '@angular/core';
 export class InputFatiguesService  {
 
   // 疲労情報
-  public fatigue_list: any[];
-  public train_A_count: number; // A列車本数
-  public train_B_count: number; // B列車本数
-  public service_life: number;  // 耐用年数
-  public reference_count: number; // 200万回
+  private fatigue_list: any[];
+  private train_A_count: number; // A列車本数
+  private train_B_count: number; // B列車本数
+  private service_life: number;  // 耐用年数
+  private reference_count: number; // 200万回
 
   constructor() {
     this.clear();

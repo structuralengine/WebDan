@@ -8,108 +8,25 @@ import { InputDesignPointsService } from '../design-points/design-points.service
 export class InputSteelsService {
 
   // 鉄筋情報
-  public steel_list: any[];
+  private steel_list: any[];
 
-  constructor(private points: InputDesignPointsService) {
+  constructor(
+    private points: InputDesignPointsService,
+    private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {
     this.steel_list = new Array();
   }
-   
-  /// <summary>
-  /// bars の
-  /// g_id でグループ化した配列のデータを返す関数
-  /// </summary>
-  public getSteelColumns(): any[] {
-
-    const result: any[] = new Array();
-
-    const old_steel_list = this.steel_list.slice(0, this.steel_list.length);
-    // this.steel_list = new Array();
-
-    const design_points: any[] = this.points.getDesignPointColumns();
-
-    for (const groupe of design_points) {
-      const member_list = new Array();
-      for (const members of groupe) {
-        const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
-        for (const position of members['positions']) {
-          if (position['isMyCalc'] !== true && position['isVyCalc'] !== true
-            && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
-            continue;
-          }
-          let b = old_steel_list.find( (value) => {
-            return (value.m_no === members.m_no && value.p_name === position.p_name);
-          });
-          if (b === undefined) {
-            b = this.default_steels(members.m_no, position.p_name, position.position);
-          }
-          b.index = position['index'];
-          b.shape = members["shape"];
-          b.position = position['position'];
-          b.p_name_ex = position['p_name_ex'];
-          b.b = members['B'];
-          b.h = members['H'];
-          position_list['positions'].push(b);
-        }
-        member_list.push(position_list);
-      }
-      result.push(member_list);
-    }
-    return result;
-  }
-
-
-  /// <summary>
-  /// bars の データを 保存する関数
-  /// </summary>
-  public setSteelsColumns(table_datas: any[][]): void {
-
-    this.steel_list = new Array();
-
-    for (const groupe of table_datas) {
-      for ( let i = 0; i < groupe.length; i += 2 ) {
-        const column1 = groupe[i];
-        const column2 = groupe[i + 1];
-
-        const b = this.default_steels(column1.m_no, column1.p_name, column1.position);
-        b['index'] = column1.index;
-        b.p_name_ex = column1.p_name_ex;
-        b.b = column1.bh;
-        b.h = column2.bh;
-
-        b['I'].title = column1.design_point_id;
-        b['I'].upper_cover =  column1.upper_left_cover;
-        b['I'].upper_width =  column1.upper_left_width;
-        b['I'].upper_thickness =  column1.upper_left_thickness;
-        b['I'].web_thickness =  column1.web_thickness;
-        b['I'].web_height =  column1.web_height;
-        b['I'].lower_width =  column1.lower_right_width;
-        b['I'].lower_thickness =  column1.lower_right_thickness;
-
-        b['H'].title = column2.design_point_id;
-        b['H'].left_cover =  column2.upper_left_cover;
-        b['H'].left_width =  column2.upper_left_width;
-        b['H'].left_thickness =  column2.upper_left_thickness;
-        b['H'].web_thickness =  column2.web_thickness;
-        b['H'].web_height =  column2.web_height;
-        b['H'].right_width =  column2.lower_right_width;
-        b['H'].right_thickness =  column2.lower_right_thickness;
-
-        this.steel_list.push(b);
-      }
-    }
-  }
 
   // 鉄筋情報
-  private default_steels(id: number, p_name: string, position: number): any {
+  private default_steels(id: number): any {
     return {
-      'm_no': id,
+      'm_no': null,
       'shape': null,
-      'index': null,
-      'position': position,
-      'p_name': p_name,
+      'index': id,
+      'position': null,
+      'p_name': null,
       'p_name_ex': null,
       'b': null,
       'h': null,
@@ -142,6 +59,140 @@ export class InputSteelsService {
       'right_width': null,
       'right_thickness': null
     };
+  }
+
+
+  public getTableColumns(): any[] {
+
+    const table_datas: any[] = new Array();
+
+    const groupe_list = this.points.getGroupeList();
+    for (let i = 0; i < groupe_list.length; i++) {
+      table_datas[i] = new Array();
+
+      const groupe = groupe_list[i];
+      for (const member of groupe) {
+        for (let k = 0; k < member.positions.length; k++) {
+          const pos = member.positions[k];
+          if (!this.points.isEnable(pos)) {
+            continue;
+          }
+          const data: any = this.getTableColumn(pos.index);
+          data.m_no = member.m_no;
+          data.b = member.B;
+          data.h = member.H;
+          data.shape = member.shape;
+          data.position = pos.position;
+          data.p_name = pos.p_name;
+          data.p_name_ex = pos.p_name;
+
+          // データを2行に分ける
+          const column1 = {};
+          const column2 = {};
+          column1['m_no'] = (k === 0) ? member.m_no: ''; // 最初の行には 部材番号を表示する
+
+          // 1行目
+          column1['index'] = data['index'];
+          const a: number = this.helper.toNumber(data.position);
+          column1['position'] = (a === null) ? '' : a.toFixed(3);
+          column1['p_name'] = data['p_name'];
+          column1['p_name_ex'] = data['p_name_ex'];
+          column1['bh'] = data['b'];
+
+          column1['design_point_id'] = data['I'].title;
+
+          column1['upper_left_cover'] = data['I'].upper_cover;
+
+          column1['upper_left_width'] = data['I'].upper_width;
+          column1['upper_left_thickness'] = data['I'].upper_thickness;
+
+          column1['web_thickness'] = data['I'].web_thickness;
+          column1['web_height'] = data['I'].web_height;
+
+          column1['lower_right_width'] = data['I'].lower_width;
+          column1['lower_right_thickness'] = data['I'].lower_thickness;
+
+          table_datas[i].push(column1);
+
+          // 2行目
+          column2['bh'] = data['h'];
+
+          column2['design_point_id'] = data['H'].title;
+
+          column2['upper_left_cover'] = data['H'].left_cover;
+
+          column2['upper_left_width'] = data['H'].left_width;
+          column2['upper_left_thickness'] = data['H'].left_thickness;
+
+          column2['web_thickness'] = data['H'].web_thickness;
+          column2['web_height'] = data['H'].web_height;
+
+          column2['lower_right_width'] = data['H'].right_width;
+          column2['lower_right_thickness'] = data['H'].right_thickness;
+
+          table_datas[i].push(column2);
+        }
+      }
+    }
+    return table_datas;
+  }
+
+  private getTableColumn(index: any): any {
+
+    let result = this.steel_list.find((value) => value.index === index);
+    if (result === undefined) {
+      result = this.default_steels(index);
+      this.steel_list.push(result);
+    }
+    return result;
+  }
+
+  public setSaveData(table_datas: any[]) {
+
+    this.steel_list = new Array();
+
+    for (const groupe of table_datas) {
+      for ( let i = 0; i < groupe.length; i += 2 ) {
+        const column1 = groupe[i];
+        const column2 = groupe[i + 1];
+
+        const b = this.default_steels(column1.index);
+        b.m_no = column1.m_no;
+        b.p_name = column1.p_name;
+        b.position = column1.position;
+        b.p_name_ex = column1.p_name_ex;
+        b.b = column1.bh;
+        b.h = column2.bh;
+
+        b['I'].title = column1.design_point_id;
+        b['I'].upper_cover =  column1.upper_left_cover;
+        b['I'].upper_width =  column1.upper_left_width;
+        b['I'].upper_thickness =  column1.upper_left_thickness;
+        b['I'].web_thickness =  column1.web_thickness;
+        b['I'].web_height =  column1.web_height;
+        b['I'].lower_width =  column1.lower_right_width;
+        b['I'].lower_thickness =  column1.lower_right_thickness;
+
+        b['H'].title = column2.design_point_id;
+        b['H'].left_cover =  column2.upper_left_cover;
+        b['H'].left_width =  column2.upper_left_width;
+        b['H'].left_thickness =  column2.upper_left_thickness;
+        b['H'].web_thickness =  column2.web_thickness;
+        b['H'].web_height =  column2.web_height;
+        b['H'].right_width =  column2.lower_right_width;
+        b['H'].right_thickness =  column2.lower_right_thickness;
+
+        this.steel_list.push(b);
+      }
+    }
+  }
+
+  public setPickUpData() {
+
+  }
+
+  public getSaveData(): any[] {
+    return this.steel_list;
   }
 
 }

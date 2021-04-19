@@ -9,10 +9,10 @@ import { InputMembersService } from '../members/members.service';
 export class InputSafetyFactorsMaterialStrengthsService  {
 
   // 安全係数情報
-  public safety_factor_material_strengths_list: any[];
+  private safety_factor_material_strengths_list: any[];
 
   private safety_factor_title: string[]
-  public pile_factor_list: any[];
+  private pile_factor_list: any[];
 
   constructor(
     private basic: InputBasicInformationService,
@@ -111,6 +111,9 @@ export class InputSafetyFactorsMaterialStrengthsService  {
     }
   }
 
+  public getSaveData(): any[]{
+    return this.safety_factor_material_strengths_list;
+  }
 
   private default_safety_factor_material_strengths(g_id: string): any {
 

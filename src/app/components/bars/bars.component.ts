@@ -1,9 +1,8 @@
 import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
 import { InputBarsService } from './bars.service';
 import { SheetComponent } from '../sheet/sheet.component';
-import pq from 'pqgrid';
 import { SaveDataService } from 'src/app/providers/save-data.service';
-import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-bars',
@@ -21,98 +20,14 @@ export class BarsComponent implements OnInit, OnDestroy {
   private table_datas: any[];
 
   constructor(
-    private save: SaveDataService,
-    private helper: DataHelperModule) { }
+    private bars: InputBarsService,
+    private save: SaveDataService) { }
 
   ngOnInit() {
 
     this.setTitle(this.save.isManual());
 
-    this.table_datas = new Array();
-
-    // グリッド用データの作成
-    const groupe_list = this.save.getGroupeList();
-    for( let i = 0; i< groupe_list.length; i++){
-      this.table_datas[i] = new Array();
-      const groupe = groupe_list[i];
-
-      // 部材
-      for ( const member of groupe) {
-
-        // 着目点
-        for (let k = 0; k < member.positions.length; k++) {
-          const pos = member.positions[k];
-          if(!this.save.points.isEnable(pos)){
-            continue;
-          }
-          // barデータに（部材、着目点など）足りない情報を追加する
-          const data: any = this.save.bars.getBarsColumn(pos.index);
-          data.m_no = member.m_no;
-          data.b = member.B;
-          data.h = member.H;
-          data.position = pos.position;
-          data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name;
-
-          // データを2行に分ける
-          const column1 = {};
-          const column2 = {};
-          if (k === 0) {
-            // 最初の行には 部材番号を表示する
-            column1['m_no'] = data.m_no;
-          }
-          // 1行目
-          const a: number = this.helper.toNumber(data.position);
-          column1['index'] = data.index;
-          column1['position'] = (a === null) ? '' : a.toFixed(3);
-          column1['p_name'] = data['p_name'];
-          column1['p_name_ex'] = data['p_name_ex'];
-          column1['bh'] = data['b'];
-          column1['haunch_height'] = data['haunch_M'];
-
-          column1['design_point_id'] = data['rebar1'].title;
-          column1['rebar_dia'] = data['rebar1'].rebar_dia;
-          column1['rebar_n'] = data['rebar1'].rebar_n;
-          column1['rebar_cover'] = data['rebar1'].rebar_cover;
-          column1['rebar_lines'] = data['rebar1'].rebar_lines;
-          column1['rebar_space'] = data['rebar1'].rebar_space;
-          column1['rebar_ss'] = data['rebar1'].rebar_ss;
-          column1['cos'] = data['rebar1'].cos;
-          column1['enable'] = data['rebar1'].enable;
-
-          column1['side_dia'] = data['sidebar'].side_dia;
-          column1['side_n'] = data['sidebar'].side_n;
-          column1['side_cover'] = data['sidebar'].side_cover;
-          column1['side_ss'] = data['sidebar'].side_ss;
-
-          column1['stirrup_dia'] = data['starrup'].stirrup_dia;
-          column1['stirrup_n'] = data['starrup'].stirrup_n;
-          column1['stirrup_ss'] = data['starrup'].stirrup_ss;
-
-          column1['tan'] = data['tan'];
-          this.table_datas[i].push(column1);
-
-          // 2行目
-          column2['bh'] = data['h'];
-          column2['haunch_height'] = data['haunch_V'];
-
-          column2['design_point_id'] = data['rebar2'].title;
-          column2['rebar_dia'] = data['rebar2'].rebar_dia;
-          column2['rebar_n'] = data['rebar2'].rebar_n;
-          column2['rebar_cover'] = data['rebar2'].rebar_cover;
-          column2['rebar_lines'] = data['rebar2'].rebar_lines;
-          column2['rebar_space'] = data['rebar2'].rebar_space;
-          column2['rebar_ss'] = data['rebar2'].rebar_ss;
-          column2['stirrup_dia'] = data['bend'].bending_dia;
-          column2['stirrup_n'] = data['bend'].bending_n;
-          column2['stirrup_ss'] = data['bend'].bending_ss;
-          column2['cos'] = data['rebar2'].cos;
-          column2['enable'] = data['rebar2'].enable;
-
-          this.table_datas[i].push(column2);
-        }
-      }
-    }
+    this.table_datas = this.bars.getTableColumns();
 
     // グリッドの設定
     this.options = new Array();
@@ -132,7 +47,7 @@ export class BarsComponent implements OnInit, OnDestroy {
               const old = property.oldRow[key];
               if (key === 'rebar_dia' || key === 'side_dia' || key === 'stirrup_dia') {
                 // 鉄筋径の規格以外は入力させない
-                const value0 = this.save.bars.matchBarSize(property.newRow[key]);
+                const value0 = this.bars.matchBarSize(property.newRow[key]);
                 const j = property.rowIndx;
                 if( value0 === null ) {
                   this.table_datas[i][j][key] = old;
@@ -203,6 +118,7 @@ export class BarsComponent implements OnInit, OnDestroy {
     this.saveData();
   }
   public saveData(): void {
+    this.bars.setSaveData(this.table_datas);
   }
 
   // 表の高さを計算する

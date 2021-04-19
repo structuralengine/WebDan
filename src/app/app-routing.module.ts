@@ -12,7 +12,7 @@ import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-fac
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
 import { ResultViewerComponent } from './calculation/result-viewer/result-viewer.component';
-import { CrackSettingsComponent } from './components/crack-settings/crack-settings.component';
+import { CrackSettingsComponent } from './components/crack/crack-settings.component';
 
 
 

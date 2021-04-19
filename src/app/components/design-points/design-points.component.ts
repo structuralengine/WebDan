@@ -19,35 +19,14 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   private table_datas: any[];
 
   constructor(
+    private points: InputDesignPointsService,
     private save: SaveDataService) { }
 
   ngOnInit() {
 
     this.setTitle(this.save.isManual());
 
-    this.table_datas = new Array();
-
-    // グリッド用データの作成
-    let index = 1;
-    for( const groupe of this.save.getGroupeList()){
-      for ( const member of groupe) {
-        const position = member.positions;
-        if (position.length <= 0) {
-          // position が 0行 だったら 空のデータを1行追加する
-          const column = this.save.points.default_position(index); 
-          column.m_no = member.m_no;
-          position.push(column);
-          index++;
-        } else {
-          // index を振りなおす
-          for (const position of member.positions){
-            position.index = index;
-            index++;
-          }
-        }
-      }
-      this.table_datas.push(groupe)
-    }
+    this.table_datas = this.points.getTableDatas();
 
     // グリッドの設定
     this.options = new Array();

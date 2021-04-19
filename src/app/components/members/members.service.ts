@@ -7,7 +7,7 @@ import { DataHelperModule } from '../../providers/data-helper.module';
 export class InputMembersService  {
 
   // 部材情報
-  public member_list: any[];
+  private member_list: any[];
 
   constructor(private helper: DataHelperModule) {
     this.clear();
@@ -28,7 +28,7 @@ export class InputMembersService  {
   }
 
   // member_list から 指定行 のデータを返す関数
-  public getMemberTableColumns(row: number): any {
+  public getTableColumns(row: number): any {
 
     let result = this.member_list.find( (item) => item.m_no === row );
 
@@ -44,6 +44,27 @@ export class InputMembersService  {
     return result;
   }
 
+  public setSaveData(table_datas: any[], isManualed: boolean) {
+
+    if (!isManualed) {
+      // 断面力手入力モードじゃない場合
+      this.member_list = table_datas;
+      return;
+    }
+
+    // 断面力手入力モードの場合に適用する
+    this.member_list = new Array();
+
+    for (const column of table_datas) {
+      if (this.isEnable(column)) {
+        // グループNo の入力がない入力行には、仮のグループid をつける
+        if (column.g_no === null) {
+          column.g_id = 'row' + column.m_no; //仮のグループid
+        }
+        this.member_list.push(column)
+      }
+    }
+  }
 
   /// pick up ファイルをセットする関数
   public setPickUpData(pickup_data: Object, isManualed: boolean) {
@@ -110,6 +131,42 @@ export class InputMembersService  {
     }
 
     return false;
+  }
+
+
+  
+  // グループ別 部材情報{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t} の配列
+  public getGroupeList(): any[] {
+
+    const id_list: string[] = new Array();
+    for (const m of this.member_list) {
+
+      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
+        continue;
+      }
+
+      if (id_list.find((value)=>value===m.g_id) === undefined) {
+        id_list.push(m.g_id);
+      }
+    }
+
+    // グループ番号順に並べる
+    id_list.sort();
+
+    // グループ番号を持つ部材のリストを返す
+    const result = new Array();
+    for (const id of id_list) {
+      // グループ番号を持つ部材のリスト
+      const members: any[] = this.member_list.filter( 
+        item => item.g_id === id);
+      result.push(members);
+    }
+    return result;
+  }
+
+
+  public getSaveData():any{
+    return this.member_list;
   }
 
 }

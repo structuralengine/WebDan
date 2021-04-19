@@ -49,7 +49,7 @@ import { FatiguesComponent } from './components/fatigues/fatigues.component';
 import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-factors-material-strengths/safety-factors-material-strengths.component';
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
 import { SteelsComponent } from './components/steels/steels.component';
-import { CrackSettingsComponent } from './components/crack-settings/crack-settings.component';
+import { CrackSettingsComponent } from './components/crack/crack-settings.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 

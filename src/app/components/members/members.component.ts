@@ -2,10 +2,8 @@ import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { InputMembersService } from './members.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import { AppComponent } from 'src/app/app.component';
-import pq from 'pqgrid';
 import { SaveDataService } from 'src/app/providers/save-data.service';
-import { CalcRestorabilityMomentService } from 'src/app/calculation/result-restorability-moment/calc-restorability-moment.service';
-import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-members',
@@ -19,42 +17,20 @@ export class MembersComponent implements OnInit, OnDestroy {
   // データグリッドの設定変数
   @ViewChild('grid') grid: SheetComponent;
   public options: pq.gridT.options;
-  private columnHeaders: object[] = [];
+  private columnHeaders: object[] = new Array();
   // このページで表示するデータ
   private ROWS_COUNT = 0;
-  private table_datas: any[] = [];
+  private table_datas: any[] = new Array();
 
   constructor(
+    private members: InputMembersService,
     private save: SaveDataService,
-    private app: AppComponent) {
-  }
+    private app: AppComponent) { }
+
 
   ngOnInit() {
 
-    if (this.save.isManual()) {
-      // 断面力て入力モードの場合の項目
-      this.columnHeaders = [];
-    } else {
-      // ピックアップファイルを使う場合の項目
-      this.columnHeaders = [
-        { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: '部材長', dataType: 'float', format: '#.000', dataIndx: 'm_len', editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-      ];
-    }
-    this.columnHeaders.push(
-      { title: 'グループNo', align: 'center', dataType: 'integer', dataIndx: 'g_no', sortable: false, width: 85 },
-      { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
-      { title: '断面形状', dataType: 'string', dataIndx: 'shape', sortable: false, width: 80 },
-      {
-        title: '断面(mm)', align: 'center', colModel: [
-          { title: 'B', dataType: 'float', dataIndx: 'B', width: 70 },
-          { title: 'H', dataType: 'float', dataIndx: 'H', width: 70 },
-          { title: 'Bt', dataType: 'float', dataIndx: 'Bt', width: 70 },
-          { title: 't', dataType: 'float', dataIndx: 't', width: 70 }
-        ]
-      },
-      { title: '部材数', align: 'center', dataType: 'float', dataIndx: 'n', sortable: false, width: 80 },
-    );
+    this.setTitle(this.save.isManual());
 
     // グリッドの基本的な オプションを登録する
     this.options = {
@@ -180,21 +156,52 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
       }
       this.loadData(this.ROWS_COUNT);
+      
     } else {
       // ピックアップファイルを使う場合
-      this.table_datas = this.save.members.member_list;
+      this.table_datas = this.members.getSaveData();
     }
 
     // データを登録する
     this.options['dataModel'] = { data: this.table_datas };
+  }
 
+
+  private setTitle(isManual: boolean): void {
+    
+    if (isManual) {
+      // 断面力手入力モードの場合の項目
+      this.columnHeaders = [];
+    } else {
+      // ピックアップファイルを使う場合の項目
+      this.columnHeaders = [
+        { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: '部材長', dataType: 'float', format: '#.000', dataIndx: 'm_len', editable: false, sortable: false, width: 90, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      ];
+    }
+
+    this.columnHeaders.push(
+      { title: 'グループNo', align: 'center', dataType: 'integer', dataIndx: 'g_no', sortable: false, width: 85 },
+      { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
+      { title: '断面形状', dataType: 'string', dataIndx: 'shape', sortable: false, width: 80 },
+      {
+        title: '断面(mm)', align: 'center', colModel: [
+          { title: 'B', dataType: 'float', dataIndx: 'B', width: 70 },
+          { title: 'H', dataType: 'float', dataIndx: 'H', width: 70 },
+          { title: 'Bt', dataType: 'float', dataIndx: 'Bt', width: 70 },
+          { title: 't', dataType: 'float', dataIndx: 't', width: 70 }
+        ]
+      },
+      { title: '部材数', align: 'center', dataType: 'float', dataIndx: 'n', sortable: false, width: 80 },
+    );
 
   }
+
 
   // 指定行row 以降のデータを読み取る
   private loadData(row: number): void {
     for (let i = this.table_datas.length + 1; i <= row; i++) {
-      const column = this.save.members.getMemberTableColumns(i);
+      const column = this.members.getTableColumns(i);
       this.table_datas.push(column);
     }
   }
@@ -205,22 +212,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   }
 
   public saveData(): void {
-
-    if (!this.save.isManual()) {
-      return;
-    }
-    // 断面力て入力モードの場合に適用する
-    for (let i = this.save.members.member_list.length - 1; i >= 0; i--) {
-      const columns = this.save.members.member_list[i];
-      if (this.save.members.isEnable(columns)) {
-        // グループNo の入力がない入力行には、仮のグループid をつける
-        if (columns.g_no === null) {
-          columns.g_id = 'row' + columns.m_no; //仮のグループid
-        }
-      } else {
-        this.save.members.member_list.splice(i, 1); // 有効な入力が何もない行は削除する
-      }
-    }
+    this.members.setSaveData(this.table_datas, this.save.isManual());
   }
 
   // 表の高さを計算する

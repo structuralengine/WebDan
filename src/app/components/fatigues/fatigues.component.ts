@@ -24,102 +24,14 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   public service_life: number;
 
   constructor(
+    private fatigues: InputFatiguesService,
     private save: SaveDataService) { }
 
   ngOnInit() {
 
     this.setTitle(this.save.isManual());
 
-    this.table_datas = new Array();
-
-    // グリッド用データの作成
-    const groupe_list = this.save.getGroupeList();
-    for( let i = 0; i< groupe_list.length; i++){
-      this.table_datas[i] = new Array();
-      const groupe = groupe_list[i];
-
-      // 部材
-      for ( const member of groupe) {
-
-        // 着目点
-        for (let k = 0; k < member.positions.length; k++) {
-          const pos = member.positions[k];
-          if(!this.save.points.isEnable(pos)){
-            continue;
-          }
-          // barデータに（部材、着目点など）足りない情報を追加する
-          const data: any = this.save.fatigues.getFatiguesColumns(pos.index);
-          data.m_no = member.m_no;
-          data.b = member.B;
-          data.h = member.H;
-          data.position = pos.position;
-          data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name;
-          
-          // データを2行に分ける
-          const column1 = {};
-          const column2 = {};
-          if (k === 0) {
-            // 最初の行には 部材番号を表示する
-            column1['m_no'] = data.m_no;
-          }
-          // 1行目
-          column1['index'] = data['index'];
-          column1['position'] = data['position'];
-          column1['p_name'] = data['p_name'];
-          column1['p_name_ex'] = data['p_name_ex'];
-
-
-          column1['bh'] = data['b'];
-          column1['design_point_id'] = data['title1'];
-
-          column1['M_SA'] = data['M1'].SA;
-          column1['M_SB'] = data['M1'].SB;
-          column1['M_NA06'] = data['M1'].NA06;
-          column1['M_NB06'] = data['M1'].NB06;
-          column1['M_NA12'] = data['M1'].NA12;
-          column1['M_NB12'] = data['M1'].NB12;
-          column1['M_A'] = data['M1'].A;
-          column1['M_B'] = data['M1'].B;
-
-          column1['V_SA'] = data['V1'].SA;
-          column1['V_SB'] = data['V1'].SB;
-          column1['V_NA06'] = data['V1'].NA06;
-          column1['V_NB06'] = data['V1'].NB06;
-          column1['V_NA12'] = data['V1'].NA12;
-          column1['V_NB12'] = data['V1'].NB12;
-          column1['V_A'] = data['V1'].A;
-          column1['V_B'] = data['V1'].B;
-
-          this.table_datas[i].push(column1);
-
-          // 2行目
-          column2['bh'] = data['h'];
-          column2['design_point_id'] = data['title2'];
-
-          column2['M_SA'] = data['M2'].SA;
-          column2['M_SB'] = data['M2'].SB;
-          column2['M_NA06'] = data['M2'].NA06;
-          column2['M_NB06'] = data['M2'].NB06;
-          column2['M_NA12'] = data['M2'].NA12;
-          column2['M_NB12'] = data['M2'].NB12;
-          column2['M_A'] = data['M2'].A;
-          column2['M_B'] = data['M2'].B;
-
-          column2['V_SA'] = data['V2'].SA;
-          column2['V_SB'] = data['V2'].SB;
-          column2['V_NA06'] = data['V2'].NA06;
-          column2['V_NB06'] = data['V2'].NB06;
-          column2['V_NA12'] = data['V2'].NA12;
-          column2['V_NB12'] = data['V2'].NB12;
-          column2['V_A'] = data['V2'].A;
-          column2['V_B'] = data['V2'].B;
-
-          this.table_datas[i].push(column2);
-        }
-      }
-    }
-
+    this.table_datas = this.fatigues.getTableColumns();
 
     // グリッドの設定
     this.options = new Array();
@@ -138,9 +50,9 @@ export class FatiguesComponent implements OnInit, OnDestroy {
       this.grids[i].options = op;
     }
 
-    this.train_A_count = this.save.fatigues.train_A_count;
-    this.train_B_count = this.save.fatigues.train_B_count;
-    this.service_life = this.save.fatigues.service_life;
+    this.train_A_count = this.fatigues.fatigues.train_A_count;
+    this.train_B_count = this.fatigues.fatigues.train_B_count;
+    this.service_life = this.fatigues.fatigues.service_life;
   }
 
   private setTitle(isManual: boolean): void{

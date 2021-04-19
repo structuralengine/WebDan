@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { InputBasicInformationService } from './basic-information.service';
 import { SaveDataService } from '../../providers/save-data.service';
-import { InputMembersService } from '../members/members.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 
@@ -10,56 +9,45 @@ import pq from 'pqgrid';
   templateUrl: './basic-information.component.html',
   styleUrls: ['./basic-information.component.scss']
 })
-export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestroy {
+export class BasicInformationComponent implements OnInit, OnDestroy {
+
+  private columnHeaders: object[] = [];
 
   @ViewChild('grid1') grid1: SheetComponent;
-  private columnHeaders: object[] = [
-    { title: '断面照査に用いる応力', dataType: 'string',  dataIndx: 'title', editable: false, sortable: false, width: 270, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-    { title: 'Pickup No', align: 'center', dataType: 'integer', dataIndx: 'pickup_no', sortable: false, width: 148 },
-  ];
-  private pickup_moment_datarows: any[] = [];
+  private table1_datas: any[] = [];
   public options1: pq.gridT.options;
 
   @ViewChild('grid2') grid2: SheetComponent;
-  private pickup_shear_force_datarows: any[] = [];
+  private table2_datas: any[] = [];
   public options2: pq.gridT.options;
 
-  public isSRC: boolean; // SRC部材 があるかどうか
-
   // 適用 に関する変数
-  specification1_selected: number;
-  specification1_list: any[];
+  public specification1_list: any[];
 
   // 仕様 に関する変数
-  specification2_selected: number;
-  specification2_list: any[];
+  public specification2_list: any[];
 
   // 設計条件
-  conditions_list: any[];
+  public conditions_list: any[];
 
   constructor(
-    private save: SaveDataService) {
-
-  }
+    private basic: InputBasicInformationService,
+    private save: SaveDataService) { }
 
   ngOnInit() {
 
-    // 適用 に関する変数 の初期化
-    this.specification1_selected = this.save.basic.specification1_selected;
-    this.specification1_list = this.save.basic.specification1_list;
+    const basic = this.basic.getSaveData();
 
-    // 仕様 に関する変数 の初期化
-    this.specification2_selected = this.save.basic.specification2_selected;
-    this.specification2_list = this.save.basic.specification2_list;
+    this.specification1_list = basic.specification1_list; // 適用
+    this.specification2_list = basic.specification2_list; // 仕様
+    this.conditions_list = basic.conditions_list;         //  設計条件
 
-    //  設計条件 に関する初期化
-    this.conditions_list = this.save.basic.conditions_list;
+    // pickUp テーブル の初期化
+    this.setTitle(this.save.isManual());
 
-    // SRC部材 があるかどうか
-    this.isSRC = this.save.members.getSRC().some((v) => v > 0);
+    this.table1_datas = basic.pickup_moment;
+    this.table2_datas = basic.pickup_shear_force;
 
-    this.initPickupTable();
-    
     this.options1 = {
       height: 290,
       showTop: false,
@@ -68,7 +56,7 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
       locale: 'jp',
       numberCell: { show: true }, // 行番号
       colModel: this.columnHeaders,
-      dataModel: { data: this.pickup_moment_datarows },
+      dataModel: { data: this.table1_datas },
     };
 
     this.options2 = {
@@ -79,23 +67,29 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
       locale: 'jp',
       numberCell: { show: true }, // 行番号
       colModel: this.columnHeaders,
-      dataModel: { data: this.pickup_shear_force_datarows },
+      dataModel: { data: this.table2_datas },
     };
 
   }
 
+  private setTitle(isManual: boolean): void {
+    
+    if (isManual) {
+      // 断面力手入力モードの場合の項目
+      this.columnHeaders = [];
+    } else {
+      // ピックアップファイルを使う場合の項目
+      this.columnHeaders = [
+          { title: '断面照査に用いる応力', dataType: 'string',  dataIndx: 'title', editable: false, sortable: false, width: 270, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+          { title: 'Pickup No', align: 'center', dataType: 'integer', dataIndx: 'no', sortable: false, width: 148 },
+        ];
+    }
+
+  }
+  
+
   public isManual(): boolean{
     return this.save.isManual();
-  }
-
-  ngAfterViewInit(){
-    if(this.isManual() === false) {
-      this.grid1.options = this.options1;
-      this.grid1.refreshDataAndView();
-
-      this.grid2.options = this.options2;
-      this.grid2.refreshDataAndView();
-    }
   }
 
   ngOnDestroy() {
@@ -103,51 +97,13 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   public saveData(): void {
-    let i: number = 0;
-    for (let row = 0; row < this.pickup_moment_datarows.length; row++) {
-      const column = this.pickup_moment_datarows[row];
-
-      if (this.save.basic.specification1_selected === 0  // 鉄道
-        && row === 2                          // 安全性 （疲労破壊）疲労限
-        && this.isSRC === false) {            // SRC部材 がない
-        i++;
-      }
-
-      this.save.basic.setPickUpNoMomentColumns(row + i, column['pickup_no']);
-    }
-
-    for (let row = 0; row < this.pickup_shear_force_datarows.length; row++) {
-      const column = this.pickup_shear_force_datarows[row];
-      this.save.basic.setPickUpNoShearForceColumns(row, column['pickup_no']);
-    }
-  }
-
-  /// <summary>
-  /// pick up table の初期化関数
-  /// </summary>
-  /// <param name='i'>選択された番号</param>
-  private initPickupTable(): void {
-
-    this.pickup_moment_datarows = new Array();
-    this.pickup_shear_force_datarows = new Array();
-
-    for (let row = 0; row < this.save.basic.pickup_moment_title.length; row++) {
-      const column = this.save.basic.getPickUpNoMomentColumns(row);
-
-      if (row === 2) { //  安全性 （疲労破壊）疲労限
-        if (this.save.basic.specification1_selected === 0) { // 鉄道
-          if (this.isSRC === false) { // SRC部材 がない
-            continue;
-          }
-        }
-      }
-      this.pickup_moment_datarows.push(column);
-    }
-
-    for (let row = 0; row < this.save.basic.pickup_shear_force_title.length; row++) {
-      const column = this.save.basic.getPickUpNoShearForceColumns(row);
-      this.pickup_shear_force_datarows.push(column);
-    }
+    this.basic.setSaveData({
+      pickup_moment: this.table1_datas,
+      pickup_shear_force: this.table2_datas,
+      specification1_list: this.specification1_list, // 適用
+      specification2_list: this.specification2_list, // 仕様
+      conditions_list: this.conditions_list         // 設計条件       
+    });
 
   }
 
@@ -157,41 +113,29 @@ export class BasicInformationComponent implements OnInit, AfterViewInit, OnDestr
   /// <param name='i'>選択された番号</param>
   public setSpecification1(i: number): void {
 
-    this.save.basic.specification1_selected = i;
-    this.save.basic.initSpecificationTitles();
+    const basic = this.basic.set_specification1(i);
 
-    // 適用 に関する変数 の初期化
-    this.save.basic.specification1_selected = i;
-    this.save.basic.specification1_list = this.save.basic.specification1_list;
+    this.specification1_list = basic.specification1_list; // 適用
+    this.specification2_list = basic.specification2_list; // 仕様
+    this.conditions_list = basic.conditions_list;         //  設計条件
 
-    // 仕様 に関する変数 の初期化
-    this.setSpecification2(this.save.basic.specification2_selected);
-    this.save.basic.specification2_list = this.save.basic.specification2_list;
+    this.table1_datas = basic.pickup_moment;
+    this.table2_datas = basic.pickup_shear_force;
 
-    //  設計条件 に関する初期化
-    this.save.basic.conditions_list = this.save.basic.conditions_list;
-
-    // pickup_table に関する初期化
-    this.initPickupTable();
-
+    this.grid1.refreshDataAndView();
+    this.grid2.refreshDataAndView();
   }
 
-  /// <summary>
   /// 仕様 変更時の処理
-  /// </summary>
-  /// <param name='i'>選択された番号</param>
-  public setSpecification2(i: number): void {
-    this.save.basic.specification2_selected = i;
+  public setSpecification2(id: number): void {
+    this.specification2_list = this.specification2_list.map(
+      obj => obj.selected = (obj.id === id) ? true : false)
   }
 
-  /// <summary>
   /// 設計条件 変更時の処理
-  /// </summary>
-  /// <param name='item'>変更されたアイテム</param>
-  /// <param name='isChecked'>チェックボックスの状態</param>
   public conditionsCheckChanged(id: string, isChecked: boolean) {
-    this.save.basic.setConditions(id, isChecked);
-    this.save.basic.conditions_list = this.save.basic.conditions_list;
+    this.conditions_list = this.conditions_list.map( obj => 
+      obj.selected = (obj.id === id) ? isChecked : obj.selected);
   }
 
 }

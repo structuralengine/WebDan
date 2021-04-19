@@ -8,7 +8,7 @@ import { InputMembersService } from "../components/members/members.service";
 import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
 import { InputSectionForcesService } from "../components/section-forces/section-forces.service";
 import { InputCalclationPrintService } from "../components/calculation-print/calclation-print.service";
-import { InputCrackSettingsService } from "../components/crack-settings/crack-settings.service";
+import { InputCrackSettingsService } from "../components/crack/crack-settings.service";
 import { InputSteelsService } from "../components/steels/steels.service";
 
 @Injectable({
@@ -16,8 +16,8 @@ import { InputSteelsService } from "../components/steels/steels.service";
 })
 export class SaveDataService {
   // ピックアップファイル
-  public pickup_filename: string;
-  public pickup_data: Object;
+  private pickup_filename: string;
+  private pickup_data: Object;
   //={
   //  1:[
   //    { index: 1, memberNo, p_name, position,
@@ -35,17 +35,17 @@ export class SaveDataService {
   // }
 
   constructor(
-    public helper: DataHelperModule,
-    public bars: InputBarsService,
-    public steel: InputSteelsService,
-    public basic: InputBasicInformationService,
-    public points: InputDesignPointsService,
-    public crack: InputCrackSettingsService,
-    public fatigues: InputFatiguesService,
-    public members: InputMembersService,
-    public safety: InputSafetyFactorsMaterialStrengthsService,
-    public force: InputSectionForcesService,
-    public calc: InputCalclationPrintService
+    private helper: DataHelperModule,
+    private bars: InputBarsService,
+    private steel: InputSteelsService,
+    private basic: InputBasicInformationService,
+    private points: InputDesignPointsService,
+    private crack: InputCrackSettingsService,
+    private fatigues: InputFatiguesService,
+    private members: InputMembersService,
+    private safety: InputSafetyFactorsMaterialStrengthsService,
+    private force: InputSectionForcesService,
+    private calc: InputCalclationPrintService
   ) {
     this.clear();
   }
@@ -237,42 +237,43 @@ export class SaveDataService {
     jsonData["pickup_data"] = this.pickup_data;
 
     // 設計条件
-    jsonData["pickup_moment_no"] = this.basic.pickup_moment_no; // ピックアップ番号 曲げモーメント
-    jsonData["pickup_shear_force_no"] = this.basic.pickup_shear_force_no; // ピックアップ番号 せん断力
-    jsonData["specification1_selected"] = this.basic.specification1_selected; // 適用 に関する変数
-    jsonData["specification2_selected"] = this.basic.specification2_selected; // 仕様 に関する変数
-    jsonData["conditions_list"] = this.basic.conditions_list; // 設計条件
+    const basic = this.basic.getSaveData();
+    jsonData["pickup_moment_no"] = basic.pickup_moment_no; // ピックアップ番号 曲げモーメント
+    jsonData["pickup_shear_force_no"] = basic.pickup_shear_force_no; // ピックアップ番号 せん断力
+    jsonData["specification1_selected"] = basic.specification1_selected; // 適用 に関する変数
+    jsonData["specification2_selected"] = basic.specification2_selected; // 仕様 に関する変数
+    jsonData["conditions_list"] = basic.conditions_list; // 設計条件
 
     // 部材情報
-    jsonData["member_list"] = this.members.member_list;
+    jsonData["member_list"] = this.members.getSaveData();
 
     // ひび割れ情報
-    jsonData["crack_list"] = this.crack.crack_list;
+    jsonData["crack_list"] = this.crack.getSaveData();
 
     // 着目点情報
-    jsonData["position_list"] = this.points.position_list;
+    jsonData["position_list"] = this.points.getSaveData();
 
     // 鉄筋情報
-    jsonData["bar_list"] = this.bars.bar_list;
+    jsonData["bar_list"] = this.bars.getSaveData();
 
     // 疲労情報
-    jsonData["fatigue_list"] = this.fatigues.fatigue_list;
-    jsonData["train_A_count"] = this.fatigues.train_A_count;
-    jsonData["train_B_count"] = this.fatigues.train_B_count;
-    jsonData["service_life"] = this.fatigues.service_life;
-    jsonData["fatigue_reference_count"] = this.fatigues.reference_count;
+    const fatigues = this.fatigues.getSaveData();
+    jsonData["fatigue_list"] = fatigues.fatigue_list;
+    jsonData["train_A_count"] = fatigues.train_A_count;
+    jsonData["train_B_count"] = fatigues.train_B_count;
+    jsonData["service_life"] = fatigues.service_life;
+    jsonData["fatigue_reference_count"] = fatigues.reference_count;
 
     // 安全係数情報
-    jsonData[
-      "safety_factor_material_strengths"
-    ] = this.safety.safety_factor_material_strengths_list;
+    jsonData["safety_factor_material_strengths"] = this.safety.getSaveData();
 
     // 断面力手入力情報
-    jsonData["manual_moment_force"] = this.force.moment_force;
-    jsonData["manual_shear_force"] = this.force.shear_force;
+    const force = this.force.getSaveData();
+    jsonData["manual_moment_force"] = force.moment_force;
+    jsonData["manual_shear_force"] = force.shear_force;
 
     // 計算印刷設定
-    jsonData["print_selected"] = this.calc.print_selected;
+    jsonData["print_selected"] = this.calc.getSaveData();
 
     // string 型にする
     const result: string = JSON.stringify(jsonData);
@@ -374,64 +375,7 @@ export class SaveDataService {
     return result;
   }
 
-  // グループ別 部材情報{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t} の配列
-  private getGroupeMemberList(): any[] {
 
-    const id_list: string[] = new Array();
-    for (const m of this.members.member_list) {
 
-      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
-        continue;
-      }
-
-      if (id_list.find((value)=>value===m.g_id) === undefined) {
-        id_list.push(m.g_id);
-      }
-    }
-
-    // グループ番号順に並べる
-    id_list.sort();
-
-    // グループ番号を持つ部材のリストを返す
-    const result = new Array();
-    for (const id of id_list) {
-      // グループ番号を持つ部材のリスト
-      const members: any[] = this.members.member_list.filter( 
-        item => item.g_id === id);
-      result.push(members);
-    }
-    return result;
-  }
-
-  // グループ別 部材情報
-  //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t, 
-  //   positions:[
-  //    { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
-  //    ...
-  //   }, ...
-  public getGroupeList(): any[] {
-
-    const groupe_list: any[] = this.getGroupeMemberList();
-    const position_list = this.points.position_list;
-
-    for(const groupe of groupe_list) {
-
-      for ( const member of groupe) {
-        member['positions'] = new Array();
-
-        // 同じ要素番号のものを探す
-        const position: any[] = position_list.filter( 
-          item => item.m_no === member.m_no );
-
-        // 対象データが無かった時に処理
-        if (position.length > 0) {
-          member.positions.push(position);
-        }
-      }
-
-    }
-
-    return groupe_list;
-  }
 
 }

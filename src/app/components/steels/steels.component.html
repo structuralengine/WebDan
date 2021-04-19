@@ -1,64 +1,13 @@
 <div #ht_container class="ht-container">
   <ngb-tabset>
-    <ngb-tab *ngFor="let groupe of groupe_list; index as i">
+    <ngb-tab *ngFor="let groupe of table_datas; index as i">
       <ng-template ngbTabTitle>
-        <h5>{{groupe[0].g_name}}</h5>
+        <h5>{{getGroupeName(i)}}</h5>
       </ng-template>
       <ng-template ngbTabContent>
         <div class="table-container">
-          <div class="header">
-            <table width="1155px">
-              <thead>
-                <tr>
-                  <th rowspan="3" width="60px">部材番号</th>
-                  <th rowspan="3" width="110px">位置</th>
-                  <th rowspan="3" width="250px">算出点名</th>
-                  <th width="85px">断面</th>
-                  <th rowspan="3" width="40px">位置</th>
-                  <th rowspan="3" width="70px">上または左からの距離(mm)</th>
-                  <th colspan="2">上フランジ または 左フランジ</th>
-                  <th colspan="2">ウェブ</th>
-                  <th colspan="2">下フランジ または 右フランジ</th>
-                </tr>
-                <tr>
-                  <th>B</th>
-                  <th rowspan="2" width="80px">フランジ幅(mm)</th>
-                  <th rowspan="2" width="80px">フランジ厚(mm)</th>
-                  <th rowspan="2" width="80px">ウェブ厚(mm)</th>
-                  <th rowspan="2" width="80px">ウェブ高(mm)</th>
-                  <th rowspan="2" width="80px">フランジ幅(mm)</th>
-                  <th rowspan="2" width="80px">フランジ厚(mm)</th>
-                </tr>
-                <tr>
-                  <th>H</th>
-                </tr>
-              </thead>
-            </table>
-          </div>
-
-          <hot-table class="hot" [settings]="table_settings[i]" [data]="table_datas[i]" [colHeaders]="false"
-            [rowHeaders]="false" height="{{hottable_height}}" width="1168"
-            licenseKey="non-commercial-and-evaluation">
-            <!-- [mergeCells] = "mergeCells[i]" > -->
-            <hot-column data="m_no" width="65" [readOnly]="true"></hot-column>
-            <hot-column data="position" width="115" [readOnly]="true"></hot-column>
-            <hot-column data="p_name_ex" width="263" [readOnly]="true"></hot-column>
-            <hot-column data="bh" width="90" [readOnly]="true"></hot-column>
-            <hot-column data="design_point_id" width="40" [readOnly]="true"></hot-column>
-
-            <hot-column data="upper_left_cover" width="75" type="numeric"></hot-column>
-
-            <hot-column data="upper_left_width" width="85" type="numeric"></hot-column>
-            <hot-column data="upper_left_thickness" width="85" type="numeric"></hot-column>
-
-            <hot-column data="web_thickness" width="85" type="numeric"></hot-column>
-            <hot-column data="web_height" width="85" type="numeric"></hot-column>
-
-            <hot-column data="lower_right_width" width="85" type="numeric"></hot-column>
-            <hot-column data="lower_right_thickness" width="85" type="numeric"></hot-column>
-          </hot-table>
+          <app-sheet #grid [options]="options[i]"></app-sheet>
         </div>
-
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

@@ -218,7 +218,7 @@ export class SetDesignForceService {
 
     const result = JSON.parse(
       JSON.stringify({
-        temp: this.save.points.getDesignPointColumns()
+        temp: this.save.points.getDesignPointColumn()
       })
     ).temp;
 

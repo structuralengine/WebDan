@@ -917,7 +917,7 @@ export class SetBarService {
 
     const temp = JSON.parse(
       JSON.stringify({
-        temp: this.save.bars.getBarsColumns(true)
+        temp: this.save.bars.getTableColumnss(true)
       })
     ).temp;
 
