@@ -21,10 +21,12 @@ export class InputFatiguesService {
   }
   public clear(): void {
     // 疲労強度入力画面に関する初期化
-    this.fatigue_list = new Array();
-    this.train_A_count = null;
-    this.train_B_count = null;
-    this.service_life = null;
+    this.setSaveData({
+      table_datas: this.getTableColumns(),
+      train_A_count: null,
+      train_B_count: null,
+      service_life: null
+    })
     this.reference_count = 2000000;
   }
 
@@ -161,7 +163,6 @@ export class InputFatiguesService {
 
   public setSaveData(fatigues: any) {
 
-    this.fatigue_list  = fatigues.fatigue_list;
     this.train_A_count - fatigues.train_A_count;
     this.train_B_count = fatigues.train_B_count;
     this.service_life  = fatigues.service_life;

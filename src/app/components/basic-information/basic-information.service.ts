@@ -6,8 +6,8 @@ import { Injectable } from '@angular/core';
 export class InputBasicInformationService  {
 
   // pick up table に関する変数
-  private pickup_moment: any[] = new Array();
-  private pickup_shear_force: any[] = new Array();
+  private pickup_moment: any[];
+  private pickup_shear_force: any[];
 
   // 適用 に関する変数
   private specification1_list: any[];
@@ -22,79 +22,71 @@ export class InputBasicInformationService  {
     this.clear();
   }
   public clear(): void {
+    this.pickup_moment = new Array();
+    this.pickup_shear_force = new Array();
+    this.specification1_list = new Array();
+    this.specification2_list = new Array();
+    this.conditions_list = new Array();
 
+    this.set_default_specification1();
+    this.set_default_pickup();
+  }
+
+  private set_default_specification1(): void {
     this.specification1_list = [
       { id: 0, title: '鉄道', selected: true },
       { id: 1, title: '道路', selected: false }
     ];
-
-    this.initSpecificationTitles();
-
   }
+  /// get_specification1 によって変わる項目の設定
+  private set_default_pickup(): void {
 
-  /// specification1_selected によって変わる項目の設定
-  private initSpecificationTitles(): void {
-
-    const index: number = this.specification1_list.find(
-      value=>value.selected === true);
-
-    switch (index) {
+    switch (this.get_specification1()) {
       case 0: // 鉄道
 
         // 曲げモーメントテーブル
         const keys_moment = [ 
-          '耐久性 縁応力度検討用',
-          '耐久性 （永久荷重）',
-          '安全性 （疲労破壊）疲労限',
-          '安全性 （疲労破壊）永久作用',
-          '安全性 （疲労破壊）永久＋変動',
-          '安全性 （破壊）',
-          '復旧性 （損傷）地震時以外',
-          '復旧性 （損傷）地震時' 
+          { id: 0, title: '耐久性 縁応力度検討用', no: null},
+          { id: 1, title: '耐久性 （永久荷重）', no: null},
+          { id: 2, title: '安全性 （疲労破壊）疲労限', no: null},
+          { id: 3, title: '安全性 （疲労破壊）永久作用', no: null},
+          { id: 4, title: '安全性 （疲労破壊）永久＋変動', no: null},
+          { id: 5, title: '安全性 （破壊）', no: null},
+          { id: 6, title: '復旧性 （損傷）地震時以外', no: null},
+          { id: 7, title: '復旧性 （損傷）地震時', no: null} 
         ];
-        // 古い入力を取っておく
-        const old_moment: number[] = new Array();
-        for(let i=0; i<keys_moment.length;i++){
-          if(this.pickup_moment.length>i){
-            old_moment.push(this.pickup_moment[i].no);
-          }else {
-            old_moment.push(null);
+        // 古い入力があれば no の入力を 保持
+        const tmp_moment: any[] = new Array();
+        for(const def of keys_moment){
+          const old = this.pickup_moment.find(v=>v.id===def.id);
+          if(old!==undefined){
+            def.no = old.no;
           }
+          tmp_moment.push(def);
         }
-        this.pickup_moment = new Array();
-        for(let i=0; i<keys_moment.length;i++){
-          this.pickup_moment.push({
-            title: keys_moment[i], no: old_moment[i]
-          });
-        }
+        this.pickup_moment = tmp_moment;
 
         // せん断力テーブル
         const keys_shear = [ 
-          '耐久性 せん断ひび割れ検討判定用',
-          '耐久性 （永久荷重）',
-          '耐久性 （変動荷重）',
-          '安全性 （疲労破壊）永久作用',
-          '安全性 （疲労破壊）永久＋変動',
-          '安全性 （破壊）',
-          '復旧性 （損傷）地震時以外',
-          '復旧性 （損傷）地震時' 
+          { id: 0, title: '耐久性 せん断ひび割れ検討判定用', no: null},
+          { id: 1, title: '耐久性 （永久荷重）', no: null},
+          { id: 2, title: '耐久性 （変動荷重）', no: null},
+          { id: 3, title: '安全性 （疲労破壊）永久作用', no: null},
+          { id: 4, title: '安全性 （疲労破壊）永久＋変動', no: null},
+          { id: 5, title: '安全性 （破壊）', no: null},
+          { id: 6, title: '復旧性 （損傷）地震時以外', no: null},
+          { id: 7, title: '復旧性 （損傷）地震時', no: null} 
         ];
-        // 古い入力を取っておく
-        const old_shear: number[] = new Array();
-        for(let i=0; i<keys_shear.length;i++){
-          if(this.pickup_shear_force.length>i){
-            old_shear.push(this.pickup_shear_force[i].no);
-          }else {
-            old_shear.push(null);
+        // 古い入力があれば no の入力を 保持
+        const tmp_shear: any[] = new Array();
+        for(const def of keys_shear){
+          const old = this.pickup_shear_force.find(v=>v.id===def.id);
+          if(old!==undefined){
+            def.no = old.no;
           }
+          tmp_shear.push(def);
         }
-        this.pickup_shear_force = new Array();
-        for(let i=0; i<keys_shear.length;i++){
-          this.pickup_shear_force.push({
-            title: keys_shear[i], no: old_shear[i]
-          });
-        }
-
+        this.pickup_shear_force = tmp_shear;
 
         this.specification2_list = [
           { id: 0, title: 'ＪＲ各社', selected: true },
@@ -125,6 +117,11 @@ export class InputBasicInformationService  {
     }
 
   }
+  
+  public get_specification1(): number {
+    return this.specification1_list.find(
+      value=>value.selected === true);
+  }
 
   public set_specification1(index: number): any {
 
@@ -134,7 +131,7 @@ export class InputBasicInformationService  {
     this.specification1_list = this.specification1_list.map(
       obj => obj.selected = (obj.id === id) ? true : false);
 
-    this.initSpecificationTitles();
+    this.set_default_pickup();
 
     return this.getSaveData()
   }
@@ -149,7 +146,6 @@ export class InputBasicInformationService  {
 
   public setPickUpData(){
   }
-
 
   public getSaveData(): any{
     return {

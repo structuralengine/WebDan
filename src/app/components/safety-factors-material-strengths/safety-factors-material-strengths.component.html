@@ -43,7 +43,7 @@
             </ng-template>
           </ngb-tab>
 
-          <ngb-tab *ngIf="isSRC[i]">
+          <ngb-tab>
             <ng-template ngbTabTitle>
               鉄骨
             </ng-template>
@@ -59,7 +59,7 @@
               <div class="material-strength">
                 <h5>鉄骨材料強度</h5>
                 <div class="table-container">
-                  <app-sheet #grid5 [options]="options4[i]"></app-sheet>
+                  <app-sheet #grid5 [options]="options5[i]"></app-sheet>
                 </div>
               </div>
 
@@ -90,9 +90,13 @@
                     <ng-container *ngFor="let item of pile_factor_list; index as j">
                       <tr>
                         <td width="20px">
-                          <input type="radio" name="pile_factor" id="pile_factor{{j}}"
-                            [(ngModel)]="pile_factor_selected[i]" [value]="item.id"
-                            [checked]="pile_factor_selected[i] == item.id" (change)="setPileFactor(i, j)" />
+                          <input type="radio" 
+                            name="pile_factor" 
+                            id="pile_factor{{j}}"
+                            [(ngModel)]="pile_factor_selected[i]" 
+                            [value]="item.id"
+                            [checked]="pile_factor_selected[i] == item.id" 
+                            (change)="setPileFactor(i, j)" />
                         </td>
                         <td style="text-align: left" width="200px">{{item.title}}</td>
                         <td>{{item.rfck}}</td>

@@ -1,3 +1,4 @@
+import { newArray } from "@angular/compiler/src/util";
 import { Injectable } from "@angular/core";
 import { DataHelperModule } from "src/app/providers/data-helper.module";
 import { InputDesignPointsService } from "../design-points/design-points.service";
@@ -74,7 +75,6 @@ export class InputCrackSettingsService {
     }
     return result;
   }
-
 
   public setSaveData(table_datas: any[]) {
 

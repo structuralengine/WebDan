@@ -22,8 +22,16 @@ export class InputMembersService  {
     // g_no: 表面上の(member.component だけで用いる)グループ番号
     // g_id: 本当のグループ番号
     return {
-      'm_no': row, 'm_len': null, 'g_no': null, 'g_id': '', 'g_name': '', 'shape': '',
-      'B': null, 'H': null, 'Bt': null, 't': null,
+      m_no: row, 
+      m_len: null, 
+      g_no: null, 
+      g_id: '', 
+      g_name: '', 
+      shape: '',
+      B: null, 
+      H: null, 
+      Bt: null, 
+      t: null,
     };
   }
 
