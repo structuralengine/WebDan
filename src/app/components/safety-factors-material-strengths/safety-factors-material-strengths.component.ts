@@ -58,54 +58,37 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
 
     this.setTitle();
 
-    const table_datas = this.safety.getTableColumns();
-    this.groupe_list = new Array();
-
-    
-    // 仕様によるタイトルの初期化
-    this.safety.initSpecificationTitles();
-
-    // グループリストを取得
-    this.groupe_list = this.safety.getGroupeList();
+    const safety = this.safety.getTableColumns();
 
     // 配列を作成
-    this.table1_datas = new Array();    // 安全係数
+    this.table1_datas = new Array();      // 安全係数
     this.table2_datas = new Array();      // 鉄筋材料
-    this.table3_datas = new Array(); // コンクリート材料
-    this.table5_datas = new Array();    // 鉄骨材料
-
-    this.pile_factor_list = new Array();              // 杭の施工条件
-    this.pile_factor_selected = new Array();
+    this.table3_datas = new Array();      // コンクリート材料
+    this.table5_datas = new Array();      // 鉄骨材料
+    this.pile_factor_list = new Array();  // 杭の施工条件
 
     // 入力項目を作成
-    for (let i = 0; i < this.groupe_list.length; i++) {
+    for (let i = 0; i < safety.groupe_list.length; i++) {
 
       const groupe = this.groupe_list[i];
-      
-      const data = this.safety.getTableColumns(groupe[0].g_id);
+
 
       // 安全係数
-      const safety: any[] = data['safety_factor'];
-      const title: string[] = data['safety_factor_title'];
-      this.table1_datas.push(
-        this.set_table1_datas(safety, title)
-      );
+      this.table1_datas.push(safety.safety_factor[i]);
 
       // 鉄筋材料
-      this.table2_datas[i] = new Array();
-      const bar = data['material_bar'];
-      /*/ セパレータ
-      this.table2_datas[i].push(
-        this.set_bar_strength_table_split(bar[0])
-      );*/
-      const bar_table_titles: string[] = ['', '軸方向鉄筋', '側方向鉄筋', 'スターラップ', '折曲げ鉄筋'];
-      for (let j = 1; j < bar.length; j++) {
-        this.table2_datas[i].push(
-          this.set_bar_strength_table_column(bar[j], bar_table_titles[j])
-        );
-      }
+      const f1 = safety.material_bar[0]; // D25以下
+      const f2 = safety.material_bar[1]; // D29以上
+      this.table2_datas.push([
+        { title: '軸方向鉄筋',  fsy1: f1.tensionBar.fsy, fsy2: f2.tensionBar.fsy, fsu1: f1.tensionBar.fsu, fsu2: f2.tensionBar.fsu },
+        { title: '側方向鉄筋',  fsy1: f1.sidebar.fsy,    fsy2: f2.sidebar.fsy,    fsu1: f1.sidebar.fsu,    fsu2: f2.sidebar.fsu },
+        { title: 'スターラップ', fsy1: f1.stirrup.fsy,   fsy2: f2.stirrup.fsy,    fsu1: f1.stirrup.fsu,    fsu2: f2.stirrup.fsu },
+      ]);
 
       // 鉄骨材料
+      safety.material_steel,
+
+
       this.table5_datas[i] = new Array();
       const steel = data['material_steel'];
       // セパレータ
@@ -120,6 +103,9 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
       }
 
       // コンクリート材料
+      safety.material_concrete,
+      safety.pile_factor
+
       this.table3_datas[i] = new Array();
       const concrete = data['material_concrete'];
 
@@ -302,12 +288,6 @@ export class SafetyFactorsMaterialStrengthsComponent implements OnInit, OnDestro
     return result;
   }
 
-  // 鉄筋の軸方向鉄筋をテーブル用のデータに整形する
-  private set_bar_strength_table_column(bar: any, title: string): any {
-    const result = bar;
-    result['title'] = title;
-    return result;
-  }
 
   // 鉄骨のセパレータをテーブル用の変数に整形する
   private set_steel_strength_table_split(split: any): any {

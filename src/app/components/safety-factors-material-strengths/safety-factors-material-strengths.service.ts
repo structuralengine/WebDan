@@ -89,15 +89,15 @@ export class InputSafetyFactorsMaterialStrengthsService {
     const result = [
       {
         separate: 25,
-        tensionBar: { fsy1: 345, fsy2: 390, fsu1: 490, fsu2: 560 },
-        sidebar: { fsy1: 345, fsy2: 390, fsu1: 490, fsu2: 560 },
-        stirrup: { fsy1: 345, fsy2: 390, fsu1: 490, fsu2: 560 }
+        tensionBar: { fsy: 345, fsu: 490 },
+        sidebar: { fsy: 345, fsu: 490 },
+        stirrup: { fsy: 345, fsu: 490 }
       },
       {
-        separate: null,
-        tensionBar: { fsy1: 345, fsy2: 390, fsu1: 490, fsu2: 560 },
-        sidebar: { fsy1: 345, fsy2: 390, fsu1: 490, fsu2: 560 },
-        stirrup: { fsy1: 345, fsy2: 390, fsu1: 490, fsu2: 560 }
+        separate: 29,
+        tensionBar: { fsy: 345, fsu: 490 },
+        sidebar: { fsy: 345, fsu: 490 },
+        stirrup: { fsy: 345, fsu: 490 }
       }
     ]
     return result;
@@ -164,13 +164,14 @@ export class InputSafetyFactorsMaterialStrengthsService {
   // 部材グループ別に並べている
   public getTableColumns(): any {
     
+    const groupe_list = this.members.getGroupeList();
     const safety_factor = {};
     const material_bar = {};
     const material_steel = {};
     const material_concrete = {};
     const pile_factor = {};
 
-    for (const groupe of this.members.getGroupeList()) {
+    for (const groupe of groupe_list) {
 
       const tmp_safety_factor = this.default_safety_factor();
       const tmp_material_bar = this.default_material_bar();
@@ -240,6 +241,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
     }
 
     return {
+      groupe_list,
       safety_factor,
       material_bar,
       material_steel,
