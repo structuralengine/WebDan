@@ -7,7 +7,7 @@ import { InputFatiguesService } from "../components/fatigues/fatigues.service";
 import { InputMembersService } from "../components/members/members.service";
 import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
 import { InputSectionForcesService } from "../components/section-forces/section-forces.service";
-import { InputCalclationPrintService } from "../components/calculation-print/calclation-print.service";
+import { InputCalclationPrintService } from "../components/calculation-print/calculation-print.service";
 import { InputCrackSettingsService } from "../components/crack/crack-settings.service";
 import { InputSteelsService } from "../components/steels/steels.service";
 

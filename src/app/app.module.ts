@@ -30,7 +30,7 @@ import { InputSteelsService } from './components/steels/steels.service';
 import { InputFatiguesService } from './components/fatigues/fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputSectionForcesService } from './components/section-forces/section-forces.service';
-import { InputCalclationPrintService } from './components/calculation-print/calclation-print.service';
+import { InputCalclationPrintService } from './components/calculation-print/calculation-print.service';
 import { SaveDataService } from './providers/save-data.service';
 
 import { UserInfoService } from './providers/user-info.service';
