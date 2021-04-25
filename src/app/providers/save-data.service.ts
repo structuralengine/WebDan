@@ -148,7 +148,7 @@ export class SaveDataService {
         index += 1;
       }
 
-      this.basic.setPickUpData(this.isManual());
+      this.basic.setPickUpData();
       this.members.setPickUpData(pickup1, this.isManual());
       this.points.setPickUpData(pickup1);
       this.force.clear();
