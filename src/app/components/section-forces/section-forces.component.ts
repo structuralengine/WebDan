@@ -196,7 +196,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
  
-  // tslint:disable-next-line: use-life-cycle-interface
+ 
   ngOnDestroy(): void {
     this.saveData();
   }

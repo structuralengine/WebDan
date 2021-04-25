@@ -113,7 +113,7 @@ export class BarsComponent implements OnInit, OnDestroy {
   }
 
 
-  // tslint:disable-next-line: use-life-cycle-interface
+ 
   ngOnDestroy() {
     this.saveData();
   }

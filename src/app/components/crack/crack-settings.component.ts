@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { Component, OnInit, QueryList, OnDestroy, ViewChildren } from '@angular/core';
 import pq from 'pqgrid';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SaveDataService } from 'src/app/providers/save-data.service';
@@ -10,7 +10,7 @@ import { InputCrackSettingsService } from './crack-settings.service';
   templateUrl: './crack-settings.component.html',
   styleUrls: ['./crack-settings.component.scss']
 })
-export class CrackSettingsComponent implements OnInit {
+export class CrackSettingsComponent implements OnInit, OnDestroy {
 
   @ViewChildren('grid') grids: QueryList<SheetComponent>;
   public options: pq.gridT.options[] = new Array();
@@ -82,7 +82,7 @@ export class CrackSettingsComponent implements OnInit {
     );
   }
 
-  // tslint:disable-next-line: use-life-cycle-interface
+ 
   ngOnDestroy() {
     this.saveData();
   }

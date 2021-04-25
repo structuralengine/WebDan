@@ -93,9 +93,9 @@
                           <input type="radio" 
                             name="pile_factor" 
                             id="pile_factor{{j}}"
-                            [(ngModel)]="pile_factor_selected[i]" 
+                            [(ngModel)]="item.selected" 
                             [value]="item.id"
-                            [checked]="pile_factor_selected[i] == item.id" 
+                            [checked]="item.selected" 
                             (change)="setPileFactor(i, j)" />
                         </td>
                         <td style="text-align: left" width="200px">{{item.title}}</td>
