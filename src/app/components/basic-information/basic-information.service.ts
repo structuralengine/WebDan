@@ -16,7 +16,7 @@ export class InputBasicInformationService  {
   private specification2_list: any[];
 
   // 設計条件
-  private conditions_list: any[];
+  public conditions_list: any[];
 
   constructor() {
     this.clear();
@@ -45,7 +45,7 @@ export class InputBasicInformationService  {
       case 0: // 鉄道
 
         // 曲げモーメントテーブル
-        const keys_moment = [ 
+        const keys_moment = [
           { id: 0, title: '耐久性 縁応力度検討用', no: null},
           { id: 1, title: '耐久性 （永久荷重）', no: null},
           { id: 2, title: '安全性 （疲労破壊）疲労限', no: null},
@@ -53,7 +53,7 @@ export class InputBasicInformationService  {
           { id: 4, title: '安全性 （疲労破壊）永久＋変動', no: null},
           { id: 5, title: '安全性 （破壊）', no: null},
           { id: 6, title: '復旧性 （損傷）地震時以外', no: null},
-          { id: 7, title: '復旧性 （損傷）地震時', no: null} 
+          { id: 7, title: '復旧性 （損傷）地震時', no: null}
         ];
         // 古い入力があれば no の入力を 保持
         const tmp_moment: any[] = new Array();
@@ -67,7 +67,7 @@ export class InputBasicInformationService  {
         this.pickup_moment = tmp_moment;
 
         // せん断力テーブル
-        const keys_shear = [ 
+        const keys_shear = [
           { id: 0, title: '耐久性 せん断ひび割れ検討判定用', no: null},
           { id: 1, title: '耐久性 （永久荷重）', no: null},
           { id: 2, title: '耐久性 （変動荷重）', no: null},
@@ -75,7 +75,7 @@ export class InputBasicInformationService  {
           { id: 4, title: '安全性 （疲労破壊）永久＋変動', no: null},
           { id: 5, title: '安全性 （破壊）', no: null},
           { id: 6, title: '復旧性 （損傷）地震時以外', no: null},
-          { id: 7, title: '復旧性 （損傷）地震時', no: null} 
+          { id: 7, title: '復旧性 （損傷）地震時', no: null}
         ];
         // 古い入力があれば no の入力を 保持
         const tmp_shear: any[] = new Array();
@@ -117,7 +117,7 @@ export class InputBasicInformationService  {
     }
 
   }
-  
+
   public get_specification1(): number {
     return this.specification1_list.find(
       value=>value.selected === true);
@@ -141,7 +141,7 @@ export class InputBasicInformationService  {
     this.pickup_shear_force = basic.pickup_shear_force;
     this.specification1_list = basic.specification1_list;
     this.specification2_list = basic.specification2_list;
-    this.conditions_list = basic.conditions_list;    
+    this.conditions_list = basic.conditions_list;
   }
 
   public setPickUpData(){
@@ -153,7 +153,7 @@ export class InputBasicInformationService  {
       pickup_shear_force: this.pickup_shear_force,
       specification1_list: this.specification1_list, // 適用
       specification2_list: this.specification2_list, // 仕様
-      conditions_list: this.conditions_list         // 設計条件       
+      conditions_list: this.conditions_list         // 設計条件
     }
   }
 

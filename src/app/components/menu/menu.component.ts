@@ -27,24 +27,20 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 })
 export class MenuComponent implements OnInit {
 
-  loginUserName: string;
-  userPoint: string;
   public loggedIn: boolean = false;
-  fileName: string;
-  baseUrl: string;
-  pickup_file_name: string;
-  amount: number;
+  private fileName: string;
+  public pickup_file_name: string;
+  private userPoint: string;
+  private amount: number;
 
 
   constructor(
     private modalService: NgbModal,
     private app: AppComponent,
     private user: UserInfoService,
-    private InputData: SaveDataService,
+    private save: SaveDataService,
     private helper: DataHelperModule,
     private dsdData: DsdDataService,
-    private http: HttpClient,
-    private platformLocation: PlatformLocation,
     private router: Router,
     private config: ConfigService,
     public auth: AuthService) {
@@ -60,9 +56,9 @@ export class MenuComponent implements OnInit {
   // 新規作成
   renew(): void {
     this.router.navigate(['/blank-page']);
-    this.app.deactiveButtons(); 
+    this.app.deactiveButtons();
 
-    this.InputData.clear();
+    this.save.clear();
   }
 
   // ファイルを開く
@@ -73,13 +69,13 @@ export class MenuComponent implements OnInit {
     evt.target.value = '';
 
     this.router.navigate(['/blank-page']);
-    this.app.deactiveButtons(); 
-    
+    this.app.deactiveButtons();
+
     let error = null;
     switch( this.helper.getExt(this.fileName)){
       case 'dsd':
         this.fileToBinary(file)
-        .then(buff  => { 
+        .then(buff  => {
           const pik =this.dsdData.readDsdData(buff);
           if (pik !== null){
             alert(pik + ' を開いてください！');
@@ -89,13 +85,13 @@ export class MenuComponent implements OnInit {
         break;
       default:
         this.fileToText(file)
-        .then(text => { this.InputData.readInputData(text); })
+        .then(text => { this.save.readInputData(text); })
         .catch(err => { error = err; });
     }
 
     // 後処理
     if( error === null ){
-      this.pickup_file_name = this.InputData.pickup_filename;
+      this.pickup_file_name = this.save.pickup_filename;
     } else {
       console.log(error)
     }
@@ -109,11 +105,11 @@ export class MenuComponent implements OnInit {
     evt.target.value = '';
     this.fileToText(file)
       .then(text => {
-        this.InputData.readPickUpData(text, file.name); // データを読み込む
-        this.pickup_file_name = this.InputData.pickup_filename;
+        this.save.readPickUpData(text, file.name); // データを読み込む
+        this.pickup_file_name = this.save.pickup_filename;
         if (this.router.url === this.router.config[0].redirectTo ) {
           this.router.navigate(['/blank-page']);
-          this.app.deactiveButtons(); 
+          this.app.deactiveButtons();
         } else {
           this.router.navigate(['/']);
         }
@@ -155,9 +151,9 @@ export class MenuComponent implements OnInit {
 
 
   // ファイルを保存
-  public save(): void {
+  public fileSave(): void {
     this.config.saveActiveComponentData();
-    const inputJson: string = this.InputData.getInputText();
+    const inputJson: string = this.save.getInputText();
     const blob = new window.Blob([inputJson], { type: 'text/plain' });
     if (this.fileName.length === 0) {
       this.fileName = 'WebDan.wdj';

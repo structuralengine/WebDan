@@ -53,7 +53,7 @@ export class InputSectionForcesService  {
   public getTable1Columns(row: number): any {
 
     let result = this.moment_force.find( (item) => item.index === row );
-    // 
+    //
     const design_point = this.points.getDesignPointColumn(row);
     const p_name_ex: string = (design_point !== undefined) ? design_point.p_name_ex: '';
 
@@ -85,7 +85,7 @@ export class InputSectionForcesService  {
   public getTable2Columns(row: number): any {
 
     let result = this.shear_force.find( (item) => item.index === row );
-    // 
+    //
     const design_point = this.points.getDesignPointColumn(row);
     const p_name_ex: string = (design_point !== undefined) ? design_point.p_name_ex: '';
 
@@ -100,7 +100,6 @@ export class InputSectionForcesService  {
 
   }
 
-
   public setTable2Columns(table_datas2: any[]) {
     this.shear_force = new Array();
     for (const data of table_datas2) {
@@ -114,6 +113,21 @@ export class InputSectionForcesService  {
     }
   }
 
+  public getSaveData(): any{
+    return {
+      moment_force: this.moment_force,
+      shear_force: this.shear_force
+    };
+  }
 
+  public setSaveData(force: any): void{
+    this.clear();
+    if('moment_force' in force){
+      this.moment_force = force.moment_force;
+    }
+    if('shear_force' in force){
+      this.shear_force = force.shear_force;
+    }
+  }
 
 }

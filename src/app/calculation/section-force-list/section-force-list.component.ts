@@ -12,6 +12,7 @@ import { CalcRestorabilityShearForceService } from '../result-restorability-shea
 import { CalcEarthquakesMomentService } from '../result-earthquakes-moment/calc-earthquakes-moment.service';
 import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-force/calc-earthquakes-shear-force.service';
 import { ArrayType } from '@angular/compiler';
+import { InputMembersService } from 'src/app/components/members/members.service';
 
 @Component({
   selector: 'app-section-force-list',
@@ -29,7 +30,7 @@ export class SectionForceListComponent implements OnInit {
   private rowTitleRowCount: number = 6; // タイトル行は 6行分
 
   constructor(
-    private save: SaveDataService,
+    private members: InputMembersService,
     private durabilityMoment: CalcDurabilityMomentService,
     private earthquakesMoment: CalcEarthquakesMomentService,
     private earthquakesShearForce: CalcEarthquakesShearForceService,
@@ -46,7 +47,7 @@ export class SectionForceListComponent implements OnInit {
   ngOnInit() {
     this.pages = new Array();
 
-    const groupeList = this.save.getGroupeList();
+    const groupeList = this.members.getGroupeList();
 
     // 安全性（破壊）
     const safetyMomentForces = this.safetyMoment.DesignForceList;

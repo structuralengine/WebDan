@@ -13,7 +13,9 @@ export class AppComponent {
 
   constructor(
     private config: ConfigService,
-    private save: SaveDataService) { }
+    private save: SaveDataService,
+    private members: InputMembersService,
+    private points: InputDesignPointsService) { }
 
   public isManual(): boolean{
     return this.save.isManual();
@@ -49,7 +51,7 @@ export class AppComponent {
   private isMemberEnable = false;
   public memberChange(): void {
 
-    const flg: boolean = this.save.members.checkMemberEnables()
+    const flg: boolean = this.members.checkMemberEnables()
     if (this.isMemberEnable !== flg) {
       for (const id of ['2', '7']) {
         const data = document.getElementById(id);
@@ -66,7 +68,7 @@ export class AppComponent {
         }
       }
       this.isMemberEnable = flg;
-    } 
+    }
     this.designPointChange();
   }
 
@@ -75,7 +77,7 @@ export class AppComponent {
   private isDesignPointEnable = false;
   public designPointChange(): void {
 
-    const flg: boolean = this.save.points.designPointChange();
+    const flg: boolean = this.points.designPointChange();
     if (this.isDesignPointEnable !== flg) {
       for (const id of ['3', '4', '5', '6', '4', '9']) {
         const data = document.getElementById(id);

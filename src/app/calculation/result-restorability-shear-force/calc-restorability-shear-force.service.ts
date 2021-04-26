@@ -30,11 +30,11 @@ export class CalcRestorabilityShearForceService {
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[6]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[6]);
 
     if (this.DesignForceList.length < 1 ) {
       return;

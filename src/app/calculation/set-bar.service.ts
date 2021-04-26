@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Data } from '@angular/router';
+import { InputBarsService } from '../components/bars/bars.service';
 import { DataHelperModule } from '../providers/data-helper.module';
 import { SaveDataService } from '../providers/save-data.service';
 
@@ -10,6 +11,7 @@ export class SetBarService {
 
   constructor(
     private save: SaveDataService,
+    private bars: InputBarsService,
     private helper: DataHelperModule) {
   }
 
@@ -119,7 +121,7 @@ export class SetBarService {
     }
 
     // 印刷用の変数に登録
-    printSideBar['As'] = this.save.getAs(dia) * n;
+    printSideBar['As'] = this.helper.getAs(dia) * n;
     printSideBar['AsString'] = dia + '-' + n + '段';
     printSideBar['ds'] = Dsn / Num;
 
@@ -253,7 +255,7 @@ export class SetBarService {
           compresBarList.push(Steel1);
         }
       }
-      result.PrintData['Asc'] = this.save.getAs(dia2) * rebar_n2;
+      result.PrintData['Asc'] = this.helper.getAs(dia2) * rebar_n2;
       result.PrintData['AscString'] = dia2 + '-' + rebar_n2 + '本';
       result.PrintData['dsc'] = this.getBarCenterPosition(dsc2, rebar_n2, line2, space2, 1);
     }
@@ -274,7 +276,7 @@ export class SetBarService {
 
     let nAs: number = 0;
     let nDepth: number = 0;
-    const As: number = this.save.getAs(dia1);
+    const As: number = this.helper.getAs(dia1);
 
     for (let i = 0; i < n1; i++) {
 
@@ -346,7 +348,7 @@ export class SetBarService {
       result.Steels.push(Ast);
     }
     // 印刷用の変数に登録
-    result.PrintData['Ast'] = this.save.getAs(dia1) * rebar_n1;
+    result.PrintData['Ast'] = this.helper.getAs(dia1) * rebar_n1;
     result.PrintData['AstString'] = dia1 + '-' + rebar_n1 + '本';
     result.PrintData['dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1, 1);
     result.PrintData['Ast-c'] = dsc1 - (tensionBar.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
@@ -438,7 +440,7 @@ export class SetBarService {
 
     let nAs: number = 0;
     let nDepth: number = 0;
-    const As: number = this.save.getAs(dia);
+    const As: number = this.helper.getAs(dia);
 
     for (let i = 0; i < n; i++) {
 
@@ -483,7 +485,7 @@ export class SetBarService {
     const vyd_n: number = Math.round(nAs / As * 100) / 100;
     result.PrintData['Vyd_AstString'] = dia + '-' + vyd_n + '本';
 
-    result.PrintData['Ast'] = this.save.getAs(dia) * rebar_n;
+    result.PrintData['Ast'] = this.helper.getAs(dia) * rebar_n;
     result.PrintData['AstString'] = dia + '-' + rebar_n.toString() + '本';
     result.PrintData['dst'] = this.getBarCenterPosition(dsc, rebar_n, line, space, 1);
 
@@ -753,7 +755,7 @@ export class SetBarService {
     // 印刷用の変数に登録
     printTensionBar['fsy'] = fsy;
     printTensionBar['fsu'] = fsu;
-    printTensionBar['As'] = this.save.getAs(dia) * barInfo.rebar_n * cos;
+    printTensionBar['As'] = this.helper.getAs(dia) * barInfo.rebar_n * cos;
     printTensionBar['cos'] = cos;
     printTensionBar['AsString'] = dia + '-' + barInfo.rebar_n + '本';
     printTensionBar['ds'] = this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space, cos);
@@ -835,7 +837,7 @@ export class SetBarService {
       result.push(Steel1);
     }
     // 印刷用の変数に登録
-    printSideBar['As'] = this.save.getAs(dia) * n;
+    printSideBar['As'] = this.helper.getAs(dia) * n;
     printSideBar['AsString'] = dia + '-' + n + '段';
     printSideBar['ds'] = this.getBarCenterPosition(dse, n, 1, space, 1);
 
@@ -900,7 +902,7 @@ export class SetBarService {
       // 鉄筋強度が 235 なら 丸鋼
       dia = 'R' + starrup.stirrup_dia;
     }
-    const As: number = this.save.getAs(dia);
+    const As: number = this.helper.getAs(dia);
     const n: number = starrup.stirrup_n;
     result['AW-φ'] = starrup.stirrup_dia;
     result.Aw = As * n;
@@ -917,7 +919,7 @@ export class SetBarService {
 
     const temp = JSON.parse(
       JSON.stringify({
-        temp: this.save.bars.getTableColumnss(true)
+        temp: this.bars.getTableColumnss(true)
       })
     ).temp;
 

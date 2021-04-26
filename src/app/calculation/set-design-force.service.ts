@@ -225,7 +225,7 @@ export class SetDesignForceService {
     // 計算対象ではない着目点を削除する
     for (let i = result.length - 1; i >= 0; i--) {
       // 計算・印刷画面の部材にチェックが入っていなかければ削除
-      if (this.save.calc.calc_checked[i] === false) {
+      if (this.calc.calc_checked[i] === false) {
         result.splice(i, 1);
         continue;
       }

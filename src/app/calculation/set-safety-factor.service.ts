@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SaveDataService } from '../providers/save-data.service';
+import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +7,14 @@ import { SaveDataService } from '../providers/save-data.service';
 export class SetSafetyFactorService {
 
   private isAlert: boolean; // 一度も警告を出したことがあるか？
-  constructor(private save: SaveDataService) {
+  constructor(private safety: InputSafetyFactorsMaterialStrengthsService) {
     this.isAlert = false;
   }
 
   // position.PostData0 に安全係数情報を追加する ///////////////////////////////////////////////////////
   public setSafetyFactor(calcTarget: string, g_id: string, position: any, tableIndex: number): void {
 
-    const safetyList = this.save.safety.safety_factor_material_strengths_list.find( (value) => {
+    const safetyList = this.safety.safety_factor_material_strengths_list.find( (value) => {
       return value.g_id.toString() === g_id;
     });
     if (safetyList === undefined) {
@@ -74,7 +74,7 @@ export class SetSafetyFactorService {
     position['material_concrete'] = safetyList.material_concrete; // コンクリート強度
 
     // 杭の施工条件
-    let pile_factor = this.save.safety.pile_factor_list.find( (value) => {
+    let pile_factor = this.safety.pile_factor_list.find( (value) => {
       return value.id === safetyList.pile_factor_selected;
     });
     if (pile_factor === undefined) {

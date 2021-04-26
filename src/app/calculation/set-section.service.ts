@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
+import { InputBasicInformationService } from '../components/basic-information/basic-information.service';
 import { DataHelperModule } from '../providers/data-helper.module';
-import { SaveDataService } from '../providers/save-data.service';
 import { SetBarService } from './set-bar.service';
 
 @Injectable({
@@ -9,7 +9,7 @@ import { SetBarService } from './set-bar.service';
 export class SetSectionService {
 
   constructor(
-    private save: SaveDataService,
+    private basic: InputBasicInformationService,
     private helper: DataHelperModule,
     private bar: SetBarService) {
   }
@@ -87,7 +87,7 @@ export class SetSectionService {
     } else if (memberInfo.shape.indexOf('T') >= 0) {
 
       // Ｔ形に関する 設計条件を確認する
-      let condition = this.save.basic.conditions_list.find((value) => {
+      let condition = this.basic.conditions_list.find((value) => {
         return (value.id === 'JR-002');
       });
       if (condition === undefined) {

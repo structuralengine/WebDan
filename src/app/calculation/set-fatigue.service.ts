@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { InputFatiguesService } from '../components/fatigues/fatigues.service';
 import { SaveDataService } from '../providers/save-data.service';
 
 @Injectable({
@@ -6,17 +7,13 @@ import { SaveDataService } from '../providers/save-data.service';
 })
 export class SetFatigueService {
 
-  constructor(private save: SaveDataService) {
+  constructor(private fatigues: InputFatiguesService) {
   }
 
   // 鉄筋の入力情報を セット
   public setFatigueData(g_id: string, m_no: number, position: any): any {
 
-    const temp = JSON.parse(
-      JSON.stringify({
-        temp: this.save.fatigues.fatigue_list
-      })
-    ).temp;
+    const temp = this.fatigues.getTableColumns()
     
     const fatigueList = temp.find( (value) => {
       return (value[0].g_id.toString() === g_id);

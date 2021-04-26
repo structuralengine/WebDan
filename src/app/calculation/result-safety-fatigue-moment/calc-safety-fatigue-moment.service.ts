@@ -63,7 +63,7 @@ export class CalcSafetyFatigueMomentService {
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+    if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
 
@@ -74,11 +74,11 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // 疲労現
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[2]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[2]);
     // 永久作用
-    this.DesignForceList3 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[3]);
     // 永久+変動作用
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[4]);
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);

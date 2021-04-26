@@ -33,11 +33,11 @@ export class CalcSafetyMomentService {
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+    if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[5]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[5]);
 
     if (this.DesignForceList.length < 1 ) {
       return;

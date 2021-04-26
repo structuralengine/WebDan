@@ -16,7 +16,7 @@ import { InputSteelsService } from "../components/steels/steels.service";
 })
 export class SaveDataService {
   // ピックアップファイル
-  private pickup_filename: string;
+  public pickup_filename: string;
   private pickup_data: Object;
   //={
   //  1:[
@@ -230,50 +230,30 @@ export class SaveDataService {
 
   // ファイルに保存用データを生成
   public getInputText(): string {
-    const jsonData = {};
 
-    // ピックアップ断面力
-    jsonData["pickup_filename"] = this.pickup_filename;
-    jsonData["pickup_data"] = this.pickup_data;
-
-    // 設計条件
-    const basic = this.basic.getSaveData();
-    jsonData["pickup_moment_no"] = basic.pickup_moment_no; // ピックアップ番号 曲げモーメント
-    jsonData["pickup_shear_force_no"] = basic.pickup_shear_force_no; // ピックアップ番号 せん断力
-    jsonData["specification1_selected"] = basic.specification1_selected; // 適用 に関する変数
-    jsonData["specification2_selected"] = basic.specification2_selected; // 仕様 に関する変数
-    jsonData["conditions_list"] = basic.conditions_list; // 設計条件
-
-    // 部材情報
-    jsonData["member_list"] = this.members.getSaveData();
-
-    // ひび割れ情報
-    jsonData["crack_list"] = this.crack.getSaveData();
-
-    // 着目点情報
-    jsonData["position_list"] = this.points.getSaveData();
-
-    // 鉄筋情報
-    jsonData["bar_list"] = this.bars.getSaveData();
-
-    // 疲労情報
-    const fatigues = this.fatigues.getSaveData();
-    jsonData["fatigue_list"] = fatigues.fatigue_list;
-    jsonData["train_A_count"] = fatigues.train_A_count;
-    jsonData["train_B_count"] = fatigues.train_B_count;
-    jsonData["service_life"] = fatigues.service_life;
-    jsonData["fatigue_reference_count"] = fatigues.reference_count;
-
-    // 安全係数情報
-    jsonData["safety_factor_material_strengths"] = this.safety.getSaveData();
-
-    // 断面力手入力情報
-    const force = this.force.getSaveData();
-    jsonData["manual_moment_force"] = force.moment_force;
-    jsonData["manual_shear_force"] = force.shear_force;
-
-    // 計算印刷設定
-    jsonData["print_selected"] = this.calc.getSaveData();
+    const jsonData = {
+      // ピックアップ断面力
+      jpickup_filename: this.pickup_filename,
+      jpickup_data: this.pickup_data,
+      // 設計条件
+      basic: this.basic.getSaveData(),
+      // 部材情報
+      members: this.members.getSaveData(),
+      // ひび割れ情報
+      crack: this.crack.getSaveData(),
+      // 着目点情報
+      points: this.points.getSaveData(),
+      // 鉄筋情報
+      bar: this.bars.getSaveData(),
+      // 疲労情報
+      fatigues: this.fatigues.getSaveData(),
+      // 安全係数情報
+      safety: this.safety.getSaveData(),
+      // 断面力手入力情報
+      force: this.force.getSaveData(),
+      // 計算印刷設定
+      calc: this.calc.getSaveData()
+    };
 
     // string 型にする
     const result: string = JSON.stringify(jsonData);
@@ -289,93 +269,63 @@ export class SaveDataService {
     this.clear();
 
     // ピックアップ断面力
-    this.pickup_filename = jsonData["pickup_filename"];
-    this.pickup_data = jsonData["pickup_data"];
+    this.pickup_filename = jsonData.pickup_filename;
+    this.pickup_data = jsonData.pickup_data;
 
     // 設計条件
-    this.basic.pickup_moment_no = jsonData["pickup_moment_no"]; // ピックアップ番号 曲げモーメント
-    this.basic.pickup_shear_force_no = jsonData["pickup_shear_force_no"]; // ピックアップ番号 せん断力
-    this.basic.specification1_selected = jsonData["specification1_selected"]; // 適用 に関する変数
-    this.basic.specification2_selected = jsonData["specification2_selected"]; // 仕様 に関する変数
-    this.basic.conditions_list = jsonData["conditions_list"]; // 設計条件
-
+    if ("basic" in jsonData) {
+      this.basic.setSaveData(jsonData.basic);
+    } else {
+      this.basic.clear();
+    }
     // 部材情報
-    this.members.member_list = jsonData["member_list"];
-    // 着目点情報
-    this.points.position_list = jsonData["position_list"];
-
+    if ("members" in jsonData) {
+      this.members.setSaveData(jsonData.members);
+    } else {
+      this.members.clear();
+    }
     // ひび割れ情報
-    if ("crack_list" in jsonData) {
-      this.crack.crack_list = jsonData["crack_list"];
+    if ("crack" in jsonData) {
+      this.crack.setSaveData(jsonData.crack);
     } else {
       this.crack.clear();
     }
-
-    // 鉄筋情報
-    this.bars.bar_list = jsonData["bar_list"];
-
-    // 疲労情報
-    this.fatigues.fatigue_list = jsonData["fatigue_list"];
-    this.fatigues.train_A_count =
-      "train_A_count" in jsonData ? jsonData["train_A_count"] : null;
-    this.fatigues.train_B_count =
-      "train_B_count" in jsonData ? jsonData["train_B_count"] : null;
-    this.fatigues.service_life =
-      "service_life" in jsonData ? jsonData["service_life"] : null;
-    this.fatigues.reference_count =
-      "fatigue_reference_count" in jsonData
-        ? jsonData["fatigue_reference_count"]
-        : null;
-
-    // 安全係数情報
-    this.safety.safety_factor_material_strengths_list =
-      jsonData["safety_factor_material_strengths"];
-
-    // 断面力手入力情報
-    this.force.moment_force = jsonData["manual_moment_force"];
-    this.force.shear_force = jsonData["manual_shear_force"];
-
-    // 計算印刷設定
-    this.calc.print_selected = jsonData["print_selected"];
-  }
-
-  // 鉄筋の断面積
-  public getAs(strAs: string): number {
-    let result: number = 0;
-    if (strAs.indexOf("φ") >= 0) {
-      const fai: number = this.helper.toNumber(strAs.replace("φ", ""));
-      if (fai === null) {
-        return 0;
-      }
-      result = (fai ** 2 * Math.PI) / 4;
-    } else if (strAs.indexOf("R") >= 0) {
-      const fai: number = this.helper.toNumber(strAs.replace("R", ""));
-      if (fai === null) {
-        return 0;
-      }
-      result = (fai ** 2 * Math.PI) / 4;
-    } else if (strAs.indexOf("D") >= 0) {
-      const fai: number = this.helper.toNumber(strAs.replace("D", ""));
-      if (fai === null) {
-        return 0;
-      }
-      let reverInfo = this.helper.rebar_List.find((value) => {
-        return value.D === fai;
-      });
-      if (reverInfo === undefined) {
-        return 0;
-      }
-      result = reverInfo.As;
+    // 着目点情報
+    if ("points" in jsonData) {
+      this.points.setSaveData(jsonData.points);
     } else {
-      result = this.helper.toNumber(strAs);
-      if (result === null) {
-        return 0;
-      }
+      this.points.clear();
     }
-    return result;
+    // 鉄筋情報
+    if ("bar" in jsonData) {
+      this.bars.setSaveData(jsonData.bar);
+    } else {
+      this.bars.clear();
+    }
+    // 疲労情報
+    if ("fatigues" in jsonData) {
+      this.fatigues.setSaveData(jsonData.fatigues);
+    } else {
+      this.fatigues.clear();
+    }
+    // 安全係数情報
+    if ("safety" in jsonData) {
+      this.safety.setSaveData(jsonData.safety);
+    } else {
+      this.safety.clear();
+    }
+    // 断面力手入力情報
+    if ("force" in jsonData) {
+      this.force.setSaveData(jsonData.force);
+    } else {
+      this.force.clear();
+    }
+    // 計算印刷設定
+    if ("calc" in jsonData) {
+      this.calc.setSaveData(jsonData.calc);
+    } else {
+      this.calc.clear();
+    }
   }
-
-
-
 
 }

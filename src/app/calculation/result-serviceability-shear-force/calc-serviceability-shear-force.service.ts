@@ -1,4 +1,3 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { ResultDataService } from '../result-data.service';
 import { SetPostDataService } from '../set-post-data.service';
@@ -6,6 +5,8 @@ import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-s
 
 import { Injectable } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class CalcServiceabilityShearForceService {
   public isEnable: boolean;
 
   constructor(
-    private save: SaveDataService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService,
     private helper: DataHelperModule,
     private force: SetDesignForceService,
     private post: SetPostDataService,
@@ -37,21 +39,21 @@ export class CalcServiceabilityShearForceService {
     this.DesignForceList= new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[0]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[0]);
     // 永久荷重
-    const DesignForceList1 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[1]);
+    const DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[1]);
 
     if (this.DesignForceList.length < 1) {
       return;
     }
 
     // 変動荷重
-    let DesignForceList2 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[2]);
+    let DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[2]);
     if(DesignForceList2.length < 1){
       DesignForceList2 = this.getLiveload(this.DesignForceList , DesignForceList1);
     }

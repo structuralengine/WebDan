@@ -68,6 +68,42 @@ export class DataHelperModule {
     return result;
   }
 
+  // 鉄筋の断面積
+  public getAs(strAs: string): number {
+    let result: number = 0;
+    if (strAs.indexOf("φ") >= 0) {
+      const fai: number = this.toNumber(strAs.replace("φ", ""));
+      if (fai === null) {
+        return 0;
+      }
+      result = (fai ** 2 * Math.PI) / 4;
+    } else if (strAs.indexOf("R") >= 0) {
+      const fai: number = this.toNumber(strAs.replace("R", ""));
+      if (fai === null) {
+        return 0;
+      }
+      result = (fai ** 2 * Math.PI) / 4;
+    } else if (strAs.indexOf("D") >= 0) {
+      const fai: number = this.toNumber(strAs.replace("D", ""));
+      if (fai === null) {
+        return 0;
+      }
+      let reverInfo = this.rebar_List.find((value) => {
+        return value.D === fai;
+      });
+      if (reverInfo === undefined) {
+        return 0;
+      }
+      result = reverInfo.As;
+    } else {
+      result = this.toNumber(strAs);
+      if (result === null) {
+        return 0;
+      }
+    }
+    return result;
+  }
+
   /// <summary>
   /// 文字列string を数値にする
   /// </summary>

@@ -7,6 +7,7 @@ import { SetFatigueService } from '../set-fatigue.service';
 
 import { Injectable, ViewChild } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.service';
 
 @Injectable({
   providedIn: 'root'
@@ -25,7 +26,8 @@ export class CalcSafetyFatigueShearForceService {
     private post: SetPostDataService,
     private result: ResultDataService,
     private base: CalcSafetyShearForceService,
-    private fatigue: SetFatigueService) {
+    private fatigue: SetFatigueService,
+    private fatigues: InputFatiguesService) {
     this.DesignForceList = null;
     this.DesignForceList3 = null;
     this.isEnable = false;
@@ -59,7 +61,7 @@ export class CalcSafetyFatigueShearForceService {
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
 
@@ -70,9 +72,9 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 最小応力
-    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[3]);
     // 最大応力
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[4]);
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
@@ -472,13 +474,9 @@ export class CalcSafetyFatigueShearForceService {
     result['ar']  = ar;
 
     // 標準列車荷重観山の総等価繰返し回数 N の計算
-    let T: number;
-    if ('service_life' in this.save.fatigues) {
-      T = this.helper.toNumber(this.save.fatigues.service_life);
-      if (T === null) { return result; }
-    } else {
-      return result;
-    }
+    let T: number = this.helper.toNumber(this.fatigues.service_life);
+    if (T === null) { return result; }
+
     const j = this.getTrainCount();
     const jA = j[0];
     const jB = j[1];

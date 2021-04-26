@@ -10,17 +10,20 @@ export class InputCalclationPrintService {
   public calc_checked: boolean[];
 
   constructor(private members: InputMembersService) {
+    this.clear();
+  }
 
+  public clear(): void {
     this.print_selected = {
-      'print_calculate_checked': false,
-      'print_section_force_checked': false,
-      'print_summary_table_checked': false,
-      'calculate_moment_checked': false,
-      'calculate_shear_force': false
+      print_calculate_checked: false,
+      print_section_force_checked: false,
+      print_summary_table_checked: false,
+      calculate_moment_checked: false,
+      calculate_shear_force: false
     }
     this.calc_checked = new Array();
-
   }
+
 
   public getColumnData(): any[] {
     const result: any[] = new Array();
@@ -46,5 +49,12 @@ export class InputCalclationPrintService {
     }
   }
 
+  public getSaveData(): any {
+    return this.print_selected
+  }
+  
+  public setSaveData(calc: any): void {
+    this.print_selected = calc;
+  }
 
 }

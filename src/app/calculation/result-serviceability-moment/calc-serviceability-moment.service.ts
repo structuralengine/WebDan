@@ -1,4 +1,3 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
@@ -6,6 +5,8 @@ import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-mom
 
 import { Injectable } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,8 @@ export class CalcServiceabilityMomentService {
   public isEnable: boolean;
 
   constructor(
-    private save: SaveDataService,
+    private calc: InputCalclationPrintService,
+    private basic: InputBasicInformationService,
     private helper: DataHelperModule,
     private force: SetDesignForceService,
     private post: SetPostDataService,
@@ -37,14 +39,14 @@ export class CalcServiceabilityMomentService {
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+    if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[1]);
     // 縁応力度検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[0]);
 
     if (this.DesignForceList.length < 1) {
       return;

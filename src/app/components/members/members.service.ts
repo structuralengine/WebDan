@@ -52,7 +52,7 @@ export class InputMembersService  {
     return result;
   }
 
-  public setSaveData(table_datas: any[], isManualed: boolean) {
+  public setSaveData(table_datas: any, isManualed: boolean = false) {
 
     if (!isManualed) {
       // 断面力手入力モードじゃない場合

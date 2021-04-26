@@ -32,9 +32,22 @@ export class InputDesignPointsService {
 
     return result;
   }
-  
+
   public getSaveData(): any[] {
     return this.position_list;
+  }
+
+  public setSaveData(points: any): void{
+    this.clear();
+    for(const data of points){
+      const tmp = this.default_position(data.id);
+      for(const key of Object.keys(tmp)){
+        if(key in data){
+          tmp[key] = data[key];
+        }
+      }
+      this.position_list.push(tmp);
+    }
   }
 
   public getTableDatas(): any[] {
