@@ -5,6 +5,8 @@ import { ResultDataService } from '../result-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service';
 
 import { Injectable } from '@angular/core';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,18 +18,19 @@ export class CalcRestorabilityMomentService {
   public isEnable: boolean;
 
   constructor(
-    private save: SaveDataService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    public base: CalcSafetyMomentService) {
+    public base: CalcSafetyMomentService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  // 手入力モード（this.save.isManual === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
     this.isEnable = false;
@@ -35,11 +38,11 @@ export class CalcRestorabilityMomentService {
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+    if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[6]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(6));
 
     if (this.DesignForceList.length < 1 ) {
       return;

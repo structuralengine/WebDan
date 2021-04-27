@@ -21,7 +21,7 @@ import { HotTableModule } from '@handsontable/angular';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { InputDataService } from './providers/input-data.service';
+import { DataHelperModule } from './providers/data-helper.module';
 import { InputBasicInformationService } from './components/basic-information/basic-information.service';
 import { InputMembersService } from './components/members/members.service';
 import { InputDesignPointsService } from './components/design-points/design-points.service';
@@ -29,8 +29,8 @@ import { InputBarsService } from './components/bars/bars.service';
 import { InputSteelsService } from './components/steels/steels.service';
 import { InputFatiguesService } from './components/fatigues/fatigues.service';
 import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/safety-factors-material-strengths.service';
-import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
-import { InputCalclationPrintService } from './components/calculation-print/calclation-print.service';
+import { InputSectionForcesService } from './components/section-forces/section-forces.service';
+import { InputCalclationPrintService } from './components/calculation-print/calculation-print.service';
 import { SaveDataService } from './providers/save-data.service';
 
 import { UserInfoService } from './providers/user-info.service';
@@ -49,7 +49,7 @@ import { FatiguesComponent } from './components/fatigues/fatigues.component';
 import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-factors-material-strengths/safety-factors-material-strengths.component';
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
 import { SteelsComponent } from './components/steels/steels.component';
-import { CrackSettingsComponent } from './components/crack-settings/crack-settings.component';
+import { CrackSettingsComponent } from './components/crack/crack-settings.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 
@@ -102,6 +102,7 @@ import { environment } from 'src/environments/environment';
     HotTableModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule,
+    DataHelperModule
   ],
   declarations: [
     AppComponent,
@@ -148,7 +149,6 @@ import { environment } from 'src/environments/environment';
     ConfigService,
     AuthGuard,
 
-    InputDataService,
     InputBasicInformationService,
     InputMembersService,
     InputDesignPointsService,

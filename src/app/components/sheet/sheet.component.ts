@@ -38,4 +38,12 @@ export class SheetComponent implements AfterViewInit, OnChanges {
     }
     this.grid.refreshDataAndView();
   }
+
+  refresh(){
+    if (this.grid === null ) {
+      return;
+    }
+    this.grid.refresh();
+  }
+  
 }

@@ -6,6 +6,10 @@ import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-s
 import { SetFatigueService } from '../set-fatigue.service';
 
 import { Injectable, ViewChild } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +21,17 @@ export class CalcSafetyFatigueShearForceService {
   public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private base: CalcSafetyShearForceService,
-              private fatigue: SetFatigueService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule,
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private base: CalcSafetyShearForceService,
+    private fatigue: SetFatigueService,
+    private fatigues: InputFatiguesService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.DesignForceList3 = null;
     this.isEnable = false;
@@ -32,13 +41,13 @@ export class CalcSafetyFatigueShearForceService {
   public getTrainCount(): number[] {
     const result = new Array(2);
     let jA = 0;
-    if ('train_A_count' in this.save.fatigues) {
-      jA = this.save.toNumber(this.save.fatigues.train_A_count);
+    if ('train_A_count' in this.fatigues) {
+      jA = this.helper.toNumber(this.fatigues.train_A_count);
       if (jA === null) { jA = 0; }
     }
     let jB = 0;
-    if ('train_B_count' in this.save.fatigues) {
-      jB = this.save.toNumber(this.save.fatigues.train_B_count);
+    if ('train_B_count' in this.fatigues) {
+      jB = this.helper.toNumber(this.fatigues.train_B_count);
       if (jB === null) { jB = 0; }
     }
     result[0] = jA;
@@ -48,7 +57,7 @@ export class CalcSafetyFatigueShearForceService {
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  // 手入力モード（this.save.isManual === true）の場合は空の配列を返す
   public setDesignForces(): void {
 
     this.isEnable = false;
@@ -56,20 +65,20 @@ export class CalcSafetyFatigueShearForceService {
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
 
     // 列車本数の入力がない場合は処理を抜ける
-    if (this.save.toNumber(this.save.fatigues.train_A_count) === null &&
-      this.save.toNumber(this.save.fatigues.train_B_count) === null) {
+    if (this.helper.toNumber(this.fatigues.train_A_count) === null &&
+      this.helper.toNumber(this.fatigues.train_B_count) === null) {
       return;
     }
 
     // 最小応力
-    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(3));
     // 最大応力
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(4));
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
@@ -123,14 +132,14 @@ export class CalcSafetyFatigueShearForceService {
           let flg = false;
           if (position.fatigueData !== null) {
             for (const key of Object.keys(position.fatigueData.V1)) {
-              if (this.save.toNumber(position.fatigueData.V1[key]) !== null) {
+              if (this.helper.toNumber(position.fatigueData.V1[key]) !== null) {
                 flg = true;
                 break;
               }
             }
             if (flg === false) {
               for (const key of Object.keys(position.fatigueData.V2)) {
-                if (this.save.toNumber(position.fatigueData.V2[key]) !== null) {
+                if (this.helper.toNumber(position.fatigueData.V2[key]) !== null) {
                   flg = true;
                   break;
                 }
@@ -328,7 +337,7 @@ export class CalcSafetyFatigueShearForceService {
     // 最小応力
     let Vpd: number;
     if ('Vd' in postdata1) {
-      Vpd = this.save.toNumber(postdata0.Vd);
+      Vpd = this.helper.toNumber(postdata0.Vd);
       if (Vpd === null) { return result; }
     } else {
       return result;
@@ -337,7 +346,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let Mpd: number;
     if ('Md' in PrintData) {
-      Mpd = this.save.toNumber(PrintData.Md);
+      Mpd = this.helper.toNumber(PrintData.Md);
       if (Mpd !== null) {
         result['Mpd'] = Mpd;
       }
@@ -345,7 +354,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let Npd: number;
     if ('Nd' in postdata0) {
-      Npd = this.save.toNumber(postdata0.Nd);
+      Npd = this.helper.toNumber(postdata0.Nd);
       if (Npd !== null) {
         result['Npd'] = Npd;
       }
@@ -353,7 +362,7 @@ export class CalcSafetyFatigueShearForceService {
     // 変動応力
     let Vrd: number;
     if ('Vd' in postdata1) {
-      Vrd = this.save.toNumber(postdata1.Vd);
+      Vrd = this.helper.toNumber(postdata1.Vd);
       if (Vrd === null) { return result; }
     } else {
       return result;
@@ -362,7 +371,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let Mrd: number;
     if ('Md' in postdata1) {
-      Mrd = this.save.toNumber(postdata1.Md);
+      Mrd = this.helper.toNumber(postdata1.Md);
       if (Mrd !== null) {
         result['Mrd'] = Mrd;
       }
@@ -370,14 +379,14 @@ export class CalcSafetyFatigueShearForceService {
 
     let Nrd: number;
     if ('Nd' in postdata1) {
-      Nrd = this.save.toNumber(postdata1.Nd);
+      Nrd = this.helper.toNumber(postdata1.Nd);
       if (Nrd !== null) {
         result['Nrd'] = Nrd;
       }
     }
 
     // せん断補強鉄筋の設計応力度
-    let kr: number = this.save.toNumber(position.memberInfo.kr);
+    let kr: number = this.helper.toNumber(position.memberInfo.kr);
     if (kr === null) { kr = 0.5; }
     result['kr'] = kr;
 
@@ -400,7 +409,7 @@ export class CalcSafetyFatigueShearForceService {
     // f200 の計算
     let rs = 1.05;
     if ('rs' in PrintData) {
-      rs = this.save.toNumber(PrintData.rs);
+      rs = this.helper.toNumber(PrintData.rs);
       if (rs === null) { rs = 1; }
     }
     result['rs'] = rs;
@@ -409,7 +418,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let fai: number;
     if ('AW-φ' in PrintData) {
-      fai = this.save.toNumber(PrintData['AW-φ']);
+      fai = this.helper.toNumber(PrintData['AW-φ']);
       if (fai === null) { return result; }
     } else {
       return result;
@@ -417,7 +426,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let fwud: number;
     if ('fwud' in PrintData) {
-      fwud = this.save.toNumber(PrintData.fwud);
+      fwud = this.helper.toNumber(PrintData.fwud);
       if (fwud === null) { return result; }
     } else {
       return result;
@@ -426,14 +435,14 @@ export class CalcSafetyFatigueShearForceService {
 
     let r1 = 1;
     if ('r1_2' in position.memberInfo) {
-      r1 = this.save.toNumber(position.memberInfo.r1_2);
+      r1 = this.helper.toNumber(position.memberInfo.r1_2);
       if (r1 === null) { r1 = 1; }
     }
     result['r1'] = r1;
 
     let ar: number = 3.09 - 0.003 * fai;
 
-    let reference_count: number = this.save.toNumber(this.save.fatigues.reference_count);
+    let reference_count: number = this.helper.toNumber(this.fatigues.reference_count);
     if (reference_count === null) {
       reference_count = 2000000;
     }
@@ -444,14 +453,14 @@ export class CalcSafetyFatigueShearForceService {
 
     let ri = 1;
     if ('ri' in PrintData) {
-      ri = this.save.toNumber(PrintData.ri);
+      ri = this.helper.toNumber(PrintData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;
 
     let rb = 1;
     if ('rb' in position.safety_factor) {
-      rb = this.save.toNumber(position.safety_factor.rb);
+      rb = this.helper.toNumber(position.safety_factor.rb);
       if (rb === null) { rb = 1; }
     }
 
@@ -469,13 +478,9 @@ export class CalcSafetyFatigueShearForceService {
     result['ar']  = ar;
 
     // 標準列車荷重観山の総等価繰返し回数 N の計算
-    let T: number;
-    if ('service_life' in this.save.fatigues) {
-      T = this.save.toNumber(this.save.fatigues.service_life);
-      if (T === null) { return result; }
-    } else {
-      return result;
-    }
+    let T: number = this.helper.toNumber(this.fatigues.service_life);
+    if (T === null) { return result; }
+
     const j = this.getTrainCount();
     const jA = j[0];
     const jB = j[1];
@@ -489,25 +494,25 @@ export class CalcSafetyFatigueShearForceService {
         inputFatigue = position.fatigueData.V2;
         break;
     }
-    let SASC: number = this.save.toNumber(inputFatigue.SA);
+    let SASC: number = this.helper.toNumber(inputFatigue.SA);
     if (SASC === null) {
       SASC = 1;
     } else {
       result['SASC'] = SASC;
     }
-    let SBSC: number = this.save.toNumber(inputFatigue.SB);
+    let SBSC: number = this.helper.toNumber(inputFatigue.SB);
     if (SBSC === null) {
       SBSC = 1;
     } else {
       result['SBSC'] = SBSC;
     }
-    let a: number = this.save.toNumber(inputFatigue.A);
+    let a: number = this.helper.toNumber(inputFatigue.A);
     if (a === null) {
       a = 1;
     } else {
       result['a'] = a;
     }
-    let b: number = this.save.toNumber(inputFatigue.B);
+    let b: number = this.helper.toNumber(inputFatigue.B);
     if (b === null) {
       b = 1;
     } else {
@@ -516,11 +521,11 @@ export class CalcSafetyFatigueShearForceService {
     let NA = 0;
     let NB = 0;
     if (k === 0.06) {
-      NA = this.save.toNumber(inputFatigue.NA06);
-      NB = this.save.toNumber(inputFatigue.NB06);
+      NA = this.helper.toNumber(inputFatigue.NA06);
+      NB = this.helper.toNumber(inputFatigue.NB06);
     } else {
-      NA = this.save.toNumber(inputFatigue.NA12);
-      NB = this.save.toNumber(inputFatigue.NB12);
+      NA = this.helper.toNumber(inputFatigue.NA12);
+      NB = this.helper.toNumber(inputFatigue.NB12);
     }
     if (NA === null) {
       NA = 0;

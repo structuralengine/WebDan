@@ -2,13 +2,16 @@ import { Injectable } from '@angular/core';
 import { SaveDataService } from './save-data.service';
 
 import * as Encord from 'encoding-japanese';
+import { DataHelperModule } from './data-helper.module';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DsdDataService {
 
-  constructor(private save: SaveDataService) { }
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule) { }
 
   // DSD データを読み込む
   public readDsdData(arrayBuffer: ArrayBuffer): string {
@@ -515,7 +518,7 @@ export class DsdDataService {
     const strT: string[] = strfix32.replace("WINDAN", "").trim().split(" ");
     return {
       datVersID: strT[0],
-      ManualInput: this.save.toNumber(strT[1])
+      ManualInput: this.helper.toNumber(strT[1])
     };
   }
 
@@ -568,13 +571,6 @@ export class DsdDataService {
   private readSingle(buff: any): number {
     const view = this.getDataView(buff, 4);
     const num = view.getFloat32(0);
-    return num;
-  }
-
-  // Double型の情報を バイナリから読み取る
-  private readDouble(buff: any): number {
-    const view = this.getDataView(buff, 8);
-    const num = view.getFloat64(0);
     return num;
   }
 

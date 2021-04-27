@@ -1,6 +1,7 @@
 ﻿import { SaveDataService } from '../providers/save-data.service';
 
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from '../providers/data-helper.module';
 
 @Injectable({
   providedIn: 'root'
@@ -8,13 +9,15 @@ import { Injectable } from '@angular/core';
 
 export class ResultDataService {
 
-  constructor(private save: SaveDataService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule) {
   }
   // 照査表における タイトル１行目を取得
   public getTitleString1(member: any, position: any): any {
 
     let strPos = '';
-    if ( this.save.toNumber(position.position) !== null ) {
+    if ( this.helper.toNumber(position.position) !== null ) {
       strPos = position.position.toFixed(3);
     }
     const m_no: string = member.m_no.toFixed(0);
@@ -156,7 +159,7 @@ export class ResultDataService {
     const ds: string = 'ds' + subscript;
 
     const cossymbol: string = 'cos' + symbol;
-    let cosvalue: number = this.save.toNumber( PrintData[cossymbol]);
+    let cosvalue: number = this.helper.toNumber( PrintData[cossymbol]);
 
     if (cosvalue === null) {
       cosvalue = 1;

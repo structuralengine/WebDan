@@ -1,39 +1,15 @@
-import { Injectable } from '@angular/core';
-import { ɵangular_packages_platform_browser_platform_browser_k } from '@angular/platform-browser';
+import { NgModule } from "@angular/core";
 
-@Injectable({
-  providedIn: 'root'
+@NgModule({
+  imports: [],
+  exports: [],
 })
-export class InputDataService {
+export class DataHelperModule {
 
-  // ピックアップファイル
-  public pickup_filename: string;
-  public pickup_data: Object;
-
-  public isManual(): boolean {
-    if ( this.pickup_filename.trim().length === 0 ){
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  constructor() { 
-    this.pickup_filename = '';
-    this.pickup_data = {};
-  }
-
-  public is3DPickUp(): boolean {
-    switch (this.getExt(this.pickup_filename)){
-      case 'csv':
-        return true;
-        break;
-      default:
-        return false;
-    }
-  }
+  constructor() {}
 
   
+
   // ファイル名から拡張子を取得する関数
   public getExt(filename: string): string {
     const pos = filename.lastIndexOf('.');
@@ -92,24 +68,42 @@ export class InputDataService {
     return result;
   }
 
-  // グループ番号の入力から番号のみ取り出す
-  public getGroupeNo(value: any): number {
-    // null だったら
-    if (value === null) {
-      return null;
+  // 鉄筋の断面積
+  public getAs(strAs: string): number {
+    let result: number = 0;
+    if (strAs.indexOf("φ") >= 0) {
+      const fai: number = this.toNumber(strAs.replace("φ", ""));
+      if (fai === null) {
+        return 0;
+      }
+      result = (fai ** 2 * Math.PI) / 4;
+    } else if (strAs.indexOf("R") >= 0) {
+      const fai: number = this.toNumber(strAs.replace("R", ""));
+      if (fai === null) {
+        return 0;
+      }
+      result = (fai ** 2 * Math.PI) / 4;
+    } else if (strAs.indexOf("D") >= 0) {
+      const fai: number = this.toNumber(strAs.replace("D", ""));
+      if (fai === null) {
+        return 0;
+      }
+      let reverInfo = this.rebar_List.find((value) => {
+        return value.D === fai;
+      });
+      if (reverInfo === undefined) {
+        return 0;
+      }
+      result = reverInfo.As;
+    } else {
+      result = this.toNumber(strAs);
+      if (result === null) {
+        return 0;
+      }
     }
-    // string に変換
-    const str: string = value.toString().trim();
-    if (str.length === 0) {
-      return null;
-    }
-    // 正規表現を使って数字だけ取り出す
-    const res: string = str.replace(/[^0-9]/g, '');
-    // 数値型　に変換
-    let result: number = this.toNumber(res);
-
     return result;
   }
+
   /// <summary>
   /// 文字列string を数値にする
   /// </summary>

@@ -1,6 +1,7 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 import { Injectable } from '@angular/core';
 
@@ -13,9 +14,11 @@ export class CalcEarthquakesShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService) {
+  constructor(
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -27,11 +30,11 @@ export class CalcEarthquakesShearForceService {
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[7]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(7));
 
 
     if (this.DesignForceList.length < 1 ) {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { InputDataService } from '../../providers/input-data.service';
+import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputDesignPointsService } from '../design-points/design-points.service';
 import { Observable, of } from 'rxjs';
 
@@ -9,184 +9,34 @@ import { Observable, of } from 'rxjs';
 export class InputBarsService {
 
   // 鉄筋情報
-  public bar_list: any[];
+  private bar_list: any[];
 
-  constructor(private input: InputDataService,
-              private points: InputDesignPointsService) {
+  constructor(private helper: DataHelperModule,
+    private points: InputDesignPointsService) {
     this.clear();
   }
   public clear(): void {
     this.bar_list = new Array();
   }
-   
-  /// <summary>
-  /// bars の
-  /// g_id でグループ化した配列のデータを返す関数
-  /// </summary>
-  public getBarsColumns(isAll: boolean = false): any[] {
-
-    const result: any[] = new Array();
-
-    const old_bar_list = this.bar_list.slice(0, this.bar_list.length);
-    // this.bar_list = new Array();
-
-    const design_points: any[] = this.points.getDesignPointColumns();
-
-    for (const groupe of design_points) {
-      const member_list = new Array();
-      for (const members of groupe) {
-        const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
-        for (const position of members['positions']) {
-
-          if ( isAll === false ) {
-            // 計算対象ではない、カラムは省略する
-            if (position['isMyCalc'] !== true && position['isVyCalc'] !== true
-              && position['isMzCalc'] !== true && position['isVzCalc'] !== true) {
-              continue;
-            }
-          }
-
-          let b = old_bar_list.find( (value) => {
-            return (value.m_no === members.m_no && value.p_name === position.p_name);
-          });
-          if (b === undefined) {
-            b = this.default_bars(members.m_no, position.p_name, position.position);
-          }
-          b.index = position['index'];
-          b.position = position['position'];
-          b.p_name_ex = position['p_name_ex'];
-          b.b = members['B'];
-          b.h = members['H'];
-          position_list['positions'].push(b);
-        }
-        member_list.push(position_list);
-      }
-      result.push(member_list);
-    }
-    return result;
-  }
-
-  public getAllColumnsBar(): any[] {
-
-    const result: any[] = new Array();
-
-    const old_bar_list = this.bar_list.slice(0, this.bar_list.length);
-    // this.bar_list = new Array();
-
-    const design_points: any[] = this.points.getDesignPointColumns();
-
-    for (const groupe of design_points) {
-      const member_list = new Array();
-      for (const members of groupe) {
-        const position_list = { g_name: members.g_name, g_id: members.g_id, positions: new Array() };
-        for (const position of members['positions']) {
-          let b = old_bar_list.find( (value) => {
-            return (value.m_no === members.m_no && value.p_name === position.p_name);
-          });
-          if (b === undefined) {
-            b = this.default_bars(members.m_no, position.p_name, position.position);
-          }
-          b.index = position['index'];
-          b.position = position['position'];
-          b.p_name_ex = position['p_name_ex'];
-          b.b = members['B'];
-          b.h = members['H'];
-          position_list['positions'].push(b);
-        }
-        member_list.push(position_list);
-      }
-      result.push(member_list);
-    }
-    return result;
-  }
-
-  /// <summary>
-  /// bars の データを 保存する関数
-  /// </summary>
-  public setBarsColumns(table_datas: any[][]): void {
-
-    this.bar_list = new Array();
-
-    let temp: number = 0;
-
-    for (const groupe of table_datas) {
-      for ( let i = 0; i < groupe.length; i += 2 ) {
-        const column1 = groupe[i];
-        const column2 = groupe[i + 1];
-
-        if( 'm_no' in column1) {
-          temp = column1.m_no;
-        } else {
-          column1.m_no = temp;
-        }
-
-        const b = this.default_bars(temp, column1.p_name, column1.position);
-        b['index'] = column1.index;
-        b.p_name_ex = column1.p_name_ex;
-        b.b = column1.bh;
-        b.h = column2.bh;
-        b.haunch_M = column1.haunch_height;
-        b.haunch_V = column2.haunch_height;
-
-        b['rebar1'].title = column1.design_point_id;
-        b['rebar1'].rebar_dia =  column1.rebar_dia;
-        b['rebar1'].rebar_n =  column1.rebar_n;
-        b['rebar1'].rebar_cover =  column1.rebar_cover;
-        b['rebar1'].rebar_lines =  column1.rebar_lines;
-        b['rebar1'].rebar_space =  column1.rebar_space;
-        b['rebar1'].rebar_ss =  column1.rebar_ss;
-        b['rebar1'].cos =  column1.cos;
-        b['rebar1'].enable =  column1.enable;
-
-        b['rebar2'].title = column2.design_point_id;
-        b['rebar2'].rebar_dia =  column2.rebar_dia;
-        b['rebar2'].rebar_n =  column2.rebar_n;
-        b['rebar2'].rebar_cover =  column2.rebar_cover;
-        b['rebar2'].rebar_lines =  column2.rebar_lines;
-        b['rebar2'].rebar_space =  column2.rebar_space;
-        b['rebar2'].rebar_ss =  column2.rebar_ss;
-        b['rebar2'].cos =  column2.cos;
-        b['rebar2'].enable =  column2.enable;
-
-        b['sidebar'].side_dia =  column1.side_dia;
-        b['sidebar'].side_n =  column1.side_n;
-        b['sidebar'].side_cover =  column1.side_cover;
-        b['sidebar'].side_ss =  column1.side_ss;
-
-        b['starrup'].stirrup_dia =  column1.stirrup_dia;
-        b['starrup'].stirrup_n =  column1.stirrup_n;
-        b['starrup'].stirrup_ss =  column1.stirrup_ss;
-
-        b['bend'].bending_dia =  column2.stirrup_dia;
-        b['bend'].bending_n =  column2.stirrup_n;
-        b['bend'].bending_ss =  column2.stirrup_ss;
-        b['bend'].bending_angle =  45;
-
-        b.tan   = column1.tan;
-
-        this.bar_list.push(b);
-      }
-    }
-  }
 
   // 鉄筋情報
-  private default_bars(id: number, p_name: string, position: number): any {
+  private default_bars(id: number): any {
     return {
-      'm_no': id,
-      'index': null,
-      'position': position,
-      'p_name': p_name,
-      'p_name_ex': null,
-      'b': null,
-      'h': null,
-      'haunch_M': null,
-      'haunch_V': null,
-      'rebar1': this.default_rebar('上'),
-      'rebar2': this.default_rebar('下'),
-      'sidebar': this.default_sidebar(),
-      'starrup': this.default_starrup(),
-      'bend': this.default_bend(),
-      'tan': null
+      index: id,
+      m_no: null,
+      position: null,
+      p_name: null,
+      p_name_ex: null,
+      b: null,
+      h: null,
+      haunch_M: null,
+      haunch_V: null,
+      rebar1: this.default_rebar('上'),
+      rebar2: this.default_rebar('下'),
+      sidebar: this.default_sidebar(),
+      starrup: this.default_starrup(),
+      bend: this.default_bend(),
+      tan: null
     };
   }
 
@@ -230,16 +80,182 @@ export class InputBarsService {
     };
   }
 
-  public matchBarSize(dia: any): number {
+  public getTableColumns(): any[] {
 
-    let result: number = null;
-    const temp = this.input.toNumber(dia);
-    for ( const d of this.input.rebar_List ){
-      if ( d.D === temp){
-        result = temp;
-        break;
-      }       
+    const table_datas: any[] = new Array();
+
+    // グリッド用データの作成
+    const groupe_list = this.points.getGroupeList();
+    for (let i = 0; i < groupe_list.length; i++) {
+      table_datas.push(new Array());
+      const groupe = groupe_list[i];
+
+      // 部材
+      for (const member of groupe) {
+
+        // 着目点
+        for (let k = 0; k < member.positions.length; k++) {
+          const pos = member.positions[k];
+          if (!this.points.isEnable(pos)) {
+            continue;
+          }
+          // barデータに（部材、着目点など）足りない情報を追加する
+          const data: any = this.getTableColumn(pos.index);
+          data.m_no = member.m_no;
+          data.b = member.B;
+          data.h = member.H;
+          data.position = pos.position;
+          data.p_name = pos.p_name;
+          data.p_name_ex = pos.p_name;
+
+          // データを2行に分ける
+          const column1 = {};
+          const column2 = {};
+          column1['m_no'] = (k === 0) ? data.m_no: ''; // 最初の行には 部材番号を表示する
+          // 1行目
+          column1['index'] = data.index;
+          const a: number = this.helper.toNumber(data.position);
+          column1['position'] = (a === null) ? '' : a.toFixed(3);
+          column1['p_name'] = data['p_name'];
+          column1['p_name_ex'] = data['p_name_ex'];
+          column1['bh'] = data['b'];
+          column1['haunch_height'] = data['haunch_M'];
+
+          column1['design_point_id'] = data['rebar1'].title;
+          column1['rebar_dia'] = data['rebar1'].rebar_dia;
+          column1['rebar_n'] = data['rebar1'].rebar_n;
+          column1['rebar_cover'] = data['rebar1'].rebar_cover;
+          column1['rebar_lines'] = data['rebar1'].rebar_lines;
+          column1['rebar_space'] = data['rebar1'].rebar_space;
+          column1['rebar_ss'] = data['rebar1'].rebar_ss;
+          column1['cos'] = data['rebar1'].cos;
+          column1['enable'] = data['rebar1'].enable;
+
+          column1['side_dia'] = data['sidebar'].side_dia;
+          column1['side_n'] = data['sidebar'].side_n;
+          column1['side_cover'] = data['sidebar'].side_cover;
+          column1['side_ss'] = data['sidebar'].side_ss;
+
+          column1['stirrup_dia'] = data['starrup'].stirrup_dia;
+          column1['stirrup_n'] = data['starrup'].stirrup_n;
+          column1['stirrup_ss'] = data['starrup'].stirrup_ss;
+
+          column1['tan'] = data['tan'];
+          table_datas[i].push(column1);
+
+          // 2行目
+          column2['bh'] = data['h'];
+          column2['haunch_height'] = data['haunch_V'];
+
+          column2['design_point_id'] = data['rebar2'].title;
+          column2['rebar_dia'] = data['rebar2'].rebar_dia;
+          column2['rebar_n'] = data['rebar2'].rebar_n;
+          column2['rebar_cover'] = data['rebar2'].rebar_cover;
+          column2['rebar_lines'] = data['rebar2'].rebar_lines;
+          column2['rebar_space'] = data['rebar2'].rebar_space;
+          column2['rebar_ss'] = data['rebar2'].rebar_ss;
+          column2['stirrup_dia'] = data['bend'].bending_dia;
+          column2['stirrup_n'] = data['bend'].bending_n;
+          column2['stirrup_ss'] = data['bend'].bending_ss;
+          column2['cos'] = data['rebar2'].cos;
+          column2['enable'] = data['rebar2'].enable;
+
+          table_datas[i].push(column2);
+        }
+      }
+    }
+    return table_datas;
+  }
+
+  private getTableColumn(index: any): any {
+
+    let result = this.bar_list.find((value) => value.index === index);
+    if (result === undefined) {
+      result = this.default_bars(index);
+      this.bar_list.push(result);
     }
     return result;
   }
+
+  public setSaveData(table_datas: any[]) {
+
+    this.bar_list = new Array();
+
+    for (const groupe of table_datas) {
+      for (let i = 0; i < groupe.length; i += 2) {
+        const column1 = groupe[i];
+        const column2 = groupe[i + 1];
+
+        const b = this.default_bars(column1.index);
+        b.p_name = column1.p_name;
+        b.position = column1.position;
+        b.m_no = column1.m_no;
+        b.p_name_ex = column1.p_name_ex;
+        b.b = column1.bh;
+        b.h = column2.bh;
+        b.haunch_M = column1.haunch_height;
+        b.haunch_V = column2.haunch_height;
+
+        b.rebar1.title = column1.design_point_id;
+        b.rebar1.rebar_dia = column1.rebar_dia;
+        b.rebar1.rebar_n = column1.rebar_n;
+        b.rebar1.rebar_cover = column1.rebar_cover;
+        b.rebar1.rebar_lines = column1.rebar_lines;
+        b.rebar1.rebar_space = column1.rebar_space;
+        b.rebar1.rebar_ss = column1.rebar_ss;
+        b.rebar1.cos = column1.cos;
+        b.rebar1.enable = column1.enable;
+
+        b.rebar2.title = column2.design_point_id;
+        b.rebar2.rebar_dia = column2.rebar_dia;
+        b.rebar2.rebar_n = column2.rebar_n;
+        b.rebar2.rebar_cover = column2.rebar_cover;
+        b.rebar2.rebar_lines = column2.rebar_lines;
+        b.rebar2.rebar_space = column2.rebar_space;
+        b.rebar2.rebar_ss = column2.rebar_ss;
+        b.rebar2.cos = column2.cos;
+        b.rebar2.enable = column2.enable;
+
+        b.sidebar.side_dia = column1.side_dia;
+        b.sidebar.side_n = column1.side_n;
+        b.sidebar.side_cover = column1.side_cover;
+        b.sidebar.side_ss = column1.side_ss;
+
+        b.starrup.stirrup_dia = column1.stirrup_dia;
+        b.starrup.stirrup_n = column1.stirrup_n;
+        b.starrup.stirrup_ss = column1.stirrup_ss;
+
+        b.bend.bending_dia = column2.stirrup_dia;
+        b.bend.bending_n = column2.stirrup_n;
+        b.bend.bending_ss = column2.stirrup_ss;
+        b.bend.bending_angle = 45;
+
+        b.tan = column1.tan;
+
+        this.bar_list.push(b);
+      }
+    }
+  }
+
+  public setPickUpData() {
+
+  }
+
+  public getSaveData(): any[] {
+    return this.bar_list;
+  }
+
+  public matchBarSize(dia: any): number {
+
+    let result: number = null;
+    const temp = this.helper.toNumber(dia);
+    for (const d of this.helper.rebar_List) {
+      if (d.D === temp) {
+        result = temp;
+        break;
+      }
+    }
+    return result;
+  }
+
 }

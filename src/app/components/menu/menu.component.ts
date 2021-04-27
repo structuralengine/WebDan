@@ -18,6 +18,7 @@ import { DsdDataService } from 'src/app/providers/dsd-data.service';
 
 import { AuthService } from '../../core/auth.service';
 import firebase from 'firebase';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Component({
   selector: 'app-menu',
@@ -26,23 +27,20 @@ import firebase from 'firebase';
 })
 export class MenuComponent implements OnInit {
 
-  loginUserName: string;
-  userPoint: string;
-  loggedIn: boolean;
-  fileName: string;
-  baseUrl: string;
-  pickup_file_name: string;
-  amount: number;
+  public loggedIn: boolean = false;
+  private fileName: string;
+  public pickup_file_name: string;
+  private userPoint: string;
+  private amount: number;
 
 
   constructor(
     private modalService: NgbModal,
     private app: AppComponent,
     private user: UserInfoService,
-    private InputData: SaveDataService,
+    private save: SaveDataService,
+    private helper: DataHelperModule,
     private dsdData: DsdDataService,
-    private http: HttpClient,
-    private platformLocation: PlatformLocation,
     private router: Router,
     private config: ConfigService,
     public auth: AuthService) {
@@ -58,10 +56,9 @@ export class MenuComponent implements OnInit {
   // 新規作成
   renew(): void {
     this.router.navigate(['/blank-page']);
-    this.app.dialogClose(); // 現在表示中の画面を閉じる
-    this.app.isManual = true;
-    this.app.isCalculated = false;
-    this.InputData.clear();
+    this.app.deactiveButtons();
+
+    this.save.clear();
   }
 
   // ファイルを開く
@@ -70,12 +67,15 @@ export class MenuComponent implements OnInit {
     const modalRef = this.modalService.open(WaitDialogComponent);
     this.fileName = file.name;
     evt.target.value = '';
+
     this.router.navigate(['/blank-page']);
+    this.app.deactiveButtons();
+
     let error = null;
-    switch( this.InputData.getExt(this.fileName)){
+    switch( this.helper.getExt(this.fileName)){
       case 'dsd':
         this.fileToBinary(file)
-        .then(buff  => { 
+        .then(buff  => {
           const pik =this.dsdData.readDsdData(buff);
           if (pik !== null){
             alert(pik + ' を開いてください！');
@@ -85,16 +85,13 @@ export class MenuComponent implements OnInit {
         break;
       default:
         this.fileToText(file)
-        .then(text => { this.InputData.readInputData(text); })
+        .then(text => { this.save.readInputData(text); })
         .catch(err => { error = err; });
     }
 
     // 後処理
     if( error === null ){
-      this.app.dialogClose(); // 現在表示中の画面を閉じる
-      this.app.isManual = this.InputData.isManual();
-      this.app.isCalculated = false;
-      this.pickup_file_name = this.InputData.pickup_filename;
+      this.pickup_file_name = this.save.pickup_filename;
     } else {
       console.log(error)
     }
@@ -108,21 +105,17 @@ export class MenuComponent implements OnInit {
     evt.target.value = '';
     this.fileToText(file)
       .then(text => {
-        this.app.dialogClose(); // 現在表示中の画面を閉じる
-        this.InputData.readPickUpData(text, file.name); // データを読み込む
-        this.pickup_file_name = this.InputData.pickup_filename;
-        this.app.isManual = false;
-        this.app.isCalculated = false;
+        this.save.readPickUpData(text, file.name); // データを読み込む
+        this.pickup_file_name = this.save.pickup_filename;
         if (this.router.url === this.router.config[0].redirectTo ) {
           this.router.navigate(['/blank-page']);
+          this.app.deactiveButtons();
         } else {
           this.router.navigate(['/']);
         }
         modalRef.close();
       })
       .catch(err => {
-        this.app.isManual = this.InputData.isManual();
-        this.app.isCalculated = false;
         modalRef.close();
         console.log(err);
       });
@@ -158,9 +151,9 @@ export class MenuComponent implements OnInit {
 
 
   // ファイルを保存
-  save(): void {
+  public fileSave(): void {
     this.config.saveActiveComponentData();
-    const inputJson: string = this.InputData.getInputText();
+    const inputJson: string = this.save.getInputText();
     const blob = new window.Blob([inputJson], { type: 'text/plain' });
     if (this.fileName.length === 0) {
       this.fileName = 'WebDan.wdj';

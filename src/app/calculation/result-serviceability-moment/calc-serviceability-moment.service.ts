@@ -1,10 +1,12 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service'
 
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +17,21 @@ export class CalcServiceabilityMomentService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              public base: CalcSafetyMomentService) {
+  constructor(
+    private calc: InputCalclationPrintService,
+    private basic: InputBasicInformationService,
+    private helper: DataHelperModule,
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  // 手入力モード（this.save.isManual === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
     this.isEnable = false;
@@ -34,14 +39,14 @@ export class CalcServiceabilityMomentService {
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+    if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力度検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
     if (this.DesignForceList.length < 1) {
       return;
@@ -365,10 +370,10 @@ export class CalcServiceabilityMomentService {
     let conNum: number = 1;
     switch (PrintData.memo) {
       case '上側引張':
-        conNum = this.save.toNumber(position.memberInfo.con_u);
+        conNum = this.helper.toNumber(position.memberInfo.con_u);
         break;
       case '下側引張':
-        conNum = this.save.toNumber(position.memberInfo.con_l);
+        conNum = this.helper.toNumber(position.memberInfo.con_l);
         break;
     }
     if (conNum === null) { conNum = 1; }
@@ -397,13 +402,13 @@ export class CalcServiceabilityMomentService {
 
     let rc: number = 1;
     if ('rc' in PrintData) {
-      rc = this.save.toNumber(PrintData.rc);
+      rc = this.helper.toNumber(PrintData.rc);
       if (rc === null) { rc = 1; }
     }
 
     let fck: number;
     if ('fck' in PrintData) {
-      fck = this.save.toNumber(PrintData.fck);
+      fck = this.helper.toNumber(PrintData.fck);
       if (fck === null) { return result; }
     } else {
       return result;
@@ -411,7 +416,7 @@ export class CalcServiceabilityMomentService {
 
     let rfck: number = 1;
     if ('rfck' in PrintData) {
-      rfck = this.save.toNumber(PrintData.rfck);
+      rfck = this.helper.toNumber(PrintData.rfck);
       if (rfck === null) { rfck = 1; }
     }
 
@@ -421,10 +426,10 @@ export class CalcServiceabilityMomentService {
 
     let H: number;
     if ('H' in PrintData) {
-      H = this.save.toNumber(PrintData.H);
+      H = this.helper.toNumber(PrintData.H);
       if (H === null) { return result; }
     } else if ('R' in PrintData) {
-      H = this.save.toNumber(PrintData.R);
+      H = this.helper.toNumber(PrintData.R);
       if (H === null) { return result; }
     } else {
       return result;
@@ -433,7 +438,7 @@ export class CalcServiceabilityMomentService {
     // 永久作用
     let Md: number;
     if ('Md' in postdata0) {
-      Md = this.save.toNumber(postdata0.Md);
+      Md = this.helper.toNumber(postdata0.Md);
       if (Md !== null) {
         result['Md'] = Md;
       }
@@ -441,7 +446,7 @@ export class CalcServiceabilityMomentService {
 
     let Nd: number;
     if ('Nd' in postdata0) {
-      Nd = this.save.toNumber(postdata0.Nd);
+      Nd = this.helper.toNumber(postdata0.Nd);
       if (Nd !== null) {
         result['Nd'] = Nd;
       }
@@ -471,7 +476,7 @@ export class CalcServiceabilityMomentService {
     // 縁応力の照査
     let Mhd: number;
     if ('Md' in postdata1) {
-      Mhd = this.save.toNumber(postdata1.Md);
+      Mhd = this.helper.toNumber(postdata1.Md);
       if (Mhd !== null) {
         result['Mhd'] = Mhd;
       }
@@ -479,7 +484,7 @@ export class CalcServiceabilityMomentService {
 
     let Nhd: number;
     if ('Nd' in postdata1) {
-      Nhd = this.save.toNumber(postdata1.Nd);
+      Nhd = this.helper.toNumber(postdata1.Nd);
       if (Nhd !== null) {
         result['Nhd'] = Nhd;
       }
@@ -493,7 +498,7 @@ export class CalcServiceabilityMomentService {
     // 制限値
     let Vyd_H: number; // 円形の制限値を求める時は換算矩形で求める
     if ('Vyd_H' in PrintData) {
-      Vyd_H = this.save.toNumber(PrintData.Vyd_H);
+      Vyd_H = this.helper.toNumber(PrintData.Vyd_H);
       if (Vyd_H === null) { return Vyd_H = H; }
     } else {
       Vyd_H = H;
@@ -516,14 +521,14 @@ export class CalcServiceabilityMomentService {
 
     let Es: number;
     if ('Es' in PrintData) {
-      Es = this.save.toNumber(PrintData.Es);
+      Es = this.helper.toNumber(PrintData.Es);
       if (Es === null) { return result; }
     } else {
       return result;
     }
     let Ec: number;
     if ('Ec' in PrintData) {
-      Ec = this.save.toNumber(PrintData.Ec);
+      Ec = this.helper.toNumber(PrintData.Ec);
       if (Ec !== null) {
         result['EsEc'] = Es / Ec;
       }
@@ -535,7 +540,7 @@ export class CalcServiceabilityMomentService {
 
     let c: number;
     if ('Ast-c' in PrintData) {
-      c = this.save.toNumber(PrintData['Ast-c']);
+      c = this.helper.toNumber(PrintData['Ast-c']);
       if (c === null) { return result; }
     } else {
       return result;
@@ -544,7 +549,7 @@ export class CalcServiceabilityMomentService {
 
     let Cs: number;
     if ('Ast-Cs' in PrintData) {
-      Cs = this.save.toNumber(PrintData['Ast-Cs']);
+      Cs = this.helper.toNumber(PrintData['Ast-Cs']);
       if (Cs === null) { return result; }
     } else {
       return result;
@@ -553,7 +558,7 @@ export class CalcServiceabilityMomentService {
 
     let fai: number;
     if ('Ast-φ' in PrintData) {
-      fai = this.save.toNumber(PrintData['Ast-φ']);
+      fai = this.helper.toNumber(PrintData['Ast-φ']);
       if (fai === null) { return result; }
     } else {
       return result;
@@ -562,7 +567,7 @@ export class CalcServiceabilityMomentService {
 
     let ecu: number;
     if ('ecsd' in position.memberInfo) {
-      ecu = this.save.toNumber(position.memberInfo.ecsd);
+      ecu = this.helper.toNumber(position.memberInfo.ecsd);
       if (ecu === null) { ecu = 450; }
     } else {
       ecu = 450;
@@ -571,7 +576,7 @@ export class CalcServiceabilityMomentService {
 
     let k1: number = 1;
     if ('fsy' in PrintData) {
-      const fsy: number = this.save.toNumber(PrintData.fsy);
+      const fsy: number = this.helper.toNumber(PrintData.fsy);
       if (fsy === 235) {
         k1 = 1.3;
       }
@@ -606,7 +611,7 @@ export class CalcServiceabilityMomentService {
 
     let ri: number = 1;
     if ('ri' in PrintData) {
-      ri = this.save.toNumber(PrintData.ri);
+      ri = this.helper.toNumber(PrintData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;

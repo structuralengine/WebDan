@@ -1,4 +1,8 @@
 import { Injectable } from '@angular/core';
+import { InputCalclationPrintService } from '../components/calculation-print/calculation-print.service';
+import { InputDesignPointsService } from '../components/design-points/design-points.service';
+import { InputSectionForcesService } from '../components/section-forces/section-forces.service';
+import { DataHelperModule } from '../providers/data-helper.module';
 import { SaveDataService } from '../providers/save-data.service';
 
 @Injectable({
@@ -7,13 +11,18 @@ import { SaveDataService } from '../providers/save-data.service';
 export class SetDesignForceService {
 
 
-  constructor(private save: SaveDataService) {
+  constructor(
+    private save: SaveDataService,
+    private helper: DataHelperModule,
+    private points: InputDesignPointsService,
+    private force: InputSectionForcesService,
+    private calc: InputCalclationPrintService) {
   }
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
   public getDesignForceList(calcTarget: string, pickupNo: number): any[] {
 
-    if (this.save.toNumber(pickupNo) === null) {
+    if (this.helper.toNumber(pickupNo) === null) {
       return new Array();
     }
     let result: any[];
@@ -37,14 +46,14 @@ export class SetDesignForceService {
       case 'Md': // 曲げモーメントの照査の場合
         force = JSON.parse(
           JSON.stringify({
-            temp: this.save.force.Mdatas
+            temp: this.force.moment_force
           })
         ).temp;
         break;
       case 'Vd': // せん断力の照査の場合
         force = JSON.parse(
           JSON.stringify({
-            temp: this.save.force.Vdatas
+            temp: this.force.shear_force
           })
         ).temp;
         break;
@@ -69,7 +78,7 @@ export class SetDesignForceService {
             return new Array(); // ピックアップ番号の入力が不正
           }
           // 奥行き本数
-          let n: number = this.save.toNumber(member.n);
+          let n: number = this.helper.toNumber(member.n);
           if (n === null) { n = 1; }
           if (n === 0) { n = 1; }
 
@@ -80,7 +89,7 @@ export class SetDesignForceService {
           }
 
           for (const key of Object.keys(targetForce)) {
-            let value: number = this.save.toNumber(targetForce[key]);
+            let value: number = this.helper.toNumber(targetForce[key]);
             if (value === null) { value = 0; }
             targetForce[key] = value;
           }
@@ -127,7 +136,7 @@ export class SetDesignForceService {
           return new Array(); // 存在しない要素番号がある
         }
         // 奥行き本数
-        let n: number = this.save.toNumber(member.n);
+        let n: number = this.helper.toNumber(member.n);
         if (n === null) { n = 1; }
         if (n === 0) { n = 1; }
 
@@ -215,14 +224,14 @@ export class SetDesignForceService {
 
     const result = JSON.parse(
       JSON.stringify({
-        temp: this.save.points.getDesignPointColumns()
+        temp: this.points.position_list
       })
     ).temp;
 
     // 計算対象ではない着目点を削除する
     for (let i = result.length - 1; i >= 0; i--) {
       // 計算・印刷画面の部材にチェックが入っていなかければ削除
-      if (this.save.calc.calc_checked[i] === false) {
+      if (this.calc.calc_checked[i] === false) {
         result.splice(i, 1);
         continue;
       }

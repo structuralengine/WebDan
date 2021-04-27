@@ -1,10 +1,12 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { ResultDataService } from '../result-data.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,18 +17,21 @@ export class CalcServiceabilityShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              private base: CalcSafetyShearForceService) {
+  constructor(
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService,
+    private helper: DataHelperModule,
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private result: ResultDataService,
+    private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  // 手入力モード（this.save.isManual === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
     this.isEnable = false;
@@ -34,21 +39,21 @@ export class CalcServiceabilityShearForceService {
     this.DesignForceList= new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[0]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(0));
     // 永久荷重
-    const DesignForceList1 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[1]);
+    const DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
 
     if (this.DesignForceList.length < 1) {
       return;
     }
 
     // 変動荷重
-    let DesignForceList2 = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[2]);
+    let DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
     if(DesignForceList2.length < 1){
       DesignForceList2 = this.getLiveload(this.DesignForceList , DesignForceList1);
     }
@@ -236,12 +241,12 @@ export class CalcServiceabilityShearForceService {
 
     let Vd: number = Math.abs(result.Vd);
 
-    let Vpd: number = this.save.toNumber(postdata1.Vd);
+    let Vpd: number = this.helper.toNumber(postdata1.Vd);
     if (Vpd === null) { Vpd = 0; }
     Vpd = Math.abs(Vpd);
     result['Vpd'] = Vpd;
 
-    let Vrd: number = this.save.toNumber(PostData2.Vd);
+    let Vrd: number = this.helper.toNumber(PostData2.Vd);
     if (Vrd === null) { Vrd = Vd - Vpd; }
     if (Vrd === 0) { Vrd = Vd - Vpd; }
     Vrd = Math.abs(Vrd);
@@ -256,7 +261,7 @@ export class CalcServiceabilityShearForceService {
     }
 
     // 環境条件
-    let conNum: number = this.save.toNumber(position.memberInfo.con_s);
+    let conNum: number = this.helper.toNumber(position.memberInfo.con_s);
     if (conNum === null) { conNum = 1; }
 
     // 制限値
@@ -278,7 +283,7 @@ export class CalcServiceabilityShearForceService {
     result['sigma12'] = sigma12;
 
     // せん断補強鉄筋の設計応力度
-    let kr: number = this.save.toNumber(position.memberInfo.kr);
+    let kr: number = this.helper.toNumber(position.memberInfo.kr);
     if (kr === null) { kr = 0.5; }
     result['kr'] = kr;
 

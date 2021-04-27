@@ -3,6 +3,8 @@ import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 
 import { Injectable } from '@angular/core';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,8 @@ export class CalcRestorabilityShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
+  constructor(private basic: InputBasicInformationService,
+              private calc: InputCalclationPrintService,
               private force: SetDesignForceService,
               private post: SetPostDataService) {
     this.DesignForceList = null;
@@ -22,7 +25,7 @@ export class CalcRestorabilityShearForceService {
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  // 手入力モード（this.save.isManual === true）の場合は空の配列を返す
   public setDesignForces(): void {
 
     this.isEnable = false;
@@ -30,11 +33,11 @@ export class CalcRestorabilityShearForceService {
     this.DesignForceList = new Array();
 
     // せん断力が計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_shear_force === false) {
+    if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.save.basic.pickup_shear_force_no[6]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(6));
 
     if (this.DesignForceList.length < 1 ) {
       return;
