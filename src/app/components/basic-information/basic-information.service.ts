@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class InputBasicInformationService  {
   // 設計条件
   public conditions_list: any[];
 
-  constructor() {
+  constructor(private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {
@@ -116,6 +117,21 @@ export class InputBasicInformationService  {
         return;
     }
 
+  }
+
+  public ppickup_moment_no(id: number){
+    const old = this.pickup_moment.find(v=>v.id===id);
+    if(old!==undefined){
+      return this.helper.toNumber(old.no);
+    }
+    return null;
+  }
+  public pickup_shear_force_no(id: number){
+    const old = this.pickup_moment.find(v=>v.id===id);
+    if(old!==undefined){
+      return this.helper.toNumber(old.no);
+    }
+    return null;
   }
 
   public get_specification1(): number {

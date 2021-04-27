@@ -3,6 +3,8 @@ import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 
 import { Injectable } from '@angular/core';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +15,8 @@ export class CalcRestorabilityShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
+  constructor(private basic: InputBasicInformationService,
+              private calc: InputCalclationPrintService,
               private force: SetDesignForceService,
               private post: SetPostDataService) {
     this.DesignForceList = null;
@@ -34,7 +37,7 @@ export class CalcRestorabilityShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[6]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(6));
 
     if (this.DesignForceList.length < 1 ) {
       return;

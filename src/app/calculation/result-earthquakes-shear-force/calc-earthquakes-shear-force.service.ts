@@ -13,7 +13,7 @@ export class CalcEarthquakesShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
+  constructor(private basic: InputBasicInformationService,
               private force: SetDesignForceService,
               private post: SetPostDataService) {
     this.DesignForceList = null;
@@ -31,7 +31,7 @@ export class CalcEarthquakesShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[7]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(7));
 
 
     if (this.DesignForceList.length < 1 ) {
