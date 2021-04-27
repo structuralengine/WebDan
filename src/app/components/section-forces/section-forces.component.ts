@@ -14,109 +14,110 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   constructor(
     private force: InputSectionForcesService) { }
 
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
+
   // 曲げモーメントのグリッド設定変数
-  @ViewChild('grid1') grid1: SheetComponent;
   private columnHeaders1: object[] = [
-    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '縁応力検討用', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)',  dataType: 'float', 'format': '#.00', dataIndx: 'case0_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: 'case0_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)',  dataType: 'float', 'format': '#.00', dataIndx: 'case0_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: 'case0_Nd', sortable: false, width: 100 }
       ]},
       { title: '耐久性検討用<br/>(永久作用)', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case1_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case1_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case1_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case1_Nd', sortable: false, width: 100 }
       ]},
     ]},
     { title: '疲労', align: 'center', colModel: [
       { title: '最小応力', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case2_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case2_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case2_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case2_Nd', sortable: false, width: 100 }
       ]},
       { title: '最大応力', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case3_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case3_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case3_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case3_Nd', sortable: false, width: 100 }
       ]},
     ]},
     { title: '破壊', align: 'center', colModel: [
       { title: '曲げ耐力検討用', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case4_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case4_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case4_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case4_Nd', sortable: false, width: 100 }
       ]},
     ]},
     { title: '復旧性', align: 'center', colModel: [
       { title: '地震時以外', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case5_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case5_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case5_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case5_Nd', sortable: false, width: 100 }
       ]},
       { title: '地震時', align: 'center', colModel: [
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case6_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case6_Nd', sortable: false, width: 70 }
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case6_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case6_Nd', sortable: false, width: 100 }
       ]},
     ]}
   ];
   private ROWS_COUNT1 = 0;
   private table_datas1: any[] = [];
-  public options1: pq.gridT.options;
+  private options1: pq.gridT.options;
 
   // せん断力のグリッド設定変数
-  @ViewChild('grid2') grid2: SheetComponent;
   private columnHeaders2: object[] = [
-    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '設計耐力検討用', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case0_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case0_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case0_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case0_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case0_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case0_Nd', sortable: false, width: 100 }
       ]},
       { title: '永久作用による<br/>断面力', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case1_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case1_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case1_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case1_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case1_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case1_Nd', sortable: false, width: 100 }
       ]},
       { title: '変動作用による<br/>断面力', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case2_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case2_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case2_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case2_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case2_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case2_Nd', sortable: false, width: 100 }
       ]},
     ]},
     { title: '疲労', align: 'center', colModel: [
       { title: '最小応力', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case3_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case3_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case3_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case3_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case3_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case3_Nd', sortable: false, width: 100 }
       ]},
       { title: '最大応力', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case4_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case4_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case4_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case4_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case4_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case4_Nd', sortable: false, width: 100 }
       ]},
     ]},
     { title: '破壊', align: 'center', colModel: [
       { title: '設計断面力', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case5_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case5_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case5_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case5_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case5_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case5_Nd', sortable: false, width: 100 }
       ]},
     ]},
     { title: '復旧性', align: 'center', colModel: [
       { title: '地震時以外', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case6_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case6_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case6_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case6_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case6_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case6_Nd', sortable: false, width: 100 }
       ]},
       { title: '地震時', align: 'center', colModel: [
-        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case7_Vd', sortable: false, width: 70 },
-        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case7_Md', sortable: false, width: 70 },
-        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case7_Nd', sortable: false, width: 70 }
+        { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case7_Vd', sortable: false, width: 100 },
+        { title: 'Md<br/>(kN/m)', dataType: 'float', 'format': '#.00', dataIndx: 'case7_Md', sortable: false, width: 100 },
+        { title: 'Nd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case7_Nd', sortable: false, width: 100 }
       ]},
     ]},
   ];
   private ROWS_COUNT2 = 0;
   private table_datas2: any[] = [];
-  public options2: pq.gridT.options;
+  private options2: pq.gridT.options;
 
 
   ngOnInit() {
@@ -144,7 +145,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         if (ui.finalV >= dataV - 1) {
           this.loadData1(dataV + this.ROWS_COUNT1);
-          this.grid1.refreshDataAndView();
+          this.grid.refreshDataAndView();
         }
       }
     };
@@ -166,20 +167,18 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
         }
         if (ui.finalV >= dataV - 1) {
           this.loadData2(dataV + this.ROWS_COUNT2);
-          this.grid2.refreshDataAndView();
+          this.grid.refreshDataAndView();
         }
       }
     };
 
   }
 
- 
   ngAfterViewInit(){
-    this.grid1.options = this.options1;
-    this.grid2.options = this.options2;
+    this.options = this.options1;
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
   }
-
-
 
   // 指定行row まで、曲げモーメント入力データを読み取る
   private loadData1(row: number): void {
@@ -191,14 +190,12 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // 指定行row まで、せん断力入力データを読み取る
   private loadData2(row: number): void {
-    for (let i = this.table_datas1.length + 1; i <= row; i++) {
+    for (let i = this.table_datas2.length + 1; i <= row; i++) {
       const column = this.force.getTable2Columns(i);
       this.table_datas2.push(column);
     }
   }
 
- 
- 
   ngOnDestroy(): void {
     this.saveData();
   }
@@ -211,7 +208,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   // 表の高さを計算する
   private tableHeight(): number {
     let containerHeight = window.innerHeight;
-    containerHeight -= 360;
+    containerHeight -= 160;
     return containerHeight;
   }
 
@@ -221,4 +218,25 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
     return Math.round(containerHeight / 30);
   }
 
+
+  public activePageChenge(id: number): void {
+    this.deactiveButtons();
+    document.getElementById("sub" + id).classList.add("is-active");
+
+    this.options = (id === 0) ? this.options1 : this.options2;
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private deactiveButtons() {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("sub" + i);
+      if (data != null) {
+        if (data.classList.contains("is-active")) {
+          data.classList.remove("is-active");
+        }
+      }
+    }
+  }
 }

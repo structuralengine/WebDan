@@ -1,50 +1,20 @@
-<!-- 
-<div #ht_container class="ht-container">
-  <ngb-tabset>
-    <ngb-tab>
-      <ng-template ngbTabTitle>
-        <h5>曲げ照査</h5>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <div class="table-container">
-          <app-sheet #grid1 [options]="options1"></app-sheet>
-        </div>
-      </ng-template>
-    </ngb-tab>
-
-    <ngb-tab>
-      <ng-template ngbTabTitle>
-        <h5>せん断照査</h5>
-      </ng-template>
-      <ng-template ngbTabContent>
-        <div class="table-container">
-          <app-sheet #grid2 [options]="options2"></app-sheet>
-        </div>
-      </ng-template>
-    </ngb-tab>
-  </ngb-tabset>
-</div>  -->
-
-
-
-<div class="tabs">
-
-  <input id="all" type="radio" name="tab_item" checked>
-  <label class="tab_item" for="all">曲げ照査</label>
-
-  <input id="programming" type="radio" name="tab_item">
-  <label class="tab_item" for="programming">せん断照査</label>
-
-  <div class="tab_content" id="all_content">
-    <div class="tab_content_description">
-      <app-sheet #grid1 [options]="options1"></app-sheet>
-    </div>
-  </div>
-
-  <div class="tab_content" id="programming_content" >
-    <div class="tab_content_description">
-      <app-sheet #grid2 [options]="options2"></app-sheet>
-    </div>
-  </div>
-
+ <div class="c-subNavArea">
+  <nav>
+    <ul class="c-subNavArea__nav">
+      <li class="c-subNavArea__navItem">
+        <a (click)="activePageChenge(0)" id="sub0" class="c-subNavArea__navItemTitle is-active">
+          <span>曲げ照査</span>
+        </a>
+      </li>
+      <li class="c-subNavArea__navItem">
+        <a (click)="activePageChenge(1)" id="sub1" class="c-subNavArea__navItemTitle">
+          <span>せん断照査</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 </div> 
+
+<div>
+  <app-sheet #grid [options]="options"></app-sheet>
+</div>
