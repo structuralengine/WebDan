@@ -175,9 +175,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   ngAfterViewInit(){
-    this.options = this.options1;
-    this.grid.options = this.options;
-    this.grid.refreshDataAndView();
+    this.activePageChenge(0);
   }
 
   // 指定行row まで、曲げモーメント入力データを読み取る

@@ -1,3 +1,4 @@
+<!-- 
 <div #ht_container class="ht-container">
   <ngb-tabset>
     <ngb-tab *ngFor="let groupe of table_datas; index as i">
@@ -11,4 +12,21 @@
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
+</div>
+ -->
+
+<div class="c-subNavArea">
+  <nav>
+    <ul class="c-subNavArea__nav">
+      <li class="c-subNavArea__navItem" *ngFor="let groupe of table_datas; index as i" >
+        <a (click)="activePageChenge(i)" id="sub{{i}}" class="c-subNavArea__navItemTitle">
+          <span>{{getGroupeName(i)}}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div>
+  <app-sheet #grid [options]="options"></app-sheet>
 </div>

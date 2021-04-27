@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit, ViewChild } from '@angular/core';
 import { InputDesignPointsService } from './design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
@@ -11,9 +11,11 @@ import pq from 'pqgrid';
 })
 export class DesignPointsComponent implements OnInit, OnDestroy {
 
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
+
   // データグリッドの設定変数
-  @ViewChildren('grid') grids: QueryList<SheetComponent>;
-  public options: pq.gridT.options[] = new Array();
+  private option_list: pq.gridT.options[] = new Array();
   private columnHeaders: object[] = [];
   // このページで表示するデータ
   public table_datas: any[];
@@ -29,7 +31,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
     this.table_datas = this.points.getTableDatas();
 
     // グリッドの設定
-    this.options = new Array();
+    this.option_list = new Array();
     for( let i =0; i < this.table_datas.length; i++){
       const op = {
         showTop: false,
@@ -41,12 +43,14 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
         colModel: this.columnHeaders,
         dataModel: { data: this.table_datas[i] },
       };
-      this.options.push(op);
-      this.grids[i].options = op;
+      this.option_list.push(op);
     }
-
   }
 
+  ngAfterViewInit(){
+    this.activePageChenge(0);
+  }
+ 
   private setTitle(isManual: boolean): void{
     if (isManual) {
       // 断面力手入力モードの場合
@@ -115,5 +119,26 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
     return containerHeight;
   }
 
+  
+  public activePageChenge(id: number): void {
+    this.deactiveButtons();
+    document.getElementById("sub" + id).classList.add("is-active");
+
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private deactiveButtons() {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("sub" + i);
+      if (data != null) {
+        if (data.classList.contains("is-active")) {
+          data.classList.remove("is-active");
+        }
+      }
+    }
+  }
 }
 
