@@ -17,7 +17,7 @@ import { InputSteelsService } from "../components/steels/steels.service";
 export class SaveDataService {
   // ピックアップファイル
   public pickup_filename: string;
-  private pickup_data: Object;
+  public pickup_data: Object;
   //={
   //  1:[
   //    { index: 1, memberNo, p_name, position,

@@ -5,6 +5,8 @@ import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
 
 import { Injectable } from '@angular/core';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +20,9 @@ export class CalcSafetyMomentService {
   constructor(private save: SaveDataService,
               private force: SetDesignForceService,
               private post: SetPostDataService,
-              private result: ResultDataService) {
+              private result: ResultDataService,
+              private basic: InputBasicInformationService,
+              private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -37,7 +41,7 @@ export class CalcSafetyMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[5]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(5));
 
     if (this.DesignForceList.length < 1 ) {
       return;

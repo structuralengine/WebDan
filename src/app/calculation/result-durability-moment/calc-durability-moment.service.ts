@@ -5,6 +5,8 @@ import { ResultDataService } from '../result-data.service';
 import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 
 import { Injectable } from '@angular/core';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +19,9 @@ export class CalcDurabilityMomentService {
 
   constructor(private save: SaveDataService,
     private force: SetDesignForceService,
-    private post: SetPostDataService) {
+    private post: SetPostDataService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
       this.DesignForceList = null;
       this.isEnable = false;
     }
@@ -34,9 +38,9 @@ export class CalcDurabilityMomentService {
       return;
     }
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[1]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[0]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
     if (this.DesignForceList.length < 1) {
       return ;

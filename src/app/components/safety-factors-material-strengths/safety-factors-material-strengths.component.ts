@@ -70,7 +70,8 @@ export class SafetyFactorsMaterialStrengthsComponent
     this.groupe_list = safety.groupe_list;
 
     // 入力項目を作成
-    for (const groupe of safety.groupe_list) {
+    for ( let i = 0; i < safety.groupe_list.length; i++){
+      const groupe = safety.groupe_list[i];
       const id = groupe.g_id;
 
       // 安全係数

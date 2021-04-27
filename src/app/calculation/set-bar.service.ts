@@ -919,7 +919,7 @@ export class SetBarService {
 
     const temp = JSON.parse(
       JSON.stringify({
-        temp: this.bars.getTableColumnss(true)
+        temp: this.bars.getTableColumns()
       })
     ).temp;
 

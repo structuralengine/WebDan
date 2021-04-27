@@ -1,10 +1,10 @@
 import { Injectable } from '@angular/core';
 
 import { UserInfoService } from '../providers/user-info.service';
-import { SaveDataService } from '../providers/save-data.service';
 import { SetSectionService } from './set-section.service';
 import { SetSafetyFactorService } from './set-safety-factor.service';
 import { DataHelperModule } from '../providers/data-helper.module';
+import { InputMembersService } from '../components/members/members.service';
 
 
 @Injectable({
@@ -12,11 +12,12 @@ import { DataHelperModule } from '../providers/data-helper.module';
 })
 export class SetPostDataService {
 
-  constructor(private user: UserInfoService,
-              private save: SaveDataService,
-              private helper: DataHelperModule,
-              private section: SetSectionService,
-              private safety: SetSafetyFactorService) { }
+  constructor(
+    private user: UserInfoService,
+    private helper: DataHelperModule,
+    private section: SetSectionService,
+    private safety: SetSafetyFactorService,
+    private members: InputMembersService ) { }
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
   public URL: string = 'https://imj7l5o0xl.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear';
@@ -100,9 +101,7 @@ export class SetPostDataService {
         const member = groupe[im];
 
         // 部材・断面情報をセット
-        const memberInfo = this.save.members.member_list.find( (value) => {
-          return (value.m_no === member.m_no);
-        });
+        const memberInfo = this.members.getTableColumns(member.m_no);
         if (memberInfo === undefined) {
           console.log('部材番号が存在しない');
           continue;

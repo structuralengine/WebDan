@@ -6,8 +6,11 @@ import { ResultDataService } from '../result-data.service';
 import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 
 import { Injectable } from '@angular/core';
-import { from } from 'rxjs';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputMembersService } from 'src/app/components/members/members.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +32,11 @@ export class CalcSafetyFatigueMomentService {
     private fatigue: SetFatigueService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private base: CalcServiceabilityMomentService) {
+    private base: CalcServiceabilityMomentService,
+    private basic: InputBasicInformationService,
+    private members: InputMembersService,
+    private fatigues: InputFatiguesService,
+    private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.DesignForceList3 = null;
     this.isEnable = false;
@@ -39,13 +46,13 @@ export class CalcSafetyFatigueMomentService {
   public getTrainCount(): number[] {
     const result = new Array(2);
     let jA = 0;
-    if ('train_A_count' in this.save.fatigues) {
-      jA = this.helper.toNumber(this.save.fatigues.train_A_count);
+    if ('train_A_count' in this.fatigues) {
+      jA = this.helper.toNumber(this.fatigues.train_A_count);
       if (jA === null) { jA = 0; }
     }
     let jB = 0;
-    if ('train_B_count' in this.save.fatigues) {
-      jB = this.helper.toNumber(this.save.fatigues.train_B_count);
+    if ('train_B_count' in this.fatigues) {
+      jB = this.helper.toNumber(this.fatigues.train_B_count);
       if (jB === null) { jB = 0; }
     }
     result[0] = jA;
@@ -68,17 +75,17 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // 列車本数の入力がない場合は処理を抜ける
-    if (this.helper.toNumber(this.save.fatigues.train_A_count) === null &&
-      this.helper.toNumber(this.save.fatigues.train_B_count) === null) {
+    if (this.helper.toNumber(this.fatigues.train_A_count) === null &&
+      this.helper.toNumber(this.fatigues.train_B_count) === null) {
       return;
     }
 
     // 疲労現
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[2]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(2));
     // 永久作用
-    this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(3));
     // 永久+変動作用
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(4));
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
@@ -138,9 +145,7 @@ export class CalcSafetyFatigueMomentService {
         const member = groupe[im];
         
         // 部材・断面情報をセット
-        const memberInfo = this.save.members.member_list.find( (value) => {
-          return (value.m_no === member.m_no);
-        });
+        const memberInfo = this.members.getTableColumns(member.m_no);
         if (memberInfo === undefined) {
           console.log('部材番号が存在しない');
           continue;
@@ -578,7 +583,7 @@ export class CalcSafetyFatigueMomentService {
 
     let ar: number = 3.09 - 0.003 * fai;
 
-    let reference_count: number = this.helper.toNumber(this.save.fatigues.reference_count);
+    let reference_count: number = this.helper.toNumber(this.fatigues.reference_count);
     if (reference_count === null) {
       reference_count = 2000000;
     }
@@ -615,8 +620,8 @@ export class CalcSafetyFatigueMomentService {
 
     // 標準列車荷重観山の総等価繰返し回数 N の計算
     let T: number;
-    if ('service_life' in this.save.fatigues) {
-      T = this.helper.toNumber(this.save.fatigues.service_life);
+    if ('service_life' in this.fatigues) {
+      T = this.helper.toNumber(this.fatigues.service_life);
       if (T === null) { return result; }
     } else {
       return result;

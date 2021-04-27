@@ -179,7 +179,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
       const tmp_material_concrete = this.default_material_concrete();
       const tmp_pile_factor = this.default_pile_factor();
 
-      const old_safety_factor = this.safety_factor.find(v => v.g_id === groupe.g_id);
+      const old_safety_factor = this.getSafetyFactor(groupe.g_id);
       if (old_safety_factor !== undefined) {
         for (const tmp of tmp_safety_factor) {
           const old = old_safety_factor.find(v => v.id === tmp.id)
@@ -222,7 +222,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const old_pile_factor = this.pile_factor.find(v => v.g_id === groupe.g_id);
+      const old_pile_factor = this.getPileFactor(groupe.g_id);
       if (old_pile_factor !== undefined) {
         for (let i = 0; i < tmp_pile_factor.length; i++) {
           const tmp = tmp_pile_factor[i];
@@ -250,6 +250,14 @@ export class InputSafetyFactorsMaterialStrengthsService {
     };
 
   }
+
+  public getSafetyFactor(g_id): any{
+    return this.safety_factor.find(v => v.g_id === g_id);
+  }
+
+  public getPileFactor(g_id) : any {
+    return this.pile_factor.find(v => v.g_id === g_id);
+  };
 
   public setSaveData(safety: any): void {
 

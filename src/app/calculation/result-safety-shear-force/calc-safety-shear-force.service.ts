@@ -8,6 +8,8 @@ import { Injectable } from '@angular/core';
 import { range } from 'rxjs';
 import { Data } from '@angular/router';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +26,9 @@ export class CalcSafetyShearForceService {
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private bar: SetBarService) {
+    private bar: SetBarService,
+    private calc: InputCalclationPrintService,
+    private basic: InputBasicInformationService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -43,7 +47,7 @@ export class CalcSafetyShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[5]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(5));
 
     if (this.DesignForceList.length < 1) {
       return;

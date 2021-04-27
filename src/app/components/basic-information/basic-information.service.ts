@@ -119,7 +119,7 @@ export class InputBasicInformationService  {
 
   }
 
-  public ppickup_moment_no(id: number){
+  public pickup_moment_no(id: number){
     const old = this.pickup_moment.find(v=>v.id===id);
     if(old!==undefined){
       return this.helper.toNumber(old.no);

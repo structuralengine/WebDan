@@ -16,7 +16,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   public options: pq.gridT.options[] = new Array();
   private columnHeaders: object[] = [];
   // このページで表示するデータ
-  private table_datas: any[];
+  public table_datas: any[];
 
   constructor(
     private points: InputDesignPointsService,

@@ -16,7 +16,7 @@ export class CrackSettingsComponent implements OnInit, OnDestroy {
   public options: pq.gridT.options[] = new Array();
   private columnHeaders: object[]= new Array();
 
-  private table_datas: any[][];
+  public table_datas: any[][];
 
   constructor(
     private crack: InputCrackSettingsService,

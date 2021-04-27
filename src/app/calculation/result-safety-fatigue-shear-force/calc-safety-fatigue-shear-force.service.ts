@@ -8,6 +8,8 @@ import { SetFatigueService } from '../set-fatigue.service';
 import { Injectable, ViewChild } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,7 +29,9 @@ export class CalcSafetyFatigueShearForceService {
     private result: ResultDataService,
     private base: CalcSafetyShearForceService,
     private fatigue: SetFatigueService,
-    private fatigues: InputFatiguesService) {
+    private fatigues: InputFatiguesService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.DesignForceList3 = null;
     this.isEnable = false;
@@ -37,13 +41,13 @@ export class CalcSafetyFatigueShearForceService {
   public getTrainCount(): number[] {
     const result = new Array(2);
     let jA = 0;
-    if ('train_A_count' in this.save.fatigues) {
-      jA = this.helper.toNumber(this.save.fatigues.train_A_count);
+    if ('train_A_count' in this.fatigues) {
+      jA = this.helper.toNumber(this.fatigues.train_A_count);
       if (jA === null) { jA = 0; }
     }
     let jB = 0;
-    if ('train_B_count' in this.save.fatigues) {
-      jB = this.helper.toNumber(this.save.fatigues.train_B_count);
+    if ('train_B_count' in this.fatigues) {
+      jB = this.helper.toNumber(this.fatigues.train_B_count);
       if (jB === null) { jB = 0; }
     }
     result[0] = jA;
@@ -66,15 +70,15 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 列車本数の入力がない場合は処理を抜ける
-    if (this.helper.toNumber(this.save.fatigues.train_A_count) === null &&
-      this.helper.toNumber(this.save.fatigues.train_B_count) === null) {
+    if (this.helper.toNumber(this.fatigues.train_A_count) === null &&
+      this.helper.toNumber(this.fatigues.train_B_count) === null) {
       return;
     }
 
     // 最小応力
-    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[3]);
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(3));
     // 最大応力
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no[4]);
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(4));
 
     // 変動応力
     const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
@@ -438,7 +442,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let ar: number = 3.09 - 0.003 * fai;
 
-    let reference_count: number = this.helper.toNumber(this.save.fatigues.reference_count);
+    let reference_count: number = this.helper.toNumber(this.fatigues.reference_count);
     if (reference_count === null) {
       reference_count = 2000000;
     }

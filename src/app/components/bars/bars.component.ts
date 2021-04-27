@@ -17,7 +17,7 @@ export class BarsComponent implements OnInit, OnDestroy {
   // private columnHeaders: object[] = new Array();
   // private pileHeaders: object[] = new Array();
 
-  private table_datas: any[];
+  public table_datas: any[];
 
   constructor(
     private bars: InputBarsService,

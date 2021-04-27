@@ -17,7 +17,7 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   public options: pq.gridT.options[] = new Array();
   private columnHeaders: object[] = new Array();
 
-  private table_datas: any[][];
+  public table_datas: any[][];
 
   public train_A_count: number;
   public train_B_count: number;

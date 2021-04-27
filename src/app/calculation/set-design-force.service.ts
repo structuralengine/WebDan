@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { InputCalclationPrintService } from '../components/calculation-print/calculation-print.service';
+import { InputDesignPointsService } from '../components/design-points/design-points.service';
+import { InputSectionForcesService } from '../components/section-forces/section-forces.service';
 import { DataHelperModule } from '../providers/data-helper.module';
 import { SaveDataService } from '../providers/save-data.service';
 
@@ -10,7 +13,10 @@ export class SetDesignForceService {
 
   constructor(
     private save: SaveDataService,
-    private helper: DataHelperModule) {
+    private helper: DataHelperModule,
+    private points: InputDesignPointsService,
+    private force: InputSectionForcesService,
+    private calc: InputCalclationPrintService) {
   }
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
@@ -40,14 +46,14 @@ export class SetDesignForceService {
       case 'Md': // 曲げモーメントの照査の場合
         force = JSON.parse(
           JSON.stringify({
-            temp: this.save.force.moment_force
+            temp: this.force.moment_force
           })
         ).temp;
         break;
       case 'Vd': // せん断力の照査の場合
         force = JSON.parse(
           JSON.stringify({
-            temp: this.save.force.shear_force
+            temp: this.force.shear_force
           })
         ).temp;
         break;
@@ -218,7 +224,7 @@ export class SetDesignForceService {
 
     const result = JSON.parse(
       JSON.stringify({
-        temp: this.save.points.getDesignPointColumn()
+        temp: this.points.position_list
       })
     ).temp;
 

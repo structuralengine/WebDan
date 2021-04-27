@@ -1,6 +1,7 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 import { Injectable } from '@angular/core';
 
@@ -13,9 +14,11 @@ export class CalcEarthquakesShearForceService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private basic: InputBasicInformationService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService) {
+  constructor(
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }

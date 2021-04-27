@@ -1,7 +1,7 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
-
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -13,9 +13,11 @@ export class CalcEarthquakesMomentService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService) {
+  constructor(
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService ) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -34,7 +36,7 @@ export class CalcEarthquakesMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[7]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(7));
 
     if (this.DesignForceList.length < 1 ){
       return;

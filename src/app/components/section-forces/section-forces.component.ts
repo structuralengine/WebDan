@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { SaveDataService } from 'src/app/providers/save-data.service';
+import { InputSectionForcesService } from './section-forces.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 
@@ -10,7 +11,8 @@ import pq from 'pqgrid';
 })
 export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  constructor(private save: SaveDataService) { }
+  constructor(
+    private force: InputSectionForcesService) { }
 
   // 曲げモーメントのグリッド設定変数
   @ViewChild('grid1') grid1: SheetComponent;
@@ -182,7 +184,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   // 指定行row まで、曲げモーメント入力データを読み取る
   private loadData1(row: number): void {
     for (let i = this.table_datas1.length + 1; i <= row; i++) {
-      const column = this.save.force.getTable1Columns(i);
+      const column = this.force.getTable1Columns(i);
       this.table_datas1.push(column);
     }
   }
@@ -190,7 +192,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   // 指定行row まで、せん断力入力データを読み取る
   private loadData2(row: number): void {
     for (let i = this.table_datas1.length + 1; i <= row; i++) {
-      const column = this.save.force.getTable2Columns(i);
+      const column = this.force.getTable2Columns(i);
       this.table_datas2.push(column);
     }
   }
@@ -201,8 +203,8 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
     this.saveData();
   }
   public saveData(): void {
-    this.save.force.setTable1Columns(this.table_datas1);
-    this.save.force.setTable2Columns(this.table_datas2);
+    this.force.setTable1Columns(this.table_datas1);
+    this.force.setTable2Columns(this.table_datas2);
   }
 
 

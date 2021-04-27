@@ -44,9 +44,9 @@ export class CalcServiceabilityMomentService {
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[1]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力度検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no[0]);
+    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
     if (this.DesignForceList.length < 1) {
       return;
