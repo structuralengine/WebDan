@@ -73,7 +73,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
   }
 
   private setTitle(isManual: boolean): void {
-    
+
     if (isManual) {
       // 断面力手入力モードの場合の項目
       this.columnHeaders = [];
@@ -86,7 +86,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
     }
 
   }
-  
+
 
   public isManual(): boolean{
     return this.save.isManual();
@@ -102,7 +102,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
       pickup_shear_force: this.table2_datas,
       specification1_list: this.specification1_list, // 適用
       specification2_list: this.specification2_list, // 仕様
-      conditions_list: this.conditions_list         // 設計条件       
+      conditions_list: this.conditions_list         // 設計条件
     });
 
   }
@@ -134,7 +134,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
 
   /// 設計条件 変更時の処理
   public conditionsCheckChanged(id: string, isChecked: boolean) {
-    this.conditions_list = this.conditions_list.map( obj => 
+    this.conditions_list = this.conditions_list.map( obj =>
       obj.selected = (obj.id === id) ? isChecked : obj.selected);
   }
 

@@ -22,12 +22,12 @@
         <ng-container *ngFor="let item of specification1_list; index as i">
           <div>
             <label>
-              <input type="radio" 
-                name="specification1" 
-                id="specification1{{i}}" 
+              <input type="radio"
+                name="specification1"
+                id="specification1{{i}}"
                 [(ngModel)]="item.selected"
-                [value]="item.id" 
-                [checked]="item.selected" 
+                [value]="item.id"
+                [checked]="item.selected"
                 (change)="setSpecification1(i)" />
                 {{item.title}}
             </label>
@@ -46,12 +46,12 @@
         <ng-container *ngFor="let item of specification2_list; index as i">
           <div>
             <label>
-              <input type="radio" 
-                name="specification2" 
-                id="specification2{{i}}" 
+              <input type="radio"
+                name="specification2"
+                id="specification2{{i}}"
                 [(ngModel)]="item.selected"
-                [value]="item.id" 
-                [checked]="item.selected" 
+                [value]="item.id"
+                [checked]="item.selected"
                 (change)="setSpecification2(i)" />
                 {{item.title}}
             </label>
@@ -66,12 +66,12 @@
     <h5>設計条件</h5>
     <ng-container *ngFor="let item of conditions_list; index as i">
       <div>
-        <input type="checkbox" 
-          name="conditions{{i}}" 
-          id="conditions{{i}}" 
-          [(ngModel)]="item.selected" 
+        <input type="checkbox"
+          name="conditions{{i}}"
+          id="conditions{{i}}"
+          [(ngModel)]="item.selected"
           [value]="item.id"
-          [checked]="item.selected" 
+          [checked]="item.selected"
           (change)="conditionsCheckChanged(item.id, $event.target.checked)" />
           {{item.title}}
       </div>
