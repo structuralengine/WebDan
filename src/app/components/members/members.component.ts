@@ -4,6 +4,7 @@ import { SheetComponent } from '../sheet/sheet.component';
 import { AppComponent } from 'src/app/app.component';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 import pq from 'pqgrid';
+import { InputDesignPointsService } from '../design-points/design-points.service';
 
 @Component({
   selector: 'app-members',
@@ -24,6 +25,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   constructor(
     private members: InputMembersService,
+    private points: InputDesignPointsService,
     private save: SaveDataService,
     private app: AppComponent) { }
 
@@ -136,7 +138,11 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
 
         // 何か変更があったら判定する
-        this.app.memberChange();
+        const flg: boolean = this.members.checkMemberEnables()
+        if(flg === true && this.save.isManual()){
+          this.points.setManualData();
+        }
+        this.app.memberChange(flg);
 
       }
     };

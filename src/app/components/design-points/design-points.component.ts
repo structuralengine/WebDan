@@ -45,10 +45,10 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
       };
       this.option_list.push(op);
     }
+    this.options = this.option_list[0];
   }
 
   ngAfterViewInit(){
-    this.activePageChenge(0);
   }
  
   private setTitle(isManual: boolean): void{
@@ -110,6 +110,13 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   }
 
   public saveData(): void {
+    const a = [];
+    for(const g of this.table_datas){
+      for(const e of g){
+        a.push(e);
+      }
+    }
+    this.points.setSaveData(a);
   }
 
   // 表の高さを計算する
@@ -119,11 +126,16 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
     return containerHeight;
   }
 
-  
   public activePageChenge(id: number): void {
     this.deactiveButtons();
-    document.getElementById("sub" + id).classList.add("is-active");
-
+    
+    const element = document.getElementById("sub" + id);
+    if(element !== null){
+      element.classList.add("is-active");
+    } else { 
+      console.log(element);
+    }
+ 
     this.options = this.option_list[id];
     this.grid.options = this.options;
     this.grid.refreshDataAndView();

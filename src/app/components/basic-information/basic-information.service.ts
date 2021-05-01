@@ -98,9 +98,9 @@ export class InputBasicInformationService  {
 
         this.conditions_list = [
           { id: 'JR-000', title: '縁応力度が制限値以内でも ひび割れ幅の検討を行う',     selected: false },
-          { id: 'JR-001', title: 'ひび割れ幅制限値に用いるかぶりは 100mm を上限とする', selected: false },
-          { id: 'JR-002', title: 'T形断面でフランジ側引張は矩形断面で計算する',         selected: false },
-          { id: 'JR-003', title: '円形断面で鉄筋を頂点に１本配置する',                 selected: false },
+          { id: 'JR-001', title: 'ひび割れ幅制限値に用いるかぶりは 100mm を上限とする', selected: true },
+          { id: 'JR-002', title: 'T形断面でフランジ側引張は矩形断面で計算する',         selected: true },
+          { id: 'JR-003', title: '円形断面で鉄筋を頂点に１本配置する',                 selected: true },
           { id: 'JR-004', title: 'せん断耐力におけるβn算定時の Mud は軸力を考慮しない', selected: false }
         ];
 
@@ -135,10 +135,18 @@ export class InputBasicInformationService  {
   }
 
   public get_specification1(): number {
-    return this.specification1_list.find(
+    const sp = this.specification1_list.find(
       value=>value.selected === true);
+
+    return sp.id;
   }
 
+  public get_specification2(): number {
+    const sp = this.specification2_list.find(
+      value=>value.selected === true);
+
+    return sp.id;
+  }
   public set_specification1(index: number): any {
 
     const id: number = this.specification1_list.findIndex(

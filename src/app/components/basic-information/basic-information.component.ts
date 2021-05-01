@@ -12,7 +12,9 @@ import pq from 'pqgrid';
 export class BasicInformationComponent implements OnInit, OnDestroy {
 
   private columnHeaders: object[] = [];
-
+  public specification1_select_id: number;
+  public specification2_select_id: number;
+  
   @ViewChild('grid1') grid1: SheetComponent;
   private table1_datas: any[] = [];
   public options1: pq.gridT.options;
@@ -38,9 +40,14 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
 
     const basic = this.basic.getSaveData();
 
-    this.specification1_list = basic.specification1_list; // 適用
-    this.specification2_list = basic.specification2_list; // 仕様
-    this.conditions_list = basic.conditions_list;         //  設計条件
+    // 適用
+    this.specification1_list = basic.specification1_list; 
+    this.specification1_select_id = this.basic.get_specification1(); 
+    // 仕様
+    this.specification2_list = basic.specification2_list; 
+    this.specification2_select_id = this.basic.get_specification2(); 
+    //  設計条件
+    this.conditions_list = basic.conditions_list;         
 
     // pickUp テーブル の初期化
     this.setTitle(this.save.isManual());
@@ -124,18 +131,14 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
 
     this.grid1.refreshDataAndView();
     this.grid2.refreshDataAndView();
+
+    this.specification1_select_id = i;
   }
 
   /// 仕様 変更時の処理
   public setSpecification2(id: number): void {
-    this.specification2_list = this.specification2_list.map(
-      obj => obj.selected = (obj.id === id) ? true : false)
+    this.specification2_list.map(
+      obj => obj.selected = (obj.id === id) ? true : false);
+    this.specification2_select_id = id;
   }
-
-  /// 設計条件 変更時の処理
-  public conditionsCheckChanged(id: string, isChecked: boolean) {
-    this.conditions_list = this.conditions_list.map( obj =>
-      obj.selected = (obj.id === id) ? isChecked : obj.selected);
-  }
-
 }

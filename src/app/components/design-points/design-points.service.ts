@@ -119,10 +119,10 @@ export class InputDesignPointsService {
       p_name: null,
       position: null,
       p_name_ex: null,
-      isMyCalc: null,
-      isVyCalc: null,
-      isMzCalc: null,
-      isVzCalc: null,
+      isMyCalc: false,
+      isVyCalc: false,
+      isMzCalc: false,
+      isVzCalc: false,
       La: null
     };
   }
@@ -180,4 +180,18 @@ export class InputDesignPointsService {
     return false;
   }
 
+  // マニュアルデータの作成
+  public setManualData():void {
+    const a = [];
+    for(const g of this.getTableDatas()){
+      for(const e of g){
+        for(const p of e.positions){
+          p.isMzCalc = true;
+          p.isVzCalc = true;
+        }
+        a.push(e);
+      }
+    }
+    this.setSaveData(a);
+  }
 }

@@ -25,7 +25,7 @@
               <input type="radio"
                 name="specification1"
                 id="specification1{{i}}"
-                [(ngModel)]="item.selected"
+                [(ngModel)]="specification1_select_id"
                 [value]="item.id"
                 [checked]="item.selected"
                 (change)="setSpecification1(i)" />
@@ -49,10 +49,10 @@
               <input type="radio"
                 name="specification2"
                 id="specification2{{i}}"
-                [(ngModel)]="item.selected"
+                [(ngModel)]="specification2_select_id"
                 [value]="item.id"
                 [checked]="item.selected"
-                (change)="setSpecification2(i)" />
+                (change)="setSpecification2(i)"/>
                 {{item.title}}
             </label>
           </div>
@@ -71,8 +71,7 @@
           id="conditions{{i}}"
           [(ngModel)]="item.selected"
           [value]="item.id"
-          [checked]="item.selected"
-          (change)="conditionsCheckChanged(item.id, $event.target.checked)" />
+          [checked]="item.selected"/>
           {{item.title}}
       </div>
     </ng-container>

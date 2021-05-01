@@ -49,9 +49,8 @@ export class AppComponent {
   // 部材に何か入力されたら呼ばれる
   // 有効な入力行があったら次のボタンを有効にする
   private isMemberEnable = false;
-  public memberChange(): void {
+  public memberChange(flg: boolean): void {
 
-    const flg: boolean = this.members.checkMemberEnables()
     if (this.isMemberEnable !== flg) {
       for (const id of ['2', '7']) {
         const data = document.getElementById(id);
