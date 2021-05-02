@@ -87,11 +87,11 @@ export class InputBarsService {
     // グリッド用データの作成
     const groupe_list = this.points.getGroupeList();
     for (let i = 0; i < groupe_list.length; i++) {
-      table_datas.push(new Array());
+      table_datas.push([]);
       const groupe = groupe_list[i];
 
       // 部材
-      for (const member of groupe) {
+      for (const member of groupe_list[i]) {
 
         // 着目点
         for (let k = 0; k < member.positions.length; k++) {
@@ -177,63 +177,61 @@ export class InputBarsService {
     return result;
   }
 
-  public setSaveData(table_datas: any[]) {
+  public setSaveData(bars: any[]) {
 
     this.bar_list = new Array();
 
-    for (const groupe of table_datas) {
-      for (let i = 0; i < groupe.length; i += 2) {
-        const column1 = groupe[i];
-        const column2 = groupe[i + 1];
+    for (let i = 0; i < bars.length; i += 2) {
+      const column1 = bars[i];
+      const column2 = bars[i + 1];
 
-        const b = this.default_bars(column1.index);
-        b.p_name = column1.p_name;
-        b.position = column1.position;
-        b.m_no = column1.m_no;
-        b.p_name_ex = column1.p_name_ex;
-        b.b = column1.bh;
-        b.h = column2.bh;
-        b.haunch_M = column1.haunch_height;
-        b.haunch_V = column2.haunch_height;
+      const b = this.default_bars(column1.index);
+      b.p_name = column1.p_name;
+      b.position = column1.position;
+      b.m_no = column1.m_no;
+      b.p_name_ex = column1.p_name_ex;
+      b.b = column1.bh;
+      b.h = column2.bh;
+      b.haunch_M = column1.haunch_height;
+      b.haunch_V = column2.haunch_height;
 
-        b.rebar1.title = column1.design_point_id;
-        b.rebar1.rebar_dia = column1.rebar_dia;
-        b.rebar1.rebar_n = column1.rebar_n;
-        b.rebar1.rebar_cover = column1.rebar_cover;
-        b.rebar1.rebar_lines = column1.rebar_lines;
-        b.rebar1.rebar_space = column1.rebar_space;
-        b.rebar1.rebar_ss = column1.rebar_ss;
-        b.rebar1.cos = column1.cos;
-        b.rebar1.enable = column1.enable;
+      b.rebar1.title = column1.design_point_id;
+      b.rebar1.rebar_dia = column1.rebar_dia;
+      b.rebar1.rebar_n = column1.rebar_n;
+      b.rebar1.rebar_cover = column1.rebar_cover;
+      b.rebar1.rebar_lines = column1.rebar_lines;
+      b.rebar1.rebar_space = column1.rebar_space;
+      b.rebar1.rebar_ss = column1.rebar_ss;
+      b.rebar1.cos = column1.cos;
+      b.rebar1.enable = column1.enable;
 
-        b.rebar2.title = column2.design_point_id;
-        b.rebar2.rebar_dia = column2.rebar_dia;
-        b.rebar2.rebar_n = column2.rebar_n;
-        b.rebar2.rebar_cover = column2.rebar_cover;
-        b.rebar2.rebar_lines = column2.rebar_lines;
-        b.rebar2.rebar_space = column2.rebar_space;
-        b.rebar2.rebar_ss = column2.rebar_ss;
-        b.rebar2.cos = column2.cos;
-        b.rebar2.enable = column2.enable;
+      b.rebar2.title = column2.design_point_id;
+      b.rebar2.rebar_dia = column2.rebar_dia;
+      b.rebar2.rebar_n = column2.rebar_n;
+      b.rebar2.rebar_cover = column2.rebar_cover;
+      b.rebar2.rebar_lines = column2.rebar_lines;
+      b.rebar2.rebar_space = column2.rebar_space;
+      b.rebar2.rebar_ss = column2.rebar_ss;
+      b.rebar2.cos = column2.cos;
+      b.rebar2.enable = column2.enable;
 
-        b.sidebar.side_dia = column1.side_dia;
-        b.sidebar.side_n = column1.side_n;
-        b.sidebar.side_cover = column1.side_cover;
-        b.sidebar.side_ss = column1.side_ss;
+      b.sidebar.side_dia = column1.side_dia;
+      b.sidebar.side_n = column1.side_n;
+      b.sidebar.side_cover = column1.side_cover;
+      b.sidebar.side_ss = column1.side_ss;
 
-        b.starrup.stirrup_dia = column1.stirrup_dia;
-        b.starrup.stirrup_n = column1.stirrup_n;
-        b.starrup.stirrup_ss = column1.stirrup_ss;
+      b.starrup.stirrup_dia = column1.stirrup_dia;
+      b.starrup.stirrup_n = column1.stirrup_n;
+      b.starrup.stirrup_ss = column1.stirrup_ss;
 
-        b.bend.bending_dia = column2.stirrup_dia;
-        b.bend.bending_n = column2.stirrup_n;
-        b.bend.bending_ss = column2.stirrup_ss;
-        b.bend.bending_angle = 45;
+      b.bend.bending_dia = column2.stirrup_dia;
+      b.bend.bending_n = column2.stirrup_n;
+      b.bend.bending_ss = column2.stirrup_ss;
+      b.bend.bending_angle = 45;
 
-        b.tan = column1.tan;
+      b.tan = column1.tan;
 
-        this.bar_list.push(b);
-      }
+      this.bar_list.push(b);
     }
   }
 

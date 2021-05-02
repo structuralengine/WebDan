@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { InputDesignPointsService } from './design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
@@ -9,7 +9,7 @@ import pq from 'pqgrid';
   templateUrl: './design-points.component.html',
   styleUrls: ['./design-points.component.scss']
 })
-export class DesignPointsComponent implements OnInit, OnDestroy {
+export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   @ViewChild('grid') grid: SheetComponent;
   public options: pq.gridT.options;
@@ -46,6 +46,8 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
       this.option_list.push(op);
     }
     this.options = this.option_list[0];
+
+    this.activeButtons(0);
   }
 
   ngAfterViewInit(){
@@ -112,8 +114,10 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   public saveData(): void {
     const a = [];
     for(const g of this.table_datas){
-      for(const e of g){
-        a.push(e);
+      for(const m of g){
+        for(const p of m.positions){
+          a.push(p);
+        }
       }
     }
     this.points.setSaveData(a);
@@ -127,14 +131,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   }
 
   public activePageChenge(id: number): void {
-    this.deactiveButtons();
-    
-    const element = document.getElementById("sub" + id);
-    if(element !== null){
-      element.classList.add("is-active");
-    } else { 
-      console.log(element);
-    }
+    this.activeButtons(id);
  
     this.options = this.option_list[id];
     this.grid.options = this.options;
@@ -142,15 +139,18 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
   }
 
   // アクティブになっているボタンを全て非アクティブにする
-  private deactiveButtons() {
+  private activeButtons(id: number) {
     for (let i = 0; i <= 1; i++) {
       const data = document.getElementById("sub" + i);
       if (data != null) {
-        if (data.classList.contains("is-active")) {
-          data.classList.remove("is-active");
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
         }
       }
     }
   }
+
 }
 

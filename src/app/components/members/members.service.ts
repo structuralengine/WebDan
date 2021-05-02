@@ -67,7 +67,7 @@ export class InputMembersService  {
       if (this.isEnable(column)) {
         // グループNo の入力がない入力行には、仮のグループid をつける
         if (column.g_no === null) {
-          column.g_id = 'row' + column.m_no; //仮のグループid
+          column.g_id = 'blank'; //'row' + column.m_no; //仮のグループid
         }
         this.member_list.push(column)
       }

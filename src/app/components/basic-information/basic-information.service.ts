@@ -152,7 +152,7 @@ export class InputBasicInformationService  {
     const id: number = this.specification1_list.findIndex(
       value => value.id === index);
 
-    this.specification1_list = this.specification1_list.map(
+    this.specification1_list.map(
       obj => obj.selected = (obj.id === id) ? true : false);
 
     this.set_default_pickup();

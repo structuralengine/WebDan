@@ -70,7 +70,7 @@ export class MembersComponent implements OnInit, OnDestroy {
               this.table_datas[i].g_id = value.toString();
 
             } else if (this.table_datas[i].g_no === null) {
-              this.table_datas[i].g_id = 'row' + this.table_datas[i].m_no; //仮のグループid
+              this.table_datas[i].g_id = 'blank';//'row' + this.table_datas[i].m_no; //仮のグループid
             }
 
             if (key === 'g_name') {
@@ -138,11 +138,7 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
 
         // 何か変更があったら判定する
-        const flg: boolean = this.members.checkMemberEnables()
-        if(flg === true && this.save.isManual()){
-          this.points.setManualData();
-        }
-        this.app.memberChange(flg);
+        this.app.memberChange();
 
       }
     };
@@ -219,6 +215,11 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   public saveData(): void {
     this.members.setSaveData(this.table_datas, this.save.isManual());
+    if(this.save.isManual()){
+      // 断面力手入力モードの時 部材・断面の入力があったら
+      // 算出点データも同時に生成されなければならない
+      this.points.setManualData();
+    }
   }
 
   // 表の高さを計算する

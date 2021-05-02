@@ -49,8 +49,8 @@ export class AppComponent {
   // 部材に何か入力されたら呼ばれる
   // 有効な入力行があったら次のボタンを有効にする
   private isMemberEnable = false;
-  public memberChange(flg: boolean): void {
-
+  public memberChange(): void {
+    const flg: boolean = this.members.checkMemberEnables()
     if (this.isMemberEnable !== flg) {
       for (const id of ['2', '7']) {
         const data = document.getElementById(id);
@@ -76,7 +76,7 @@ export class AppComponent {
   private isDesignPointEnable = false;
   public designPointChange(): void {
 
-    const flg: boolean = this.points.designPointChange();
+    const flg: boolean = (this.save.isManual())? true : this.points.designPointChange();
     if (this.isDesignPointEnable !== flg) {
       for (const id of ['3', '4', '5', '6', '4', '9']) {
         const data = document.getElementById(id);

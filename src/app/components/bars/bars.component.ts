@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import { InputBarsService } from './bars.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import { SaveDataService } from 'src/app/providers/save-data.service';
@@ -9,10 +9,13 @@ import pq from 'pqgrid';
   templateUrl: './bars.component.html',
   styleUrls: ['./bars.component.scss']
 })
-export class BarsComponent implements OnInit, OnDestroy {
+export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChildren('grid') grids: QueryList<SheetComponent>;
-  public options: pq.gridT.options[] = new Array();
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
+
+  // データグリッドの設定変数
+  private option_list: pq.gridT.options[] = new Array();
   private beamHeaders: object[] = new Array();
   // private columnHeaders: object[] = new Array();
   // private pileHeaders: object[] = new Array();
@@ -30,7 +33,7 @@ export class BarsComponent implements OnInit, OnDestroy {
     this.table_datas = this.bars.getTableColumns();
 
     // グリッドの設定
-    this.options = new Array();
+    this.option_list = new Array();
     for( let i =0; i < this.table_datas.length; i++){
       const op = {
         showTop: false,
@@ -57,10 +60,15 @@ export class BarsComponent implements OnInit, OnDestroy {
           }
         }
       };
-      this.options.push(op);
-      this.grids[i].options = op;
+      this.option_list.push(op);
     }
+    this.options = this.option_list[0];
 
+    this.activeButtons(0);
+
+  }
+
+  ngAfterViewInit(){
   }
 
   private setTitle(isManual: boolean): void{
@@ -112,22 +120,6 @@ export class BarsComponent implements OnInit, OnDestroy {
     );
   }
 
-
- 
-  ngOnDestroy() {
-    this.saveData();
-  }
-  public saveData(): void {
-    this.bars.setSaveData(this.table_datas);
-  }
-
-  // 表の高さを計算する
-  private tableHeight(): number {
-    let containerHeight = window.innerHeight;
-    containerHeight -= 230;
-    return containerHeight;
-  }
-
   public getGroupeName(i: number): string {
     const target = this.table_datas[i];
     const first = target[0];
@@ -143,6 +135,49 @@ export class BarsComponent implements OnInit, OnDestroy {
       result = 'No' + i;
     }
     return result;
+  }
+
+  ngOnDestroy() {
+    this.saveData();
+  }
+  public saveData(): void {
+    const a = [];
+    for(const g of this.table_datas){
+      for(const e of g){
+        a.push(e);
+      }
+    }
+    this.bars.setSaveData(a);
+  }
+
+  // 表の高さを計算する
+  private tableHeight(): number {
+    let containerHeight = window.innerHeight;
+    containerHeight -= 230;
+    return containerHeight;
+  }
+
+
+  public activePageChenge(id: number): void {
+    this.activeButtons(id);
+ 
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private activeButtons(id: number) {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("sub" + i);
+      if (data != null) {
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
+        }
+      }
+    }
   }
 
 }

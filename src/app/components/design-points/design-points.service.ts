@@ -40,7 +40,7 @@ export class InputDesignPointsService {
   public setSaveData(points: any): void{
     this.clear();
     for(const data of points){
-      const tmp = this.default_position(data.id);
+      const tmp = this.default_position(data.index);
       for(const key of Object.keys(tmp)){
         if(key in data){
           tmp[key] = data[key];
@@ -61,7 +61,7 @@ export class InputDesignPointsService {
         const position = member.positions;
         if (position.length <= 0) {
           // position が 0行 だったら 空のデータを1行追加する
-          const column = this.default_position(index); 
+          const column = this.default_position(index);
           column.m_no = member.m_no;
           position.push(column);
           index++;
@@ -80,7 +80,7 @@ export class InputDesignPointsService {
   }
 
   // グループ別 部材情報
-  //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t, 
+  //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t,
   //   positions:[
   //    { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
   //    ...
@@ -88,7 +88,6 @@ export class InputDesignPointsService {
   public getGroupeList(): any[] {
 
     const groupe_list: any[] = this.members.getGroupeList();
-    const position_list = this.position_list;
 
     for(const groupe of groupe_list) {
 
@@ -96,7 +95,7 @@ export class InputDesignPointsService {
         member['positions'] = new Array();
 
         // 同じ要素番号のものを探す
-        const position: any[] = position_list.filter( 
+        const position: any[] = this.position_list.filter(
           item => item.m_no === member.m_no );
 
         // 対象データが無かった時に処理
@@ -180,18 +179,19 @@ export class InputDesignPointsService {
     return false;
   }
 
-  // マニュアルデータの作成
+  // 断面力手入力モードの時 部材・断面の入力が変更になったら
+  // 算出点データも同時に生成されなければならない
   public setManualData():void {
-    const a = [];
+    const data = [];
     for(const g of this.getTableDatas()){
-      for(const e of g){
-        for(const p of e.positions){
+      for(const m of g){
+        for(const p of m.positions){
           p.isMzCalc = true;
           p.isVzCalc = true;
+          data.push(p);
         }
-        a.push(e);
       }
     }
-    this.setSaveData(a);
+    this.setSaveData(data);
   }
 }
