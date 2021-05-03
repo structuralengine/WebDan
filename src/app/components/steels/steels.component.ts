@@ -20,7 +20,7 @@ export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public table_datas: any[];
   // タブのヘッダ名
-  public groupe_mame: string[];
+  public groupe_name: string[];
 
   constructor(
     private steel: InputSteelsService,
@@ -50,9 +50,9 @@ export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
     this.options = this.option_list[0];
 
     // タブのタイトルとなる
-    this.groupe_mame = new Array();
+    this.groupe_name = new Array();
     for( let i =0; i < this.table_datas.length; i++){
-      this.groupe_mame.push( this.steel.getGroupeName(i));
+      this.groupe_name.push( this.steel.getGroupeName(i));
     }
 
 
@@ -104,7 +104,7 @@ export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getGroupeName(i: number): string {
-    return this.groupe_mame[i];
+    return this.groupe_name[i];
   }
  
   ngOnDestroy() {

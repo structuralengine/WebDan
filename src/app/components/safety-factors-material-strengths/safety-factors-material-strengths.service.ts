@@ -11,7 +11,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
   private material_bar: any;
   private material_steel: any;
   private material_concrete: any;
-  private pile_factor: any;
+  public pile_factor: any;
 
   constructor(
     private basic: InputBasicInformationService,
@@ -144,7 +144,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
     switch (this.basic.get_specification1()) {
       case 0: // 鉄道
       result = [
-          { id: 'pile-000', title: '使用しない', rfck: 1.0, rfbok: 1.0, rEc: 1.0, rVcd: 1.0, selected: false },
+          { id: 'pile-000', title: '使用しない', rfck: 1.0, rfbok: 1.0, rEc: 1.0, rVcd: 1.0, selected: true },
           { id: 'pile-001', title: '泥水比重1.04以下', rfck: 0.8, rfbok: 0.7, rEc: 0.8, rVcd: 0.9, selected: false },
           { id: 'pile-002', title: '自然泥水, 泥水比重1.10以下', rfck: 0.7, rfbok: 0.6, rEc: 0.8, rVcd: 0.9, selected: false },
           { id: 'pile-003', title: 'ベントナイト泥水', rfck: 0.6, rfbok: 0.5, rEc: 0.7, rVcd: 0.8, selected: false },
@@ -164,23 +164,27 @@ export class InputSafetyFactorsMaterialStrengthsService {
   // 部材グループ別に並べている
   public getTableColumns(): any {
 
-    const groupe_list = this.members.getGroupeList();
     const safety_factor = {};
     const material_bar = {};
     const material_steel = {};
     const material_concrete = {};
     const pile_factor = {};
 
-    for (const groupe of groupe_list) {
+    // グリッド用データの作成
+    const groupe_list = this.members.getGroupeList();
+    for( const groupe of groupe_list){
+      const first = groupe[0];
+      const id = first.g_id;
 
+      // 空のデータを1行追加する 
       const tmp_safety_factor = this.default_safety_factor();
       const tmp_material_bar = this.default_material_bar();
       const tmp_material_steel = this.default_material_steel();
       const tmp_material_concrete = this.default_material_concrete();
       const tmp_pile_factor = this.default_pile_factor();
 
-      const old_safety_factor = this.getSafetyFactor(groupe.g_id);
-      if (old_safety_factor !== undefined) {
+      if (id in this.safety_factor) {
+        const old_safety_factor = this.safety_factor[id];
         for (const tmp of tmp_safety_factor) {
           const old = old_safety_factor.find(v => v.id === tmp.id)
           if (old !== undefined) {
@@ -191,8 +195,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const old_material_bar = this.material_bar.find(v => v.g_id === groupe.g_id);
-      if (old_material_bar !== undefined) {
+      if (id in this.material_bar) {
+        const old_material_bar = this.material_bar[id];
         for (let i = 0; i < tmp_material_bar.length; i++) {
           const tmp = tmp_material_bar[i];
           const old = old_material_bar[i];
@@ -202,8 +206,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const old_material_steel = this.material_steel.find(v => v.g_id === groupe.g_id);
-      if (old_material_steel !== undefined) {
+      if (id in this.material_steel) {
+        const old_material_steel = this.material_steel[id];
         for (let i = 0; i < tmp_material_steel.length; i++) {
           const tmp = tmp_material_steel[i];
           const old = old_material_steel[i];
@@ -213,8 +217,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const old_material_concrete = this.material_concrete.find(v => v.g_id === groupe.g_id);
-      if (old_material_concrete !== undefined) {
+      if (id in this.material_concrete) {
+        const old_material_concrete = this.material_concrete[id];
         for (const key of Object.keys(tmp_material_concrete)) {
           if (key in old_material_concrete) {
             tmp_material_concrete[key] = old_material_concrete[key];
@@ -222,8 +226,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const old_pile_factor = this.getPileFactor(groupe.g_id);
-      if (old_pile_factor !== undefined) {
+      if (id in this.pile_factor) {
+        const old_pile_factor = this.pile_factor[id];
         for (let i = 0; i < tmp_pile_factor.length; i++) {
           const tmp = tmp_pile_factor[i];
           const old = old_pile_factor[i];
@@ -232,11 +236,11 @@ export class InputSafetyFactorsMaterialStrengthsService {
           }
         }
       }
-      safety_factor[groupe.g_id] = tmp_safety_factor;
-      material_bar[groupe.g_id] = tmp_material_bar
-      material_steel[groupe.g_id] = tmp_material_steel;
-      material_concrete[groupe.g_id] = tmp_material_concrete;
-      pile_factor[groupe.g_id] = tmp_pile_factor;
+      safety_factor[id] = tmp_safety_factor;
+      material_bar[id] = tmp_material_bar
+      material_steel[id] = tmp_material_steel;
+      material_concrete[id] = tmp_material_concrete;
+      pile_factor[id] = tmp_pile_factor;
 
     }
 
@@ -251,13 +255,6 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
   }
 
-  public getSafetyFactor(g_id): any{
-    return this.safety_factor.find(v => v.g_id === g_id);
-  }
-
-  public getPileFactor(g_id) : any {
-    return this.pile_factor.find(v => v.g_id === g_id);
-  };
 
   public setSaveData(safety: any): void {
 

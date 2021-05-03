@@ -15,7 +15,7 @@ export class SetSafetyFactorService {
   // position.PostData0 に安全係数情報を追加する ///////////////////////////////////////////////////////
   public setSafetyFactor(calcTarget: string, g_id: string, position: any, tableIndex: number): void {
 
-    const safetyList = this.safety.getSafetyFactor(g_id);
+    const safetyList = this.safety.pile_factor[g_id];
     if (safetyList === undefined) {
       console.log('安全係数がないので計算できません');
       if (this.isAlert === false) {
@@ -73,7 +73,7 @@ export class SetSafetyFactorService {
     position['material_concrete'] = safetyList.material_concrete; // コンクリート強度
 
     // 杭の施工条件
-    let pile_factor = this.safety.getPileFactor( g_id);
+    let pile_factor = this.safety.pile_factor[g_id];
     if (pile_factor === undefined) {
       pile_factor = safetyList.pile_factor_list[0];
     }
