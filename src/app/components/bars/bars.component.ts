@@ -7,7 +7,7 @@ import pq from 'pqgrid';
 @Component({
   selector: 'app-bars',
   templateUrl: './bars.component.html',
-  styleUrls: ['./bars.component.scss']
+  styleUrls: ['./bars.component.scss', '../subNavArea.scss']
 })
 export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -21,6 +21,8 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
   // private pileHeaders: object[] = new Array();
 
   public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_mame: string[];
 
   constructor(
     private bars: InputBarsService,
@@ -64,11 +66,17 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.options = this.option_list[0];
 
-    this.activeButtons(0);
+    // タブのタイトルとなる
+    this.groupe_mame = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_mame.push( this.bars.getGroupeName(i));
+    }
+
 
   }
 
   ngAfterViewInit(){
+    this.activeButtons(0);
   }
 
   private setTitle(isManual: boolean): void{
@@ -121,20 +129,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getGroupeName(i: number): string {
-    const target = this.table_datas[i];
-    const first = target[0];
-    let result: string = '';
-    if(first.g_name === null){
-      result = first.g_id;
-    } else if(first.g_name === ''){
-      result = first.g_id;
-    } else {
-      result = first.g_name;
-    }
-    if(result === ''){
-      result = 'No' + i;
-    }
-    return result;
+    return this.groupe_mame[i];
   }
 
   ngOnDestroy() {
@@ -169,7 +164,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
   // アクティブになっているボタンを全て非アクティブにする
   private activeButtons(id: number) {
     for (let i = 0; i <= 1; i++) {
-      const data = document.getElementById("sub" + i);
+      const data = document.getElementById("bar" + i);
       if (data != null) {
         if(i === id){
           data.classList.add("is-active");

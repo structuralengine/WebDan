@@ -7,7 +7,7 @@ import pq from 'pqgrid';
 @Component({
   selector: 'app-design-points',
   templateUrl: './design-points.component.html',
-  styleUrls: ['./design-points.component.scss']
+  styleUrls: ['./design-points.component.scss', '../subNavArea.scss']
 })
 export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
@@ -19,6 +19,8 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
   private columnHeaders: object[] = [];
   // このページで表示するデータ
   public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_mame: string[];
 
   constructor(
     private points: InputDesignPointsService,
@@ -28,7 +30,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
     this.setTitle(this.save.isManual());
 
-    this.table_datas = this.points.getTableDatas();
+    this.table_datas = this.points.getTableColumns();
 
     // グリッドの設定
     this.option_list = new Array();
@@ -47,10 +49,16 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
     this.options = this.option_list[0];
 
-    this.activeButtons(0);
+    // タブのタイトルとなる
+    this.groupe_mame = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_mame.push( this.points.getGroupeName(i));
+    }
+
   }
 
   ngAfterViewInit(){
+    this.activeButtons(0);
   }
 
   private setTitle(isManual: boolean): void{
@@ -90,10 +98,6 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
-  public getGroupeName(i: number): string {
-    return this.points.getGroupeName(i);
-  }
-
   ngOnDestroy() {
     this.saveData();
   }
@@ -126,7 +130,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
   // アクティブになっているボタンを全て非アクティブにする
   private activeButtons(id: number) {
     for (let i = 0; i <= 1; i++) {
-      const data = document.getElementById("sub" + i);
+      const data = document.getElementById("pos" + i);
       if (data != null) {
         if(i === id){
           data.classList.add("is-active");
@@ -135,6 +139,11 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
         }
       }
     }
+  }
+
+  // タブのヘッダ名
+  public getGroupeName(i: number): string{
+    return this.groupe_mame[i];
   }
 
 }

@@ -11,7 +11,8 @@ export class InputBarsService {
   // 鉄筋情報
   private bar_list: any[];
 
-  constructor(private helper: DataHelperModule,
+  constructor(
+    private helper: DataHelperModule,
     private points: InputDesignPointsService) {
     this.clear();
   }
@@ -42,41 +43,41 @@ export class InputBarsService {
 
   private default_rebar(title: string): any {
     return {
-      'title': title,
-      'rebar_dia': null,
-      'rebar_n': null,
-      'rebar_cover': null,
-      'rebar_lines': null,
-      'rebar_space': null,
-      'rebar_ss': null,
-      'cos': null,
-      'enable': null
+      title: title,
+      rebar_dia: null,
+      rebar_n: null,
+      rebar_cover: null,
+      rebar_lines: null,
+      rebar_space: null,
+      rebar_ss: null,
+      cos: null,
+      enable: null
     };
   }
 
   private default_sidebar(): any {
     return {
-      'side_dia': null,
-      'side_n': null,
-      'side_cover': null,
-      'side_ss': null
+      side_dia: null,
+      side_n: null,
+      side_cover: null,
+      side_ss: null
     };
   }
 
   private default_starrup(): any {
     return {
-      'stirrup_dia': null,
-      'stirrup_n': null,
-      'stirrup_ss': null
+      stirrup_dia: null,
+      stirrup_n: null,
+      stirrup_ss: null
     };
   }
 
   private default_bend(): any {
     return {
-      'bending_dia': null,
-      'bending_n': null,
-      'bending_ss': null,
-      'bending_angle': null
+      bending_dia: null,
+      bending_n: null,
+      bending_ss: null,
+      bending_angle: null
     };
   }
 
@@ -165,7 +166,7 @@ export class InputBarsService {
     return table_datas;
   }
 
-  private getTableColumn(index: any): any {
+  public getTableColumn(index: any): any {
 
     let result = this.bar_list.find((value) => value.index === index);
     if (result === undefined) {
@@ -175,13 +176,13 @@ export class InputBarsService {
     return result;
   }
 
-  public setSaveData(bars: any[]) {
+  public setSaveData(table_datas: any[]) {
 
     this.bar_list = new Array();
 
-    for (let i = 0; i < bars.length; i += 2) {
-      const column1 = bars[i];
-      const column2 = bars[i + 1];
+    for (let i = 0; i < table_datas.length; i += 2) {
+      const column1 = table_datas[i];
+      const column2 = table_datas[i + 1];
 
       const b = this.default_bars(column1.index);
       b.p_name = column1.p_name;
@@ -239,6 +240,10 @@ export class InputBarsService {
 
   public getSaveData(): any[] {
     return this.bar_list;
+  }
+
+  public getGroupeName(i: number): string {
+    return this.points.getGroupeName(i);
   }
 
   public matchBarSize(dia: any): number {

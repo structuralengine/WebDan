@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputMembersService } from '../members/members.service';
 
 @Injectable({
@@ -12,8 +11,7 @@ export class InputDesignPointsService {
   // { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
-    private members: InputMembersService,
-    private helper: DataHelperModule) {
+    private members: InputMembersService) {
     this.clear();
   }
 
@@ -22,11 +20,11 @@ export class InputDesignPointsService {
     this.position_list = new Array();
   }
 
-  public getDesignPointColumn(id: number): any {
-    let result = this.position_list.find((value)=> value.index === id);
+  public getTableColumn(index: number): any {
+    let result = this.position_list.find((value)=> value.index === index);
 
     if(result === undefined){
-      result = this.default_position(id);
+      result = this.default_position(index);
       this.position_list.push(result);
     }
 
@@ -50,7 +48,7 @@ export class InputDesignPointsService {
     }
   }
 
-  public getTableDatas(): any[] {
+  public getTableColumns(): any[] {
 
     const table_datas: any[] = new Array();
 
@@ -188,7 +186,7 @@ export class InputDesignPointsService {
   // 算出点データも同時に生成されなければならない
   public setManualData():void {
     const data = [];
-    for(const g of this.getTableDatas()){
+    for(const g of this.getTableColumns()){
       for(const p of g){
           p.isMzCalc = true;
           p.isVzCalc = true;

@@ -7,6 +7,7 @@ import { InputDesignPointsService } from "../design-points/design-points.service
   providedIn: "root",
 })
 export class InputCrackSettingsService {
+
   // 部材情報
   public crack_list: any[];
 
@@ -38,19 +39,19 @@ export class InputCrackSettingsService {
   public getTableColumns(): any[] {
 
     const table_datas: any[] = new Array();
+
     // グリッド用データの作成
     const groupe_list = this.points.getGroupeList();
     for (let i = 0; i < groupe_list.length; i++) {
-      table_datas[i] = new Array();
-      const groupe = groupe_list[i];
-
+      const table_groupe = [];
       // 部材
-      for (const member of groupe) {
-
+      for (const member of groupe_list[i]) {
         // 着目点
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
-
+          if (!this.points.isEnable(pos)) {
+            continue;
+          }
           // barデータに（部材、着目点など）足りない情報を追加する
           const data: any = this.getTableColumn(pos.index);
           data.m_no = (k === 0) ? member.m_no: ''; // 最初の行には 部材番号を表示する
@@ -58,11 +59,12 @@ export class InputCrackSettingsService {
           data.h = member.H;
           data.position = pos.position;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name;
+          data.p_name_ex = pos.p_name_ex;
 
-          table_datas[i].push(data);
+          table_groupe.push(data);
         }
       }
+      table_datas.push(table_groupe);
     }
     return table_datas;
   }
@@ -81,23 +83,20 @@ export class InputCrackSettingsService {
 
     this.crack_list = new Array();
 
-    for (const groupe of table_datas) {
-      for ( const column of groupe ) {
-        const b = this.default_crack(column.index);
-        b.m_no=     column.m_no;   
-        b.p_name=   column.p_name;  
-        b.p_name_ex=column.p_name_ex;
-        b.con_u=    column.con_u;   
-        b.con_l=    column.con_l;   
-        b.con_s=    column.con_s;   
-        b.vis_u=    column.vis_u;   
-        b.vis_l=    column.vis_l;   
-        b.ecsd=     column.ecsd;    
-        b.kr=       column.kr;      
-        this.crack_list.push(b);
-      }
+    for (const column of table_datas) {
+      const b = this.default_crack(column.index);
+      b.m_no =      column.m_no;   
+      b.p_name =    column.p_name;  
+      b.p_name_ex = column.p_name_ex;
+      b.con_u =     column.con_u;   
+      b.con_l =     column.con_l;   
+      b.con_s =     column.con_s;   
+      b.vis_u =     column.vis_u;   
+      b.vis_l =     column.vis_l;   
+      b.ecsd =      column.ecsd;    
+      b.kr =        column.kr;      
+      this.crack_list.push(b);
     }
-
   }
 
   public setPickUpData() {

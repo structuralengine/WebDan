@@ -1,4 +1,4 @@
-import { Component, OnInit, QueryList, OnDestroy, ViewChildren } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, AfterViewInit } from '@angular/core';
 import pq from 'pqgrid';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SaveDataService } from 'src/app/providers/save-data.service';
@@ -8,15 +8,20 @@ import { InputCrackSettingsService } from './crack-settings.service';
 @Component({
   selector: 'app-crack-settings',
   templateUrl: './crack-settings.component.html',
-  styleUrls: ['./crack-settings.component.scss']
+  styleUrls: ['./crack-settings.component.scss', '../subNavArea.scss']
 })
-export class CrackSettingsComponent implements OnInit, OnDestroy {
+export class CrackSettingsComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChildren('grid') grids: QueryList<SheetComponent>;
-  public options: pq.gridT.options[] = new Array();
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
+
+  // データグリッドの設定変数
+  private option_list: pq.gridT.options[] = new Array();
   private columnHeaders: object[]= new Array();
 
-  public table_datas: any[][];
+  public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_mame: string[];
 
   constructor(
     private crack: InputCrackSettingsService,
@@ -42,10 +47,20 @@ export class CrackSettingsComponent implements OnInit, OnDestroy {
         colModel: this.columnHeaders,
         dataModel: { data: this.table_datas[i] }
       };
-      this.options.push(op);
-      this.grids[i].options = op;
+      this.option_list.push(op);
+    }
+    this.options = this.option_list[0];
+
+    // タブのタイトルとなる
+    this.groupe_mame = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_mame.push( this.crack.getGroupeName(i));
     }
 
+  }
+
+  ngAfterViewInit(){
+    this.activeButtons(0);  
   }
 
   private setTitle(isManual: boolean): void{
@@ -81,14 +96,23 @@ export class CrackSettingsComponent implements OnInit, OnDestroy {
       { title: 'せん断<br/>kr', dataType: 'float', format: '#.0', dataIndx: 'kr', sortable: false, width: 70 },
     );
   }
-
  
+  public getGroupeName(i: number): string {
+    return this.groupe_mame[i];
+  }
+
   ngOnDestroy() {
     this.saveData();
   }
 
   public saveData(): void {
-    this.crack.setSaveData(this.table_datas);
+    const a = [];
+    for(const g of this.table_datas){
+      for(const e of g){
+        a.push(e);
+      }
+    }
+    this.crack.setSaveData(a);
   }
 
   // 表の高さを計算する
@@ -98,8 +122,27 @@ export class CrackSettingsComponent implements OnInit, OnDestroy {
     return containerHeight;
   }
   
-  public getGroupeName(i: number): string {
-    return this.crack.getGroupeName(i);
+
+  public activePageChenge(id: number): void {
+    this.activeButtons(id);
+ 
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private activeButtons(id: number) {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("crk" + i);
+      if (data != null) {
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
+        }
+      }
+    }
   }
 
 }

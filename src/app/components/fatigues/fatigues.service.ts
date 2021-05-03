@@ -7,28 +7,26 @@ import { InputDesignPointsService } from "../design-points/design-points.service
 })
 export class InputFatiguesService {
 
-  // 疲労情報
-  private fatigue_list: any[];
   public train_A_count: number; // A列車本数
   public train_B_count: number; // B列車本数
   public service_life: number; // 耐用年数
   public reference_count: number; // 200万回
 
+  // 疲労情報
+  private fatigue_list: any[];
+
   constructor(
     private helper: DataHelperModule,
-    private points: InputDesignPointsService
-  ) {
+    private points: InputDesignPointsService) {
     this.clear();
   }
   public clear(): void {
-    // 疲労強度入力画面に関する初期化
-    this.setSaveData({
-      table_datas: this.getTableColumns(),
-      train_A_count: null,
-      train_B_count: null,
-      service_life: null
-    })
+    this.train_A_count = null; // A列車本数
+    this.train_B_count = null; // B列車本数
+    this.service_life = null; // 耐用年数
     this.reference_count = 2000000;
+
+    this.fatigue_list = new Array();
   }
 
   // 疲労情報
@@ -63,16 +61,15 @@ export class InputFatiguesService {
   }
 
   public getTableColumns(): any[] {
+
     const table_datas: any[] = new Array();
 
     // グリッド用データの作成
     const groupe_list = this.points.getGroupeList();
     for (let i = 0; i < groupe_list.length; i++) {
-      table_datas[i] = new Array();
-      const groupe = groupe_list[i];
-
+      const table_groupe = [];
       // 部材
-      for (const member of groupe) {
+      for (const member of groupe_list[i]) {
         // 着目点
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
@@ -86,7 +83,7 @@ export class InputFatiguesService {
           data.h = member.H;
           data.position = pos.position;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name;
+          data.p_name_ex = pos.p_name_ex;
 
           // データを2行に分ける
           const column1 = {};
@@ -121,7 +118,7 @@ export class InputFatiguesService {
           column1['V_A'] = data['V1'].A;
           column1['V_B'] = data['V1'].B;
 
-          table_datas[i].push(column1);
+          table_groupe.push(column1);
 
           // 2行目
           column2['bh'] = data['h'];
@@ -144,10 +141,10 @@ export class InputFatiguesService {
           column2['V_NB12'] = data['V2'].NB12;
           column2['V_A'] = data['V2'].A;
           column2['V_B'] = data['V2'].B;
-
-          table_datas[i].push(column2);
+          table_groupe.push(column2);
         }
       }
+      table_datas.push(table_groupe);
     }
     return table_datas;
   }
@@ -166,64 +163,64 @@ export class InputFatiguesService {
 
     this.train_A_count - fatigues.train_A_count;
     this.train_B_count = fatigues.train_B_count;
-    this.service_life  = fatigues.service_life;
+    this.service_life = fatigues.service_life;
 
-    this.fatigue_list  = new Array();
+    this.fatigue_list = new Array();
 
-    for (const groupe of fatigues.table_datas) {
-      for (let i = 0; i < groupe.length; i += 2) {
-        const column1 = groupe[i];
-        const column2 = groupe[i + 1];
+    const table_datas = fatigues.table_datas;
+    for (let i = 0; i < table_datas.length; i += 2) {
+      const column1 = table_datas[i];
+      const column2 = table_datas[i + 1];
 
-        const f = this.default_fatigue(column1.index);
-        f.p_name = column1.p_name;
-        f.position = column1.position;
-        f.m_no = column1.m_no;
-        f.p_name_ex = column1.p_name_ex;
-        f.b = column1.bh;
-        f.h = column2.bh;
+      const f = this.default_fatigue(column1.index);
+      f.p_name = column1.p_name;
+      f.position = column1.position;
+      f.m_no = column1.m_no;
+      f.p_name_ex = column1.p_name_ex;
+      f.b = column1.bh;
+      f.h = column2.bh;
 
-        f.title1 = column1.design_point_id;
-        f['M1'].SA = column1.M_SA;
-        f['M1'].SB =  column1.M_SB;
-        f['M1'].NA06 =  column1.M_NA06;
-        f['M1'].NB06 =  column1.M_NB06;
-        f['M1'].NA12 =  column1.M_NA12;
-        f['M1'].NB12 =  column1.M_NB12;
-        f['M1'].A =  column1.M_A;
-        f['M1'].B =  column1.M_B;
+      f.title1 = column1.design_point_id;
+      f['M1'].SA = column1.M_SA;
+      f['M1'].SB = column1.M_SB;
+      f['M1'].NA06 = column1.M_NA06;
+      f['M1'].NB06 = column1.M_NB06;
+      f['M1'].NA12 = column1.M_NA12;
+      f['M1'].NB12 = column1.M_NB12;
+      f['M1'].A = column1.M_A;
+      f['M1'].B = column1.M_B;
 
-        f['V1'].SA = column1.V_SA;
-        f['V1'].SB =  column1.V_SB;
-        f['V1'].NA06 =  column1.V_NA06;
-        f['V1'].NB06 =  column1.V_NB06;
-        f['V1'].NA12 =  column1.V_NA12;
-        f['V1'].NB12 =  column1.V_NB12;
-        f['V1'].A =  column1.V_A;
-        f['V1'].B =  column1.V_B;
+      f['V1'].SA = column1.V_SA;
+      f['V1'].SB = column1.V_SB;
+      f['V1'].NA06 = column1.V_NA06;
+      f['V1'].NB06 = column1.V_NB06;
+      f['V1'].NA12 = column1.V_NA12;
+      f['V1'].NB12 = column1.V_NB12;
+      f['V1'].A = column1.V_A;
+      f['V1'].B = column1.V_B;
 
-        f.title2 = column2.design_point_id;
-        f['M2'].SA = column2.M_SA;
-        f['M2'].SB =  column2.M_SB;
-        f['M2'].NA06 =  column2.M_NA06;
-        f['M2'].NB06 =  column2.M_NB06;
-        f['M2'].NA12 =  column2.M_NA12;
-        f['M2'].NB12 =  column2.M_NB12;
-        f['M2'].A =  column2.M_A;
-        f['M2'].B =  column2.M_B;
+      f.title2 = column2.design_point_id;
+      f['M2'].SA = column2.M_SA;
+      f['M2'].SB = column2.M_SB;
+      f['M2'].NA06 = column2.M_NA06;
+      f['M2'].NB06 = column2.M_NB06;
+      f['M2'].NA12 = column2.M_NA12;
+      f['M2'].NB12 = column2.M_NB12;
+      f['M2'].A = column2.M_A;
+      f['M2'].B = column2.M_B;
 
-        f['V2'].SA = column2.V_SA;
-        f['V2'].SB =  column2.V_SB;
-        f['V2'].NA06 =  column2.V_NA06;
-        f['V2'].NB06 =  column2.V_NB06;
-        f['V2'].NA12 =  column2.V_NA12;
-        f['V2'].NB12 =  column2.V_NB12;
-        f['V2'].A =  column2.V_A;
-        f['V2'].B =  column2.V_B;
+      f['V2'].SA = column2.V_SA;
+      f['V2'].SB = column2.V_SB;
+      f['V2'].NA06 = column2.V_NA06;
+      f['V2'].NB06 = column2.V_NB06;
+      f['V2'].NA12 = column2.V_NA12;
+      f['V2'].NB12 = column2.V_NB12;
+      f['V2'].A = column2.V_A;
+      f['V2'].B = column2.V_B;
 
-        this.fatigue_list.push(f);
-      }
+      this.fatigue_list.push(f);
     }
+
   }
 
   public setPickUpData() {
