@@ -22,15 +22,15 @@ export class InputMembersService  {
     // g_no: 表面上の(member.component だけで用いる)グループ番号
     // g_id: 本当のグループ番号
     return {
-      m_no: row, 
-      m_len: null, 
-      g_no: null, 
-      g_id: '', 
-      g_name: '', 
+      m_no: row,
+      m_len: null,
+      g_no: null,
+      g_id: '',
+      g_name: '',
       shape: '',
-      B: null, 
-      H: null, 
-      Bt: null, 
+      B: null,
+      H: null,
+      Bt: null,
       t: null,
     };
   }
@@ -141,8 +141,25 @@ export class InputMembersService  {
     return false;
   }
 
+  public getGroupeName(i: number): string {
+    const groupe = this.getGroupeList();
 
-  
+    const target = groupe[i];
+    const first = target[0];
+    let result: string = '';
+    if(first.g_name === null){
+      result = first.g_id;
+    } else if(first.g_name === ''){
+      result = first.g_id;
+    } else {
+      result = first.g_name;
+    }
+    if(result === ''){
+      result = 'No' + i;
+    }
+    return result;
+  }
+
   // グループ別 部材情報{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t} の配列
   public getGroupeList(): any[] {
 
@@ -165,7 +182,7 @@ export class InputMembersService  {
     const result = new Array();
     for (const id of id_list) {
       // グループ番号を持つ部材のリスト
-      const members: any[] = this.member_list.filter( 
+      const members: any[] = this.member_list.filter(
         item => item.g_id === id);
       result.push(members);
     }

@@ -161,20 +161,7 @@ export class FatiguesComponent implements OnInit, OnDestroy {
   }
 
   public getGroupeName(i: number): string {
-    const target = this.table_datas[i];
-    const first = target[0];
-    let result: string = '';
-    if(first.g_name === null){
-      result = first.g_id;
-    } else if(first.g_name === ''){
-      result = first.g_id;
-    } else {
-      result = first.g_name;
-    }
-    if(result === ''){
-      result = 'No' + i;
-    }
-    return result;
+    return this.fatigues.getGroupeName(i);
   }
 
 }

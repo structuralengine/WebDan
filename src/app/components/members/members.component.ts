@@ -158,7 +158,7 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
       }
       this.loadData(this.ROWS_COUNT);
-      
+
     } else {
       // ピックアップファイルを使う場合
       this.table_datas = this.members.getSaveData();
@@ -170,7 +170,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
 
   private setTitle(isManual: boolean): void {
-    
+
     if (isManual) {
       // 断面力手入力モードの場合の項目
       this.columnHeaders = [];
@@ -208,7 +208,7 @@ export class MembersComponent implements OnInit, OnDestroy {
     }
   }
 
- 
+
   ngOnDestroy() {
     this.saveData();
   }

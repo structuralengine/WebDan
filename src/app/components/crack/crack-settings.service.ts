@@ -10,7 +10,8 @@ export class InputCrackSettingsService {
   // 部材情報
   public crack_list: any[];
 
-  constructor(private points: InputDesignPointsService) {
+  constructor(
+    private points: InputDesignPointsService) {
     this.clear();
   }
   public clear(): void {
@@ -105,6 +106,10 @@ export class InputCrackSettingsService {
   
   public getSaveData(): any[] {
     return this.crack_list;
+  }
+
+  public getGroupeName(i: number): string {
+    return this.points.getGroupeName(i);
   }
 
 }

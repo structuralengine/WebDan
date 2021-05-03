@@ -52,7 +52,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngAfterViewInit(){
   }
- 
+
   private setTitle(isManual: boolean): void{
     if (isManual) {
       // 断面力手入力モードの場合
@@ -91,20 +91,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   public getGroupeName(i: number): string {
-    const target = this.table_datas[i];
-    const first = target[0];
-    let result: string = '';
-    if(first.g_name === null){
-      result = first.g_id;
-    } else if(first.g_name === ''){
-      result = first.g_id;
-    } else {
-      result = first.g_name;
-    }
-    if(result === ''){
-      result = 'No' + i;
-    }
-    return result;
+    return this.points.getGroupeName(i);
   }
 
   ngOnDestroy() {
@@ -114,10 +101,8 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
   public saveData(): void {
     const a = [];
     for(const g of this.table_datas){
-      for(const m of g){
-        for(const p of m.positions){
+      for(const p of g){
           a.push(p);
-        }
       }
     }
     this.points.setSaveData(a);
@@ -132,7 +117,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   public activePageChenge(id: number): void {
     this.activeButtons(id);
- 
+
     this.options = this.option_list[id];
     this.grid.options = this.options;
     this.grid.refreshDataAndView();

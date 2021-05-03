@@ -57,23 +57,25 @@ export class InputDesignPointsService {
     // グリッド用データの作成
     let index = 1;
     for( const groupe of this.getGroupeList()){
+      const columns = [];
       for ( const member of groupe) {
         const position = member.positions;
         if (position.length <= 0) {
           // position が 0行 だったら 空のデータを1行追加する
           const column = this.default_position(index);
           column.m_no = member.m_no;
-          position.push(column);
+          columns.push(column);
           index++;
         } else {
           // index を振りなおす
-          for (const position of member.positions){
-            position.index = index;
+          for (const column of member.positions){
+            column.index = index;
+            columns.push(column);
             index++;
           }
         }
       }
-      table_datas.push(groupe)
+      table_datas.push(columns)
     }
 
     return table_datas;
@@ -99,8 +101,8 @@ export class InputDesignPointsService {
           item => item.m_no === member.m_no );
 
         // 対象データが無かった時に処理
-        if (position.length > 0) {
-          member.positions.push(position);
+        for(const pos of position){
+          member.positions.push(pos);
         }
       }
 
@@ -109,6 +111,9 @@ export class InputDesignPointsService {
     return groupe_list;
   }
 
+  public getGroupeName(i: number): string {
+    return this.members.getGroupeName(i);
+  }
 
   // 着目点情報
   public default_position(id: number): any {
@@ -184,12 +189,10 @@ export class InputDesignPointsService {
   public setManualData():void {
     const data = [];
     for(const g of this.getTableDatas()){
-      for(const m of g){
-        for(const p of m.positions){
+      for(const p of g){
           p.isMzCalc = true;
           p.isVzCalc = true;
           data.push(p);
-        }
       }
     }
     this.setSaveData(data);

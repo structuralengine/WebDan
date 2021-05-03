@@ -6,6 +6,7 @@ import { InputDesignPointsService } from "../design-points/design-points.service
   providedIn: "root",
 })
 export class InputFatiguesService {
+
   // 疲労情報
   private fatigue_list: any[];
   public train_A_count: number; // A列車本数
@@ -238,5 +239,8 @@ export class InputFatiguesService {
     }
   }
 
+  public getGroupeName(i: number): string {
+    return this.points.getGroupeName(i);
+  }
 
 }

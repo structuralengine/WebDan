@@ -41,7 +41,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
         sortable: false,
         locale: "jp",
         height: this.tableHeight().toString(),
-        numberCell: { show: this.save.isManual() }, // 行番号
+        numberCell: { show: false }, // 行番号
         colModel: this.beamHeaders,
         dataModel: { data: this.table_datas[i] },
         change: (evt, ui) => {

@@ -9,12 +9,12 @@ import pq from 'pqgrid';
   templateUrl: './safety-factors-material-strengths.component.html',
   styleUrls: ['./safety-factors-material-strengths.component.scss']
 })
-export class SafetyFactorsMaterialStrengthsComponent 
+export class SafetyFactorsMaterialStrengthsComponent
   implements OnInit, OnDestroy {
 
   // 安全係数
   @ViewChildren('grid1') grid1: QueryList<SheetComponent>;
-  public options1: pq.gridT.options[] = new Array(); 
+  public options1: pq.gridT.options[] = new Array();
   private columnHeaders1: object[] = [];
   private table1_datas: any[][];    // 安全係数
 
@@ -108,7 +108,7 @@ export class SafetyFactorsMaterialStrengthsComponent
 
       // 杭の施工条件
       this.pile_factor_list.push(safety.pile_factor[id]);
-      
+
       // グリッドの設定
       this.options1.push({
         width: 985,
@@ -142,7 +142,7 @@ export class SafetyFactorsMaterialStrengthsComponent
         numberCell: { show: false }, // 行番号
         colModel: this.columnHeaders3,
         dataModel: { data: this.table3_datas[i] },
-      });  
+      });
       this.options4.push({
         showTop: false,
         reactive: true,
@@ -196,20 +196,20 @@ export class SafetyFactorsMaterialStrengthsComponent
         { title: 'D32以上', dataType: 'float', dataIndx: 'fsu2', sortable: false, width: 70 }
       ]},
     ];
-  
+
     // コンクリート材料強度
     this.columnHeaders3 = [
       { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 390 },
       { title: '', dataType: 'float', dataIndx: 'value', sortable: false, width: 140 },
     ];
-  
+
     // 鉄骨 - 安全係数
     this.columnHeaders4 = [
       { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       { title: 'γs', dataType: 'float', 'format':'#.00', dataIndx: 'S_rs', sortable: false, width: 70 },
       { title: 'γb', dataType: 'float', 'format':'#.00', dataIndx: 'S_rb', sortable: false, width: 70 }
     ];
-  
+
     // 鉄骨材料強度
     this.columnHeaders5 = [
       { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
@@ -217,18 +217,18 @@ export class SafetyFactorsMaterialStrengthsComponent
       { title: '16＜t≦40', dataType: 'float', dataIndx: 'SRCfsyk2', sortable: false, width: 100 },
       { title: '40＜t≦75', dataType: 'float', dataIndx: 'SRCfsyk3', sortable: false, width: 100 }
     ];
-  
+
   }
 
   ngOnDestroy(): void {
     this.saveData();
   }
   public saveData(): void {
-    const safety_factor = {}; 
-    const material_bar = {}; 
-    const material_steel = {}; 
-    const material_concrete = {}; 
-    const pile_factor = {}; 
+    const safety_factor = {};
+    const material_bar = {};
+    const material_steel = {};
+    const material_concrete = {};
+    const pile_factor = {};
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       const groupe = this.groupe_list[i];
@@ -282,8 +282,8 @@ export class SafetyFactorsMaterialStrengthsComponent
 
     this.safety.setSaveData({
       safety_factor,
-      material_bar, 
-      material_steel, 
+      material_bar,
+      material_steel,
       material_concrete,
       pile_factor
     })
@@ -302,20 +302,7 @@ export class SafetyFactorsMaterialStrengthsComponent
   }
 
   public getGroupeName(i: number): string {
-    const target = this.groupe_list[i];
-    const first = target[0];
-    let result: string = '';
-    if(first.g_name === null){
-      result = first.g_id;
-    } else if(first.g_name === ''){
-      result = first.g_id;
-    } else {
-      result = first.g_name;
-    }
-    if(result === ''){
-      result = 'No' + i;
-    }
-    return result;
+    return this.safety.getGroupeName(i);
   }
 
 

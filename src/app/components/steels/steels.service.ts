@@ -195,4 +195,8 @@ export class InputSteelsService {
     return this.steel_list;
   }
 
+  public getGroupeName(i: number): string {
+    return this.points.getGroupeName(i);
+  }
+  
 }

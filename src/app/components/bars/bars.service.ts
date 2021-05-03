@@ -87,12 +87,9 @@ export class InputBarsService {
     // グリッド用データの作成
     const groupe_list = this.points.getGroupeList();
     for (let i = 0; i < groupe_list.length; i++) {
-      table_datas.push([]);
-      const groupe = groupe_list[i];
-
+      const table_groupe = [];
       // 部材
       for (const member of groupe_list[i]) {
-
         // 着目点
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
@@ -106,7 +103,7 @@ export class InputBarsService {
           data.h = member.H;
           data.position = pos.position;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name;
+          data.p_name_ex = pos.p_name_ex;
 
           // データを2行に分ける
           const column1 = {};
@@ -141,7 +138,7 @@ export class InputBarsService {
           column1['stirrup_ss'] = data['starrup'].stirrup_ss;
 
           column1['tan'] = data['tan'];
-          table_datas[i].push(column1);
+          table_groupe.push(column1);
 
           // 2行目
           column2['bh'] = data['h'];
@@ -160,9 +157,10 @@ export class InputBarsService {
           column2['cos'] = data['rebar2'].cos;
           column2['enable'] = data['rebar2'].enable;
 
-          table_datas[i].push(column2);
+          table_groupe.push(column2);
         }
       }
+      table_datas.push(table_groupe);
     }
     return table_datas;
   }

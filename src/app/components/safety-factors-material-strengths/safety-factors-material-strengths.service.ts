@@ -163,7 +163,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
   // component で使う用
   // 部材グループ別に並べている
   public getTableColumns(): any {
-    
+
     const groupe_list = this.members.getGroupeList();
     const safety_factor = {};
     const material_bar = {};
@@ -342,6 +342,10 @@ export class InputSafetyFactorsMaterialStrengthsService {
       material_concrete: this.material_concrete,
       pile_factor: this.pile_factor
     }
+  }
+
+  public getGroupeName(i: number): string {
+    return this.members.getGroupeName(i);
   }
 
 
