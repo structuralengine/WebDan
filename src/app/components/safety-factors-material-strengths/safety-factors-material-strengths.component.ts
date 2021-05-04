@@ -3,6 +3,7 @@ import { InputSafetyFactorsMaterialStrengthsService } from './safety-factors-mat
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 import { InputMembersService } from '../members/members.service';
+import { visitAll } from '@angular/compiler';
 
 @Component({
   selector: 'app-safety-factors-material-strengths',
@@ -50,6 +51,7 @@ export class SafetyFactorsMaterialStrengthsComponent
   // 杭の施工条件
   public options6: any[]; // 杭の施工条件
   public pile_factor_list: any[] = new Array();
+  public pile_factor_select_id: string;
 
   // タブのヘッダ名
   private current_index: number;
@@ -135,7 +137,7 @@ export class SafetyFactorsMaterialStrengthsComponent
       // グリッドの設定
       this.option1_list.push({
         width: 985,
-        height: 235,
+        height: 220,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -146,7 +148,7 @@ export class SafetyFactorsMaterialStrengthsComponent
       });
       this.option2_list.push({
         width: 532,
-        height: 185,
+        height: 180,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -167,15 +169,15 @@ export class SafetyFactorsMaterialStrengthsComponent
         dataModel: { data: this.table3_datas[i] },
       });
       this.option4_list.push({
-        width: 985,
-        height: 235,
+        width: 400,
+        height: 205,
         showTop: false,
         reactive: true,
         sortable: false,
         locale: 'jp',
         numberCell: { show: false }, // 行番号
         colModel: this.columnHeaders4,
-        dataModel: { data: this.table1_datas[i] },
+        dataModel: { data: this.table4_datas[i] },
       });
       this.option5_list.push({
         width: 560,
@@ -197,6 +199,8 @@ export class SafetyFactorsMaterialStrengthsComponent
     this.options4 = this.option4_list[0];
     this.options5 = this.option5_list[0];
     this.options6 = this.pile_factor_list[0];
+    this.pile_factor_select_id = this.getPileFactorSelectId();
+
   }
 
   ngAfterViewInit(){
@@ -270,6 +274,8 @@ export class SafetyFactorsMaterialStrengthsComponent
 
     for (let i = 0; i < this.groupe_list.length; i++) {
       const groupe = this.groupe_list[i];
+      const first = groupe[0];
+      const id = first.g_id;
 
       // 安全係数
       const safety = this.table1_datas[i];
@@ -284,11 +290,11 @@ export class SafetyFactorsMaterialStrengthsComponent
           S_rs: steel.S_rs, S_rb: steel.S_rb
         })
       }
-      safety_factor[groupe.g_id] = factor;
+      safety_factor[id] = factor;
 
       // 鉄筋材料
       const bar = this.table2_datas[i];
-      material_bar[groupe.g_id] = [{
+      material_bar[id] = [{
           tensionBar: { fsy:  bar[0].fsy1, fsu:  bar[0].fsu1 },
           sidebar:    { fsy: bar[1].fsy1,    fsu: bar[1].fsu1 },
           stirrup:    { fsy: bar[2].fsy1,    fsu: bar[2].fsu1 }
@@ -301,7 +307,7 @@ export class SafetyFactorsMaterialStrengthsComponent
       const steel = this.table5_datas[i];
 
       // 鉄骨材料
-      material_steel[groupe.g_id] =  [
+      material_steel[id] =  [
         {
           fsyk: steel[0].SRCfsyk1,
           fsvyk: steel[1].SRCfsyk1,
@@ -321,13 +327,13 @@ export class SafetyFactorsMaterialStrengthsComponent
 
       // コンクリート材料
       const conc = this.table3_datas[i];
-      material_concrete[groupe.g_id] =  {
+      material_concrete[id] =  {
         fck: conc[0].value,
         dmax: conc[1].value
       }
 
       // 杭の施工条件
-      pile_factor[groupe.g_id] = this.pile_factor_list[i];
+      pile_factor[id] = this.pile_factor_list[i];
     }
 
     this.safety.setSaveData({
@@ -341,17 +347,21 @@ export class SafetyFactorsMaterialStrengthsComponent
   }
 
   // 杭の施工条件を変更を処理する関数
-  public setPileFactor( j: number): void {
-
+  public setPileFactor(j: number): void {
     const i = this.current_index;
-
     const pile = this.pile_factor_list[i];
-
     for(let k = 0; k < pile.length; k++){
-      pile[k].selected = (i===k) ? true: false;
+      pile[k].selected = (j===k) ? true: false;
     }
-
+    this.pile_factor_select_id = this.getPileFactorSelectId();
   }
+  private getPileFactorSelectId(): string {
+    const id = this.current_index
+    const options6 = this.pile_factor_list[id];
+    const result = options6.find((v) => v.selected === true);
+    return result.id;
+  }
+
 
   public activePageChenge(id: number): void {
 
@@ -380,7 +390,9 @@ export class SafetyFactorsMaterialStrengthsComponent
     this.grid5.refreshDataAndView();
 
     this.options6 = this.pile_factor_list[id];
+    this.pile_factor_select_id = this.getPileFactorSelectId();
   }
+
 
   // アクティブになっているボタンを全て非アクティブにする
   private activeButtons(id: number) {

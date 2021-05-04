@@ -81,16 +81,16 @@
         </tr>
       </thead>
       <tbody>
-        <ng-container *ngFor="let item of options6; index as j">
+        <ng-container *ngFor="let item of options6; index as i">
           <tr>
             <td width="20px">
               <input type="radio" 
                 name="pile_factor" 
-                id="pile_factor{{j}}"
-                [(ngModel)]="item.selected" 
+                id="pile_factor{{i}}"
+                [(ngModel)]="pile_factor_select_id" 
                 [value]="item.id"
                 [checked]="item.selected" 
-                (change)="setPileFactor(j)" />
+                (change)="setPileFactor(i)" />
             </td>
             <td style="text-align: left" width="200px">{{item.title}}</td>
             <td>{{item.rfck.toFixed(2)}}</td>

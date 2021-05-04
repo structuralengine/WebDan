@@ -260,7 +260,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
     this.clear();
 
-    for (const groupe of safety) {
+    for (const id of Object.keys(safety.safety_factor)) {
 
       const tmp_safety_factor = this.default_safety_factor();
       const tmp_material_bar = this.default_material_bar();
@@ -268,8 +268,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
       const tmp_material_concrete = this.default_material_concrete();
       const tmp_pile_factor = this.default_pile_factor();
 
-      const new_safety_factor = safety.safety_factor.find(v => v.g_id === groupe.g_id);
-      if (new_safety_factor !== undefined) {
+      if (id in safety.safety_factor) {
+        const new_safety_factor = safety.safety_factor[id];
         for (const tmp of tmp_safety_factor) {
           const org = new_safety_factor.find(v => v.id === tmp.id)
           if (org !== undefined) {
@@ -280,8 +280,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const new_material_bar = safety.material_bar.find(v => v.g_id === groupe.g_id);
-      if (new_material_bar !== undefined) {
+      if (id in safety.material_bar) {
+        const new_material_bar = safety.material_bar[id];
         for (let i = 0; i < tmp_material_bar.length; i++) {
           const tmp = tmp_material_bar[i];
           const org = new_material_bar[i];
@@ -291,8 +291,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const new_material_steel = safety.material_steel.find(v => v.g_id === groupe.g_id);
-      if (new_material_steel !== undefined) {
+      if (id in safety.material_steel) {
+        const new_material_steel = safety.material_steel[id];
         for (let i = 0; i < tmp_material_steel.length; i++) {
           const tmp = tmp_material_steel[i];
           const org = new_material_steel[i];
@@ -302,8 +302,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const new_material_concrete = safety.material_concrete.find(v => v.g_id === groupe.g_id);
-      if (new_material_concrete !== undefined) {
+      if (id in safety.material_concrete) {
+        const new_material_concrete = safety.material_concrete[id];
         for (const key of Object.keys(tmp_material_concrete)) {
           if (key in new_material_concrete) {
             tmp_material_concrete[key] = new_material_concrete[key];
@@ -311,8 +311,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
         }
       }
 
-      const new_pile_factor = safety.pile_factor.find(v => v.g_id === groupe.g_id);
-      if (new_pile_factor !== undefined) {
+      if (id in safety.pile_factor) {
+        const new_pile_factor = safety.pile_factor[id];
         for (let i = 0; i < tmp_pile_factor.length; i++) {
           const tmp = tmp_pile_factor[i];
           const org = new_pile_factor[i];
@@ -321,11 +321,11 @@ export class InputSafetyFactorsMaterialStrengthsService {
           }
         }
       }
-      this.safety_factor[groupe.g_id] = tmp_safety_factor;
-      this.material_bar[groupe.g_id] = tmp_material_bar;
-      this.material_steel[groupe.g_id] = tmp_material_steel;
-      this.material_concrete[groupe.g_id] = tmp_material_concrete;
-      this.pile_factor[groupe.g_id] = tmp_pile_factor;
+      this.safety_factor[id] = tmp_safety_factor;
+      this.material_bar[id] = tmp_material_bar;
+      this.material_steel[id] = tmp_material_steel;
+      this.material_concrete[id] = tmp_material_concrete;
+      this.pile_factor[id] = tmp_pile_factor;
     }
 
   }

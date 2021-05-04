@@ -4,8 +4,14 @@ legend {
 }
 
 fieldset {
-  border: 1px #cacaca solid;;
+  border: 1px #cacaca solid;
+  padding-right: 15px;
 }
+
+h4 {
+  text-decoration: underline; /*下線を引く*/
+}
+
 
 .tabContent{
   margin: 15px;
@@ -62,7 +68,5 @@ fieldset {
 .range-fieldset {
   float: right;
   margin-left: 15px;
-
-
 }
 

@@ -51,7 +51,7 @@ export class InputBarsService {
       rebar_space: null,
       rebar_ss: null,
       cos: null,
-      enable: null
+      enable: true
     };
   }
 
