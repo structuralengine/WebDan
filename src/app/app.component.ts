@@ -68,15 +68,18 @@ export class AppComponent {
       }
       this.isMemberEnable = flg;
     }
-    this.designPointChange();
+    this.designPointChange(this.isMemberEnable);
   }
 
   // 算出点に何か入力されたら呼ばれる
   // 有効な入力行があったら次のボタンを有効にする
   private isDesignPointEnable = false;
-  public designPointChange(): void {
+  public designPointChange(flg=true): void {
 
-    const flg: boolean = (this.save.isManual())? true : this.points.designPointChange();
+    if(!this.save.isManual()){
+      flg = this.points.designPointChange();
+    }
+
     if (this.isDesignPointEnable !== flg) {
       for (const id of ['3', '4', '5', '6', '4', '9']) {
         const data = document.getElementById(id);

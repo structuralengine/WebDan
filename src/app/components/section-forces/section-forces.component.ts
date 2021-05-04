@@ -172,10 +172,12 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
       }
     };
 
+    this.options = this.options1;
+
   }
 
   ngAfterViewInit(){
-    this.activePageChenge(0);
+    this.activeButtons(0);
   }
 
   // 指定行row まで、曲げモーメント入力データを読み取る
@@ -218,8 +220,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   public activePageChenge(id: number): void {
-    this.deactiveButtons();
-    document.getElementById("sub" + id).classList.add("is-active");
+    this.activeButtons(id);
 
     this.options = (id === 0) ? this.options1 : this.options2;
     this.grid.options = this.options;
@@ -227,14 +228,17 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   // アクティブになっているボタンを全て非アクティブにする
-  private deactiveButtons() {
+  private activeButtons(id: number) {
     for (let i = 0; i <= 1; i++) {
-      const data = document.getElementById("sub" + i);
+      const data = document.getElementById("foc" + i);
       if (data != null) {
-        if (data.classList.contains("is-active")) {
-          data.classList.remove("is-active");
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
         }
       }
     }
   }
+
 }

@@ -148,7 +148,7 @@ export class SafetyFactorsMaterialStrengthsComponent
       });
       this.option2_list.push({
         width: 532,
-        height: 180,
+        height: 185,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -230,12 +230,12 @@ export class SafetyFactorsMaterialStrengthsComponent
     this.columnHeaders2 = [
       { title: '', align: 'left', dataType: 'string', dataIndx: 'title', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       { title: '降伏強度', align: 'center', colModel: [
-        { title: 'D29以下', dataType: 'float', dataIndx: 'fsy1', sortable: false, width: 70 },
-        { title: 'D32以上', dataType: 'float', dataIndx: 'fsy2', sortable: false, width: 70 }
+        { title: 'D25以下', dataType: 'float', dataIndx: 'fsy1', sortable: false, width: 70 },
+        { title: 'D29以上', dataType: 'float', dataIndx: 'fsy2', sortable: false, width: 70 }
       ]},
       { title: '設計引張強度', align: 'center', colModel: [
-        { title: 'D29以下', dataType: 'float', dataIndx: 'fsu1', sortable: false, width: 70 },
-        { title: 'D32以上', dataType: 'float', dataIndx: 'fsu2', sortable: false, width: 70 }
+        { title: 'D25以下', dataType: 'float', dataIndx: 'fsu1', sortable: false, width: 70 },
+        { title: 'D29以上', dataType: 'float', dataIndx: 'fsu2', sortable: false, width: 70 }
       ]},
     ];
 
