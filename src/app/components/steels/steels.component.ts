@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy, QueryList, ViewChildren } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { InputSteelsService } from './steels.service';
-import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
@@ -8,14 +7,20 @@ import pq from 'pqgrid';
 @Component({
   selector: 'app-steels',
   templateUrl: './steels.component.html',
-  styleUrls: ['./steels.component.scss']
+  styleUrls: ['./steels.component.scss', '../subNavArea.scss']
 })
-export class SteelsComponent implements OnInit, OnDestroy {
+export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChildren('grid') grids: QueryList<SheetComponent>;
-  public options: pq.gridT.options[] = new Array();
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
+
+  // データグリッドの設定変数
+  private option_list: pq.gridT.options[] = new Array();
   private columnHeaders: object[] = new Array();
+
   public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_name: string[];
 
   constructor(
     private steel: InputSteelsService,
@@ -40,10 +45,21 @@ export class SteelsComponent implements OnInit, OnDestroy {
         colModel: this.columnHeaders,
         dataModel: { data: this.table_datas[i] }
       };
-      this.options.push(op);
-      this.grids[i].options = op;
+      this.option_list.push(op);
+    }
+    this.options = this.option_list[0];
+
+    // タブのタイトルとなる
+    this.groupe_name = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_name.push( this.steel.getGroupeName(i));
     }
 
+
+  }
+
+  ngAfterViewInit(){
+    this.activeButtons(0);  
   }
 
   private setTitle(isManual: boolean): void{
@@ -87,13 +103,21 @@ export class SteelsComponent implements OnInit, OnDestroy {
     );
   }
 
-
+  public getGroupeName(i: number): string {
+    return this.groupe_name[i];
+  }
  
   ngOnDestroy() {
     this.saveData();
   }
   public saveData(): void {
-    this.steel.setSaveData(this.table_datas);
+    const a = [];
+    for(const g of this.table_datas){
+      for(const e of g){
+        a.push(e);
+      }
+    }
+    this.steel.setSaveData(a);
   }
 
   // 表の高さを計算する
@@ -103,21 +127,27 @@ export class SteelsComponent implements OnInit, OnDestroy {
     return containerHeight;
   }
 
-  public getGroupeName(i: number): string {
-    const target = this.table_datas[i];
-    const first = target[0];
-    let result: string = '';
-    if(first.g_name === null){
-      result = first.g_id;
-    } else if(first.g_name === ''){
-      result = first.g_id;
-    } else {
-      result = first.g_name;
+
+  public activePageChenge(id: number): void {
+    this.activeButtons(id);
+ 
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private activeButtons(id: number) {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("stl" + i);
+      if (data != null) {
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
+        }
+      }
     }
-    if(result === ''){
-      result = 'No' + i;
-    }
-    return result;
   }
 
 }

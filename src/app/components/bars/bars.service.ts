@@ -11,7 +11,8 @@ export class InputBarsService {
   // 鉄筋情報
   private bar_list: any[];
 
-  constructor(private helper: DataHelperModule,
+  constructor(
+    private helper: DataHelperModule,
     private points: InputDesignPointsService) {
     this.clear();
   }
@@ -42,41 +43,41 @@ export class InputBarsService {
 
   private default_rebar(title: string): any {
     return {
-      'title': title,
-      'rebar_dia': null,
-      'rebar_n': null,
-      'rebar_cover': null,
-      'rebar_lines': null,
-      'rebar_space': null,
-      'rebar_ss': null,
-      'cos': null,
-      'enable': null
+      title: title,
+      rebar_dia: null,
+      rebar_n: null,
+      rebar_cover: null,
+      rebar_lines: null,
+      rebar_space: null,
+      rebar_ss: null,
+      cos: null,
+      enable: true
     };
   }
 
   private default_sidebar(): any {
     return {
-      'side_dia': null,
-      'side_n': null,
-      'side_cover': null,
-      'side_ss': null
+      side_dia: null,
+      side_n: null,
+      side_cover: null,
+      side_ss: null
     };
   }
 
   private default_starrup(): any {
     return {
-      'stirrup_dia': null,
-      'stirrup_n': null,
-      'stirrup_ss': null
+      stirrup_dia: null,
+      stirrup_n: null,
+      stirrup_ss: null
     };
   }
 
   private default_bend(): any {
     return {
-      'bending_dia': null,
-      'bending_n': null,
-      'bending_ss': null,
-      'bending_angle': null
+      bending_dia: null,
+      bending_n: null,
+      bending_ss: null,
+      bending_angle: null
     };
   }
 
@@ -87,12 +88,9 @@ export class InputBarsService {
     // グリッド用データの作成
     const groupe_list = this.points.getGroupeList();
     for (let i = 0; i < groupe_list.length; i++) {
-      table_datas.push(new Array());
-      const groupe = groupe_list[i];
-
+      const table_groupe = [];
       // 部材
-      for (const member of groupe) {
-
+      for (const member of groupe_list[i]) {
         // 着目点
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
@@ -106,7 +104,7 @@ export class InputBarsService {
           data.h = member.H;
           data.position = pos.position;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name;
+          data.p_name_ex = pos.p_name_ex;
 
           // データを2行に分ける
           const column1 = {};
@@ -141,7 +139,7 @@ export class InputBarsService {
           column1['stirrup_ss'] = data['starrup'].stirrup_ss;
 
           column1['tan'] = data['tan'];
-          table_datas[i].push(column1);
+          table_groupe.push(column1);
 
           // 2行目
           column2['bh'] = data['h'];
@@ -160,14 +158,15 @@ export class InputBarsService {
           column2['cos'] = data['rebar2'].cos;
           column2['enable'] = data['rebar2'].enable;
 
-          table_datas[i].push(column2);
+          table_groupe.push(column2);
         }
       }
+      table_datas.push(table_groupe);
     }
     return table_datas;
   }
 
-  private getTableColumn(index: any): any {
+  public getTableColumn(index: any): any {
 
     let result = this.bar_list.find((value) => value.index === index);
     if (result === undefined) {
@@ -181,59 +180,57 @@ export class InputBarsService {
 
     this.bar_list = new Array();
 
-    for (const groupe of table_datas) {
-      for (let i = 0; i < groupe.length; i += 2) {
-        const column1 = groupe[i];
-        const column2 = groupe[i + 1];
+    for (let i = 0; i < table_datas.length; i += 2) {
+      const column1 = table_datas[i];
+      const column2 = table_datas[i + 1];
 
-        const b = this.default_bars(column1.index);
-        b.p_name = column1.p_name;
-        b.position = column1.position;
-        b.m_no = column1.m_no;
-        b.p_name_ex = column1.p_name_ex;
-        b.b = column1.bh;
-        b.h = column2.bh;
-        b.haunch_M = column1.haunch_height;
-        b.haunch_V = column2.haunch_height;
+      const b = this.default_bars(column1.index);
+      b.p_name = column1.p_name;
+      b.position = column1.position;
+      b.m_no = column1.m_no;
+      b.p_name_ex = column1.p_name_ex;
+      b.b = column1.bh;
+      b.h = column2.bh;
+      b.haunch_M = column1.haunch_height;
+      b.haunch_V = column2.haunch_height;
 
-        b.rebar1.title = column1.design_point_id;
-        b.rebar1.rebar_dia = column1.rebar_dia;
-        b.rebar1.rebar_n = column1.rebar_n;
-        b.rebar1.rebar_cover = column1.rebar_cover;
-        b.rebar1.rebar_lines = column1.rebar_lines;
-        b.rebar1.rebar_space = column1.rebar_space;
-        b.rebar1.rebar_ss = column1.rebar_ss;
-        b.rebar1.cos = column1.cos;
-        b.rebar1.enable = column1.enable;
+      b.rebar1.title = column1.design_point_id;
+      b.rebar1.rebar_dia = column1.rebar_dia;
+      b.rebar1.rebar_n = column1.rebar_n;
+      b.rebar1.rebar_cover = column1.rebar_cover;
+      b.rebar1.rebar_lines = column1.rebar_lines;
+      b.rebar1.rebar_space = column1.rebar_space;
+      b.rebar1.rebar_ss = column1.rebar_ss;
+      b.rebar1.cos = column1.cos;
+      b.rebar1.enable = column1.enable;
 
-        b.rebar2.title = column2.design_point_id;
-        b.rebar2.rebar_dia = column2.rebar_dia;
-        b.rebar2.rebar_n = column2.rebar_n;
-        b.rebar2.rebar_cover = column2.rebar_cover;
-        b.rebar2.rebar_lines = column2.rebar_lines;
-        b.rebar2.rebar_space = column2.rebar_space;
-        b.rebar2.rebar_ss = column2.rebar_ss;
-        b.rebar2.cos = column2.cos;
-        b.rebar2.enable = column2.enable;
+      b.rebar2.title = column2.design_point_id;
+      b.rebar2.rebar_dia = column2.rebar_dia;
+      b.rebar2.rebar_n = column2.rebar_n;
+      b.rebar2.rebar_cover = column2.rebar_cover;
+      b.rebar2.rebar_lines = column2.rebar_lines;
+      b.rebar2.rebar_space = column2.rebar_space;
+      b.rebar2.rebar_ss = column2.rebar_ss;
+      b.rebar2.cos = column2.cos;
+      b.rebar2.enable = column2.enable;
 
-        b.sidebar.side_dia = column1.side_dia;
-        b.sidebar.side_n = column1.side_n;
-        b.sidebar.side_cover = column1.side_cover;
-        b.sidebar.side_ss = column1.side_ss;
+      b.sidebar.side_dia = column1.side_dia;
+      b.sidebar.side_n = column1.side_n;
+      b.sidebar.side_cover = column1.side_cover;
+      b.sidebar.side_ss = column1.side_ss;
 
-        b.starrup.stirrup_dia = column1.stirrup_dia;
-        b.starrup.stirrup_n = column1.stirrup_n;
-        b.starrup.stirrup_ss = column1.stirrup_ss;
+      b.starrup.stirrup_dia = column1.stirrup_dia;
+      b.starrup.stirrup_n = column1.stirrup_n;
+      b.starrup.stirrup_ss = column1.stirrup_ss;
 
-        b.bend.bending_dia = column2.stirrup_dia;
-        b.bend.bending_n = column2.stirrup_n;
-        b.bend.bending_ss = column2.stirrup_ss;
-        b.bend.bending_angle = 45;
+      b.bend.bending_dia = column2.stirrup_dia;
+      b.bend.bending_n = column2.stirrup_n;
+      b.bend.bending_ss = column2.stirrup_ss;
+      b.bend.bending_angle = 45;
 
-        b.tan = column1.tan;
+      b.tan = column1.tan;
 
-        this.bar_list.push(b);
-      }
+      this.bar_list.push(b);
     }
   }
 
@@ -243,6 +240,10 @@ export class InputBarsService {
 
   public getSaveData(): any[] {
     return this.bar_list;
+  }
+
+  public getGroupeName(i: number): string {
+    return this.points.getGroupeName(i);
   }
 
   public matchBarSize(dia: any): number {

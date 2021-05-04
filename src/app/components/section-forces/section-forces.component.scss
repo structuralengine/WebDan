@@ -1,93 +1,39 @@
-.ht-container {
-  height: 100%;
-}
+.c-subNavArea {
 
-.table-container {
-  margin-top: 7px;
-  margin-left: 7px;
-}
-
-.header {
-  margin-bottom: 0px;
-  padding-bottom: 0px;
-  overflow: visible;
-  box-sizing: border-box;
-  display: block;
-
-  table, th, td {
-    border: 1px solid #cfcfcf;
-    font-weight: normal;
+  &__nav {
+    text-align: left;
+    margin-left: -10px;
+    font-size: 0; /* タグ改行時の空白防止 */
+    background: #fff;
+    color: #2f3f4e;
     font-size: 14px;
-    text-align: center;
-    padding: 0;
-    line-height: 1.5;
-    background: #f3f3f3;
   }
 
-}
+  a.is-active {
+    background: #2f3f4e;
+    color: #fff;
+  }
 
-.hot {
-  margin-top: 0px;
-  padding-top: 0px;
-  height: 100%;
-}
+  &__navItem {
+    display: inline-block;
+    margin-left: 10px;
+    font-size: 14px; /* ulでサイズ0にしたのを戻す */
+  }
 
+  &__navItemTitle {
+    transform: translateX(0);
+    display: block;
+    border-bottom: 1px solid #000080;
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #2f3f4e;
+    cursor: pointer;
+    position: relative;
 
-///////////////////////////////////////////////
+    &:hover {
+      background: #2f3f4e0c;
+      text-decoration: none;
+    }
+  }
 
-
-/*タブ切り替え全体のスタイル*/
-.tabs {
-  margin-top: 50px;
-  padding-bottom: 40px;
-  background-color: #fff;
-  // box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  // width: 700px;
-  margin: 0 auto;}
-
-/*タブのスタイル*/
-.tab_item {
-  width: calc(100%/3);
-  height: 50px;
-  border-bottom: 3px solid #5ab4bd;
-  background-color: #d9d9d9;
-  line-height: 50px;
-  font-size: 16px;
-  text-align: center;
-  color: #565656;
-  display: block;
-  float: left;
-  text-align: center;
-  font-weight: bold;
-  transition: all 0.2s ease;
-}
-.tab_item:hover {
-  opacity: 0.75;
-}
-
-/*ラジオボタンを全て消す*/
-input[name="tab_item"] {
-  display: none;
-}
-
-/*タブ切り替えの中身のスタイル*/
-.tab_content {
-  display: none;
-  padding: 40px 40px 0;
-  clear: both;
-  overflow: hidden;
-}
-
-
-/*選択されているタブのコンテンツのみを表示*/
-#all:checked ~ #all_content,
-#programming:checked ~ #programming_content,
-#design:checked ~ #design_content {
-  display: block;
-}
-
-/*選択されているタブのスタイルを変える*/
-.tabs input:checked + .tab_item {
-  background-color: #5ab4bd;
-  color: #fff;
 }

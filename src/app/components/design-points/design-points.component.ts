@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterViewInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { InputDesignPointsService } from './design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
 import { SheetComponent } from '../sheet/sheet.component';
@@ -7,16 +7,20 @@ import pq from 'pqgrid';
 @Component({
   selector: 'app-design-points',
   templateUrl: './design-points.component.html',
-  styleUrls: ['./design-points.component.scss']
+  styleUrls: ['./design-points.component.scss', '../subNavArea.scss']
 })
-export class DesignPointsComponent implements OnInit, OnDestroy {
+export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
+
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
 
   // データグリッドの設定変数
-  @ViewChildren('grid') grids: QueryList<SheetComponent>;
-  public options: pq.gridT.options[] = new Array();
+  private option_list: pq.gridT.options[] = new Array();
   private columnHeaders: object[] = [];
   // このページで表示するデータ
   public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_name: string[];
 
   constructor(
     private points: InputDesignPointsService,
@@ -26,10 +30,10 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
 
     this.setTitle(this.save.isManual());
 
-    this.table_datas = this.points.getTableDatas();
+    this.table_datas = this.points.getTableColumns();
 
     // グリッドの設定
-    this.options = new Array();
+    this.option_list = new Array();
     for( let i =0; i < this.table_datas.length; i++){
       const op = {
         showTop: false,
@@ -41,10 +45,20 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
         colModel: this.columnHeaders,
         dataModel: { data: this.table_datas[i] },
       };
-      this.options.push(op);
-      this.grids[i].options = op;
+      this.option_list.push(op);
+    }
+    this.options = this.option_list[0];
+
+    // タブのタイトルとなる
+    this.groupe_name = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_name.push( this.points.getGroupeName(i));
     }
 
+  }
+
+  ngAfterViewInit(){
+    this.activeButtons(0);
   }
 
   private setTitle(isManual: boolean): void{
@@ -84,28 +98,18 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getGroupeName(i: number): string {
-    const target = this.table_datas[i];
-    const first = target[0];
-    let result: string = '';
-    if(first.g_name === null){
-      result = first.g_id;
-    } else if(first.g_name === ''){
-      result = first.g_id;
-    } else {
-      result = first.g_name;
-    }
-    if(result === ''){
-      result = 'No' + i;
-    }
-    return result;
-  }
-
   ngOnDestroy() {
     this.saveData();
   }
 
   public saveData(): void {
+    const a = [];
+    for(const g of this.table_datas){
+      for(const p of g){
+          a.push(p);
+      }
+    }
+    this.points.setSaveData(a);
   }
 
   // 表の高さを計算する
@@ -113,6 +117,33 @@ export class DesignPointsComponent implements OnInit, OnDestroy {
     let containerHeight = window.innerHeight;
     containerHeight -= 230;
     return containerHeight;
+  }
+
+  public activePageChenge(id: number): void {
+    this.activeButtons(id);
+
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private activeButtons(id: number) {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("pos" + i);
+      if (data != null) {
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
+        }
+      }
+    }
+  }
+
+  // タブのヘッダ名
+  public getGroupeName(i: number): string{
+    return this.groupe_name[i];
   }
 
 }

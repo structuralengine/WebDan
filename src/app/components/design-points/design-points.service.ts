@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputMembersService } from '../members/members.service';
 
 @Injectable({
@@ -12,8 +11,7 @@ export class InputDesignPointsService {
   // { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
-    private members: InputMembersService,
-    private helper: DataHelperModule) {
+    private members: InputMembersService) {
     this.clear();
   }
 
@@ -22,11 +20,11 @@ export class InputDesignPointsService {
     this.position_list = new Array();
   }
 
-  public getDesignPointColumn(id: number): any {
-    let result = this.position_list.find((value)=> value.index === id);
+  public getTableColumn(index: number): any {
+    let result = this.position_list.find((value)=> value.index === index);
 
     if(result === undefined){
-      result = this.default_position(id);
+      result = this.default_position(index);
       this.position_list.push(result);
     }
 
@@ -40,7 +38,7 @@ export class InputDesignPointsService {
   public setSaveData(points: any): void{
     this.clear();
     for(const data of points){
-      const tmp = this.default_position(data.id);
+      const tmp = this.default_position(data.index);
       for(const key of Object.keys(tmp)){
         if(key in data){
           tmp[key] = data[key];
@@ -50,37 +48,39 @@ export class InputDesignPointsService {
     }
   }
 
-  public getTableDatas(): any[] {
+  public getTableColumns(): any[] {
 
     const table_datas: any[] = new Array();
 
     // グリッド用データの作成
     let index = 1;
     for( const groupe of this.getGroupeList()){
+      const columns = [];
       for ( const member of groupe) {
         const position = member.positions;
         if (position.length <= 0) {
           // position が 0行 だったら 空のデータを1行追加する
-          const column = this.default_position(index); 
+          const column = this.default_position(index);
           column.m_no = member.m_no;
-          position.push(column);
+          columns.push(column);
           index++;
         } else {
           // index を振りなおす
-          for (const position of member.positions){
-            position.index = index;
+          for (const column of member.positions){
+            column.index = index;
+            columns.push(column);
             index++;
           }
         }
       }
-      table_datas.push(groupe)
+      table_datas.push(columns)
     }
 
     return table_datas;
   }
 
   // グループ別 部材情報
-  //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t, 
+  //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t,
   //   positions:[
   //    { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
   //    ...
@@ -88,7 +88,6 @@ export class InputDesignPointsService {
   public getGroupeList(): any[] {
 
     const groupe_list: any[] = this.members.getGroupeList();
-    const position_list = this.position_list;
 
     for(const groupe of groupe_list) {
 
@@ -96,12 +95,12 @@ export class InputDesignPointsService {
         member['positions'] = new Array();
 
         // 同じ要素番号のものを探す
-        const position: any[] = position_list.filter( 
+        const position: any[] = this.position_list.filter(
           item => item.m_no === member.m_no );
 
         // 対象データが無かった時に処理
-        if (position.length > 0) {
-          member.positions.push(position);
+        for(const pos of position){
+          member.positions.push(pos);
         }
       }
 
@@ -110,6 +109,9 @@ export class InputDesignPointsService {
     return groupe_list;
   }
 
+  public getGroupeName(i: number): string {
+    return this.members.getGroupeName(i);
+  }
 
   // 着目点情報
   public default_position(id: number): any {
@@ -119,10 +121,10 @@ export class InputDesignPointsService {
       p_name: null,
       position: null,
       p_name_ex: null,
-      isMyCalc: null,
-      isVyCalc: null,
-      isMzCalc: null,
-      isVzCalc: null,
+      isMyCalc: false,
+      isVyCalc: false,
+      isMzCalc: false,
+      isVzCalc: false,
       La: null
     };
   }
@@ -180,4 +182,17 @@ export class InputDesignPointsService {
     return false;
   }
 
+  // 断面力手入力モードの時 部材・断面の入力が変更になったら
+  // 算出点データも同時に生成されなければならない
+  public setManualData():void {
+    const data = [];
+    for(const g of this.getTableColumns()){
+      for(const p of g){
+          p.isMzCalc = true;
+          p.isVzCalc = true;
+          data.push(p);
+      }
+    }
+    this.setSaveData(data);
+  }
 }

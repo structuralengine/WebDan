@@ -4,6 +4,7 @@ import { SheetComponent } from '../sheet/sheet.component';
 import { AppComponent } from 'src/app/app.component';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 import pq from 'pqgrid';
+import { InputDesignPointsService } from '../design-points/design-points.service';
 
 @Component({
   selector: 'app-members',
@@ -24,6 +25,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
   constructor(
     private members: InputMembersService,
+    private points: InputDesignPointsService,
     private save: SaveDataService,
     private app: AppComponent) { }
 
@@ -68,7 +70,7 @@ export class MembersComponent implements OnInit, OnDestroy {
               this.table_datas[i].g_id = value.toString();
 
             } else if (this.table_datas[i].g_no === null) {
-              this.table_datas[i].g_id = 'row' + this.table_datas[i].m_no; //仮のグループid
+              this.table_datas[i].g_id = 'blank';//'row' + this.table_datas[i].m_no; //仮のグループid
             }
 
             if (key === 'g_name') {
@@ -156,7 +158,7 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
       }
       this.loadData(this.ROWS_COUNT);
-      
+
     } else {
       // ピックアップファイルを使う場合
       this.table_datas = this.members.getSaveData();
@@ -168,7 +170,7 @@ export class MembersComponent implements OnInit, OnDestroy {
 
 
   private setTitle(isManual: boolean): void {
-    
+
     if (isManual) {
       // 断面力手入力モードの場合の項目
       this.columnHeaders = [];
@@ -206,13 +208,18 @@ export class MembersComponent implements OnInit, OnDestroy {
     }
   }
 
- 
+
   ngOnDestroy() {
     this.saveData();
   }
 
   public saveData(): void {
     this.members.setSaveData(this.table_datas, this.save.isManual());
+    if(this.save.isManual()){
+      // 断面力手入力モードの時 部材・断面の入力があったら
+      // 算出点データも同時に生成されなければならない
+      this.points.setManualData();
+    }
   }
 
   // 表の高さを計算する
