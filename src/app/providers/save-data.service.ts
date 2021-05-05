@@ -86,15 +86,16 @@ export class SaveDataService {
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
       const pickup1 = {};
       let index: number = 1;
+      const mode = this.helper.getExt(filename);
 
       for (let i = 1; i < tmp.length; ++i) {
-        const line = tmp[i];
-        if (line.trim().length === 0) {
+        const line = tmp[i].trim();
+        if (line.length === 0) {
           continue;
         }
 
         let data: any;
-        switch (this.helper.getExt(filename)) {
+        switch (mode) {
           case "pik":
             data = this.pikFileRead(line); // 2次元（平面）解析のピックアップデータ
             break;
@@ -107,7 +108,7 @@ export class SaveDataService {
             return;
         }
 
-        if (data.pickUpNo in pickup1 === false) {
+        if (!(data.pickUpNo in pickup1)) {
           pickup1[data.pickUpNo] = new Array();
         }
         const pickup2 = pickup1[data.pickUpNo];
@@ -149,8 +150,14 @@ export class SaveDataService {
       }
 
       this.basic.setPickUpData();
-      this.members.setPickUpData(pickup1, this.isManual());
+      this.members.setPickUpData(pickup1);
       this.points.setPickUpData(pickup1);
+      this.bars.setPickUpData();
+      this.steel.setPickUpData();
+      this.basic.setPickUpData();
+      this.crack.setPickUpData();
+      this.fatigues.setPickUpData();
+      this.safety.clear();
       this.force.clear();
 
       this.pickup_filename = filename;
@@ -178,7 +185,7 @@ export class SaveDataService {
     }
 
     return {
-      pickUpNo: "pickUpNo:" + line.slice(0, 5).trim(),
+      pickUpNo: line.slice(0, 5).trim(),
       mark: ma,
       memberNo: this.helper.toNumber(line.slice(10, 15)),
       maxPickupCase: line.slice(15, 20).trim(),
@@ -205,9 +212,9 @@ export class SaveDataService {
   private csvFileRead(tmp: string): any {
     const line = tmp.split(",");
     return {
-      pickUpNo: "pickUpNo:" + line[0].trim(),
+      pickUpNo: line[0].trim(),
       mark: line[1].trim(),
-      memberNo: line[2].trim(),
+      memberNo: this.helper.toNumber(line[2].trim()),
       maxPickupCase: line[3].trim(),
       minPickupCase: line[4].trim(),
       p_name: line[5].trim(),

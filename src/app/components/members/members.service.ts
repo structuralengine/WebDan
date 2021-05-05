@@ -52,9 +52,9 @@ export class InputMembersService  {
     return result;
   }
 
-  public setSaveData(table_datas: any, isManualed: boolean = false) {
+  public setSaveData(table_datas: any, isManual: boolean = false) {
 
-    if (!isManualed) {
+    if (!isManual) {
       // 断面力手入力モードじゃない場合
       this.member_list = table_datas;
       return;
@@ -75,28 +75,33 @@ export class InputMembersService  {
   }
 
   /// pick up ファイルをセットする関数
-  public setPickUpData(pickup_data: Object, isManualed: boolean) {
-
-    const mList: any[] = pickup_data[Object.keys(pickup_data)[0]];
+  public setPickUpData(pickup_data: Object) {
+    const keys: string[] = Object.keys(pickup_data);
+    const members: any[] = pickup_data[keys[0]];
 
     // 部材リストを作成する
     const old_member_list = this.member_list.slice(0, this.member_list.length);
     this.member_list = new Array();
 
-    // 部材番号、部材長 をセットする
-    for (let i = 0; i < mList.length; i++) {
-      let new_member = old_member_list.find( (value) => {
-        return value.m_no === mList[i].memberNo;
+    // 部材番号のもっとも大きい数
+    let n = 0;
+    members.forEach((v,i,a) => {
+      n = Math.max(n, v.memberNo);
+    });
+    for(let mNo = 1; mNo <= n; mNo++){
+      // 同じ部材番号を抽出
+      const tar = members.filter((v,i,a) => v.memberNo === mNo);
+      let pos = 0;
+      tar.forEach((v,i,a) => {
+        pos = Math.max(pos, v.position);
       });
+      // 今の入力を踏襲
+      let new_member = old_member_list.find((value) => value.m_no === mNo);
       if (new_member === undefined) {
-        new_member = this.default_member(mList[i].memberNo);
+        new_member = this.default_member(mNo);
       }
       // 部材長をセットする
-      const pList: any[] = mList[i].positions;
-      new_member.m_len = pList[pList.length - 1].position;
-      if (isManualed) {
-        new_member.g_id = '';
-      }
+      new_member.m_len = pos;
       this.member_list.push(new_member);
     }
   }

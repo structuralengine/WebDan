@@ -131,12 +131,37 @@ export class InputDesignPointsService {
 
   // pick up ファイルをセットする関数
   public setPickUpData(pickup_data: Object) {
-
-    const pickup_points: any[] = pickup_data[Object.keys(pickup_data)[0]];
-
     // 初期化する
     const old_position_list = this.position_list.slice(0, this.position_list.length);
     this.position_list = new Array();
+
+    const keys: string[] = Object.keys(pickup_data);
+    const members: any[] = pickup_data[keys[0]];
+
+    const groupe_list: any[] = this.members.getGroupeList();
+    for(const groupe of groupe_list) {
+      let positions: number[];
+      for ( const member of groupe) {
+        const tar = members.filter((v,i,a) => v.memberNo === member.m_no);
+        const array1 = [];
+        tar.forEach((v1,i1,a) => {
+          if(array1.find((v2,i2,o)=>v2.position===v2.position)){
+            array1.push(v1);
+          }
+        });
+        positions = Array.from(new Set(array1));
+        positions.sort();
+      }
+      for(const pos of positions){
+        let new_member = old_position_list.find((t) => t.index === pickup_point.index);
+        if (new_member === undefined) {
+          new_member = this.default_position(pickup_point.index);
+        }
+      }
+    }
+
+    const pickup_points: any[] = pickup_data[Object.keys(pickup_data)[0]];
+
 
     // 着目点リストを作成する
     for(const pickup_point of pickup_points){

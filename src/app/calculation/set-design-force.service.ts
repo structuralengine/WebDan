@@ -121,7 +121,7 @@ export class SetDesignForceService {
     ).temp;
 
     // 断面力を追加
-    const pickupStr: string = 'pickUpNo:' + pickupNo;
+    const pickupStr: string = pickupNo.toString();
     if (pickupStr in force === false) {
       return new Array(); // ピックアップ番号の入力が不正
     }
