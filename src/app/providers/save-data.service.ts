@@ -86,6 +86,7 @@ export class SaveDataService {
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
       const pickup1 = {};
       let index: number = 1;
+      let old: number = Number.MAX_VALUE;
       const mode = this.helper.getExt(filename);
 
       for (let i = 1; i < tmp.length; ++i) {
@@ -107,7 +108,13 @@ export class SaveDataService {
             this.pickup_data = {};
             return;
         }
+        // 最初の行か判定する
+        if(data.memberNo < old){
+          index = 1;
+        }
+        old = data.memberNo;
 
+        // 
         if (!(data.pickUpNo in pickup1)) {
           pickup1[data.pickUpNo] = new Array();
         }
@@ -119,10 +126,8 @@ export class SaveDataService {
           pickup2.push(pickup3);
         }
 
-        if (data.mark in pickup3 === false) {
+        if (!(data.mark in pickup3)) {
           pickup3[data.mark] = {max: {}, min: {}};
-          pickup3.index = 1;
-          index = 1;
         }
         const pickup4 = pickup3[data.mark];
 
