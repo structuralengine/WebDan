@@ -130,7 +130,7 @@ export class InputDesignPointsService {
   }
 
   // pick up ファイルをセットする関数
-  public setPickUpData(pickup_data: Object) {
+  public setPickUpData(pickup_data: Object) { 
     // 初期化する
     const old_position_list = this.position_list.slice(0, this.position_list.length);
     this.position_list = new Array();
