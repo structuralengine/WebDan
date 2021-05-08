@@ -53,7 +53,7 @@ export class InputMembersService  {
   }
 
   public setSaveData(table_datas: any, isManual: boolean = false) {
-
+ 
     if (!isManual) {
       // 断面力手入力モードじゃない場合
       this.member_list = table_datas;
@@ -104,6 +104,7 @@ export class InputMembersService  {
       new_member.m_len = pos;
       this.member_list.push(new_member);
     }
+
   }
 
 

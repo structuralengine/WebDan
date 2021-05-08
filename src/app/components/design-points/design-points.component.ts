@@ -109,7 +109,11 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
           a.push(p);
       }
     }
-    this.points.setSaveData(a);
+    if(this.save.isManual()){
+      this.points.setManualSaveData(a);
+    } else {
+      this.points.setSaveData(a);
+    }
   }
 
   // 表の高さを計算する

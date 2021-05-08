@@ -85,12 +85,12 @@ export class SaveDataService {
       const tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
       const pickup1 = {};
-      let index: number = 0;
+      let i: number = 0;
       let oldNo: number = 0;
       const mode = this.helper.getExt(filename);
 
-      for (let i = 1; i < tmp.length; ++i) {
-        const line = tmp[i].trim();
+      for (let j = 1; j < tmp.length; ++j) {
+        const line = tmp[j].trim();
         if (line.length === 0) {
           continue;
         }
@@ -110,7 +110,7 @@ export class SaveDataService {
         }
         // 最初の行か判定する
         if(data.m_no < oldNo){
-          index = 0;
+          i = 0;
         }
         oldNo = data.m_no;
 
@@ -120,9 +120,9 @@ export class SaveDataService {
         }
         const pickup2 = pickup1[data.pickUpNo];
 
-        let pickup3 = { index: index, m_no: data.m_no, p_name: data.p_name, position: data.position };
-        if( pickup2.length > index){
-          pickup3 = pickup2[index];
+        let pickup3 = { index: i + 1, m_no: data.m_no, p_name: data.p_name, position: data.position };
+        if( pickup2.length > i){
+          pickup3 = pickup2[i];
         } else {
           pickup2.push(pickup3);
         }
@@ -152,7 +152,7 @@ export class SaveDataService {
           comb: data.minPickupCase,
         };
 
-        index += 1;
+        i += 1;
       }
 
       this.basic.setPickUpData();

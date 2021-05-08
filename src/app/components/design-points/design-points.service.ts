@@ -35,7 +35,8 @@ export class InputDesignPointsService {
     return this.position_list;
   }
 
-  public setSaveData(points: any): void{
+  public setManualSaveData(points: any): void{
+
     this.clear();
     for(const data of points){
       const tmp = this.default_position(data.index);
@@ -47,29 +48,46 @@ export class InputDesignPointsService {
       this.position_list.push(tmp);
     }
   }
+  
+  public setSaveData(points: any): void{
+
+    for(const data of points){
+      const tmp = this.default_position(data.index);
+      const i = this.position_list.findIndex((value) => value.index === data.index);
+      const pos = this.position_list[i];
+      for(const key of Object.keys(tmp)){
+        if(key in pos){
+          tmp[key] = pos[key];
+        }
+        if(key in data){
+          tmp[key] = data[key];
+        }
+      }
+      this.position_list[i] = tmp;
+    }
+  }
 
   public getTableColumns(): any[] {
 
     const table_datas: any[] = new Array();
 
     // グリッド用データの作成
-    let index = 1;
     for( const groupe of this.getGroupeList()){
       const columns = [];
       for ( const member of groupe) {
+        const index = member.m_no;
         const position = member.positions;
-        if (position.length <= 0) {
+        if (position.length === 0) {
+          // マニュアルモードでしかここにこないハズ
           // position が 0行 だったら 空のデータを1行追加する
           const column = this.default_position(index);
           column.m_no = member.m_no;
           columns.push(column);
-          index++;
         } else {
           // index を振りなおす
           for (const column of member.positions){
-            column.index = index;
+            // column.index = index;
             columns.push(column);
-            index++;
           }
         }
       }
@@ -157,7 +175,7 @@ export class InputDesignPointsService {
       // 部材長をセットする
       this.position_list.push(new_point);
     }
- 
+
   }
 
   // 算出点に何か入力されたタイミング

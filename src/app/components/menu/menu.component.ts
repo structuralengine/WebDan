@@ -4,7 +4,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from '../../app.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, NavigationEnd } from '@angular/router';
 
 import { ResultViewerComponent } from '../../calculation/result-viewer/result-viewer.component';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
@@ -19,6 +19,7 @@ import { DsdDataService } from 'src/app/providers/dsd-data.service';
 import { AuthService } from '../../core/auth.service';
 import firebase from 'firebase';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu',
@@ -103,16 +104,14 @@ export class MenuComponent implements OnInit {
     const file = evt.target.files[0];
     const modalRef = this.modalService.open(WaitDialogComponent);
     evt.target.value = '';
+
+    this.router.navigate(['/blank-page']);
+    this.app.deactiveButtons();
+
     this.fileToText(file)
       .then(text => {
         this.save.readPickUpData(text, file.name); // データを読み込む
         this.pickup_file_name = this.save.pickup_filename;
-        if (this.router.url === this.router.config[0].redirectTo ) {
-          this.router.navigate(['/blank-page']);
-          this.app.deactiveButtons();
-        } else {
-          this.router.navigate(['/']);
-        }
         modalRef.close();
       })
       .catch(err => {
