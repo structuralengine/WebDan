@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
 import { InputDesignPointsService } from './design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
+import { AppComponent } from 'src/app/app.component';
 import { SheetComponent } from '../sheet/sheet.component';
 import pq from 'pqgrid';
 
@@ -24,7 +25,8 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(
     private points: InputDesignPointsService,
-    private save: SaveDataService) { }
+    private save: SaveDataService,
+    private app: AppComponent) { }
 
   ngOnInit() {
 
@@ -44,6 +46,10 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
         numberCell: { show: false }, // 行番号
         colModel: this.columnHeaders,
         dataModel: { data: this.table_datas[i] },
+        change: (evt, ui) => {
+          // 何か変更があったら判定する
+          this.app.designPointChange(this.points.designPointChange());
+        }
       };
       this.option_list.push(op);
     }
