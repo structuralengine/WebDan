@@ -20,7 +20,7 @@ export class SaveDataService {
   public pickup_data: Object;
   //={
   //  1:[
-  //    { index: 1, memberNo, p_name, position,
+  //    { index: 1, m_no, p_name, position,
   //      M:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
   //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
   //      S:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
@@ -28,7 +28,7 @@ export class SaveDataService {
   //      N:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
   //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
   //    },
-  //    { index: 2, memberNo, ...
+  //    { index: 2, m_no, ...
   //  ],
   //  2:[
   //    ...
@@ -85,11 +85,12 @@ export class SaveDataService {
       const tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
       // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
       const pickup1 = {};
-      let index: number = 1;
+      let i: number = 0;
+      let oldNo: number = 0;
       const mode = this.helper.getExt(filename);
 
-      for (let i = 1; i < tmp.length; ++i) {
-        const line = tmp[i].trim();
+      for (let j = 1; j < tmp.length; ++j) {
+        const line = tmp[j].trim();
         if (line.length === 0) {
           continue;
         }
@@ -107,22 +108,27 @@ export class SaveDataService {
             this.pickup_data = {};
             return;
         }
+        // 最初の行か判定する
+        if(data.m_no < oldNo){
+          i = 0;
+        }
+        oldNo = data.m_no;
 
+        // 
         if (!(data.pickUpNo in pickup1)) {
           pickup1[data.pickUpNo] = new Array();
         }
         const pickup2 = pickup1[data.pickUpNo];
 
-        let pickup3 = pickup2.find((v)=>v.index===index);
-        if (pickup3===undefined) {
-          pickup3 = { index, memberNo: data.memberNo, p_name: data.p_name, position: data.position };
+        let pickup3 = { index: i + 1, m_no: data.m_no, p_name: data.p_name, position: data.position };
+        if( pickup2.length > i){
+          pickup3 = pickup2[i];
+        } else {
           pickup2.push(pickup3);
         }
 
-        if (data.mark in pickup3 === false) {
+        if (!(data.mark in pickup3)) {
           pickup3[data.mark] = {max: {}, min: {}};
-          pickup3.index = 1;
-          index = 1;
         }
         const pickup4 = pickup3[data.mark];
 
@@ -146,7 +152,7 @@ export class SaveDataService {
           comb: data.minPickupCase,
         };
 
-        index += 1;
+        i += 1;
       }
 
       this.basic.setPickUpData();
@@ -157,7 +163,7 @@ export class SaveDataService {
       this.basic.setPickUpData();
       this.crack.setPickUpData();
       this.fatigues.setPickUpData();
-      this.safety.clear();
+      // this.safety.clear();
       this.force.clear();
 
       this.pickup_filename = filename;
@@ -187,7 +193,7 @@ export class SaveDataService {
     return {
       pickUpNo: line.slice(0, 5).trim(),
       mark: ma,
-      memberNo: this.helper.toNumber(line.slice(10, 15)),
+      m_no: this.helper.toNumber(line.slice(10, 15)),
       maxPickupCase: line.slice(15, 20).trim(),
       minPickupCase: line.slice(20, 25).trim(),
       p_name: line.slice(25, 30).trim(),
@@ -214,7 +220,7 @@ export class SaveDataService {
     return {
       pickUpNo: line[0].trim(),
       mark: line[1].trim(),
-      memberNo: this.helper.toNumber(line[2].trim()),
+      m_no: this.helper.toNumber(line[2].trim()),
       maxPickupCase: line[3].trim(),
       minPickupCase: line[4].trim(),
       p_name: line[5].trim(),

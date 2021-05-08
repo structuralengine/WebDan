@@ -130,7 +130,7 @@ export class SetDesignForceService {
     for (const groupe of result) {
       for (const member of groupe) {
         const targetMember = targetForce.find((value) => {
-          return (value.memberNo === member.m_no);
+          return (value.m_no === member.m_no);
         });
         if (targetMember === undefined) {
           return new Array(); // 存在しない要素番号がある

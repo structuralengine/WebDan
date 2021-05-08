@@ -53,7 +53,7 @@ export class InputMembersService  {
   }
 
   public setSaveData(table_datas: any, isManual: boolean = false) {
-
+ 
     if (!isManual) {
       // 断面力手入力モードじゃない場合
       this.member_list = table_datas;
@@ -86,24 +86,25 @@ export class InputMembersService  {
     // 部材番号のもっとも大きい数
     let n = 0;
     members.forEach((v,i,a) => {
-      n = Math.max(n, v.memberNo);
+      n = Math.max(n, v.m_no);
     });
-    for(let mNo = 1; mNo <= n; mNo++){
+    for(let m_no = 1; m_no <= n; m_no++){
       // 同じ部材番号を抽出
-      const tar = members.filter((v,i,a) => v.memberNo === mNo);
+      const tar = members.filter((v,i,a) => v.m_no === m_no);
       let pos = 0;
       tar.forEach((v,i,a) => {
         pos = Math.max(pos, v.position);
       });
       // 今の入力を踏襲
-      let new_member = old_member_list.find((value) => value.m_no === mNo);
+      let new_member = old_member_list.find((value) => value.m_no === m_no);
       if (new_member === undefined) {
-        new_member = this.default_member(mNo);
+        new_member = this.default_member(m_no);
       }
       // 部材長をセットする
       new_member.m_len = pos;
       this.member_list.push(new_member);
     }
+
   }
 
 
@@ -168,9 +169,9 @@ export class InputMembersService  {
   // グループ別 部材情報{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t} の配列
   public getGroupeList(): any[] {
 
-    const id_list: string[] = new Array();
+    // 全てのグループ番号をリストアップする
+    const id_list: string[] =  new Array();
     for (const m of this.member_list) {
-
       if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
         continue;
       }
