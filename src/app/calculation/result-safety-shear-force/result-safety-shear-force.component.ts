@@ -29,6 +29,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     this.err = '';
 
     // POST 用データを取得する
+    this.calc.setDesignForces();
     const postData = this.calc.setInputData();
     if (postData === null) {
       this.isLoading = false;

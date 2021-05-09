@@ -55,33 +55,17 @@ export class ResultViewerComponent implements OnInit {
 
     this.printcalculate = false;
     if (this.printControl.print_selected.print_calculate_checked === true) {
-      /*
-      if (this.user.loggedIn === true) {
-      */
+      // if (this.user.loggedIn === true) {
         this.printcalculate = true;
-      /*
-      } else {
-        alert('ログインしてください');
-        return;
-      }
-      */
+      // } else {
+      //   alert('ログインしてください');
+      //   return;
+      // }
     }
-
-    this.durabilityMoment.setDesignForces();
-    this.earthquakesMoment.setDesignForces();
-    this.earthquakesShearForce.setDesignForces();
-    this.restorabilityMoment.setDesignForces();
-    this.restorabilityShearForce.setDesignForces();
-    this.SafetyFatigueMoment.setDesignForces();
-    this.safetyFatigueShearForce.setDesignForces();
-    this.safetyMoment.setDesignForces();
-    this.safetyShearForce.setDesignForces();
-    this.serviceabilityMoment.setDesignForces();
-    this.serviceabilityShearForce.setDesignForces();
 
   }
 
-  public printTest() {
+  public print() {
     printJS({
       printable: 'print_section',
       type: 'html',
@@ -90,7 +74,7 @@ export class ResultViewerComponent implements OnInit {
   }
 
   private initPrintCss(): void {
-    this.PrintCss = '@page {';
+    this.PrintCss =  '@page {';
     this.PrintCss += 'size: A4;';
     this.PrintCss += 'margin: 0;';
     this.PrintCss += '}';
