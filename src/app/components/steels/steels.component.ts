@@ -117,7 +117,7 @@ export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
         a.push(e);
       }
     }
-    this.steel.setSaveData(a);
+    this.steel.setTableColumns(a);
   }
 
   // 表の高さを計算する

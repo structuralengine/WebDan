@@ -35,7 +35,7 @@ export class InputDesignPointsService {
     return this.position_list;
   }
 
-  public setManualSaveData(points: any): void{
+  public setSaveData(points: any): void{
 
     this.clear();
     for(const data of points){
@@ -49,7 +49,7 @@ export class InputDesignPointsService {
     }
   }
   
-  public setSaveData(points: any): void{
+  public setTableColumns(points: any): void{
 
     for(const data of points){
       const tmp = this.default_position(data.index);
@@ -216,6 +216,6 @@ export class InputDesignPointsService {
           data.push(p);
       }
     }
-    this.setSaveData(data);
+    this.setTableColumns(data);
   }
 }

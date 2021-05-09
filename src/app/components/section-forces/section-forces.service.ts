@@ -120,7 +120,12 @@ export class InputSectionForcesService  {
     };
   }
 
-  public setSaveData(force: any): void{
+  public setSaveData(force: any) {
+    this.moment_force = force.moment_force,
+    this.shear_force = force.shear_force
+  }
+
+  public setTableColumns(force: any): void{
     this.clear();
     if('moment_force' in force){
       this.moment_force = force.moment_force;

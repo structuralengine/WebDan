@@ -8,6 +8,7 @@ import { InputDesignPointsService } from "../design-points/design-points.service
 })
 export class InputCrackSettingsService {
 
+
   // 部材情報
   public crack_list: any[];
 
@@ -79,7 +80,7 @@ export class InputCrackSettingsService {
     return result;
   }
 
-  public setSaveData(table_datas: any[]) {
+  public setTableColumns(table_datas: any[]) {
 
     this.crack_list = new Array();
 
@@ -105,6 +106,10 @@ export class InputCrackSettingsService {
   
   public getSaveData(): any[] {
     return this.crack_list;
+  }
+
+  public setSaveData(crack: any) {
+    this.crack_list = crack;
   }
 
   public getGroupeName(i: number): string {

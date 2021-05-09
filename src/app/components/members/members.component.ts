@@ -214,7 +214,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   }
 
   public saveData(): void {
-    this.members.setSaveData(this.table_datas, this.save.isManual());
+    this.members.setTableColumns(this.table_datas, this.save.isManual());
     if(this.save.isManual()){
       // 断面力手入力モードの時 部材・断面の入力があったら
       // 算出点データも同時に生成されなければならない

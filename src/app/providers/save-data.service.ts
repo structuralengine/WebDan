@@ -246,8 +246,8 @@ export class SaveDataService {
 
     const jsonData = {
       // ピックアップ断面力
-      jpickup_filename: this.pickup_filename,
-      jpickup_data: this.pickup_data,
+      pickup_filename: this.pickup_filename,
+      pickup_data: this.pickup_data,
       // 設計条件
       basic: this.basic.getSaveData(),
       // 部材情報
@@ -282,8 +282,14 @@ export class SaveDataService {
     this.clear();
 
     // ピックアップ断面力
-    this.pickup_filename = jsonData.pickup_filename;
-    this.pickup_data = jsonData.pickup_data;
+    if ("pickup_filename" in jsonData) {
+      this.pickup_filename = jsonData.pickup_filename;
+    }
+    if ("pickup_data" in jsonData) {
+      this.pickup_data = jsonData.pickup_data;
+    } else{
+      this.pickup_filename = '';
+    }
 
     // 設計条件
     if ("basic" in jsonData) {

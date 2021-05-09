@@ -171,7 +171,7 @@ export class FatiguesComponent implements OnInit, OnDestroy, AfterViewInit {
         table_datas.push(e);
       }
     }
-    this.fatigues.setSaveData({
+    this.fatigues.setTableColumns({
       table_datas,
       train_A_count: this.train_A_count,
       train_B_count: this.train_B_count,

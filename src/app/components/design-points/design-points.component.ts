@@ -116,9 +116,9 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
       }
     }
     if(this.save.isManual()){
-      this.points.setManualSaveData(a);
-    } else {
       this.points.setSaveData(a);
+    } else {
+      this.points.setTableColumns(a);
     }
   }
 

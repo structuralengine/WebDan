@@ -142,7 +142,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
         a.push(e);
       }
     }
-    this.bars.setSaveData(a);
+    this.bars.setTableColumns(a);
   }
 
   // 表の高さを計算する

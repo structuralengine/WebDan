@@ -153,7 +153,7 @@ export class InputSteelsService {
     return result;
   }
 
-  public setSaveData(table_datas: any[]) {
+  public setTableColumns(table_datas: any[]) {
 
     this.steel_list = new Array();
 

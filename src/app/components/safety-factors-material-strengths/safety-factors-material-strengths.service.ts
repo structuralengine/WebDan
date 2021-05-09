@@ -256,7 +256,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
   }
 
 
-  public setSaveData(safety: any): void {
+  public setTableColumns(safety: any): void {
 
     this.clear();
 
@@ -339,6 +339,14 @@ export class InputSafetyFactorsMaterialStrengthsService {
       material_concrete: this.material_concrete,
       pile_factor: this.pile_factor
     }
+  }
+
+  public setSaveData(safety: any) {
+    this.safety_factor = safety.safety_factor,
+    this.material_bar = safety.material_bar,
+    this.material_steel = safety.material_steel,
+    this.material_concrete = safety.material_concrete,
+    this.pile_factor = safety.pile_factor
   }
 
   public getGroupeName(i: number): string {

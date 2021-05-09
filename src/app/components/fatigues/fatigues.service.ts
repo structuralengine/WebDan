@@ -159,7 +159,7 @@ export class InputFatiguesService {
   }
 
 
-  public setSaveData(fatigues: any) {
+  public setTableColumns(fatigues: any) {
 
     this.train_A_count - fatigues.train_A_count;
     this.train_B_count = fatigues.train_B_count;
@@ -234,6 +234,13 @@ export class InputFatiguesService {
       train_B_count: this.train_B_count,
       service_life: this.service_life
     }
+  }
+
+  public setSaveData(fatigues: any) {
+    this.fatigue_list = fatigues.fatigue_list,
+    this.train_A_count = fatigues.train_A_count,
+    this.train_B_count = fatigues.train_B_count,
+    this.service_life = fatigues.service_life
   }
 
   public getGroupeName(i: number): string {

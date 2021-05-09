@@ -112,7 +112,7 @@ export class CrackSettingsComponent implements OnInit, OnDestroy, AfterViewInit 
         a.push(e);
       }
     }
-    this.crack.setSaveData(a);
+    this.crack.setTableColumns(a);
   }
 
   // 表の高さを計算する

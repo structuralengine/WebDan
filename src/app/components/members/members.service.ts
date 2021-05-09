@@ -5,6 +5,7 @@ import { DataHelperModule } from '../../providers/data-helper.module';
   providedIn: 'root'
 })
 export class InputMembersService  {
+ 
 
   // 部材情報
   private member_list: any[];
@@ -52,7 +53,7 @@ export class InputMembersService  {
     return result;
   }
 
-  public setSaveData(table_datas: any, isManual: boolean = false) {
+  public setTableColumns(table_datas: any, isManual: boolean = false) {
  
     if (!isManual) {
       // 断面力手入力モードじゃない場合
@@ -198,6 +199,10 @@ export class InputMembersService  {
 
   public getSaveData():any{
     return this.member_list;
+  }
+
+  public setSaveData(members: any) {
+    this.member_list = members;
   }
 
 }

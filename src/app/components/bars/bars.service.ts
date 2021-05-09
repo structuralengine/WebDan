@@ -176,7 +176,7 @@ export class InputBarsService {
     return result;
   }
 
-  public setSaveData(table_datas: any[]) {
+  public setTableColumns(table_datas: any[]) {
 
     this.bar_list = new Array();
 
@@ -240,6 +240,10 @@ export class InputBarsService {
 
   public getSaveData(): any[] {
     return this.bar_list;
+  }
+
+  public setSaveData(bar: any) {
+    this.bar_list = bar;
   }
 
   public getGroupeName(i: number): string {

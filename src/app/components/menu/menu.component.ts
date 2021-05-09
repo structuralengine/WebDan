@@ -81,12 +81,16 @@ export class MenuComponent implements OnInit {
           if (pik !== null){
             alert(pik + ' を開いてください！');
           }
+          this.app.memberChange(); // 左側のボタンを有効にする。
         })
         .catch(err => { error = err; });
         break;
       default:
         this.fileToText(file)
-        .then(text => { this.save.readInputData(text); })
+        .then(text => {
+          this.save.readInputData(text);
+          this.app.memberChange(); // 左側のボタンを有効にする。
+        })
         .catch(err => { error = err; });
     }
 
@@ -96,6 +100,7 @@ export class MenuComponent implements OnInit {
     } else {
       console.log(error)
     }
+
     modalRef.close();
   }
 

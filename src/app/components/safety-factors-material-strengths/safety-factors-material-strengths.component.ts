@@ -136,8 +136,8 @@ export class SafetyFactorsMaterialStrengthsComponent
 
       // グリッドの設定
       this.option1_list.push({
-        width: 985,
-        height: 220,
+        width: 1000,
+        height: 250,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -336,7 +336,7 @@ export class SafetyFactorsMaterialStrengthsComponent
       pile_factor[id] = this.pile_factor_list[i];
     }
 
-    this.safety.setSaveData({
+    this.safety.setTableColumns({
       safety_factor,
       material_bar,
       material_steel,
