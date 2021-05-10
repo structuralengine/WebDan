@@ -32,7 +32,7 @@ export class ResultDataService {
   // 照査表における タイトル２行目を取得
   public getTitleString2(position: any, postdata: any): any {
 
-    const title: string = position.p_name_ex;// + side;
+    const title: string = position.p_name;// + side;
     const result = { alien: 'center', value: title };
     return result;
   }

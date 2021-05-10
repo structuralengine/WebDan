@@ -20,7 +20,7 @@ export class SaveDataService {
   public pickup_data: Object;
   //={
   //  1:[
-  //    { index: 1, m_no, p_name, position,
+  //    { index: 1, m_no, g_name, position,
   //      M:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
   //         min:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb }},
   //      S:{max:{ Mtd, Mdy, Mdz, Vdy, Vdz, Nd, comb },
@@ -120,7 +120,7 @@ export class SaveDataService {
         }
         const pickup2 = pickup1[data.pickUpNo];
 
-        let pickup3 = { index: i + 1, m_no: data.m_no, p_name: data.p_name, position: data.position };
+        let pickup3 = { index: i + 1, m_no: data.m_no, g_name: data.g_name, position: data.position };
         if( pickup2.length > i){
           pickup3 = pickup2[i];
         } else {
@@ -196,7 +196,7 @@ export class SaveDataService {
       m_no: this.helper.toNumber(line.slice(10, 15)),
       maxPickupCase: line.slice(15, 20).trim(),
       minPickupCase: line.slice(20, 25).trim(),
-      p_name: line.slice(25, 30).trim(),
+      g_name: line.slice(25, 30).trim(),
       position: this.helper.toNumber(line.slice(30, 40)),
       maxMdx: 0,
       maxMdy: this.helper.toNumber(line.slice(40, 50)),
@@ -223,7 +223,7 @@ export class SaveDataService {
       m_no: this.helper.toNumber(line[2].trim()),
       maxPickupCase: line[3].trim(),
       minPickupCase: line[4].trim(),
-      p_name: line[5].trim(),
+      g_name: line[5].trim(),
       position: this.helper.toNumber(line[6]),
       maxNd: -1 * this.helper.toNumber(line[7]),
       maxVdy: this.helper.toNumber(line[8]),

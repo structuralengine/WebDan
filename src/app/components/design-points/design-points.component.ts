@@ -72,16 +72,16 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
       // 断面力手入力モードの場合
       this.columnHeaders = [
         { title: "", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: "算出点名", dataType: "string", dataIndx: "p_name_ex", sortable: false, width: 250 },
+        { title: "算出点名", dataType: "string", dataIndx: "p_name", sortable: false, width: 250 },
         { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
       ];
     } else {
       // ピックアップファイルを使う場合
       this.columnHeaders = [
         { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: "算出点", dataType: "string", dataIndx: "p_name", sortable: false, width: 85, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "算出点", dataType: "string", dataIndx: "g_name", sortable: false, width: 85, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
         { title: "位置", dataType: "float", format: "#.000", dataIndx: "position", sortable: false, width: 110, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: "算出点名", dataType: "string", dataIndx: "p_name_ex", sortable: false, width: 250 },
+        { title: "算出点名", dataType: "string", dataIndx: "p_name", sortable: false, width: 250 },
       ];
       if (this.save.is3DPickUp()) {
         // 3次元ピックアップファイルの場合

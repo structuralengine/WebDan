@@ -78,7 +78,7 @@ export class CrackSettingsComponent implements OnInit, OnDestroy, AfterViewInit 
 
     // 共通する項目
     this.columnHeaders.push(
-      { title: '算出点名', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      { title: '算出点名', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       {
         title: '環境条件', align: 'center', colModel: [
           { title: '上側', dataType: 'integer', dataIndx: 'con_u', sortable: false, width: 60 },

@@ -257,16 +257,16 @@ export class SetDesignForceService {
             }
           }
 
-          const p_name_ex: string = (pos.p_name_ex === null) ? '' : pos.p_name_ex.toString().toUpperCase();
+          const p_name: string = (pos.p_name === null) ? '' : pos.p_name.toString().toUpperCase();
 
-          if (pos.enable === true && p_name_ex.indexOf('MAX') >= 0) {
-            // 着目点名(p_name_ex) に MAX というキーワードが入っていたら END まで対象とする
+          if (pos.enable === true && p_name.indexOf('MAX') >= 0) {
+            // 着目点名(p_name) に MAX というキーワードが入っていたら END まで対象とする
             maxFlag = true;
           }
 
           pos['isMax'] = maxFlag;  // MAX 区間中は isMaxフラグを付ける
 
-          if (p_name_ex.indexOf('END') >= 0) {
+          if (p_name.indexOf('END') >= 0) {
             maxFlag = false;
           }
 

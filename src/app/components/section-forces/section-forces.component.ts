@@ -19,8 +19,8 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // 曲げモーメントのグリッド設定変数
   private columnHeaders1: object[] = [
-    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
-    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '縁応力検討用', align: 'center', colModel: [
         { title: 'Md<br/>(kN/m)',  dataType: 'float', 'format': '#.00', dataIndx: 'case0_Md', sortable: false, width: 100 },
@@ -64,8 +64,8 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // せん断力のグリッド設定変数
   private columnHeaders2: object[] = [
-    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
-    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name_ex', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '設計耐力検討用', align: 'center', colModel: [
         { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case0_Vd', sortable: false, width: 100 },

@@ -34,8 +34,8 @@ export class InputFatiguesService {
     return {
       m_no: null,
       index: id,
+      g_name: null,
       p_name: null,
-      p_name_ex: null,
       b: null,
       h: null,
       title1: "上",
@@ -82,8 +82,8 @@ export class InputFatiguesService {
           data.b = member.B;
           data.h = member.H;
           data.position = pos.position;
+          data.g_name = pos.g_name;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name_ex;
 
           // データを2行に分ける
           const column1 = {};
@@ -93,8 +93,8 @@ export class InputFatiguesService {
           column1["index"] = data.index;
           const a: number = this.helper.toNumber(data.position);
           column1["position"] = a === null ? "" : a.toFixed(3);
+          column1['g_name'] = data['g_name'];
           column1['p_name'] = data['p_name'];
-          column1['p_name_ex'] = data['p_name_ex'];
 
 
           column1['bh'] = data['b'];
@@ -173,10 +173,10 @@ export class InputFatiguesService {
       const column2 = table_datas[i + 1];
 
       const f = this.default_fatigue(column1.index);
-      f.p_name = column1.p_name;
+      f.g_name = column1.g_name;
       f.position = column1.position;
       f.m_no = column1.m_no;
-      f.p_name_ex = column1.p_name_ex;
+      f.p_name = column1.p_name;
       f.b = column1.bh;
       f.h = column2.bh;
 

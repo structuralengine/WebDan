@@ -26,8 +26,8 @@ export class InputBarsService {
       index: id,
       m_no: null,
       position: null,
+      g_name: null,
       p_name: null,
-      p_name_ex: null,
       b: null,
       h: null,
       haunch_M: null,
@@ -103,8 +103,8 @@ export class InputBarsService {
           data.b = member.B;
           data.h = member.H;
           data.position = pos.position;
+          data.g_name = pos.g_name;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name_ex;
 
           // データを2行に分ける
           const column1 = {};
@@ -114,8 +114,8 @@ export class InputBarsService {
           column1['index'] = data.index;
           const a: number = this.helper.toNumber(data.position);
           column1['position'] = (a === null) ? '' : a.toFixed(3);
+          column1['g_name'] = data['g_name'];
           column1['p_name'] = data['p_name'];
-          column1['p_name_ex'] = data['p_name_ex'];
           column1['bh'] = data['b'];
           column1['haunch_height'] = data['haunch_M'];
 
@@ -185,10 +185,10 @@ export class InputBarsService {
       const column2 = table_datas[i + 1];
 
       const b = this.default_bars(column1.index);
-      b.p_name = column1.p_name;
+      b.g_name = column1.g_name;
       b.position = column1.position;
       b.m_no = column1.m_no;
-      b.p_name_ex = column1.p_name_ex;
+      b.p_name = column1.p_name;
       b.b = column1.bh;
       b.h = column2.bh;
       b.haunch_M = column1.haunch_height;

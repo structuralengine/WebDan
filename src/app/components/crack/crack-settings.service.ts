@@ -25,8 +25,8 @@ export class InputCrackSettingsService {
     return {
       index: id,
       m_no: null,
+      g_name: null,
       p_name: null,
-      p_name_ex: null,
       con_u: null,
       con_l: null,
       con_s: null,
@@ -59,8 +59,8 @@ export class InputCrackSettingsService {
           data.b = member.B;
           data.h = member.H;
           data.position = pos.position;
+          data.g_name = pos.g_name;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name_ex;
 
           table_groupe.push(data);
         }
@@ -87,8 +87,8 @@ export class InputCrackSettingsService {
     for (const column of table_datas) {
       const b = this.default_crack(column.index);
       b.m_no =      column.m_no;   
-      b.p_name =    column.p_name;  
-      b.p_name_ex = column.p_name_ex;
+      b.g_name =    column.g_name;  
+      b.p_name = column.p_name;
       b.con_u =     column.con_u;   
       b.con_l =     column.con_l;   
       b.con_s =     column.con_s;   

@@ -411,8 +411,8 @@ export class SectionForceListComponent implements OnInit {
             const p: any = {
               m_no: member.m_no,
               position: pos.position.toFixed(3),
+              g_name: pos.g_name,
               p_name: pos.p_name,
-              p_name_ex: pos.p_name_ex,
               upperSideName: upperName,
               bottomSideName: bottomName
             };

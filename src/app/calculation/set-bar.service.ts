@@ -979,8 +979,8 @@ export class SetBarService {
         if (key === 'b') { continue; }
         if (key === 'h') { continue; }
         if (key === 'm_no') { continue; }
+        if (key === 'g_name') { continue; }
         if (key === 'p_name') { continue; }
-        if (key === 'p_name_ex') { continue; }
         if (key === 'position') { continue; }
         if (key === 'index') { continue; }
         if (key === 'title') { continue; }

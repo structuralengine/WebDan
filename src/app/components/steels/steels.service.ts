@@ -28,8 +28,8 @@ export class InputSteelsService {
       shape: null,
       index: id,
       position: null,
+      g_name: null,
       p_name: null,
-      p_name_ex: null,
       b: null,
       h: null,
       I: this.default_I_steel(),
@@ -86,8 +86,8 @@ export class InputSteelsService {
           data.h = member.H;
           data.shape = member.shape;
           data.position = pos.position;
+          data.g_name = pos.g_name;
           data.p_name = pos.p_name;
-          data.p_name_ex = pos.p_name_ex;
 
           // データを2行に分ける
           const column1 = {};
@@ -98,8 +98,8 @@ export class InputSteelsService {
           column1['index'] = data['index'];
           const a: number = this.helper.toNumber(data.position);
           column1['position'] = (a === null) ? '' : a.toFixed(3);
+          column1['g_name'] = data['g_name'];
           column1['p_name'] = data['p_name'];
-          column1['p_name_ex'] = data['p_name_ex'];
           column1['bh'] = data['b'];
 
           column1['design_point_id'] = data['I'].title;
@@ -163,9 +163,9 @@ export class InputSteelsService {
 
       const b = this.default_steels(column1.index);
       b.m_no = column1.m_no;
-      b.p_name = column1.p_name;
+      b.g_name = column1.g_name;
       b.position = column1.position;
-      b.p_name_ex = column1.p_name_ex;
+      b.p_name = column1.p_name;
       b.b = column1.bh;
       b.h = column2.bh;
 

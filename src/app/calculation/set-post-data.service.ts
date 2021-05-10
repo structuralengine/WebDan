@@ -238,7 +238,7 @@ export class SetPostDataService {
         let keys = list[0];
         let member = baseDesignForceList[ig][keys.im];
         let position = member.positions[keys.ip];
-        const name: string = position.p_name_ex;
+        const name: string = position.p_name;
 
         for ( keys of list) {
           member = baseDesignForceList[ig][keys.im];
@@ -253,18 +253,18 @@ export class SetPostDataService {
                 if ( upper === null ) {
                   upper = position;
                   upper['keyForce'] = force;
-                  upper.p_name_ex = name;
+                  upper.p_name = name;
                 } else if (calcTarget === 'Md') {
                   if (upper.keyForce[calcTarget] > force[calcTarget]) {
                     upper = position;
                     upper.keyForce = force;
-                    upper.p_name_ex = name;
+                    upper.p_name = name;
                   }
                 } else {
                   if (Math.abs(upper.keyForce[calcTarget]) < Math.abs(force[calcTarget])) {
                     upper = position;
                     upper.keyForce = force;
-                    upper.p_name_ex = name;
+                    upper.p_name = name;
                   }
                 }
                 break;
@@ -272,18 +272,18 @@ export class SetPostDataService {
               if ( bottom === null ) {
                 bottom = position;
                 bottom['keyForce'] = force;
-                bottom.p_name_ex = name;
+                bottom.p_name = name;
               } else if (calcTarget === 'Md') {
                 if (bottom.keyForce[calcTarget] < force[calcTarget]) {
                   bottom = position;
                   bottom.keyForce = force;
-                  bottom.p_name_ex = name;
+                  bottom.p_name = name;
                 }
               } else {
                 if (Math.abs(bottom.keyForce[calcTarget]) < Math.abs(force[calcTarget])) {
                   bottom = position;
                   bottom.keyForce = force;
-                  bottom.p_name_ex = name;
+                  bottom.p_name = name;
                 }
               }
               break;

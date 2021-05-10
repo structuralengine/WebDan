@@ -69,8 +69,8 @@ export class SetFatigueService {
         if (key === 'h') { continue; }
         if (key === 'index') { continue; }
         if (key === 'm_no') { continue; }
+        if (key === 'g_name') { continue; }
         if (key === 'p_name') { continue; }
-        if (key === 'p_name_ex') { continue; }
         if (key === 'position') { continue; }
         if (key === 'title1') { continue; }
         if (key === 'title2') { continue; }

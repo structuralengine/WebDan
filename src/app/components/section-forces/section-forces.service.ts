@@ -18,7 +18,7 @@ export class InputSectionForcesService  {
   }
 
   // 曲げモーメント １入力行のデフォルト値
-  // { index, p_name_ex, case: [{Md, Nd}, {Md, Nd}, ...] }
+  // { index, p_name, case: [{Md, Nd}, {Md, Nd}, ...] }
   private default_1_column(index: number): any {
 
     const rows: any = { index, case: new Array() };
@@ -34,7 +34,7 @@ export class InputSectionForcesService  {
   }
 
   // せん断力 １入力行のデフォルト値
-  // { index, p_name_ex, case: [{Vd, Md, Nd}, {Vd, Md, Nd}, ...] }
+  // { index, p_name, case: [{Vd, Md, Nd}, {Vd, Md, Nd}, ...] }
   private default_2_column(index: number): any {
 
     const rows: any = { index, case: new Array() };
@@ -55,11 +55,11 @@ export class InputSectionForcesService  {
     let result = this.moment_force.find( (item) => item.index === row );
     //
     const design_point = this.points.getTableColumn(row);
+    let g_name: string = '';
     let p_name: string = '';
-    let p_name_ex: string = '';
     if(design_point !== undefined){
-      p_name = design_point.g_name;
-      p_name_ex = design_point.p_name_ex;
+      g_name = design_point.g_name;
+      p_name = design_point.p_name;
     }
 
     // 対象データが無かった時に処理
@@ -68,8 +68,8 @@ export class InputSectionForcesService  {
       this.moment_force.push(result);
     }
 
+    result['g_name'] = g_name;
     result['p_name'] = p_name;
-    result['p_name_ex'] = p_name_ex;
     return result;
 
   }
@@ -93,7 +93,7 @@ export class InputSectionForcesService  {
     let result = this.shear_force.find( (item) => item.index === row );
     //
     const design_point = this.points.getTableColumn(row);
-    const p_name_ex: string = (design_point !== undefined) ? design_point.p_name_ex: '';
+    const p_name: string = (design_point !== undefined) ? design_point.p_name: '';
 
     // 対象データが無かった時に処理
     if (result === undefined) {
@@ -101,7 +101,7 @@ export class InputSectionForcesService  {
       this.shear_force.push(result);
     }
 
-    result['p_name_ex'] = p_name_ex;
+    result['p_name'] = p_name;
     return result;
 
   }

@@ -8,7 +8,7 @@ export class InputDesignPointsService {
 
   // 着目点情報
   private position_list: any[];
-  // { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
+  // { index, m_no, g_name, position, p_name, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
     private members: InputMembersService) {
@@ -85,6 +85,7 @@ export class InputDesignPointsService {
           // position が 0行 だったら 空のデータを1行追加する
           const column = this.default_position(member.m_no);
           column.m_no = member.m_no;
+          column.g_name = member.g_name;
           columns.push(column);
         } else {
           // index を振りなおす
@@ -103,7 +104,7 @@ export class InputDesignPointsService {
   // グループ別 部材情報
   //  [{m_no, m_len, g_no, g_id, g_name, shape, B, H, Bt, t,
   //   positions:[
-  //    { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
+  //    { index, m_no, g_name, position, p_name, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
   //    ...
   //   }, ...
   public getGroupeList(): any[] {
@@ -139,9 +140,9 @@ export class InputDesignPointsService {
     return {
       index: id,
       m_no: null,
-      p_name: null,
+      g_name: null,
       position: null,
-      p_name_ex: null,
+      p_name: null,
       isMyCalc: false,
       isVyCalc: false,
       isMzCalc: false,
