@@ -63,6 +63,18 @@ export class ResultViewerComponent implements OnInit {
       // }
     }
 
+    this.durabilityMoment.setDesignForces();
+    this.earthquakesMoment.setDesignForces();
+    this.earthquakesShearForce.setDesignForces();
+    this.restorabilityMoment.setDesignForces();
+    this.restorabilityShearForce.setDesignForces();
+    this.SafetyFatigueMoment.setDesignForces();
+    this.safetyFatigueShearForce.setDesignForces();
+    this.safetyMoment.setDesignForces();
+    this.safetyShearForce.setDesignForces();
+    this.serviceabilityMoment.setDesignForces();
+    this.serviceabilityShearForce.setDesignForces();
+
   }
 
   public print() {

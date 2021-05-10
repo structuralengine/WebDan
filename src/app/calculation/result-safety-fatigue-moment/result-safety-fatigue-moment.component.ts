@@ -34,7 +34,6 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     this.NB = trainCount[1];
     
     // POST 用データを取得する
-    this.calc.setDesignForces();
     const postData = this.calc.setInputData();
     if (postData === null) {
       this.isLoading = false;

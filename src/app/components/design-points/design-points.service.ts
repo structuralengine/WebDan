@@ -7,7 +7,7 @@ import { InputMembersService } from '../members/members.service';
 export class InputDesignPointsService {
 
   // 着目点情報
-  public position_list: any[];
+  private position_list: any[];
   // { index, m_no, p_name, position, p_name_ex, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
@@ -148,7 +148,7 @@ export class InputDesignPointsService {
   }
 
   // pick up ファイルをセットする関数
-  public setPickUpData(pickup_data: Object) { 
+  public setPickUpData(pickup_data: Object) {
     const keys: string[] = Object.keys(pickup_data);
     const positions: any[] = pickup_data[keys[0]];
 

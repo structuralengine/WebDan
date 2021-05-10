@@ -72,15 +72,16 @@ export class SetDesignForceService {
         if (targetMember === undefined) {
           return new Array(); // 存在しない要素番号がある
         }
+        // 奥行き本数
+        let n: number = this.helper.toNumber(member.n);
+        if (n === null) { n = 1; }
+        if (n === 0) { n = 1; }
+
         for (const position of member.positions) {
 
           if (targetMember.case.length < pickupNo) {
             return new Array(); // ピックアップ番号の入力が不正
           }
-          // 奥行き本数
-          let n: number = this.helper.toNumber(member.n);
-          if (n === null) { n = 1; }
-          if (n === 0) { n = 1; }
 
           const targetForce = targetMember.case[pickupNo];
 
@@ -127,11 +128,11 @@ export class SetDesignForceService {
     }
     const targetForce = force[pickupStr];
 
+    // 断面力を追加
     for (const groupe of result) {
       for (const member of groupe) {
-        const targetMember = targetForce.find((value) => {
-          return (value.m_no === member.m_no);
-        });
+        const targetMember = targetForce.filter((value) =>
+          value.m_no === member.m_no);
         if (targetMember === undefined) {
           return new Array(); // 存在しない要素番号がある
         }
@@ -141,9 +142,10 @@ export class SetDesignForceService {
         if (n === 0) { n = 1; }
 
         for (const position of member.positions) {
-          const targetPosition = targetMember.positions.find((value) => {
-            return (value.index === position.index);
-          });
+
+          const targetPosition = targetMember.find((value) => 
+            value.index === position.index);
+
           if (targetPosition === undefined) {
             return new Array(); // 存在しない着目点がある
           }
@@ -224,7 +226,7 @@ export class SetDesignForceService {
 
     const result = JSON.parse(
       JSON.stringify({
-        temp: this.points.position_list
+        temp: this.points.getGroupeList()
       })
     ).temp;
 
@@ -235,15 +237,13 @@ export class SetDesignForceService {
         result.splice(i, 1);
         continue;
       }
+      const members = result[i];
 
-      const groupe = result[i];
-      for (let j = groupe.length - 1; j >= 0; j--) {
-
-        const positions: any[] = groupe[j].positions;
+      for (let j = members.length - 1; j >= 0; j--) {
         let maxFlag: boolean = false;
+        const positions = members[j].positions;
 
         for (const pos of positions) {
-
           if (maxFlag === true) {
             pos['enable'] = maxFlag;
           } else {
@@ -284,13 +284,13 @@ export class SetDesignForceService {
 
         // 照査する着目点がなければ 対象部材を削除
         if (positions.length === 0) {
-          groupe.splice(j, 1);
+          members.splice(j, 1);
         }
 
       }
 
       // 照査する部材がなければ 対象グループを削除
-      if (groupe.length === 0) {
+      if (members.length === 0) {
         result.splice(i, 1);
       }
 
