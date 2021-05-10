@@ -88,7 +88,7 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, this.DesignForceList3, DesignForceList2], 'Vd');
+    this.post.setPostData('Vd', this.DesignForceList, this.DesignForceList3, DesignForceList2);
 
   }
 

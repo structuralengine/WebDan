@@ -59,7 +59,7 @@ export class CalcServiceabilityShearForceService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList1, DesignForceList2], 'Vd');
+    this.post.setPostData('Vd', this.DesignForceList, DesignForceList1, DesignForceList2);
 
   }
 

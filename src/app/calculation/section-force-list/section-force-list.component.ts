@@ -68,8 +68,8 @@ export class SectionForceListComponent implements OnInit {
     const earthquakesMomentForces = this.earthquakesMoment.DesignForceList;
     const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
 
-    for (const memberList of groupeList) {
-
+    for (let i = 0; i < groupeList.length; i++) {
+      const memberList = groupeList[i];
       let currentRow: number = 0;
 
       // グループタイプ によって 上側・下側の表示を 右側・左側 等にする
@@ -104,7 +104,7 @@ export class SectionForceListComponent implements OnInit {
       }
 
 
-      const g_name: string = memberList[0].g_name;
+      const g_name: string = this.members.getGroupeName(i);// memberList[0].g_name;
 
       let page: any = null;
       const g_name_moment: string = g_name + ' 曲げモーメントの照査';

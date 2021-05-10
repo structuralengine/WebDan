@@ -53,7 +53,7 @@ export class CalcServiceabilityMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
+    this.post.setPostData('Md', this.DesignForceList, DesignForceList1);
 
   }
 

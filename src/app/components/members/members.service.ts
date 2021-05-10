@@ -33,6 +33,7 @@ export class InputMembersService  {
       H: null,
       Bt: null,
       t: null,
+      n: null
     };
   }
 

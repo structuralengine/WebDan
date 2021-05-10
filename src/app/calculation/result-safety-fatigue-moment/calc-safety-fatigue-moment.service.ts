@@ -95,7 +95,7 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, this.DesignForceList3, DesignForceList2], 'Md');
+    this.post.setPostData('Md', this.DesignForceList, this.DesignForceList3, DesignForceList2);
 
   }
 
@@ -133,7 +133,7 @@ export class CalcSafetyFatigueMomentService {
   // DesignForceList[0]: 最大応力
   // DesignForceList[1]: 最小応力
   // DesignForceList[2]: 変動応力
-  public setPostData(DesignForceListList: any[]): void {
+  public setPostData(...DesignForceListList: any[]): void {
 
     const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
     const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力

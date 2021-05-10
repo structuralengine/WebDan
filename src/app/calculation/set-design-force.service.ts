@@ -143,7 +143,7 @@ export class SetDesignForceService {
 
         for (const position of member.positions) {
 
-          const targetPosition = targetMember.find((value) => 
+          const targetPosition = targetMember.find((value) =>
             value.index === position.index);
 
           if (targetPosition === undefined) {
@@ -153,24 +153,18 @@ export class SetDesignForceService {
             position['designForce'] = new Array();
           }
 
-          let mKey1: string = 'my';
-          let mKey2: string = 'Mdy';
+          let mKey1 = 'my', mKey2 = 'Mdy';
           if (position.isMzCalc === true) {
-            mKey1 = 'mz';
-            mKey2 = 'Mdz';
+            mKey1 = 'mz', mKey2 = 'Mdz';
           } else if (position.isVzCalc === true) {
-            mKey1 = 'mz';
-            mKey2 = 'Mdz';
+            mKey1 = 'mz', mKey2 = 'Mdz';
           }
 
-          let vKey1: string = 'fy';
-          let vKey2: string = 'Vdy';
+          let vKey1 = 'fy', vKey2: string = 'Vdy';
           if (position.isVzCalc === true) {
-            vKey1 = 'fz';
-            vKey2 = 'Vdz';
+            vKey1 = 'fz', vKey2 = 'Vdz';
           } else if (position.isMzCalc === true) {
-            vKey1 = 'fz';
-            vKey2 = 'Vdz';
+            vKey1 = 'fz', vKey2 = 'Vdz';
           }
 
           let temp = {

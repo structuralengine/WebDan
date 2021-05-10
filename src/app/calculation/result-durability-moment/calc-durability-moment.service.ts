@@ -47,7 +47,7 @@ export class CalcDurabilityMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
+    this.post.setPostData('Md',this.DesignForceList, DesignForceList1);
 
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition(this.DesignForceList);

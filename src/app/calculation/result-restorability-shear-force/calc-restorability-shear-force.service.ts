@@ -44,7 +44,7 @@ export class CalcRestorabilityShearForceService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList], 'Vd');
+    this.post.setPostData('Vd', this.DesignForceList);
 
   }
 

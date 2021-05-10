@@ -43,7 +43,7 @@ export class CalcEarthquakesMomentService {
     }
 
     // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList], 'Md');
+    this.post.setPostData('Md', this.DesignForceList);
 
   }
 

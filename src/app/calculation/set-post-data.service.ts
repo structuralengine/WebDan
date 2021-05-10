@@ -90,7 +90,7 @@ export class SetPostDataService {
 
   // position に PostData を追加する
   // DesignForceList　を複数指定できる。最初の DesignForceList が基準になる
-  public setPostData(DesignForceListList: any[], calcTarget: string): void {
+  public setPostData(calcTarget: string, ...DesignForceListList: any[]): void {
 
     const baseDesignForceList: any[] = DesignForceListList[0];
 
@@ -168,14 +168,23 @@ export class SetPostDataService {
           if (ps === undefined) {
             df.positions.splice(k, 1);
             continue;
-          }   
-          if (!('PostData0' in ps)) {
+          } 
+          if (!('designForce' in ps)) {
             df.positions.splice(k, 1);
             continue;
           }
-          const pd = ps['PostData0'][0];
-          if (pd[calcTarget] === 0) {
-            df.positions.splice(k, 1);
+          const pd = ps.designForce[0];
+          let key = calcTarget;
+          if(!(key in pd)) {
+            const max = pd[key + 'max'];
+            const min = pd[key + 'min'];
+            if (max[key] === 0 && min[key] === 0) {
+              df.positions.splice(k, 1);
+            }
+          } else {
+            if (pd[key] === 0) {
+              df.positions.splice(k, 1);
+            }
           }
         }
         if (df.positions.length === 0) {
@@ -372,7 +381,7 @@ export class SetPostDataService {
         const members: any[] = new Array();
         for (const df of DesignForceListList){
           members.push(df[ig][im]);
-        }       
+        }
 
         const tempms: any[] = new Array(DesignForceListList.length).fill(new Array());
         for(let i=0; i< members.length; i++){
