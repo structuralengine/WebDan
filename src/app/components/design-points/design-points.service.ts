@@ -54,11 +54,15 @@ export class InputDesignPointsService {
     for(const data of points){
       const tmp = this.default_position(data.index);
       const i = this.position_list.findIndex((value) => value.index === data.index);
-      const pos = this.position_list[i];
-      for(const key of Object.keys(tmp)){
-        if(key in pos){
-          tmp[key] = pos[key];
+      if( i >= 0 ){
+        const pos = this.position_list[i];
+        for(const key of Object.keys(tmp)){
+          if(key in pos){
+            tmp[key] = pos[key];
+          }
         }
+      }
+      for(const key of Object.keys(tmp)){
         if(key in data){
           tmp[key] = data[key];
         }
@@ -75,12 +79,11 @@ export class InputDesignPointsService {
     for( const groupe of this.getGroupeList()){
       const columns = [];
       for ( const member of groupe) {
-        const index = member.m_no;
         const position = member.positions;
         if (position.length === 0) {
           // マニュアルモードでしかここにこないハズ
           // position が 0行 だったら 空のデータを1行追加する
-          const column = this.default_position(index);
+          const column = this.default_position(member.m_no);
           column.m_no = member.m_no;
           columns.push(column);
         } else {

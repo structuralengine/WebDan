@@ -55,7 +55,12 @@ export class InputSectionForcesService  {
     let result = this.moment_force.find( (item) => item.index === row );
     //
     const design_point = this.points.getTableColumn(row);
-    const p_name_ex: string = (design_point !== undefined) ? design_point.p_name_ex: '';
+    let p_name: string = '';
+    let p_name_ex: string = '';
+    if(design_point !== undefined){
+      p_name = design_point.g_name;
+      p_name_ex = design_point.p_name_ex;
+    }
 
     // 対象データが無かった時に処理
     if (result === undefined) {
@@ -63,6 +68,7 @@ export class InputSectionForcesService  {
       this.moment_force.push(result);
     }
 
+    result['p_name'] = p_name;
     result['p_name_ex'] = p_name_ex;
     return result;
 

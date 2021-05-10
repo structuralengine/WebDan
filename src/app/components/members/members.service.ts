@@ -193,7 +193,11 @@ export class InputMembersService  {
         item => item.g_id === id);
       result.push(members);
     }
-    return result;
+    return JSON.parse(
+      JSON.stringify({
+        temp: result
+      })
+    ).temp;
   }
 
 
