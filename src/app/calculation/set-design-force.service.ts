@@ -31,6 +31,7 @@ export class SetDesignForceService {
     } else {
       result = this.getDesignForceFromPickUpData(calcTarget, pickupNo);
     }
+
     return result;
   }
 
@@ -290,6 +291,42 @@ export class SetDesignForceService {
 
     const baseDesignForceList: any[] = DesignForceListList[0];
 
+    for(let i = 1; i < DesignForceListList.length; i++){
+      const targetDesignForceList = JSON.parse(
+        JSON.stringify({ temp: DesignForceListList[i] })
+      ).temp;
+
+      for( const groupe of baseDesignForceList ) {
+        for( const member of groupe ) {
+          for(const position of member.positions){
+            const index = position.index;
+            // 同じindex の position を見つける
+            let targetPosition: any = null;
+            findPosition:
+            for(const g of targetDesignForceList) {
+              for(const m of g){
+                for(const p of m.positions){
+                  if(p.index === index){
+                    targetPosition = p;
+                    break findPosition;
+                  }
+                }
+              }
+            }
+            /////////////////////////////////////////////////////
+            for(const force of position.designForce){
+  
+            }
+          }
+        }
+      }
+
+      DesignForceListList[i] = targetDesignForceList;
+
+
+    }
+
+
     for (let ig = 0; ig < baseDesignForceList.length; ig++) {
       const groupe = baseDesignForceList[ig];
 
@@ -299,12 +336,25 @@ export class SetDesignForceService {
         for (let ip = 0; ip < member.positions.length; ip++) {
           const position = member.positions[ip];
 
+          let index = position.index;
+
+0
           // ピックアップ断面力から設計断面力を選定する
           for (let fo = 0; fo < position.designForce.length; fo++) {
 
 
           }
 
+        }
+      }
+    }
+
+    for( const groupe of baseDesignForceList ) {
+      for( const member of groupe ) {
+        for(const position of member){
+          for(const force of position.designForce){
+
+          }
         }
       }
     }

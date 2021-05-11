@@ -59,7 +59,10 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['/blank-page']);
     this.app.deactiveButtons();
 
-    this.save.clear();
+    setTimeout(()=>{
+      this.save.clear();
+      this.app.memberChange(); // 左側のボタンを無効にする。
+    }, 10);
   }
 
   // ファイルを開く

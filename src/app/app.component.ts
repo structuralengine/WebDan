@@ -81,7 +81,7 @@ export class AppComponent {
     }
 
     if (this.isDesignPointEnable !== flg) {
-      for (const id of ['3', '4', '5', '6', '4', '9']) {
+      for (const id of ['3', '4', '5', '6', '7']) {
         const data = document.getElementById(id);
         if (data != null) {
           if (flg === true) {
