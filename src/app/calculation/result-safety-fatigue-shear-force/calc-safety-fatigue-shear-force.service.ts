@@ -18,6 +18,7 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 export class CalcSafetyFatigueShearForceService {
   // 安全性（疲労破壊）せん断力
   public DesignForceList: any[];  // 永久+変動作用
+  public DesignForceList2: any[]; // 変動応力
   public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
 
@@ -80,15 +81,11 @@ export class CalcSafetyFatigueShearForceService {
     // 最大応力
     this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(4));
 
+    // 複数の断面力の整合性を確認する
+    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList3);
+
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
-
-    if (this.DesignForceList.length < 1) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList, this.DesignForceList3, DesignForceList2);
+    this.DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
 
   }
 
@@ -98,6 +95,9 @@ export class CalcSafetyFatigueShearForceService {
     if (this.DesignForceList.length < 1) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Vd', this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
 
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 1, 'Vd', '耐力', 1);

@@ -96,7 +96,7 @@ export class MenuComponent implements OnInit {
 
     // 後処理
     if( error === null ){
-      this.pickup_file_name = this.save.pickup_filename;
+      this.pickup_file_name = this.save.getPickupFilename();
     } else {
       console.log(error)
     }
@@ -116,7 +116,7 @@ export class MenuComponent implements OnInit {
     this.fileToText(file)
       .then(text => {
         this.save.readPickUpData(text, file.name); // データを読み込む
-        this.pickup_file_name = this.save.pickup_filename;
+        this.pickup_file_name = this.save.getPickupFilename();
         modalRef.close();
       })
       .catch(err => {

@@ -19,6 +19,8 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 export class CalcSafetyFatigueMomentService {
   // 安全性（疲労破壊）曲げモーメント
   public DesignForceList: any[];  // 永久+変動作用
+  public DesignForceList1: any[]; // 疲労現
+  public DesignForceList2: any[]; // 変動応力
   public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
 
@@ -81,21 +83,18 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // 疲労現
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(2));
+    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(2));
     // 永久作用
     this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(3));
     // 永久+変動作用
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(4));
 
+    // 複数の断面力の整合性を確認する
+    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1, this.DesignForceList3);
+
+
     // 変動応力
-    const DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
-
-    if (this.DesignForceList.length < 1) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList, this.DesignForceList3, DesignForceList2);
+    this.DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
 
   }
 
@@ -105,6 +104,9 @@ export class CalcSafetyFatigueMomentService {
     if (this.DesignForceList.length < 1) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Md', this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
 
     // POST 用
     this.PostedData = this.post.setInputData(this.DesignForceList, 1, 'Md', '応力度', 2);
@@ -143,7 +145,7 @@ export class CalcSafetyFatigueMomentService {
 
       for (let im = 0; im < groupe.length; im++) {
         const member = groupe[im];
-        
+
         // 部材・断面情報をセット
         const memberInfo = this.members.getTableColumns(member.m_no);
         if (memberInfo === undefined) {
@@ -178,7 +180,7 @@ export class CalcSafetyFatigueMomentService {
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
             sectionForce = this.post.getSectionForce(force, member.g_id, 'Md');
-            
+
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
               position['PostData' + (icase - 1).toString()] = sectionForce[icase];
@@ -200,7 +202,7 @@ export class CalcSafetyFatigueMomentService {
     const baseDesignForceList: any[] = DesignForceListList[0];
     const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
 
-    const maxPositionList = this.post.getMaxPositionList(baseDesignForceList, 'Md');
+    const maxPositionList = this.post.getMaxPositionList('Md', baseDesignForceList);
 
     // isMax フラグの付いた部材のうち最大でない部材を除外する
     const result0: any[] = new Array();

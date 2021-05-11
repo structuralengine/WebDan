@@ -43,13 +43,6 @@ export class CalcSafetyMomentService {
 
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(5));
 
-    if (this.DesignForceList.length < 1 ) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList);
-
   }
 
   // サーバー POST用データを生成する
@@ -58,6 +51,9 @@ export class CalcSafetyMomentService {
     if (this.DesignForceList.length < 1 ) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Md', this.DesignForceList);
 
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 2, 'Md', '耐力', 1);

@@ -36,14 +36,6 @@ export class CalcEarthquakesShearForceService {
 
     this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(7));
 
-
-    if (this.DesignForceList.length < 1 ) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList);
-
   }
 
   // サーバー POST用データを生成する
@@ -52,6 +44,10 @@ export class CalcEarthquakesShearForceService {
     if (this.DesignForceList.length < 1 ) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Vd', this.DesignForceList);
+
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 4, 'Vd', '耐力', 1);
     return postData;

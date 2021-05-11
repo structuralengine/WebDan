@@ -38,13 +38,6 @@ export class CalcEarthquakesMomentService {
 
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(7));
 
-    if (this.DesignForceList.length < 1 ){
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList);
-
   }
 
   // サーバー POST用データを生成する
@@ -53,6 +46,9 @@ export class CalcEarthquakesMomentService {
     if(this.DesignForceList.length < 1 ){
       return null;
     }
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Md', this.DesignForceList);
+
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 4, 'Md', '耐力', 1);
     return postData;

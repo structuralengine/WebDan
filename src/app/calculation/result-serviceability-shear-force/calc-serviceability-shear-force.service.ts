@@ -15,6 +15,8 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 export class CalcServiceabilityShearForceService {
   // 耐久性 せん断ひび割れ
   public DesignForceList: any[];
+  private DesignForceList1: any[];
+  private DesignForceList2: any[];
   public isEnable: boolean;
 
   constructor(
@@ -46,20 +48,21 @@ export class CalcServiceabilityShearForceService {
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
     this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(0));
     // 永久荷重
-    const DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
+    this.DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
 
-    if (this.DesignForceList.length < 1) {
-      return;
-    }
+
+    // 複数の断面力の整合性を確認する
+    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // 変動荷重
-    let DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
-    if(DesignForceList2.length < 1){
-      DesignForceList2 = this.getLiveload(this.DesignForceList , DesignForceList1);
+    this.DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
+
+    if (this.DesignForceList2.length < 1){
+      this.DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList1);
+    } else {
+      this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList2);
     }
 
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList, DesignForceList1, DesignForceList2);
 
   }
 
@@ -69,6 +72,10 @@ export class CalcServiceabilityShearForceService {
     if (this.DesignForceList.length < 1 ) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Vd', this.DesignForceList, this.DesignForceList1, this.DesignForceList2);
+
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 0, 'Vd', '耐力', 3);
     return postData;

@@ -16,8 +16,8 @@ import { InputSteelsService } from "../components/steels/steels.service";
 })
 export class SaveDataService {
   // ピックアップファイル
-  public pickup_filename: string;
-  public pickup_data: Object;
+  private pickup_filename: string;
+  private pickup_data: Object;
   //={
   //  1:[
   //    { index: 1, m_no, g_name, position,
@@ -347,4 +347,15 @@ export class SaveDataService {
     }
   }
 
+  public getPickUpData(): Object {
+    return JSON.parse(
+      JSON.stringify({
+        temp: this.pickup_data
+      })
+    ).temp;
+  }
+
+  public getPickupFilename(): string{
+    return this.pickup_filename;
+  }
 }

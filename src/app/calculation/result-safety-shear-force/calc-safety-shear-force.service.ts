@@ -49,12 +49,6 @@ export class CalcSafetyShearForceService {
 
     this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(5));
 
-    if (this.DesignForceList.length < 1) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList);
 
   }
 
@@ -64,6 +58,9 @@ export class CalcSafetyShearForceService {
     if (this.DesignForceList.length < 1) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Vd', this.DesignForceList);
 
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 2, 'Vd', '耐力', 1);

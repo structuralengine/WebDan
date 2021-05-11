@@ -115,11 +115,7 @@ export class SetDesignForceService {
     const result = this.getEnableMembers(calcTarget);
 
     // 断面力を取得
-    const force: object = JSON.parse(
-      JSON.stringify({
-        temp: this.save.pickup_data
-      })
-    ).temp;
+    const force: object = this.save.getPickUpData();
 
     // 断面力を追加
     const pickupStr: string = pickupNo.toString();
@@ -139,7 +135,7 @@ export class SetDesignForceService {
         // 奥行き本数
         let n: number = this.helper.toNumber(member.n);
         if (n === null) { n = 1; }
-        if (n === 0) { n = 1; }
+        n = (n === 0)? 1: Math.abs(n);
 
         for (const position of member.positions) {
 
@@ -218,11 +214,7 @@ export class SetDesignForceService {
   // 計算対象の着目点のみを抽出する
   private getEnableMembers(calcTarget: string): any[] {
 
-    const result = JSON.parse(
-      JSON.stringify({
-        temp: this.points.getGroupeList()
-      })
-    ).temp;
+    const result = this.points.getGroupeList();
 
     // 計算対象ではない着目点を削除する
     for (let i = result.length - 1; i >= 0; i--) {
@@ -292,4 +284,30 @@ export class SetDesignForceService {
 
     return result;
   }
+
+  // 複数の断面力表について、基本の断面力に無いものは削除する
+  public AlignMultipleLists(...DesignForceListList: any[]){
+
+    const baseDesignForceList: any[] = DesignForceListList[0];
+
+    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+      const groupe = baseDesignForceList[ig];
+
+      for (let im = 0; im < groupe.length; im++) {
+        const member = groupe[im];
+
+        for (let ip = 0; ip < member.positions.length; ip++) {
+          const position = member.positions[ip];
+
+          // ピックアップ断面力から設計断面力を選定する
+          for (let fo = 0; fo < position.designForce.length; fo++) {
+
+
+          }
+
+        }
+      }
+    }
+  }
+
 }

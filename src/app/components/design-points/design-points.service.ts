@@ -128,7 +128,12 @@ export class InputDesignPointsService {
 
     }
 
-    return groupe_list;
+    return JSON.parse(
+      JSON.stringify({
+        temp: groupe_list
+      })
+    ).temp;
+
   }
 
   public getGroupeName(i: number): string {

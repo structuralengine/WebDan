@@ -15,6 +15,8 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 export class CalcDurabilityMomentService {
   // 使用性 曲げひび割れ
   public DesignForceList: any[];
+  public DesignForceList1: any[];
+
   public isEnable: boolean;
 
   constructor(private save: SaveDataService,
@@ -40,37 +42,21 @@ export class CalcDurabilityMomentService {
     // 永久荷重
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
+    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
-    if (this.DesignForceList.length < 1) {
-      return ;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md',this.DesignForceList, DesignForceList1);
+    // 複数の断面力の整合性を確認する
+    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
-    this.deleteDurabilityDisablePosition(this.DesignForceList);
+    this.deleteDurabilityDisablePosition(); 
 
-  }
-
-  // サーバー POST用データを生成する
-  public setInputData(): any {
-
-    if (this.DesignForceList.length < 1) {
-      return null;
-    }
-
-    // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 0, 'Md', '応力度', 2);
-    return postData;
   }
 
   // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
-  private deleteDurabilityDisablePosition(DesignForceList: any[]) {
+  private deleteDurabilityDisablePosition() {
 
-    for (let ig = DesignForceList.length - 1; ig >= 0; ig--) {
-      const groupe = DesignForceList[ig];
+    for (let ig = this.DesignForceList.length - 1; ig >= 0; ig--) {
+      const groupe = this.DesignForceList[ig];
       for (let im = groupe.length - 1; im >= 0; im--) {
         const member = groupe[im];
         for (let ip = member.positions.length - 1; ip >= 0; ip--) {
@@ -118,8 +104,26 @@ export class CalcDurabilityMomentService {
         }
       }
       if (groupe.length < 1) {
-        DesignForceList.splice(ig, 1);
+        this.DesignForceList.splice(ig, 1);
+        this.DesignForceList1.splice(ig, 1);
       }
     }
   }
+
+
+  // サーバー POST用データを生成する
+  public setInputData(): any {
+
+    if (this.DesignForceList.length < 1) {
+      return null;
+    }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Md',this.DesignForceList, this.DesignForceList1);
+
+    // POST 用
+    const postData = this.post.setInputData(this.DesignForceList, 0, 'Md', '応力度', 2);
+    return postData;
+  }
+
 }

@@ -15,6 +15,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 export class CalcServiceabilityMomentService {
   // 耐久性 曲げひび割れ
   public DesignForceList: any[];
+  private DesignForceList1: any[];
   public isEnable: boolean;
 
   constructor(
@@ -46,14 +47,10 @@ export class CalcServiceabilityMomentService {
     // 永久荷重
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力度検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
+    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
-    if (this.DesignForceList.length < 1) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList, DesignForceList1);
+    // 複数の断面力の整合性を確認する
+    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
   }
 
@@ -63,6 +60,9 @@ export class CalcServiceabilityMomentService {
     if (this.DesignForceList.length < 1) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Md', this.DesignForceList, this.DesignForceList1);
 
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 0, 'Md', '応力度', 2);

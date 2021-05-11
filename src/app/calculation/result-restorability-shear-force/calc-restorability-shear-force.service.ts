@@ -39,13 +39,6 @@ export class CalcRestorabilityShearForceService {
 
     this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(6));
 
-    if (this.DesignForceList.length < 1 ) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList);
-
   }
 
   // サーバー POST用データを生成する
@@ -54,6 +47,9 @@ export class CalcRestorabilityShearForceService {
     if (this.DesignForceList.length < 1 ) {
       return null;
     }
+
+    // サーバーに送信するデータを作成
+    this.post.setPostData('Vd', this.DesignForceList);
 
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 3, 'Vd', '耐力', 1);

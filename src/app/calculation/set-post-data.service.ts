@@ -148,14 +148,14 @@ export class SetPostDataService {
     }
 
     // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-    this.setMaxPosition(DesignForceListList, calcTarget);
+    this.setMaxPosition(calcTarget, DesignForceListList);
 
     // Md=0 のケースを削除する
-    this.deleteEmptyForce(DesignForceListList, calcTarget);
+    this.deleteEmptyForce(calcTarget, DesignForceListList);
 
   }
 
-  private  deleteEmptyForce(DesignForceListList: any[], calcTarget: string): void {
+  private  deleteEmptyForce(calcTarget: string, DesignForceListList: any[]): void {
 
     const baseDesignForceList = DesignForceListList[0];
 
@@ -203,7 +203,7 @@ export class SetPostDataService {
 
 
   // MAX区間(isMax) の着目点一覧を取得する
-  public getMaxPositionList(baseDesignForceList: any[], calcTarget: string): any {
+  public getMaxPositionList(calcTarget: string, baseDesignForceList: any[]): any {
 
     // maxグループの部材リストを作成する
     const maxIndexList = {};
@@ -364,10 +364,10 @@ export class SetPostDataService {
   }
 
   // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-  private setMaxPosition(DesignForceListList: any[], calcTarget: string): void {
+  private setMaxPosition(calcTarget: string, DesignForceListList: any[]): void {
 
     // MAX区間(isMax) の着目点一覧を取得する
-    const maxPositionList = this.getMaxPositionList(DesignForceListList[0], calcTarget);
+    const maxPositionList = this.getMaxPositionList(calcTarget, DesignForceListList[0]);
 
     // isMax フラグの付いた部材のうち最大でない部材を除外する
     const results: any[] = new Array(DesignForceListList.length).fill(new Array());
