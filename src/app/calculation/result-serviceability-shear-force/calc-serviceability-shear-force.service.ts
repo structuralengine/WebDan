@@ -94,10 +94,9 @@ export class CalcServiceabilityShearForceService {
         for (let im = 0; im < groupe.length; im++) {
           const member = groupe[im];
           for (let ip = 0; ip < member.positions.length; ip++) {
-            const position = member.positions[ip];
 
             // 最大応力 - 最小応力 で変動荷重を求める
-            const minForce: any = position.designForce;
+            const minForce: any = member.positions[ip].designForce;
             const maxForce: any = result[ig][im].positions[ip].designForce;
             for (let i = 0; i < minForce.length; i++) {
               for (const key1 of ['Md', 'Vd', 'Nd']) {

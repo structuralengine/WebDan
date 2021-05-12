@@ -205,18 +205,19 @@ export class SetDesignForceService {
     return result;
   }
 
-  // 計算対象の着目点のみを抽出する
+    // 計算対象の着目点のみを抽出する
   private getEnableMembers(target: string): any[] {
-    const result = this.points.getGroupeList();
+
+    const groupeList = this.points.getGroupeList();
 
     // 計算対象ではない着目点を削除する
-    for (let i = result.length - 1; i >= 0; i--) {
+    for (let i = groupeList.length - 1; i >= 0; i--) {
       // 計算・印刷画面の部材にチェックが入っていなかければ削除
       if (this.calc.calc_checked[i] === false) {
-        result.splice(i, 1);
+        groupeList.splice(i, 1);
         continue;
       }
-      const members = result[i];
+      const members = groupeList[i];
 
       for (let j = members.length - 1; j >= 0; j--) {
         let maxFlag: boolean = false;
@@ -268,7 +269,17 @@ export class SetDesignForceService {
 
       // 照査する部材がなければ 対象グループを削除
       if (members.length === 0) {
-        result.splice(i, 1);
+        groupeList.splice(i, 1);
+      }
+    }
+
+    // 最後に結合する
+    const result = [];
+    for (const g of groupeList) {
+      for (const m of g) {
+        for (const p of m.positions) {
+          result.push(p);
+        }
       }
     }
 
@@ -393,10 +404,11 @@ export class SetDesignForceService {
     for (const g of DesignForceList) {
       for (const m of g) {
         for (const p of m.positions) {
-          const f = p.designForce;
-          f["index"] = p.index;
-          result.push(f);
-        }
+          for(const f of p.designForce){
+            f["index"] = p.index;
+            result.push(f);
+            }
+      }
       }
     }
     return result;
