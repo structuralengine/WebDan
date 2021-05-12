@@ -132,7 +132,7 @@ export class SetPostDataService {
 
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
-            sectionForce = this.getSectionForce(force, member.g_id, calcTarget);
+            sectionForce = [];//仮コメントアウト this.getSectionForce(force, member.g_id, calcTarget);
 
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {

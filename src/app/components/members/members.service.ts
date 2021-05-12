@@ -18,12 +18,12 @@ export class InputMembersService  {
   }
 
   // 部材情報
-  private default_member(row: number): any {
+  private default_member(m_no: number): any {
     // メモ:
     // g_no: 表面上の(member.component だけで用いる)グループ番号
     // g_id: 本当のグループ番号
     return {
-      m_no: row,
+      m_no: m_no,
       m_len: null,
       g_no: null,
       g_id: '',
@@ -201,13 +201,32 @@ export class InputMembersService  {
     ).temp;
   }
 
-
   public getSaveData():any{
-    return this.member_list;
+    const result = [];
+    for(const m of this.member_list){
+      const def = this.default_member(m.m_no);
+      for(const k of Object.keys(def)){
+        if(k in m){
+          def[k] = m[k];
+        }
+      }
+      result.push(def)
+    }
+    return result;
   }
 
   public setSaveData(members: any) {
-    this.member_list = members;
+
+    this.clear();
+    for(const m of members){
+      const def = this.default_member(m.m_no);
+      for(const k of Object.keys(def)){
+        if(k in m){
+          def[k] = m[k];
+        }
+      }
+      this.member_list.push(def)
+    }
   }
 
 }

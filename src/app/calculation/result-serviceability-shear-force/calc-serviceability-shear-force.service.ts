@@ -44,25 +44,24 @@ export class CalcServiceabilityShearForceService {
     if (this.calc.print_selected.calculate_shear_force === false) {
       return;
     }
+
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
     this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(0));
     // 永久荷重
     this.DesignForceList1 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(1));
 
-
-    // 複数の断面力の整合性を確認する
+    // DesignForceList と DesignForceList1 の断面力の整合性を確認する
     this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // 変動荷重
     this.DesignForceList2 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(2));
-
     if (this.DesignForceList2.length < 1){
       this.DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList1);
-    } else {
-      this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList2);
     }
 
+    // DesignForceList と DesignForceList2 の断面力の整合性を確認する
+    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList2);
 
   }
 
@@ -96,21 +95,15 @@ export class CalcServiceabilityShearForceService {
           const member = groupe[im];
           for (let ip = 0; ip < member.positions.length; ip++) {
             const position = member.positions[ip];
-            if (position === undefined) {
-              console.log('着目点が存在しない');
-              continue;
-            }
+
             // 最大応力 - 最小応力 で変動荷重を求める
             const minForce: any = position.designForce;
             const maxForce: any = result[ig][im].positions[ip].designForce;
             for (let i = 0; i < minForce.length; i++) {
-              for (const key1 of Object.keys(minForce[i])) {
-                if (key1 === 'n') { continue; }
-                for (const key2 of Object.keys(minForce[i][key1])) {
-                  if (key2 === 'comb') { continue; }
-                  maxForce[i][key1][key2] -= minForce[i][key1][key2];
-                }
+              for (const key1 of ['Md', 'Vd', 'Nd']) {
+                maxForce[i][key1] -= minForce[i][key1];
               }
+              maxForce[i]['comb'] = "-";
             }
           }
         }

@@ -70,7 +70,7 @@ export class InputCrackSettingsService {
     return table_datas;
   }
 
-  private getTableColumn(index: any): any {
+  public getTableColumn(index: any): any {
 
     let result = this.crack_list.find((value) => value.index === index);
     if (result === undefined) {

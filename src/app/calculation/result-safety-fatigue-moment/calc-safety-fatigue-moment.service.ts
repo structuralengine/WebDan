@@ -179,7 +179,7 @@ export class CalcSafetyFatigueMomentService {
 
             // ピックアップ断面力から設計断面力を選定する
             let sectionForce: any[];
-            sectionForce = this.post.getSectionForce(force, member.g_id, 'Md');
+            sectionForce = [];//仮コメントアウト this.post.getSectionForce(force, member.g_id, 'Md');
 
             // postData に登録する
             for (let icase = 0; icase < sectionForce.length; icase++) {
