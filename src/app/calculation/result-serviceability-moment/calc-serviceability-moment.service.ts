@@ -45,9 +45,9 @@ export class CalcServiceabilityMomentService {
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
+    this.DesignForceList = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(1));
     // 縁応力度検討用
-    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
+    this.DesignForceList1 = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(0));
 
     // 複数の断面力の整合性を確認する
     this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);

@@ -36,7 +36,7 @@ export class CalcEarthquakesMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(7));
+    this.DesignForceList = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(7));
 
   }
 

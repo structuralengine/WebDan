@@ -42,7 +42,7 @@ export class CalcRestorabilityMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(6));
+    this.DesignForceList = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(6));
 
   }
 

@@ -46,16 +46,16 @@ export class CalcServiceabilityShearForceService {
     }
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(0));
+    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(0));
     // 永久荷重
-    this.DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
+    this.DesignForceList1 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(1));
 
 
     // 複数の断面力の整合性を確認する
     this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // 変動荷重
-    this.DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
+    this.DesignForceList2 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(2));
 
     if (this.DesignForceList2.length < 1){
       this.DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList1);

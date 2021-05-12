@@ -77,9 +77,9 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 最小応力
-    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(3));
+    this.DesignForceList3 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(3));
     // 最大応力
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(4));
+    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(4));
 
     // 複数の断面力の整合性を確認する
     this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList3);

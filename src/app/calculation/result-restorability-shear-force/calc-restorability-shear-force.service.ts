@@ -37,7 +37,7 @@ export class CalcRestorabilityShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(6));
+    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(6));
 
   }
 

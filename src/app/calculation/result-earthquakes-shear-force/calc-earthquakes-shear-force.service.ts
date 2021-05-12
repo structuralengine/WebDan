@@ -34,7 +34,7 @@ export class CalcEarthquakesShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(7));
+    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(7));
 
   }
 

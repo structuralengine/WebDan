@@ -47,7 +47,7 @@ export class CalcSafetyShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(5));
+    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(5));
 
 
   }

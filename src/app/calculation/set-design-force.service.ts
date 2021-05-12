@@ -20,7 +20,7 @@ export class SetDesignForceService {
   }
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
-  public getDesignForceList(calcTarget: string, pickupNo: number): any[] {
+  public getDesignForceList(calcTarget: string[], pickupNo: number): any[] {
 
     if (this.helper.toNumber(pickupNo) === null) {
       return new Array();
@@ -36,14 +36,15 @@ export class SetDesignForceService {
   }
 
   // 断面力手入力情報から断面力一覧を取得
-  private getDesignForceFromManualInput(calcTarget: string, pickupNo: number): any[] {
+  private getDesignForceFromManualInput(calcTarget: string[], pickupNo: number): any[] {
 
     // 部材グループ・照査する着目点を取得
-    const result = this.getEnableMembers(calcTarget);
+    const result = this.getEnableMembers(calcTarget[0]);
 
     // 断面力を取得
+    const target = calcTarget[0];
     let force: any[];
-    switch (calcTarget) {
+    switch (target) {
       case 'Md': // 曲げモーメントの照査の場合
         force = JSON.parse(
           JSON.stringify({
@@ -86,9 +87,6 @@ export class SetDesignForceService {
 
           const targetForce = targetMember.case[pickupNo];
 
-          if ('designForce' in position === false) {
-            position['designForce'] = new Array();
-          }
 
           for (const key of Object.keys(targetForce)) {
             let value: number = this.helper.toNumber(targetForce[key]);
@@ -96,12 +94,18 @@ export class SetDesignForceService {
             targetForce[key] = value;
           }
 
-          const designForce = {
-            Manual: targetForce,
-            n: n
-          };
+          const designForce = this.getSectionForce(
+            target, n, {
+            Mdmax: targetForce,
+            Mdmin: targetForce,
+            Vdmax: targetForce,
+            Vdmin: targetForce,
+            Ndmax: targetForce,
+            Ndmin: targetForce,
+          });
+          designForce['n'] = n;
 
-          position['designForce'].push(designForce);
+          position['designForce'] = designForce;
         }
       }
     }
@@ -110,10 +114,11 @@ export class SetDesignForceService {
   }
 
   // ピックアップデータから断面力一覧を取得
-  private getDesignForceFromPickUpData(calcTarget: string, pickupNo: number): any[] {
+  private getDesignForceFromPickUpData(calcTarget: string[], pickupNo: number): any[] {
 
+    const target = calcTarget[0];
     // 部材グループ・照査する着目点を取得
-    const result = this.getEnableMembers(calcTarget);
+    const result = this.getEnableMembers(target);
 
     // 断面力を取得
     const force: object = this.save.getPickUpData();
@@ -136,7 +141,7 @@ export class SetDesignForceService {
         // 奥行き本数
         let n: number = this.helper.toNumber(member.n);
         if (n === null) { n = 1; }
-        n = (n === 0)? 1: Math.abs(n);
+        n = (n === 0) ? 1 : Math.abs(n);
 
         for (const position of member.positions) {
 
@@ -146,65 +151,47 @@ export class SetDesignForceService {
           if (targetPosition === undefined) {
             return new Array(); // 存在しない着目点がある
           }
-          if ('designForce' in position === false) {
-            position['designForce'] = new Array();
-          }
 
-          let mKey1 = 'my', mKey2 = 'Mdy';
-          if (position.isMzCalc === true) {
-            mKey1 = 'mz', mKey2 = 'Mdz';
-          } else if (position.isVzCalc === true) {
-            mKey1 = 'mz', mKey2 = 'Mdz';
-          }
 
-          let vKey1 = 'fy', vKey2: string = 'Vdy';
-          if (position.isVzCalc === true) {
-            vKey1 = 'fz', vKey2 = 'Vdz';
-          } else if (position.isMzCalc === true) {
-            vKey1 = 'fz', vKey2 = 'Vdz';
-          }
-
-          let temp = {
-            Mdmax: 0,
-            Mdmin: 0,
-            Vdmax: 0,
-            Vdmin: 0,
-            Ndmax: 0,
-            Ndmin: 0
-          }
-          if (!( mKey1 in targetPosition )) {
-            temp = {
+          let temp: any;
+          if (!('my' in targetPosition)) {
+            // 2次元PICKUP
+            temp = this.getSectionForce(calcTarget, n, {                     
               Mdmax: targetPosition['M'].max,
               Mdmin: targetPosition['M'].min,
               Vdmax: targetPosition['S'].max,
               Vdmin: targetPosition['S'].min,
               Ndmax: targetPosition['N'].max,
               Ndmin: targetPosition['N'].min
-            };
+            }) 
+
           } else {
-            temp = {
-              Mdmax: targetPosition[mKey1].max,
-              Mdmin: targetPosition[mKey1].min,
-              Vdmax: targetPosition[vKey1].max,
-              Vdmin: targetPosition[vKey1].min,
-              Ndmax: targetPosition['fx'].max,
-              Ndmin: targetPosition['fx'].min
-            };
+            let mKey1 = 'my', mKey2 = 'Mdy', vKey1 = 'fy', vKey2 = 'Vdy';
+            if ((target === 'Md' && position.isMzCalc === true) ||
+                (target === 'Vd' && position.isVzCalc === true)) {
+              mKey1 = 'mz', mKey2 = 'Mdz', vKey1 = 'fz', vKey2 = 'Vdz';
+            } 
+
+            const forceObj = {};
+            const k1 = [mKey1, vKey1, 'fx'];
+            const k2 = ['Md', 'Vd', 'Nd'];
+            for(let i=0; i<3; i++){
+              for(const k3 of ['max', 'min']){
+                const t = targetPosition[k1[i]];
+                const m1 = t[k3];
+                const k4 = k2[i] + k3;
+                forceObj[k4] = {      
+                  Md: m1[mKey2],
+                  Vd: m1[vKey2],
+                  Nd: m1.Nd,
+                  comb: m1.comb
+                }
+              }
+            }
+            temp = this.getSectionForce(calcTarget, n, forceObj);
           }
 
-          const designForce = { n };
-
-          for (const key of Object.keys(temp)) {
-            const tmp = temp[key];
-            designForce[key] = {
-              comb: tmp.comb,
-              Md: tmp[mKey2],
-              Nd: tmp.Nd,
-              Vd: tmp[vKey2]
-            };
-          }
-
-          position['designForce'].push(designForce);
+          position['designForce'] = temp;
         }
       }
     }
@@ -213,7 +200,7 @@ export class SetDesignForceService {
   }
 
   // 計算対象の着目点のみを抽出する
-  private getEnableMembers(calcTarget: string): any[] {
+  private getEnableMembers(target: string): any[] {
 
     const result = this.points.getGroupeList();
 
@@ -234,7 +221,7 @@ export class SetDesignForceService {
           if (maxFlag === true) {
             pos['enable'] = maxFlag;
           } else {
-            switch (calcTarget) {
+            switch (target) {
               case 'Md':  // 曲げモーメントの照査の場合
                 pos['enable'] = (pos.isMyCalc === true || pos.isMzCalc === true);
                 break;
@@ -287,77 +274,120 @@ export class SetDesignForceService {
   }
 
   // 複数の断面力表について、基本の断面力に無いものは削除する
-  public AlignMultipleLists(...DesignForceListList: any[]){
+  public AlignMultipleLists(...DesignForceListList: any[]) {
 
     const baseDesignForceList: any[] = DesignForceListList[0];
 
-    for(let i = 1; i < DesignForceListList.length; i++){
+    for (let i = 1; i < DesignForceListList.length; i++) {
+
+      // 全ての着目点情報を収集しておく
+      const targetPositions = [];
+      for (const g of DesignForceListList[i]) {
+        for (const m of g) {
+          for (const p of m.positions) {
+            targetPositions.push(p);
+          }
+        }
+      }
+
+      // ベースケースの複製を作っておく
       const targetDesignForceList = JSON.parse(
-        JSON.stringify({ temp: DesignForceListList[i] })
+        JSON.stringify({ temp: baseDesignForceList })
       ).temp;
 
-      for( const groupe of baseDesignForceList ) {
-        for( const member of groupe ) {
-          for(const position of member.positions){
+      ////////////////////////////////////////////////////////////////
+      for (let ig = 0; ig < baseDesignForceList.length; ig++) {
+        const groupe = baseDesignForceList[ig];
+        for (let im = 0; im < groupe.length; im++) {
+          const member = groupe[im];
+          for (let ip = 0; ip < member.positions.length; ip++) {
+            const position = member.positions[ip];
             const index = position.index;
-            // 同じindex の position を見つける
-            let targetPosition: any = null;
-            findPosition:
-            for(const g of targetDesignForceList) {
-              for(const m of g){
-                for(const p of m.positions){
-                  if(p.index === index){
-                    targetPosition = p;
-                    break findPosition;
-                  }
-                }
+
+            // 同じindex の position を見つける ///////////////////////
+            const targetPosition: any = targetPositions.find(p => p.index === index);
+            const p = targetDesignForceList[ig][im].positions[ip];
+
+            for(const def of p.designForce){
+              const targetSide: any = targetPosition.designForce.find(d => d.side === def.side);
+              if (targetPosition !== undefined) {
+                
               }
             }
-            /////////////////////////////////////////////////////
-            for(const force of position.designForce){
-  
+
+            
+            if (targetPosition !== undefined) {
+              // 断面力情報をコピー
+              p.designForce = targetPosition.designForce;
+
+            } else {
+              // 断面力情報が見つからなかった
+              const def = { comb: 0, Md: 0, Nd: 0, Vd: 0 };
+              p.designForce = {
+                Mdmax: def, Mdmin: def,
+                Vdmax: def, Vdmin: def,
+                Ndmax: def, Ndmin: def,
+                n: 1
+              };
             }
+
           }
         }
       }
 
       DesignForceListList[i] = targetDesignForceList;
 
-
     }
 
-
-    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
-      const groupe = baseDesignForceList[ig];
-
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
-
-        for (let ip = 0; ip < member.positions.length; ip++) {
-          const position = member.positions[ip];
-
-          let index = position.index;
-
-0
-          // ピックアップ断面力から設計断面力を選定する
-          for (let fo = 0; fo < position.designForce.length; fo++) {
-
-
-          }
-
-        }
-      }
-    }
-
-    for( const groupe of baseDesignForceList ) {
-      for( const member of groupe ) {
-        for(const position of member){
-          for(const force of position.designForce){
-
-          }
-        }
-      }
-    }
   }
+
+
+  // 設計断面力（リスト）を生成する
+  private getSectionForce(calcTarget: string[], n: number, forceObj: any): any[] {
+
+    // 設計断面の数をセット
+    const result: any[] = new Array();
+
+    for (const target of calcTarget) {
+
+      let maxKey: string = target + 'max';
+      let minKey: string = target + 'min';
+
+      if (!(maxKey in forceObj) && !(minKey in forceObj)) { return result; }
+      if (!(maxKey in forceObj)) { maxKey = minKey; }
+      if (!(minKey in forceObj)) { minKey = maxKey; }
+
+      // 最大の場合と最小の場合登録する
+      for (const k of [maxKey, minKey]) {
+        const force = forceObj[k];
+        const side = (force.Md > 0) ? '下側引張' : '上側引張';
+        const f = {
+          side, target,
+          Md: force.Md / n,
+          Vd: force.Vd / n,
+          Nd: force.Nd / n,
+          comb: force.comb
+        };
+        // -------------------------------------------
+        let flg = false;
+        for (let i = 0; i < result.length; i++) {
+          const r = result[i];
+          if (r.side === side && r.target === target) {
+            flg = true;
+            // side が同じ場合値の大きい方を採用する
+            if (Math.abs(r[target]) < Math.abs(f[target])) {
+              result[i] = f;
+            }
+          }
+        }
+        if (flg === false) {
+          result.push(f);
+        }
+        // -------------------------------------------
+      }
+    }
+    return result;
+  }
+
 
 }

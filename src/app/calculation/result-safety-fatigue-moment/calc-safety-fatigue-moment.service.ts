@@ -83,11 +83,11 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // 疲労現
-    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(2));
+    this.DesignForceList1 = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(2));
     // 永久作用
-    this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(3));
+    this.DesignForceList3 = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(3));
     // 永久+変動作用
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(4));
+    this.DesignForceList = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(4));
 
     // 複数の断面力の整合性を確認する
     this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1, this.DesignForceList3);
