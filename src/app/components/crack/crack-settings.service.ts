@@ -48,6 +48,7 @@ export class InputCrackSettingsService {
       // 部材
       for (const member of groupe_list[i]) {
         // 着目点
+        let count = 0;
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
           if (!this.points.isEnable(pos)) {
@@ -55,7 +56,7 @@ export class InputCrackSettingsService {
           }
           // barデータに（部材、着目点など）足りない情報を追加する
           const data: any = this.getTableColumn(pos.index);
-          data.m_no = (k === 0) ? member.m_no: ''; // 最初の行には 部材番号を表示する
+          data.m_no = (count === 0) ? member.m_no: ''; // 最初の行には 部材番号を表示する
           data.b = member.B;
           data.h = member.H;
           data.position = pos.position;
@@ -63,6 +64,7 @@ export class InputCrackSettingsService {
           data.p_name = pos.p_name;
 
           table_groupe.push(data);
+          count++;
         }
       }
       table_datas.push(table_groupe);

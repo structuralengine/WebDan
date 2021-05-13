@@ -74,6 +74,7 @@ export class InputSteelsService {
       // 部材
       for (const member of groupe_list[i]) {
         // 着目点
+        let count = 0;
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
           if (!this.points.isEnable(pos)) {
@@ -92,7 +93,7 @@ export class InputSteelsService {
           // データを2行に分ける
           const column1 = {};
           const column2 = {};
-          column1['m_no'] = (k === 0) ? member.m_no: ''; // 最初の行には 部材番号を表示する
+          column1['m_no'] = (count === 0) ? member.m_no: ''; // 最初の行には 部材番号を表示する
 
           // 1行目
           column1['index'] = data['index'];
@@ -136,6 +137,7 @@ export class InputSteelsService {
           column2['enable'] = bar['rebar2'].enable;
 
           table_groupe.push(column2);
+          count++;
         }
       }
       table_datas.push(table_groupe);

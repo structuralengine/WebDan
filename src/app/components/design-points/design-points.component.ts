@@ -47,6 +47,17 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
         colModel: this.columnHeaders,
         dataModel: { data: this.table_datas[i] },
         change: (evt, ui) => {
+          for (const property of ui.updateList) {
+            for (const key of Object.keys(property.newRow)) {
+              if (property.newRow[key]===true) {
+                const target = this.table_datas[i][property.rowIndx];
+                if (key === 'isMyCalc') { target['isMzCalc'] = false; }
+                if (key === 'isMzCalc') { target['isMyCalc'] = false; }
+                if (key === 'isVyCalc') { target['isVzCalc'] = false; }
+                if (key === 'isVzCalc') { target['isVyCalc'] = false; }
+              }
+            }
+          }
           // 何か変更があったら判定する
           this.app.designPointChange(this.points.designPointChange());
         }
@@ -79,7 +90,7 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
       // ピックアップファイルを使う場合
       this.columnHeaders = [
         { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-        { title: "算出点", dataType: "string", dataIndx: "g_name", sortable: false, width: 85, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "算出点", dataType: "string", dataIndx: "p_id", sortable: false, width: 85, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
         { title: "位置", dataType: "float", format: "#.000", dataIndx: "position", sortable: false, width: 110, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
         { title: "算出点名", dataType: "string", dataIndx: "p_name", sortable: false, width: 250 },
       ];

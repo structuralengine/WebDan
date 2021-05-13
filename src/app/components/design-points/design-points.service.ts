@@ -8,7 +8,7 @@ export class InputDesignPointsService {
 
   // 着目点情報
   private position_list: any[];
-  // { index, m_no, g_name, position, p_name, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
+  // { index, m_no, p_id, position, p_name, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
     private members: InputMembersService) {
@@ -145,9 +145,9 @@ export class InputDesignPointsService {
     return {
       index: id,
       m_no: null,
-      g_name: null,
       position: null,
       p_name: null,
+      p_id: null,
       isMyCalc: false,
       isVyCalc: false,
       isMzCalc: false,

@@ -14,9 +14,9 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 
 export class CalcServiceabilityShearForceService {
   // 耐久性 せん断ひび割れ
-  public DesignForceList: any[];
-  private DesignForceList1: any[];
-  private DesignForceList2: any[];
+  public DesignForceList: any[];  // せん断ひび割れ検討判定用
+  public DesignForceList1: any[]; // 永久荷重
+  public DesignForceList2: any[]; // 変動荷重
   public isEnable: boolean;
 
   constructor(
