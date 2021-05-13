@@ -46,11 +46,9 @@ export class CalcEarthquakesMomentService {
     if(this.DesignForceList.length < 1 ){
       return null;
     }
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList);
 
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 4, 'Md', '耐力', 1);
+    const postData = this.post.setInputData('Md', '耐力', 4, this.DesignForceList);
     return postData;
   }
 

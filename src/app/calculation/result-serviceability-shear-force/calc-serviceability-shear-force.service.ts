@@ -72,11 +72,8 @@ export class CalcServiceabilityShearForceService {
       return null;
     }
 
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList, this.DesignForceList1, this.DesignForceList2);
-
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 0, 'Vd', '耐力', 3);
+    const postData = this.post.setInputData('Vd', '耐力', 0, this.DesignForceList);
     return postData;
   }
 

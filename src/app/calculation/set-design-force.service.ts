@@ -250,13 +250,13 @@ export class SetDesignForceService {
     for (const g of groupeList) {
       for (const m of g) {
         for (const p of m.positions) {
-          // 部材の情報を追加する
-          for (const k of Object.keys(m)) {
-            if (k === "positions") {
-              continue;
-            }
-            p[k] = m[k];
-          }
+          // // 部材の情報を追加する
+          // for (const k of Object.keys(m)) {
+          //   if (k === "positions") {
+          //     continue;
+          //   }
+          //   p[k] = m[k];
+          // }
           result.push(p);
         }
       }

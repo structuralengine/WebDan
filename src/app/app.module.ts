@@ -82,7 +82,6 @@ import { ResultSummaryTableComponent } from './calculation/result-summary-table/
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
-import { SetSafetyFactorService} from './calculation/set-safety-factor.service';
 import { SetSectionService} from './calculation/set-section.service';
 import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
@@ -173,7 +172,6 @@ import { environment } from 'src/environments/environment';
     CalcEarthquakesShearForceService,
 
     SetDesignForceService,
-    SetSafetyFactorService,
     SetSectionService,
     SetBarService,
     SetPostDataService

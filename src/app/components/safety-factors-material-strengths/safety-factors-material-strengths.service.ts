@@ -353,5 +353,57 @@ export class InputSafetyFactorsMaterialStrengthsService {
     return this.members.getGroupeName(i);
   }
 
+  // 計算に必要なデータを返す
+  public getCalcData(target: string, g_id: string , i: number): any {
+
+    const result = {};
+
+    // 安全係数 を代入する
+    let safe = this.safety_factor[g_id];
+    if (safe === undefined) {
+      safe = this.default_safety_factor();
+    }
+    const safety_factor = (target === 'Md' ) ?
+        { // まげモーメントの照査の場合
+          rc: safe[i].M_rc,
+          rs: safe[i].M_rs,
+          rb: safe[i].M_rbs
+        }:{ // せん断力の照査の場合
+          rc: safe[i].V_rc,
+          rs: safe[i].V_rs,
+          rbc: safe[i].V_rbc,
+          rbs: safe[i].V_rbs,
+          rbd: safe[i].V_rbv
+        };
+    safety_factor['ri'] = safe[i].ri;
+    safety_factor['range'] = safe[i].range;
+    result['safety_factor'] = safety_factor; // 安全係数
+
+    // 鉄筋強度 を代入する
+    let bar = this.material_bar[g_id];
+    if (bar === undefined) {
+      bar = this.default_material_bar();
+    }
+    result['material_bar'] = bar;
+
+    // コンクリート強度 を代入する
+    let conc = this.material_concrete[g_id];
+    if (conc === undefined) {
+      conc = this.default_material_concrete();
+    }
+    result['material_concrete'] = conc;
+
+    // 杭の施工条件
+    let pile = this.pile_factor[g_id];
+    if (pile === undefined) {
+      pile = this.default_pile_factor();
+    }
+    result['pile_factor'] = pile;
+
+
+    return result;
+  }
 
 }
+
+

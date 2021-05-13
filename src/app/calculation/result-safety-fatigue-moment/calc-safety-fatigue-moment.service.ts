@@ -23,9 +23,6 @@ export class CalcSafetyFatigueMomentService {
   public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
 
-  // 永久作用と縁応力検討用のポストデータの数を調べるのに使う
-  private PostedData: any;
-
   constructor(
     private save: SaveDataService,
     private helper: DataHelperModule,
@@ -80,7 +77,7 @@ export class CalcSafetyFatigueMomentService {
     this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(3));
     // 永久+変動作用
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(4));
-    
+
     // 複数の断面力の整合性を確認する
     this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1, this.DesignForceList3);
 
@@ -146,264 +143,11 @@ export class CalcSafetyFatigueMomentService {
       return null;
     }
 
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
-
     // POST 用
-    this.PostedData = this.post.setInputData(this.DesignForceList, 1, 'Md', '応力度', 2);
-    // 連結する
-    const postData = {
-      InputData0: this.copyInputData(this.PostedData.InputData0, this.PostedData.InputData1)
-    };
+    const postData = this.post.setInputData( 'Md', '応力度', 1, this.DesignForceList, this.DesignForceList3);
     return postData;
   }
 
-  // POST データを結合する
-  private copyInputData(InputData0: any[], InputData1: any[]): any[] {
-    for (let i = 0; i < InputData0.length; i++) {
-      for (const key of Object.keys(InputData0[i])) {
-        if (key in InputData1[i] === false) {
-          InputData1[i][key] = InputData0[i][key];
-        }
-      }
-    }
-    const result = InputData0.concat(InputData1);
-    return result;
-  }
-
-  // position に PostData を追加する
-  // SetPostDataService にある同名の関数の改良版で、
-  // DesignForceList[0]: 最大応力
-  // DesignForceList[1]: 最小応力
-  // DesignForceList[2]: 変動応力
-  public setPostData(...DesignForceListList: any[]): void {
-
-    const baseDesignForceList: any[] = DesignForceListList[0];   // 最大応力
-    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
-
-    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
-      const groupe = baseDesignForceList[ig];
-
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
-
-        // 部材・断面情報をセット
-        const memberInfo = this.members.getTableColumns(member.m_no);
-        if (memberInfo === undefined) {
-          console.log('部材番号が存在しない');
-          continue;
-        }
-
-        for (let ip = 0; ip < member.positions.length; ip++) {
-          // const position = member.positions[ip];
-          const position = baseDesignForceList[ig][im].positions[ip];
-          if (position === undefined) {
-            console.log('着目点が存在しない');
-            continue;
-          }
-          // 断面
-          position['memberInfo'] = memberInfo;
-
-          // ピックアップ断面力から設計断面力を選定する
-          for (let fo = 0; fo < member.positions[ip].designForce.length; fo++) {
-            // 対象の断面力を抽出する
-            const force: any[] = new Array();
-            for (const target of DesignForceListList) {
-              let designForce: any;
-              try {
-                designForce = target[ig][im].positions[ip].designForce[fo];
-              } catch {
-                designForce = null;
-              }
-              force.push(designForce);
-            }
-
-            // ピックアップ断面力から設計断面力を選定する
-            let sectionForce: any[];
-            sectionForce = [];//仮コメントアウト this.post.getSectionForce(force, member.g_id, 'Md');
-
-            // postData に登録する
-            for (let icase = 0; icase < sectionForce.length; icase++) {
-              position['PostData' + (icase - 1).toString()] = sectionForce[icase];
-            }
-          }
-          // 必要ないので消す！！
-          delete position.designForce;
-        }
-      }
-    }
-    // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-    this.setMaxPosition([DesignForceListList, minDesignForceList]);
-
-  }
-
-  // MAX区間(isMax) の断面力のうち最大のものを一つ選ぶ
-  private setMaxPosition(DesignForceListList: any[]): void {
-
-    const baseDesignForceList: any[] = DesignForceListList[0];
-    const minDesignForceList: any[] = DesignForceListList[1]; // 最小応力
-
-    const maxPositionList = this.post.getMaxPositionList('Md', baseDesignForceList);
-
-    // isMax フラグの付いた部材のうち最大でない部材を除外する
-    const result0: any[] = new Array();
-    const result1: any[] = new Array();
-    for (let ig = 0; ig < baseDesignForceList.length; ig++) {
-      const groupe = baseDesignForceList[ig];
-
-      const tempg0: any[] = new Array();
-      const tempg1: any[] = new Array();
-      for (let im = 0; im < groupe.length; im++) {
-        const member0 = groupe[im];
-        const member1 = minDesignForceList[ig][im];
-
-        const tempm0: any[] = new Array();
-        const tempm1: any[] = new Array();
-        for (let ip = 0; ip < member0.positions.length; ip++) {
-          const position0 = member0.positions[ip];
-          const position1 = member1.positions[ip];
-
-          if ( position0.isMax === true) {
-            for ( const boj of maxPositionList[ig]) {
-              if (position0.index === boj.upper.index) {
-                tempm0.push(position0);
-                tempm1.push(position1);
-              }
-              if ( boj.upper.index !== boj.bottom.index ) {
-                if (position0.index === boj.bottom.index) {
-                  tempm0.push(position0);
-                  tempm1.push(position1);
-                }
-              }
-            }
-          } else {
-            tempm0.push(position0);
-            tempm1.push(position1);
-          }
-        }
-        if (tempm0.length > 0 ) {
-          member0.positions = tempm0;
-          tempg0.push(member0);
-          member1.positions = tempm1;
-          tempg1.push(member1);
-        }
-      }
-      if (tempg0.length > 0 ) {
-        result0.push(tempg0);
-        result1.push(tempg1);
-      }
-    }
-
-    DesignForceListList[0] = result0;
-    DesignForceListList[1] = result1;
-
-  }
-
-  /*/ 変動荷重を
-  private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
-
-    const result = JSON.parse(
-      JSON.stringify({
-        temp: minDesignForceList
-      })
-    ).temp;
-
-    for (let ig = 0; ig < maxDesignForceList.length; ig++) {
-      const groupe = maxDesignForceList[ig];
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
-
-        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
-
-          const position = member.positions[ip];
-          if (position === undefined) {
-            console.log('着目点が存在しない');
-            continue;
-          }
-          // position に 疲労係数入れる
-          this.fatigue.setFatigueData(member.g_id, member.m_no, position);
-
-          // もし疲労係数がなかったら削除する
-          let flg = false;
-          if (position.fatigueData !== null) {
-            for (const key of Object.keys(position.fatigueData.M1)) {
-              if (this.helper.toNumber(position.fatigueData.M1[key]) !== null) {
-                flg = true;
-                break;
-              }
-            }
-            if (flg === false) {
-              for (const key of Object.keys(position.fatigueData.M2)) {
-                if (this.helper.toNumber(position.fatigueData.M2[key]) !== null) {
-                  flg = true;
-                  break;
-                }
-              }
-            }
-          }
-          if (flg === false) {
-            member.positions.splice(ip, 1); // 削除する
-            continue;
-          }
-
-          // 最大応力 - 最小応力 で変動荷重を求める
-          const maxForce: any = position.designForce;
-          const minForce: any = result[ig][im].positions[ip].designForce;
-
-          for (let i = 0; i < maxForce.length; i++) {
-            for (const key1 of Object.keys(maxForce[i])) {
-              if (key1 === 'n') { continue; }
-
-              // 最大<=>最小 反対の断面力 も探査対象にする
-              let key2: string;
-              if (key1.indexOf('max') >= 0) {
-                key2 = key1.replace('max', 'min');
-              } else {
-                key2 = key1.replace('min', 'max');
-              }
-              const force0 = maxForce[i][key1];
-              const force1 =  minForce[i][key1];
-              const force2 =  minForce[i][key2];
-
-              // 最小と最大 差が大きい方を変動作用とする
-              let Md0: number = force0['Md'];
-              let Md1: number = force1['Md'] * Math.sign(Md0);
-              let Md2: number = force2['Md'] * Math.sign(Md0);
-              Md0 = Math.abs(Md0);
-
-              // 最小の方が大きい場合は、比較対象から除外する
-              if ( Md0 < Md1) {
-                Md1 = Md0;
-              }
-              if ( Md0 < Md2) {
-                Md2 = Md0;
-              }
-
-              let targetMinForce: object;
-              if ( Md0 - Md1 > Md0 - Md2 ) {
-                targetMinForce = force1;
-              } else {
-                // 反対のキーを持つ最小応力が採用された場合
-                targetMinForce = force2;
-                minForce[i][key1] = minForce[i][key2]; // 反対のキーに断面力をコピーする
-              }
-
-              // 最大 - 最小 断面力の計算
-              for (const key3 of Object.keys(maxForce[i][key1])) {
-                if (key3 === 'comb') { continue; }
-                maxForce[i][key1][key3] -= targetMinForce[key3];
-              }
-
-            }
-          }
-
-
-        }
-      }
-    }
-    return result;
-  }
-  */
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(responseData: any, postData: any): any[] {
@@ -414,8 +158,12 @@ export class CalcSafetyFatigueMomentService {
     let i = 0;
     const title = '安全性（疲労破壊）曲げモーメントの照査結果';
 
-    const responseMax = responseData.slice(0, this.PostedData.InputData0.length);
-    const responseMin = responseData.slice(-this.PostedData.InputData1.length);
+    //仮
+    // const responseMax = responseData.slice(0, this.PostedData.InputData0.length);
+    // const responseMin = responseData.slice(-this.PostedData.InputData1.length);
+    const responseMax = responseData.slice(0, 2); // エラー回避仮コード
+    const responseMin = responseData.slice(-2);   // エラー回避仮コード
+    //仮END
 
     for (const groupe of postData) {
       groupeName = groupe[0].g_name;

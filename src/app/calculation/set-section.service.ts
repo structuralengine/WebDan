@@ -14,12 +14,11 @@ export class SetSectionService {
     private bar: SetBarService) {
   }
 
-  // position に コンクリート・鉄筋情報を入力する /////////////////////////////////////////////////////////////////////
-  public setPostData(g_id: string, m_no: number, position: any): void {
+  // position に コンクリート・鉄筋情報を入力する
+  // 部材・断面情報: memberInfo
+  public setPostData(member: any, force: any, safety: any): any {
 
-    // 部材・断面情報
-    const memberInfo = position.memberInfo;
-
+    const position = {PostData0:null};
     // 出力用の変数の用意する
     position['PrintData'] = JSON.parse(
       JSON.stringify({
@@ -28,7 +27,7 @@ export class SetSectionService {
     ).temp;
 
     // 鉄筋の入力情報ををセット
-    this.bar.setBarData(g_id, m_no, position);
+    this.bar.setBarData(member.g_id, member.m_no, position);
 
     //barがnullなら処理を飛ばす
     if (position.barData === null) {
@@ -37,7 +36,7 @@ export class SetSectionService {
     }
 
     // POST 用の断面情報をセット
-    if (memberInfo.shape.indexOf('円') >= 0) {
+    if (member.shape.indexOf('円') >= 0) {
 
       // 円形の場合は 上側引張、下側引張　どちらかにする
       if (position.PostData0.length > 1) {
@@ -60,9 +59,9 @@ export class SetSectionService {
         }
       }
       let isEnable: boolean;
-      if (memberInfo.shape.indexOf('円形') >= 0) {
+      if (member.shape.indexOf('円形') >= 0) {
         isEnable = this.getCircle(position);
-      } else if (memberInfo.shape.indexOf('円環') >= 0) {
+      } else if (member.shape.indexOf('円環') >= 0) {
         isEnable = this.getRing(position);
       } else {
         isEnable = false;
@@ -76,7 +75,7 @@ export class SetSectionService {
         return;
       }
 
-    } else if (memberInfo.shape.indexOf('矩形') >= 0) {
+    } else if (member.shape.indexOf('矩形') >= 0) {
 
       for (let i = position.PostData0.length - 1; i >= 0; i--) {
         if (this.getRectangle(position, i) === false) {
@@ -84,7 +83,7 @@ export class SetSectionService {
         }
       }
 
-    } else if (memberInfo.shape.indexOf('T') >= 0) {
+    } else if (member.shape.indexOf('T') >= 0) {
 
       // Ｔ形に関する 設計条件を確認する
       let condition = this.basic.conditions_list.find((value) => {
@@ -96,14 +95,14 @@ export class SetSectionService {
 
       for (let i = position.PostData0.length - 1; i >= 0; i--) {
         let isEnable: boolean;
-        if (memberInfo.shape.indexOf('T形') >= 0) {
+        if (member.shape.indexOf('T形') >= 0) {
           if (condition.selected === true && position.PostData0[i].side === '上側引張') {
             // T形 断面の上側引張は 矩形
             isEnable = this.getRectangle(position, i);
           } else {
             isEnable = this.getTsection(position, i);
           }
-        } else if (memberInfo.shape.indexOf('逆T形') >= 0) {
+        } else if (member.shape.indexOf('逆T形') >= 0) {
           if (condition.selected === true && position.PostData0[i].side === '下側引張') {
             // 逆T形 断面の下側引張は 矩形
             isEnable = this.getRectangle(position, i);
@@ -119,7 +118,7 @@ export class SetSectionService {
 
       }
 
-    } else if (memberInfo.shape.indexOf('小判形') >= 0) {
+    } else if (member.shape.indexOf('小判形') >= 0) {
 
       // 小判形の場合は 上側引張、下側引張　どちらかにする
       if (position.PostData0.length > 1) {
@@ -134,11 +133,11 @@ export class SetSectionService {
         }
       }
       let isEnable: boolean;
-      if (memberInfo.B > memberInfo.H) {
+      if (member.B > member.H) {
         isEnable = this.getHorizontalOval(position);
-      } else if (memberInfo.B < memberInfo.H) {
+      } else if (member.B < member.H) {
         isEnable = this.getVerticalOval(position);
-      } else if (memberInfo.B === memberInfo.H) {
+      } else if (member.B === member.H) {
         isEnable = this.getCircle(position);
       }
       if (isEnable === false) {
@@ -147,7 +146,7 @@ export class SetSectionService {
       }
 
     } else {
-      console.log("断面形状：" + memberInfo.shape + " は適切ではありません。");
+      console.log("断面形状：" + member.shape + " は適切ではありません。");
       this.clearPostDataAll(position);
       return;
     }

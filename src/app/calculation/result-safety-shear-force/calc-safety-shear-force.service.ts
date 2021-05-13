@@ -59,11 +59,8 @@ export class CalcSafetyShearForceService {
       return null;
     }
 
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Vd', this.DesignForceList);
-
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 2, 'Vd', '耐力', 1);
+    const postData = this.post.setInputData('Vd', '耐力', 2, this.DesignForceList);
     return postData;
   }
 

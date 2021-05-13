@@ -40,8 +40,7 @@ export class InputMembersService  {
   // member_list から 指定行 のデータを返す関数
   public getTableColumns(row: number): any {
 
-    let result = this.member_list.find( (item) => item.m_no === row );
-
+    let result = this.getCalcData(row);
     // 対象データが無かった時に処理
     if (result !== undefined) {
       if(result.g_no === null){
@@ -51,6 +50,11 @@ export class InputMembersService  {
       result = this.default_member(row);
       this.member_list.push(result);
     }
+    return result;
+  }
+
+  public getCalcData(m_no: number){
+    const result = this.member_list.find( (item) => item.m_no === m_no );
     return result;
   }
 

@@ -1,5 +1,4 @@
 import { Component, OnInit } from "@angular/core";
-import { SaveDataService } from "../../providers/save-data.service";
 import { CalcSafetyMomentService } from "../result-safety-moment/calc-safety-moment.service";
 import { CalcSafetyShearForceService } from "../result-safety-shear-force/calc-safety-shear-force.service";
 import { CalcSafetyFatigueMomentService } from "../result-safety-fatigue-moment/calc-safety-fatigue-moment.service";
@@ -11,7 +10,6 @@ import { CalcRestorabilityMomentService } from "../result-restorability-moment/c
 import { CalcRestorabilityShearForceService } from "../result-restorability-shear-force/calc-restorability-shear-force.service";
 import { CalcEarthquakesMomentService } from "../result-earthquakes-moment/calc-earthquakes-moment.service";
 import { CalcEarthquakesShearForceService } from "../result-earthquakes-shear-force/calc-earthquakes-shear-force.service";
-import { ArrayType } from "@angular/compiler";
 import { InputMembersService } from "src/app/components/members/members.service";
 
 @Component({
@@ -47,27 +45,6 @@ export class SectionForceListComponent implements OnInit {
     this.pages = new Array();
 
     const groupeList = this.members.getGroupeList();
-
-    // 安全性（破壊）
-    // const safetyMomentForces = this.safetyMoment.DesignForceList;
-    // const safetyShearForces = this.safetyShearForce.DesignForceList;
-    // 安全性（疲労破壊）
-    const safetyFatigueMomentForces = this.SafetyFatigueMoment.DesignForceList;
-    const safetyFatigueMomentForces3 =
-      this.SafetyFatigueMoment.DesignForceList3;
-    // const safetyFatigueShearForces = this.safetyFatigueShearForce.DesignForceList;
-    // 耐久性
-    // const serviceabilityMomentForces = this.serviceabilityMoment.DesignForceList;
-    // const serviceabilityShearForces = this.serviceabilityShearForce.DesignForceList;
-    // 使用性
-    //const durabilityMomentForces = this.durabilityMoment.DesignForceList;
-    // 復旧性（地震時以外）
-    // const restorabilityMomentForces = this.restorabilityMoment.DesignForceList;
-    // const restorabilityShearForces = this.restorabilityShearForce.DesignForceList;
-    // 復旧性（地震時）
-    // const earthquakesMomentForces = this.earthquakesMoment.DesignForceList;
-    // const earthquakesShearForces = this.earthquakesShearForce.DesignForceList;
-
     for (let i = 0; i < groupeList.length; i++) {
       const memberList = groupeList[i];
       let currentRow: number = 0;

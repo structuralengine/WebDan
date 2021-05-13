@@ -48,18 +48,18 @@ export class ResultSafetyMomentComponent implements OnInit {
         'Accept': 'application/json'
       })
     })
-      .subscribe(
-        response => {
-          const result: string = JSON.stringify(response);
-          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
-          this.isLoading = false;
-          this.calc.isEnable = true;
-        },
-        error => {
-          this.err = error.toString();
-          this.isLoading = false;
-          this.isFulfilled = false;
-        });
+    .subscribe(
+      response => {
+        const result: string = JSON.stringify(response);
+        this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
+        this.isLoading = false;
+        this.calc.isEnable = true;
+      },
+      error => {
+        this.err = error.toString();
+        this.isLoading = false;
+        this.isFulfilled = false;
+      });
 
   }
 

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
-import { Data } from '@angular/router';
 import { InputBarsService } from '../components/bars/bars.service';
+import { InputSteelsService } from '../components/steels/steels.service';
 import { DataHelperModule } from '../providers/data-helper.module';
-import { SaveDataService } from '../providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +9,150 @@ import { SaveDataService } from '../providers/save-data.service';
 export class SetBarService {
 
   constructor(
-    private save: SaveDataService,
     private bars: InputBarsService,
+    private steel: InputSteelsService,
     private helper: DataHelperModule) {
   }
+
+    // position に コンクリート・鉄筋情報を入力する
+  // 部材・断面情報: memberInfo
+  public setPostData(member: any, force: any, safety: any): any {
+    /*仮
+    const position = {PostData0:null};
+    // 出力用の変数の用意する
+    position['PrintData'] = JSON.parse(
+      JSON.stringify({
+        temp: position.PostData0
+      })
+    ).temp;
+
+    // 鉄筋の入力情報ををセット
+    this.bar.setBarData(member.g_id, member.m_no, position);
+
+    //barがnullなら処理を飛ばす
+    if (position.barData === null) {
+      this.clearPostDataAll(position);
+      return;
+    }
+
+    // POST 用の断面情報をセット
+    if (member.shape.indexOf('円') >= 0) {
+
+      // 円形の場合は 上側引張、下側引張　どちらかにする
+      if (position.PostData0.length > 1) {
+        if (Math.abs(position.PostData0[0]) > Math.abs(position.PostData0[1])) {
+          // 末尾の要素を取り除く
+          let i = 0;
+          while ('PostData' + i.toString() in position) {
+            position['PostData' + i.toString()].pop();
+            i++;
+          }
+          position.PrintData.pop();
+        } else {
+          // 先頭の要素を取り除く
+          let i = 0;
+          while ('PostData' + i.toString() in position) {
+            position['PostData' + i.toString()].shift();
+            i++;
+          }
+          position.PrintData.shift();
+        }
+      }
+      let isEnable: boolean;
+      if (member.shape.indexOf('円形') >= 0) {
+        isEnable = this.getCircle(position);
+      } else if (member.shape.indexOf('円環') >= 0) {
+        isEnable = this.getRing(position);
+      } else {
+        isEnable = false;
+      }
+      if (isEnable === false) {
+        let i = 0;
+        while ('PostData' + i.toString() in position) {
+          position['PostData' + i.toString()] = new Array();
+          i++;
+        }
+        return;
+      }
+
+    } else if (member.shape.indexOf('矩形') >= 0) {
+
+      for (let i = position.PostData0.length - 1; i >= 0; i--) {
+        if (this.getRectangle(position, i) === false) {
+          this.splicePostDataAll(position, i);
+        }
+      }
+
+    } else if (member.shape.indexOf('T') >= 0) {
+
+      // Ｔ形に関する 設計条件を確認する
+      let condition = this.basic.conditions_list.find((value) => {
+        return (value.id === 'JR-002');
+      });
+      if (condition === undefined) {
+        condition = { id: 'undefined', selected: false };
+      }
+
+      for (let i = position.PostData0.length - 1; i >= 0; i--) {
+        let isEnable: boolean;
+        if (member.shape.indexOf('T形') >= 0) {
+          if (condition.selected === true && position.PostData0[i].side === '上側引張') {
+            // T形 断面の上側引張は 矩形
+            isEnable = this.getRectangle(position, i);
+          } else {
+            isEnable = this.getTsection(position, i);
+          }
+        } else if (member.shape.indexOf('逆T形') >= 0) {
+          if (condition.selected === true && position.PostData0[i].side === '下側引張') {
+            // 逆T形 断面の下側引張は 矩形
+            isEnable = this.getRectangle(position, i);
+          } else {
+            isEnable = this.getInvertedTsection(position, i);
+          }
+        } else {
+          isEnable = false;
+        }
+        if (isEnable === false) {
+          this.splicePostDataAll(position, i)
+        }
+
+      }
+
+    } else if (member.shape.indexOf('小判形') >= 0) {
+
+      // 小判形の場合は 上側引張、下側引張　どちらかにする
+      if (position.PostData0.length > 1) {
+        if (Math.abs(position.PostData0[0]) > Math.abs(position.PostData0[1])) {
+          // 末尾の要素を取り除く
+          this.popPostDataAll(position);
+          position.PrintData.pop();
+        } else {
+          // 先頭の要素を取り除く
+          this.shiftPostDataAll(position);
+          position.PrintData.shift();
+        }
+      }
+      let isEnable: boolean;
+      if (member.B > member.H) {
+        isEnable = this.getHorizontalOval(position);
+      } else if (member.B < member.H) {
+        isEnable = this.getVerticalOval(position);
+      } else if (member.B === member.H) {
+        isEnable = this.getCircle(position);
+      }
+      if (isEnable === false) {
+        this.clearPostDataAll(position);
+        return;
+      }
+
+    } else {
+      console.log("断面形状：" + member.shape + " は適切ではありません。");
+      this.clearPostDataAll(position);
+      return;
+    }
+    */ return null;
+  }
+
 
   // 横小判形における 側面鉄筋 の 鉄筋情報を生成する関数
   private getHorizontalOvalSideBar(

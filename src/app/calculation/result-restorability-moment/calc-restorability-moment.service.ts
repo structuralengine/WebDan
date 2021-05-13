@@ -53,11 +53,8 @@ export class CalcRestorabilityMomentService {
       return null;
     }
 
-    // サーバーに送信するデータを作成
-    this.post.setPostData('Md', this.DesignForceList);
-
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 3, 'Md', '耐力', 1);
+    const postData = this.post.setInputData('Md', '耐力', 3, this.DesignForceList);
     return postData;
   }
 
