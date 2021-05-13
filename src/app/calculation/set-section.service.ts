@@ -18,61 +18,20 @@ export class SetSectionService {
   // 部材・断面情報: memberInfo
   public setPostData(member: any, force: any, safety: any): any {
 
-    const position = {PostData0:null};
-    // 出力用の変数の用意する
-    position['PrintData'] = JSON.parse(
-      JSON.stringify({
-        temp: position.PostData0
-      })
-    ).temp;
-
-    // 鉄筋の入力情報ををセット
-    this.bar.setBarData(member.g_id, member.m_no, position);
-
-    //barがnullなら処理を飛ばす
-    if (position.barData === null) {
-      this.clearPostDataAll(position);
-      return;
-    }
 
     // POST 用の断面情報をセット
     if (member.shape.indexOf('円') >= 0) {
 
-      // 円形の場合は 上側引張、下側引張　どちらかにする
-      if (position.PostData0.length > 1) {
-        if (Math.abs(position.PostData0[0]) > Math.abs(position.PostData0[1])) {
-          // 末尾の要素を取り除く
-          let i = 0;
-          while ('PostData' + i.toString() in position) {
-            position['PostData' + i.toString()].pop();
-            i++;
-          }
-          position.PrintData.pop();
-        } else {
-          // 先頭の要素を取り除く
-          let i = 0;
-          while ('PostData' + i.toString() in position) {
-            position['PostData' + i.toString()].shift();
-            i++;
-          }
-          position.PrintData.shift();
-        }
-      }
       let isEnable: boolean;
       if (member.shape.indexOf('円形') >= 0) {
-        isEnable = this.getCircle(position);
+        isEnable = this.getCircle(member);
       } else if (member.shape.indexOf('円環') >= 0) {
-        isEnable = this.getRing(position);
+        isEnable = this.getRing(member);
       } else {
         isEnable = false;
       }
       if (isEnable === false) {
-        let i = 0;
-        while ('PostData' + i.toString() in position) {
-          position['PostData' + i.toString()] = new Array();
-          i++;
-        }
-        return;
+        return null;
       }
 
     } else if (member.shape.indexOf('矩形') >= 0) {
@@ -771,48 +730,5 @@ export class SetSectionService {
     return degree * (Math.PI / 180);
   }
 
-  // エラー等があったため この position の postData を 削除する
-  private clearPostDataAll(position: any): void {
-    let i = 0;
-    let key: string = 'PostData' + i.toString();
-    while (key in position) {
-      position[key] = new Array();
-      i++;
-      key = 'PostData' + i.toString();
-    }
-  }
-
-  // エラー等があったため この position の postData の index番目の要素 を 削除する
-  private splicePostDataAll(position: any, index: number): void {
-    let i = 0;
-    let key: string = 'PostData' + i.toString();
-    while (key in position) {
-      position[key].splice(index, 1);
-      i++;
-      key = 'PostData' + i.toString();
-    }
-  }
-
-  // この position の postData の 末尾の要素を取り除く
-  private popPostDataAll(position: any): void {
-    let i = 0;
-    let key: string = 'PostData' + i.toString();
-    while (key in position) {
-      position[key].pop();
-      i++;
-      key = 'PostData' + i.toString();
-    }
-  }
-
-  // この position の postData の 先頭の要素を取り除く
-  private shiftPostDataAll(position: any): void {
-    let i = 0;
-    let key: string = 'PostData' + i.toString();
-    while (key in position) {
-      position[key].shift();
-      i++;
-      key = 'PostData' + i.toString();
-    }
-  }
 
 }
