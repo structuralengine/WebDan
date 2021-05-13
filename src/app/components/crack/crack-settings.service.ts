@@ -72,11 +72,16 @@ export class InputCrackSettingsService {
 
   public getTableColumn(index: any): any {
 
-    let result = this.crack_list.find((value) => value.index === index);
+    let result = this.getCalcData(index);
     if (result === undefined) {
       result = this.default_crack(index);
       this.crack_list.push(result);
     }
+    return result;
+  }
+
+  public getCalcData(index: number): any{
+    const result = this.crack_list.find((value) => value.index === index);
     return result;
   }
 
@@ -86,16 +91,16 @@ export class InputCrackSettingsService {
 
     for (const column of table_datas) {
       const b = this.default_crack(column.index);
-      b.m_no =      column.m_no;   
-      b.g_name =    column.g_name;  
+      b.m_no =      column.m_no;
+      b.g_name =    column.g_name;
       b.p_name = column.p_name;
-      b.con_u =     column.con_u;   
-      b.con_l =     column.con_l;   
-      b.con_s =     column.con_s;   
-      b.vis_u =     column.vis_u;   
-      b.vis_l =     column.vis_l;   
-      b.ecsd =      column.ecsd;    
-      b.kr =        column.kr;      
+      b.con_u =     column.con_u;
+      b.con_l =     column.con_l;
+      b.con_s =     column.con_s;
+      b.vis_u =     column.vis_u;
+      b.vis_l =     column.vis_l;
+      b.ecsd =      column.ecsd;
+      b.kr =        column.kr;
       this.crack_list.push(b);
     }
   }
@@ -103,7 +108,7 @@ export class InputCrackSettingsService {
   public setPickUpData() {
 
   }
-  
+
   public getSaveData(): any[] {
     return this.crack_list;
   }

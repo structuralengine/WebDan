@@ -6,8 +6,8 @@ import { InputDesignPointsService } from '../design-points/design-points.service
 })
 export class InputSectionForcesService  {
 
-  public moment_force: any[];
-  public shear_force: any[];
+  private moment_force: any[];
+  private shear_force: any[];
 
   constructor(private points: InputDesignPointsService) {
     this.clear();

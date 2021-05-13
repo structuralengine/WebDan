@@ -62,7 +62,7 @@ export class ResultDataService {
       bottomSideName = '';
     }
 
-    switch (postdata.memo) {
+    switch (postdata.side) {
       case '上側引張':
         side = upperSideName;
         break;

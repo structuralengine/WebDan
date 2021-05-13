@@ -39,17 +39,13 @@ export class CalcDurabilityMomentService {
     }
     // 永久荷重
     this.DesignForceList = this.force.getDesignForceList(
-      ["Md"],
-      this.basic.pickup_moment_no(1)
-    );
+      "Md", this.basic.pickup_moment_no(1));
     // 縁応力検討用
     this.DesignForceList1 = this.force.getDesignForceList(
-      ["Md"],
-      this.basic.pickup_moment_no(0)
-    );
+      "Md", this.basic.pickup_moment_no(0));
 
     // 複数の断面力の整合性を確認する
-    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
+    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition();
@@ -57,54 +53,25 @@ export class CalcDurabilityMomentService {
 
   // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
   private deleteDurabilityDisablePosition() {
-    for (let ig = this.DesignForceList.length - 1; ig >= 0; ig--) {
-      const groupe = this.DesignForceList[ig],
-        groupe1 = this.DesignForceList1[ig];
-      for (let im = groupe.length - 1; im >= 0; im--) {
-        const member = groupe[im],
-          member1 = groupe1[im];
-        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
-          const position: any = member.positions[ip];
-          const memberInfo = this.crack
-            .getSaveData()
-            .find((value) => value.index === position.index);
 
-          const designForce0 = position.designForce;
-          const designForce1 = member1.positions[ip].designForce;
-          for (let i = designForce0.length - 1; i >= 0; i--) {
-            switch (designForce0[i].side) {
-              case "上側引張":
-                if (memberInfo.vis_u !== true) {
-                  designForce0.splice(i, 1);
-                  designForce1.splice(i, 1);
-                }
-                break;
-              case "下側引張":
-                if (memberInfo.vis_l !== true) {
-                  designForce0.splice(i, 1);
-                  designForce1.splice(i, 1);
-                }
-                break;
-            }
-            if (designForce0.Md === 0) {
-              designForce0.splice(i, 1);
-              designForce1.splice(i, 1);
-            }
-          }
+    for (let ip = this.DesignForceList.length - 1; ip >= 0; ip--) {
+      const pos: any = this.DesignForceList[ip];
+      const info = this.crack.getCalcData(pos.index);
 
-          if (position.designForce.length < 1) {
-            member.positions.splice(ip, 1);
-            member1.positions.splice(ip, 1);
-          }
-        }
-        if (member.positions.length < 1) {
-          groupe.splice(im, 1);
-          groupe1.splice(im, 1);
+      const force0 = pos.designForce;
+      const force1 = this.DesignForceList1[ip].designForce;
+      for (let i = force0.length - 1; i >= 0; i--) {
+        if(( force0[i].side==="上側引張" && info.vis_u !== true) ||
+            (force0[i].side==="下側引張" && info.vis_l !== true) ||
+            (force0[i].Md === 0)) {
+          force0.splice(i, 1);
+          force1.splice(i, 1);
         }
       }
-      if (groupe.length < 1) {
-        this.DesignForceList.splice(ig, 1);
-        this.DesignForceList1.splice(ig, 1);
+
+      if (pos.designForce.length < 1) {
+        this.DesignForceList.splice(ip, 1);
+        this.DesignForceList1.splice(ip, 1);
       }
     }
   }

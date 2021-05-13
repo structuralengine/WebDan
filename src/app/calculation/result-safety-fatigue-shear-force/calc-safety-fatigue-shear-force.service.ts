@@ -3,7 +3,6 @@ import { SetDesignForceService } from '../set-design-force.service';
 import { ResultDataService } from '../result-data.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
-import { SetFatigueService } from '../set-fatigue.service';
 
 import { Injectable, ViewChild } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
@@ -29,8 +28,7 @@ export class CalcSafetyFatigueShearForceService {
     private post: SetPostDataService,
     private result: ResultDataService,
     private base: CalcSafetyShearForceService,
-    private fatigue: SetFatigueService,
-    private fatigues: InputFatiguesService,
+    private fatigue: InputFatiguesService,
     private basic: InputBasicInformationService,
     private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
@@ -42,13 +40,13 @@ export class CalcSafetyFatigueShearForceService {
   public getTrainCount(): number[] {
     const result = new Array(2);
     let jA = 0;
-    if ('train_A_count' in this.fatigues) {
-      jA = this.helper.toNumber(this.fatigues.train_A_count);
+    if ('train_A_count' in this.fatigue) {
+      jA = this.helper.toNumber(this.fatigue.train_A_count);
       if (jA === null) { jA = 0; }
     }
     let jB = 0;
-    if ('train_B_count' in this.fatigues) {
-      jB = this.helper.toNumber(this.fatigues.train_B_count);
+    if ('train_B_count' in this.fatigue) {
+      jB = this.helper.toNumber(this.fatigue.train_B_count);
       if (jB === null) { jB = 0; }
     }
     result[0] = jA;
@@ -71,22 +69,63 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 列車本数の入力がない場合は処理を抜ける
-    if (this.helper.toNumber(this.fatigues.train_A_count) === null &&
-      this.helper.toNumber(this.fatigues.train_B_count) === null) {
+    if (this.helper.toNumber(this.fatigue.train_A_count) === null &&
+      this.helper.toNumber(this.fatigue.train_B_count) === null) {
       return;
     }
 
     // 最小応力
-    this.DesignForceList3 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(3));
+    this.DesignForceList3 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(3));
     // 最大応力
-    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(4));
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(4));
 
     // 複数の断面力の整合性を確認する
-    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList3);
+    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList3);
 
     // 変動応力
-    this.DesignForceList2 = this.getLiveload(this.DesignForceList3, this.DesignForceList);
+    this.DesignForceList2 = this.force.getLiveload(this.DesignForceList3, this.DesignForceList);
 
+    // 有効な入力行以外は削除する
+    this.deleteFatigueDisablePosition();
+
+  }
+
+  // 疲労破壊の照査の対象外の着目点を削除する
+  private deleteFatigueDisablePosition() {
+
+    for (let ip = this.DesignForceList.length - 1; ip >= 0; ip--) {
+      const pos: any = this.DesignForceList[ip];
+
+      const force0 = pos.designForce;
+      const force2 = this.DesignForceList2[ip].designForce;
+      const force3 = this.DesignForceList3[ip].designForce;
+
+      // 疲労に用いる係数を取得する
+      const info = this.fatigue.getCalcData(pos.index);
+      for (let i = force0.length - 1; i >= 0; i--) {
+        // 係数に１つも有効な数値がなければ削除
+        let enable = false;
+        for(const k of Object.keys(info.share)){
+          if(info.share[k] !== null){
+            enable = true;
+            break;
+          }
+        }
+        if((enable === false) ||(force0[i].Md === 0)) {
+          force0.splice(i, 1);
+          force2.splice(i, 1);
+          force3.splice(i, 1);
+        } else {
+          force0['fatigue'] = info.share;
+        }
+      }
+
+      if (pos.designForce.length < 1) {
+        this.DesignForceList.splice(ip, 1);
+        this.DesignForceList2.splice(ip, 1);
+        this.DesignForceList3.splice(ip, 1);
+      }
+    }
   }
 
   // サーバー POST用データを生成する
@@ -102,107 +141,6 @@ export class CalcSafetyFatigueShearForceService {
     // POST 用
     const postData = this.post.setInputData(this.DesignForceList, 1, 'Vd', '耐力', 1);
     return postData;
-  }
-
-  // 変動荷重を
-  private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
-
-    const result = JSON.parse(
-      JSON.stringify({
-        temp: minDesignForceList
-      })
-    ).temp;
-
-    for (let ig = 0; ig < maxDesignForceList.length; ig++) {
-      const groupe = maxDesignForceList[ig];
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
-
-        for (let ip = member.positions.length - 1; ip >= 0; ip--) {
-
-          const position = member.positions[ip];
-          if (position === undefined) {
-            console.log('着目点が存在しない');
-            continue;
-          }
-          // position に 疲労係数入れる
-          this.fatigue.setFatigueData(member.g_id, member.m_no, position);
-
-          // もし疲労係数がなかったら削除する
-          let flg = false;
-          if (position.fatigueData !== null) {
-            for (const key of Object.keys(position.fatigueData.V1)) {
-              if (this.helper.toNumber(position.fatigueData.V1[key]) !== null) {
-                flg = true;
-                break;
-              }
-            }
-            if (flg === false) {
-              for (const key of Object.keys(position.fatigueData.V2)) {
-                if (this.helper.toNumber(position.fatigueData.V2[key]) !== null) {
-                  flg = true;
-                  break;
-                }
-              }
-            }
-          }
-          if (flg === false) {
-            member.positions.splice(ip, 1); // 削除する
-            continue;
-          }
-
-          // 最大応力 - 最小応力 で変動荷重を求める
-          const maxForce: any = position.designForce;
-          const minForce: any = result[ig][im].positions[ip].designForce;
-          for (let i = 0; i < maxForce.length; i++) {
-            for (const key1 of Object.keys(maxForce[i])) {
-              if (key1 === 'n') { continue; }
-
-              // 最大<=>最小 反対の断面力 も探査対象にする
-              let key2: string;
-              if (key1.indexOf('max') >= 0) {
-                key2 = key1.replace('max', 'min');
-              } else {
-                key2 = key1.replace('min', 'max');
-              }
-              const force0 = maxForce[i][key1];
-              const force1 =  minForce[i][key1];
-              const force2 =  minForce[i][key2];
-
-              // 最小と最大 差が大きい方を変動作用とする
-              let Vd0: number = force0.Vd;
-              let Vd1: number = force1.Vd * Math.sign(Vd0);
-              let Vd2: number = force2.Vd * Math.sign(Vd0);
-              Vd0 = Math.abs(Vd0);
-
-              // 最小の方が大きい場合は、比較対象から除外する
-              if ( Vd0 < Vd1) {
-                Vd1 = Vd0;
-              }
-              if ( Vd0 < Vd2) {
-                Vd2 = Vd0;
-              }
-
-              let targetMinForce: object;
-              if ( Vd0 - Vd1 > Vd0 - Vd2 ) {
-                targetMinForce = force1;
-              } else {
-                // 反対のキーを持つ最小応力が採用された場合
-                targetMinForce = force2;
-                minForce[i][key1] = minForce[i][key2]; // 反対のキーに断面力をコピーする
-              }
-
-              // 最大 - 最小 断面力の計算
-              for (const key3 of Object.keys(maxForce[i][key1])) {
-                if (key3 === 'comb') { continue; }
-                maxForce[i][key1][key3] -= targetMinForce[key3];
-              }
-            }
-          }
-        }
-      }
-    }
-    return result;
   }
 
   // 出力テーブル用の配列にセット
@@ -442,7 +380,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let ar: number = 3.09 - 0.003 * fai;
 
-    let reference_count: number = this.helper.toNumber(this.fatigues.reference_count);
+    let reference_count: number = this.helper.toNumber(this.fatigue.reference_count);
     if (reference_count === null) {
       reference_count = 2000000;
     }
@@ -478,7 +416,7 @@ export class CalcSafetyFatigueShearForceService {
     result['ar']  = ar;
 
     // 標準列車荷重観山の総等価繰返し回数 N の計算
-    let T: number = this.helper.toNumber(this.fatigues.service_life);
+    let T: number = this.helper.toNumber(this.fatigue.service_life);
     if (T === null) { return result; }
 
     const j = this.getTrainCount();
@@ -486,7 +424,7 @@ export class CalcSafetyFatigueShearForceService {
     const jB = j[1];
 
     let inputFatigue: any;
-    switch (PrintData.memo) {
+    switch (PrintData.side) {
       case '上側引張':
         inputFatigue = position.fatigueData.V1;
         break;

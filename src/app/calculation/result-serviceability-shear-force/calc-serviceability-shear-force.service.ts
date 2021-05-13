@@ -47,21 +47,21 @@ export class CalcServiceabilityShearForceService {
 
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    this.DesignForceList = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(0));
+    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(0));
     // 永久荷重
-    this.DesignForceList1 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(1));
+    this.DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
 
     // DesignForceList と DesignForceList1 の断面力の整合性を確認する
-    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
+    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // 変動荷重
-    this.DesignForceList2 = this.force.getDesignForceList(['Vd'], this.basic.pickup_shear_force_no(2));
+    this.DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
     if (this.DesignForceList2.length < 1){
-      this.DesignForceList2 = this.getLiveload(this.DesignForceList , this.DesignForceList1);
+      this.DesignForceList2 = this.force.getLiveload(this.DesignForceList , this.DesignForceList1);
     }
 
     // DesignForceList と DesignForceList2 の断面力の整合性を確認する
-    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList2);
+    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList2);
 
   }
 
@@ -79,36 +79,6 @@ export class CalcServiceabilityShearForceService {
     const postData = this.post.setInputData(this.DesignForceList, 0, 'Vd', '耐力', 3);
     return postData;
   }
-
-    // 変動荷重を
-    private getLiveload(minDesignForceList: any[], maxDesignForceList: any[]): any[] {
-
-      const result = JSON.parse(
-        JSON.stringify({
-          temp: maxDesignForceList
-        })
-      ).temp;
-  
-      for (let ig = 0; ig < minDesignForceList.length; ig++) {
-        const groupe = minDesignForceList[ig];
-        for (let im = 0; im < groupe.length; im++) {
-          const member = groupe[im];
-          for (let ip = 0; ip < member.positions.length; ip++) {
-
-            // 最大応力 - 最小応力 で変動荷重を求める
-            const minForce: any = member.positions[ip].designForce;
-            const maxForce: any = result[ig][im].positions[ip].designForce;
-            for (let i = 0; i < minForce.length; i++) {
-              for (const key1 of ['Md', 'Vd', 'Nd']) {
-                maxForce[i][key1] -= minForce[i][key1];
-              }
-              maxForce[i]['comb'] = "-";
-            }
-          }
-        }
-      }
-      return result;
-    }
 
   // 出力テーブル用の配列にセット
   public setServiceabilityPages(responseData: any, postData: any): any[] {

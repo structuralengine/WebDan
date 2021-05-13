@@ -257,7 +257,7 @@ export class SetPostDataService {
           const g_id_Mode_P: boolean = (member.g_id.toUpperCase().indexOf('P') >= 0) ? true : false;
 
           for ( const force of position.PostData0) {
-            switch (force.memo) {
+            switch (force.side) {
               case '上側引張':
                 if ( upper === null ) {
                   upper = position;
@@ -323,7 +323,7 @@ export class SetPostDataService {
             while (key in upper) {
               const p = upper[key];
               for (let j = p.length - 1; j >= 0; j--) {
-                if ( p[j].memo === '下側引張' ) {
+                if ( p[j].side === '下側引張' ) {
                   p.splice(j, 1);
                 }
               }
@@ -337,7 +337,7 @@ export class SetPostDataService {
             while (key in bottom) {
               const p = bottom[key];
               for (let j = p.length - 1; j >= 0; j--) {
-                if ( p[j].memo === '上側引張' ) {
+                if ( p[j].side === '上側引張' ) {
                   p.splice(j, 1);
                 }
               }

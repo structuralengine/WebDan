@@ -97,14 +97,14 @@ export class SetSectionService {
       for (let i = position.PostData0.length - 1; i >= 0; i--) {
         let isEnable: boolean;
         if (memberInfo.shape.indexOf('T形') >= 0) {
-          if (condition.selected === true && position.PostData0[i].memo === '上側引張') {
+          if (condition.selected === true && position.PostData0[i].side === '上側引張') {
             // T形 断面の上側引張は 矩形
             isEnable = this.getRectangle(position, i);
           } else {
             isEnable = this.getTsection(position, i);
           }
         } else if (memberInfo.shape.indexOf('逆T形') >= 0) {
-          if (condition.selected === true && position.PostData0[i].memo === '下側引張') {
+          if (condition.selected === true && position.PostData0[i].side === '下側引張') {
             // 逆T形 断面の下側引張は 矩形
             isEnable = this.getRectangle(position, i);
           } else {
@@ -363,7 +363,7 @@ export class SetSectionService {
     PostData['SectionElastic'] = sectionElastic;
 
     // 鉄筋情報を 集計
-    const bars = this.bar.getRectBar(position, PostData.memo, h);
+    const bars = this.bar.getRectBar(position, PostData.side, h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
@@ -448,7 +448,7 @@ export class SetSectionService {
     PostData['SectionElastic'] = sectionElastic;
 
     // 鉄筋情報を 集計
-    const bars = this.bar.getRectBar(position, PostData.memo, h);
+    const bars = this.bar.getRectBar(position, PostData.side, h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;
@@ -517,7 +517,7 @@ export class SetSectionService {
     PostData['SectionElastic'] = sectionElastic;
 
     // 鉄筋情報を 集計
-    const bars = this.bar.getRectBar(position, PostData.memo, h);
+    const bars = this.bar.getRectBar(position, PostData.side, h);
     if (bars !== null) {
       PostData['Steels'] = bars.Steels;
       PostData['SteelElastic'] = bars.SteelElastic;

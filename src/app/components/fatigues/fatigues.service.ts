@@ -71,6 +71,7 @@ export class InputFatiguesService {
       // 部材
       for (const member of groupe_list[i]) {
         // 着目点
+        let count = 0;
         for (let k = 0; k < member.positions.length; k++) {
           const pos = member.positions[k];
           if (!this.points.isEnable(pos)) {
@@ -78,70 +79,38 @@ export class InputFatiguesService {
           }
           // barデータに（部材、着目点など）足りない情報を追加する
           const data: any = this.getTableColumn(pos.index);
-          data.m_no = member.m_no;
-          data.b = member.B;
-          data.h = member.H;
-          data.position = pos.position;
-          data.g_name = pos.g_name;
-          data.p_name = pos.p_name;
 
           // データを2行に分ける
           const column1 = {};
           const column2 = {};
-          column1["m_no"] = k === 0 ? data.m_no : ""; // 最初の行には 部材番号を表示する
+          column1["m_no"] = (count === 0) ? pos.m_no : ""; // 最初の行には 部材番号を表示する
           // 1行目
           column1["index"] = data.index;
-          const a: number = this.helper.toNumber(data.position);
-          column1["position"] = a === null ? "" : a.toFixed(3);
-          column1['g_name'] = data['g_name'];
-          column1['p_name'] = data['p_name'];
-
-
-          column1['bh'] = data['b'];
-          column1['design_point_id'] = data['title1'];
-
-          column1['M_SA'] = data['M1'].SA;
-          column1['M_SB'] = data['M1'].SB;
-          column1['M_NA06'] = data['M1'].NA06;
-          column1['M_NB06'] = data['M1'].NB06;
-          column1['M_NA12'] = data['M1'].NA12;
-          column1['M_NB12'] = data['M1'].NB12;
-          column1['M_A'] = data['M1'].A;
-          column1['M_B'] = data['M1'].B;
-
-          column1['V_SA'] = data['V1'].SA;
-          column1['V_SB'] = data['V1'].SB;
-          column1['V_NA06'] = data['V1'].NA06;
-          column1['V_NB06'] = data['V1'].NB06;
-          column1['V_NA12'] = data['V1'].NA12;
-          column1['V_NB12'] = data['V1'].NB12;
-          column1['V_A'] = data['V1'].A;
-          column1['V_B'] = data['V1'].B;
-
+          const a: number = this.helper.toNumber(pos.position);
+          column1["position"] = (a === null) ? "" : a.toFixed(3);
+          column1['g_name'] = pos.g_name;
+          column1['p_name'] = pos.p_name;
+          column1['bh'] = member.B;
+          column1['design_point_id'] = data.title1;
+          for(const k of Object.keys(data.M1)){
+            column1['M_'+ k] = data.M1[k];
+          }
+          for(const k of Object.keys(data.V1)){
+            column1['V_'+ k] = data.V1[k];
+          }
           table_groupe.push(column1);
 
           // 2行目
-          column2['bh'] = data['h'];
-          column2['design_point_id'] = data['title2'];
-
-          column2['M_SA'] = data['M2'].SA;
-          column2['M_SB'] = data['M2'].SB;
-          column2['M_NA06'] = data['M2'].NA06;
-          column2['M_NB06'] = data['M2'].NB06;
-          column2['M_NA12'] = data['M2'].NA12;
-          column2['M_NB12'] = data['M2'].NB12;
-          column2['M_A'] = data['M2'].A;
-          column2['M_B'] = data['M2'].B;
-
-          column2['V_SA'] = data['V2'].SA;
-          column2['V_SB'] = data['V2'].SB;
-          column2['V_NA06'] = data['V2'].NA06;
-          column2['V_NB06'] = data['V2'].NB06;
-          column2['V_NA12'] = data['V2'].NA12;
-          column2['V_NB12'] = data['V2'].NB12;
-          column2['V_A'] = data['V2'].A;
-          column2['V_B'] = data['V2'].B;
+          column2['bh'] = member.H;
+          column2['design_point_id'] = data.title2;
+          for(const k of Object.keys(data.M2)){
+            column2['M_'+ k] = data.M2[k];
+          }
+          for(const k of Object.keys(data.V2)){
+            column2['V_'+ k] = data.V2[k];
+          }
           table_groupe.push(column2);
+          count++;
         }
       }
       table_datas.push(table_groupe);
@@ -158,6 +127,75 @@ export class InputFatiguesService {
     return result;
   }
 
+  // 計算に用いる値を返す
+  public getCalcData(index: number): any {
+
+    const result = {
+      upper: this.default_fatigue_coefficient(),
+      bottom: this.default_fatigue_coefficient(),
+      share: this.default_fatigue_coefficient()
+    }
+
+    // グリッド用データの作成
+    for (const groupe of this.points.getGroupeList()) {
+      // 部材
+      let startFlg = false;
+      for (let im = groupe.length - 1; im >= 0; im--) {
+        const member = groupe[im];
+        // 着目点
+        for (let ip =  member.positions.length - 1; ip >= 0; ip--) {
+          const pos = member.positions[ip];
+          if(pos.index === index){
+            // 当該着目点以上の値を採用値とする
+            startFlg = true;
+          }
+          if(startFlg === false){
+            continue;
+          }
+          let endFlg = true;
+          // barデータに（部材、着目点など）足りない情報を追加する
+          const data: any = this.fatigue_list.find((v) => v.index === pos.index);
+          if(data === undefined){
+            continue;
+          }
+
+          // 曲げ - 上側
+          const upper = data.M1;
+          for(const k of Object.keys(result.upper)){
+            if(result.upper[k] === null && k in upper){
+              result.upper[k] = this.helper.toNumber(upper[k]);
+              endFlg = false; // まだ終わらない
+            }
+          }
+          // 曲げ - 下側
+          const bottom = data.M2;
+          for(const k of Object.keys(result.bottom)){
+            if(result.bottom[k] === null && k in bottom){
+              result.bottom[k] = this.helper.toNumber(bottom[k]);
+              endFlg = false; // まだ終わらない
+            }
+          }
+          // せん断
+          for(const key of ['V1', 'V2']){
+            const share = data[key];
+            for(const k of Object.keys(result.share)){
+              if(result.share[k] === null && k in share){
+                result.share[k] = this.helper.toNumber(share[k]);
+                endFlg = false; // まだ終わらない
+              }
+            }
+  
+          }
+
+          if( endFlg === true){
+            // 全ての値に有効な数値(null以外)が格納されたら終了する
+            return result;
+          }
+        }
+      }
+    }
+    return result;
+  }
 
   public setTableColumns(fatigues: any) {
 
@@ -173,12 +211,6 @@ export class InputFatiguesService {
       const column2 = table_datas[i + 1];
 
       const f = this.default_fatigue(column1.index);
-      f.g_name = column1.g_name;
-      f.position = column1.position;
-      f.m_no = column1.m_no;
-      f.p_name = column1.p_name;
-      f.b = column1.bh;
-      f.h = column2.bh;
 
       f.title1 = column1.design_point_id;
       f['M1'].SA = column1.M_SA;

@@ -116,7 +116,6 @@ export class FatiguesComponent implements OnInit, OnDestroy, AfterViewInit {
           {
             title: '曲げ加工 r1', align: 'center', colModel: [
               { title: '軸鉄筋', dataType: 'float', format: '#.00', dataIndx: 'r1_1', sortable: false, width: 60 },
-              { title: '帯筋', dataType: 'float', format: '#.00', dataIndx: 'r1_2', sortable: false, width: 60 },
               { title: '折曲げ', dataType: 'float', format: '#.00', dataIndx: 'r1_3', sortable: false, width: 60 }
             ]
           },
@@ -146,9 +145,7 @@ export class FatiguesComponent implements OnInit, OnDestroy, AfterViewInit {
           },
           {
             title: '曲げ加工 r1', align: 'center', colModel: [
-              { title: '軸鉄筋', dataType: 'float', format: '#.00', dataIndx: 'r1_1', sortable: false, width: 60 },
               { title: '帯筋', dataType: 'float', format: '#.00', dataIndx: 'r1_2', sortable: false, width: 60 },
-              { title: '折曲げ', dataType: 'float', format: '#.00', dataIndx: 'r1_3', sortable: false, width: 60 }
             ]
           },
         ]

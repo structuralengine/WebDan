@@ -15,7 +15,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 export class CalcServiceabilityMomentService {
   // 耐久性 曲げひび割れ
   public DesignForceList: any[];
-  private DesignForceList1: any[];
+  public DesignForceList1: any[];
   public isEnable: boolean;
 
   constructor(
@@ -45,12 +45,12 @@ export class CalcServiceabilityMomentService {
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(1));
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力度検討用
-    this.DesignForceList1 = this.force.getDesignForceList(['Md'], this.basic.pickup_moment_no(0));
+    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
     // 複数の断面力の整合性を確認する
-    this.force.AlignMultipleLists(this.DesignForceList, this.DesignForceList1);
+    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
   }
 
@@ -368,7 +368,7 @@ export class CalcServiceabilityMomentService {
 
     // 環境条件
     let conNum: number = 1;
-    switch (PrintData.memo) {
+    switch (PrintData.side) {
       case '上側引張':
         conNum = this.helper.toNumber(position.memberInfo.con_u);
         break;
@@ -681,7 +681,7 @@ export class CalcServiceabilityMomentService {
       const Md: number = Math.abs(Mhd * 1000000);
       const Nd: number = Nhd * 1000;
       let e: number;
-      switch (PrintData.memo) {
+      switch (PrintData.side) {
         case '上側引張':
           e = PrintData.eu;
           break;
