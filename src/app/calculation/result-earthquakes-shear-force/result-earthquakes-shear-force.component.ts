@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CalcEarthquakesShearForceService } from './calc-earthquakes-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
-import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
+import { ResultSafetyShearForceComponent } from '../result-safety-shear-force/result-safety-shear-force.component';
 
 @Component({
   selector: 'app-result-earthquakes-shear-force',
@@ -24,7 +24,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     private calc: CalcEarthquakesShearForceService,
     private result: ResultDataService,
     private post: SetPostDataService,
-    private base: CalcSafetyShearForceService) { }
+    private base: ResultSafetyShearForceComponent) { }
 
   ngOnInit() {
     this.isLoading = true;

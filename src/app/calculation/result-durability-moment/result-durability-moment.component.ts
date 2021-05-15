@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { CalcDurabilityMomentService } from './calc-durability-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
-import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
+import { ResultServiceabilityMomentComponent } from '../result-serviceability-moment/result-serviceability-moment.component';
 
 @Component({
   selector: 'app-result-durability-moment',
@@ -17,12 +17,12 @@ export class ResultDurabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   private err: string;
-  private serviceabilityMomentPages: any[];
+  public serviceabilityMomentPages: any[];
 
   constructor(private http: HttpClient,
               private calc: CalcDurabilityMomentService,
               private post: SetPostDataService,
-              private base: CalcServiceabilityMomentService) {
+              private base: ResultServiceabilityMomentComponent) {
   }
 
   ngOnInit() {

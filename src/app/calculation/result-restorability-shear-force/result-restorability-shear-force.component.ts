@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CalcRestorabilityShearForceService } from './calc-restorability-shear-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
-import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
+import { ResultSafetyShearForceComponent } from '../result-safety-shear-force/result-safety-shear-force.component';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
     private calc: CalcRestorabilityShearForceService,
     private result: ResultDataService,
     private post: SetPostDataService,
-    private base: CalcSafetyShearForceService) { }
+    private base: ResultSafetyShearForceComponent) { }
 
   ngOnInit() {
     this.isLoading = true;
