@@ -193,6 +193,9 @@ export class InputFatiguesService {
           }
         }
       }
+      if(startFlg === true){
+        return result;
+      }
     }
     return result;
   }

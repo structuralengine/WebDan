@@ -159,8 +159,8 @@ export class CalcSafetyFatigueMomentService {
     const title = '安全性（疲労破壊）曲げモーメントの照査結果';
 
     //仮
-    // const responseMax = responseData.slice(0, this.PostedData.InputData0.length);
-    // const responseMin = responseData.slice(-this.PostedData.InputData1.length);
+    // const responseMax = responseData.slice(0, this.PostedData.length);
+    // const responseMin = responseData.slice(-this.PostedData.length);
     const responseMax = responseData.slice(0, 2); // エラー回避仮コード
     const responseMin = responseData.slice(-2);   // エラー回避仮コード
     //仮END

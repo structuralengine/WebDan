@@ -39,7 +39,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       this.isFulfilled = false;
       return;
     }
-    if (postData.InputData0.length < 1) {
+    if (postData.length < 1) {
       this.isLoading = false;
       this.isFulfilled = false;
       return;

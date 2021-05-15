@@ -39,7 +39,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
       this.isFulfilled = false;
       return;
     }
-    if (postData.InputData0.length < 1) {
+    if (postData.length < 1) {
       this.isLoading = false;
       this.isFulfilled = false;
       return;
@@ -47,12 +47,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      })
-    })
+    this.http.post(this.post.URL, inputJson, this.post.options)
       .subscribe(
         response => {
           const result: string = JSON.stringify(response);

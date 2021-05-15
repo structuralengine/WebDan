@@ -1,9 +1,11 @@
 import { Injectable } from "@angular/core";
 import { UserInfoService } from "../providers/user-info.service";
 import { InputMembersService } from "../components/members/members.service";
+import { InputBarsService } from '../components/bars/bars.service';
 import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
 import { SetSectionService } from "./set-section.service";
 import { SetBarService } from "./set-bar.service";
+import { HttpHeaders } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -14,11 +16,19 @@ export class SetPostDataService {
     private section: SetSectionService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private members: InputMembersService,
+    private bars: InputBarsService,
     private steel: SetBarService) {}
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
   public URL: string =
     "https://imj7l5o0xl.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear";
+
+  public options = {
+    headers: new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Accept': 'application/json'
+    })
+  };
 
   public parseJsonString(str: string): any {
     let json: any = null;
@@ -36,7 +46,7 @@ export class SetPostDataService {
     const postObject = {
       username: this.user.loginUserName,
       password: this.user.loginPassword,
-      InputData: postData.InputData0,
+      InputData: postData,
     };
     const inputJson: string = JSON.stringify(postObject);
     return inputJson;
@@ -45,9 +55,9 @@ export class SetPostDataService {
   // サーバーに送信するデータを作成
   // target: 'Md', 'Vd' 安全係数などの選定に用いる
   // type: '応力度', '耐力'
-  // safety_id: 安全係数の行番号
+  // safetyID: 安全係数の行番号
   // DesignForceList: 着目点, 断面力情報
-  public setInputData( target: string, type: string, safety_id: number,
+  public setInputData( target: string, type: string, safetyID: number,
     ...DesignForceList: any[] ): any {
     const result = [];
 
@@ -55,8 +65,9 @@ export class SetPostDataService {
       for (const position of list) {
         // 部材情報
         const member = this.members.getCalcData(position.m_no);
+        const bar = this.bars.getCalcData(position.index);
         // 安全係数
-        const safety = this.safety.getCalcData( target, member.g_id, safety_id );
+        const safety = this.safety.getCalcData( target, member.g_id, safetyID );
 
         // 送信post データの生成
         for (const force of position.designForce) {
@@ -72,12 +83,12 @@ export class SetPostDataService {
           }
 
           // 断面形状
-          const section = this.section.setPostData(member, force, safety);
+          const section = this.section.setPostData(member, bar, force, safety);
           data['Sections'] = section.Sections;
           data['SectionElastic'] = section.SectionElastic;
 
           // 鉄筋の本数
-          const steel = this.steel.setPostData(member, force, safety);
+          const steel = this.steel.setPostData(member, bar, force, safety, section);
           data['Steels'] = steel.Steels;
           data['SteelElastic'] = steel.SteelElastic;
 

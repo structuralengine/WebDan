@@ -22,14 +22,19 @@ export class InputBarsService {
 
   // 鉄筋情報
   private default_bars(id: number): any {
+    const result = this.default(id);
+    result['m_no'] =  null;
+    result['position'] =  null;
+    result['g_name'] =  null;
+    result['p_name'] =  null;
+    result['b'] =  null;
+    result['h'] =  null;
+    return result;
+  }
+ 
+  private default(id: number): any {
     return {
       index: id,
-      m_no: null,
-      position: null,
-      g_name: null,
-      p_name: null,
-      b: null,
-      h: null,
       haunch_M: null,
       haunch_V: null,
       rebar1: this.default_rebar('上'),
@@ -174,6 +179,63 @@ export class InputBarsService {
     if (result === undefined) {
       result = this.default_bars(index);
       this.bar_list.push(result);
+    }
+    return result;
+  }
+
+  public getCalcData(index: any): any {
+
+    let result = null;
+
+    // グリッド用データの作成
+    for (const groupe of this.points.getGroupeList()) {
+      // 部材
+      let startFlg = false;
+      for (let im = groupe.length - 1; im >= 0; im--) {
+        const member = groupe[im];
+        // 着目点
+        for (let ip =  member.positions.length - 1; ip >= 0; ip--) {
+          const pos = member.positions[ip];
+          if(pos.index === index){
+            // 当該着目点以上の値を採用値とする
+            startFlg = true;
+          }
+          if(startFlg === false){
+            continue;
+          }
+          let endFlg = true;
+          // barデータに（部材、着目点など）足りない情報を追加する
+          const data: any = this.bar_list.find((v) => v.index === pos.index);
+          if(data === undefined){
+            continue;
+          }
+          if(result === null) {
+            // 当該入力行 の情報を入手
+            result = this.default(index);
+            for(const key of Object.keys(result)){
+              result[key] = data[key];
+            }
+          }
+          // 当該入力行より上の行
+          for(const key of ['rebar1', 'rebar2', 'sidebar', 'starrup', 'bend']){
+            const rebar = data[key];
+            const re = result[key];
+            for(const k of Object.keys(re)){
+              if(re[k] === null && k in rebar){
+                re[k] = this.helper.toNumber(rebar[k]);
+                endFlg = false; // まだ終わらない
+              }
+            }
+          }
+          if( endFlg === true){
+            // 全ての値に有効な数値(null以外)が格納されたら終了する
+            return result;
+          }
+        }
+      }
+      if(startFlg === true){
+        return result;
+      }
     }
     return result;
   }

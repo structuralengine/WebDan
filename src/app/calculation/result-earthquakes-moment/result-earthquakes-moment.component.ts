@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { CalcEarthquakesMomentService } from './calc-earthquakes-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
-import { CalcRestorabilityMomentService } from '../result-restorability-moment/calc-restorability-moment.service';
-import { from } from 'rxjs';
+import { ResultRestorabilityMomentComponent } from '../result-restorability-moment/result-restorability-moment.component';
 
 @Component({
   selector: 'app-result-earthquakes-moment',
@@ -23,7 +22,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
   constructor(private http: HttpClient,
     private calc: CalcEarthquakesMomentService,
     private post: SetPostDataService,
-    private base: CalcRestorabilityMomentService) { }
+    private base: ResultRestorabilityMomentComponent) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -37,7 +36,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
       this.isFulfilled = false;
       return;
     }
-    if (postData.InputData0.length < 1) {
+    if (postData.length < 1) {
       this.isLoading = false;
       this.isFulfilled = false;
       return;
@@ -45,12 +44,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      })
-    })
+    this.http.post(this.post.URL, inputJson, this.post.options)
       .subscribe(
         response => {
           const result: string = JSON.stringify(response);

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import { CalcRestorabilityMomentService } from './calc-restorability-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
+import { ResultDataService } from '../result-data.service';
 
 
 @Component({
@@ -19,9 +20,11 @@ export class ResultRestorabilityMomentComponent implements OnInit {
   private err: string;
   private restorabilityMomentPages: any[];
 
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private calc: CalcRestorabilityMomentService,
-    private post: SetPostDataService) { }
+    private post: SetPostDataService,
+    private result: ResultDataService ) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -35,7 +38,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
       this.isFulfilled = false;
       return;
     }
-    if (postData.InputData0.length < 1) {
+    if (postData.length < 1) {
       this.isLoading = false;
       this.isFulfilled = false;
       return;
@@ -43,12 +46,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      })
-    })
+    this.http.post(this.post.URL, inputJson, this.post.options)
       .subscribe(
         response => {
           const result: string = JSON.stringify(response);
@@ -75,8 +73,98 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     }
     const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.restorabilityMomentPages = this.calc.setRestorabilityPages(json.OutputData, postData);
+    this.restorabilityMomentPages = this.setRestorabilityPages(json.OutputData, postData);
     return true;
+  }
+
+  // 出力テーブル用の配列にセット
+  public setRestorabilityPages( responseData: any, postData: any,
+                                title: string = '復旧性（地震時以外）曲げモーメントの照査結果' ): any[] {
+    const result: any[] = new Array();
+    let page: any;
+    let groupeName: string;
+    let i: number = 0;
+    for (const groupe of postData) {
+      groupeName = groupe[0].g_name;
+      page = {
+        caption: title,
+        g_name: groupeName,
+        columns: new Array()
+      };
+
+      for (const member of groupe) {
+        for (const position of member.positions) {
+          for (let j = 0; j < position.PostData0.length; j++) {
+            const postdata = position.PostData0[j];
+            const PrintData = position.PrintData[j];
+            const resultData = responseData[i].Reactions[0];
+
+            if (page.columns.length > 4) {
+              result.push(page);
+              page = {
+                caption: title,
+                g_name: groupeName,
+                columns: new Array()
+              };
+            }
+            const column: any[] = new Array();
+            /////////////// タイトル ///////////////
+            column.push(this.result.getTitleString1(member, position));
+            column.push(this.result.getTitleString2(position, postdata));
+            column.push(this.result.getTitleString3(position, postdata));
+            ///////////////// 形状 /////////////////
+            column.push(this.result.getShapeString_B(PrintData));
+            column.push(this.result.getShapeString_H(PrintData));
+            column.push(this.result.getShapeString_Bt(PrintData));
+            column.push(this.result.getShapeString_t(PrintData));
+            /////////////// 引張鉄筋 ///////////////
+            const Ast: any = this.result.getAsString(PrintData);
+            column.push(Ast.As);
+            column.push(Ast.AsString);
+            column.push(Ast.ds);
+            /////////////// 圧縮鉄筋 ///////////////
+            const Asc: any = this.result.getAsString(PrintData, 'Asc');
+            column.push(Asc.As);
+            column.push(Asc.AsString);
+            column.push(Asc.ds);
+            /////////////// 側面鉄筋 ///////////////
+            const Ase: any = this.result.getAsString(PrintData, 'Ase');
+            column.push(Ase.As);
+            column.push(Ase.AsString);
+            column.push(Ase.ds);
+            /////////////// コンクリート情報 ///////////////
+            const fck: any = this.result.getFckString(PrintData);
+            column.push(fck.fck);
+            column.push(fck.rc);
+            column.push(fck.fcd);
+            /////////////// 鉄筋情報 ///////////////
+            const fsk: any = this.result.getFskString(PrintData);
+            column.push(fsk.fsy);
+            column.push(fsk.rs);
+            column.push(fsk.fsd);
+            /////////////// 照査 ///////////////
+            const resultColumn: any = this.calc.getResultString(PrintData, resultData, position.safety_factor);
+            column.push(resultColumn.Md);
+            column.push(resultColumn.Nd);
+            column.push(resultColumn.εcu);
+            column.push(resultColumn.εs);
+            column.push(resultColumn.x);
+            column.push(resultColumn.My);
+            column.push(resultColumn.rb);
+            column.push(resultColumn.Myd);
+            column.push(resultColumn.ri);
+            column.push(resultColumn.ratio);
+            column.push(resultColumn.result);
+            page.columns.push(column);
+            i++;
+          }
+        }
+      }
+      if (page.columns.length > 0) {
+        result.push(page);
+      }
+    }
+    return result;
   }
 
 }
