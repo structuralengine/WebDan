@@ -47,8 +47,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options)
       .subscribe(
         response => {
-          const result: string = JSON.stringify(response);
-          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
+          this.isFulfilled = this.setPages(response);
           this.isLoading = false;
           this.calc.isEnable = true;
         },
@@ -61,7 +60,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(response: string, postData: any): boolean {
+  private setPages(response): boolean {
     if (response === null) {
       return false;
     }
@@ -71,7 +70,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     }
     const json = this.post.parseJsonString(response);
     if (json === null) { return false; }
-    this.restorabilityMomentPages = this.base.setRestorabilityPages(json.OutputData, postData, '復旧性（地震時）曲げモーメントの照査結果');
+    this.restorabilityMomentPages = this.base.setRestorabilityPages(response, '復旧性（地震時）曲げモーメントの照査結果');
     return true;
   }
 

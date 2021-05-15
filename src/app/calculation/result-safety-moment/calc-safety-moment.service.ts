@@ -20,7 +20,6 @@ export class CalcSafetyMomentService {
   constructor(private save: SaveDataService,
               private force: SetDesignForceService,
               private post: SetPostDataService,
-              private result: ResultDataService,
               private basic: InputBasicInformationService,
               private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
