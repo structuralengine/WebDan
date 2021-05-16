@@ -557,5 +557,40 @@ export class SetSectionService {
     return degree * (Math.PI / 180);
   }
 
+  public getShapeString(member: any, bar: any,
+                        force: any, safety: any,
+                        result: any): any {
+
+    let result: object;
+
+    // 鉄筋情報を 集計
+    if (result.shape === 'Circle') {
+      result = this.getCircle(member);
+
+    } else if ( result.shape === 'Ring' ){
+      result = this.getRing(member);
+
+    } else if ( result.shape === 'Rectangle' ){
+      result = this.getRectangle(member, bar);
+
+    } else if ( result.shape === 'Tsection'  ){
+      result = this.getTsection(member, bar);
+
+    } else if ( result.shape === 'InvertedTsection') {
+      result = this.getInvertedTsection(member, bar);
+
+    } else if (result.shape === 'HorizontalOval') {
+      result = this.getHorizontalOval(member);
+
+    } else if (result.shape === 'VerticalOval') {
+      result = this.getVerticalOval(member);
+
+    } else {
+    console.log("断面形状：" + result.shape + " は適切ではありません。");
+    return null;
+    }
+
+    return result;
+  }
 
 }
