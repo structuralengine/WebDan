@@ -2,6 +2,7 @@
 
 import { Injectable } from '@angular/core';
 import { DataHelperModule } from '../providers/data-helper.module';
+import { SetSectionService } from './set-section.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +11,20 @@ import { DataHelperModule } from '../providers/data-helper.module';
 export class ResultDataService {
 
   constructor(
-    private save: SaveDataService,
+    private section: SetSectionService,
     private helper: DataHelperModule) {
   }
+
+  public getTitleString(member: any, position: any, _side: string): any {
+    return {
+      m_no: this.getTitleString1(member, position),
+      p_name: this.getTitleString2(position),
+      side: this.getTitleString3(position, _side)
+    };
+  }
+
   // 照査表における タイトル１行目を取得
-  public getTitleString1(member: any, position: any): any {
+  private getTitleString1(member: any, position: any): string {
 
     let strPos = '';
     if ( this.helper.toNumber(position.position) !== null ) {
@@ -25,61 +35,34 @@ export class ResultDataService {
     if (member.m_len > 0) {
       title += '(' + strPos + ')';
     }
-    const result = { alien: 'center', value: title };
-    return result;
+    return title;
   }
 
   // 照査表における タイトル２行目を取得
-  public getTitleString2(position: any, postdata: any): any {
-
+  private getTitleString2(position: any): string {
     const title: string = position.p_name;// + side;
-    const result = { alien: 'center', value: title };
-    return result;
+    return title;
   }
+
   // 照査表における タイトル３行目を取得
-  public getTitleString3( position: any, postdata: any): any {
-
-    const g_id: string = position.memberInfo.g_id;
-    let side: string;
-
-    // グループタイプ によって 上側・下側の表示を 右側・左側 等にする
-    let upperSideName: string = '(上側)';
-    let bottomSideName: string = '(下側)';
-    if (g_id.toUpperCase().indexOf('R') >= 0) {
-      upperSideName = '(外側)';
-      bottomSideName = '(内側)';
-    }
-    if (g_id.toUpperCase().indexOf('L') >= 0) {
-      upperSideName = '(内側)';
-      bottomSideName = '(外側)';
-    }
-    if (g_id.toUpperCase().indexOf('P') >= 0) {
-      upperSideName = '';
-      bottomSideName = '';
-    }
-    if (g_id.toUpperCase().indexOf('C') >= 0) {
-      upperSideName = '';
-      bottomSideName = '';
-    }
-
-    switch (postdata.side) {
-      case '上側引張':
-        side = upperSideName;
-        break;
-      case '下側引張':
-        side = bottomSideName;
-        break;
-      default:
-        side = '';
-    }
+  private getTitleString3( position: any, side: string): string {
     const title: string = position.memberInfo.shape + side;
-    const result = { alien: 'center', value: title };
-    return result;
+    return title;
+  }
+
+  // 照査表における 断面の文字列を取得
+  public getShapeString(){
+    const sectionInfo = this.section.getShapeString();
+    return {
+      B: sectionInfo.B,
+      H: sectionInfo.H,
+      Bt: sectionInfo.Bt,
+      t: sectionInfo.t
+    };
   }
 
   // 照査表における 断面幅の文字列を取得
   public getShapeString_B(PrintData: any): any {
-
     const result = { alien: 'right' };
     switch (PrintData.shape) {
       case 'Ring':              // 円環

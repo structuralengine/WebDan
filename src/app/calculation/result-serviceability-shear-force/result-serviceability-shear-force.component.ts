@@ -32,49 +32,40 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
     // POST 用データを取得する
     const postData = this.calc.setInputData();
-    if (postData === null) {
+    if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.isFulfilled = false;
-      return;
-    }
-    if (postData.length < 1) {
-      this.isLoading = false;
-      this.isFulfilled = false;
       return;
     }
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, this.post.options)
-      .subscribe(
-        response => {
-          const result: string = JSON.stringify(response);
-          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
-          this.isLoading = false;
+    this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
+      (response) => {
+        if (response["ErrorException"] === null) {
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
-        },
-        error => {
-          this.err = error.toString();
-          this.isLoading = false;
-          this.isFulfilled = false;
-        });
+        } else {    
+          this.err = JSON.stringify(response["ErrorException"]);
+        }
+        this.isLoading = false;
+      },
+      (error) => {
+        this.err = error.toString();
+        this.isLoading = false;
+      }
+    );
 
   }
 
   // 計算結果を集計する
-  private setPages(response: string, postData: any): boolean {
-    if (response === null) {
+  private setPages(OutputData: any): boolean {
+    try {
+      this.serviceabilityShearForcePages = this.setServiceabilityPages(OutputData);
+      return true;
+    } catch(e) {
+      this.err = e.toString();
       return false;
     }
-    if (response.slice(0, 7).indexOf('Error') >= 0) {
-      this.err = response;
-      return false;
-    }
-
-    const json = this.post.parseJsonString(response);
-    if (json === null) { return false; }
-    this.serviceabilityShearForcePages = this.setServiceabilityPages(json.OutputData, postData);
-    return true;
   }
 
 

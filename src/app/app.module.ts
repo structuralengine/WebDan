@@ -174,7 +174,16 @@ import { environment } from 'src/environments/environment';
     SetDesignForceService,
     SetSectionService,
     SetBarService,
-    SetPostDataService
+    SetPostDataService,
+
+    // 計算結果コンポーネントで他のコンポーネントから使いまわされるものは　
+    // declarations だけではなくココ(providers) にも宣言して
+    // 他のコンポーネントから機能の一部を使えるようにする
+    ResultSafetyShearForceComponent,
+    ResultSafetyMomentComponent,
+    ResultRestorabilityMomentComponent,
+    ResultRestorabilityShearForceComponent,
+    ResultServiceabilityMomentComponent,
   ],
   bootstrap: [
     AppComponent

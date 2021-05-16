@@ -7,6 +7,7 @@ import { ResultDataService } from '../result-data.service';
 import { Injectable } from '@angular/core';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class CalcSafetyMomentService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private save: SaveDataService,
+  constructor(private safety: InputSafetyFactorsMaterialStrengthsService,
               private force: SetDesignForceService,
               private post: SetPostDataService,
               private basic: InputBasicInformationService,
@@ -56,9 +57,11 @@ export class CalcSafetyMomentService {
     return postData;
   }
 
-  public getResultString(PrintData: any, resultData: any, safety_factor: any): any {
+  public getResultString(postData: any, resultData: any, member: any): any {
 
-    const Md: number = Math.abs(PrintData.Md);
+    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, 2 );
+ 
+    const Md: number = Math.abs(postData.Md);
     const Mu: number = resultData.M.Mi;
     const rb: number = safety_factor.rb;
     const Mud: number = Mu / rb;
@@ -67,18 +70,17 @@ export class CalcSafetyMomentService {
     const result: string = (ratio < 1) ? 'OK' : 'NG';
 
     return {
-      Md: { alien: 'right', value: Md.toFixed(1) },
-      Nd: { alien: 'right', value: PrintData.Nd.toFixed(1) },
-      εcu: { alien: 'right', value: resultData.M.εc.toFixed(5) },
-      εs: { alien: 'right', value: resultData.M.εs.toFixed(5) },
-      x: { alien: 'right', value: resultData.M.x.toFixed(1) },
-      Mu: { alien: 'right', value: Mu.toFixed(1) },
-      rb: { alien: 'right', value: rb.toFixed(2) },
-      Mud: { alien: 'right', value: Mud.toFixed(1) },
-      ri: { alien: 'right', value: ri.toFixed(2) },
-      ratio: { alien: 'right', value: ratio.toFixed(3) },
-      result: { alien: 'center', value: result }
+      εcu: resultData.M.εc,
+      εs: resultData.M.εs,
+      x: resultData.M.x,
+      Mu,
+      rb,
+      Mud,
+      ri,
+      ratio,
+      result
     };
+
   }
 
 }

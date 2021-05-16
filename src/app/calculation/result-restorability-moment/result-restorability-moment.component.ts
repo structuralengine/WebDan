@@ -13,12 +13,12 @@ import { ResultDataService } from '../result-data.service';
 })
 export class ResultRestorabilityMomentComponent implements OnInit {
 
-  private title = "復旧性（地震時以外）曲げモーメントの照査";
-  private page_index = "ap_8";
+  public title = "復旧性（地震時以外）曲げモーメントの照査";
+  public page_index = "ap_8";
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private restorabilityMomentPages: any[];
+  public err: string;
+  public restorabilityMomentPages: any[];
 
   constructor(
     private http: HttpClient,
@@ -33,49 +33,42 @@ export class ResultRestorabilityMomentComponent implements OnInit {
 
     // POST 用データを取得する
     const postData = this.calc.setInputData();
-    if (postData === null) {
+    if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.isFulfilled = false;
-      return;
-    }
-    if (postData.length < 1) {
-      this.isLoading = false;
-      this.isFulfilled = false;
       return;
     }
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, this.post.options)
-      .subscribe(
-        response => {
-          const result: string = JSON.stringify(response);
-          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
-          this.isLoading = false;
+    this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
+      (response) => {
+        if (response["ErrorException"] === null) {
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
-        },
-        error => {
-          this.err = error.toString();
-          this.isLoading = false;
-          this.isFulfilled = false;
-        });
+        } else {
+          this.err = JSON.stringify(response["ErrorException"]);
+        }
+        this.isLoading = false;
+      },
+      (error) => {
+        this.err = error.toString();
+        this.isLoading = false;
+      }
+    );
 
   }
 
   // 計算結果を集計する
-  private setPages(response: string, postData: any): boolean {
-    if (response === null) {
+  private setPages(OutputData: any): boolean {
+    try {
+      this.restorabilityMomentPages = this.setRestorabilityPages(OutputData);
+      return true;
+    } catch(e) {
+      this.err = e.toString();
       return false;
     }
-    if (response.slice(0, 7).indexOf('Error') >= 0) {
-      this.err = response;
-      return false;
-    }
-    const json = this.post.parseJsonString(response);
-    if (json === null) { return false; }
-    this.restorabilityMomentPages = this.setRestorabilityPages(json.OutputData, postData);
-    return true;
   }
+
 
   // 出力テーブル用の配列にセット
   public setRestorabilityPages( responseData: any, postData: any,

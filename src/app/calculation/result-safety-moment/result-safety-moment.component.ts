@@ -1,79 +1,70 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-import { CalcSafetyMomentService } from './calc-safety-moment.service';
-import { SetPostDataService } from '../set-post-data.service';
-import { ResultDataService } from '../result-data.service';
-
+import { CalcSafetyMomentService } from "./calc-safety-moment.service";
+import { SetPostDataService } from "../set-post-data.service";
+import { ResultDataService } from "../result-data.service";
 
 @Component({
-  selector: 'app-result-safety-moment',
-  templateUrl: './result-safety-moment.component.html',
-  styleUrls: ['../result-viewer/result-viewer.component.scss']
+  selector: "app-result-safety-moment",
+  templateUrl: "./result-safety-moment.component.html",
+  styleUrls: ["../result-viewer/result-viewer.component.scss"],
 })
 export class ResultSafetyMomentComponent implements OnInit {
-
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
   public safetyMomentPages: any[];
 
-  constructor(private http: HttpClient,
-              private calc: CalcSafetyMomentService,
-              private post: SetPostDataService,
-              private result: ResultDataService ) { }
+  constructor(
+    private http: HttpClient,
+    private calc: CalcSafetyMomentService,
+    private post: SetPostDataService,
+    private result: ResultDataService
+  ) {}
 
   ngOnInit() {
     this.isLoading = true;
     this.isFulfilled = false;
-    this.err = '';
+    this.err = "";
 
     // POST 用データを取得する
     const postData = this.calc.setInputData();
-    if (postData === null) {
+    if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.isFulfilled = false;
-      return;
-    }
-    if (postData.length < 1) {
-      this.isLoading = false;
-      this.isFulfilled = false;
       return;
     }
 
     // postする
     const inputJson: string = this.post.getInputJsonString(postData);
     console.log(inputJson);
-    this.http.post(this.post.URL, inputJson, this.post.options )
-    .subscribe(
-      response => {
-        const result: string = JSON.stringify(response);
-        this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
+    this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
+      (response) => {
+        if (response["ErrorException"] === null) {
+          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.calc.isEnable = true;
+        } else {
+          this.err = JSON.stringify(response["ErrorException"]);
+        }
         this.isLoading = false;
-        this.calc.isEnable = true;
       },
-      error => {
+      (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.isFulfilled = false;
-      });
-
+      }
+    );
   }
 
-  // 計算結果を集計する
-  private setPages(response: string, postData: any): boolean {
-    if (response === null) {
-      return false;
+    // 計算結果を集計する
+    private setPages(OutputData: any): boolean {
+      try {
+        this.safetyMomentPages = this.setSafetyPages(OutputData);
+        return true;
+      } catch(e) {
+        this.err = e.toString();
+        return false;
+      }
     }
-    if (response.slice(0, 7).indexOf('Error') >= 0) {
-      this.err = response;
-      return false;
-    }
-    const json = this.post.parseJsonString(response);
-    if (json === null) { return false; }
-    this.safetyMomentPages = this.setSafetyPages(json.OutputData, postData);
-    return true;
-  }
 
 
   // 出力テーブル用の配列にセット
@@ -85,9 +76,9 @@ export class ResultSafetyMomentComponent implements OnInit {
     for (const groupe of postData) {
       groupeName = groupe[0].g_name;
       page = {
-        caption: '安全性（破壊）曲げモーメントの照査結果',
+        caption: "安全性（破壊）曲げモーメントの照査結果",
         g_name: groupeName,
-        columns: new Array()
+        columns: new Array(),
       };
 
       for (const member of groupe) {
@@ -100,9 +91,9 @@ export class ResultSafetyMomentComponent implements OnInit {
             if (page.columns.length > 4) {
               result.push(page);
               page = {
-                caption: '安全性（破壊）曲げモーメントの照査結果',
+                caption: "安全性（破壊）曲げモーメントの照査結果",
                 g_name: groupeName,
-                columns: new Array()
+                columns: new Array(),
               };
             }
             const column: any[] = new Array();
@@ -121,12 +112,12 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(Ast.AsString);
             column.push(Ast.ds);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(PrintData, 'Asc');
+            const Asc: any = this.result.getAsString(PrintData, "Asc");
             column.push(Asc.As);
             column.push(Asc.AsString);
             column.push(Asc.ds);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(PrintData, 'Ase');
+            const Ase: any = this.result.getAsString(PrintData, "Ase");
             column.push(Ase.As);
             column.push(Ase.AsString);
             column.push(Ase.ds);
@@ -141,7 +132,11 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(fsk.rs);
             column.push(fsk.fsd);
             /////////////// 照査 ///////////////
-            const resultColumn: any = this.calc.getResultString(PrintData, resultData, position.safety_factor);
+            const resultColumn: any = this.calc.getResultString(
+              PrintData,
+              resultData,
+              position.safety_factor
+            );
             column.push(resultColumn.Md);
             column.push(resultColumn.Nd);
             column.push(resultColumn.εcu);
@@ -164,6 +159,4 @@ export class ResultSafetyMomentComponent implements OnInit {
     }
     return result;
   }
-
 }
-
