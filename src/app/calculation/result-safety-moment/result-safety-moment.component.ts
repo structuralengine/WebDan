@@ -22,7 +22,7 @@ export class ResultSafetyMomentComponent implements OnInit {
     private calc: CalcSafetyMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private points: InputDesignPointsService
+    private points: InputDesignPointsService,
   ) {}
 
   ngOnInit() {
@@ -87,18 +87,18 @@ export class ResultSafetyMomentComponent implements OnInit {
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const inp = postData.find(
+            const post = postData.find(
               (e) => e.index === position.index && e.side === side
             );
-            const res = OutputData.find(
+            const resp = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-            if (inp === undefined || res === undefined) {
+            if (post === undefined || resp === undefined) {
               continue;
             }
 
             const resultColumn: any = this.calc.getResultString(
-              inp, res, member
+              post, resp, member
             );
 
             if (page.columns.length > 4) {
@@ -117,7 +117,7 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push({ alien: 'center', value: title.p_name });
             column.push({ alien: 'center', value: title.side });
             ///////////////// 形状 /////////////////
-            const shape = this.result.getShapeString();
+            const shape = this.result.getShapeString('Md', member, post);
             column.push({alien: 'right', value: shape.B});
             column.push({alien: 'right', value: shape.H});
             column.push({alien: 'right', value: shape.Bt});
@@ -148,8 +148,8 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(fsk.rs);
             column.push(fsk.fsd);
             /////////////// 照査 ///////////////
-            column.push({ alien: 'right', value: Math.abs(inp.Md).toFixed(1) });
-            column.push({ alien: 'right', value: inp.Nd.toFixed(1) });
+            column.push({ alien: 'right', value: Math.abs(post.Md).toFixed(1) });
+            column.push({ alien: 'right', value: post.Nd.toFixed(1) });
             column.push({ alien: 'right', value: resultColumn.εcu.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.εs.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.x.toFixed(1) });

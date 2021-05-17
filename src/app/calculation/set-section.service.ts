@@ -17,7 +17,7 @@ export class SetSectionService {
   // position: ハンチの情報
   // force: 荷重の情報
   // safety: 安全係数の情報
-  public setPostData( member: any, bar: any, 
+  public setPostData( target: string, member: any, bar: any, 
                       force: any, safety: any): any {
 
     let result: object;
@@ -36,7 +36,8 @@ export class SetSectionService {
       }
 
     } else if (member.shape.indexOf('矩形') >= 0) {
-      result = this.getRectangle(member, bar);
+      const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+      result = this.getRectangle(member, haunch);
       if(result ===null){ return null; }
 
     } else if (member.shape.indexOf('T') >= 0) {
@@ -49,22 +50,26 @@ export class SetSectionService {
       if (member.shape.indexOf('T形') >= 0) {
         if (condition.selected === true && force.side === '上側引張') {
           // T形 断面の上側引張は 矩形
-          result = this.getRectangle(member, bar);
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getRectangle(member, haunch);
           if(result ===null){ return null; }
 
         } else {
-          result = this.getTsection(member, bar);
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getTsection(member, haunch);
           if(result ===null){ return null; }
 
         }
       } else if (member.shape.indexOf('逆T形') >= 0) {
         if (condition.selected === true && force.side === '下側引張') {
           // 逆T形 断面の下側引張は 矩形
-          result = this.getRectangle(member, bar);
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getRectangle(member, haunch);
           if(result ===null){ return null; }
 
         } else {
-          result = this.getInvertedTsection(member, bar);
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getInvertedTsection(member, haunch);
           if(result ===null){ return null; }
 
         }
@@ -96,6 +101,82 @@ export class SetSectionService {
 
     return result;
   }
+
+
+  private getShapeName(member: any): string{
+
+    if (member.shape.indexOf('円') >= 0) {
+
+      if (member.shape.indexOf('円形') >= 0) {
+        return 'Circle';
+
+      } else if (member.shape.indexOf('円環') >= 0) {
+        let b: number = this.helper.toNumber(member.B);
+        if (b === null) { return 'Circle'; }
+        return 'Ring';
+
+      }
+
+    } else if (member.shape.indexOf('矩形') >= 0) {
+      return 'Rectangle';
+
+    } else if (member.shape.indexOf('T') >= 0) {
+
+      // Ｔ形に関する 設計条件を確認する
+      let condition = this.basic.conditions_list.find(e =>
+        e.id === 'JR-002');
+      if (condition === undefined) { condition = { selected: false }; }
+
+      if (member.shape.indexOf('T形') >= 0) {
+        if (condition.selected === true && force.side === '上側引張') {
+          // T形 断面の上側引張は 矩形
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getRectangle(member, haunch);
+          if(result ===null){ return null; }
+
+        } else {
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getTsection(member, haunch);
+          if(result ===null){ return null; }
+
+        }
+      } else if (member.shape.indexOf('逆T形') >= 0) {
+        if (condition.selected === true && force.side === '下側引張') {
+          // 逆T形 断面の下側引張は 矩形
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getRectangle(member, haunch);
+          if(result ===null){ return null; }
+
+        } else {
+          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+          result = this.getInvertedTsection(member, haunch);
+          if(result ===null){ return null; }
+
+        }
+      }
+
+    } else if (member.shape.indexOf('小判形') >= 0) {
+
+      if (member.B > member.H) {
+        result = this.getHorizontalOval(member);
+        if(result ===null){ return null; }
+
+      } else if (member.B < member.H) {
+        result = this.getVerticalOval(member);
+        if(result ===null){ return null; }
+
+      } else if (member.B === member.H) {
+        result = this.getCircle(member);
+        if(result ===null){ return null; }
+
+      }
+
+    } else {
+      console.log("断面形状：" + member.shape + " は適切ではありません。");
+      return null;
+    }
+  }
+
 
   // 横小判形断面の POST 用 データ作成
   private getHorizontalOval(member: any): any {
@@ -222,14 +303,14 @@ export class SetSectionService {
   }
 
   // T形断面の POST 用 データ作成
-  private getInvertedTsection(member: any, bar: any): any {
+  private getInvertedTsection(member: any, haunch: any): any {
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
     let h: number = this.helper.toNumber(member.H);
     if (h === null) { return null; }
-    if (this.helper.toNumber(bar.haunch_M) !== null) {
-      h += bar.haunch_M;
+    if (this.helper.toNumber(haunch) !== null) {
+      h += haunch;
     }
     const b: number = this.helper.toNumber(member.B);
     if (b === null) { return null; }
@@ -237,7 +318,7 @@ export class SetSectionService {
     if (bf === b) { bf = null; }
     let hf: number = this.helper.toNumber(member.t);
     if (bf === null && hf == null) {
-      return this.getRectangle(member, bar);
+      return this.getRectangle(member, haunch);
     }
     if (bf === null) { bf = b; }
     if (hf === null) { hf = h; }
@@ -287,14 +368,14 @@ export class SetSectionService {
   }
 
   // T形断面の POST 用 データ作成
-  private getTsection(member: any, bar: any): any {
+  private getTsection(member: any, haunch: number): any {
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
     let h: number = this.helper.toNumber(member.H);
     if (h === null) { return null; }
-    if (this.helper.toNumber(bar.haunch_M) !== null) {
-      h += bar.haunch_M;
+    if (this.helper.toNumber(haunch) !== null) {
+      h += haunch;
     }
     const b: number = this.helper.toNumber(member.B);
     if (b === null) { return null; }
@@ -302,7 +383,7 @@ export class SetSectionService {
     if (bf === b) { bf = null; }
     let hf: number = this.helper.toNumber(member.t);
     if (bf === null && hf == null) {
-      return this.getRectangle(member, bar);
+      return this.getRectangle(member, haunch);
     }
     if (bf === null) { bf = b; }
     if (hf === null) { hf = h; }
@@ -352,14 +433,14 @@ export class SetSectionService {
   }
 
   // 矩形断面の POST 用 データ作成
-  private getRectangle(member: any, bar: any): any {
+  private getRectangle(member: any, haunch: number): any {
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
     let h: number = this.helper.toNumber(member.H);
     if (h === null) { return null; }
-    if (this.helper.toNumber(bar.haunch_M) !== null) {
-      h += bar.haunch_M * 1;
+    if (this.helper.toNumber(haunch) !== null) {
+      h += haunch * 1;
     }
     const b: number = this.helper.toNumber(member.B);
     if (b === null) { return null; }
@@ -400,7 +481,6 @@ export class SetSectionService {
     let h: number = this.helper.toNumber(member.H);
     if (h === null) { return null; }
     let b: number = this.helper.toNumber(member.B);
-    if (b === null) { return this.getCircle(member); }
     const x1: number = h / RCOUNT;
     const x3: number = (h - b) / 2;
 
@@ -557,17 +637,62 @@ export class SetSectionService {
     return degree * (Math.PI / 180);
   }
 
-  public getShapeString(member: any, bar: any,
-                        force: any, safety: any,
-                        result: any): any {
+  public getShape(target: string, member: any, position: any): any {
 
-    let result: object;
+    const result = { shape: postData.shape };
 
+    let h: number, b: number, R: number, r: number
     // 鉄筋情報を 集計
-    if (result.shape === 'Circle') {
-      result = this.getCircle(member);
+    switch (postData.shape) {
+      case 'Ring': // 円環
+        R = this.helper.toNumber(member.H);
+        if (R === null) { return null; }
+        r = this.helper.toNumber(member.B);
+        if (r === null) {
+          result['R'] = R;  // 直径
+        } else { 
+          result['r'] = r;  // 半径
+        }
+        break;
 
-    } else if ( result.shape === 'Ring' ){
+      case 'Circle': // 円形
+        R = this.helper.toNumber(member.H);
+        if (R === null) {
+          R = this.helper.toNumber(member.B);
+        }
+        result['R'] = R;
+        break;
+
+      case 'Rectangle':         // 矩形
+      const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
+        let h: number = this.helper.toNumber(member.H);
+        if (h === null) { return null; }
+        if (this.helper.toNumber(bar.haunch_M) !== null) {
+          h += bar.haunch_M * 1;
+        }
+        const b: number = this.helper.toNumber(member.B);
+        if (b === null) { return null; }
+        result['B'] = b;
+        result['H'] = h;
+      break;
+
+      case 'HorizontalOval':    // 水平方向小判形
+      case 'VerticalOval':      // 鉛直方向小判形
+      case 'InvertedTsection':  // 逆T形
+      case 'Tsection':          // T形
+      default:
+        result['value'] = PrintData.B;
+        break;
+    }
+
+    if (postData.shape === 'Circle') {
+      let h: number = this.helper.toNumber(member.H);
+      if (h === null) {
+        h = this.helper.toNumber(member.B);
+      }
+
+      if (h === null) { return null; }
+    } else if ( postData.shape === 'Ring' ){
       result = this.getRing(member);
 
     } else if ( result.shape === 'Rectangle' ){

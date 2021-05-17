@@ -51,8 +51,8 @@ export class ResultDataService {
   }
 
   // 照査表における 断面の文字列を取得
-  public getShapeString(){
-    const sectionInfo = this.section.getShapeString();
+  public getShapeString(target: string, member: any, postData: any){
+    const sectionInfo = this.section.getShape(target, member, postData);
     return {
       B: sectionInfo.B,
       H: sectionInfo.H,
@@ -62,9 +62,9 @@ export class ResultDataService {
   }
 
   // 照査表における 断面幅の文字列を取得
-  public getShapeString_B(PrintData: any): any {
+  public getShapeString_B(postData: any): any {
     const result = { alien: 'right' };
-    switch (PrintData.shape) {
+    switch (postData.shape) {
       case 'Ring':              // 円環
       case 'Circle':            // 円形
         result['value'] = PrintData.R;

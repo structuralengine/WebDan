@@ -83,7 +83,7 @@ export class SetPostDataService {
           }
 
           // 断面形状
-          const section = this.section.setPostData(member, bar, force, safety);
+          const section = this.section.setPostData(target, member, bar, force, safety);
           data['Sections'] = section.Sections;
           data['SectionElastic'] = section.SectionElastic;
 
