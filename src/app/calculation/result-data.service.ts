@@ -51,8 +51,8 @@ export class ResultDataService {
   }
 
   // 照査表における 断面の文字列を取得
-  public getShapeString(target: string, member: any, postData: any){
-    const sectionInfo = this.section.getShape(target, member, postData);
+  public getShapeString(target: string, member: any, position: any){
+    const sectionInfo = this.section.getShape(target, member, position);
     return {
       B: sectionInfo.B,
       H: sectionInfo.H,
