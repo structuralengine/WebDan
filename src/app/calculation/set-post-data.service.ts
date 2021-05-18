@@ -65,7 +65,6 @@ export class SetPostDataService {
       for (const position of list) {
         // 部材情報
         const member = this.members.getCalcData(position.m_no);
-        const bar = this.bars.getCalcData(position.index);
         // 安全係数
         const safety = this.safety.getCalcData( target, member.g_id, safetyID );
 
@@ -88,7 +87,7 @@ export class SetPostDataService {
           data['SectionElastic'] = section.SectionElastic;
 
           // 鉄筋の本数
-          const steel = this.steel.setPostData(member, bar, force, safety, section);
+          const steel = this.steel.setPostData(member, force, safety, section);
           data['Steels'] = steel.Steels;
           data['SteelElastic'] = steel.SteelElastic;
 

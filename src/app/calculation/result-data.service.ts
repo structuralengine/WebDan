@@ -3,6 +3,7 @@
 import { Injectable } from '@angular/core';
 import { DataHelperModule } from '../providers/data-helper.module';
 import { SetSectionService } from './set-section.service';
+import { SetBarService } from './set-bar.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +13,7 @@ export class ResultDataService {
 
   constructor(
     private section: SetSectionService,
+    private steel: SetBarService,
     private helper: DataHelperModule) {
   }
 
@@ -68,6 +70,8 @@ export class ResultDataService {
 
   // 照査表における 引張鉄筋情報を取得
   public getAsString(PrintData: any, symbol: string = 'Ast'): any {
+
+    const barInfo = this.steel.getAs(target, member, position);
 
     if (symbol in PrintData === false) {
       return {
