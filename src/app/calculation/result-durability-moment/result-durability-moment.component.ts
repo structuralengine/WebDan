@@ -44,7 +44,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.isFulfilled = this.setPages(postData, response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -58,11 +58,11 @@ export class ResultDurabilityMomentComponent implements OnInit {
     );
   }
   // 計算結果を集計する
-  private setPages(OutputData: any): boolean {
+  private setPages(postData: any, OutputData: any): boolean {
     try {
       // 耐久性のページと同じ
       this.serviceabilityMomentPages = this.base.setServiceabilityPages(
-        OutputData,
+        postData, OutputData,
         "使用性（外観）曲げひび割れの照査結果"
       );
       return true;

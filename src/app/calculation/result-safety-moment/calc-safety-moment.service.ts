@@ -18,11 +18,13 @@ export class CalcSafetyMomentService {
   public DesignForceList: any[];
   public isEnable: boolean;
 
-  constructor(private safety: InputSafetyFactorsMaterialStrengthsService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private basic: InputBasicInformationService,
-              private calc: InputCalclationPrintService) {
+  constructor(
+    private safety: InputSafetyFactorsMaterialStrengthsService,
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService) {
+      
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -57,7 +59,7 @@ export class CalcSafetyMomentService {
     return postData;
   }
 
-  public getResultString(postData: any, resultData: any, member: any): any {
+  public getResultValue(postData: any, resultData: any, member: any): any {
 
     const safety_factor = this.safety.getCalcData( 'Md', member.g_id, 2 );
  

@@ -43,7 +43,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.isFulfilled = this.setPages(postData, response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -58,10 +58,10 @@ export class ResultEarthquakesMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(OutputData: any): boolean {
+  private setPages(postData: any, OutputData: any): boolean {
     try {
       this.restorabilityMomentPages = this.base.setRestorabilityPages(
-        OutputData,
+        postData, OutputData,
         "復旧性（地震時）曲げモーメントの照査結果"
       );
       return true;

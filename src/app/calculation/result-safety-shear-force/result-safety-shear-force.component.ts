@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcSafetyShearForceService } from "./calc-safety-shear-force.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
+import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 
 @Component({
   selector: "app-result-safety-shear-force",
@@ -22,7 +23,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
     private http: HttpClient,
     private calc: CalcSafetyShearForceService,
     private post: SetPostDataService,
-    private result: ResultDataService
+    private result: ResultDataService,
+    private points: InputDesignPointsService,
   ) {}
 
   ngOnInit() {
@@ -42,7 +44,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.isFulfilled = this.setPages(postData, response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -55,10 +57,11 @@ export class ResultSafetyShearForceComponent implements OnInit {
       }
     );
   }
+  
   // 計算結果を集計する
-  private setPages(OutputData: any): boolean {
+  private setPages(postData: any, OutputData: any): boolean {
     try {
-      this.safetyShearForcePages = this.getSafetyPages(OutputData);
+      this.safetyShearForcePages = this.getSafetyPages(postData, OutputData);
       return true;
     } catch (e) {
       this.err = e.toString();
@@ -67,25 +70,35 @@ export class ResultSafetyShearForceComponent implements OnInit {
   }
 
   // 出力テーブル用の配列にセット
-  public getSafetyPages(
-    responseData: any,
-    postData: any,
-    title: string = "安全性（破壊）せん断力の照査結果"
-  ): any[] {
+  public getSafetyPages(postData: any, OutputData: any,
+    title: string = "安全性（破壊）せん断力の照査結果" ): any[] {
     const result: any[] = new Array();
-    let page: any;
-    let groupeName: string;
-    let i: number = 0;
-    for (const groupe of postData) {
-      groupeName = groupe[0].g_name;
-      page = { caption: title, g_name: groupeName, columns: new Array() };
 
-      for (const member of groupe) {
+    let page: any;
+
+    let i: number = 0;
+    const groupe = this.points.getGroupeList();
+    for (let ig = 0; ig < groupe.length; ig++) {
+      const groupeName = this.points.getGroupeName(ig);
+      page = {
+        caption: title,
+        g_name: groupeName,
+        columns: new Array(),
+      };
+
+      for (const member of groupe[ig]) {0
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData0.length; j++) {
-            const postdata = position.PostData0[j];
-            const PrintData = position.PrintData[j];
-            const resultData = responseData[i].Reactions[0];
+          for (const side of ["上側引張", "下側引張"]) {
+
+            const post = postData.find(
+              (e) => e.index === position.index && e.side === side
+            );
+            const res = OutputData.find(
+              (e) => e.index === position.index && e.side === side
+            );
+            if (post === undefined || res === undefined) {
+              continue;
+            }
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -100,27 +113,27 @@ export class ResultSafetyShearForceComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultVmu: any = this.calc.calcVmu(
-              PrintData,
-              resultData,
-              position
+              post, res, member
             );
-            const resultColumn: any = this.calc.getResultString(
-              PrintData,
-              resultVmu
+
+            const resultColumn: any = this.getResultString(
+              this.calc.calcVmu( post, res, member )
             );
             /////////////// タイトル ///////////////
-            column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata));
-            column.push(this.result.getTitleString3(position, postdata));
-
+            const titleColumn = this.result.getTitleString(member, position, side)
+            column.push({ alien: 'center', value: titleColumn.m_no });
+            column.push({ alien: 'center', value: titleColumn.p_name });
+            column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            column.push(this.getShapeString_B(PrintData));
-            column.push(this.getShapeString_H(PrintData));
-            column.push(resultColumn.tan);
+            const shapeString = this.result.getShapeString('Vd', member, post);
+            column.push(shapeString.B);
+            column.push(shapeString.H);
             /////////////// 引張鉄筋 ///////////////
-            column.push(resultColumn.As);
-            column.push(resultColumn.AsString);
-            column.push(resultColumn.dst);
+            const Ast: any = this.result.getAsString(PrintData);
+            column.push(Ast.tan);
+            column.push(Ast.As);
+            column.push(Ast.AsString);
+            column.push(Ast.dst);
             /////////////// 圧縮鉄筋 ///////////////
             const Asc: any = this.result.getAsString(PrintData, "Asc");
             column.push(Asc.As);
@@ -190,51 +203,188 @@ export class ResultSafetyShearForceComponent implements OnInit {
     return result;
   }
 
-  // 照査表における 断面幅の文字列を取得
-  public getShapeString_B(PrintData: any): any {
-    const result = { alien: "center", value: "" };
-    switch (PrintData.shape) {
-      case "Circle": // 円形
-        result.value = "R " + PrintData.R.toString();
-        break;
-      case "Ring": // 円環
-        result.value = "R " + PrintData.R.toString();
-        result.value += ", ";
-        result.value += "r " + PrintData.r.toString();
-        break;
-      case "HorizontalOval": // 水平方向小判形
-      case "VerticalOval": // 鉛直方向小判形
-      case "InvertedTsection": // 逆T形
-      case "Tsection": // T形
-      case "Rectangle": // 矩形
-      default:
-        result.value = PrintData.B.toString();
-        break;
+  public getResultString(re: any): any {
+
+    const result = {
+      tan: { alien: 'center', value: '-' },
+
+      As: { alien: 'center', value: '-' },
+      AsString: { alien: 'center', value: '-' },
+      dst: { alien: 'center', value: '-' },
+
+      Md: { alien: 'center', value: '-' },
+      Nd: { alien: 'center', value: '-' },
+      Vd: { alien: 'center', value: '-' },
+      La: { alien: 'center', value: '-' },
+
+      Aw: { alien: 'center', value: '-' },
+      AwString: { alien: 'center', value: '-' },
+      fwyd: { alien: 'center', value: '-' },
+      deg: { alien: 'center', value: '-' },
+      Ss: { alien: 'center', value: '-' },
+
+      fvcd: { alien: 'center', value: '-' },
+      Bd: { alien: 'center', value: '-' },
+      Bp: { alien: 'center', value: '-' },
+      Mu: { alien: 'center', value: '-' },
+      Mo: { alien: 'center', value: '-' },
+      Bn: { alien: 'center', value: '-' },
+      ad: { alien: 'center', value: '-' },
+      Ba: { alien: 'center', value: '-' },
+      pw: { alien: 'center', value: '-' },
+      Bw: { alien: 'center', value: '-' },
+      rbc: { alien: 'center', value: '-' },
+      Vcd: { alien: 'center', value: '-' },
+      rbs: { alien: 'center', value: '-' },
+      Vsd: { alien: 'center', value: '-' },
+      Vyd: { alien: 'center', value: '-' },
+      ri: { alien: 'center', value: '-' },
+      Vyd_Ratio: { alien: 'center', value: '-' },
+      Vyd_Result: { alien: 'center', value: '-' },
+      fwcd: { alien: 'center', value: '-' },
+      Vwcd: { alien: 'center', value: '-' },
+      Vwcd_Ratio: { alien: 'center', value: '-' },
+      Vwcd_Result: { alien: 'center', value: '-' }
+    };
+
+
+    if ('tan' in re) {
+      result.tan = { alien: 'right', value: re.tan.toFixed(1) };
     }
+
+    // 引張鉄筋
+    if ('Ast' in re) {
+      result.As = { alien: 'right', value: re.Ast.toFixed(1) };
+    }
+    if ('AstString' in re) {
+      result.AsString = { alien: 'right', value: re.AstString };
+    }
+    if ('d' in re) {
+      result.dst = { alien: 'right', value: (re.H - re.d).toFixed(1) };
+    }
+
+    // 断面力
+    if ('Md' in re) {
+      result.Md = { alien: 'right', value: re.Md.toFixed(1) };
+    }
+    if ('Nd' in re) {
+      result.Nd = { alien: 'right', value: re.Nd.toFixed(1) };
+    }
+    if ('Vhd' in re) {
+      // tanθc + tanθt があるとき
+      const sVd: string = (re.Vd - re.Vhd).toFixed(1) + '(' + re.Vd.toFixed(1) + ')';
+      result.Vd = { alien: 'right', value: sVd };
+    } else {
+      result.Vd = { alien: 'right', value: re.Vd.toFixed(1) };
+    }
+
+    if ('La' in re) {
+      result.La = { alien: 'right', value: re.La.toFixed(0) };
+    }
+
+    // 帯鉄筋
+    if ('Aw' in re) {
+      result.Aw = { alien: 'right', value: re.Aw.toFixed(1) };
+    }
+    if ('AwString' in re) {
+      result.AwString = { alien: 'right', value: re.AwString };
+    }
+    if ('fwyd' in re) {
+      result.fwyd = { alien: 'right', value: re.fwyd.toFixed(0) };
+    }
+    if ('deg' in re) {
+      result.deg = { alien: 'right', value: re.deg.toFixed(0) };
+    }
+    if ('Ss' in re) {
+      result.Ss = { alien: 'right', value: re.Ss.toFixed(0) };
+    }
+
+    if ('fvcd' in re) {
+      result.fvcd = { alien: 'right', value: re.fvcd.toFixed(3) };
+    }
+    if ('fdd' in re) {
+      result.fvcd = { alien: 'right', value: re.fdd.toFixed(3) };
+    }
+
+    if ('Bd' in re) {
+      result.Bd = { alien: 'right', value: re.Bd.toFixed(3) };
+    }
+    if ('Bp' in re) {
+      result.Bp = { alien: 'right', value: re.Bp.toFixed(3) };
+    }
+    if ('Mu' in re) {
+      result.Mu = { alien: 'right', value: re.Mu.toFixed(1) };
+    }
+    if ('Mo' in re) {
+      result.Mo = { alien: 'right', value: re.Mo.toFixed(1) };
+    }
+    if ('Bn' in re) {
+      result.Bn = { alien: 'right', value: re.Bn.toFixed(3) };
+    }
+    if ('ad' in re) {
+      result.ad = { alien: 'right', value: re.ad.toFixed(3) };
+    }
+    if ('Ba' in re) {
+      result.Ba = { alien: 'right', value: re.Ba.toFixed(3) };
+    }
+    if ('pw' in re) {
+      result.pw = { alien: 'right', value: re.pw.toFixed(5) };
+    }
+    if ('Bw' in re) {
+      result.Bw = { alien: 'right', value: re.Bw.toFixed(3) };
+    }
+
+    if ('rbc' in re) {
+      result.rbc = { alien: 'right', value: re.rbc.toFixed(2) };
+    }
+
+    if ('Vcd' in re) {
+      result.Vcd = { alien: 'right', value: re.Vcd.toFixed(1) };
+    }
+    if ('Vdd' in re) {
+      result.Vcd = { alien: 'right', value: re.Vdd.toFixed(1) };
+    }
+
+    if ('rbs' in re) {
+      result.rbs = { alien: 'right', value: re.rbs.toFixed(2) };
+    }
+    if ('Vsd' in re) {
+      result.Vsd = { alien: 'right', value: re.Vsd.toFixed(1) };
+    }
+
+    if ('Vyd' in re) {
+      result.Vyd = { alien: 'right', value: re.Vyd.toFixed(1) };
+    }
+    if ('Vdd' in re) {
+      result.Vyd = { alien: 'right', value: re.Vdd.toFixed(1) };
+    }
+
+    if ('ri' in re) {
+      result.ri = { alien: 'right', value: re.ri.toFixed(2) };
+    }
+
+    if ('Vyd_Ratio' in re) {
+      result.Vyd_Ratio = { alien: 'right', value: re.Vyd_Ratio.toFixed(3) };
+    }
+    if ('Vyd_Result' in re) {
+      result.Vyd_Result = { alien: 'center', value: re.Vyd_Result };
+    }
+
+    if ('fwcd' in re) {
+      result.fwcd = { alien: 'right', value: re.fwcd.toFixed(3) };
+    }
+    if ('Vwcd' in re) {
+      result.Vwcd = { alien: 'right', value: re.Vwcd.toFixed(1) };
+    }
+    if ('Vwcd_Ratio' in re) {
+      result.Vwcd_Ratio = { alien: 'right', value: re.Vwcd_Ratio.toFixed(3) };
+    }
+    if ('Vwcd_Result' in re) {
+      result.Vwcd_Result = { alien: 'center', value: re.Vwcd_Result };
+    }
+
     return result;
+
   }
 
-  // 照査表における 断面高さの文字列を取得
-  public getShapeString_H(PrintData: any): any {
-    const result = { alien: "center", value: "" };
-    switch (PrintData.shape) {
-      case "Circle": // 円形
-        result.value = "□ " + PrintData.Vyd_H.toFixed(1);
-        break;
-      case "Ring": // 円環
-        result.value = "H " + PrintData.Vyd_H.toFixed(1);
-        result.value += ", ";
-        result.value += "B " + PrintData.Vyd_B.toFixed(1);
-        break;
-      case "HorizontalOval": // 水平方向小判形
-      case "VerticalOval": // 鉛直方向小判形
-      case "InvertedTsection": // 逆T形
-      case "Tsection": // T形
-      case "Rectangle": // 矩形
-      default:
-        result.value = PrintData.H.toString();
-        break;
-    }
-    return result;
-  }
 }

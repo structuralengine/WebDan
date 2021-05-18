@@ -15,114 +15,56 @@ export class ResultDataService {
     private helper: DataHelperModule) {
   }
 
-  public getTitleString(member: any, position: any, _side: string): any {
-    return {
-      m_no: this.getTitleString1(member, position),
-      p_name: this.getTitleString2(position),
-      side: this.getTitleString3(position, _side)
-    };
-  }
+  public getTitleString(member: any, position: any, side: string): any {
 
-  // 照査表における タイトル１行目を取得
-  private getTitleString1(member: any, position: any): string {
-
+    // 照査表における タイトル１行目を取得
     let strPos = '';
     if ( this.helper.toNumber(position.position) !== null ) {
       strPos = position.position.toFixed(3);
     }
     const m_no: string = member.m_no.toFixed(0);
-    let title: string = m_no + '部材';
+    let title1: string = m_no + '部材';
     if (member.m_len > 0) {
-      title += '(' + strPos + ')';
+      title1 += '(' + strPos + ')';
     }
-    return title;
-  }
 
-  // 照査表における タイトル２行目を取得
-  private getTitleString2(position: any): string {
-    const title: string = position.p_name;// + side;
-    return title;
-  }
+    // 照査表における タイトル２行目を取得
+    const title2: string = position.p_name;// + side;
 
-  // 照査表における タイトル３行目を取得
-  private getTitleString3( position: any, side: string): string {
-    const title: string = position.memberInfo.shape + side;
-    return title;
-  }
-
-  // 照査表における 断面の文字列を取得
-  public getShapeString(target: string, member: any, position: any){
-    const sectionInfo = this.section.getShape(target, member, position);
+    // 照査表における タイトル３行目を取得
+    const title3: string = position.memberInfo.shape + side;
+  
     return {
-      B: sectionInfo.B,
-      H: sectionInfo.H,
-      Bt: sectionInfo.Bt,
-      t: sectionInfo.t
+      m_no: title1,
+      p_name: title2,
+      side: title3
     };
   }
 
-  // 照査表における 断面幅の文字列を取得
-  public getShapeString_B(postData: any): any {
-    const result = { alien: 'right' };
-    switch (postData.shape) {
-      case 'Ring':              // 円環
-      case 'Circle':            // 円形
-        result['value'] = PrintData.R;
-        break;
-      case 'HorizontalOval':    // 水平方向小判形
-      case 'VerticalOval':      // 鉛直方向小判形
-      case 'InvertedTsection':  // 逆T形
-      case 'Tsection':          // T形
-      case 'Rectangle':         // 矩形
-      default:
-        result['value'] = PrintData.B;
-        break;
-    }
-    return result;
-  }
 
-  // 照査表における 断面高さの文字列を取得
-  public getShapeString_H(PrintData: any): any {
+  // 照査表における 断面の文字列を取得
+  public getShapeString(target: string, member: any, position: any){
 
-    const result = { alien: 'right' };
-    switch (PrintData.shape) {
-      case 'Ring':              // 円環
-        result['value'] = PrintData.R;
-        break;
-      case 'Circle':            // 円形
-        result['alien'] = 'center';
-        result['value'] = '-';
-        break;
-      case 'HorizontalOval':    // 水平方向小判形
-      case 'VerticalOval':      // 鉛直方向小判形
-      case 'InvertedTsection':  // 逆T形
-      case 'Tsection':          // T形
-      case 'Rectangle':         // 矩形
-      default:
-        result['value'] = PrintData.H;
-        break;
+    const sectionInfo = this.section.getShape(target, member, position);
+
+    const result = {
+      B: this.helper.toNumber(sectionInfo.B),
+      H: this.helper.toNumber(sectionInfo.H),
+      Bt: this.helper.toNumber(sectionInfo.Bt),
+      t: this.helper.toNumber(sectionInfo.t)
+    };
+
+    for(const key of Object.keys(result)){
+      if(result[key] === null){
+        result[key] = { alien: 'center', value: '-'};
+      } else {
+        result[key] = { alien: 'right', value: result[key]};
+      }
     }
 
     return result;
   }
 
-  // 照査表における フランジ幅の文字列を取得
-  public getShapeString_Bt(PrintData: any): any {
-    if ('Bt' in PrintData) {
-      return { alien: 'right', value: PrintData.Bt };
-    } else {
-      return { alien: 'center', value: '-' };
-    }
-  }
-
-  // 照査表における フランジ高さの文字列を取得
-  public getShapeString_t(PrintData: any): any {
-    if ('t' in PrintData) {
-      return { alien: 'right', value: PrintData.t };
-    } else {
-      return { alien: 'center', value: '-' };
-    }
-  }
 
   // 照査表における 引張鉄筋情報を取得
   public getAsString(PrintData: any, symbol: string = 'Ast'): any {
@@ -132,7 +74,8 @@ export class ResultDataService {
         As: { alien: 'center', value: '-' },
         AsString: { alien: 'center', value: '-' },
         ds: { alien: 'center', value: '-' },
-        cos: { alien: 'center', value: '-' }
+        cos: { alien: 'center', value: '-' },
+        tan: null
       };
     }
 
@@ -239,5 +182,7 @@ export class ResultDataService {
 
     return result;
   }
+
+
 
 }

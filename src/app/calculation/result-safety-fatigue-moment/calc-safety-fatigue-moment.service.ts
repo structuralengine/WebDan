@@ -148,7 +148,7 @@ export class CalcSafetyFatigueMomentService {
     return postData;
   }
 
-  public calcFrd(PrintData: any, postdata0: any, postdata1: any, position: any, responseMin: any, responseMax: any): any {
+  public getResultValue(PrintData: any, postdata0: any, postdata1: any, position: any, responseMin: any, responseMax: any): any {
 
     const result: any = {};
 

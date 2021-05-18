@@ -5,6 +5,7 @@ import { CalcSafetyFatigueShearForceService } from './calc-safety-fatigue-shear-
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
 import { ResultSafetyShearForceComponent } from '../result-safety-shear-force/result-safety-shear-force.component';
+import { InputDesignPointsService } from 'src/app/components/design-points/design-points.service';
 
 @Component({
   selector: 'app-result-safety-fatigue-shear-force',
@@ -25,7 +26,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
               private calc: CalcSafetyFatigueShearForceService,
               private base: ResultSafetyShearForceComponent,
               private post: SetPostDataService,
-              private result: ResultDataService ) { }
+              private result: ResultDataService,
+              private points: InputDesignPointsService ) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -38,78 +40,85 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
     // POST 用データを取得する
     const postData = this.calc.setInputData();
-    if (postData === null) {
+    if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.isFulfilled = false;
-      return;
-    }
-    if (postData.length < 1) {
-      this.isLoading = false;
-      this.isFulfilled = false;
       return;
     }
 
-      // 計算結果を集計する
-    this.safetyFatigueShearForcepages = this.setSafetyFatiguePages(this.calc.DesignForceList);
-    this.isFulfilled = true;
+    // 計算結果を集計する
+    try {
+      this.safetyFatigueShearForcepages = this.setSafetyFatiguePages(postData);
+      this.isFulfilled = true;
+      this.calc.isEnable = true;
+    } catch (e) {
+      this.err = e.toString();
+      this.isFulfilled = false;
+    }
     this.isLoading = false;
-    this.calc.isEnable = true;
     
-    this.NA = 80;
-    this.NB = 80;
   }
 
   // 出力テーブル用の配列にセット
   public setSafetyFatiguePages(postData: any): any[] {
     const result: any[] = new Array();
+
     let page: any;
-    let groupeName: string;
-    let i = 0;
     const title = '安全性（疲労破壊）せん断力の照査結果';
 
-    for (const groupe of postData) {
-      groupeName = groupe[0].g_name;
-      page = { caption: title, g_name: groupeName, columns: new Array() };
+    let i: number = 0;
+    const groupe = this.points.getGroupeList();
+    for (let ig = 0; ig < groupe.length; ig++) {
+      const groupeName = this.points.getGroupeName(ig);
+      page = {
+        caption: title,
+        g_name: groupeName,
+        columns: new Array(),
+      };
 
-      for (const member of groupe) {
+      for (const member of groupe[ig]) {0
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData0.length; j++) {
+          for (const side of ["上側引張", "下側引張"]) {
+
+            const post = postData.filter(
+              (e) => e.index === position.index && e.side === side
+            );
 
             // 最小応力
-            const postdata0 = position.PostData1[j];
+            const postdata0 = post[0];
             // 変動応力
-            const postdata1 = position.PostData0[j];
-
-            // 印刷用データ
-            const PrintData = position.PrintData[j];
+            const postdata1 = post[1];
 
             if (page.columns.length > 4) {
               result.push(page);
-              page = { caption: title, g_name: groupeName, columns: new Array() };
+              page = { 
+                caption: title, 
+                g_name: groupeName, 
+                columns: new Array() 
+              };
             }
 
-            const column: any[] = new Array();
-
-
             /////////////// まず計算 ///////////////
+            const resultColumn: any = this.getResultString(
+              this.calc.calcFatigue(
+                null, postdata0, postdata1, position
+            ));
 
-            const resultFatigue: any = this.calc.calcFatigue(PrintData, postdata0, postdata1, position);
-
-            const resultColumn: any = this.getResultString(resultFatigue);
-
+            const column: any[] = new Array();
             /////////////// タイトル ///////////////
-            column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position, postdata0));
-
+            const titleColumn = this.result.getTitleString(member, position, side)
+            column.push({ alien: 'center', value: titleColumn.m_no });
+            column.push({ alien: 'center', value: titleColumn.p_name });
+            column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            column.push(this.base.getShapeString_B(PrintData));
-            column.push(this.base.getShapeString_H(PrintData));
-            column.push(resultColumn.tan);
+            const shapeString = this.result.getShapeString('Vd', member, post);
+            column.push(shapeString.B);
+            column.push(shapeString.H);
             /////////////// 引張鉄筋 ///////////////
-            column.push(resultColumn.As);
-            column.push(resultColumn.AsString);
-            column.push(resultColumn.dst);
+            const Ast: any = this.result.getAsString(PrintData);
+            column.push(Ast.tan);
+            column.push(Ast.As);
+            column.push(Ast.AsString);
+            column.push(Ast.dst);
             /////////////// コンクリート情報 ///////////////
             const fck: any = this.result.getFckString(PrintData);
             column.push(fck.fck);
@@ -180,6 +189,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
     return result;
   }
+
+
   private getResultString(re: any): any {
 
     const result = {

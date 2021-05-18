@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { InputBarsService } from '../components/bars/bars.service';
 import { InputBasicInformationService } from '../components/basic-information/basic-information.service';
 import { DataHelperModule } from '../providers/data-helper.module';
 
@@ -9,6 +10,7 @@ export class SetSectionService {
 
   constructor(
     private basic: InputBasicInformationService,
+    private bars: InputBarsService,
     private helper: DataHelperModule) {
   }
 
@@ -17,108 +19,67 @@ export class SetSectionService {
   // position: ハンチの情報
   // force: 荷重の情報
   // safety: 安全係数の情報
-  public setPostData( target: string, member: any, bar: any, 
+  public setPostData( target: string, member: any, 
                       force: any, safety: any): any {
 
     let result: object;
-
-    // POST 用の断面情報をセット
-    if (member.shape.indexOf('円') >= 0) {
-
-      if (member.shape.indexOf('円形') >= 0) {
+    const shapeName = this.getShapeName(member, force.side );                
+    let haunch: number;
+    switch(shapeName){
+      case 'Circle':            // 円形
         result = this.getCircle(member);
-        if(result ===null){ return null; }
-
-      } else if (member.shape.indexOf('円環') >= 0) {
-        result = this.getRing(member);
-        if(result ===null){ return null; }
-
-      }
-
-    } else if (member.shape.indexOf('矩形') >= 0) {
-      const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-      result = this.getRectangle(member, haunch);
-      if(result ===null){ return null; }
-
-    } else if (member.shape.indexOf('T') >= 0) {
-
-      // Ｔ形に関する 設計条件を確認する
-      let condition = this.basic.conditions_list.find(e =>
-        e.id === 'JR-002');
-      if (condition === undefined) { condition = { selected: false }; }
-
-      if (member.shape.indexOf('T形') >= 0) {
-        if (condition.selected === true && force.side === '上側引張') {
-          // T形 断面の上側引張は 矩形
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getRectangle(member, haunch);
-          if(result ===null){ return null; }
-
-        } else {
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getTsection(member, haunch);
-          if(result ===null){ return null; }
-
-        }
-      } else if (member.shape.indexOf('逆T形') >= 0) {
-        if (condition.selected === true && force.side === '下側引張') {
-          // 逆T形 断面の下側引張は 矩形
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getRectangle(member, haunch);
-          if(result ===null){ return null; }
-
-        } else {
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getInvertedTsection(member, haunch);
-          if(result ===null){ return null; }
-
-        }
-      }
-
-    } else if (member.shape.indexOf('小判形') >= 0) {
-
-      if (member.B > member.H) {
+        break;
+      case 'Ring':              // 円環
+        result = this.getRing(member); 
+        break;
+      case 'Rectangle':         // 矩形
+        result = this.getRectangle(member, target, force.index);
+        break;
+      case 'Tsection':          // T形
+        result = this.getTsection(member, target, force.index);
+        break;
+      case 'InvertedTsection':  // 逆T形
+        result = this.getInvertedTsection(member, target, force.index);
+        break;
+      case 'HorizontalOval':    // 水平方向小判形
         result = this.getHorizontalOval(member);
-        if(result ===null){ return null; }
-
-      } else if (member.B < member.H) {
+      break;
+      case 'VerticalOval':      // 鉛直方向小判形
         result = this.getVerticalOval(member);
-        if(result ===null){ return null; }
-
-      } else if (member.B === member.H) {
-        result = this.getCircle(member);
-        if(result ===null){ return null; }
-
-      }
-
-    } else {
-      console.log("断面形状：" + member.shape + " は適切ではありません。");
-      return null;
+        break;
+      default:
+        console.log("断面形状：" + member.shape + " は適切ではありません。");
+        return null;
     }
-
+    result['shape'] = shapeName;
+    
     // コンクリートの材料情報を集計
     result['SectionElastic'] = this.setSectionElastic(safety);
 
     return result;
   }
 
+  // 断面の入力から形状名を決定する
+  private getShapeName(member: any, side: string): string{
 
-  private getShapeName(member: any): string{
+    let result: string = null;;
 
     if (member.shape.indexOf('円') >= 0) {
 
       if (member.shape.indexOf('円形') >= 0) {
-        return 'Circle';
+        result = 'Circle';
 
       } else if (member.shape.indexOf('円環') >= 0) {
         let b: number = this.helper.toNumber(member.B);
-        if (b === null) { return 'Circle'; }
-        return 'Ring';
+        if (b === null || b === 0) {  
+          result = 'Circle'; 
+        }
+        result = 'Ring';
 
       }
 
     } else if (member.shape.indexOf('矩形') >= 0) {
-      return 'Rectangle';
+      result = 'Rectangle';
 
     } else if (member.shape.indexOf('T') >= 0) {
 
@@ -128,29 +89,37 @@ export class SetSectionService {
       if (condition === undefined) { condition = { selected: false }; }
 
       if (member.shape.indexOf('T形') >= 0) {
-        if (condition.selected === true && force.side === '上側引張') {
+        if (condition.selected === true && side === '上側引張') {
           // T形 断面の上側引張は 矩形
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getRectangle(member, haunch);
-          if(result ===null){ return null; }
+          result = 'Rectangle';
 
         } else {
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getTsection(member, haunch);
-          if(result ===null){ return null; }
+          const b: number = this.helper.toNumber(member.B);
+          if (b === null) { return null; }
+          let bf: number = this.helper.toNumber(member.Bt);
+          if (bf === b) { bf = null; }
+          const hf: number = this.helper.toNumber(member.t);
+          if (bf === null && hf == null) {
+            result = 'Rectangle';
+          }
+          result = 'Tsection';
 
         }
       } else if (member.shape.indexOf('逆T形') >= 0) {
-        if (condition.selected === true && force.side === '下側引張') {
+        if (condition.selected === true && side === '下側引張') {
           // 逆T形 断面の下側引張は 矩形
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getRectangle(member, haunch);
-          if(result ===null){ return null; }
+          result = 'Rectangle';
 
         } else {
-          const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-          result = this.getInvertedTsection(member, haunch);
-          if(result ===null){ return null; }
+          const b: number = this.helper.toNumber(member.B);
+          if (b === null) { return null; }
+          let bf: number = this.helper.toNumber(member.Bt);
+          if (bf === b) { bf = null; }
+          const hf: number = this.helper.toNumber(member.t);
+          if (bf === null && hf == null) {
+            result = 'Rectangle';
+          }
+          result = 'InvertedTsection';
 
         }
       }
@@ -158,16 +127,13 @@ export class SetSectionService {
     } else if (member.shape.indexOf('小判形') >= 0) {
 
       if (member.B > member.H) {
-        result = this.getHorizontalOval(member);
-        if(result ===null){ return null; }
+        result = 'HorizontalOval';
 
       } else if (member.B < member.H) {
-        result = this.getVerticalOval(member);
-        if(result ===null){ return null; }
+        result = 'VerticalOval';
 
       } else if (member.B === member.H) {
-        result = this.getCircle(member);
-        if(result ===null){ return null; }
+        result = 'Circle';
 
       }
 
@@ -175,8 +141,9 @@ export class SetSectionService {
       console.log("断面形状：" + member.shape + " は適切ではありません。");
       return null;
     }
-  }
 
+    return  result;
+  }
 
   // 横小判形断面の POST 用 データ作成
   private getHorizontalOval(member: any): any {
@@ -185,10 +152,9 @@ export class SetSectionService {
     const RCOUNT = 100;
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) { return null; }
-    let b: number = this.helper.toNumber(member.B);
-    if (b === null) { return null; }
+    const shape = this.getShape('HorizontalOval', member);
+    const h: number = shape.H;
+    const b: number = shape.B;    
 
     const steps = 180 / RCOUNT;
 
@@ -204,24 +170,6 @@ export class SetSectionService {
       olddeg = deg;
     }
 
-    // 照査表印字のための変数 print に値を登録
-    result['shape'] = 'HorizontalOval'; // 形状
-    result['B'] = b; // 断面幅
-    result['H'] = h; // 断面高さ
-
-    // せん断照査用の換算矩形断面を算定
-    const circleArea: number = (h ** 2) * Math.PI / 4;
-    const rectArea: number = h * (b - h);
-    const Area = circleArea + rectArea;
-    result['Vyd_H'] = h;
-    result['Vyd_B'] = Area / h;
-
-    // 断面積と断面係数
-    result['A'] = Area;
-    result['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
-    result['eu'] = h / 2;
-    result['el'] = h / 2;
-
     return result;
   }
 
@@ -232,10 +180,9 @@ export class SetSectionService {
     const RCOUNT = 100;
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) { return null; }
-    let b: number = this.helper.toNumber(member.B);
-    if (b === null) { return null; }
+    const shape = this.getShape('VerticalOval', member);
+    const h: number = shape.H;
+    const b: number = shape.B;    
 
     const steps = 180 / RCOUNT;
 
@@ -273,55 +220,19 @@ export class SetSectionService {
       olddeg = deg;
     }
 
-    // 照査表印字のための変数 print に値を登録
-    result['shape'] = 'VerticalOval'; // 形状
-
-    result['B'] = b;
-    result['H'] = h;
-
-    // せん断照査用の換算矩形断面を算定
-    const x = h - b;
-    const circleArea: number = (b ** 2) * Math.PI / 4;
-    const rectArea: number = b * x;
-    const Area = circleArea + rectArea;
-    const Vyd_H = Area / b;
-    result['Area'] = Area;
-    result['Vyd_H'] = Vyd_H;
-    result['Vyd_B'] = b;
-
-    // 断面積と断面係数
-    result['A'] = Area;
-    const a1: number = Math.PI * Math.pow(b, 4) / 64;
-    const a2: number = x * Math.pow(b, 3) / 6;
-    const a3: number = Math.PI * Math.pow(x, 2) * Math.pow(b, 2) / 16;
-    const a4: number = b * Math.pow(x, 3) / 12;
-    result['I'] = a1 + a2 + a3 + a4;
-    result['eu'] = h / 2;
-    result['el'] = h / 2;
-
     return result;
   }
 
   // T形断面の POST 用 データ作成
-  private getInvertedTsection(member: any, haunch: any): any {
+  private getInvertedTsection(member: any, target: string, index: number): any {
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) { return null; }
-    if (this.helper.toNumber(haunch) !== null) {
-      h += haunch;
-    }
-    const b: number = this.helper.toNumber(member.B);
-    if (b === null) { return null; }
-    let bf: number = this.helper.toNumber(member.Bt);
-    if (bf === b) { bf = null; }
-    let hf: number = this.helper.toNumber(member.t);
-    if (bf === null && hf == null) {
-      return this.getRectangle(member, haunch);
-    }
-    if (bf === null) { bf = b; }
-    if (hf === null) { hf = h; }
+    const shape = this.getShape('InvertedTsection', member, target, index);
+    const h: number = shape.H;
+    const b: number =shape.B;
+    const bf: number = shape.Bt;
+    const hf: number = shape.t;
 
     const section2 = {
       Height: h - hf,
@@ -339,54 +250,19 @@ export class SetSectionService {
     };
     result.Sections.push(section1);
 
-    // 照査表印字のための変数 print に値を登録
-    result['shape'] = 'InvertedTsection'; // 形状
-    result['B'] = b;
-    result['H'] = h;
-    result['Bt'] = bf;
-    result['t'] = hf;
-
-    // せん断照査用の換算矩形断面を算定
-    result['Vyd_H'] = h;
-    result['Vyd_B'] = b;
-
-    // 断面積と断面係数
-    const x: number = bf - b;
-    result['A'] = h * b + hf * x;
-    const a1: number = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
-    const a2: number = 2 * (b * h + x * hf);
-    const e1: number = a1 / a2;
-    const e2: number = h - e1;
-    result['eu'] = e2;
-    result['el'] = e1;
-    const a3: number = bf * Math.pow(e1, 3);
-    const a4: number = x * h;
-    const a5: number = b * Math.pow(e2, 3);
-    result['I'] = (a3 - a4 + a5) / 3;
-
     return result;
   }
 
   // T形断面の POST 用 データ作成
-  private getTsection(member: any, haunch: number): any {
+  private getTsection(member: any, target: string, index: number): any {
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) { return null; }
-    if (this.helper.toNumber(haunch) !== null) {
-      h += haunch;
-    }
-    const b: number = this.helper.toNumber(member.B);
-    if (b === null) { return null; }
-    let bf: number = this.helper.toNumber(member.Bt);
-    if (bf === b) { bf = null; }
-    let hf: number = this.helper.toNumber(member.t);
-    if (bf === null && hf == null) {
-      return this.getRectangle(member, haunch);
-    }
-    if (bf === null) { bf = b; }
-    if (hf === null) { hf = h; }
+    const shape = this.getShape('Tsection', member, target, index);
+    const h: number = shape.H;
+    const b: number =shape.B;
+    const bf: number = shape.Bt;
+    const hf: number = shape.t;
 
     const section1 = {
       Height: hf,
@@ -403,47 +279,19 @@ export class SetSectionService {
       ElasticID: 'c'
     };
     result.Sections.push(section2);
-
-    // 照査表印字のための変数 print に値を登録
-    result['shape'] = 'Tsection'; // 形状
-    result['B'] = b;
-    result['H'] = h;
-    result['Bt'] = bf;
-    result['t'] = hf;
-
-    // せん断照査用の換算矩形断面を算定
-    result['Vyd_H'] = h;
-    result['Vyd_B'] = b;
-
-    // 断面積と断面係数
-    const x: number = bf - b;
-    result['A'] = h * b + hf * x;
-    const a1: number = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
-    const a2: number = 2 * (b * h + x * hf);
-    const e1: number = a1 / a2;
-    const e2: number = h - e1;
-    result['eu'] = e1;
-    result['el'] = e2;
-    const a3: number = bf * Math.pow(e1, 3);
-    const a4: number = x * h;
-    const a5: number = b * Math.pow(e2, 3);
-    result['I'] = (a3 - a4 + a5) / 3;
 
     return result;
   }
 
   // 矩形断面の POST 用 データ作成
-  private getRectangle(member: any, haunch: number): any {
+  private getRectangle(member: any, target: string, index: number): any {
+
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) { return null; }
-    if (this.helper.toNumber(haunch) !== null) {
-      h += haunch * 1;
-    }
-    const b: number = this.helper.toNumber(member.B);
-    if (b === null) { return null; }
+    const shape = this.getShape('Rectangle', member, target, index)
+    const h: number = shape.H;
+    const b: number = shape.B;
 
     const section = {
       Height: h, // 断面高さ
@@ -452,21 +300,6 @@ export class SetSectionService {
       ElasticID: 'c'  // 材料番号
     };
     result.Sections.push(section);
-
-    // 照査表印字のための変数 print に値を登録
-    result['shape'] = 'Rectangle'; // 形状
-    result['B'] = b;
-    result['H'] = h;
-
-    // せん断照査用の換算矩形断面を算定
-    result['Vyd_H'] = h;
-    result['Vyd_B'] = b;
-
-    // 断面積と断面係数
-    result['A'] = b * h;
-    result['I'] = b * Math.pow(h, 3) / 12;
-    result['eu'] = h / 2;
-    result['el'] = h / 2;
 
     return result;
   }
@@ -478,9 +311,9 @@ export class SetSectionService {
     const RCOUNT = 100;
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) { return null; }
-    let b: number = this.helper.toNumber(member.B);
+    const shape = this.getShape('Ring', member)
+    let h: number = shape.H;
+    let b: number = shape.B;
     const x1: number = h / RCOUNT;
     const x3: number = (h - b) / 2;
 
@@ -510,23 +343,6 @@ export class SetSectionService {
       b3 = b4;
     }
 
-    result['shape'] = 'Ring';  // 形状
-    result['R'] = h;           // 外径
-    result['r'] = b;           // 内径
-
-    // せん断照査用の換算矩形断面を算定
-    let Area = Math.pow(h, 2) * Math.PI / 4;
-    const Vyd_H = Math.sqrt(Area);
-    result['Vyd_H'] = Vyd_H;
-    Area -= (b ** 2) * Math.PI / 4;
-    result['Vyd_B'] = h - Math.sqrt((h ** 2) - Area);
-
-    // 断面積と断面係数
-    result['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
-    result['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
-    result['eu'] = h / 2;
-    result['el'] = h / 2;
-
     return result;
   }
 
@@ -537,11 +353,8 @@ export class SetSectionService {
     const RCOUNT = 100;
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) {
-      h = this.helper.toNumber(member.B);
-    }
-    if (h === null) { return null; }
+    const shape = this.getShape('Circle', member);
+    let h: number = shape.H;
     const x1: number = h / RCOUNT;
     let b1 = 0;
     for (let i = 1; i <= RCOUNT; i++) {
@@ -557,22 +370,6 @@ export class SetSectionService {
       b1 = b2;
     }
 
-    // 照査表印字のための変数 print に値を登録
-    result['shape'] = 'Circle'; // 形状
-    result['R'] = h;
-
-    // せん断照査用の換算矩形断面を算定
-    const Area = Math.pow(h, 2) * Math.PI / 4;
-    const Vyd_H = Math.sqrt(Area);
-    result['Vyd_H'] = Vyd_H;
-    result['Vyd_B'] = Vyd_H;
-
-    // 断面積と断面係数
-    result['A'] = Math.pow(h, 2) * Math.PI / 4;
-    result['I'] = Math.pow(h, 4) * Math.PI / 64;
-    result['eu'] = h / 2;
-    result['el'] = h / 2;
-
     return result;
   }
 
@@ -587,7 +384,6 @@ export class SetSectionService {
     return Math.abs(2 * c);
 
   }
-
 
   // コンクリート強度の POST用データを返す
   private setSectionElastic(safety: any): any[] {
@@ -637,85 +433,256 @@ export class SetSectionService {
     return degree * (Math.PI / 180);
   }
 
-  public getShape(target: string, member: any, position: any): any {
+  // 断面の幅と高さ（フランジ幅と高さ）を取得する
+  public getShape(shapeName: string, member: any, 
+                  target: string = 'Md', index: number = null): any {
 
-    const result = { shape: postData.shape };
+    const result = {};   
+    
+    let h: number, b: number, bf: number, hf: number, haunch: number;
+    let bar: any;
 
-    let h: number, b: number, R: number, r: number
-    // 鉄筋情報を 集計
-    switch (postData.shape) {
-      case 'Ring': // 円環
-        R = this.helper.toNumber(member.H);
-        if (R === null) { return null; }
-        r = this.helper.toNumber(member.B);
-        if (r === null) {
-          result['R'] = R;  // 直径
-        } else { 
-          result['r'] = r;  // 半径
+    switch(shapeName){
+      case 'Circle':            // 円形
+        h = this.helper.toNumber(member.H);
+        if (h === null) {
+          h = this.helper.toNumber(member.B);
         }
+        result['H'] = h;
         break;
 
-      case 'Circle': // 円形
-        R = this.helper.toNumber(member.H);
-        if (R === null) {
-          R = this.helper.toNumber(member.B);
-        }
-        result['R'] = R;
+      case 'Ring':              // 円環
+        result['H'] = this.helper.toNumber(member.H); // 外径
+        result['B'] = this.helper.toNumber(member.B); // 内径
         break;
 
       case 'Rectangle':         // 矩形
-      const haunch = (target==='Md')? bar.haunch_M : bar.haunch_V;
-        let h: number = this.helper.toNumber(member.H);
-        if (h === null) { return null; }
-        if (this.helper.toNumber(bar.haunch_M) !== null) {
-          h += bar.haunch_M * 1;
+        h = this.helper.toNumber(member.H);
+        bar = this.bars.getTableColumn(index);
+        if (target==='Md'){
+          haunch = bar.haunch_M;
+        } else if(target==='Vd') {
+          haunch =  bar.haunch_V;
         }
-        const b: number = this.helper.toNumber(member.B);
-        if (b === null) { return null; }
+        if (this.helper.toNumber(haunch) !== null) {
+          h += haunch * 1;
+        }
+        result['H'] = h;
+        result['B'] = this.helper.toNumber(member.B);
+        break;
+
+      case 'Tsection':          // T形
+      case 'InvertedTsection':  // 逆T形
+        h = this.helper.toNumber(member.H);
+        bar = this.bars.getTableColumn(index);
+        if (target==='Md'){
+          haunch = bar.haunch_M;
+        } else if(target==='Vd') {
+          haunch =  bar.haunch_V;
+        }
+        if (this.helper.toNumber(haunch) !== null) {
+          h += haunch;
+        }
+        b = this.helper.toNumber(member.B);
+        bf = this.helper.toNumber(member.Bt);
+        hf = this.helper.toNumber(member.t);
+        if (bf === null) { bf = b; }
+        if (hf === null) { hf = h; }
         result['B'] = b;
         result['H'] = h;
-      break;
+        result['Bt'] = bf;
+        result['t'] = hf;
+        break;
 
       case 'HorizontalOval':    // 水平方向小判形
       case 'VerticalOval':      // 鉛直方向小判形
-      case 'InvertedTsection':  // 逆T形
-      case 'Tsection':          // T形
-      default:
-        result['value'] = PrintData.B;
+        h = this.helper.toNumber(member.H);
+        result['H'] = h;
+        result['B'] = this.helper.toNumber(member.B);
         break;
-    }
 
-    if (postData.shape === 'Circle') {
-      let h: number = this.helper.toNumber(member.H);
-      if (h === null) {
-        h = this.helper.toNumber(member.B);
-      }
-
-      if (h === null) { return null; }
-    } else if ( postData.shape === 'Ring' ){
-      result = this.getRing(member);
-
-    } else if ( result.shape === 'Rectangle' ){
-      result = this.getRectangle(member, bar);
-
-    } else if ( result.shape === 'Tsection'  ){
-      result = this.getTsection(member, bar);
-
-    } else if ( result.shape === 'InvertedTsection') {
-      result = this.getInvertedTsection(member, bar);
-
-    } else if (result.shape === 'HorizontalOval') {
-      result = this.getHorizontalOval(member);
-
-    } else if (result.shape === 'VerticalOval') {
-      result = this.getVerticalOval(member);
-
-    } else {
-    console.log("断面形状：" + result.shape + " は適切ではありません。");
-    return null;
+      default:
+        console.log("断面形状：" + member.shape + " は適切ではありません。");
+        return null;
     }
 
     return result;
   }
 
+   // せん断照査用の換算矩形断面を算定
+  public getVydBH(shapeName: string, member: any, 
+                  target: string, index: number): any {
+
+    const result = {};   
+    const shape = this.getShape(shapeName, member, target, index);
+
+    let h: number, b: number, Area: number, circleArea: number, rectArea: number;
+
+    switch(shapeName){
+      case 'Circle':            // 円形
+        h = shape.H;
+        Area = Math.pow(h, 2) * Math.PI / 4;
+        h = Math.sqrt(Area);
+        result['H'] = h;
+        result['B'] = h;
+        break;
+
+      case 'Ring':              // 円環
+        h = shape.H; // 外径
+        b = shape.B; // 内径
+        Area = Math.pow(h, 2) * Math.PI / 4;
+        result['H'] = Math.sqrt(Area);
+        Area -= (b ** 2) * Math.PI / 4;
+        result['B'] = h - Math.sqrt((h ** 2) - Area);    
+        break;
+
+      case 'Rectangle':         // 矩形
+      case 'Tsection':          // T形
+      case 'InvertedTsection':  // 逆T形
+        result['H'] = shape.H;
+        result['B'] = shape.B;
+        break;
+
+      case 'HorizontalOval':    // 水平方向小判形
+        h = shape.H;
+        b = shape.B;
+        circleArea = (h ** 2) * Math.PI / 4;
+        rectArea = h * (b - h);
+        Area = circleArea + rectArea;
+        result['H'] = h;
+        result['B'] = Area / h;
+        break;
+
+      case 'VerticalOval':      // 鉛直方向小判形
+        const x = h - b;
+        circleArea = (b ** 2) * Math.PI / 4;
+        rectArea = b * x;
+        Area = circleArea + rectArea;
+        result['H'] = Area / b;
+        result['B'] = b;
+      
+      break;
+
+      default:
+      console.log("断面形状：" + member.shape + " は適切ではありません。");
+      return null;
+    }
+
+    return result;  
+  }
+
+  // 断面積と断面係数
+  public getStructuralVal( shapeName: string, member: any, 
+                    target: string, index: number): any {
+
+    const result = {};   
+    const shape = this.getShape(shapeName, member, target, index);
+
+    let h: number, b: number, bf: number, hf: number;
+    let a1: number, a2: number, a3: number, a4: number, a5: number;
+    let x: number, e1: number, e2: number;
+    let Area: number, circleArea: number, rectArea: number;
+
+    switch(shapeName){
+    case 'Circle':            // 円形
+      h = shape.H;
+      result['A'] = Math.pow(h, 2) * Math.PI / 4;
+      result['I'] = Math.pow(h, 4) * Math.PI / 64;
+      result['eu'] = h / 2;
+      result['el'] = h / 2;
+      break;
+
+    case 'Ring':              // 円環
+      h = shape.H; // 外径
+      b = shape.B; // 内径
+      result['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
+      result['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
+      result['eu'] = h / 2;
+      result['el'] = h / 2;
+      break;
+
+    case 'Rectangle':         // 矩形
+      h = shape.H; 
+      b = shape.B; 
+      result['A'] = b * h;
+      result['I'] = b * Math.pow(h, 3) / 12;
+      result['eu'] = h / 2;
+      result['el'] = h / 2;
+      break;
+
+    case 'Tsection':          // T形
+      h = shape.H;
+      b =shape.B;
+      bf = shape.Bt;
+      hf = shape.t;
+      x = bf - b;
+      result['A'] = h * b + hf * x;
+      a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
+      a2 = 2 * (b * h + x * hf);
+      e1 = a1 / a2;
+      e2 = h - e1;
+      result['eu'] = e1;
+      result['el'] = e2;
+      a3 = bf * Math.pow(e1, 3);
+      a4 = x * h;
+      a5 = b * Math.pow(e2, 3);
+      result['I'] = (a3 - a4 + a5) / 3;
+      break;
+
+
+    case 'InvertedTsection':  // 逆T形
+      h = shape.H;
+      b =shape.B;
+      bf = shape.Bt;
+      hf = shape.t;
+      x = bf - b;
+      result['A'] = h * b + hf * x;
+      a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
+      a2 = 2 * (b * h + x * hf);
+      e1 = a1 / a2;
+      e2 = h - e1;
+      result['eu'] = e2;
+      result['el'] = e1;
+      a3 = bf * Math.pow(e1, 3);
+      a4 = x * h;
+      a5 = b * Math.pow(e2, 3);
+      result['I'] = (a3 - a4 + a5) / 3;
+      break;
+
+    case 'HorizontalOval':    // 水平方向小判形
+      h = shape.H;
+      b = shape.B;
+      circleArea = (h ** 2) * Math.PI / 4;
+      rectArea = h * (b - h);
+      Area = circleArea + rectArea;
+      result['A'] = Area;
+      result['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
+      result['eu'] = h / 2;
+      result['el'] = h / 2;
+      break;
+
+    case 'VerticalOval':      // 鉛直方向小判形
+      x = h - b;
+      circleArea = (b ** 2) * Math.PI / 4;
+      rectArea = b * x;
+      Area = circleArea + rectArea;
+      a1 = Math.PI * Math.pow(b, 4) / 64;
+      a2 = x * Math.pow(b, 3) / 6;
+      a3 = Math.PI * Math.pow(x, 2) * Math.pow(b, 2) / 16;
+      a4 = b * Math.pow(x, 3) / 12;
+      result['A'] = Area;
+      result['I'] = a1 + a2 + a3 + a4;
+      result['eu'] = h / 2;
+      result['el'] = h / 2;
+
+      break;
+
+    default:
+      console.log("断面形状：" + member.shape + " は適切ではありません。");
+      return null;
+    }
+
+    return result;  
+  }
+  
 }

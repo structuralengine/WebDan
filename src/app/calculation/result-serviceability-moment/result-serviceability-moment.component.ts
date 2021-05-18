@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { CalcServiceabilityMomentService } from './calc-serviceability-moment.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
+import { InputDesignPointsService } from 'src/app/components/design-points/design-points.service';
 
 
 @Component({
@@ -24,7 +25,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     private http: HttpClient,
     private calc: CalcServiceabilityMomentService,
     private post: SetPostDataService,
-    private result: ResultDataService ) { }
+    private result: ResultDataService,
+    private points: InputDesignPointsService ) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -43,7 +45,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.isFulfilled = this.setPages(postData, response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -59,9 +61,9 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(OutputData: any): boolean {
+  private setPages(postData: any, OutputData: any): boolean {
     try {
-      this.serviceabilityMomentPages = this.setServiceabilityPages(OutputData);
+      this.serviceabilityMomentPages = this.setServiceabilityPages(postData, OutputData);
       return true;
     } catch(e) {
       this.err = e.toString();
@@ -71,61 +73,83 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
 
   // 出力テーブル用の配列にセット
-  public setServiceabilityPages(responseData: any[], postData: any, title: string = null): any[] {
+  public setServiceabilityPages(postData: any, OutputData: any,
+                                title: string = null): any[] {
     const result: any[] = new Array();
-    let page: any;
-    let groupeName: string;
-    let i: number = 0;
-    let isDurability: boolean = false;
-    if (title === null) {
+
+    let isDurability = true;                              
+    if(title === null){
       title = '耐久性　曲げひび割れの照査結果';
-    } else {
-      isDurability = true;
-    }
+      isDurability = false;
+    }                    
 
-    for (const groupe of postData) {
-      groupeName = groupe[0].g_name;
-      page = { caption: title, g_name: groupeName, columns: new Array() };
+    let page: any;
 
-      for (const member of groupe) {
+    let i: number = 0;
+    const groupe = this.points.getGroupeList();
+    for (let ig = 0; ig < groupe.length; ig++) {
+      const groupeName = this.points.getGroupeName(ig);
+      page = {
+        caption: title,
+        g_name: groupeName,
+        columns: new Array(),
+      };
+
+      for (const member of groupe[ig]) {0
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData0.length; j++) {
+          for (const side of ["上側引張", "下側引張"]) {
 
-            // 永久荷重
-            const postdata0 = position.PostData0[j];
-
-            // 縁応力検討用荷重
-            let postdata1 = { Md: 0, Nd: 0 };
-            if ('PostData1' in position) {
-              postdata1 = position.PostData1[j];
+            const post = postData.filter(
+              (e) => e.index === position.index && e.side === side
+            );
+            const res = OutputData.filter(
+              (e) => e.index === position.index && e.side === side
+            );
+            if (post === undefined || res === undefined) {
+              continue;
             }
 
-            // 印刷用データ
-            const PrintData = position.PrintData[j];
+            // 永久荷重
+            const postdata0 = post[0];
+
+            // 縁応力検討用荷重
+            const postdata1 = post[1];
 
             // 応力度
-            const resultData = responseData[i].ResultSigma;
+            const resultData = res[0];
 
             if (page.columns.length > 4) {
               result.push(page);
-              page = { caption: title, g_name: groupeName, columns: new Array() };
+              page = { 
+                caption: title, 
+                g_name: groupeName, 
+                columns: new Array() 
+              };
             }
 
-            const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            const resultWd: any = this.calc.calcWd(PrintData, postdata0, postdata1, position, resultData, isDurability);
-            const resultColumn: any = this.calc.getResultString(resultWd);
+            const resultColumn: any = this.getResultString(
+              this.calc.calcWd(
+                null, 
+                postdata0, 
+                postdata1, 
+                position, 
+                resultData, isDurability)
+            );
 
+            const column: any[] = new Array();
             /////////////// タイトル /////////////// 
-            column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position, postdata0));
+            const titleColumn = this.result.getTitleString(member, position, side)
+            column.push({ alien: 'center', value: titleColumn.m_no });
+            column.push({ alien: 'center', value: titleColumn.p_name });
+            column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            column.push(this.result.getShapeString_B(PrintData));
-            column.push(this.result.getShapeString_H(PrintData));
-            column.push(this.result.getShapeString_Bt(PrintData));
-            column.push(this.result.getShapeString_t(PrintData));
+            const shapeString = this.result.getShapeString('Md', member, post);
+            column.push(shapeString.B);
+            column.push(shapeString.H);
+            column.push(shapeString.Bt);
+            column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
             const Ast: any = this.result.getAsString(PrintData);
             column.push(Ast.As);
@@ -192,6 +216,174 @@ export class ResultServiceabilityMomentComponent implements OnInit {
         result.push(page);
       }
     }
+    return result;
+  }
+
+
+  // 計算と印刷用
+  public getResultString(re: any): any {
+
+    const result = {
+      con: { alien: 'center', value: '-' },
+
+      Mhd: { alien: 'center', value: '-' },
+      Nhd: { alien: 'center', value: '-' },
+      sigma_b: { alien: 'center', value: '-' },
+
+      Md: { alien: 'center', value: '-' },
+      Nd: { alien: 'center', value: '-' },
+      sigma_c: { alien: 'center', value: '-' },
+      sigma_s: { alien: 'center', value: '-' },
+
+      Mpd: { alien: 'center', value: '-' },
+      Npd: { alien: 'center', value: '-' },
+      EsEc: { alien: 'center', value: '-' },
+      sigma_se: { alien: 'center', value: '-' },
+      c: { alien: 'center', value: '-' },
+      Cs: { alien: 'center', value: '-' },
+      fai: { alien: 'center', value: '-' },
+
+      ecu: { alien: 'center', value: '-' },
+      k1: { alien: 'center', value: '-' },
+      k2: { alien: 'center', value: '-' },
+      n: { alien: 'center', value: '-' },
+      k3: { alien: 'center', value: '-' },
+      k4: { alien: 'center', value: '-' },
+
+      Wd: { alien: 'center', value: '-' },
+      Wlim: { alien: 'center', value: '-' },
+
+      ri: { alien: 'center', value: '-' },
+      ratio: { alien: 'center', value: '-' },
+      result: { alien: 'center', value: '-' }
+    };
+
+    // 環境条件
+    if ('con' in re) {
+      result.con.value = re.con;
+    }
+
+    // 永久作用
+    if ('Md' in re) {
+      result.Md = { alien: 'right', value: re.Md.toFixed(1) };
+    }
+    if ('Nd' in re) {
+      result.Nd = { alien: 'right', value: re.Nd.toFixed(1) };
+    }
+
+    // 圧縮応力度の照査
+    if ('Sigmac' in re && 'fcd04' in re) {
+      if (re.Sigmac < re.fcd04) {
+        result.sigma_c.value = re.Sigmac.toFixed(2) + ' < ' + re.fcd04.toFixed(1);
+      } else {
+        result.sigma_c.value = re.Sigmac.toFixed(2) + ' > ' + re.fcd04.toFixed(1);
+        result.result.value = '(0.4fcd) NG';
+      }
+    }
+
+    // 縁応力の照査
+    if ('Mhd' in re) {
+      result.Mhd = { alien: 'right', value: re.Mhd.toFixed(1) };
+    }
+    if ('Nhd' in re) {
+      result.Nhd = { alien: 'right', value: re.Nhd.toFixed(1) };
+    }
+    // 縁応力度
+    if ('Sigmab' in re && 'Sigmabl' in re) {
+      if (re.Sigmab < re.Sigmabl) {
+        let SigmabVal: number = re.Sigmab;
+        if ( SigmabVal < 0 ) {
+          SigmabVal = 0;
+        }
+        result.sigma_b.value = SigmabVal.toFixed(2) + ' < ' + re.Sigmabl.toFixed(2);
+
+        // 鉄筋応力度の照査
+        if ('Sigmas' in re && 'sigmal1' in re) {
+          if (re.Sigmas < 0) {
+            result.sigma_s.value = '全断面圧縮';
+            if (result.result.value === '-') {
+              result.result.value = 'OK';
+            }
+          } else if (re.Sigmas < re.sigmal1) {
+            result.sigma_s.value = re.Sigmas.toFixed(1) + ' < ' + re.sigmal1.toFixed(1);
+            if (result.result.value === '-') {
+              result.result.value = 'OK';
+            }
+          } else {
+            result.sigma_s.value = re.Sigmas.toFixed(1) + ' > ' + re.sigmal1.toFixed(1);
+            result.result.value = 'NG';
+          }
+        }
+        return result;
+      } else {
+        result.sigma_b.value = re.Sigmab.toFixed(2) + ' > ' + re.Sigmabl.toFixed(2);
+      }
+    }
+
+    // ひび割れ幅の照査
+    if ('Mpd' in re) {
+      result.Mpd = { alien: 'right', value: re.Mpd.toFixed(1) };
+    }
+    if ('Npd' in re) {
+      result.Npd = { alien: 'right', value: re.Npd.toFixed(1) };
+    }
+    if ('EsEc' in re) {
+      result.EsEc = { alien: 'right', value: re.EsEc.toFixed(2) };
+    }
+
+    if ('sigma_se' in re) {
+      result.sigma_se = { alien: 'right', value: re.sigma_se.toFixed(1) };
+    }
+    if ('c' in re) {
+      result.c = { alien: 'right', value: re.c.toFixed(1) };
+    }
+    if ('Cs' in re) {
+      result.Cs = { alien: 'right', value: re.Cs.toFixed(1) };
+    }
+    if ('fai' in re) {
+      result.fai = { alien: 'right', value: re.fai.toFixed(0) };
+    }
+    if ('ecu' in re) {
+      result.ecu = { alien: 'right', value: re.ecu.toFixed(0) };
+    }
+
+    if ('k1' in re) {
+      result.k1 = { alien: 'right', value: re.k1.toFixed(2) };
+    }
+    if ('k2' in re) {
+      result.k2 = { alien: 'right', value: re.k2.toFixed(3) };
+    }
+    if ('n' in re) {
+      result.n = { alien: 'right', value: re.n.toFixed(3) };
+    }
+    if ('k3' in re) {
+      result.k3 = { alien: 'right', value: re.k3.toFixed(3) };
+    }
+    if ('k4' in re) {
+      result.k4 = { alien: 'right', value: re.k4.toFixed(2) };
+    }
+    if ('Wd' in re) {
+      result.Wd = { alien: 'right', value: re.Wd.toFixed(3) };
+    }
+    // 制限値
+    if ('Wlim' in re) {
+      result.Wlim = { alien: 'right', value: re.Wlim.toFixed(3) };
+    }
+    if ('ri' in re) {
+      result.ri.value = re.ri.toFixed(2);
+    }
+    if ('ratio' in re) {
+      result.ratio.value = re.ratio.toFixed(3);
+    }
+
+    if (re.ratio < 1) {
+      if (result.result.value === '-') {
+        result.result.value = 'OK';
+      }
+    } else {
+      result.result.value = 'NG';
+    }
+
     return result;
   }
 

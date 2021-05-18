@@ -71,57 +71,60 @@ export class ResultSafetyMomentComponent implements OnInit {
   // 出力テーブル用の配列にセット
   public setSafetyPages(postData: any, OutputData: any): any[] {
     const result: any[] = new Array();
+
     let page: any;
+    const title = "安全性（破壊）曲げモーメントの照査結果";
 
     let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
       page = {
-        caption: "安全性（破壊）曲げモーメントの照査結果",
+        caption: title,
         g_name: groupeName,
         columns: new Array(),
       };
 
-      for (const member of groupe[ig]) {
+      for (const member of groupe[ig]) {0
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
             const post = postData.find(
               (e) => e.index === position.index && e.side === side
             );
-            const resp = OutputData.find(
+            const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-            if (post === undefined || resp === undefined) {
+            if (post === undefined || res === undefined) {
               continue;
             }
-
-            const resultColumn: any = this.calc.getResultString(
-              post, resp, member
-            );
 
             if (page.columns.length > 4) {
               result.push(page);
               page = {
-                caption: "安全性（破壊）曲げモーメントの照査結果",
+                caption: title,
                 g_name: groupeName,
                 columns: new Array(),
               };
             }
 
+            /////////////// まず計算 ///////////////
+            const resultColumn: any = this.calc.getResultValue(
+              post, res, member
+            );
+
             const column: any[] = new Array();
             /////////////// タイトル ///////////////
-            const title = this.result.getTitleString(member, position, side)
-            column.push({ alien: 'center', value: title.m_no });
-            column.push({ alien: 'center', value: title.p_name });
-            column.push({ alien: 'center', value: title.side });
+            const titleColumn = this.result.getTitleString(member, position, side)
+            column.push({ alien: 'center', value: titleColumn.m_no });
+            column.push({ alien: 'center', value: titleColumn.p_name });
+            column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shape = this.result.getShapeString('Md', member, post);
-            column.push({alien: 'right', value: shape.B});
-            column.push({alien: 'right', value: shape.H});
-            column.push({alien: 'right', value: shape.Bt});
-            column.push({alien: 'right', value: shape.t});
+            const shapeString = this.result.getShapeString('Md', member, post);
+            column.push(shapeString.B);
+            column.push(shapeString.H);
+            column.push(shapeString.Bt);
+            column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
             const Ast: any = this.result.getAsString(PrintData);
             column.push(Ast.As);

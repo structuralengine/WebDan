@@ -45,7 +45,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.isFulfilled = this.setPages(postData, response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -60,11 +60,11 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(OutputData: any): boolean {
+  private setPages(postData: any, OutputData: any): boolean {
     try {
       // 安全性破壊のページと同じ
       this.safetyShearForcePages = this.base.getSafetyPages(
-        OutputData,
+        postData, OutputData,
         "復旧性（地震時）せん断力の照査結果"
       );
       return true;

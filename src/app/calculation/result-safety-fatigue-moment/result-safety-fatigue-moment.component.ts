@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcSafetyFatigueMomentService } from "./calc-safety-fatigue-moment.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
+import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 
 @Component({
   selector: "app-result-safety-fatigue-moment",
@@ -23,7 +24,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     private http: HttpClient,
     private calc: CalcSafetyFatigueMomentService,
     private post: SetPostDataService,
-    private result: ResultDataService
+    private result: ResultDataService,
+    private points: InputDesignPointsService
   ) {}
 
   ngOnInit() {
@@ -47,7 +49,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(response["OutputData"]);
+          this.isFulfilled = this.setPages(postData, response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -62,9 +64,9 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(OutputData: any): boolean {
+  private setPages(postData: any, OutputData: any): boolean {
     try {
-      this.safetyFatigueMomentPages = this.setSafetyFatiguePages(OutputData);
+      this.safetyFatigueMomentPages = this.setSafetyFatiguePages(postData, OutputData);
       return true;
     } catch (e) {
       this.err = e.toString();
@@ -73,12 +75,10 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   }
 
   // 出力テーブル用の配列にセット
-  public setSafetyFatiguePages(responseData: any, postData: any): any[] {
+  public setSafetyFatiguePages(postData: any, OutputData: any): any[] {
     const result: any[] = new Array();
 
     let page: any;
-    let groupeName: string;
-    let i = 0;
     const title = "安全性（疲労破壊）曲げモーメントの照査結果";
 
     //仮
@@ -88,24 +88,38 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     const responseMin = responseData.slice(-2); // エラー回避仮コード
     //仮END
 
-    for (const groupe of postData) {
-      groupeName = groupe[0].g_name;
-      page = { caption: title, g_name: groupeName, columns: new Array() };
+    let i: number = 0;
+    const groupe = this.points.getGroupeList();
+    for (let ig = 0; ig < groupe.length; ig++) {
+      const groupeName = this.points.getGroupeName(ig);
+      page = {
+        caption: title,
+        g_name: groupeName,
+        columns: new Array(),
+      };
 
-      for (const member of groupe) {
+      for (const member of groupe[ig]) {0
         for (const position of member.positions) {
-          for (let j = 0; j < position.PostData0.length; j++) {
-            // 最小応力
-            const postdata0 = position.PostData1[j];
-            // 変動応力
-            const postdata1 = position.PostData0[j];
+          for (const side of ["上側引張", "下側引張"]) {
 
-            // 印刷用データ
-            const PrintData = position.PrintData[j];
+            const post = postData.filter(
+              (e) => e.index === position.index && e.side === side
+            );
+            const res = OutputData.filter(
+              (e) => e.index === position.index && e.side === side
+            );
+            if (post === undefined || res === undefined) {
+              continue;
+            }
+
+            // 最小応力
+            const postdata0 = post[0];
+            // 変動応力
+            const postdata1 = post[1];
 
             // 応力度
-            const resultMin = responseMin[i].ResultSigma;
-            const resultMax = responseMax[i].ResultSigma;
+            const resultMin = res[0];
+            const resultMax = res[1];
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -119,25 +133,27 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            const resultFrd: any = this.calc.calcFrd(
-              PrintData,
-              postdata0,
-              postdata1,
-              position,
-              resultMin,
-              resultMax
-            );
-            const resultColumn: any = this.getResultString(resultFrd);
+            const resultColumn: any = this.getResultString(
+              this.calc.getResultValue(
+                null,
+                postdata0,
+                postdata1,
+                position,
+                resultMin,
+                resultMax
+              ));
 
             /////////////// タイトル ///////////////
-            column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position, postdata0));
+            const titleColumn = this.result.getTitleString(member, position, side)
+            column.push({ alien: 'center', value: titleColumn.m_no });
+            column.push({ alien: 'center', value: titleColumn.p_name });
+            column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            column.push(this.result.getShapeString_B(PrintData));
-            column.push(this.result.getShapeString_H(PrintData));
-            column.push(this.result.getShapeString_Bt(PrintData));
-            column.push(this.result.getShapeString_t(PrintData));
+            const shapeString = this.result.getShapeString('Md', member, post);
+            column.push(shapeString.B);
+            column.push(shapeString.H);
+            column.push(shapeString.Bt);
+            column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
             const Ast: any = this.result.getAsString(PrintData);
             column.push(Ast.As);
