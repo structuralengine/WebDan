@@ -58,7 +58,7 @@ export class SetPostDataService {
   // safetyID: 安全係数の行番号
   // DesignForceList: 着目点, 断面力情報
   public setInputData( target: string, type: string, safetyID: number,
-    ...DesignForceList: any[] ): any {
+                      ...DesignForceList: any[] ): any {
     const result = [];
 
     for(const list of DesignForceList) {
@@ -82,12 +82,12 @@ export class SetPostDataService {
           }
 
           // 断面形状
-          const section = this.section.setPostData(target, member, force, safety);
+          const section = this.section.getPostData(target, member, force, safety);
           data['Sections'] = section.Sections;
           data['SectionElastic'] = section.SectionElastic;
 
           // 鉄筋の本数
-          const steel = this.steel.setPostData(member, force, safety, section);
+          const steel = this.steel.getPostData(member, force, safety, section);
           data['Steels'] = steel.Steels;
           data['SteelElastic'] = steel.SteelElastic;
 

@@ -19,18 +19,18 @@ export class SetSectionService {
   // position: ハンチの情報
   // force: 荷重の情報
   // safety: 安全係数の情報
-  public setPostData( target: string, member: any, 
+  public getPostData( target: string, member: any,
                       force: any, safety: any): any {
 
     let result: object;
-    const shapeName = this.getShapeName(member, force.side );                
-    let haunch: number;
+
+    const shapeName = this.getShapeName(member, force.side );
     switch(shapeName){
       case 'Circle':            // 円形
         result = this.getCircle(member);
         break;
       case 'Ring':              // 円環
-        result = this.getRing(member); 
+        result = this.getRing(member);
         break;
       case 'Rectangle':         // 矩形
         result = this.getRectangle(member, target, force.index);
@@ -52,7 +52,7 @@ export class SetSectionService {
         return null;
     }
     result['shape'] = shapeName;
-    
+
     // コンクリートの材料情報を集計
     result['SectionElastic'] = this.setSectionElastic(safety);
 
@@ -71,8 +71,8 @@ export class SetSectionService {
 
       } else if (member.shape.indexOf('円環') >= 0) {
         let b: number = this.helper.toNumber(member.B);
-        if (b === null || b === 0) {  
-          result = 'Circle'; 
+        if (b === null || b === 0) {
+          result = 'Circle';
         }
         result = 'Ring';
 
@@ -154,7 +154,7 @@ export class SetSectionService {
     // 断面情報を集計
     const shape = this.getShape('HorizontalOval', member);
     const h: number = shape.H;
-    const b: number = shape.B;    
+    const b: number = shape.B;
 
     const steps = 180 / RCOUNT;
 
@@ -182,7 +182,7 @@ export class SetSectionService {
     // 断面情報を集計
     const shape = this.getShape('VerticalOval', member);
     const h: number = shape.H;
-    const b: number = shape.B;    
+    const b: number = shape.B;
 
     const steps = 180 / RCOUNT;
 
@@ -434,11 +434,11 @@ export class SetSectionService {
   }
 
   // 断面の幅と高さ（フランジ幅と高さ）を取得する
-  public getShape(shapeName: string, member: any, 
+  public getShape(shapeName: string, member: any,
                   target: string = 'Md', index: number = null): any {
 
-    const result = {};   
-    
+    const result = {};
+
     let h: number, b: number, bf: number, hf: number, haunch: number;
     let bar: any;
 
@@ -510,10 +510,10 @@ export class SetSectionService {
   }
 
    // せん断照査用の換算矩形断面を算定
-  public getVydBH(shapeName: string, member: any, 
+  public getVydBH(shapeName: string, member: any,
                   target: string, index: number): any {
 
-    const result = {};   
+    const result = {};
     const shape = this.getShape(shapeName, member, target, index);
 
     let h: number, b: number, Area: number, circleArea: number, rectArea: number;
@@ -533,7 +533,7 @@ export class SetSectionService {
         Area = Math.pow(h, 2) * Math.PI / 4;
         result['H'] = Math.sqrt(Area);
         Area -= (b ** 2) * Math.PI / 4;
-        result['B'] = h - Math.sqrt((h ** 2) - Area);    
+        result['B'] = h - Math.sqrt((h ** 2) - Area);
         break;
 
       case 'Rectangle':         // 矩形
@@ -560,7 +560,7 @@ export class SetSectionService {
         Area = circleArea + rectArea;
         result['H'] = Area / b;
         result['B'] = b;
-      
+
       break;
 
       default:
@@ -568,14 +568,14 @@ export class SetSectionService {
       return null;
     }
 
-    return result;  
+    return result;
   }
 
   // 断面積と断面係数
-  public getStructuralVal( shapeName: string, member: any, 
+  public getStructuralVal( shapeName: string, member: any,
                     target: string, index: number): any {
 
-    const result = {};   
+    const result = {};
     const shape = this.getShape(shapeName, member, target, index);
 
     let h: number, b: number, bf: number, hf: number;
@@ -602,8 +602,8 @@ export class SetSectionService {
       break;
 
     case 'Rectangle':         // 矩形
-      h = shape.H; 
-      b = shape.B; 
+      h = shape.H;
+      b = shape.B;
       result['A'] = b * h;
       result['I'] = b * Math.pow(h, 3) / 12;
       result['eu'] = h / 2;
@@ -682,7 +682,7 @@ export class SetSectionService {
       return null;
     }
 
-    return result;  
+    return result;
   }
-  
+
 }
