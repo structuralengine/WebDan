@@ -47,6 +47,7 @@ export class ResultDataService {
   // 照査表における 断面の文字列を取得
   public getShapeString(target: string, member: any, position: any){
 
+    const shapeName = this.section.getShapeName(member, position.side );
     const sectionInfo = this.section.getShape(target, member, position);
 
     const result = {
@@ -71,7 +72,9 @@ export class ResultDataService {
   // 照査表における 引張鉄筋情報を取得
   public getAsString(PrintData: any, symbol: string = 'Ast'): any {
 
-    const barInfo = this.steel.getAs(target, member, position);
+    const barInfo = this.steel.getAs(shapeName, member, position);
+
+
 
     if (symbol in PrintData === false) {
       return {

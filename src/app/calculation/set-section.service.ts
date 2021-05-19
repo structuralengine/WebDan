@@ -60,7 +60,7 @@ export class SetSectionService {
   }
 
   // 断面の入力から形状名を決定する
-  private getShapeName(member: any, side: string): string{
+  public getShapeName(member: any, side: string): string{
 
     let result: string = null;;
 
