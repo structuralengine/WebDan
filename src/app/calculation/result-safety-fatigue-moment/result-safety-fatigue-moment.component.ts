@@ -19,6 +19,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   public err: string;
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
+  private title = "安全性（疲労破壊）曲げモーメントの照査結果";
 
   constructor(
     private http: HttpClient,
@@ -45,6 +46,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     }
 
     // postする
+    console.log(this.title, postData);
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
@@ -79,7 +81,6 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     const result: any[] = new Array();
 
     let page: any;
-    const title = "安全性（疲労破壊）曲げモーメントの照査結果";
 
     //仮
     // const responseMax = responseData.slice(0, this.PostedData.length);
@@ -93,7 +94,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
       page = {
-        caption: title,
+        caption: this.title,
         g_name: groupeName,
         columns: new Array(),
       };
@@ -124,7 +125,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             if (page.columns.length > 4) {
               result.push(page);
               page = {
-                caption: title,
+                caption: this.title,
                 g_name: groupeName,
                 columns: new Array(),
               };

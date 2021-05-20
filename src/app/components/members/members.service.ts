@@ -58,6 +58,18 @@ export class InputMembersService  {
     return result;
   }
 
+  // 同じグループの部材リストを取得する
+  public getSameGroupeMembers(m_no: number): any{
+
+    const m = this.getCalcData(m_no);
+
+    if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
+      return [];
+    }
+
+    return this.member_list.filter(v=>v.g_id === m.g_id);
+  }
+
   public setTableColumns(table_datas: any, isManual: boolean = false) {
  
     if (!isManual) {

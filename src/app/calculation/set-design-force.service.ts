@@ -149,7 +149,7 @@ export class SetDesignForceService {
       } else {
         let mKey1 = "my", mKey2 = "Mdy", vKey1 = "fy", vKey2 = "Vdy";
         if ((target === "Md" && position.isMzCalc === true) ||
-            (target === "Vd" && position.isVzCalc === true)) {
+            (target === "Vd" && position.isVyCalc === true)) {
           mKey1 = "mz"; mKey2 = "Mdz";  vKey1 = "fz"; vKey2 = "Vdz";
         }
 

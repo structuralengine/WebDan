@@ -16,32 +16,30 @@ export class SetBarService {
   // position: ハンチの情報
   // force: 荷重の情報
   // safety: 安全係数の情報
-  public getPostData(member: any, force: any, safety: any, result: any): any {
-    // const bar = this.bars.getCalcData(force.index);
-    //
+  public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
 
     // 鉄筋情報を 集計
-    let bars: any;
-    if (result.shape === "Circle" || result.shape === "Ring") {
-      bars = this.getCircleBar(member, force.index, force.side, safety);
-    } else if (
-      result.shape === "Rectangle" ||
-      result.shape === "Tsection" ||
-      result.shape === "InvertedTsection"
-    ) {
-      bars = this.getRectBar(member, force.index, force.side, safety);
-    } else if (result.shape === "HorizontalOval") {
-      bars = this.getRectBar(member, force.index, "小判", safety);
-    } else if (result.shape === "VerticalOval") {
-      bars = this.getVerticalOvalBar(member, force.index, safety);
-    } else {
-      console.log("断面形状：" + result.shape + " は適切ではありません。");
-      return null;
-    }
+    let result: object;
 
-    // POST 用の断面情報をセット
-    for (const key of Object.keys(bars)) {
-      result[key] = bars[key];
+    switch(shape){
+      case "Circle":
+      case "Ring":
+        result = this.getCircleBar(member, index, side, safety);
+        break;
+      case "Rectangle":
+      case "Tsection":
+      case "InvertedTsection":
+        result = this.getRectBar(member, index, side, safety);
+        break;
+      case "HorizontalOval":
+        result = this.getRectBar(member, index, "小判", safety);
+        break;
+      case "VerticalOval":
+        result = this.getVerticalOvalBar(member, index, safety);
+        break;
+      default:
+        console.log("断面形状：" + shape + " は適切ではありません。");
+        return null;
     }
 
     return result;
@@ -823,17 +821,18 @@ export class SetBarService {
     */
 
     // 鉄筋情報を登録
+    let rebar_n = barInfo.rebar_n;
     for (let i = 0; i < barInfo.n; i++) {
       const dst: number = barInfo.dsc + i * barInfo.space;
       const Steel1 = {
         Depth: dst,
         i: dia,
-        n: Math.min(barInfo.line, barInfo.rebar_n * barInfo.cos),
+        n: Math.min(barInfo.line, rebar_n * barInfo.cos),
         IsTensionBar: false,
         ElasticID: id,
       };
       result.Steels.push(Steel1);
-      barInfo.rebar_n = barInfo.rebar_n - barInfo.line;
+      rebar_n = rebar_n - barInfo.line;
     }
 
     /*/ 印刷用の変数に登録
@@ -1039,8 +1038,23 @@ export class SetBarService {
       cos = 1;
     }
 
-    return { rebar_dia: dia, mark, rebar_n, line, n, space, dsc, cos };
-  }
+    let ss = this.helper.toNumber(barInfo.rebar_ss);
+    if (ss === null) {
+      ss = 0;
+    }
+
+    return {
+      rebar_dia: dia, // 鉄筋径
+      mark,           // 異形鉄筋:D, 丸鋼：R
+      rebar_n,        // 全本数
+      n,              // 段数
+      dsc,            // 最外縁の鉄筋かぶり
+      line,           // 1列当たりの鉄筋本数
+      space,          // 1段目と2段目のアキ
+      rebar_ss: ss,   // 鉄筋間隔 
+      cos             // 角度補正係数 cosθ
+    }
+}
 
 
   

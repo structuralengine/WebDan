@@ -113,8 +113,10 @@ export class ResultDataService {
   }
 
   // 照査表における コンクリート強度情報を取得
-  public getFckString(PrintData: any): any {
+  public getFckString(safety: any): any {
     const result = {};
+
+    const PrintData: any = this.section.getSectionElastic(safety);
 
     if ('fck' in PrintData) {
       if (PrintData.rfck === 1) {

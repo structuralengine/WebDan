@@ -97,15 +97,19 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
       if (this.save.is3DPickUp()) {
         // 3次元ピックアップファイルの場合
         this.columnHeaders.push(
-          { title: "曲げ照査(y軸)", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
-          { title: "せん断照査(y軸)", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 },
-          { title: "曲げ照査(z軸)", align: "center", dataType: "bool", dataIndx: "isMzCalc", type: 'checkbox', sortable: false, width: 120 },
-          { title: "せん断照査(z軸)", align: "center", dataType: "bool", dataIndx: "isVzCalc", type: 'checkbox', sortable: false, width: 120 }
+          { title: '曲げ照査', align: 'center', colModel: [
+            { title: "y軸周り", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
+            { title: "z軸周り", align: "center", dataType: "bool", dataIndx: "isMzCalc", type: 'checkbox', sortable: false, width: 120 },
+          ]},
+          { title: 'せん断照査', align: 'center', colModel: [
+            { title: "y軸方向", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 },
+            { title: "z軸方向", align: "center", dataType: "bool", dataIndx: "isVzCalc", type: 'checkbox', sortable: false, width: 120 }
+          ]},
         );
       } else {
         // 2次元ピックアップファイルの場合
         this.columnHeaders.push(
-          { title: "曲げ照査", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
+          { title: "曲げ照査", align: "center", dataType: "bool", dataIndx: "isMzCalc", type: 'checkbox', sortable: false, width: 120 },
           { title: "せん断照査", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 }
         );
       }

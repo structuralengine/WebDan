@@ -16,6 +16,7 @@ export class ResultSafetyMomentComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public safetyMomentPages: any[];
+  private title = "安全性（破壊）曲げモーメントの照査結果";
 
   constructor(
     private http: HttpClient,
@@ -38,12 +39,12 @@ export class ResultSafetyMomentComponent implements OnInit {
     }
 
     // postする
+    console.log(this.title, postData);
     const inputJson: string = this.post.getInputJsonString(postData);
-    console.log(inputJson);
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(postData, response["OutputData"]);
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -58,9 +59,9 @@ export class ResultSafetyMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(postData: any, OutputData: any): boolean {
+  private setPages(OutputData: any): boolean {
     try {
-      this.safetyMomentPages = this.setSafetyPages(postData, OutputData);
+      this.safetyMomentPages = this.setSafetyPages(OutputData);
       return true;
     } catch (e) {
       this.err = e.toString();
@@ -69,18 +70,17 @@ export class ResultSafetyMomentComponent implements OnInit {
   }
 
   // 出力テーブル用の配列にセット
-  public setSafetyPages(postData: any, OutputData: any): any[] {
+  public setSafetyPages(OutputData: any): any[] {
     const result: any[] = new Array();
 
     let page: any;
-    const title = "安全性（破壊）曲げモーメントの照査結果";
 
     let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
       page = {
-        caption: title,
+        caption: this.title,
         g_name: groupeName,
         columns: new Array(),
       };
@@ -89,20 +89,17 @@ export class ResultSafetyMomentComponent implements OnInit {
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const post = postData.find(
-              (e) => e.index === position.index && e.side === side
-            );
             const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-            if (post === undefined || res === undefined) {
+            if (res === undefined) {
               continue;
             }
 
             if (page.columns.length > 4) {
               result.push(page);
               page = {
-                caption: title,
+                caption: this.title,
                 g_name: groupeName,
                 columns: new Array(),
               };
@@ -110,7 +107,7 @@ export class ResultSafetyMomentComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultColumn: any = this.calc.getResultValue(
-              post, res, member
+              res, res, member
             );
 
             const column: any[] = new Array();
@@ -120,7 +117,7 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Md', member, post);
+            const shapeString = this.result.getShapeString('Md', member, res);
             column.push(shapeString.B);
             column.push(shapeString.H);
             column.push(shapeString.Bt);
@@ -149,8 +146,8 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(fsk.rs);
             column.push(fsk.fsd);
             /////////////// 照査 ///////////////
-            column.push({ alien: 'right', value: Math.abs(post.Md).toFixed(1) });
-            column.push({ alien: 'right', value: post.Nd.toFixed(1) });
+            column.push({ alien: 'right', value: Math.abs(res.Md).toFixed(1) });
+            column.push({ alien: 'right', value: res.Nd.toFixed(1) });
             column.push({ alien: 'right', value: resultColumn.εcu.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.εs.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.x.toFixed(1) });

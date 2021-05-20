@@ -19,9 +19,7 @@ export class SetSectionService {
   // position: ハンチの情報
   // force: 荷重の情報
   // safety: 安全係数の情報
-  public getPostData( target: string, member: any,
-                      force: any, safety: any): any {
-
+  public getPostData( member: any, force: any, safety: any): any {
     let result: object;
 
     const shapeName = this.getShapeName(member, force.side );
@@ -33,13 +31,13 @@ export class SetSectionService {
         result = this.getRing(member);
         break;
       case 'Rectangle':         // 矩形
-        result = this.getRectangle(member, target, force.index);
+        result = this.getRectangle(member, force);
         break;
       case 'Tsection':          // T形
-        result = this.getTsection(member, target, force.index);
+        result = this.getTsection(member, force);
         break;
       case 'InvertedTsection':  // 逆T形
-        result = this.getInvertedTsection(member, target, force.index);
+        result = this.getInvertedTsection(member, force);
         break;
       case 'HorizontalOval':    // 水平方向小判形
         result = this.getHorizontalOval(member);
@@ -54,7 +52,7 @@ export class SetSectionService {
     result['shape'] = shapeName;
 
     // コンクリートの材料情報を集計
-    result['SectionElastic'] = this.setSectionElastic(safety);
+    result['SectionElastic'] = [this.getSectionElastic(safety)];
 
     return result;
   }
@@ -224,11 +222,12 @@ export class SetSectionService {
   }
 
   // T形断面の POST 用 データ作成
-  private getInvertedTsection(member: any, target: string, index: number): any {
-    const result = { symmetry: false, Sections: [] };
+  private getInvertedTsection(member: any, force: any): any {
 
+    const result = { symmetry: false, Sections: [] };
+    
     // 断面情報を集計
-    const shape = this.getShape('InvertedTsection', member, target, index);
+    const shape = this.getShape('InvertedTsection', member, force.target, force.index);
     const h: number = shape.H;
     const b: number =shape.B;
     const bf: number = shape.Bt;
@@ -254,11 +253,11 @@ export class SetSectionService {
   }
 
   // T形断面の POST 用 データ作成
-  private getTsection(member: any, target: string, index: number): any {
+  private getTsection(member: any, force: any): any {
     const result = { symmetry: false, Sections: [] };
 
     // 断面情報を集計
-    const shape = this.getShape('Tsection', member, target, index);
+    const shape = this.getShape('Tsection', member, force.target, force.index);
     const h: number = shape.H;
     const b: number =shape.B;
     const bf: number = shape.Bt;
@@ -284,12 +283,12 @@ export class SetSectionService {
   }
 
   // 矩形断面の POST 用 データ作成
-  private getRectangle(member: any, target: string, index: number): any {
+  private getRectangle(member: any, force: any): any {
 
-    const result = { symmetry: false, Sections: [] };
-
+    const result = { symmetry: true, Sections: [] };
+    
     // 断面情報を集計
-    const shape = this.getShape('Rectangle', member, target, index)
+    const shape = this.getShape('Rectangle', member, force.target, force.index)
     const h: number = shape.H;
     const b: number = shape.B;
 
@@ -386,22 +385,19 @@ export class SetSectionService {
   }
 
   // コンクリート強度の POST用データを返す
-  private setSectionElastic(safety: any): any[] {
+  public getSectionElastic(safety: any): any {
 
-    const result = [];
-
-    const fck = safety.material_concrete.fck;
+     const fck = safety.material_concrete.fck;
     const rc = safety.safety_factor.rc;
     const pile = safety.pile_factor.find(e=>e.selected===true);
     const rfck = (pile !== undefined) ? pile.rfck : 1;
     const rEc = (pile !== undefined) ? pile.rEc : 1;
     const Ec = this.getEc(fck);
-    const elastic = {
+    const result = {
       fck: rfck * fck / rc,     // コンクリート強度
       Ec: rEc * Ec,       // コンクリートの弾性係数
       ElasticID: 'c'      // 材料番号
     };
-    result.push(elastic);
 
     return result;
   }

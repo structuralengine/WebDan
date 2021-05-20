@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { DataHelperModule } from '../../providers/data-helper.module';
 import { InputDesignPointsService } from '../design-points/design-points.service';
 import { Observable, of } from 'rxjs';
+import { InputMembersService } from '../members/members.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +14,8 @@ export class InputBarsService {
 
   constructor(
     private helper: DataHelperModule,
-    private points: InputDesignPointsService) {
+    private points: InputDesignPointsService,
+    private members: InputMembersService) {
     this.clear();
   }
   public clear(): void {
@@ -187,54 +189,41 @@ export class InputBarsService {
 
     let result = null;
 
-    // グリッド用データの作成
-    for (const groupe of this.points.getGroupeList()) {
-      // 部材
-      let startFlg = false;
-      for (let im = groupe.length - 1; im >= 0; im--) {
-        const member = groupe[im];
-        // 着目点
-        for (let ip =  member.positions.length - 1; ip >= 0; ip--) {
-          const pos = member.positions[ip];
-          if(pos.index === index){
-            // 当該着目点以上の値を採用値とする
-            startFlg = true;
-          }
-          if(startFlg === false){
-            continue;
-          }
-          let endFlg = true;
-          // barデータに（部材、着目点など）足りない情報を追加する
-          const data: any = this.bar_list.find((v) => v.index === pos.index);
-          if(data === undefined){
-            continue;
-          }
-          if(result === null) {
-            // 当該入力行 の情報を入手
-            result = this.default(index);
-            for(const key of Object.keys(result)){
-              result[key] = data[key];
-            }
-          }
-          // 当該入力行より上の行
-          for(const key of ['rebar1', 'rebar2', 'sidebar', 'starrup', 'bend']){
-            const rebar = data[key];
-            const re = result[key];
-            for(const k of Object.keys(re)){
-              if(re[k] === null && k in rebar){
-                re[k] = this.helper.toNumber(rebar[k]);
-                endFlg = false; // まだ終わらない
-              }
-            }
-          }
-          if( endFlg === true){
-            // 全ての値に有効な数値(null以外)が格納されたら終了する
-            return result;
+    const positions = this.points.getSameGroupePoints(index);
+    const start = positions.findIndex(v=>v.index === index);
+
+    for (let ip = start; ip >= 0; ip--) {
+      const pos = positions[ip];
+      if(!this.points.isEnable(pos)){
+        continue; // 計算対象ではなければスキップ
+      }
+      // barデータに（部材、着目点など）足りない情報を追加する
+      const data: any = this.bar_list.find((v) => v.index === pos.index);
+      if(data === undefined){
+        continue;
+      }
+      if(result === null) {
+        // 当該入力行 の情報を入手
+        result = this.default(index);
+        for(const key of Object.keys(result)){
+          result[key] = data[key];
+        }
+      }
+      // 当該入力行より上の行
+      let endFlg = true;
+      for(const key of ['rebar1', 'rebar2', 'sidebar', 'starrup', 'bend']){
+        const rebar = data[key];
+        const re = result[key];
+        for(const k of Object.keys(re)){
+          if(re[k] === null && k in rebar){
+            re[k] = this.helper.toNumber(rebar[k]);
+            endFlg = false; // まだ終わらない
           }
         }
       }
-      if(startFlg === true){
-        return result;
+      if( endFlg === true){
+        // 全ての値に有効な数値(null以外)が格納されたら終了する
+        break;
       }
     }
     return result;

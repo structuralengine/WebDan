@@ -82,12 +82,12 @@ export class SetPostDataService {
           }
 
           // 断面形状
-          const section = this.section.getPostData(target, member, force, safety);
+          const section = this.section.getPostData(member, force, safety);
           data['Sections'] = section.Sections;
           data['SectionElastic'] = section.SectionElastic;
 
           // 鉄筋の本数
-          const steel = this.steel.getPostData(member, force, safety, section);
+          const steel = this.steel.getPostData(member, position.index, force.side, section.shape, safety);
           data['Steels'] = steel.Steels;
           data['SteelElastic'] = steel.SteelElastic;
 

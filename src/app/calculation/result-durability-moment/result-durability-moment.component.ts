@@ -39,8 +39,8 @@ export class ResultDurabilityMomentComponent implements OnInit {
     }
 
     // postする
+    console.log(this.title, postData);
     const inputJson: string = this.post.getInputJsonString(postData);
-    console.log(inputJson);
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {

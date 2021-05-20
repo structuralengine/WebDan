@@ -140,6 +140,21 @@ export class InputDesignPointsService {
 
   }
 
+  // 同じグループの着目点リストを取得する
+  public getSameGroupePoints(index: number): any[] {
+
+    const result = []
+
+    const target = this.getCalcData(index);
+    for(const m of this.members.getSameGroupeMembers(target.m_no)){
+      for(const p of this.position_list.filter(v=>v.m_no === m.m_no)){
+        result.push(p)
+      }
+  }
+
+    return result;
+  }
+
   public getGroupeName(i: number): string {
     return this.members.getGroupeName(i);
   }

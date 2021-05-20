@@ -19,7 +19,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public serviceabilityShearForcePages: any[];
-
+  private title = '耐久性 せん断ひび割れの照査結果';
   constructor(private http: HttpClient,
               private calc: CalcServiceabilityShearForceService,
               private base: ResultSafetyShearForceComponent,
@@ -40,6 +40,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     }
 
     // postする
+    console.log(this.title, postData);
     const inputJson: string = this.post.getInputJsonString(postData);
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
@@ -76,14 +77,13 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     const result: any[] = new Array();
 
     let page: any;
-    const title: string = '耐久性 せん断ひび割れの照査結果';
 
     let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
       page = {
-        caption: title,
+        caption: this.title,
         g_name: groupeName,
         columns: new Array(),
       };
@@ -117,7 +117,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             if (page.columns.length > 4) {
               result.push(page);
               page = { 
-                caption: title, 
+                caption: this.title, 
                 g_name: groupeName,
                 columns: new Array() 
               };
