@@ -17,6 +17,7 @@ export class CalcSafetyMomentService {
   // 安全性（破壊）曲げモーメント
   public DesignForceList: any[];
   public isEnable: boolean;
+  public safetyID: number = 2;
 
   constructor(
     private safety: InputSafetyFactorsMaterialStrengthsService,
@@ -55,13 +56,13 @@ export class CalcSafetyMomentService {
     }
 
     // POST 用
-    const postData = this.post.setInputData('Md', '耐力', 2, this.DesignForceList);
+    const postData = this.post.setInputData('Md', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
 
   public getResultValue(postData: any, resultData: any, member: any): any {
 
-    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, 2 );
+    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, this.safetyID );
  
     const Md: number = Math.abs(postData.Md);
     const Mu: number = resultData.M.Mi;

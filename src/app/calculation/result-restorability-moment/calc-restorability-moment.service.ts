@@ -15,6 +15,7 @@ export class CalcRestorabilityMomentService {
   // 復旧性（地震時以外）曲げモーメント
   public DesignForceList: any[];
   public isEnable: boolean;
+  public safetyID: number = 3;
 
   constructor(
     private safety: InputSafetyFactorsMaterialStrengthsService,
@@ -54,14 +55,14 @@ export class CalcRestorabilityMomentService {
     }
 
     // POST 用
-    const postData = this.post.setInputData('Md', '耐力', 3, this.DesignForceList);
+    const postData = this.post.setInputData('Md', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
 
 
   public getResultValue(postData: any, resultData: any, member: any): any {
 
-    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, 3 );
+    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, this.safetyID );
 
     const Md: number = Math.abs(postData.Md);
     const My: number = resultData.Y.Mi;

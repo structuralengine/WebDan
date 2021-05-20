@@ -114,18 +114,18 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             column.push(shapeString.B);
             column.push(shapeString.H);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(PrintData);
+            const Ast: any = this.result.getAsString(position.shape, member, position);
             column.push(Ast.tan);
-            column.push(Ast.As);
-            column.push(Ast.AsString);
+            column.push(Ast.Ast);
+            column.push(Ast.AstString);
             column.push(Ast.dst);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(PrintData);
+            const fck: any = this.result.getFckString(position);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋強度情報 ///////////////
-            const fsk: any = this.result.getFskString(PrintData);
+            const fsk: any = this.result.getFskString(position);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);

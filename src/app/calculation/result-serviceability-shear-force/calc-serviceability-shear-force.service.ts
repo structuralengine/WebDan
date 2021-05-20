@@ -18,6 +18,7 @@ export class CalcServiceabilityShearForceService {
   public DesignForceList1: any[]; // 永久荷重
   public DesignForceList2: any[]; // 変動荷重
   public isEnable: boolean;
+  public safetyID: number = 0;
 
   constructor(
     private basic: InputBasicInformationService,
@@ -73,7 +74,7 @@ export class CalcServiceabilityShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', 0, this.DesignForceList);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
 

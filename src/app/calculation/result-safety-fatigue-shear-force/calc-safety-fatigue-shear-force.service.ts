@@ -20,6 +20,7 @@ export class CalcSafetyFatigueShearForceService {
   public DesignForceList2: any[]; // 変動応力
   public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
+  public safetyID: number = 1;
 
   constructor(
     private save: SaveDataService,
@@ -136,7 +137,7 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', 1, this.DesignForceList);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
 

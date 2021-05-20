@@ -13,6 +13,7 @@ export class CalcEarthquakesShearForceService {
   // 復旧性（地震時）せん断力
   public DesignForceList: any[];
   public isEnable: boolean;
+  public safetyID: number = 4;
 
   constructor(
     private force: SetDesignForceService,
@@ -46,7 +47,7 @@ export class CalcEarthquakesShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', 4, this.DesignForceList);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
 

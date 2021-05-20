@@ -22,6 +22,7 @@ export class CalcSafetyFatigueMomentService {
   public DesignForceList2: any[]; // 変動応力
   public DesignForceList3: any[]; // 永久作用
   public isEnable: boolean;
+  public safetyID: number = 1;
 
   constructor(
     private save: SaveDataService,
@@ -144,7 +145,7 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', 1, this.DesignForceList, this.DesignForceList3);
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, this.DesignForceList, this.DesignForceList3);
     return postData;
   }
 

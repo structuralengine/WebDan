@@ -70,11 +70,11 @@ export class ResultDataService {
 
 
   // 照査表における 引張鉄筋情報を取得
-  public getAsString(PrintData: any, symbol: string = 'Ast'): any {
+  public getAsString(shapeName: string, member: any, position: any): any {
 
     const barInfo = this.steel.getAs(shapeName, member, position);
-
-
+    const result = {};
+/*
 
     if (symbol in PrintData === false) {
       return {
@@ -108,7 +108,7 @@ export class ResultDataService {
       AsString: { alien: 'right', value: PrintData[AsString] },
       ds: { alien: 'right', value: PrintData[ds].toFixed(1) }
     };
-
+*/
     return result;
   }
 

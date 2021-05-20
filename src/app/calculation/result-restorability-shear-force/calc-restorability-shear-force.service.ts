@@ -14,6 +14,7 @@ export class CalcRestorabilityShearForceService {
   // 復旧性（地震時以外）せん断力
   public DesignForceList: any[];
   public isEnable: boolean;
+  public safetyID: number = 3;
 
   constructor(private basic: InputBasicInformationService,
               private calc: InputCalclationPrintService,
@@ -49,7 +50,7 @@ export class CalcRestorabilityShearForceService {
     }
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', 3, this.DesignForceList);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
 

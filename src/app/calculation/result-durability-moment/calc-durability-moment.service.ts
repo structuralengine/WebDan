@@ -15,6 +15,7 @@ export class CalcDurabilityMomentService {
   public DesignForceList1: any[];
 
   public isEnable: boolean;
+  public safetyID: number = 0;
 
   constructor(
     private crack: InputCrackSettingsService,
@@ -83,7 +84,7 @@ export class CalcDurabilityMomentService {
     }
 
     // POST 用
-    const postData = this.post.setInputData("Md", "応力度", 0,  this.DesignForceList, this.DesignForceList1);
+    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  this.DesignForceList, this.DesignForceList1);
     return postData;
   }
 }
