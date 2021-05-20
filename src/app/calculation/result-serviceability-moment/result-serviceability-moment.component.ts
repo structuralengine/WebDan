@@ -151,27 +151,25 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push(shapeString.Bt);
             column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(PrintData);
-            column.push(Ast.As);
-            column.push(Ast.AsString);
-            column.push(Ast.ds);
+            const Ast: any = this.result.getAsString(position.shape, member, position);
+            column.push(Ast.Ast);
+            column.push(Ast.AstString);
+            column.push(Ast.dst);
             /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(PrintData, 'Asc');
-            column.push(Asc.As);
-            column.push(Asc.AsString);
-            column.push(Asc.ds);
+            column.push(Ast.Asc);
+            column.push(Ast.AscString);
+            column.push(Ast.dsc);
             /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(PrintData, 'Ase');
-            column.push(Ase.As);
-            column.push(Ase.AsString);
-            column.push(Ase.ds);
+            column.push(Ast.Ase);
+            column.push(Ast.AseString);
+            column.push(Ast.dse);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(PrintData);
+            const fck: any = this.result.getFckString(position);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(PrintData);
+            const fsk: any = this.result.getFskString(position);
             column.push(fsk.fsy);
             column.push(fsk.rs);
             column.push(fsk.fsd);
