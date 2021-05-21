@@ -76,7 +76,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
   // 出力テーブル用の配列にセット
   public setRestorabilityPages( OutputData: any,
                                 title: string = '復旧性（地震時以外）曲げモーメントの照査結果',
-                                DesignForceList: any = null,
+                                DesignForceList: any = this.calc.DesignForceList,
                                 safetyID = this.calc.safetyID ): any[] {
     const result: any[] = new Array();
     let page: any;
@@ -106,7 +106,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             }
 
             const resultColumn: any = this.calc.getResultValue(
-              res, member, DesignForceList
+              res, safety, DesignForceList
             );
 
             if (page.columns.length > 4) {

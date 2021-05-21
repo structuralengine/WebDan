@@ -66,7 +66,6 @@ export class CalcSafetyMomentService {
 
   public getResultValue(res: any, safety: any): any {
 
-
     const force = this.DesignForceList.find(v => v.index === res.index)
                       .designForce.find(v => v.side === res.side)
 

@@ -64,13 +64,13 @@ export class CalcRestorabilityMomentService {
   }
 
 
-  public getResultValue(resultData: any, member: any, DesignForceList: any): any {
+  public getResultValue(res: any, safety: any, DesignForceList: any): any {
 
-    DesignForceList = (DesignForceList===null) ? this.DesignForceList : DesignForceList;
-    const force = DesignForceList.find(v => v.index === resultData.index)
-                      .designForce.find(v => v.side === resultData.side)
+    const force = DesignForceList.find(v => v.index === res.index)
+                      .designForce.find(v => v.side === res.side)
 
-    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, this.safetyID );
+    const resultData = res.Reactions[0];
+    const safety_factor = safety.safety_factor;
 
     const Md: number = Math.abs(force.Md);
     const My: number = resultData.Y.Mi;

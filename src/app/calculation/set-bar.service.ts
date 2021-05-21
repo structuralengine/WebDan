@@ -162,7 +162,7 @@ export class SetBarService {
     const h: number = this.helper.toNumber(member.H);
     const b: number = this.helper.toNumber(member.B);
 
-    const barInfo = this.getAs("VerticalOval", index, "小判");
+    const barInfo = this.getAs("VerticalOval", index, "小判", h);
     const tension: any = barInfo.tension;
     const compres: any = barInfo.compres;
     const sideBar = barInfo.sidebar;
@@ -568,9 +568,10 @@ export class SetBarService {
       Steels: new Array(),
       SteelElastic: new Array(),
     };
-    const barInfo = this.getAs("Rectangle", index, side);
 
     const height: number = member.H;
+    const barInfo = this.getAs("Rectangle", index, side, height);
+
     let tension: any = barInfo.tension;
     let compres: any = barInfo.compres;
 
@@ -647,17 +648,9 @@ export class SetBarService {
           height
         );
       } else {
-        const tensionBarDepth = tensionBarList[tensionBarList.length - 1].Depth;
-        const compresBarDepth =
-          compresBarList.length > 0
-            ? compresBarList[compresBarList.length - 1].Depth
-            : 0;
         sideBar = this.getSideBar(
           barInfo.sidebar,
-          safety,
-          height,
-          tensionBarDepth,
-          compresBarDepth
+          safety
         );
       }
       sideBarList = sideBar.Steels;
@@ -854,17 +847,18 @@ export class SetBarService {
   // 矩形。Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数
   private getSideBar(
     barInfo: any,
-    safety: any,
-    height: number,
-    dst: number,
-    dsc: number
+    safety: any
   ): any {
 
     const result = {
       Steels: new Array(),
       SteelElastic: new Array(),
     };
-
+    
+    if (barInfo === null) {
+      return result; // 側方鉄筋の入力が無い場合
+    }
+/*
     // 鉄筋径の入力が ない場合は スキップ
     if (barInfo.side_dia === null) {
       return result;
@@ -889,25 +883,13 @@ export class SetBarService {
 
     // 1段当りの本数
     const line = 2;
-
-    /*/ 鉄筋強度
-    let fsy: number;
-    let ElasticID: string;
-    if (barInfo.side_dia < materialInfo[0].separate) {
-      fsy = this.helper.toNumber(materialInfo[0].sidebar.fsy);
-      ElasticID = 's1';
-    } else {
-      fsy = this.helper.toNumber(materialInfo[1].sidebar.fsy);
-      ElasticID = 's2';
-    }
-    if (fsy === null) {
-      return result;
-    }
 */
+
+    // 鉄筋強度
     const fsy1 = this.getFsyk(
-      barInfo.rebar_dia,
+      barInfo.side_dia,
       safety.material_bar,
-      "tensionBar"
+      "sidebar"
     );
     const id = "s" + fsy1.id;
 
@@ -919,11 +901,11 @@ export class SetBarService {
     }
 
     // 鉄筋情報を登録
-    for (let i = 0; i < n; i++) {
+    for (let i = 0; i < barInfo.n; i++) {
       const Steel1 = {
-        Depth: dse + i * space,
+        Depth: barInfo.dse + i * barInfo.space,
         i: dia,
-        n: line,
+        n: barInfo.line,
         IsTensionBar: false,
         ElasticID: id,
       };
@@ -954,7 +936,7 @@ export class SetBarService {
   }
 
   // 軸方向鉄筋の情報を返す
-  public getAs(shapeName: string, index: number, side: string): any {
+  public getAs(shapeName: string, index: number, side: string, height: number = null): any {
     let result = {};
 
     const bar = this.bars.getCalcData(index);
@@ -964,7 +946,7 @@ export class SetBarService {
     switch (shapeName) {
       case "Circle": // 円形
       case "Ring": // 円環
-        tension = this.getRebar(bar.rebar1);
+        tension = this.getRebarInfo(bar.rebar1);
         result = { tension };
         break;
 
@@ -976,16 +958,17 @@ export class SetBarService {
         switch (side) {
           case "上側引張":
           case "小判":
-            tension = this.getRebar(bar.rebar1);
-            compres = this.getRebar(bar.rebar2);
+            tension = this.getRebarInfo(bar.rebar1);
+            compres = this.getRebarInfo(bar.rebar2);
             break;
           case "下側引張":
-            tension = this.getRebar(bar.rebar2);
-            compres = this.getRebar(bar.rebar1);
+            tension = this.getRebarInfo(bar.rebar2);
+            compres = this.getRebarInfo(bar.rebar1);
             break;
         }
+        const sidebar = this.getSideInfo(bar.sidebar, tension.dsc, compres.dsc, height);
 
-        result = { tension, compres, sidebar: bar.sidebar };
+        result = { tension, compres, sidebar };
         break;
 
       default:
@@ -996,12 +979,12 @@ export class SetBarService {
   }
 
   // 圧縮・引張主鉄筋の情報を返す
-  private getRebar(barInfo: any): any {
+  private getRebarInfo(barInfo: any): any {
     // 鉄筋径
-    let dia = Math.abs(barInfo.rebar_dia);
-    if (this.helper.toNumber(dia) === null) {
+    if (this.helper.toNumber(barInfo.rebar_dia) === null) {
       return null;
     }
+    const dia = Math.abs(barInfo.rebar_dia);
 
     // 異形鉄筋:D, 丸鋼: R
     const mark = barInfo.rebar_dia > 0 ? "D" : "R";
@@ -1056,11 +1039,51 @@ export class SetBarService {
     }
   }
 
+  private getSideInfo(barInfo: any, dst: number, dsc: number, height: number){
+    
+    if(height===null){
+      return null; // 円形など側鉄筋を用いない形状はスキップ
+    }
 
+    // 鉄筋径の入力が ない場合は スキップ
+    if (barInfo.side_dia === null) {
+      return null;
+    }
+    const dia = Math.abs(barInfo.side_dia);
 
+    // 異形鉄筋:D, 丸鋼: R
+    const mark = barInfo.rebar_dia > 0 ? "D" : "R";
 
+    // 鉄筋段数
+    const n = barInfo.side_n;
+    if (n === 0) {
+      return null; // 鉄筋段数の入力が 0 の場合は スキップ
+    }
 
+    // 鉄筋間隔
+    let space = barInfo.side_ss;
+    if (this.helper.toNumber(space) === null) {
+      space = (height - dst - dsc) / (n + 1);
+    }
 
+    // 鉄筋かぶり
+    let dse = barInfo.side_cover;
+    if (this.helper.toNumber(dse) === null) {
+      dse = dsc + space;
+    }
+
+    // 1段当りの本数
+    const line = 2;
+
+    return {
+      mark,
+      side_dia: dia,
+      n,
+      space,
+      dse,
+      line
+    }
+  }
 
   // せん断補強鉄筋量の情報を返す
   public getAw(shapeName: string, index: number, side: string): any {

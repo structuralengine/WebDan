@@ -109,7 +109,7 @@ export class ResultDataService {
 
 
     /////////////// 圧縮鉄筋 ///////////////
-    if (safety.safety_factor.range >= 2) {
+    if (safety.safety_factor.range >= 2 && bar.compres != null) {
       const fsyc = this.steel.getFsyk(bar.compres.rebar_dia, safety.material_bar);
       if (fsyc.fsy === 235) {
         bar.compres.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
@@ -127,22 +127,23 @@ export class ResultDataService {
     }
 
     /////////////// 側面鉄筋 ///////////////
-    if (safety.safety_factor.range >= 3) {
-      const fsye = this.steel.getFsyk(bar.sidebar.rebar_dia, safety.material_bar, "sidebar");
-      if (fsye.fsy === 235) {
-        bar.sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
-      }
-      const marke = (bar.sidebar.mark === "R") ? 'φ' : 'D';
-      const Ase = marke + bar.sidebar.rebar_dia;
-      const Asex: number = this.helper.getAs(Ase) * bar.sidebar.rebar_n;
-      const dsex: number = this.steel.getBarCenterPosition(
-        bar.sidebar.dsc, bar.sidebar.rebar_n, bar.sidebar.line,
-        bar.sidebar.space, bar.sidebar.cos);
-
-      result['Ase'] = Asex.toFixed(2);
-      result['AseString'] = Ase + '-' + bar.sidebar.rebar_n + '段';
-      result['dse'] = (Number.isInteger(dsex)) ? dsex.toFixed(0) : dsex.toFixed(2);
-    }
+    if (safety.safety_factor.range >= 3 && bar.sidebar != null) {
+        const dia = Math.abs(bar.sidebar.side_dia);
+        const fsye = this.steel.getFsyk(dia, safety.material_bar, "sidebar");
+        let marke = 'D';
+        if (fsye.fsy === 235 || bar.sidebar.side_dia < 0) {
+          marke = 'φ'; // 鉄筋強度が 235 なら 丸鋼
+        }
+        const Ase = marke + bar.sidebar.side_dia;
+        const Asex: number = this.helper.getAs(Ase) * bar.sidebar.side_n;
+        const dsex: number = this.steel.getBarCenterPosition(
+          bar.sidebar.dsc, bar.sidebar.side_n, bar.sidebar.line,
+          bar.sidebar.space, bar.sidebar.cos);
+  
+        result['Ase'] = Asex.toFixed(2);
+        result['AseString'] = Ase + '-' + bar.sidebar.side_n + '段';
+        result['dse'] = (Number.isInteger(dsex)) ? dsex.toFixed(0) : dsex.toFixed(2);
+}
 
     for (const key of Object.keys(result)) {
       if (result[key] === null) {
