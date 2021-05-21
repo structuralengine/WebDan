@@ -268,7 +268,7 @@ export class SetDesignForceService {
   // 複数の断面力表について、
   // 基本の断面力に無いものは削除する,
   // 基本にあってtargetにないものは断面力0値を追加する
-  public alignMultipleLists(...DesignForceListList: any[]) {
+  public alignMultipleLists(...DesignForceListList: any): any {
     const force0: any[] = DesignForceListList[0];
 
     for (let i = 1; i < DesignForceListList.length; i++) {
@@ -306,6 +306,7 @@ export class SetDesignForceService {
       }
       DesignForceListList[i] = force2;
     }
+    return DesignForceListList;
   }
 
   // 設計断面力（リスト）を生成する

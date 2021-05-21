@@ -78,7 +78,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
     let page: any;
 
-    let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       
@@ -98,7 +97,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             const res = OutputData.filter(
               (e) => e.index === position.index && e.side === side
             );
-            if (res === undefined) {
+            if (res === undefined || res.length < 1) {
               continue;
             }
 
@@ -186,7 +185,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             column.push(resultColumn.Result);
 
             page.columns.push(column);
-            i++;
           }
         }
       }

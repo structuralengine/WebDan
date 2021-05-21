@@ -81,7 +81,6 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     const result: any[] = new Array();
     let page: any;
 
-    let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
 
@@ -101,7 +100,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-            if (res === undefined) {
+            if (res === undefined || res.length < 1) {
               continue;
             }
 
@@ -165,7 +164,6 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             column.push({ alien: 'center', value: resultColumn.result });
 
             page.columns.push(column);
-            i++;
           }
         }
       }

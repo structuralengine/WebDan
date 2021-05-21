@@ -89,7 +89,6 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     const responseMin = OutputData.slice(-2); // エラー回避仮コード
     //仮END
 
-    let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
 
@@ -110,7 +109,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             const res = OutputData.filter(
               (e) => e.index === position.index && e.side === side
             );
-            if (res === undefined) {
+            if (res === undefined || res.length < 1) {
               continue;
             }
 
@@ -197,7 +196,6 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             column.push(resultColumn.result);
 
             page.columns.push(column);
-            i++;
           }
         }
       }

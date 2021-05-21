@@ -53,9 +53,6 @@ export class CalcServiceabilityMomentService {
     // 縁応力度検討用
     this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
-    // 複数の断面力の整合性を確認する
-    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
-
   }
 
   // サーバー POST用データを生成する
@@ -65,8 +62,11 @@ export class CalcServiceabilityMomentService {
       return null;
     }
 
+    // 複数の断面力の整合性を確認する
+    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
+
     // POST 用
-    const postData = this.post.setInputData('Md', '応力度', this.safetyID, this.DesignForceList, this.DesignForceList1);
+    const postData = this.post.setInputData('Md', '応力度', this.safetyID, force[0], force[1]);
     return postData;
   }
 

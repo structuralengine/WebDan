@@ -45,9 +45,6 @@ export class CalcDurabilityMomentService {
     this.DesignForceList1 = this.force.getDesignForceList(
       "Md", this.basic.pickup_moment_no(0));
 
-    // 複数の断面力の整合性を確認する
-    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
-
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition();
   }
@@ -83,8 +80,11 @@ export class CalcDurabilityMomentService {
       return null;
     }
 
+    // 複数の断面力の整合性を確認する
+    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
+
     // POST 用
-    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  this.DesignForceList, this.DesignForceList1);
+    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  force[0], force[1]);
     return postData;
   }
 }

@@ -82,9 +82,6 @@ export class CalcSafetyFatigueMomentService {
     // 永久+変動作用
     this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(4));
 
-    // 複数の断面力の整合性を確認する
-    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1, this.DesignForceList3);
-
     // 変動応力
     this.DesignForceList2 = this.force.getLiveload(this.DesignForceList3, this.DesignForceList);
 
@@ -147,8 +144,11 @@ export class CalcSafetyFatigueMomentService {
       return null;
     }
 
+    // 複数の断面力の整合性を確認する
+    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList3);
+
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, this.DesignForceList, this.DesignForceList3);
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force[0], force[1]);
     return postData;
   }
 

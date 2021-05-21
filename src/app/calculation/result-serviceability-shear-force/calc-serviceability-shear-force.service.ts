@@ -55,17 +55,11 @@ export class CalcServiceabilityShearForceService {
     // 永久荷重
     this.DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
 
-    // DesignForceList と DesignForceList1 の断面力の整合性を確認する
-    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
-
     // 変動荷重
     this.DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
     if (this.DesignForceList2.length < 1){
       this.DesignForceList2 = this.force.getLiveload(this.DesignForceList , this.DesignForceList1);
     }
-
-    // DesignForceList と DesignForceList2 の断面力の整合性を確認する
-    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList2);
 
   }
 

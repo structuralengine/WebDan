@@ -83,10 +83,7 @@ export class CalcSafetyFatigueShearForceService {
     // 最大応力
     this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(4));
 
-    // 複数の断面力の整合性を確認する
-    this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList3);
-
-    // 変動応力
+     // 変動応力
     this.DesignForceList2 = this.force.getLiveload(this.DesignForceList3, this.DesignForceList);
 
     // 有効な入力行以外は削除する
