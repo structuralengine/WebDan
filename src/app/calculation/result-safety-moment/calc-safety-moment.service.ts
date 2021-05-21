@@ -25,7 +25,7 @@ export class CalcSafetyMomentService {
     private post: SetPostDataService,
     private basic: InputBasicInformationService,
     private calc: InputCalclationPrintService) {
-      
+
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -51,7 +51,7 @@ export class CalcSafetyMomentService {
   // サーバー POST用データを生成する
   public setInputData(): any {
 
-    if (this.DesignForceList.length < 1 ) {
+    if (this.DesignForceList.length < 1) {
       return null;
     }
 
@@ -60,11 +60,20 @@ export class CalcSafetyMomentService {
     return postData;
   }
 
-  public getResultValue(postData: any, resultData: any, member: any): any {
+  public getSafetyFactor(g_id: string){
+    return this.safety.getCalcData('Md', g_id, this.safetyID).safety_factor;
+  }
 
-    const safety_factor = this.safety.getCalcData( 'Md', member.g_id, this.safetyID );
- 
-    const Md: number = Math.abs(postData.Md);
+  public getResultValue(res: any, safety: any): any {
+
+
+    const force = this.DesignForceList.find(v => v.index === res.index)
+                      .designForce.find(v => v.side === res.side)
+
+    const resultData = res.Reactions[0];
+    const safety_factor = safety.safety_factor;
+
+    const Md: number = Math.abs(force.Md);
     const Mu: number = resultData.M.Mi;
     const rb: number = safety_factor.rb;
     const Mud: number = Mu / rb;
@@ -73,6 +82,8 @@ export class CalcSafetyMomentService {
     const result: string = (ratio < 1) ? 'OK' : 'NG';
 
     return {
+      Md,
+      Nd: force.Nd,
       εcu: resultData.M.εc,
       εs: resultData.M.εs,
       x: resultData.M.x,

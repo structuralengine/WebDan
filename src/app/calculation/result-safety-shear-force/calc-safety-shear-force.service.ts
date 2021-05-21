@@ -68,15 +68,20 @@ export class CalcSafetyShearForceService {
 
 
   // 変数の整理と計算
-  public calcVmu(PrintData: any, resultData: any, position: any): any {
+  public calcVmu( resultData: any, position: any, DesignForceList: any): any {
+
+    DesignForceList= (DesignForceList===null) ? this.DesignForceList : DesignForceList;
+    
+    const force = this.DesignForceList.find(v => v.index === resultData.index)
+                          .designForce.find(v => v.side === resultData.side)
 
     const result: any = {}; // 印刷用
     const source: any = {}; // 計算用
 
     // 断面力
-    let Md: number = this.helper.toNumber(PrintData.Md);
-    let Nd: number = this.helper.toNumber(PrintData.Nd);
-    let Vd: number = Math.abs(this.helper.toNumber(PrintData.Vd));
+    let Md: number = this.helper.toNumber(force.Md);
+    let Nd: number = this.helper.toNumber(force.Nd);
+    let Vd: number = Math.abs(this.helper.toNumber(force.Vd));
     if (Md === null) { Md = 0; }
     Md = Math.abs(Md);
     result['Md'] = Md;
@@ -91,16 +96,16 @@ export class CalcSafetyShearForceService {
 
     // 換算断面
     let h: number = 0;
-    if ('Vyd_H' in PrintData) {
-      h = this.helper.toNumber(PrintData.Vyd_H);
+    if ('Vyd_H' in resultData) {
+      h = this.helper.toNumber(resultData.Vyd_H);
       if (h === null) { return result; }
     }
     result['H'] = h;
     source['H'] = h; // 換算高
 
     let bw: number = 0;
-    if ('Vyd_B' in PrintData) {
-      bw = this.helper.toNumber(PrintData.Vyd_B);
+    if ('Vyd_B' in resultData) {
+      bw = this.helper.toNumber(resultData.Vyd_B);
       if (bw === null) { return result; }
     }
     result['B'] = bw;
@@ -108,25 +113,25 @@ export class CalcSafetyShearForceService {
 
     // 引張鉄筋
     let Ast: number = 0;
-    if ('Vyd_Ast' in PrintData) {
-      Ast = this.helper.toNumber(PrintData.Vyd_Ast);
+    if ('Vyd_Ast' in resultData) {
+      Ast = this.helper.toNumber(resultData.Vyd_Ast);
       if (Ast === null) { Ast = 0; }
-    } else if ('Ast' in PrintData) {
-      Ast = this.helper.toNumber(PrintData.Ast);
+    } else if ('Ast' in resultData) {
+      Ast = this.helper.toNumber(resultData.Ast);
       if (Ast === null) { Ast = 0; }
     }
     result['Ast'] = Ast;
 
-    if ('Vyd_AstString' in PrintData) {
-      result['AstString'] = PrintData.Vyd_AstString;
+    if ('Vyd_AstString' in resultData) {
+      result['AstString'] = resultData.Vyd_AstString;
     } else  {
-      result['AstString'] = PrintData.AstString;
+      result['AstString'] = resultData.AstString;
     }
 
     // 有効高さ
     let d: number = 0;
-    if ('Vyd_d' in PrintData) {
-      d = this.helper.toNumber(PrintData.Vyd_d);
+    if ('Vyd_d' in resultData) {
+      d = this.helper.toNumber(resultData.Vyd_d);
       if (d === null) { d = h; }
     }
     result['d'] = d;
@@ -134,8 +139,8 @@ export class CalcSafetyShearForceService {
 
     // 引張鉄筋比
     let pc: number = 0;
-    if ('Vyd_pc' in PrintData) {
-      pc = this.helper.toNumber(PrintData.Vyd_pc);
+    if ('Vyd_pc' in resultData) {
+      pc = this.helper.toNumber(resultData.Vyd_pc);
       if (pc === null) { d = 0; }
     }
     source['pc'] = pc;
@@ -174,21 +179,21 @@ export class CalcSafetyShearForceService {
 
     // 帯鉄筋
     let Aw: number = 0;
-    if ('Aw' in PrintData) {
-      Aw = this.helper.toNumber(PrintData.Aw);
+    if ('Aw' in resultData) {
+      Aw = this.helper.toNumber(resultData.Aw);
       if (Aw === null) {
         Aw = 0;
       } else {
         result['Aw'] = Aw;
-        result['AwString'] = PrintData.AwString;
-        result['fwyd'] = PrintData.fwyd;
+        result['AwString'] = resultData.AwString;
+        result['fwyd'] = resultData.fwyd;
       }
     }
     source['Aw'] = Aw;
 
     let fwyd: number = 0;
-    if ('fwyd' in PrintData) {
-      fwyd = this.helper.toNumber(PrintData.fwyd);
+    if ('fwyd' in resultData) {
+      fwyd = this.helper.toNumber(resultData.fwyd);
       if (fwyd === null) {
         fwyd = 0;
       } else {
@@ -198,8 +203,8 @@ export class CalcSafetyShearForceService {
     source['fwyd'] = fwyd;
 
     let deg: number = 90;
-    if ('deg' in PrintData) {
-      deg = this.helper.toNumber(PrintData.deg);
+    if ('deg' in resultData) {
+      deg = this.helper.toNumber(resultData.deg);
       if (deg === null) {
         deg = 90;
       } else {
@@ -209,8 +214,8 @@ export class CalcSafetyShearForceService {
     source['deg'] = deg;
 
     let Ss: number = Number.MAX_VALUE;
-    if ('Ss' in PrintData) {
-      Ss = this.helper.toNumber(PrintData.Ss);
+    if ('Ss' in resultData) {
+      Ss = this.helper.toNumber(resultData.Ss);
       if (Ss === null) {
         Ss = Number.MAX_VALUE;
       } else {
@@ -221,8 +226,8 @@ export class CalcSafetyShearForceService {
 
     // コンクリート材料
     let fck: number = 0;
-    if ('fck' in PrintData) {
-      fck = this.helper.toNumber(PrintData.fck);
+    if ('fck' in resultData) {
+      fck = this.helper.toNumber(resultData.fck);
       if (fck === null) { return result; }
     }
     result['fck'] = fck;
@@ -230,22 +235,22 @@ export class CalcSafetyShearForceService {
 
     // 杭の施工条件による計数
     let rfck: number = 1;
-    if ('rfck' in PrintData) {
-      rfck = this.helper.toNumber(PrintData.rfck);
+    if ('rfck' in resultData) {
+      rfck = this.helper.toNumber(resultData.rfck);
       if (rfck === null) { rfck = 1; }
     }
 
     let rVcd: number = 1;
-    if ('rVcd' in PrintData) {
-      rVcd = this.helper.toNumber(PrintData.rVcd);
+    if ('rVcd' in resultData) {
+      rVcd = this.helper.toNumber(resultData.rVcd);
       if (rVcd === null) { rVcd = 1; }
     }
     source['rVcd'] = rVcd;
 
 
     let rc: number = 0;
-    if ('rc' in PrintData) {
-      rc = this.helper.toNumber(PrintData.rc);
+    if ('rc' in resultData) {
+      rc = this.helper.toNumber(resultData.rc);
       if (rc === null) { rc = 1; }
     }
     result['rc'] = rc;
@@ -256,16 +261,16 @@ export class CalcSafetyShearForceService {
 
     // 鉄筋材料
     let fsy: number = 0;
-    if ('fsy' in PrintData) {
-      fsy = this.helper.toNumber(PrintData.fsy);
+    if ('fsy' in resultData) {
+      fsy = this.helper.toNumber(resultData.fsy);
       if (fsy === null) { return result; }
     }
     result['fsy'] = fsy;
     source['fsy'] = fsy;
 
     let rs: number = 0;
-    if ('rs' in PrintData) {
-      rs = this.helper.toNumber(PrintData.rs);
+    if ('rs' in resultData) {
+      rs = this.helper.toNumber(resultData.rs);
       if (rs === null) { rs = 1; }
     }
     result['rs'] = rs;
@@ -282,16 +287,16 @@ export class CalcSafetyShearForceService {
     // せん断耐力の照査
     let rbc: number = 1;
     if (La / d >= 2) {
-      if ('rbc' in PrintData) {
-        rbc = this.helper.toNumber(PrintData.rbc);
+      if ('rbc' in resultData) {
+        rbc = this.helper.toNumber(resultData.rbc);
         if (rbc === null) { rbc = 1; }
       }
       result['rbc'] = rbc;
       source['rbc'] = rbc;
 
       let rbs: number = 1;
-      if ('rbs' in PrintData) {
-        rbs = this.helper.toNumber(PrintData.rbs);
+      if ('rbs' in resultData) {
+        rbs = this.helper.toNumber(resultData.rbs);
         if (rbs === null) { rbs = 1; }
       }
       result['rbs'] = rbs;
@@ -302,8 +307,8 @@ export class CalcSafetyShearForceService {
         result[key] = Vyd[key];
       }
     } else {
-      if ('rbd' in PrintData) {
-        rbc = this.helper.toNumber(PrintData.rbd);
+      if ('rbd' in resultData) {
+        rbc = this.helper.toNumber(resultData.rbd);
         if (rbc === null) { rbc = 1; }
       }
       result['rbc'] = rbc;
@@ -320,8 +325,8 @@ export class CalcSafetyShearForceService {
     }
 
     let ri: number = 0;
-    if ('ri' in PrintData) {
-      ri = this.helper.toNumber(PrintData.ri);
+    if ('ri' in resultData) {
+      ri = this.helper.toNumber(resultData.ri);
       if (ri === null) { ri = 1; }
     }
     result['ri'] = ri;

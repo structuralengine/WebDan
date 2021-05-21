@@ -61,6 +61,7 @@ export class ResultSafetyMomentComponent implements OnInit {
   // 計算結果を集計する
   private setPages(OutputData: any): boolean {
     try {
+      
       this.safetyMomentPages = this.setSafetyPages(OutputData);
       return true;
     } catch (e) {
@@ -79,13 +80,20 @@ export class ResultSafetyMomentComponent implements OnInit {
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
+
+      if(groupe[ig].length === 0){
+        continue;
+      }
+
       page = {
         caption: this.title,
         g_name: groupeName,
         columns: new Array(),
       };
 
-      for (const member of groupe[ig]) {0
+      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
+
+      for (const member of groupe[ig]) {
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
@@ -107,7 +115,7 @@ export class ResultSafetyMomentComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultColumn: any = this.calc.getResultValue(
-              res, res, member
+              res, safety
             );
 
             const column: any[] = new Array();
@@ -123,7 +131,7 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(shapeString.Bt);
             column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(position.shape, member, position);
+            const Ast: any = this.result.getAsString('Md',shapeString.shape, res, safety);
             column.push(Ast.Ast);
             column.push(Ast.AstString);
             column.push(Ast.dst);
@@ -146,8 +154,8 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(fsk.rs);
             column.push(fsk.fsd);
             /////////////// 照査 ///////////////
-            column.push({ alien: 'right', value: Math.abs(res.Md).toFixed(1) });
-            column.push({ alien: 'right', value: res.Nd.toFixed(1) });
+            column.push({ alien: 'right', value: resultColumn.Md.toFixed(1) });
+            column.push({ alien: 'right', value: resultColumn.Nd.toFixed(1) });
             column.push({ alien: 'right', value: resultColumn.εcu.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.εs.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.x.toFixed(1) });

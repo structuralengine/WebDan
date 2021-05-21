@@ -149,7 +149,16 @@ export class CalcSafetyFatigueMomentService {
     return postData;
   }
 
-  public getResultValue(PrintData: any, postdata0: any, postdata1: any, position: any, responseMin: any, responseMax: any): any {
+  public getResultValue( position: any, res: any): any {
+
+    // 仮    
+    const PrintData: any = {};
+
+    const postdata0: any = {}; // 最小応力
+    const postdata1: any = {}; // 変動応力
+    // 応力度
+    let responseMin: any = res[0];
+    let responseMax: any = res[1];
 
     const result: any = {};
 

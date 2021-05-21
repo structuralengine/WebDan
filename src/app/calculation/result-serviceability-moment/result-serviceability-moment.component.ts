@@ -46,7 +46,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(postData, response["OutputData"]);
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -62,9 +62,9 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(postData: any, OutputData: any): boolean {
+  private setPages(OutputData: any): boolean {
     try {
-      this.serviceabilityMomentPages = this.setServiceabilityPages(postData, OutputData);
+      this.serviceabilityMomentPages = this.setServiceabilityPages(OutputData);
       return true;
     } catch(e) {
       this.err = e.toString();
@@ -74,8 +74,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
 
   // 出力テーブル用の配列にセット
-  public setServiceabilityPages(postData: any, OutputData: any,
-                                title: string = null): any[] {
+  public setServiceabilityPages(OutputData: any,
+                                title: string = null ): any[] {
     const result: any[] = new Array();
 
     let isDurability = true;                              
@@ -100,24 +100,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const post = postData.filter(
-              (e) => e.index === position.index && e.side === side
-            );
             const res = OutputData.filter(
               (e) => e.index === position.index && e.side === side
             );
-            if (post === undefined || res === undefined) {
+            if (res === undefined) {
               continue;
             }
-
-            // 永久荷重
-            const postdata0 = post[0];
-
-            // 縁応力検討用荷重
-            const postdata1 = post[1];
-
-            // 応力度
-            const resultData = res[0];
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -131,12 +119,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultColumn: any = this.getResultString(
-              this.calc.calcWd(
-                null, 
-                postdata0, 
-                postdata1, 
-                position, 
-                resultData, isDurability)
+              this.calc.calcWd( res, position, isDurability)
             );
 
             const column: any[] = new Array();
@@ -146,7 +129,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Md', member, post);
+            const shapeString = this.result.getShapeString('Md', member, res);
             column.push(shapeString.B);
             column.push(shapeString.H);
             column.push(shapeString.Bt);

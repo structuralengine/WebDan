@@ -51,7 +51,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(postData, response["OutputData"]);
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -66,9 +66,9 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(postData: any, OutputData: any): boolean {
+  private setPages(OutputData: any): boolean {
     try {
-      this.safetyFatigueMomentPages = this.setSafetyFatiguePages(postData, OutputData);
+      this.safetyFatigueMomentPages = this.setSafetyFatiguePages(OutputData);
       return true;
     } catch (e) {
       this.err = e.toString();
@@ -77,7 +77,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   }
 
   // 出力テーブル用の配列にセット
-  public setSafetyFatiguePages(postData: any, OutputData: any): any[] {
+  public setSafetyFatiguePages(OutputData: any): any[] {
     const result: any[] = new Array();
 
     let page: any;
@@ -92,6 +92,11 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
+
+      if(groupe[ig].length === 0){
+        continue;
+      }
+
       const groupeName = this.points.getGroupeName(ig);
       page = {
         caption: this.title,
@@ -99,28 +104,20 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
         columns: new Array(),
       };
 
+      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
+
+
       for (const member of groupe[ig]) {0
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const post = postData.filter(
-              (e) => e.index === position.index && e.side === side
-            );
             const res = OutputData.filter(
               (e) => e.index === position.index && e.side === side
             );
-            if (post === undefined || res === undefined) {
+            if (res === undefined) {
               continue;
             }
 
-            // 最小応力
-            const postdata0 = post[0];
-            // 変動応力
-            const postdata1 = post[1];
-
-            // 応力度
-            const resultMin = res[0];
-            const resultMax = res[1];
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -135,14 +132,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultColumn: any = this.getResultString(
-              this.calc.getResultValue(
-                null,
-                postdata0,
-                postdata1,
-                position,
-                resultMin,
-                resultMax
-              ));
+              this.calc.getResultValue( position, res ));
 
             /////////////// タイトル ///////////////
             const titleColumn = this.result.getTitleString(member, position, side)
@@ -150,13 +140,13 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Md', member, post);
+            const shapeString = this.result.getShapeString('Md', member, res);
             column.push(shapeString.B);
             column.push(shapeString.H);
             column.push(shapeString.Bt);
             column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(position.shape, member, position);
+            const Ast: any = this.result.getAsString('Md', shapeString.shape, res, safety);
             column.push(Ast.Ast);
             column.push(Ast.AstString);
             column.push(Ast.dst);

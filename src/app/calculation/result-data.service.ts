@@ -34,7 +34,7 @@ export class ResultDataService {
     const title2: string = position.p_name;// + side;
 
     // 照査表における タイトル３行目を取得
-    const title3: string = position.memberInfo.shape + side;
+    const title3: string = side;
   
     return {
       m_no: title1,
@@ -45,10 +45,11 @@ export class ResultDataService {
 
 
   // 照査表における 断面の文字列を取得
-  public getShapeString(target: string, member: any, position: any){
+  public getShapeString(target: string, member: any, res: any): any{
 
-    const shapeName = this.section.getShapeName(member, position.side );
-    const sectionInfo = this.section.getShape(target, member, position);
+    const shapeName = this.section.getShapeName(member, res.side );
+
+    const sectionInfo = this.section.getShape(shapeName, member, target, res.index);
 
     const result = {
       B: this.helper.toNumber(sectionInfo.B),
@@ -65,50 +66,71 @@ export class ResultDataService {
       }
     }
 
+    result['shape'] = shapeName;
+
     return result;
   }
 
 
   // 照査表における 引張鉄筋情報を取得
-  public getAsString(shapeName: string, member: any, position: any): any {
+  public getAsString(target: string, shapeName: string, res: any, safety: any): any {
 
-    const barInfo = this.steel.getAs(shapeName, member, position);
-    const result = {};
-/*
-
-    if (symbol in PrintData === false) {
-      return {
-        As: { alien: 'center', value: '-' },
-        AsString: { alien: 'center', value: '-' },
-        ds: { alien: 'center', value: '-' },
-        cos: { alien: 'center', value: '-' },
-        tan: null
-      };
-    }
-
-    const subscript: string = symbol.replace('As', '');
-    const As: string = symbol;
-    const AsString: string = symbol + 'String';
-    const ds: string = 'ds' + subscript;
-
-    const cossymbol: string = 'cos' + symbol;
-    let cosvalue: number = this.helper.toNumber( PrintData[cossymbol]);
-
-    if (cosvalue === null) {
-      cosvalue = 1;
-    }
-
-    let Ass: string =  PrintData[As].toFixed(1);
-    if (cosvalue  !== 1) {
-      Ass = '(' + cosvalue.toFixed(3) + ')' + Ass;
-    }
+    const bar = this.steel.getAs(shapeName, res.index, res.side);
 
     const result = {
-      As: { alien: 'right', value: Ass },
-      AsString: { alien: 'right', value: PrintData[AsString] },
-      ds: { alien: 'right', value: PrintData[ds].toFixed(1) }
+      Ast:  null,
+      AstString:  null,
+      dst:  null,
+
+      Asc: null,
+      AscString: null,
+      dsc: null,
+
+      Ase: null,
+      AseString: null,
+      dse: null
     };
-*/
+
+    /////////////// 引張鉄筋 ///////////////
+    const Astx: number = this.helper.getAs(bar.tension.dia) * bar.tension.n * bar.tension.cos;
+    const dstx: number = this.steel.getBarCenterPosition(bar.tension.dsc, bar.tension.n, bar.tension.line, bar.tension.space, bar.tension.cos);
+
+    result['Ast'] = Astx.toFixed(2);
+    result['AstString'] = bar.tension.dia + '-' + bar.tension.n + '本';
+    result['dst'] = (Number.isInteger(dstx)) ? dstx.toFixed(0) : dstx.toFixed(2);
+
+
+    /////////////// 圧縮鉄筋 ///////////////
+    if (safety.safety_factor.range >= 2) {
+      const Ascx: number = this.helper.getAs(bar.compres.dia) * bar.compres.n * bar.compres.cos;
+      const dscx: number = this.steel.getBarCenterPosition(bar.compres.dsc, bar.compres.n, bar.compres.line, bar.compres.space, bar.compres.cos);
+
+      result['Asc'] = Ascx.toFixed(2);
+      result['AscString'] = bar.compres.dia + '-' + bar.compres.n + '本';
+      result['dsc'] = (Number.isInteger(dscx)) ? dscx.toFixed(0) : dscx.toFixed(2);
+    }
+
+    /////////////// 側面鉄筋 ///////////////
+    if (safety.safety_factor.range >= 3) {
+      const Asex: number = this.helper.getAs(bar.sidebar.dia) * bar.sidebar.n;
+      const dsex: number = this.steel.getBarCenterPosition(bar.sidebar.dsc, bar.sidebar.n, bar.sidebar.line, bar.sidebar.space, bar.sidebar.cos);
+
+      result['Ase'] = Asex.toFixed(2);
+      result['AseString'] = bar.sidebar.dia + '-' + bar.sidebar.n + '段';
+      result['dse'] = (Number.isInteger(dsex)) ? dsex.toFixed(0) : dsex.toFixed(2);
+    }
+
+    for(const key of Object.keys(result)){
+      if(result[key] === null){
+        result[key] = { alien: 'center', value: '-'};
+      } else {
+        result[key] = { alien: 'center', value: result[key]};
+      }
+    }
+
+    result['AstCos'] = bar.tension.cos;
+    result['AscCos'] = bar.compres.cos;
+
     return result;
   }
 

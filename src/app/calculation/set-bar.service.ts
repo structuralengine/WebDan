@@ -1096,7 +1096,7 @@ export class SetBarService {
 
 
   // 鉄筋の重心位置を求める
-  private getBarCenterPosition(
+  public getBarCenterPosition(
     cover: number,
     n: number,
     line: number,

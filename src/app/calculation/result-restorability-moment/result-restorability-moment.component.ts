@@ -46,7 +46,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(postData, response["OutputData"]);
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -62,9 +62,9 @@ export class ResultRestorabilityMomentComponent implements OnInit {
   }
 
   // 計算結果を集計する
-  private setPages(postData: any, OutputData: any): boolean {
+  private setPages(OutputData: any): boolean {
     try {
-      this.restorabilityMomentPages = this.setRestorabilityPages(postData, OutputData);
+      this.restorabilityMomentPages = this.setRestorabilityPages(OutputData);
       return true;
     } catch(e) {
       this.err = e.toString();
@@ -74,37 +74,43 @@ export class ResultRestorabilityMomentComponent implements OnInit {
 
 
   // 出力テーブル用の配列にセット
-  public setRestorabilityPages( postData: any, OutputData: any,
-                                title: string = '復旧性（地震時以外）曲げモーメントの照査結果' ): any[] {
+  public setRestorabilityPages( OutputData: any,
+                                title: string = '復旧性（地震時以外）曲げモーメントの照査結果',
+                                DesignForceList: any = null,
+                                safetyID = this.calc.safetyID ): any[] {
     const result: any[] = new Array();
     let page: any;
 
     let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
+
+      if(groupe[ig].length === 0){
+        continue;
+      }
+
       const groupeName = this.points.getGroupeName(ig);
       page = {
-        caption: "安全性（破壊）曲げモーメントの照査結果",
+        caption: title,
         g_name: groupeName,
         columns: new Array(),
       };
+
+      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
       for (const member of groupe[ig]) {0
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const post = postData.find(
-              (e) => e.index === position.index && e.side === side
-            );
             const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-            if (post === undefined || res === undefined) {
+            if (res === undefined) {
               continue;
             }
 
             const resultColumn: any = this.calc.getResultValue(
-              post, res, member
+              res, member, DesignForceList
             );
 
             if (page.columns.length > 4) {
@@ -122,13 +128,13 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Md', member, post);
+            const shapeString = this.result.getShapeString('Md', member, res);
             column.push(shapeString.B);
             column.push(shapeString.H);
             column.push(shapeString.Bt);
             column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(position.shape, member, position);
+            const Ast: any = this.result.getAsString('Md', shapeString.shape, res, safety);
             column.push(Ast.Ast);
             column.push(Ast.AstString);
             column.push(Ast.dst);
@@ -151,8 +157,8 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             column.push(fsk.rs);
             column.push(fsk.fsd);
             /////////////// 照査 ///////////////
-            column.push({ alien: 'right', value: Math.abs(post.Md).toFixed(1) });
-            column.push({ alien: 'right', value: post.Nd.toFixed(1) });
+            column.push({ alien: 'right', value: Math.abs(resultColumn.Md).toFixed(1) });
+            column.push({ alien: 'right', value: resultColumn.Nd.toFixed(1) });
             column.push({ alien: 'right', value: resultColumn.εcu.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.εs.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.x.toFixed(1) });

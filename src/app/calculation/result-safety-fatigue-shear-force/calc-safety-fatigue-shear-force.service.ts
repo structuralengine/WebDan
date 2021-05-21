@@ -9,12 +9,14 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class CalcSafetyFatigueShearForceService {
+
   // 安全性（疲労破壊）せん断力
   public DesignForceList: any[];  // 永久+変動作用
   public DesignForceList2: any[]; // 変動応力
@@ -23,6 +25,7 @@ export class CalcSafetyFatigueShearForceService {
   public safetyID: number = 1;
 
   constructor(
+    private safety: InputSafetyFactorsMaterialStrengthsService,
     private save: SaveDataService,
     private helper: DataHelperModule,
     private force: SetDesignForceService,
@@ -129,6 +132,11 @@ export class CalcSafetyFatigueShearForceService {
     }
   }
 
+  // 
+  public getSafetyFactor(g_id: any) {
+    return this.safety.getCalcData('Md', g_id, this.safetyID).safety_factor;
+  }
+
   // サーバー POST用データを生成する
   public setInputData(): any {
 
@@ -141,7 +149,9 @@ export class CalcSafetyFatigueShearForceService {
     return postData;
   }
 
-  public calcFatigue(PrintData: any, postdata0: any, postdata1: any, position: any): any {
+  public calcFatigue(PrintData: any, position: any): any {
+    
+    const postdata0: any={}, postdata1: any={},
 
     if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
     if ('Nd' in PrintData) { PrintData.Nd = 0; }    // 疲労の Vcd を計算する時は βn=1

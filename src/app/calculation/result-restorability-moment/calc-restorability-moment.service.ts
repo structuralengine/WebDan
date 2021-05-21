@@ -59,12 +59,20 @@ export class CalcRestorabilityMomentService {
     return postData;
   }
 
+  public getSafetyFactor(g_id: string, safetyID: number){
+    return this.safety.getCalcData('Md', g_id, safetyID).safety_factor;
+  }
 
-  public getResultValue(postData: any, resultData: any, member: any): any {
+
+  public getResultValue(resultData: any, member: any, DesignForceList: any): any {
+
+    DesignForceList = (DesignForceList===null) ? this.DesignForceList : DesignForceList;
+    const force = DesignForceList.find(v => v.index === resultData.index)
+                      .designForce.find(v => v.side === resultData.side)
 
     const safety_factor = this.safety.getCalcData( 'Md', member.g_id, this.safetyID );
 
-    const Md: number = Math.abs(postData.Md);
+    const Md: number = Math.abs(force.Md);
     const My: number = resultData.Y.Mi;
     const rb: number = safety_factor.rb;
     const Myd: number = My / rb;
@@ -73,6 +81,8 @@ export class CalcRestorabilityMomentService {
     const result: string = (ratio < 1) ? 'OK' : 'NG';
 
     return {
+      Nd: force.Nd,
+      Md,
       εcu: resultData.Y.εc,
       εs: resultData.Y.εs,
       x: resultData.Y.x,

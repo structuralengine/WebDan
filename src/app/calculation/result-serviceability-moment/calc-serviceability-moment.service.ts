@@ -68,14 +68,14 @@ export class CalcServiceabilityMomentService {
   }
 
 
-  public calcWd(PrintData: any, postdata0: any, postdata1: any, position: any, resultData: any,
-                isDurability: boolean): any {
+  public calcWd(resultData: any, position: any, isDurability: boolean): any {
+    const PrintData: any = {}; //仮
 
     const result = {};
 
     // 環境条件
     let conNum: number = 1;
-    switch (PrintData.side) {
+    switch (resultData.side) {
       case '上側引張':
         conNum = this.helper.toNumber(position.memberInfo.con_u);
         break;
@@ -144,16 +144,16 @@ export class CalcServiceabilityMomentService {
 
     // 永久作用
     let Md: number;
-    if ('Md' in postdata0) {
-      Md = this.helper.toNumber(postdata0.Md);
+    if ('Md' in resultData) {
+      Md = this.helper.toNumber(resultData.Md);
       if (Md !== null) {
         result['Md'] = Md;
       }
     }
 
     let Nd: number;
-    if ('Nd' in postdata0) {
-      Nd = this.helper.toNumber(postdata0.Nd);
+    if ('Nd' in resultData) {
+      Nd = this.helper.toNumber(resultData.Nd);
       if (Nd !== null) {
         result['Nd'] = Nd;
       }
@@ -182,16 +182,16 @@ export class CalcServiceabilityMomentService {
 
     // 縁応力の照査
     let Mhd: number;
-    if ('Md' in postdata1) {
-      Mhd = this.helper.toNumber(postdata1.Md);
+    if ('Md' in resultData) {
+      Mhd = this.helper.toNumber(resultData.Md);
       if (Mhd !== null) {
         result['Mhd'] = Mhd;
       }
     }
 
     let Nhd: number;
-    if ('Nd' in postdata1) {
-      Nhd = this.helper.toNumber(postdata1.Nd);
+    if ('Nd' in resultData) {
+      Nhd = this.helper.toNumber(resultData.Nd);
       if (Nhd !== null) {
         result['Nhd'] = Nhd;
       }
@@ -215,7 +215,7 @@ export class CalcServiceabilityMomentService {
 
     if (Sigmab < Sigmabl) {
       // 鉄筋応力度の照査
-      const Sigmas: number = this.getSigmas(resultData.st, postdata0.Steels);
+      const Sigmas: number = this.getSigmas(resultData.st, resultData.Steels);
       if (Sigmas === null) { return result; }
       result['Sigmas'] = Sigmas;
       result['sigmal1'] = sigmal1;
@@ -241,7 +241,7 @@ export class CalcServiceabilityMomentService {
       }
     }
 
-    const Sigmase: number = this.getSigmas(resultData.st, postdata0.Steels);
+    const Sigmase: number = this.getSigmas(resultData.st, resultData.Steels);
     if (Sigmase === null) { return result; }
     result['sigma_se'] = Sigmase;
 

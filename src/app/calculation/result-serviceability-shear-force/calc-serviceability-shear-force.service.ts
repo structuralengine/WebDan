@@ -7,12 +7,14 @@ import { Injectable } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class CalcServiceabilityShearForceService {
+
   // 耐久性 せん断ひび割れ
   public DesignForceList: any[];  // せん断ひび割れ検討判定用
   public DesignForceList1: any[]; // 永久荷重
@@ -21,6 +23,7 @@ export class CalcServiceabilityShearForceService {
   public safetyID: number = 0;
 
   constructor(
+    private safety: InputSafetyFactorsMaterialStrengthsService,
     private basic: InputBasicInformationService,
     private calc: InputCalclationPrintService,
     private helper: DataHelperModule,
@@ -77,10 +80,18 @@ export class CalcServiceabilityShearForceService {
     const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
     return postData;
   }
+  
+  public getSafetyFactor(g_id: any) {
+    return this.safety.getCalcData('Vd', g_id, this.safetyID).safety_factor;
+  }
 
-  public calcSigma( PrintData: any, postdata1: any, PostData2: any,
-                    resultData: any, position: any): any {
+  public calcSigma( resultData: any, position: any): any {
+    //仮
+    const PrintData: any = {};
+    const postdata1: any = {};
+    const PostData2: any = {};
 
+    
     if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
     const result: any = this.base.calcVmu(PrintData, resultData, position);
 

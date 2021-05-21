@@ -59,7 +59,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   }
 
   // 出力テーブル用の配列にセット
-  public setSafetyFatiguePages(postData: any): any[] {
+  public setSafetyFatiguePages(OutputData: any): any[] {
     const result: any[] = new Array();
 
     let page: any;
@@ -68,6 +68,11 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     let i: number = 0;
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
+
+      if(groupe[ig].length === 0){
+        continue;
+      }
+
       const groupeName = this.points.getGroupeName(ig);
       page = {
         caption: title,
@@ -75,18 +80,18 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
         columns: new Array(),
       };
 
+      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
+
       for (const member of groupe[ig]) {0
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const post = postData.filter(
+            const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-
-            // 最小応力
-            const postdata0 = post[0];
-            // 変動応力
-            const postdata1 = post[1];
+            if (res === undefined) {
+              continue;
+            }
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -99,9 +104,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultColumn: any = this.getResultString(
-              this.calc.calcFatigue(
-                null, postdata0, postdata1, position
-            ));
+              this.calc.calcFatigue( res,  position));
 
             const column: any[] = new Array();
             /////////////// タイトル ///////////////
@@ -110,11 +113,11 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Vd', member, post);
+            const shapeString = this.result.getShapeString('Vd', member, res);
             column.push(shapeString.B);
             column.push(shapeString.H);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(position.shape, member, position);
+            const Ast: any = this.result.getAsString('Vd', shapeString.shape, res, safety);
             column.push(Ast.tan);
             column.push(Ast.Ast);
             column.push(Ast.AstString);

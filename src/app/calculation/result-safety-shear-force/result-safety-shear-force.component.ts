@@ -45,7 +45,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
       (response) => {
         if (response["ErrorException"] === null) {
-          this.isFulfilled = this.setPages(postData, response["OutputData"]);
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
         } else {
           this.err = JSON.stringify(response["ErrorException"]);
@@ -60,9 +60,9 @@ export class ResultSafetyShearForceComponent implements OnInit {
   }
   
   // 計算結果を集計する
-  private setPages(postData: any, OutputData: any): boolean {
+  private setPages(OutputData: any): boolean {
     try {
-      this.safetyShearForcePages = this.getSafetyPages(postData, OutputData);
+      this.safetyShearForcePages = this.getSafetyPages(OutputData);
       return true;
     } catch (e) {
       this.err = e.toString();
@@ -71,8 +71,9 @@ export class ResultSafetyShearForceComponent implements OnInit {
   }
 
   // 出力テーブル用の配列にセット
-  public getSafetyPages(postData: any, OutputData: any,
-    title: string = "安全性（破壊）せん断力の照査結果" ): any[] {
+  public getSafetyPages(OutputData: any,
+                        title: string = "安全性（破壊）せん断力の照査結果",
+                        DesignForceList: any = null ): any[] {
     const result: any[] = new Array();
 
     let page: any;
@@ -91,13 +92,10 @@ export class ResultSafetyShearForceComponent implements OnInit {
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
-            const post = postData.find(
-              (e) => e.index === position.index && e.side === side
-            );
             const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
-            if (post === undefined || res === undefined) {
+            if (res === undefined) {
               continue;
             }
 
@@ -114,11 +112,11 @@ export class ResultSafetyShearForceComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const resultVmu: any = this.calc.calcVmu(
-              post, res, member
+              res, member, DesignForceList
             );
 
             const resultColumn: any = this.getResultString(
-              this.calc.calcVmu( post, res, member )
+              this.calc.calcVmu( res, member, DesignForceList )
             );
             /////////////// タイトル ///////////////
             const titleColumn = this.result.getTitleString(member, position, side)
@@ -126,7 +124,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Vd', member, post);
+            const shapeString = this.result.getShapeString('Vd', member, res);
             column.push(shapeString.B);
             column.push(shapeString.H);
             /////////////// 引張鉄筋 ///////////////
