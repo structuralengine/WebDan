@@ -10,6 +10,7 @@ import { Data } from '@angular/router';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,7 @@ export class CalcSafetyShearForceService {
   public safetyID: number = 2;
 
   constructor(
+    private safety: InputSafetyFactorsMaterialStrengthsService,
     private save: SaveDataService,
     private helper: DataHelperModule,
     private force: SetDesignForceService,
@@ -65,7 +67,9 @@ export class CalcSafetyShearForceService {
     return postData;
   }
 
-
+  public getSafetyFactor(g_id: any, safetyID: number) {
+    return this.safety.getCalcData('Vd', g_id, this.safetyID);
+  }
 
   // 変数の整理と計算
   public calcVmu( resultData: any, position: any, DesignForceList: any): any {

@@ -134,7 +134,7 @@ export class CalcSafetyFatigueShearForceService {
 
   // 
   public getSafetyFactor(g_id: any) {
-    return this.safety.getCalcData('Md', g_id, this.safetyID).safety_factor;
+    return this.safety.getCalcData('Md', g_id, this.safetyID);
   }
 
   // サーバー POST用データを生成する
@@ -151,7 +151,7 @@ export class CalcSafetyFatigueShearForceService {
 
   public calcFatigue(PrintData: any, position: any): any {
     
-    const postdata0: any={}, postdata1: any={},
+    const postdata0: any={}, postdata1: any={};
 
     if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
     if ('Nd' in PrintData) { PrintData.Nd = 0; }    // 疲労の Vcd を計算する時は βn=1

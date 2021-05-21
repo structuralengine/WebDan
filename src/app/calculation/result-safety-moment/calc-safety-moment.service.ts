@@ -61,7 +61,7 @@ export class CalcSafetyMomentService {
   }
 
   public getSafetyFactor(g_id: string){
-    return this.safety.getCalcData('Md', g_id, this.safetyID).safety_factor;
+    return this.safety.getCalcData('Md', g_id, this.safetyID);
   }
 
   public getResultValue(res: any, safety: any): any {

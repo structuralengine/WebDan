@@ -9,7 +9,7 @@ export class SetBarService {
   constructor(
     private bars: InputBarsService,
     private helper: DataHelperModule
-  ) {}
+  ) { }
 
   // 鉄筋情報を集計する
   // member: 部材・断面情報
@@ -21,7 +21,7 @@ export class SetBarService {
     // 鉄筋情報を 集計
     let result: object;
 
-    switch(shape){
+    switch (shape) {
       case "Circle":
       case "Ring":
         result = this.getCircleBar(member, index, side, safety);
@@ -1054,10 +1054,10 @@ export class SetBarService {
       rebar_ss: ss,   // 鉄筋間隔 
       cos             // 角度補正係数 cosθ
     }
-}
+  }
 
 
-  
+
 
 
 

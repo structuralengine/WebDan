@@ -75,7 +75,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
   // 出力テーブル用の配列にセット
   public setServiceabilityPages(OutputData: any,
-                                title: string = null ): any[] {
+                                title: string = null,
+                                safetyID: number = this.calc.safetyID): any[] {
     const result: any[] = new Array();
 
     let isDurability = true;                              
@@ -90,11 +91,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
+
       page = {
         caption: title,
         g_name: groupeName,
         columns: new Array(),
       };
+
+      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
       for (const member of groupe[ig]) {0
         for (const position of member.positions) {
@@ -135,7 +139,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push(shapeString.Bt);
             column.push(shapeString.t);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(position.shape, member, position);
+            const Ast: any = this.result.getAsString('Md', shapeString.shape, res, safety);
             column.push(Ast.Ast);
             column.push(Ast.AstString);
             column.push(Ast.dst);
@@ -148,15 +152,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push(Ast.AseString);
             column.push(Ast.dse);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(position);
+            const fck: any = this.result.getFckString(safety);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(position);
-            column.push(fsk.fsy);
-            column.push(fsk.rs);
-            column.push(fsk.fsd);
+            column.push(Ast.fsy);
+            column.push(Ast.rs);
+            column.push(Ast.fsd);
             /////////////// 照査 ///////////////
             column.push(resultColumn.con);
 

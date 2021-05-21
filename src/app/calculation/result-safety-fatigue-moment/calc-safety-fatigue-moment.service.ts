@@ -16,6 +16,9 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 })
 
 export class CalcSafetyFatigueMomentService {
+  getSafetyFactor(g_id: any) {
+    throw new Error("Method not implemented.");
+  }
   // 安全性（疲労破壊）曲げモーメント
   public DesignForceList: any[];  // 永久+変動作用
   public DesignForceList1: any[]; // 疲労現

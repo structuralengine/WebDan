@@ -73,7 +73,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
   // 出力テーブル用の配列にセット
   public getSafetyPages(OutputData: any,
                         title: string = "安全性（破壊）せん断力の照査結果",
-                        DesignForceList: any = null ): any[] {
+                        DesignForceList: any = null,
+                        safetyID: number = this.calc.safetyID ): any[] {
     const result: any[] = new Array();
 
     let page: any;
@@ -82,11 +83,14 @@ export class ResultSafetyShearForceComponent implements OnInit {
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
+
       page = {
         caption: title,
         g_name: groupeName,
         columns: new Array(),
       };
+
+      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
       for (const member of groupe[ig]) {0
         for (const position of member.positions) {
@@ -128,7 +132,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
             column.push(shapeString.B);
             column.push(shapeString.H);
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(position.shape, member, position);
+            const Ast: any = this.result.getAsString('Vd', shapeString.shape, res, safety);
             column.push(Ast.tan);
             column.push(Ast.Ast);
             column.push(Ast.AstString);
@@ -147,10 +151,9 @@ export class ResultSafetyShearForceComponent implements OnInit {
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋強度情報 ///////////////
-            const fsk: any = this.result.getFskString(position);
-            column.push(fsk.fsy);
-            column.push(fsk.rs);
-            column.push(fsk.fsd);
+            column.push(Ast.fsy);
+            column.push(Ast.rs);
+            column.push(Ast.fsd);
             /////////////// 断面力 ///////////////
             column.push(resultColumn.Md);
             column.push(resultColumn.Nd);

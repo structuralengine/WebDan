@@ -81,10 +81,6 @@ export class ResultSafetyMomentComponent implements OnInit {
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
 
-      if(groupe[ig].length === 0){
-        continue;
-      }
-
       page = {
         caption: this.title,
         g_name: groupeName,
@@ -144,15 +140,14 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(Ast.AseString);
             column.push(Ast.dse);
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(position);
+            const fck: any = this.result.getFckString(safety);
             column.push(fck.fck);
             column.push(fck.rc);
             column.push(fck.fcd);
             /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(position);
-            column.push(fsk.fsy);
-            column.push(fsk.rs);
-            column.push(fsk.fsd);
+            column.push(Ast.fsy);
+            column.push(Ast.rs);
+            column.push(Ast.fsd);
             /////////////// 照査 ///////////////
             column.push({ alien: 'right', value: resultColumn.Md.toFixed(1) });
             column.push({ alien: 'right', value: resultColumn.Nd.toFixed(1) });

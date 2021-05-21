@@ -82,7 +82,7 @@ export class CalcServiceabilityShearForceService {
   }
   
   public getSafetyFactor(g_id: any) {
-    return this.safety.getCalcData('Vd', g_id, this.safetyID).safety_factor;
+    return this.safety.getCalcData('Vd', g_id, this.safetyID);
   }
 
   public calcSigma( resultData: any, position: any): any {

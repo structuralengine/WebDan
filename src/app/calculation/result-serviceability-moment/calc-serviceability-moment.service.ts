@@ -7,12 +7,14 @@ import { Injectable } from '@angular/core';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class CalcServiceabilityMomentService {
+
   // 耐久性 曲げひび割れ
   public DesignForceList: any[];
   public DesignForceList1: any[];
@@ -20,6 +22,7 @@ export class CalcServiceabilityMomentService {
   public safetyID: number = 0;
 
   constructor(
+    private safety: InputSafetyFactorsMaterialStrengthsService,
     private calc: InputCalclationPrintService,
     private basic: InputBasicInformationService,
     private helper: DataHelperModule,
@@ -67,6 +70,9 @@ export class CalcServiceabilityMomentService {
     return postData;
   }
 
+  public getSafetyFactor(g_id: any, safetyID: number) {
+    return this.safety.getCalcData('Md', g_id, this.safetyID);
+  }
 
   public calcWd(resultData: any, position: any, isDurability: boolean): any {
     const PrintData: any = {}; //仮

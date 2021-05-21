@@ -19,11 +19,11 @@ export class SetSectionService {
   // position: ハンチの情報
   // force: 荷重の情報
   // safety: 安全係数の情報
-  public getPostData( member: any, force: any, safety: any): any {
+  public getPostData(member: any, force: any, safety: any): any {
     let result: object;
 
-    const shapeName = this.getShapeName(member, force.side );
-    switch(shapeName){
+    const shapeName = this.getShapeName(member, force.side);
+    switch (shapeName) {
       case 'Circle':            // 円形
         result = this.getCircle(member);
         break;
@@ -41,7 +41,7 @@ export class SetSectionService {
         break;
       case 'HorizontalOval':    // 水平方向小判形
         result = this.getHorizontalOval(member);
-      break;
+        break;
       case 'VerticalOval':      // 鉛直方向小判形
         result = this.getVerticalOval(member);
         break;
@@ -58,7 +58,7 @@ export class SetSectionService {
   }
 
   // 断面の入力から形状名を決定する
-  public getShapeName(member: any, side: string): string{
+  public getShapeName(member: any, side: string): string {
 
     let result: string = null;;
 
@@ -140,7 +140,7 @@ export class SetSectionService {
       return null;
     }
 
-    return  result;
+    return result;
   }
 
   // 横小判形断面の POST 用 データ作成
@@ -225,11 +225,11 @@ export class SetSectionService {
   private getInvertedTsection(member: any, force: any): any {
 
     const result = { symmetry: false, Sections: [] };
-    
+
     // 断面情報を集計
     const shape = this.getShape('InvertedTsection', member, force.target, force.index);
     const h: number = shape.H;
-    const b: number =shape.B;
+    const b: number = shape.B;
     const bf: number = shape.Bt;
     const hf: number = shape.t;
 
@@ -259,7 +259,7 @@ export class SetSectionService {
     // 断面情報を集計
     const shape = this.getShape('Tsection', member, force.target, force.index);
     const h: number = shape.H;
-    const b: number =shape.B;
+    const b: number = shape.B;
     const bf: number = shape.Bt;
     const hf: number = shape.t;
 
@@ -286,7 +286,7 @@ export class SetSectionService {
   private getRectangle(member: any, force: any): any {
 
     const result = { symmetry: true, Sections: [] };
-    
+
     // 断面情報を集計
     const shape = this.getShape('Rectangle', member, force.target, force.index)
     const h: number = shape.H;
@@ -387,9 +387,9 @@ export class SetSectionService {
   // コンクリート強度の POST用データを返す
   public getSectionElastic(safety: any): any {
 
-     const fck = safety.material_concrete.fck;
+    const fck = safety.material_concrete.fck;
     const rc = safety.safety_factor.rc;
-    const pile = safety.pile_factor.find(e=>e.selected===true);
+    const pile = safety.pile_factor.find(e => e.selected === true);
     const rfck = (pile !== undefined) ? pile.rfck : 1;
     const rEc = (pile !== undefined) ? pile.rEc : 1;
     const Ec = this.getEc(fck);
@@ -403,7 +403,7 @@ export class SetSectionService {
   }
 
   // コンクリート強度から弾性係数を 返す
-  private getEc(fck: number) {
+  public getEc(fck: number) {
 
     const EcList: number[] = [22, 25, 28, 31, 33, 35, 37, 38];
     const fckList: number[] = [18, 24, 30, 40, 50, 60, 70, 80];
@@ -431,14 +431,14 @@ export class SetSectionService {
 
   // 断面の幅と高さ（フランジ幅と高さ）を取得する
   public getShape(shapeName: string, member: any,
-                  target: string = 'Md', index: number = null): any {
+    target: string = 'Md', index: number = null): any {
 
     const result = {};
 
     let h: number, b: number, bf: number, hf: number, haunch: number;
     let bar: any;
 
-    switch(shapeName){
+    switch (shapeName) {
       case 'Circle':            // 円形
         h = this.helper.toNumber(member.H);
         if (h === null) {
@@ -455,10 +455,10 @@ export class SetSectionService {
       case 'Rectangle':         // 矩形
         h = this.helper.toNumber(member.H);
         bar = this.bars.getTableColumn(index);
-        if (target==='Md'){
+        if (target === 'Md') {
           haunch = bar.haunch_M;
-        } else if(target==='Vd') {
-          haunch =  bar.haunch_V;
+        } else if (target === 'Vd') {
+          haunch = bar.haunch_V;
         }
         if (this.helper.toNumber(haunch) !== null) {
           h += haunch * 1;
@@ -471,10 +471,10 @@ export class SetSectionService {
       case 'InvertedTsection':  // 逆T形
         h = this.helper.toNumber(member.H);
         bar = this.bars.getTableColumn(index);
-        if (target==='Md'){
+        if (target === 'Md') {
           haunch = bar.haunch_M;
-        } else if(target==='Vd') {
-          haunch =  bar.haunch_V;
+        } else if (target === 'Vd') {
+          haunch = bar.haunch_V;
         }
         if (this.helper.toNumber(haunch) !== null) {
           h += haunch;
@@ -505,16 +505,16 @@ export class SetSectionService {
     return result;
   }
 
-   // せん断照査用の換算矩形断面を算定
+  // せん断照査用の換算矩形断面を算定
   public getVydBH(shapeName: string, member: any,
-                  target: string, index: number): any {
+    target: string, index: number): any {
 
     const result = {};
     const shape = this.getShape(shapeName, member, target, index);
 
     let h: number, b: number, Area: number, circleArea: number, rectArea: number;
 
-    switch(shapeName){
+    switch (shapeName) {
       case 'Circle':            // 円形
         h = shape.H;
         Area = Math.pow(h, 2) * Math.PI / 4;
@@ -557,19 +557,19 @@ export class SetSectionService {
         result['H'] = Area / b;
         result['B'] = b;
 
-      break;
+        break;
 
       default:
-      console.log("断面形状：" + member.shape + " は適切ではありません。");
-      return null;
+        console.log("断面形状：" + member.shape + " は適切ではありません。");
+        return null;
     }
 
     return result;
   }
 
   // 断面積と断面係数
-  public getStructuralVal( shapeName: string, member: any,
-                    target: string, index: number): any {
+  public getStructuralVal(shapeName: string, member: any,
+    target: string, index: number): any {
 
     const result = {};
     const shape = this.getShape(shapeName, member, target, index);
@@ -579,103 +579,103 @@ export class SetSectionService {
     let x: number, e1: number, e2: number;
     let Area: number, circleArea: number, rectArea: number;
 
-    switch(shapeName){
-    case 'Circle':            // 円形
-      h = shape.H;
-      result['A'] = Math.pow(h, 2) * Math.PI / 4;
-      result['I'] = Math.pow(h, 4) * Math.PI / 64;
-      result['eu'] = h / 2;
-      result['el'] = h / 2;
-      break;
+    switch (shapeName) {
+      case 'Circle':            // 円形
+        h = shape.H;
+        result['A'] = Math.pow(h, 2) * Math.PI / 4;
+        result['I'] = Math.pow(h, 4) * Math.PI / 64;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
 
-    case 'Ring':              // 円環
-      h = shape.H; // 外径
-      b = shape.B; // 内径
-      result['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
-      result['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
-      result['eu'] = h / 2;
-      result['el'] = h / 2;
-      break;
+      case 'Ring':              // 円環
+        h = shape.H; // 外径
+        b = shape.B; // 内径
+        result['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
+        result['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
 
-    case 'Rectangle':         // 矩形
-      h = shape.H;
-      b = shape.B;
-      result['A'] = b * h;
-      result['I'] = b * Math.pow(h, 3) / 12;
-      result['eu'] = h / 2;
-      result['el'] = h / 2;
-      break;
+      case 'Rectangle':         // 矩形
+        h = shape.H;
+        b = shape.B;
+        result['A'] = b * h;
+        result['I'] = b * Math.pow(h, 3) / 12;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
 
-    case 'Tsection':          // T形
-      h = shape.H;
-      b =shape.B;
-      bf = shape.Bt;
-      hf = shape.t;
-      x = bf - b;
-      result['A'] = h * b + hf * x;
-      a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
-      a2 = 2 * (b * h + x * hf);
-      e1 = a1 / a2;
-      e2 = h - e1;
-      result['eu'] = e1;
-      result['el'] = e2;
-      a3 = bf * Math.pow(e1, 3);
-      a4 = x * h;
-      a5 = b * Math.pow(e2, 3);
-      result['I'] = (a3 - a4 + a5) / 3;
-      break;
+      case 'Tsection':          // T形
+        h = shape.H;
+        b = shape.B;
+        bf = shape.Bt;
+        hf = shape.t;
+        x = bf - b;
+        result['A'] = h * b + hf * x;
+        a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
+        a2 = 2 * (b * h + x * hf);
+        e1 = a1 / a2;
+        e2 = h - e1;
+        result['eu'] = e1;
+        result['el'] = e2;
+        a3 = bf * Math.pow(e1, 3);
+        a4 = x * h;
+        a5 = b * Math.pow(e2, 3);
+        result['I'] = (a3 - a4 + a5) / 3;
+        break;
 
 
-    case 'InvertedTsection':  // 逆T形
-      h = shape.H;
-      b =shape.B;
-      bf = shape.Bt;
-      hf = shape.t;
-      x = bf - b;
-      result['A'] = h * b + hf * x;
-      a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
-      a2 = 2 * (b * h + x * hf);
-      e1 = a1 / a2;
-      e2 = h - e1;
-      result['eu'] = e2;
-      result['el'] = e1;
-      a3 = bf * Math.pow(e1, 3);
-      a4 = x * h;
-      a5 = b * Math.pow(e2, 3);
-      result['I'] = (a3 - a4 + a5) / 3;
-      break;
+      case 'InvertedTsection':  // 逆T形
+        h = shape.H;
+        b = shape.B;
+        bf = shape.Bt;
+        hf = shape.t;
+        x = bf - b;
+        result['A'] = h * b + hf * x;
+        a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
+        a2 = 2 * (b * h + x * hf);
+        e1 = a1 / a2;
+        e2 = h - e1;
+        result['eu'] = e2;
+        result['el'] = e1;
+        a3 = bf * Math.pow(e1, 3);
+        a4 = x * h;
+        a5 = b * Math.pow(e2, 3);
+        result['I'] = (a3 - a4 + a5) / 3;
+        break;
 
-    case 'HorizontalOval':    // 水平方向小判形
-      h = shape.H;
-      b = shape.B;
-      circleArea = (h ** 2) * Math.PI / 4;
-      rectArea = h * (b - h);
-      Area = circleArea + rectArea;
-      result['A'] = Area;
-      result['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
-      result['eu'] = h / 2;
-      result['el'] = h / 2;
-      break;
+      case 'HorizontalOval':    // 水平方向小判形
+        h = shape.H;
+        b = shape.B;
+        circleArea = (h ** 2) * Math.PI / 4;
+        rectArea = h * (b - h);
+        Area = circleArea + rectArea;
+        result['A'] = Area;
+        result['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
 
-    case 'VerticalOval':      // 鉛直方向小判形
-      x = h - b;
-      circleArea = (b ** 2) * Math.PI / 4;
-      rectArea = b * x;
-      Area = circleArea + rectArea;
-      a1 = Math.PI * Math.pow(b, 4) / 64;
-      a2 = x * Math.pow(b, 3) / 6;
-      a3 = Math.PI * Math.pow(x, 2) * Math.pow(b, 2) / 16;
-      a4 = b * Math.pow(x, 3) / 12;
-      result['A'] = Area;
-      result['I'] = a1 + a2 + a3 + a4;
-      result['eu'] = h / 2;
-      result['el'] = h / 2;
+      case 'VerticalOval':      // 鉛直方向小判形
+        x = h - b;
+        circleArea = (b ** 2) * Math.PI / 4;
+        rectArea = b * x;
+        Area = circleArea + rectArea;
+        a1 = Math.PI * Math.pow(b, 4) / 64;
+        a2 = x * Math.pow(b, 3) / 6;
+        a3 = Math.PI * Math.pow(x, 2) * Math.pow(b, 2) / 16;
+        a4 = b * Math.pow(x, 3) / 12;
+        result['A'] = Area;
+        result['I'] = a1 + a2 + a3 + a4;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
 
-      break;
+        break;
 
-    default:
-      console.log("断面形状：" + member.shape + " は適切ではありません。");
-      return null;
+      default:
+        console.log("断面形状：" + member.shape + " は適切ではありません。");
+        return null;
     }
 
     return result;
