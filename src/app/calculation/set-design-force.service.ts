@@ -147,10 +147,10 @@ export class SetDesignForceService {
           Ndmin: force["N"].min,
         });
       } else {
-        let mKey1 = "my", mKey2 = "Mdy", vKey1 = "fy", vKey2 = "Vdy";
+        let mKey1 = "my", mKey2 = "Mdy", vKey1 = "fz", vKey2 = "Vdz";
         if ((target === "Md" && position.isMzCalc === true) ||
             (target === "Vd" && position.isVyCalc === true)) {
-          mKey1 = "mz"; mKey2 = "Mdz";  vKey1 = "fz"; vKey2 = "Vdz";
+          mKey1 = "mz"; mKey2 = "Mdz";  vKey1 = "fy"; vKey2 = "Vdy";
         }
 
         const forceObj = {};

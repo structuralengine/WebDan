@@ -551,15 +551,13 @@ export class SetSectionService {
   }
 
   // せん断照査用の換算矩形断面を算定
-  public getVydBH(shapeName: string, member: any,
-    target: string, index: number): any {
+  public getVydBH(shape: any): any {
 
     const result = {};
-    const shape = this.getShape(shapeName, member, target, index);
 
     let h: number, b: number, Area: number, circleArea: number, rectArea: number;
 
-    switch (shapeName) {
+    switch (shape.shape) {
       case 'Circle':            // 円形
         h = shape.H;
         Area = Math.pow(h, 2) * Math.PI / 4;
@@ -605,7 +603,7 @@ export class SetSectionService {
         break;
 
       default:
-        console.log("断面形状：" + member.shape + " は適切ではありません。");
+        console.log("断面形状：" + shape.shape + " は適切ではありません。");
         return null;
     }
 

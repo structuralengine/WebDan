@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { InputBarsService } from "../components/bars/bars.service";
 import { DataHelperModule } from "../providers/data-helper.module";
+import { SetSectionService } from "./set-section.service";
 
 @Injectable({
   providedIn: "root",
@@ -8,6 +9,7 @@ import { DataHelperModule } from "../providers/data-helper.module";
 export class SetBarService {
   constructor(
     private bars: InputBarsService,
+    private section: SetSectionService,
     private helper: DataHelperModule
   ) { }
 
@@ -1069,7 +1071,7 @@ export class SetBarService {
   }
 
   private getSideInfo(barInfo: any, dst: number, dsc: number, height: number){
-    
+
     if(height===null){
       return null; // 円形など側鉄筋を用いない形状はスキップ
     }
@@ -1115,12 +1117,7 @@ export class SetBarService {
   }
 
   // 照査表における 引張鉄筋情報を取得
-  public getResult(
-    target: string,
-    shape: any,
-    res: any,
-    safety: any
-  ): any {
+  public getResult(target: string, shape: any, res: any, safety: any): any {
 
     const result = {
       Ast: null,
@@ -1141,7 +1138,9 @@ export class SetBarService {
       Es: null,
       fsd: null,
       rs: null,
-      fsu: null
+      fsu: null,
+
+      tan: null
     };
 
     const bar = this.getAs(shape.shape, res.index, res.side, shape.B, shape.H);
@@ -1154,10 +1153,31 @@ export class SetBarService {
     if (fsyt.fsy === 235) {
       bar.tension.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
     }
-    const markt = bar.tension.mark === "R" ? "φ" : "D";
-    const AstDia = markt + bar.tension.rebar_dia;
+    const mark = bar.tension.mark === "R" ? "φ" : "D";
+    const AstDia = mark + bar.tension.rebar_dia;
+    let rebar_n = bar.tension.rebar_n;
+
+
+    if(target === 'Vd') {
+      // せん断照査における円形の引張鉄筋は、矩形換算時の鉄筋量
+      switch(shape.shape){
+        case "Circle": // 円形
+        case "Ring": // 円環
+          const VydBH = this.section.getVydBH(shape);
+          rebar_n = rebar_n / 4;
+        break;
+        case "VerticalOval": // 鉛直方向小判形
+          rebar_n = rebar_n / 2;
+        break;
+      }
+      const Aw = this.getAw(shape, bar, safety)
+      for(const key of Object.keys(Aw)){
+        result[key] = Aw[key];
+      }
+    }
+
     const Astx: number =
-      this.helper.getAs(AstDia) * bar.tension.rebar_n * bar.tension.cos;
+      this.helper.getAs(AstDia) * rebar_n * bar.tension.cos;
     const dstx: number = this.getBarCenterPosition(
       bar.tension.dsc,
       bar.tension.rebar_n,
@@ -1167,7 +1187,7 @@ export class SetBarService {
     );
 
     result.Ast = Astx;
-    result.AstString = AstDia + "-" + bar.tension.rebar_n + "本";
+    result.AstString = AstDia + "-" + rebar_n + "本";
     result.dst = dstx;
 
     /////////////// 圧縮鉄筋 ///////////////
@@ -1241,8 +1261,35 @@ export class SetBarService {
   }
 
   // せん断補強鉄筋量の情報を返す
-  public getAw(shapeName: string, index: number, side: string): any {
-    let result = {};
+  public getAw( shape: any, bar: any, safety: any): any {
+
+    const result = {
+      Aw: null,
+      AwString: null,
+      deg: null,
+      Ss: null,
+
+      fwyd: null,
+      rs: null,
+
+      tan: null
+    };
+
+    let dia: string = "D" + bar.stirrup_dia;
+    if (fwyd === 235) {
+      // 鉄筋強度が 235 なら 丸鋼
+      dia = "R" + starrup.stirrup_dia;
+    }
+    const As: number = this.helper.getAs(dia);
+    const n: number = starrup.stirrup_n;
+    result["AW-φ"] = starrup.stirrup_dia;
+    result.Aw = As * n;
+    result.AwString = dia + "-" + n + "本";
+    result.Ss = starrup.stirrup_ss;
+    result.fwyd = fwyd;
+    result.fwud = fwud;
+
+
     return result;
   }
 
@@ -1312,6 +1359,7 @@ export class SetBarService {
     return result;
   }
 
+  /*
   private setAwPrintData(starrup: any, materialInfo: any[]): any {
     // エラーチェック
     if (starrup.stirrup_dia === null) {
@@ -1369,7 +1417,6 @@ export class SetBarService {
 
     return result;
   }
-
-
+  */
 
 }

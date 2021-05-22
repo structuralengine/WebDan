@@ -175,7 +175,7 @@ export class InputBasicInformationService  {
     return null;
   }
   public pickup_shear_force_no(id: number){
-    const old = this.pickup_moment.find(v=>v.id===id);
+    const old = this.pickup_shear_force.find(v=>v.id===id);
     if(old!==undefined){
       return this.helper.toNumber(old.no);
     }
