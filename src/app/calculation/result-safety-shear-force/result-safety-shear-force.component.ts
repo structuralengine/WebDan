@@ -5,6 +5,8 @@ import { CalcSafetyShearForceService } from "./calc-safety-shear-force.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
+import { SetSectionService } from "../set-section.service";
+import { SetBarService } from "../set-bar.service";
 
 @Component({
   selector: "app-result-safety-shear-force",
@@ -24,6 +26,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
     private calc: CalcSafetyShearForceService,
     private post: SetPostDataService,
     private result: ResultDataService,
+    private section: SetSectionService,
+    private bar: SetBarService,
     private points: InputDesignPointsService,
   ) {}
 
@@ -58,7 +62,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       }
     );
   }
-  
+
   // 計算結果を集計する
   private setPages(OutputData: any): boolean {
     try {
@@ -114,45 +118,42 @@ export class ResultSafetyShearForceComponent implements OnInit {
             const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
-            const resultVmu: any = this.calc.calcVmu(
-              res, member, DesignForceList
-            );
+            const titleColumn = this.result.getTitleString(member, position, side)
+            const shape = this.section.getResult('Vd', member, res);
+            const Ast: any = this.bar.getResult('Vd', shape, res, safety);
+            const fck: any = this.section.getFck(position);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcVmu( res, member, DesignForceList )
             );
             /////////////// タイトル ///////////////
-            const titleColumn = this.result.getTitleString(member, position, side)
             column.push({ alien: 'center', value: titleColumn.m_no });
             column.push({ alien: 'center', value: titleColumn.p_name });
             column.push({ alien: 'center', value: titleColumn.side });
             ///////////////// 形状 /////////////////
-            const shapeString = this.result.getShapeString('Vd', member, res);
-            column.push(shapeString.B);
-            column.push(shapeString.H);
+            column.push(this.result.alien(shape.B));
+            column.push(this.result.alien(shape.H));
             /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString('Vd', shapeString.shape, res, safety);
-            column.push(Ast.tan);
-            column.push(Ast.Ast);
-            column.push(Ast.AstString);
-            column.push(Ast.dst);
+            column.push(this.result.alien(Ast.tan, 'center'));
+            column.push(this.result.alien(this.result.numStr(Ast.Ast), 'center'));
+            column.push(this.result.alien(Ast.AstString, 'center'));
+            column.push(this.result.alien(this.result.numStr(Ast.dst), 'center'));
             /////////////// 圧縮鉄筋 ///////////////
-            column.push(Ast.Asc);
-            column.push(Ast.AscString);
-            column.push(Ast.dsc);
+            column.push(this.result.alien(this.result.numStr(Ast.Asc), 'center'));
+            column.push(this.result.alien(Ast.AscString, 'center'));
+            column.push(this.result.alien(this.result.numStr(Ast.dsc), 'center'));
             /////////////// 側面鉄筋 ///////////////
-            column.push(Ast.Ase);
-            column.push(Ast.AseString);
-            column.push(Ast.dse);
+            column.push(this.result.alien(this.result.numStr(Ast.Ase), 'center'));
+            column.push(this.result.alien(Ast.AseString, 'center'));
+            column.push(this.result.alien(this.result.numStr(Ast.dse), 'center'));
             /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(position);
-            column.push(fck.fck);
-            column.push(fck.rc);
-            column.push(fck.fcd);
+            column.push(this.result.alien(fck.fck.toFixed(1), 'center'));
+            column.push(this.result.alien(fck.rc.toFixed(2), 'center'));
+            column.push(this.result.alien(fck.fcd.toFixed(1), 'center'));
             /////////////// 鉄筋強度情報 ///////////////
-            column.push(Ast.fsy);
-            column.push(Ast.rs);
-            column.push(Ast.fsd);
+            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), 'center'));
+            column.push(this.result.alien(Ast.rs.toFixed(2), 'center'));
+            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'));
             /////////////// 断面力 ///////////////
             column.push(resultColumn.Md);
             column.push(resultColumn.Nd);

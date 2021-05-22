@@ -60,7 +60,7 @@ export class SetSectionService {
   // 断面の入力から形状名を決定する
   public getShapeName(member: any, side: string): string {
 
-    let result: string = null;;
+    let result: string = null;
 
     if (member.shape.indexOf('円') >= 0) {
 
@@ -387,19 +387,64 @@ export class SetSectionService {
   // コンクリート強度の POST用データを返す
   public getSectionElastic(safety: any): any {
 
-    const fck = safety.material_concrete.fck;
-    const rc = safety.safety_factor.rc;
-    const pile = safety.pile_factor.find(e => e.selected === true);
-    const rfck = (pile !== undefined) ? pile.rfck : 1;
-    const rEc = (pile !== undefined) ? pile.rEc : 1;
-    const Ec = this.getEc(fck);
-    const result = {
-      fck: rfck * fck / rc,     // コンクリート強度
-      Ec: rEc * Ec,       // コンクリートの弾性係数
+    const fck = this.getFck(safety);
+
+    return {
+      fck: fck.fck,     // コンクリート強度
+      Ec: fck.Ec,       // コンクリートの弾性係数
       ElasticID: 'c'      // 材料番号
     };
 
+  }
+
+  public getFck(safety: any): any {
+    const result = {
+      fck: null,
+      rc: null,
+      Ec: null,
+      fcd: null
+    };
+
+    const pile = safety.pile_factor.find((e) => e.selected === true);
+    const rfck = pile !== undefined ? pile.rfck : 1;
+    const rEc = pile !== undefined ? pile.rEc : 1;
+    let rc = safety.safety_factor.rc;
+
+    if ("rc" in safety.safety_factor) {
+      result.rc = rc;
+    } else {
+      rc = 1;
+    }
+
+    if ("fck" in safety.material_concrete) {
+      const fck = safety.material_concrete.fck;
+      result.fck = fck * rfck;
+      const Ec = this.getEc(result.fck);
+      result.Ec = Ec * rEc;
+      result.fcd = rfck * fck / rc;
+    }
+
     return result;
+  }
+
+  // 照査表における 断面の文字列を取得
+  public getResult(target: string, member: any, res: any): any {
+    const shapeName = this.getShapeName(member, res.side);
+
+    const sectionInfo = this.getShape(
+      shapeName,
+      member,
+      target,
+      res.index
+    );
+
+    return {
+      B: this.helper.toNumber(sectionInfo.B),
+      H: this.helper.toNumber(sectionInfo.H),
+      Bt: this.helper.toNumber(sectionInfo.Bt),
+      t: this.helper.toNumber(sectionInfo.t),
+      shape: shapeName,
+    };
   }
 
   // コンクリート強度から弾性係数を 返す

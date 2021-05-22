@@ -75,7 +75,7 @@ export class CalcSafetyShearForceService {
   public calcVmu( resultData: any, position: any, DesignForceList: any): any {
 
     DesignForceList= (DesignForceList===null) ? this.DesignForceList : DesignForceList;
-    
+
     const force = this.DesignForceList.find(v => v.index === resultData.index)
                           .designForce.find(v => v.side === resultData.side)
 

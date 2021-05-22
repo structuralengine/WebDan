@@ -62,6 +62,7 @@ export class InputCrackSettingsService {
           data.position = pos.position;
           data.g_name = pos.g_name;
           data.p_name = pos.p_name;
+          data.g_id = member.g_id;
 
           table_groupe.push(data);
           count++;

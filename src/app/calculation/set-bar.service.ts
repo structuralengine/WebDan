@@ -162,7 +162,7 @@ export class SetBarService {
     const h: number = this.helper.toNumber(member.H);
     const b: number = this.helper.toNumber(member.B);
 
-    const barInfo = this.getAs("VerticalOval", index, "小判", h);
+    const barInfo = this.getAs("VerticalOval", index, "小判", b, h);
     const tension: any = barInfo.tension;
     const compres: any = barInfo.compres;
     const sideBar = barInfo.sidebar;
@@ -295,7 +295,7 @@ export class SetBarService {
     // 側方鉄筋 をセットする
     let sideBarList: any[] = new Array();
     if (safety.safety_factor.range >= 3) {
-      const rebar = this.getSideBar(sideBar, safety, h - b, 0, 0);
+      const rebar = this.getSideBar(sideBar, safety); //, h - b, 0, 0);
       sideBarList = rebar.Steels;
       for (const elastic of rebar.SteelElastic) {
         result.SteelElastic.push(elastic);
@@ -401,11 +401,24 @@ export class SetBarService {
     side: string,
     safety: any
   ): any {
+
     const result = {
       Steels: new Array(),
       SteelElastic: new Array(),
     };
-    const barInfo = this.getAs("Circle", index, side);
+
+
+    // 鉄筋配置
+    let h: number = this.helper.toNumber(member.H);
+    if (h === null) {
+      h = this.helper.toNumber(member.B);
+    }
+    if (h === null) {
+      return result;
+    }
+    
+    
+    const barInfo = this.getAs("Circle", index, side, h);
     /* const barInfo: any = bar.rebar1;
 
     // 鉄筋径の入力が ない場合は スキップ
@@ -469,14 +482,6 @@ export class SetBarService {
       dia = "R" + barInfo.rebar_dia;
     }
 
-    // 鉄筋配置
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) {
-      h = this.helper.toNumber(member.B);
-    }
-    if (h === null) {
-      return result;
-    }
 
     // let nAs: number = 0;
     // let nDepth: number = 0;
@@ -569,8 +574,9 @@ export class SetBarService {
       SteelElastic: new Array(),
     };
 
-    const height: number = member.H;
-    const barInfo = this.getAs("Rectangle", index, side, height);
+    const h: number = member.H;
+    const b: number = member.B;
+    const barInfo = this.getAs("Rectangle", index, side, b, h);
 
     let tension: any = barInfo.tension;
     let compres: any = barInfo.compres;
@@ -645,7 +651,7 @@ export class SetBarService {
           safety,
           tension,
           compres,
-          height
+          h
         );
       } else {
         sideBar = this.getSideBar(
@@ -680,7 +686,7 @@ export class SetBarService {
 
     for (const Ast of tensionBarList) {
       Ast.n = Ast.n * cosAst;
-      Ast.Depth = height - Ast.Depth / cosAst;
+      Ast.Depth = h - Ast.Depth / cosAst;
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }
@@ -841,7 +847,7 @@ export class SetBarService {
     result['φ'] =  barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
     */
 
-    return result;
+    return result;safety
   }
 
   // 矩形。Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数
@@ -854,7 +860,7 @@ export class SetBarService {
       Steels: new Array(),
       SteelElastic: new Array(),
     };
-    
+
     if (barInfo === null) {
       return result; // 側方鉄筋の入力が無い場合
     }
@@ -936,7 +942,7 @@ export class SetBarService {
   }
 
   // 軸方向鉄筋の情報を返す
-  public getAs(shapeName: string, index: number, side: string, height: number = null): any {
+  public getAs(shapeName: string, index: number, side: string, b: number, h: number = null): any {
     let result = {};
 
     const bar = this.bars.getCalcData(index);
@@ -947,14 +953,33 @@ export class SetBarService {
       case "Circle": // 円形
       case "Ring": // 円環
         tension = this.getRebarInfo(bar.rebar1);
+        if(tension.rebar_ss === null){
+          const D = h - tension.dsc * 2; 
+          tension.rebar_ss = D / tension.line; 
+        }
         result = { tension };
+        break;
+
+      case "VerticalOval": // 鉛直方向小判形
+        tension = this.getRebarInfo(bar.rebar1);
+        compres = this.getRebarInfo(bar.rebar2);
+        if(tension.rebar_ss === null){
+          const D = h - tension.dsc * 2; 
+          tension.rebar_ss = D / tension.line; 
+        }
+        break;
+
+      case "HorizontalOval": // 水平方向小判形
+        tension = this.getRebarInfo(bar.rebar1);
+        compres = this.getRebarInfo(bar.rebar2);
+        if(tension.rebar_ss === null){
+          tension.rebar_ss = (b - h) / tension.line;
+        }
         break;
 
       case "Rectangle": // 矩形
       case "Tsection": // T形
       case "InvertedTsection": // 逆T形
-      case "HorizontalOval": // 水平方向小判形
-      case "VerticalOval": // 鉛直方向小判形
         switch (side) {
           case "上側引張":
           case "小判":
@@ -966,7 +991,11 @@ export class SetBarService {
             compres = this.getRebarInfo(bar.rebar1);
             break;
         }
-        const sidebar = this.getSideInfo(bar.sidebar, tension.dsc, compres.dsc, height);
+        if(tension.rebar_ss === null){
+          tension.rebar_ss = b / tension.line;
+        }
+
+        const sidebar = this.getSideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
 
         result = { tension, compres, sidebar };
         break;
@@ -1083,6 +1112,132 @@ export class SetBarService {
       dse,
       line
     }
+  }
+
+  // 照査表における 引張鉄筋情報を取得
+  public getResult(
+    target: string,
+    shape: any,
+    res: any,
+    safety: any
+  ): any {
+
+    const result = {
+      Ast: null,
+      AstString: null,
+      dst: null,
+      AstCos: null,
+
+      Asc: null,
+      AscString: null,
+      dsc: null,
+      AscCos: null,
+
+      Ase: null,
+      AseString: null,
+      dse: null,
+
+      fsy: null,
+      Es: null,
+      fsd: null,
+      rs: null,
+      fsu: null
+    };
+
+    const bar = this.getAs(shape.shape, res.index, res.side, shape.B, shape.H);
+    for(const key of Object.keys(bar)){
+      result[key] = bar[key];
+    }
+
+    /////////////// 引張鉄筋 ///////////////
+    const fsyt = this.getFsyk(bar.tension.rebar_dia, safety.material_bar);
+    if (fsyt.fsy === 235) {
+      bar.tension.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+    }
+    const markt = bar.tension.mark === "R" ? "φ" : "D";
+    const AstDia = markt + bar.tension.rebar_dia;
+    const Astx: number =
+      this.helper.getAs(AstDia) * bar.tension.rebar_n * bar.tension.cos;
+    const dstx: number = this.getBarCenterPosition(
+      bar.tension.dsc,
+      bar.tension.rebar_n,
+      bar.tension.line,
+      bar.tension.space,
+      bar.tension.cos
+    );
+
+    result.Ast = Astx;
+    result.AstString = AstDia + "-" + bar.tension.rebar_n + "本";
+    result.dst = dstx;
+
+    /////////////// 圧縮鉄筋 ///////////////
+    if (safety.safety_factor.range >= 2 && bar.compres != null) {
+      const fsyc = this.getFsyk(
+        bar.compres.rebar_dia,
+        safety.material_bar
+      );
+      if (fsyc.fsy === 235) {
+        bar.compres.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+      }
+      const markc = bar.compres.mark === "R" ? "φ" : "D";
+      const AscDia = markc + bar.compres.rebar_dia;
+      const Ascx: number =
+        this.helper.getAs(AscDia) * bar.compres.rebar_n * bar.compres.cos;
+      const dscx: number = this.getBarCenterPosition(
+        bar.compres.dsc,
+        bar.compres.rebar_n,
+        bar.compres.line,
+        bar.compres.space,
+        bar.compres.cos
+      );
+
+      result.Asc = Ascx;
+      result.AscString = AscDia + "-" + bar.compres.rebar_n + "本";
+      result.dsc = dscx;
+    }
+
+    /////////////// 側面鉄筋 ///////////////
+    if (safety.safety_factor.range >= 3 && bar.sidebar != null) {
+      const dia = Math.abs(bar.sidebar.side_dia);
+      const fsye = this.getFsyk(dia, safety.material_bar, "sidebar");
+      let marke = "D";
+      if (fsye.fsy === 235 || bar.sidebar.side_dia < 0) {
+        marke = "φ"; // 鉄筋強度が 235 なら 丸鋼
+      }
+      const Ase = marke + bar.sidebar.side_dia;
+      const Asex: number = this.helper.getAs(Ase) * bar.sidebar.side_n;
+      const dsex: number = this.getBarCenterPosition(
+        bar.sidebar.dsc,
+        bar.sidebar.side_n,
+        bar.sidebar.line,
+        bar.sidebar.space,
+        bar.sidebar.cos
+      );
+
+      result.Ase = Asex;
+      result.AseString = Ase + "-" + bar.sidebar.side_n + "段";
+      result.dse = dsex;
+    }
+
+    result.AstCos = bar.tension.cos;
+    result.AscCos = bar.compres.cos;
+
+    // 照査表における 鉄筋強度情報を取得
+    if ("fsy" in fsyt) {
+      result.fsy = fsyt.fsy;
+      result.Es = 200;
+      result.fsd = fsyt.fsy / safety.safety_factor.rs;
+    }
+
+    if ("rs" in safety.safety_factor) {
+      result.rs = safety.safety_factor.rs;
+    }
+
+    if ("fsu" in fsyt) {
+      result.fsu = fsyt.fsu;
+    }
+
+    return result;
   }
 
   // せん断補強鉄筋量の情報を返す

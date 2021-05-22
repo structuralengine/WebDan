@@ -8,6 +8,8 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
+import { SetSectionService } from '../set-section.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,7 +30,8 @@ export class CalcServiceabilityMomentService {
     private helper: DataHelperModule,
     private force: SetDesignForceService,
     private post: SetPostDataService,
-    private result: ResultDataService,
+    private crack: InputCrackSettingsService,
+    private section: SetSectionService,
     public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;
@@ -74,19 +77,26 @@ export class CalcServiceabilityMomentService {
     return this.safety.getCalcData('Md', g_id, this.safetyID);
   }
 
-  public calcWd(resultData: any, position: any, isDurability: boolean): any {
-    const PrintData: any = {}; //仮
+  public calcWd(
+    res: any, shape: any,
+    fc: any, Ast: any, safety: any,
+    member: any, isDurability: boolean): any {
+
+    const res0 = res[0]; // 永久作用
+    const res1 = res[1]; // 永久＋変動作用
+
+    const crackInfo = this.crack.getTableColumn(res0.index);
 
     const result = {};
 
     // 環境条件
     let conNum: number = 1;
-    switch (resultData.side) {
+    switch (res0.side) {
       case '上側引張':
-        conNum = this.helper.toNumber(position.memberInfo.con_u);
+        conNum = this.helper.toNumber(crackInfo.con_u);
         break;
       case '下側引張':
-        conNum = this.helper.toNumber(position.memberInfo.con_l);
+        conNum = this.helper.toNumber(crackInfo.con_l);
         break;
     }
     if (conNum === null) { conNum = 1; }
@@ -113,72 +123,19 @@ export class CalcServiceabilityMomentService {
         break;
     }
 
-    let rc: number = 1;
-    if ('rc' in PrintData) {
-      rc = this.helper.toNumber(PrintData.rc);
-      if (rc === null) { rc = 1; }
-    }
-
-    let fck: number;
-    if ('fck' in PrintData) {
-      fck = this.helper.toNumber(PrintData.fck);
-      if (fck === null) { return result; }
-    } else {
-      return result;
-    }
-
-    let rfck: number = 1;
-    if ('rfck' in PrintData) {
-      rfck = this.helper.toNumber(PrintData.rfck);
-      if (rfck === null) { rfck = 1; }
-    }
-
-
-    const fcd: number = rfck * fck / rc;
-
-
-    let H: number;
-    if ('H' in PrintData) {
-      H = this.helper.toNumber(PrintData.H);
-      if (H === null) { return result; }
-    } else if ('R' in PrintData) {
-      H = this.helper.toNumber(PrintData.R);
-      if (H === null) { return result; }
-    } else {
-      return result;
-    }
+    const fcd: number = fc.fcd;
+    const H: number = shape.H;
 
     // 永久作用
-    let Md: number;
-    if ('Md' in resultData) {
-      Md = this.helper.toNumber(resultData.Md);
-      if (Md !== null) {
-        result['Md'] = Md;
-      }
-    }
+    const Md: number = res0.ResultSigma.Md;
+    result['Md'] = Md;
 
-    let Nd: number;
-    if ('Nd' in resultData) {
-      Nd = this.helper.toNumber(resultData.Nd);
-      if (Nd !== null) {
-        result['Nd'] = Nd;
-      }
-    }
+    const Nd: number = res0.ResultSigma.Nd;
     result['Nd'] = Nd;
 
-    if (resultData === null) {
-      resultData = {
-        fi: 0,
-        Md: 0,
-        Nd: 0,
-        sc: new Array(),
-        st: new Array(),
-        x: 0,
-      };
-    }
 
     // 圧縮応力度の照査
-    const Sigmac: number = this.getSigmac(resultData.sc);
+    const Sigmac: number = this.getSigmac(res0.ResultSigma.sc);
     if (Sigmac === null) { return result; }
     result['Sigmac'] = Sigmac;
 
@@ -187,42 +144,30 @@ export class CalcServiceabilityMomentService {
     result['fcd04'] = fcd04;
 
     // 縁応力の照査
-    let Mhd: number;
-    if ('Md' in resultData) {
-      Mhd = this.helper.toNumber(resultData.Md);
-      if (Mhd !== null) {
-        result['Mhd'] = Mhd;
-      }
-    }
+    const Mhd: number = res1.ResultSigma.Md;
+    result['Mhd'] = Mhd;
 
-    let Nhd: number;
-    if ('Nd' in resultData) {
-      Nhd = this.helper.toNumber(resultData.Nd);
-      if (Nhd !== null) {
-        result['Nhd'] = Nhd;
-      }
-    }
+    const Nhd: number = res1.ResultSigma.Nd;
+    result['Nhd'] = Nhd;
 
     // 縁応力度
-    const Sigmab: number = this.getSigmab(Mhd, Nhd, PrintData);
+    const struct = this.section.getStructuralVal(
+      shape.shape, member, "Md", res0.index);
+    const Sigmab: number = this.getSigmab(Mhd, Nhd, res0.side, struct);
     if (Sigmab === null) { return result; }
     result['Sigmab'] = Sigmab;
 
     // 制限値
-    let Vyd_H: number; // 円形の制限値を求める時は換算矩形で求める
-    if ('Vyd_H' in PrintData) {
-      Vyd_H = this.helper.toNumber(PrintData.Vyd_H);
-      if (Vyd_H === null) { return Vyd_H = H; }
-    } else {
-      Vyd_H = H;
-    }
+    const VydBH = this.section.getVydBH(shape.shape, member, "Md", res0.index);
+    const Vyd_H: number= VydBH.H; // 円形の制限値を求める時は換算矩形で求める
     const Sigmabl: number = this.getSigmaBl(Vyd_H, fcd);
     result['Sigmabl'] = Sigmabl;
 
+    const Sigmas: number = this.getSigmas(res0.ResultSigma.st);
+    if (Sigmas === null) { return result; }
+
     if (Sigmab < Sigmabl) {
       // 鉄筋応力度の照査
-      const Sigmas: number = this.getSigmas(resultData.st, resultData.Steels);
-      if (Sigmas === null) { return result; }
       result['Sigmas'] = Sigmas;
       result['sigmal1'] = sigmal1;
       return result;
@@ -232,78 +177,37 @@ export class CalcServiceabilityMomentService {
     result['Mpd'] = Md;
     result['Npd'] = Nd;
 
-    let Es: number;
-    if ('Es' in PrintData) {
-      Es = this.helper.toNumber(PrintData.Es);
-      if (Es === null) { return result; }
-    } else {
-      return result;
-    }
-    let Ec: number;
-    if ('Ec' in PrintData) {
-      Ec = this.helper.toNumber(PrintData.Ec);
-      if (Ec !== null) {
-        result['EsEc'] = Es / Ec;
-      }
-    }
+    const Es: number = Ast.Es;
+    const Ec: number = fc.Ec;
+    result['EsEc'] = Es / Ec;
 
-    const Sigmase: number = this.getSigmas(resultData.st, resultData.Steels);
-    if (Sigmase === null) { return result; }
+    const Sigmase: number = Sigmas;
     result['sigma_se'] = Sigmase;
 
-    let c: number;
-    if ('Ast-c' in PrintData) {
-      c = this.helper.toNumber(PrintData['Ast-c']);
-      if (c === null) { return result; }
-    } else {
-      return result;
-    }
-    result['c'] = c;
-
-    let Cs: number;
-    if ('Ast-Cs' in PrintData) {
-      Cs = this.helper.toNumber(PrintData['Ast-Cs']);
-      if (Cs === null) { return result; }
-    } else {
-      return result;
-    }
-    result['Cs'] = Cs;
-
-    let fai: number;
-    if ('Ast-φ' in PrintData) {
-      fai = this.helper.toNumber(PrintData['Ast-φ']);
-      if (fai === null) { return result; }
-    } else {
-      return result;
-    }
+    const fai: number = Ast.tension.rebar_dia;
     result['fai'] = fai;
 
-    let ecu: number;
-    if ('ecsd' in position.memberInfo) {
-      ecu = this.helper.toNumber(position.memberInfo.ecsd);
-      if (ecu === null) { ecu = 450; }
-    } else {
-      ecu = 450;
-    }
+    const c: number = Ast.tension.dsc - (Ast.tension.rebar_dia / 2)
+    result['c'] = c;
+
+    let Cs: number = Ast.tension.rebar_ss;
+    result['Cs'] = Cs;
+
+    let ecu: number = this.helper.toNumber(crackInfo.ecsd);
+    if (ecu === null) { ecu = 450; }
     result['ecu'] = ecu;
 
-    let k1: number = 1;
-    if ('fsy' in PrintData) {
-      const fsy: number = this.helper.toNumber(PrintData.fsy);
-      if (fsy === 235) {
-        k1 = 1.3;
-      }
-    }
+    const k1: number = (Ast.fsy === 235) ? 1.3 : 1;
     result['k1'] = k1;
 
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    const n: number = PrintData['Ast-n'];
+    const n: number = Ast.tension.n;
     result['n'] = n;
 
     const k3: number = (5 * (n + 2)) / (7 * n + 8);
-    result['k3'] = k3; 
+    result['k3'] = k3;
 
     const k4: number = 0.85;
     result['k4'] = k4;
@@ -322,11 +226,7 @@ export class CalcServiceabilityMomentService {
     }
     result['Wlim'] = Wlim;
 
-    let ri: number = 1;
-    if ('ri' in PrintData) {
-      ri = this.helper.toNumber(PrintData.ri);
-      if (ri === null) { ri = 1; }
-    }
+    let ri: number = safety.safety_factor.ri;
     result['ri'] = ri;
 
     const ratio: number = ri * Wd / Wlim;
@@ -337,7 +237,7 @@ export class CalcServiceabilityMomentService {
 
 
   // 鉄筋の引張応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  public getSigmas(sigmaSt: any[], Steels: any[]): number {
+  public getSigmas(sigmaSt: any[]): number {
 
     if (sigmaSt === null) {
       return null;
@@ -345,7 +245,7 @@ export class CalcServiceabilityMomentService {
     if (sigmaSt.length < 1) {
       return 0;
     }
-    
+
     try {
       // とりあえず最外縁の鉄筋の応力度を用いる
       let st: number = 0;
@@ -387,27 +287,24 @@ export class CalcServiceabilityMomentService {
   }
 
   // 縁応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  private getSigmab(Mhd: number, Nhd: number, PrintData: any): number {
-    try {
-      const I: number = PrintData.I;
-      const A: number = PrintData.A;
-      const Md: number = Math.abs(Mhd * 1000000);
-      const Nd: number = Nhd * 1000;
-      let e: number;
-      switch (PrintData.side) {
-        case '上側引張':
-          e = PrintData.eu;
-          break;
-        case '下側引張':
-          e = PrintData.el;
-          break;
-      }
-      const Z = I / e;
-      const result = Md / Z - Nd / A;
-      return result;
-    } catch{
-      return null;
+  private getSigmab(Mhd: number, Nhd: number, side: string, struct: any): number {
+
+    const I: number = struct.I;
+    const A: number = struct.A;
+    const Md: number = Math.abs(Mhd * 1000000);
+    const Nd: number = Nhd * 1000;
+    let e: number;
+    switch (side) {
+      case '上側引張':
+        e = struct.eu;
+        break;
+      case '下側引張':
+        e = struct.el;
+        break;
     }
+    const Z = I / e;
+    const result = Md / Z - Nd / A;
+    return result;
 
   }
 
