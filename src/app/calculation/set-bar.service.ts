@@ -954,7 +954,7 @@ export class SetBarService {
     switch (shapeName) {
       case "Circle": // 円形
       case "Ring": // 円環
-        tension = this.getRebarInfo(bar.rebar1);
+        tension = this.rebarInfo(bar.rebar1);
         if(tension.rebar_ss === null){
           const D = h - tension.dsc * 2; 
           tension.rebar_ss = D / tension.line; 
@@ -963,8 +963,8 @@ export class SetBarService {
         break;
 
       case "VerticalOval": // 鉛直方向小判形
-        tension = this.getRebarInfo(bar.rebar1);
-        compres = this.getRebarInfo(bar.rebar2);
+        tension = this.rebarInfo(bar.rebar1);
+        compres = this.rebarInfo(bar.rebar2);
         if(tension.rebar_ss === null){
           const D = h - tension.dsc * 2; 
           tension.rebar_ss = D / tension.line; 
@@ -972,8 +972,8 @@ export class SetBarService {
         break;
 
       case "HorizontalOval": // 水平方向小判形
-        tension = this.getRebarInfo(bar.rebar1);
-        compres = this.getRebarInfo(bar.rebar2);
+        tension = this.rebarInfo(bar.rebar1);
+        compres = this.rebarInfo(bar.rebar2);
         if(tension.rebar_ss === null){
           tension.rebar_ss = (b - h) / tension.line;
         }
@@ -985,19 +985,19 @@ export class SetBarService {
         switch (side) {
           case "上側引張":
           case "小判":
-            tension = this.getRebarInfo(bar.rebar1);
-            compres = this.getRebarInfo(bar.rebar2);
+            tension = this.rebarInfo(bar.rebar1);
+            compres = this.rebarInfo(bar.rebar2);
             break;
           case "下側引張":
-            tension = this.getRebarInfo(bar.rebar2);
-            compres = this.getRebarInfo(bar.rebar1);
+            tension = this.rebarInfo(bar.rebar2);
+            compres = this.rebarInfo(bar.rebar1);
             break;
         }
         if(tension.rebar_ss === null){
           tension.rebar_ss = b / tension.line;
         }
 
-        const sidebar = this.getSideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
+        const sidebar = this.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
 
         result = { tension, compres, sidebar };
         break;
@@ -1010,7 +1010,7 @@ export class SetBarService {
   }
 
   // 圧縮・引張主鉄筋の情報を返す
-  private getRebarInfo(barInfo: any): any {
+  private rebarInfo(barInfo: any): any {
     // 鉄筋径
     if (this.helper.toNumber(barInfo.rebar_dia) === null) {
       return null;
@@ -1070,7 +1070,7 @@ export class SetBarService {
     }
   }
 
-  private getSideInfo(barInfo: any, dst: number, dsc: number, height: number){
+  private sideInfo(barInfo: any, dst: number, dsc: number, height: number){
 
     if(height===null){
       return null; // 円形など側鉄筋を用いない形状はスキップ
@@ -1275,6 +1275,16 @@ export class SetBarService {
       tan: null
     };
 
+    // 鉄筋径
+    if (this.helper.toNumber(bar.stirrup_dia) === null) {
+      return null;
+    }
+    const dia = Math.abs(bar.stirrup_dia);
+/*
+    // 異形鉄筋:D, 丸鋼: R
+    const mark = barInfo.rebar_dia > 0 ? "D" : "R";
+
+        
     let dia: string = "D" + bar.stirrup_dia;
     if (fwyd === 235) {
       // 鉄筋強度が 235 なら 丸鋼
@@ -1288,8 +1298,7 @@ export class SetBarService {
     result.Ss = starrup.stirrup_ss;
     result.fwyd = fwyd;
     result.fwud = fwud;
-
-
+*/
     return result;
   }
 
