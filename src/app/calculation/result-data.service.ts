@@ -2,19 +2,16 @@
 
 import { Injectable } from "@angular/core";
 import { DataHelperModule } from "../providers/data-helper.module";
-import { SetSectionService } from "./set-section.service";
-import { SetBarService } from "./set-bar.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ResultDataService {
   constructor(
-    private section: SetSectionService,
-    private steel: SetBarService,
     private helper: DataHelperModule
   ) {}
 
+  // 表題の共通した行
   public getTitleString(member: any, position: any, side: string): any {
     // 照査表における タイトル１行目を取得
     let strPos = "";
@@ -40,6 +37,7 @@ export class ResultDataService {
     };
   }
 
+  // value が null なら center 寄せ の -
   public alien(value: any, alien: string = "right"): any {
     let result: object;
     if (value === null) {
@@ -50,6 +48,7 @@ export class ResultDataService {
     return result;
   }
 
+  // 整数なら Fixed(0), 少数なら dim で指定した少数で丸める
   public numStr(dst: number, dim: number = 2): string{
 
     if ( dst === null ){ 

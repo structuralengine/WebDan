@@ -477,7 +477,7 @@ export class SetSectionService {
   }
 
   // 角度をラジアンに変換
-  private Radians(degree: number) {
+  public Radians(degree: number) {
     return degree * (Math.PI / 180);
   }
 

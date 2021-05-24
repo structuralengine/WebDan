@@ -130,7 +130,7 @@ export class CalcSafetyShearForceService {
     const tan: number = Ast.tan;
     let Vhd: number = 0;
     if (tan !== 0) {
-      Vhd = (Math.abs(Md) / d) * this.bar.Radians(tan);
+      Vhd = (Math.abs(Md) / d) * this.section.Radians(tan);
       result["Vhd"] = Vhd;
     }
 
@@ -333,8 +333,8 @@ export class CalcSafetyShearForceService {
     result["z"] = z;
 
     let sinCos: number =
-      Math.sin(this.bar.Radians(deg)) +
-      Math.cos(this.bar.Radians(deg));
+      Math.sin(this.section.Radians(deg)) +
+      Math.cos(this.section.Radians(deg));
     result["sinCos"] = sinCos;
 
     let Vsd =

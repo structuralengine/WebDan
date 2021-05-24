@@ -14,11 +14,7 @@ export class SetBarService {
   ) { }
 
   // 鉄筋情報を集計する
-  // member: 部材・断面情報
-  // position: ハンチの情報
-  // force: 荷重の情報
-  // safety: 安全係数の情報
-  public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
+   public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
 
     // 鉄筋情報を 集計
     let result: object;
@@ -97,21 +93,6 @@ export class SetBarService {
     // 1段当りの本数
     const line = 2;
 
-    /*/ 鉄筋強度
-    let fsy: number;
-    let ElasticID: string ;
-    if (barInfo.side_dia < materialInfo[0].separate) {
-      fsy = this.helper.toNumber(materialInfo[0].sidebar.fsy);
-      ElasticID = 's1';
-    } else {
-      fsy = this.helper.toNumber(materialInfo[1].sidebar.fsy);
-      ElasticID = 's2';
-    }
-    if (fsy === null) {
-      return new Array();
-    }
-    */
-
     const fsy = this.getFsyk(barInfo.rebar_dia, safety.material_bar, "sidebar");
     const id = "s" + fsy.id;
 
@@ -126,8 +107,6 @@ export class SetBarService {
     const start_deg: number = (360 * dse) / (Math.PI * Rt); // 鉄筋配置開始角度
     const steps_deg: number = (360 * space) / (Math.PI * Rt); // 鉄筋配置角度
     const end_deg: number = start_deg + steps_deg * (n - 1); // 鉄筋配置終了角度
-    //let Dsn: number = 0;
-    //let Num: number = 0;
     for (let deg = start_deg; deg <= end_deg; deg += steps_deg) {
       const dt = Rt / 2 - (Math.cos(this.Radians(deg)) * Rt) / 2 + dsc;
 
@@ -140,21 +119,13 @@ export class SetBarService {
       };
       result.push(Steel1);
 
-      //Num += line;
-      //Dsn += dt * line;
     }
-
-    /*/ 印刷用の変数に登録
-    result['As'] = this.helper.getAs(dia) * n;
-    result['AsString'] = dia + '-' + n + '段';
-    result['ds'] = Dsn / Num;
-    */
 
     return result;
   }
 
   // 縦小判形の 鉄筋のPOST用 データを登録する。
-  public getVerticalOvalBar(member: any, index: number, safety: any): any {
+  private getVerticalOvalBar(member: any, index: number, safety: any): any {
     const result = {
       Steels: new Array(),
       SteelElastic: new Array(),
@@ -164,65 +135,11 @@ export class SetBarService {
     const h: number = this.helper.toNumber(member.H);
     const b: number = this.helper.toNumber(member.B);
 
-    const barInfo = this.getAs("VerticalOval", index, "小判", b, h);
+    const barInfo = this.getInputData("VerticalOval", index, "小判", b, h);
     const tension: any = barInfo.tension;
     const compres: any = barInfo.compres;
     const sideBar = barInfo.sidebar;
-    /*
-    const tension: any = bar.rebar1;
-    const compres: any = bar.rebar2;
 
-    // 鉄筋径の入力が ない場合は スキップ
-    if (this.helper.toNumber(tension.rebar_dia) === null) {
-      return result;
-    }
-    if (this.helper.toNumber(compres.rebar_dia) === null) {
-      compres.rebar_dia = tension.rebar_dia;
-    }
-
-    // 鉄筋の本数の入力が ない場合は スキップ
-    let rebar_n1 = this.helper.toNumber(tension.rebar_n);
-    if (rebar_n1 === null) {
-      return result;
-    }
-    let rebar_n2 = this.helper.toNumber(compres.rebar_n);
-    if (rebar_n2 === null) {
-      rebar_n2 = rebar_n1;
-    }
-
-    // 1段当りの本数
-    let line1: number = this.helper.toNumber(tension.rebar_lines);
-    if (line1 === null) {
-      line1 = rebar_n1;
-    }
-    let line2: number = this.helper.toNumber(compres.rebar_lines);
-    if (line2 === null) {
-      line2 = rebar_n2;
-    }
-
-    // 鉄筋段数
-    const n1: number = Math.ceil(line1 / rebar_n1);
-    const n2: number = Math.ceil(line2 / rebar_n2);
-
-    // 鉄筋アキ
-    let space1: number = this.helper.toNumber(tension.rebar_space);
-    if (space1 === null) {
-      space1 = 0;
-    }
-    let space2: number = this.helper.toNumber(compres.rebar_space);
-    if (space2 === null) {
-      space2 = 0;
-    }
-    // 鉄筋かぶり
-    let dsc1 = this.helper.toNumber(tension.rebar_cover);
-    if (dsc1 === null) {
-      dsc1 = 0;
-    }
-    let dsc2 = this.helper.toNumber(compres.rebar_cover);
-    if (dsc2 === null) {
-      dsc2 = 0;
-    }
-*/
     // 鉄筋強度の入力
     const rs = safety.safety_factor.rs;
 
@@ -287,11 +204,7 @@ export class SetBarService {
           compresBarList.push(Steel1);
         }
       }
-      /*
-      result['Asc'] = this.helper.getAs(dia2) * rebar_n2;
-      result['AscString'] = dia2 + '-' + rebar_n2 + '本';
-      result['dsc'] = this.getBarCenterPosition(dsc2, rebar_n2, line2, space2, 1);
-*/
+
     }
 
     // 側方鉄筋 をセットする
@@ -303,19 +216,10 @@ export class SetBarService {
         result.SteelElastic.push(elastic);
       }
 
-      /*/ 印刷用の変数に登録
-      result['Ase'] = rebar['As'];
-      result['AseString'] = rebar['AsString'];
-      result['dse'] = rebar['ds'];
-      */
     }
 
     // 引張（下側）鉄筋配置
     const tensionBarList: any[] = new Array();
-
-    // let nAs: number = 0;
-    // let nDepth: number = 0;
-    // const As: number = this.helper.getAs(dia1);
 
     for (let i = 0; i < tension.n; i++) {
       const Depth = tension.dsc + i * tension.space;
@@ -333,28 +237,8 @@ export class SetBarService {
           ElasticID: id1, // 材料番号
         };
         tensionBarList.push(Steel1);
-        // nAs += As * 1;
-        // nDepth += As * 1 * dst;
       }
     }
-    /*
-    result['Ast-n'] = n1; // ひび割れの検討k3 に用いる鉄筋段数
-    result['Ast-c'] = dsc1 - (tension.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
-    result['Ast-φ'] = tension.rebar_dia; // ひび割れの検討 に用いる鉄筋径
-    let Cs: number = this.helper.toNumber(tension.rebar_ss);
-    if (Cs === null) {
-      Cs = (h - (tension.dsc * 2)) * Math.PI / tension.line;
-    }
-    result['Ast-Cs'] = Cs; // ひび割れの検討 に用いる鉄筋間隔
-    result['Vyd_d'] = nDepth / nAs;
-    result['Vyd_Ast'] = nAs;
-
-    // 印刷用の変数に登録
-    result['fsu'] = fsu1;
-    result['fsy'] = fsy1;
-    result['rs'] = rs;
-    result['Es'] = 200;
-    */
 
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
@@ -374,30 +258,11 @@ export class SetBarService {
       result.Steels.push(Ast);
     }
 
-    /*/ 印刷用の変数に登録
-    result['Ast'] = this.helper.getAs(dia1) * rebar_n1;
-    result['AstString'] = dia1 + '-' + rebar_n1 + '本';
-    result['dst'] = this.getBarCenterPosition(dsc1, rebar_n1, line1, space1, 1);
-    result['Ast-c'] = dsc1 - (tension.rebar_dia/2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
-    result['Ast-Cs'] = tension.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
-    result['Ast-φ'] = tension.rebar_dia; // ひび割れの検討 に用いる鉄筋径
-
-    const Aw: any = this.setAwPrintData(bar.stirrup, safety.material_bar);
-    if (Aw !== null) {
-      result['AW-φ'] = Aw['AW-φ'];
-      result['Aw'] = Aw.Aw;
-      result['AwString'] = Aw.AwString;
-      result['fwyd'] = Aw.fwyd;
-      result['fwud'] = Aw.fwud;
-      result['deg'] = Aw.deg;
-      result['Ss'] = Aw.Ss;
-    }
-    */
     return result;
   }
 
   // 円形の 鉄筋のPOST用 データを登録する。
-  public getCircleBar(
+  private getCircleBar(
     member: any,
     index: number,
     side: string,
@@ -418,58 +283,9 @@ export class SetBarService {
     if (h === null) {
       return result;
     }
-    
-    
-    const barInfo = this.getAs("Circle", index, side, h);
-    /* const barInfo: any = bar.rebar1;
 
-    // 鉄筋径の入力が ない場合は スキップ
-    if (this.helper.toNumber(barInfo.rebar_dia) === null) {
-      return result;
-    }
+    const barInfo = this.getInputData("Circle", index, side, h);
 
-    // 鉄筋の本数の入力が ない場合は スキップ
-    let rebar_n = this.helper.toNumber(barInfo.rebar_n);
-    if (rebar_n === null) {
-      return result;
-    }
-
-    // 1段当りの本数
-    let line: number = this.helper.toNumber(barInfo.rebar_lines);
-    if (line === null) {
-      line = rebar_n;
-    }
-
-    // 鉄筋段数
-    const n: number = Math.ceil(line / rebar_n);
-
-    // 鉄筋アキ
-    let space: number = this.helper.toNumber(barInfo.rebar_space);
-    if (space === null) {
-      space = 0;
-    }
-
-    // 鉄筋かぶり
-    let dsc = this.helper.toNumber(barInfo.rebar_cover);
-    if (dsc === null) {
-      dsc = 0;
-    }
-    */
-
-    /*/ 鉄筋強度
-    let fsy: number;
-    let fsu: number;
-    if (barInfo.rebar_dia <= safety.material_bar[0].separate) {
-      fsy = this.helper.toNumber(safety.material_bar[0].tensionBar.fsy);
-      fsu = this.helper.toNumber(safety.material_bar[0].tensionBar.fsu);
-    } else {
-      fsy = this.helper.toNumber(safety.material_bar[1].tensionBar.fsy);
-      fsu = this.helper.toNumber(safety.material_bar[1].tensionBar.fsu);
-    }
-    if (fsy === null) {
-      return result;
-    }
-*/
     const fsy = this.getFsyk(
       barInfo.rebar_dia,
       safety.material_bar,
@@ -483,11 +299,6 @@ export class SetBarService {
       // 鉄筋強度が 235 なら 丸鋼
       dia = "R" + barInfo.rebar_dia;
     }
-
-
-    // let nAs: number = 0;
-    // let nDepth: number = 0;
-    // const As: number = this.helper.getAs(dia);
 
     for (let i = 0; i < barInfo.n; i++) {
       const Depth = barInfo.dsc + i * barInfo.space;
@@ -507,10 +318,6 @@ export class SetBarService {
           ElasticID: "s", // 材料番号
         };
         result.Steels.push(Steel1);
-        // if (tensionBar === true) {
-        //   nAs += As * 1;
-        //   nDepth += As * dst;
-        // }
       }
     }
 
@@ -524,48 +331,11 @@ export class SetBarService {
       ElasticID: id,
     });
 
-    /*/ 印刷用の変数に登録
-    result['Vyd_d'] = nDepth / nAs;
-    result['Vyd_Ast'] = nAs;
-    const vyd_n: number = Math.round(nAs / As * 100) / 100;
-    result['Vyd_AstString'] = dia + '-' + vyd_n + '本';
-
-    result['Ast'] = this.helper.getAs(dia) * barInfo.rebar_n;
-    result['AstString'] = dia + '-' + barInfo.rebar_n.toString() + '本';
-    result['dst'] = this.getBarCenterPosition(barInfo.dsc, barInfo.rebar_n, barInfo.line, barInfo.space, 1);
-
-    result['Ast-n'] = barInfo.n; // ひび割れの検討k3 に用いる鉄筋段数
-    result['Ast-c'] = barInfo.dsc - (barInfo.rebar_dia / 2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
-    result['Ast-φ'] = barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
-
-    let Cs: number = this.helper.toNumber(barInfo.rebar_ss);
-    if (Cs === null) {
-      Cs = (h - (barInfo.dsc * 2)) * Math.PI / barInfo.line;
-    }
-    result['Ast-Cs'] = Cs; // ひび割れの検討 に用いる鉄筋間隔
-
-    result['fsu'] = fsu;
-    result['fsy'] = fsy;
-    result['rs'] = rs;
-    result['Es'] = 200;
-
-    const Aw: any = this.setAwPrintData(barInfo.stirrup, safety.material_bar);
-    if (Aw !== null) {
-      result['AW-φ'] = Aw['AW-φ'];
-      result['Aw'] = Aw.Aw;
-      result['AwString'] = Aw.AwString;
-      result['fwyd'] = Aw.fwyd;
-      result['fwud'] = Aw.fwud;
-      result['deg'] = Aw.deg;
-      result['Ss'] = Aw.Ss;
-    }
-    */
-
     return result;
   }
 
-  // 矩形 T形の 鉄筋のPOST用 データを登録する。
-  public getRectBar(
+  // 矩形、Ｔ形断面の 鉄筋のPOST用 データを登録する。
+  private getRectBar(
     member: any,
     index: number,
     side: string,
@@ -578,30 +348,10 @@ export class SetBarService {
 
     const h: number = member.H;
     const b: number = member.B;
-    const barInfo = this.getAs("Rectangle", index, side, b, h);
+    const barInfo = this.getInputData("Rectangle", index, side, b, h);
 
     let tension: any = barInfo.tension;
     let compres: any = barInfo.compres;
-
-    /*
-    switch (side) {
-      case '上側引張':
-        tension = bar.rebar1;
-        compres = bar.rebar2;
-        break;
-      case '下側引張':
-        tension = bar.rebar2;
-        compres = bar.rebar1;
-        break;
-      case '小判':
-        tension = bar.rebar1;
-        compres = bar.rebar2;
-        break;
-    }
-    */
-
-    // 基準となる 鉄筋強度
-    // const rs = safety.safety_factor.rs;
 
     const tensionBar = this.getCompresBar(barInfo.tension, safety);
     const tensionBarList = tensionBar.Steels;
@@ -635,12 +385,7 @@ export class SetBarService {
           result.SteelElastic.push(elastic);
         }
       }
-      /*
-      result['Asc'] = compresBar['As'];
-      result['AscString'] = compresBar['AsString'];
-      result['AscCos'] = compresBar['cos'];
-      result['dsc'] = compresBar['ds'];
-      */
+
     }
 
     // 側方鉄筋 をセットする
@@ -692,108 +437,20 @@ export class SetBarService {
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }
-    /*
-    // 印刷用の変数に登録
-    result['fsu'] = tensionBar['fsu'];
-    result['fsy'] = tensionBar['fsy'];
-    result['rs'] = rs;
-    result['Es'] = 200;
-    result['Ast'] = tensionBar['As'];
-    result['AstCos'] = tensionBar['cos'];
-    result['AstString'] = tensionBar['AsString'];
-    result['dst'] = tensionBar['ds'];
 
-    result['Ast-n'] = tensionBar.n; // ひび割れの検討k3 に用いる鉄筋段数
-    result['Ast-c'] = tensionBar.c - (tensionBar['φ'] / 2); // ひび割れの検討 に用いる1段目の鉄筋かぶり
-    result['Ast-Cs'] = tensionBar.Cs; // ひび割れの検討 に用いる鉄筋間隔
-    result['Ast-φ'] = tensionBar['φ']; // ひび割れの検討 に用いる鉄筋径
-    result['Vyd_d'] = height - tensionBar.ds;
-    result['Vyd_Ast'] = tensionBar.As;
-
-
-    if (sideBarList.length > 0) { // 印刷用の変数に登録
-      result['Ase'] = sideBar['As'];
-      result['AseString'] = sideBar['AsString'];
-      result['dse'] = sideBar['ds'];
-    }
-
-    const Aw: any = this.setAwPrintData(bar.stirrup, safety.material_bar);
-    if (Aw !== null) {
-      result['AW-φ'] = Aw['AW-φ'];
-      result['Aw'] = Aw.Aw;
-      result['AwString'] = Aw.AwString;
-      result['fwyd'] = Aw.fwyd;
-      result['fwud'] = Aw.fwud;
-      result['deg'] = Aw.deg;
-      result['Ss'] = Aw.Ss;
-    }
-*/
     return result;
   }
 
-  // 矩形。Ｔ形断面における 上側（圧縮側）の 鉄筋情報を生成する関数
+  // 矩形、Ｔ形断面における 上側（圧縮側）の 鉄筋情報を生成する関数
   private getCompresBar(barInfo: any, safety: any): any {
     const result = {
       Steels: new Array(),
       SteelElastic: new Array(),
     };
 
-    /*
-    // 鉄筋径の入力が ない場合は スキップ
-    if (this.helper.toNumber(barInfo.rebar_dia) === null) {
-      return result;
-    }
-
-    //鉄筋の本数の入力が ない場合は スキップ
-    let rebar_n = this.helper.toNumber(barInfo.rebar_n );
-    if (rebar_n === null) {
-      return result;
-    }
-
-    const materialInfo = safety.material_bar;
-
-    // 1段当りの本数
-    let line: number = this.helper.toNumber(barInfo.rebar_lines);
-    if (line === null) {
-      line = rebar_n;
-    }
-
-    // 鉄筋段数
-    const nn: number = rebar_n / line;
-    const n: number = Math.ceil(nn);
-
-    // 鉄筋アキ
-    let space: number = this.helper.toNumber(barInfo.rebar_space);
-    if (space === null) {
-      space = 0;
-    }
-
-    // 鉄筋かぶり
-    let dsc = this.helper.toNumber(barInfo.rebar_cover);
-    if (dsc === null) {
-      dsc = 0;
-    }
-*/
     // 鉄筋強度の入力
     const rs = safety.safety_factor.rs;
-    /*
-    // 鉄筋強度
-    let fsy: number;
-    let fsu: number;
-    let ElasticID: string;
-    if (barInfo.rebar_dia <= materialInfo[0].separate) {
-      fsy = this.helper.toNumber(materialInfo[0].tensionBar.fsy);
-      fsu = this.helper.toNumber(materialInfo[0].tensionBar.fsu);
-      ElasticID = 't1';
-    } else {
-      fsy = this.helper.toNumber(materialInfo[1].tensionBar.fsy);
-      fsu = this.helper.toNumber(materialInfo[1].tensionBar.fsu);
-      ElasticID = 't2';
-    }
-    if (fsy === null) {
-      return result;
-    }
-*/
+
     const fsy = this.getFsyk(
       barInfo.rebar_dia,
       safety.material_bar,
@@ -814,13 +471,6 @@ export class SetBarService {
       dia = "R" + barInfo.rebar_dia;
     }
 
-    /*/ cos に入力があれば本数に反映。鉄筋の本数の入力が ない場合は スキップ
-    let cos = this.helper.toNumber(barInfo.cos);
-    if (cos === null) {
-      cos = 1;
-    }
-    */
-
     // 鉄筋情報を登録
     let rebar_n = barInfo.rebar_n;
     for (let i = 0; i < barInfo.n; i++) {
@@ -836,23 +486,10 @@ export class SetBarService {
       rebar_n = rebar_n - barInfo.line;
     }
 
-    /*/ 印刷用の変数に登録
-    result['fsy'] =  fsy;
-    result['fsu'] =  fsu;
-    result['As'] =  this.helper.getAs(dia) * barInfo.rebar_n * cos;
-    result['cos'] =  cos;
-    result['AsString'] =  dia + '-' + barInfo.rebar_n + '本';
-    result['ds'] =  this.getBarCenterPosition(dsc, barInfo.rebar_n, line, space, cos);
-    result['n'] =  nn; // ひび割れの検討k3 に用いる鉄筋段数
-    result['c'] =  dsc; // ひび割れの検討 に用いる1段目の鉄筋かぶり
-    result['Cs'] =  barInfo.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
-    result['φ'] =  barInfo.rebar_dia; // ひび割れの検討 に用いる鉄筋径
-    */
-
     return result;safety
   }
 
-  // 矩形。Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数
+  // 矩形、Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数
   private getSideBar(
     barInfo: any,
     safety: any
@@ -866,32 +503,6 @@ export class SetBarService {
     if (barInfo === null) {
       return result; // 側方鉄筋の入力が無い場合
     }
-/*
-    // 鉄筋径の入力が ない場合は スキップ
-    if (barInfo.side_dia === null) {
-      return result;
-    }
-    // 鉄筋段数
-    const n = barInfo.side_n;
-    if (n === 0) {
-      return result; // 鉄筋段数の入力が 0 の場合は スキップ
-    }
-
-    // 鉄筋間隔
-    let space = barInfo.side_ss;
-    if (this.helper.toNumber(space) === null) {
-      space = (height - dst - dsc) / (n + 1);
-    }
-
-    // 鉄筋かぶり
-    let dse = barInfo.side_cover;
-    if (this.helper.toNumber(dse) === null) {
-      dse = dsc + space;
-    }
-
-    // 1段当りの本数
-    const line = 2;
-*/
 
     // 鉄筋強度
     const fsy1 = this.getFsyk(
@@ -929,22 +540,16 @@ export class SetBarService {
       ElasticID: id,
     });
 
-    /*/ 印刷用の変数に登録
-    result['As'] = this.helper.getAs(dia) * n;
-    result['AsString'] = dia + '-' + n + '段';
-    result['ds'] = this.getBarCenterPosition(dse, n, 1, space, 1);
-    */
-
     return result;
   }
 
   // 角度をラジアンに変換
-  public Radians(degree: number) {
-    return degree * (Math.PI / 180);
+  private Radians(degree: number) {
+    return this.section.Radians(degree);
   }
 
-  // 軸方向鉄筋の情報を返す
-  public getAs(shapeName: string, index: number, side: string, b: number, h: number = null): any {
+  // 鉄筋の情報を返す
+  private getInputData(shapeName: string, index: number, side: string, b: number, h: number = null): any {
     let result = {};
 
     const bar = this.bars.getCalcData(index);
@@ -956,8 +561,8 @@ export class SetBarService {
       case "Ring": // 円環
         tension = this.rebarInfo(bar.rebar1);
         if(tension.rebar_ss === null){
-          const D = h - tension.dsc * 2; 
-          tension.rebar_ss = D / tension.line; 
+          const D = h - tension.dsc * 2;
+          tension.rebar_ss = D / tension.line;
         }
         result = { tension };
         break;
@@ -966,8 +571,8 @@ export class SetBarService {
         tension = this.rebarInfo(bar.rebar1);
         compres = this.rebarInfo(bar.rebar2);
         if(tension.rebar_ss === null){
-          const D = h - tension.dsc * 2; 
-          tension.rebar_ss = D / tension.line; 
+          const D = h - tension.dsc * 2;
+          tension.rebar_ss = D / tension.line;
         }
         break;
 
@@ -1065,7 +670,7 @@ export class SetBarService {
       dsc,            // 最外縁の鉄筋かぶり
       line,           // 1列当たりの鉄筋本数
       space,          // 1段目と2段目のアキ
-      rebar_ss: ss,   // 鉄筋間隔 
+      rebar_ss: ss,   // 鉄筋間隔
       cos             // 角度補正係数 cosθ
     }
   }
@@ -1143,7 +748,7 @@ export class SetBarService {
       tan: null
     };
 
-    const bar = this.getAs(shape.shape, res.index, res.side, shape.B, shape.H);
+    const bar = this.getInputData(shape.shape, res.index, res.side, shape.B, shape.H);
     for(const key of Object.keys(bar)){
       result[key] = bar[key];
     }
@@ -1170,7 +775,7 @@ export class SetBarService {
           rebar_n = rebar_n / 2;
         break;
       }
-      const Aw = this.getAw(shape, bar, safety)
+      const Aw = this.stirrupInfo(bar, safety)
       for(const key of Object.keys(Aw)){
         result[key] = Aw[key];
       }
@@ -1255,7 +860,7 @@ export class SetBarService {
   }
 
   // せん断補強鉄筋量の情報を返す
-  public getAw( shape: any, bar: any, safety: any): any {
+  private stirrupInfo( bar: any, safety: any): any {
 
     const result = {
 
@@ -1347,7 +952,7 @@ export class SetBarService {
   }
 
   // 鉄筋の重心位置を求める
-  public getBarCenterPosition(
+  private getBarCenterPosition(
     cover: number,
     n: number,
     line: number,
@@ -1384,65 +989,5 @@ export class SetBarService {
     result /= cos;
     return result;
   }
-
-  /*
-  private setAwPrintData(stirrup: any, materialInfo: any[]): any {
-    // エラーチェック
-    if (stirrup.stirrup_dia === null) {
-      return null;
-    }
-    if (stirrup.stirrup_n === null) {
-      return null;
-    }
-    if (stirrup.stirrup_n === 0) {
-      return null;
-    }
-    if (stirrup.stirrup_ss === null) {
-      return null;
-    }
-    if (stirrup.stirrup_ss === 0) {
-      return null;
-    }
-
-    const result = {
-      "AW-φ": 0,
-      Aw: 0,
-      AwString: "",
-      fwyd: 0,
-      fwud: 0,
-      deg: 90,
-      Ss: 0,
-    };
-
-    let fwyd: number;
-    let fwud: number;
-    if (stirrup.stirrup_dia <= materialInfo[0].separate) {
-      fwyd = this.helper.toNumber(materialInfo[0].stirrup.fsy);
-      fwud = this.helper.toNumber(materialInfo[0].stirrup.fsu);
-    } else {
-      fwyd = this.helper.toNumber(materialInfo[1].stirrup.fsy);
-      fwud = this.helper.toNumber(materialInfo[1].stirrup.fsu);
-    }
-    if (fwyd === null) {
-      return null;
-    }
-
-    let dia: string = "D" + stirrup.stirrup_dia;
-    if (fwyd === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + stirrup.stirrup_dia;
-    }
-    const As: number = this.helper.getAs(dia);
-    const n: number = stirrup.stirrup_n;
-    result["AW-φ"] = stirrup.stirrup_dia;
-    result.Aw = As * n;
-    result.AwString = dia + "-" + n + "本";
-    result.Ss = stirrup.stirrup_ss;
-    result.fwyd = fwyd;
-    result.fwud = fwud;
-
-    return result;
-  }
-  */
 
 }
