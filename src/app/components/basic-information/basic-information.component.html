@@ -40,7 +40,7 @@
 
   <div class="right-right-contents">
 
-    <div class="specification2-fieldset">
+    <div class="specification2-fieldset" *ngIf="specification2_list.length > 0">
       <fieldset>
         <legend>仕様</legend>
         <ng-container *ngFor="let item of specification2_list; index as i">

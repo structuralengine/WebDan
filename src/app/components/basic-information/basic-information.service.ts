@@ -36,7 +36,7 @@ export class InputBasicInformationService  {
   private default_specification1(): any {
     return [
       { id: 0, title: '鉄道', selected: true },
-      { id: 1, title: '道路', selected: false }
+      { id: 1, title: '港湾', selected: false }
     ];
   }
   /// get_specification1 によって変わる項目の設定
@@ -95,7 +95,18 @@ export class InputBasicInformationService  {
         ];
         break;
 
-      case 1: // 道路
+      case 1: // 港湾
+
+        result = [
+          { id: 0, title: '使用限界 縁応力度検討用', no: null},
+          { id: 1, title: '使用限界 （永久荷重）', no: null},
+          { id: 3, title: '疲労限界　永久荷重', no: null},
+          { id: 4, title: '疲労限界　永久＋変動', no: null},
+          { id: 5, title: '終局限界', no: null},
+          { id: 6, title: '地震時 使用限界', no: null},
+          { id: 7, title: '地震時 終局限界', no: null}
+        ];
+        break;
       default:
         // まだ対応していない
     }
@@ -119,7 +130,18 @@ export class InputBasicInformationService  {
         ];
         break;
 
-      case 1: // 道路
+      case 1: // 港湾
+        result = [
+          { id: 0, title: '使用限界 せん断ひび割れ検討判定用', no: null},
+          { id: 1, title: '使用限界 （永久荷重）', no: null},
+          { id: 2, title: '使用限界 （変動荷重）', no: null},
+          { id: 3, title: '疲労限界　永久荷重', no: null},
+          { id: 4, title: '疲労限界　永久＋変動', no: null},
+          { id: 5, title: '終局限界', no: null},
+          { id: 6, title: '地震時 使用限界', no: null},
+          { id: 7, title: '地震時 終局限界', no: null}
+        ];
+        break;
       default:
         // まだ対応していない
     }
@@ -139,7 +161,9 @@ export class InputBasicInformationService  {
         ];
         break;
 
-      case 1: // 道路
+      case 1: // 港湾
+        result = [];
+        break;
       default:
         // まだ対応していない
     }
@@ -151,6 +175,7 @@ export class InputBasicInformationService  {
     let result: any[] = new Array();
     switch (specification1) {
       case 0: // 鉄道
+      case 1: // 港湾
         result =[
           { id: 'JR-000', title: '縁応力度が制限値以内でも ひび割れ幅の検討を行う',     selected: false },
           { id: 'JR-001', title: 'ひび割れ幅制限値に用いるかぶりは 100mm を上限とする', selected: true },
@@ -160,7 +185,6 @@ export class InputBasicInformationService  {
         ];
         break;
 
-      case 1: // 道路
       default:
         // まだ対応していない
     }
