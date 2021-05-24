@@ -75,7 +75,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
         break;
 
-      case 1: // 道路
+      case 1: // 港湾
         result = new Array();
         break;
     }
@@ -152,7 +152,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
         ];
         break;
 
-      case 1: // 道路
+      case 1: // 港湾
       result = new Array();
 
         break;
