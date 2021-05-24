@@ -8,6 +8,7 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class CalcServiceabilityShearForceService {
     private helper: DataHelperModule,
     private force: SetDesignForceService,
     private post: SetPostDataService,
-    private result: ResultDataService,
+    private crack: InputCrackSettingsService,
     private base: CalcSafetyShearForceService) {
     this.DesignForceList = null;
     this.isEnable = false;
@@ -70,39 +71,57 @@ export class CalcServiceabilityShearForceService {
       return null;
     }
 
+    // 複数の断面力の整合性を確認する
+    const force = this.force.alignMultipleLists(this.DesignForceList1, this.DesignForceList, this.DesignForceList2);
+
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force[0]);
     return postData;
   }
-  
+
   public getSafetyFactor(g_id: any) {
     return this.safety.getCalcData('Vd', g_id, this.safetyID);
   }
 
-  public calcSigma( resultData: any, position: any): any {
-    //仮
-    const PrintData: any = {};
-    const postdata1: any = {};
-    const PostData2: any = {};
+  public calcSigma(
+    res: any,
+    shape: any,
+    fc: any,
+    Ast: any,
+    safety: any): any {
 
-    
-    if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
+    // せん断ひび割れ検討判定用
+    let force0 = this.DesignForceList.find(
+      (v) => v.index === res.index
+    ).designForce.find((v) => v.side === res.side);
+    if(force0 === undefined){
+      force0 = { Md: 0, Nd: 0, Vd: 0}
+    }
+    let Vd: number = Math.abs(force0.Vd);
 
-    //仮
-    let res, shape, fc, Ast, safety, La, DesignForceList;
-    const result: any = this.base.calcVmu(res, shape, fc, Ast, safety, La, DesignForceList);
-    // 
+    // 永久荷重
+    const force1 = this.DesignForceList1.find(
+      (v) => v.index === res.index
+    ).designForce.find((v) => v.side === res.side);
+    // せん断耐力
+    const result: any = this.base.calcVmu(
+      res, shape, fc, Ast, safety, null, force1);
 
-    let Vd: number = Math.abs(result.Vd);
+    // 変動荷重
+    let force2 = this.DesignForceList2.find(
+      (v) => v.index === res.index
+    ).designForce.find((v) => v.side === res.side);
+    if(force2 === undefined){
+      force2 = { Md: 0, Nd: 0, Vd: 0}
+    }
 
-    let Vpd: number = this.helper.toNumber(postdata1.Vd);
+    let Vpd: number = this.helper.toNumber(force1.Vd);
     if (Vpd === null) { Vpd = 0; }
     Vpd = Math.abs(Vpd);
     result['Vpd'] = Vpd;
 
-    let Vrd: number = this.helper.toNumber(PostData2.Vd);
-    if (Vrd === null) { Vrd = Vd - Vpd; }
-    if (Vrd === 0) { Vrd = Vd - Vpd; }
+    let Vrd: number = this.helper.toNumber(force2.Vd);
+    if (Vrd === null || Vrd === 0) { Vrd = Vd - Vpd; }
     Vrd = Math.abs(Vrd);
     result['Vrd'] = Vrd;
 
@@ -115,29 +134,31 @@ export class CalcServiceabilityShearForceService {
     }
 
     // 環境条件
-    let conNum: number = this.helper.toNumber(position.memberInfo.con_s);
+    const crackInfo = this.crack.getTableColumn(res.index);
+
+    let conNum: number = this.helper.toNumber(crackInfo.con_s);
     if (conNum === null) { conNum = 1; }
 
     // 制限値
     let sigma12: number = 120;
     switch (conNum) {
       case 1:
-        sigma12 = (PrintData.fwyd !== 235) ? 120 : 100;
+        sigma12 = (Ast.fwyd !== 235) ? 120 : 100;
         result['con'] = '一般の環境';
         break;
       case 2:
-        sigma12 = (PrintData.fwyd !== 235) ? 100 : 80;
+        sigma12 = (Ast.fwyd !== 235) ? 100 : 80;
         result['con'] = '腐食性環境';
         break;
       case 3:
-        sigma12 = (PrintData.fwyd !== 235) ? 80 : 60;
+        sigma12 = (Ast.fwyd !== 235) ? 80 : 60;
         result['con'] = '厳しい腐食';
         break;
     }
     result['sigma12'] = sigma12;
 
     // せん断補強鉄筋の設計応力度
-    let kr: number = this.helper.toNumber(position.memberInfo.kr);
+    let kr: number = this.helper.toNumber(crackInfo.kr);
     if (kr === null) { kr = 0.5; }
     result['kr'] = kr;
 

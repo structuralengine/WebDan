@@ -5,7 +5,6 @@ import { CalcServiceabilityMomentService } from "./calc-serviceability-moment.se
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { InputCrackSettingsService } from "src/app/components/crack/crack-settings.service";
 import { SetSectionService } from "../set-section.service";
 import { SetBarService } from "../set-bar.service";
 

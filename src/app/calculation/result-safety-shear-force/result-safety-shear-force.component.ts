@@ -100,12 +100,14 @@ export class ResultSafetyShearForceComponent implements OnInit {
       for (const member of groupe[ig]) {
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
+
             const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
             if (res === undefined || res.length < 1) {
               continue;
             }
+
             const force = DesignForceList.find(
               (v) => v.index === res.index
             ).designForce.find((v) => v.side === res.side);

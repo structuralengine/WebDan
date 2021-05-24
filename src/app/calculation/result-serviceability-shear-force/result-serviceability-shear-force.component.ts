@@ -93,18 +93,14 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
       for (const member of groupe[ig]) {
-        0;
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
-            const res = OutputData.filter(
+            const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
             );
             if (res === undefined || res.length < 1) {
               continue;
             }
-
-            // 解析結果
-            const resultData = res[0];
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -114,8 +110,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
                 columns: new Array(),
               };
             }
-
-            const column: any[] = new Array();
 
             /////////////// まず計算 ///////////////
             const titleColumn = this.result.getTitleString(
@@ -128,9 +122,15 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             const fck: any = this.section.getFck(safety);
 
             const resultColumn: any = this.getResultString(
-              this.calc.calcSigma(resultData, position)
+              this.calc.calcSigma(
+                res,
+                shape,
+                fck,
+                Ast,
+                safety)
             );
 
+            const column: any[] = new Array();
             /////////////// タイトル ///////////////
             column.push({ alien: "center", value: titleColumn.m_no });
             column.push({ alien: "center", value: titleColumn.p_name });
@@ -140,39 +140,25 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             column.push(this.result.alien(shape.H));
             /////////////// 引張鉄筋 ///////////////
             column.push(this.result.alien(Ast.tan, "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.Ast), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
             column.push(this.result.alien(Ast.AstString, "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.dst), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
             /////////////// 圧縮鉄筋 ///////////////
-            column.push(
-              this.result.alien(this.result.numStr(Ast.Asc), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.Asc), "center"));
             column.push(this.result.alien(Ast.AscString, "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.dsc), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.dsc), "center"));
             /////////////// 側面鉄筋 ///////////////
             // column.push(this.result.alien(this.result.numStr(Ast.Ase), 'center'));
             column.push(this.result.alien(Ast.AseString, "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.dse), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.dse), "center"));
             /////////////// コンクリート情報 ///////////////
             column.push(this.result.alien(fck.fck.toFixed(1), "center"));
             column.push(this.result.alien(fck.rc.toFixed(2), "center"));
             column.push(this.result.alien(fck.fcd.toFixed(1), "center"));
             /////////////// 鉄筋強度情報 ///////////////
-            column.push(
-              this.result.alien(this.result.numStr(Ast.fsy, 1), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), "center"));
             column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.fsd, 1), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
             /////////////// 帯鉄筋情報 ///////////////
             column.push(resultColumn.Aw);
             column.push(resultColumn.AwString);
@@ -216,13 +202,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
   public getResultString(re: any): any {
     const result = {
-      B: { alien: "center", value: "-" },
-      H: { alien: "center", value: "-" },
-      tan: { alien: "center", value: "-" },
-
-      As: { alien: "center", value: "-" },
-      AsString: { alien: "center", value: "-" },
-      dst: { alien: "center", value: "-" },
 
       Aw: { alien: "center", value: "-" },
       AwString: { alien: "center", value: "-" },
@@ -254,28 +233,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       Ratio: { alien: "center", value: "-" },
       Result: { alien: "center", value: "-" },
     };
-
-    // 断面
-    if ("B" in re) {
-      result.B = { alien: "right", value: re.B.toFixed(0) };
-    }
-    if ("H" in re) {
-      result.H = { alien: "right", value: re.H.toFixed(0) };
-    }
-    if ("tan" in re) {
-      result.tan = { alien: "right", value: re.tan.toFixed(1) };
-    }
-
-    // 引張鉄筋
-    if ("Ast" in re) {
-      result.As = { alien: "right", value: re.Ast.toFixed(1) };
-    }
-    if ("AstString" in re) {
-      result.AsString = { alien: "right", value: re.AstString };
-    }
-    if ("d" in re) {
-      result.dst = { alien: "right", value: (re.H - re.d).toFixed(1) };
-    }
 
     // 帯鉄筋
     if ("Aw" in re) {
