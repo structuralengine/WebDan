@@ -73,7 +73,7 @@ export class CalcSafetyShearForceService {
   }
 
   public getSafetyFactor(g_id: any, safetyID: number) {
-    return this.safety.getCalcData("Vd", g_id, this.safetyID);
+    return this.safety.getCalcData("Vd", g_id, safetyID);
   }
 
   // 変数の整理と計算

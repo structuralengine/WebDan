@@ -39,16 +39,16 @@ export class InputFatiguesService {
       b: null,
       h: null,
       title1: "上",
-      M1: this.default_fatigue_coefficient(),
-      V1: this.default_fatigue_coefficient(),
+      M1: this.default_fatigue_coefficient('Md'),
+      V1: this.default_fatigue_coefficient('Vd'),
       title2: "下",
-      M2: this.default_fatigue_coefficient(),
-      V2: this.default_fatigue_coefficient(),
+      M2: this.default_fatigue_coefficient('Md'),
+      V2: this.default_fatigue_coefficient('Vd'),
     };
   }
 
-  private default_fatigue_coefficient(): any {
-    return {
+  private default_fatigue_coefficient(target: string): any {
+    const result = {
       SA: null,
       SB: null,
       NA06: null,
@@ -56,8 +56,15 @@ export class InputFatiguesService {
       NA12: null,
       NB12: null,
       A: null,
-      B: null,
+      B: null
     };
+    if(target === 'Md'){
+      result['r1_1'] = null;
+      result['r1_3'] = null;
+    } else {
+      result['r1_2'] = null;
+    }
+    return result;
   }
 
   public getTableColumns(): any[] {
@@ -131,9 +138,9 @@ export class InputFatiguesService {
   public getCalcData(index: number): any {
 
     const result = {
-      upper: this.default_fatigue_coefficient(),
-      bottom: this.default_fatigue_coefficient(),
-      share: this.default_fatigue_coefficient()
+      upper: this.default_fatigue_coefficient('Md'),
+      bottom: this.default_fatigue_coefficient('Md'),
+      share: this.default_fatigue_coefficient('Vd')
     }
 
     // グリッド用データの作成
@@ -184,7 +191,6 @@ export class InputFatiguesService {
                 endFlg = false; // まだ終わらない
               }
             }
-  
           }
 
           if( endFlg === true){
@@ -224,6 +230,8 @@ export class InputFatiguesService {
       f['M1'].NB12 = column1.M_NB12;
       f['M1'].A = column1.M_A;
       f['M1'].B = column1.M_B;
+      f['M1'].r1_1 = column1.r1_1;
+      f['M1'].r1_3 = column1.r1_3;
 
       f['V1'].SA = column1.V_SA;
       f['V1'].SB = column1.V_SB;
@@ -233,6 +241,7 @@ export class InputFatiguesService {
       f['V1'].NB12 = column1.V_NB12;
       f['V1'].A = column1.V_A;
       f['V1'].B = column1.V_B;
+      f['V1'].r1_2 = column1.r1_2;
 
       f.title2 = column2.design_point_id;
       f['M2'].SA = column2.M_SA;
@@ -243,6 +252,8 @@ export class InputFatiguesService {
       f['M2'].NB12 = column2.M_NB12;
       f['M2'].A = column2.M_A;
       f['M2'].B = column2.M_B;
+      f['M2'].r1_1 = column1.r1_1;
+      f['M2'].r1_3 = column1.r1_3;
 
       f['V2'].SA = column2.V_SA;
       f['V2'].SB = column2.V_SB;
@@ -252,6 +263,7 @@ export class InputFatiguesService {
       f['V2'].NB12 = column2.V_NB12;
       f['V2'].A = column2.V_A;
       f['V2'].B = column2.V_B;
+      f['V2'].r1_2 = column1.r1_2;
 
       this.fatigue_list.push(f);
     }

@@ -7,6 +7,7 @@ import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
+import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 
 @Component({
   selector: "app-result-safety-fatigue-moment",
@@ -30,7 +31,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     private result: ResultDataService,
     private section: SetSectionService,
     private bar: SetBarService,
-    private points: InputDesignPointsService
+    private points: InputDesignPointsService,
+    private fatigue: InputFatiguesService
   ) {}
 
   ngOnInit() {
@@ -86,17 +88,10 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
     let page: any;
 
-    //仮
-    // const responseMax = responseData.slice(0, this.PostedData.length);
-    // const responseMin = responseData.slice(-this.PostedData.length);
-    const responseMax = OutputData.slice(0, 2); // エラー回避仮コード
-    const responseMin = OutputData.slice(-2); // エラー回避仮コード
-    //仮END
-
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
-
       const groupeName = this.points.getGroupeName(ig);
+
       page = {
         caption: this.title,
         g_name: groupeName,
@@ -105,9 +100,9 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-
       for (const member of groupe[ig]) {0
         for (const position of member.positions) {
+          const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
 
             const res = OutputData.filter(
@@ -116,7 +111,6 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             if (res === undefined || res.length < 1) {
               continue;
             }
-
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -127,17 +121,18 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
               };
             }
 
-            const column: any[] = new Array();
-
             /////////////// まず計算 ///////////////
             const titleColumn = this.result.getTitleString(member, position, side)
-            const shape = this.section.getResult('Md', member, res);
-            const Ast: any = this.bar.getResult('Md', shape, res, safety);
+            const shape = this.section.getResult('Md', member, res[0]);
+            const Ast: any = this.bar.getResult('Md', shape, res[0], safety);
             const fck: any = this.section.getFck(safety);
 
             const resultColumn: any = this.getResultString(
-              this.calc.getResultValue( position, res ));
+              this.calc.getResultValue(
+                res, Ast, safety, fatigueInfo)
+            );
 
+            const column: any[] = new Array();
             /////////////// タイトル ///////////////
             column.push({ alien: 'center', value: titleColumn.m_no });
             column.push({ alien: 'center', value: titleColumn.p_name });

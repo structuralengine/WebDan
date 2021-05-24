@@ -10,6 +10,7 @@ import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.servi
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { CalcSafetyFatigueMomentService } from '../result-safety-fatigue-moment/calc-safety-fatigue-moment.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,32 +31,15 @@ export class CalcSafetyFatigueShearForceService {
     private helper: DataHelperModule,
     private force: SetDesignForceService,
     private post: SetPostDataService,
-    private result: ResultDataService,
+    private moment: CalcSafetyFatigueMomentService,
     private base: CalcSafetyShearForceService,
     private fatigue: InputFatiguesService,
     private basic: InputBasicInformationService,
     private calc: InputCalclationPrintService) {
     this.DesignForceList = null;
+    this.DesignForceList2 = null;
     this.DesignForceList3 = null;
     this.isEnable = false;
-  }
-
-  // 列車本数を返す関数
-  public getTrainCount(): number[] {
-    const result = new Array(2);
-    let jA = 0;
-    if ('train_A_count' in this.fatigue) {
-      jA = this.helper.toNumber(this.fatigue.train_A_count);
-      if (jA === null) { jA = 0; }
-    }
-    let jB = 0;
-    if ('train_B_count' in this.fatigue) {
-      jB = this.helper.toNumber(this.fatigue.train_B_count);
-      if (jB === null) { jB = 0; }
-    }
-    result[0] = jA;
-    result[1] = jB;
-    return result;
   }
 
   // 設計断面力の集計
@@ -86,20 +70,38 @@ export class CalcSafetyFatigueShearForceService {
      // 変動応力
     this.DesignForceList2 = this.force.getLiveload(this.DesignForceList3, this.DesignForceList);
 
-    // 有効な入力行以外は削除する
-    this.deleteFatigueDisablePosition();
+  }
 
+  //
+  public getSafetyFactor(g_id: any) {
+    return this.safety.getCalcData('Vd', g_id, this.safetyID);
+  }
+
+  // サーバー POST用データを生成する
+  public setInputData(): any {
+
+    if (this.DesignForceList.length < 1) {
+      return null;
+    }
+
+    // 複数の断面力の整合性を確認する
+    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList2, this.DesignForceList3);
+
+    // 有効な入力行以外は削除する
+    this.deleteFatigueDisablePosition(force);
+
+    // POST 用
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
+    return postData;
   }
 
   // 疲労破壊の照査の対象外の着目点を削除する
-  private deleteFatigueDisablePosition() {
+  private deleteFatigueDisablePosition(force: any) {
 
-    for (let ip = this.DesignForceList.length - 1; ip >= 0; ip--) {
-      const pos: any = this.DesignForceList[ip];
+    for (let ip = force[0].length - 1; ip >= 0; ip--) {
+      const pos: any = force[0][ip];
 
       const force0 = pos.designForce;
-      const force2 = this.DesignForceList2[ip].designForce;
-      const force3 = this.DesignForceList3[ip].designForce;
 
       // 疲労に用いる係数を取得する
       const info = this.fatigue.getCalcData(pos.index);
@@ -112,39 +114,23 @@ export class CalcSafetyFatigueShearForceService {
             break;
           }
         }
-        if((enable === false) ||(force0[i].Md === 0)) {
-          force0.splice(i, 1);
-          force2.splice(i, 1);
-          force3.splice(i, 1);
+        if((enable === false) ||(force0[i].Vd === 0)) {
+          for(const f of force){
+            f[ip].designForce.splice(i, 1);
+          }
         } else {
           force0['fatigue'] = info.share;
         }
       }
 
       if (pos.designForce.length < 1) {
-        this.DesignForceList.splice(ip, 1);
-        this.DesignForceList2.splice(ip, 1);
-        this.DesignForceList3.splice(ip, 1);
+        for(const f of force){
+          f.splice(ip, 1);
+        }
       }
     }
   }
 
-  // 
-  public getSafetyFactor(g_id: any) {
-    return this.safety.getCalcData('Md', g_id, this.safetyID);
-  }
-
-  // サーバー POST用データを生成する
-  public setInputData(): any {
-
-    if (this.DesignForceList.length < 1) {
-      return null;
-    }
-
-    // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
-    return postData;
-  }
 
   public calcFatigue(PrintData: any, position: any): any {
     
@@ -390,6 +376,9 @@ export class CalcSafetyFatigueShearForceService {
 
   }
 
-
+  // 列車本数を返す関数
+  public getTrainCount(): number[] {
+    return this.moment.getTrainCount();
+  }
 
 }
