@@ -128,14 +128,14 @@ export class CalcSafetyFatigueMomentService {
     return this.safety.getCalcData('Md', g_id, this.safetyID);
   }
 
-  public getResultValue(
+  public calcFatigue(
     res: any, Ast: any, safety: any, tmpFatigue: any ): any {
 
     // 応力度
-    let responseMin: any = res[0];
-    let responseMax: any;
+    let resMin: any = res[0];
+    let resMax: any;
     if (res.length < 1) {
-      responseMax = {
+      resMax = {
         ResultSigma: {
           fi: 0,
           Md: 0,
@@ -146,27 +146,27 @@ export class CalcSafetyFatigueMomentService {
         }
       };
     } else {
-      responseMax = res[1];
+      resMax = res[1];
     }
 
     const result: any = {};
 
-    const Mdmin = responseMin.ResultSigma.Md;;
+    const Mdmin = resMin.ResultSigma.Md;;
     result['Mdmin'] = Mdmin;
-    const Ndmin = this.helper.toNumber(responseMin.ResultSigma.Nd);
+    const Ndmin = this.helper.toNumber(resMin.ResultSigma.Nd);
     result['Ndmin'] = Ndmin;
 
-    const sigma_min: number = this.base.getSigmas(responseMin.ResultSigma.st);
+    const sigma_min: number = this.base.getSigmas(resMin.ResultSigma.st);
     if (sigma_min === null) { return result; }
     result['sigma_min'] = sigma_min;
 
 
-    const Mrd = responseMax.ResultSigma.Md;
+    const Mrd = resMax.ResultSigma.Md;
     result['Mrd'] = Mrd;
-    const Nrd = this.helper.toNumber(responseMax.ResultSigma.Nd);
+    const Nrd = this.helper.toNumber(resMax.ResultSigma.Nd);
     result['Nrd'] = Nrd;
 
-    const sigma_rd: number = this.base.getSigmas(responseMax.ResultSigma.st);
+    const sigma_rd: number = this.base.getSigmas(resMax.ResultSigma.st);
     if (sigma_rd === null) { return result; }
     result['sigma_rd'] = sigma_rd;
 
@@ -182,7 +182,7 @@ export class CalcSafetyFatigueMomentService {
     const fsu: number = this.helper.toNumber(Ast.fsu);
 
     let inputFatigue: any;
-    switch (responseMin.side) {
+    switch (resMin.side) {
       case '上側引張':
         inputFatigue = tmpFatigue.upper;
         break;

@@ -82,16 +82,16 @@ export class CalcServiceabilityMomentService {
     fc: any, Ast: any, safety: any,
     member: any, isDurability: boolean): any {
 
-    const responseMin = res[0]; // 永久作用
-    const responseMax = res[1]; // 永久＋変動作用
+    const resMin = res[0]; // 永久作用
+    const resMax = res[1]; // 永久＋変動作用
 
-    const crackInfo = this.crack.getTableColumn(responseMin.index);
+    const crackInfo = this.crack.getTableColumn(resMin.index);
 
     const result = {};
 
     // 環境条件
     let conNum: number = 1;
-    switch (responseMin.side) {
+    switch (resMin.side) {
       case '上側引張':
         conNum = this.helper.toNumber(crackInfo.con_u);
         break;
@@ -126,15 +126,15 @@ export class CalcServiceabilityMomentService {
     const fcd: number = fc.fcd;
 
     // 永久作用
-    const Md: number = responseMin.ResultSigma.Md;
+    const Md: number = resMin.ResultSigma.Md;
     result['Md'] = Md;
 
-    const Nd: number = responseMin.ResultSigma.Nd;
+    const Nd: number = resMin.ResultSigma.Nd;
     result['Nd'] = Nd;
 
 
     // 圧縮応力度の照査
-    const Sigmac: number = this.getSigmac(responseMin.ResultSigma.sc);
+    const Sigmac: number = this.getSigmac(resMin.ResultSigma.sc);
     if (Sigmac === null) { return result; }
     result['Sigmac'] = Sigmac;
 
@@ -143,26 +143,26 @@ export class CalcServiceabilityMomentService {
     result['fcd04'] = fcd04;
 
     // 縁応力の照査
-    const Mhd: number = responseMax.ResultSigma.Md;
+    const Mhd: number = resMax.ResultSigma.Md;
     result['Mhd'] = Mhd;
 
-    const Nhd: number = responseMax.ResultSigma.Nd;
+    const Nhd: number = resMax.ResultSigma.Nd;
     result['Nhd'] = Nhd;
 
     // 縁応力度
     const struct = this.section.getStructuralVal(
-      shape.shape, member, "Md", responseMin.index);
-    const Sigmab: number = this.getSigmab(Mhd, Nhd, responseMin.side, struct);
+      shape.shape, member, "Md", resMin.index);
+    const Sigmab: number = this.getSigmab(Mhd, Nhd, resMin.side, struct);
     if (Sigmab === null) { return result; }
     result['Sigmab'] = Sigmab;
 
     // 制限値
     // 円形の制限値を求める時は換算矩形で求める
-    const VydBH = this.section.getShape(shape.shape, member,'Vd', responseMin.index)
+    const VydBH = this.section.getShape(shape.shape, member,'Vd', resMin.index)
     const Sigmabl: number = this.getSigmaBl(VydBH.H, fcd);
     result['Sigmabl'] = Sigmabl;
 
-    const Sigmas: number = this.getSigmas(responseMin.ResultSigma.st);
+    const Sigmas: number = this.getSigmas(resMin.ResultSigma.st);
     if (Sigmas === null) { return result; }
 
     if (Sigmab < Sigmabl) {

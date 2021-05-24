@@ -100,7 +100,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {0
+      for (const member of groupe[ig]) {
         for (const position of member.positions) {
           const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
@@ -128,7 +128,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             const fck: any = this.section.getFck(safety);
 
             const resultColumn: any = this.getResultString(
-              this.calc.getResultValue(
+              this.calc.calcFatigue(
                 res, Ast, safety, fatigueInfo)
             );
 

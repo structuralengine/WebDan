@@ -2,12 +2,11 @@ import { Component, OnInit } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
 import { CalcSafetyFatigueShearForceService } from "./calc-safety-fatigue-shear-force.service";
-import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
-import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
+import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 
 @Component({
   selector: "app-result-safety-fatigue-shear-force",
@@ -21,13 +20,15 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public safetyFatigueShearForcepages: any[];
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
+  private title = "安全性（疲労破壊）せん断力の照査結果";
 
   constructor(
     private calc: CalcSafetyFatigueShearForceService,
     private result: ResultDataService,
     private section: SetSectionService,
     private bar: SetBarService,
-    private points: InputDesignPointsService
+    private points: InputDesignPointsService,
+    private fatigue: InputFatiguesService
   ) {}
 
   ngOnInit() {
@@ -63,13 +64,13 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     const result: any[] = new Array();
 
     let page: any;
-    const title = "安全性（疲労破壊）せん断力の照査結果";
 
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
+
       page = {
-        caption: title,
+        caption: this.title,
         g_name: groupeName,
         columns: new Array(),
       };
@@ -77,10 +78,11 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
       for (const member of groupe[ig]) {
-        0;
         for (const position of member.positions) {
+          const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
-            const res = OutputData.find(
+
+            const res = OutputData.filter(
               (e) => e.index === position.index && e.side === side
             );
             if (res === undefined || res.length < 1) {
@@ -90,7 +92,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             if (page.columns.length > 4) {
               result.push(page);
               page = {
-                caption: title,
+                caption: this.title,
                 g_name: groupeName,
                 columns: new Array(),
               };
@@ -102,12 +104,13 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
               position,
               side
             );
-            const shape = this.section.getResult("Vd", member, res);
-            const Ast: any = this.bar.getResult("Vd", shape, res, safety);
+            const shape = this.section.getResult("Vd", member, res[0]);
+            const Ast: any = this.bar.getResult("Vd", shape, res[0], safety);
             const fck: any = this.section.getFck(safety);
 
             const resultColumn: any = this.getResultString(
-              this.calc.calcFatigue(res, position)
+              this.calc.calcFatigue(
+                res, shape, fck, Ast, safety, fatigueInfo)
             );
 
             const column: any[] = new Array();
@@ -120,25 +123,17 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             column.push(this.result.alien(shape.H));
             /////////////// 引張鉄筋 ///////////////
             column.push(this.result.alien(Ast.tan, "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.Ast), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
             column.push(this.result.alien(Ast.AstString, "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.dst), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
             /////////////// コンクリート情報 ///////////////
             column.push(this.result.alien(fck.fck.toFixed(1), "center"));
             column.push(this.result.alien(fck.rc.toFixed(2), "center"));
             column.push(this.result.alien(fck.fcd.toFixed(1), "center"));
             /////////////// 鉄筋強度情報 ///////////////
-            column.push(
-              this.result.alien(this.result.numStr(Ast.fsy, 1), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), "center"));
             column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
-            column.push(
-              this.result.alien(this.result.numStr(Ast.fsd, 1), "center")
-            );
+            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
             column.push(this.result.alien(Ast.fwud, "center"));
             /////////////// 帯鉄筋情報 ///////////////
             column.push(resultColumn.AwString);
@@ -201,13 +196,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
   private getResultString(re: any): any {
     const result = {
-      tan: { alien: "center", value: "-" },
 
-      As: { alien: "center", value: "-" },
-      AsString: { alien: "center", value: "-" },
-      dst: { alien: "center", value: "-" },
-
-      fwud: { alien: "center", value: "-" },
       Aw: { alien: "center", value: "-" },
       AwString: { alien: "center", value: "-" },
       fwyd: { alien: "center", value: "-" },
@@ -256,25 +245,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result: { alien: "center", value: "-" },
     };
 
-    if ("tan" in re) {
-      result.tan = { alien: "right", value: re.tan.toFixed(1) };
-    }
-
-    // 引張鉄筋
-    if ("Ast" in re) {
-      result.As = { alien: "right", value: re.Ast.toFixed(1) };
-    }
-    if ("AstString" in re) {
-      result.AsString = { alien: "right", value: re.AstString };
-    }
-    if ("d" in re) {
-      result.dst = { alien: "right", value: (re.H - re.d).toFixed(1) };
-    }
-
     // 帯鉄筋
-    if ("fwud" in re) {
-      result.fwud = { alien: "right", value: re.fwud.toFixed(0) };
-    }
     if ("Aw" in re) {
       result.Aw = { alien: "right", value: re.Aw.toFixed(1) };
     }

@@ -1,6 +1,5 @@
 import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
-import { ResultDataService } from '../result-data.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 
@@ -11,6 +10,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { CalcSafetyFatigueMomentService } from '../result-safety-fatigue-moment/calc-safety-fatigue-moment.service';
+import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +27,9 @@ export class CalcSafetyFatigueShearForceService {
 
   constructor(
     private safety: InputSafetyFactorsMaterialStrengthsService,
-    private save: SaveDataService,
     private helper: DataHelperModule,
     private force: SetDesignForceService,
-    private post: SetPostDataService,
+    private crack: InputCrackSettingsService,
     private moment: CalcSafetyFatigueMomentService,
     private base: CalcSafetyShearForceService,
     private fatigue: InputFatiguesService,
@@ -72,11 +71,6 @@ export class CalcSafetyFatigueShearForceService {
 
   }
 
-  //
-  public getSafetyFactor(g_id: any) {
-    return this.safety.getCalcData('Vd', g_id, this.safetyID);
-  }
-
   // サーバー POST用データを生成する
   public setInputData(): any {
 
@@ -85,13 +79,29 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList2, this.DesignForceList3);
+    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
 
     // 有効な入力行以外は削除する
     this.deleteFatigueDisablePosition(force);
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
+    const postData = [];
+    for(const a of [force[1], force[2]]){
+      for(const b of a){
+        for(const c of b.designForce){
+          postData.push({
+            index: b.index,
+            side: c.side,
+            Nd: c.Nd,
+            Md: c.Md,
+            Vd: c.Vd,
+            Reactions: [{
+              M: { Mi: 0 } // Vcd の算定で用いるβn=1とするため 0でよい
+            }]
+          });
+        }
+      }
+    }
     return postData;
   }
 
@@ -131,73 +141,54 @@ export class CalcSafetyFatigueShearForceService {
     }
   }
 
+  //
+  public getSafetyFactor(g_id: any) {
+    return this.safety.getCalcData('Vd', g_id, this.safetyID);
+  }
 
-  public calcFatigue(PrintData: any, position: any): any {
-    
-    const postdata0: any={}, postdata1: any={};
+  public calcFatigue(
+    res: any, shape: any, fc: any, Ast: any, safety: any, tmpFatigue: any ): any {
 
-    if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
-    if ('Nd' in PrintData) { PrintData.Nd = 0; }    // 疲労の Vcd を計算する時は βn=1
-    const resultData = { M: { Mi: 0 } };
+    const resMin: any = res[0];
+    const resMax: any = res[1];
 
-    //仮
-    let res, shape, fc, Ast, safety, La, DesignForceList;
-    const result: any = this.base.calcVmu(res, shape, fc, Ast, safety, La, DesignForceList);
-
+    // 疲労の Vcd を計算する時は βn=1
+    const DesignForceList = { Md: resMin.Md, Vd: resMin.Vd, Nd: 0};
+    const result: any = this.base.calcVmu(res[0], shape, fc, Ast, safety, null, DesignForceList);
 
     // 最小応力
-    let Vpd: number;
-    if ('Vd' in postdata1) {
-      Vpd = this.helper.toNumber(postdata0.Vd);
-      if (Vpd === null) { return result; }
-    } else {
-      return result;
-    }
+    const Vpd: number = this.helper.toNumber(resMin.Vd);
+    if (Vpd === null) { return result; }
     result.Vpd = Vpd;
 
-    let Mpd: number;
-    if ('Md' in PrintData) {
-      Mpd = this.helper.toNumber(PrintData.Md);
-      if (Mpd !== null) {
-        result['Mpd'] = Mpd;
-      }
+    const Mpd: number = this.helper.toNumber(resMin.Md);
+    if (Mpd !== null) {
+      result['Mpd'] = Mpd;
     }
 
-    let Npd: number;
-    if ('Nd' in postdata0) {
-      Npd = this.helper.toNumber(postdata0.Nd);
-      if (Npd !== null) {
-        result['Npd'] = Npd;
-      }
+    const Npd: number = this.helper.toNumber(resMin.Nd);
+    if (Npd !== null) {
+      result['Npd'] = Npd;
     }
+
     // 変動応力
-    let Vrd: number;
-    if ('Vd' in postdata1) {
-      Vrd = this.helper.toNumber(postdata1.Vd);
-      if (Vrd === null) { return result; }
-    } else {
-      return result;
-    }
+    const Vrd: number = this.helper.toNumber(resMax.Vd);
+    if (Vrd === null) { return result; }
     result['Vrd'] = Vrd;
 
-    let Mrd: number;
-    if ('Md' in postdata1) {
-      Mrd = this.helper.toNumber(postdata1.Md);
-      if (Mrd !== null) {
-        result['Mrd'] = Mrd;
-      }
+    const Mrd: number = this.helper.toNumber(resMax.Md);
+    if (Mrd !== null) {
+      result['Mrd'] = Mrd;
     }
 
-    let Nrd: number;
-    if ('Nd' in postdata1) {
-      Nrd = this.helper.toNumber(postdata1.Nd);
-      if (Nrd !== null) {
-        result['Nrd'] = Nrd;
-      }
+    const Nrd: number = this.helper.toNumber(resMax.Nd);
+    if (Nrd !== null) {
+      result['Nrd'] = Nrd;
     }
 
     // せん断補強鉄筋の設計応力度
-    let kr: number = this.helper.toNumber(position.memberInfo.kr);
+    const crackInfo = this.crack.getTableColumn(resMin.index); // 環境条件
+    let kr: number = this.helper.toNumber(crackInfo.kr);
     if (kr === null) { kr = 0.5; }
     result['kr'] = kr;
 
@@ -218,37 +209,23 @@ export class CalcSafetyFatigueShearForceService {
     result['sigma_rd'] = sigma_rd;
 
     // f200 の計算
-    let rs = 1.05;
-    if ('rs' in PrintData) {
-      rs = this.helper.toNumber(PrintData.rs);
-      if (rs === null) { rs = 1; }
-    }
+    let rs = this.helper.toNumber(safety.safety_factor.rs);
+    if (rs === null) { rs = 1.05; }
     result['rs'] = rs;
 
     let k = 0.12;
 
-    let fai: number;
-    if ('AW-φ' in PrintData) {
-      fai = this.helper.toNumber(PrintData['AW-φ']);
-      if (fai === null) { return result; }
-    } else {
-      return result;
-    }
+    const fai: number = this.helper.toNumber(Ast.stirrup.stirrup_dia);
+    if (fai === null) { return result; }
 
-    let fwud: number;
-    if ('fwud' in PrintData) {
-      fwud = this.helper.toNumber(PrintData.fwud);
-      if (fwud === null) { return result; }
-    } else {
-      return result;
-    }
+    const fwud: number = this.helper.toNumber(Ast.fwud);
+    if (fwud === null) { return result; }
     result['fwud'] = fwud;
 
-    let r1 = 1;
-    if ('r1_2' in position.memberInfo) {
-      r1 = this.helper.toNumber(position.memberInfo.r1_2);
-      if (r1 === null) { r1 = 1; }
-    }
+    const inputFatigue: any = tmpFatigue.share;
+
+    let r1: number = this.helper.toNumber(inputFatigue.r1_2);
+    if (r1 === null) { r1 = 1; }
     result['r1'] = r1;
 
     let ar: number = 3.09 - 0.003 * fai;
@@ -262,18 +239,11 @@ export class CalcSafetyFatigueShearForceService {
     const fsr200: number = r1 * tmp201 * tmp202 / rs;
     result['fsr200'] = fsr200;
 
-    let ri = 1;
-    if ('ri' in PrintData) {
-      ri = this.helper.toNumber(PrintData.ri);
-      if (ri === null) { ri = 1; }
-    }
+    const ri: number = safety.safety_factor.ri;
     result['ri'] = ri;
 
-    let rb = 1;
-    if ('rb' in position.safety_factor) {
-      rb = this.helper.toNumber(position.safety_factor.rb);
-      if (rb === null) { rb = 1; }
-    }
+    let rb = this.helper.toNumber(safety.safety_factor.rbs);
+    if (rb === null) { rb = 1; }
 
     const ratio200: number = ri * sigma_rd / (fsr200 / rb);
     result['ratio200'] = ratio200;
@@ -296,15 +266,7 @@ export class CalcSafetyFatigueShearForceService {
     const jA = j[0];
     const jB = j[1];
 
-    let inputFatigue: any;
-    switch (PrintData.side) {
-      case '上側引張':
-        inputFatigue = position.fatigueData.V1;
-        break;
-      case '下側引張':
-        inputFatigue = position.fatigueData.V2;
-        break;
-    }
+
     let SASC: number = this.helper.toNumber(inputFatigue.SA);
     if (SASC === null) {
       SASC = 1;
