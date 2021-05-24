@@ -1,28 +1,19 @@
-<ng-container *ngIf="!isManual">
-<div class="left-contents">
-  <section class="pickup-table">
-    <h5>{{pickup_moment_title}}</h5>
-    <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_moment_datarows" [colHeaders]="true"
-      [rowHeaders]="true" licenseKey="non-commercial-and-evaluation">
-      <hot-column data="title" [readOnly]="true" title="{{pickup_title_column_header}}" width="270px"></hot-column>
-      <hot-column data="pickup_no" title="Pickup No" [readOnly]="isManual"></hot-column>
-    </hot-table>
-  </section>
+<ng-container *ngIf="!isManual()">
+  <div class="left-contents">
+    <section class="pickup-table">
+      <h5>ピックアップ (曲げ耐力用)</h5>
+      <app-sheet #grid1 [options]="options1"></app-sheet>
+    </section>
 
-  <section class="pickup-table">
-    <h5>{{pickup_shear_force_title}}</h5>
-    <hot-table class="hot" [settings]="pickup_table_settings" [data]="pickup_shear_force_datarows" [colHeaders]="true"
-      [rowHeaders]="true" licenseKey="non-commercial-and-evaluation">
-      <hot-column data="title" [readOnly]="true" title="{{pickup_title_column_header}}" width="270px"></hot-column>
-      <hot-column data="pickup_no" title="Pickup No" [readOnly]="isManual"></hot-column>
-    </hot-table>
-  </section>
-</div>
+    <section class="pickup-table">
+      <h5>ピックアップ (せん断耐力用)</h5>
+      <app-sheet #grid2 [options]="options2"></app-sheet>
+    </section>
+  </div>
 </ng-container>
 
 <div class="right-contents">
 
-<!--
   <div class="right-left-contents">
 
     <div class="specification1-fieldset">
@@ -31,9 +22,14 @@
         <ng-container *ngFor="let item of specification1_list; index as i">
           <div>
             <label>
-              <input type="radio" name="specification1" id="specification1{{i}}" [(ngModel)]="specification1_selected"
-                [value]="item.id" [checked]="specification1_selected == item.id"
-                (change)="setSpecification1(i)" />{{item.title}}
+              <input type="radio"
+                name="specification1"
+                id="specification1{{i}}"
+                [(ngModel)]="specification1_select_id"
+                [value]="item.id"
+                [checked]="item.selected"
+                (change)="setSpecification1(i)" />
+                {{item.title}}
             </label>
           </div>
         </ng-container>
@@ -50,9 +46,14 @@
         <ng-container *ngFor="let item of specification2_list; index as i">
           <div>
             <label>
-              <input type="radio" name="specification2" id="specification2{{i}}" [(ngModel)]="specification2_selected"
-                [value]="item.id" [checked]="specification2_selected == item.id"
-                (change)="setSpecification2(i)" />{{item.title}}
+              <input type="radio"
+                name="specification2"
+                id="specification2{{i}}"
+                [(ngModel)]="specification2_select_id"
+                [value]="item.id"
+                [checked]="item.selected"
+                (change)="setSpecification2(i)"/>
+                {{item.title}}
             </label>
           </div>
         </ng-container>
@@ -60,15 +61,18 @@
     </div>
 
   </div>
--->
 
   <div class="conditions-checkbox">
     <h5>設計条件</h5>
     <ng-container *ngFor="let item of conditions_list; index as i">
       <div>
-        <input type="checkbox" name="conditions{{i}}" id="conditions{{i}}" [(ngModel)]="conditions_list[i].selected"
-          [value]="item.id" [checked]="item.selected"
-          (change)="conditionsCheckChanged(item.id, $event.target.checked)">{{item.title}}
+        <input type="checkbox"
+          name="conditions{{i}}"
+          id="conditions{{i}}"
+          [(ngModel)]="item.selected"
+          [value]="item.id"
+          [checked]="item.selected"/>
+          {{item.title}}
       </div>
     </ng-container>
   </div>

@@ -55,20 +55,20 @@
                     <line stroke-width="0.50" x1="0" [attr.y1]="63 + r * 16" x2="568" [attr.y2]="63 + r * 16" />
                   </ng-container>
                 </g>
-                
+
                 <!--column Header-->
                 <g font-size="10pt">
                   <text x="12" [attr.y]="60 + r * 16" text-anchor="middle">
                     {{ row.m_no }}
                   </text>
                   <text x="42" [attr.y]="60 + r * 16" text-anchor="middle">
-                    {{ row.p_name }}
+                    {{ row.p_id }}
                   </text>
                   <text x="105" [attr.y]="60 + r * 16" text-anchor="end">
                     {{ row.position }}
                   </text>
                   <text x="115" [attr.y]="60 + r * 16" text-anchor="start">
-                    {{ row.p_name_ex }}
+                    {{ row.p_name }}
                   </text>
                   <text x="275" [attr.y]="60 + r * 16" text-anchor="end">
                     {{ row.upper.Md }}
@@ -101,7 +101,7 @@
                 <line stroke-width="0.25" x1="350" y1="31" x2="350" [attr.y2]="47 + table.rows.length * 16" />
                 <line stroke-width="0.50" x1="385" y1="15" x2="385" [attr.y2]="47 + table.rows.length * 16" />
                 <line stroke-width="0.25" x1="455" y1="31" x2="455" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="525" y1="31" x2="525" [attr.y2]="47 + table.rows.length * 16" /> 
+                <line stroke-width="0.25" x1="525" y1="31" x2="525" [attr.y2]="47 + table.rows.length * 16" />
               </g>
 
             </svg>
@@ -124,25 +124,25 @@
                 <text x="14" y="43">番号</text>
                 <text x="40" y="27">算出</text>
                 <text x="40" y="43">番号</text>
-                
+
                 <text x="80" y="27">算出点</text>
                 <text x="155" y="27">算 出 点 名</text>
                 <text x="283" y="27">V</text>
                 <text x="350" y="27">M</text>
-                <text x="420" y="27">N</text> 
+                <text x="420" y="27">N</text>
                 <text x="470" y="27">comb</text>
 
                 <text x="283" y="44">(kN)</text>
                 <text x="350" y="44">(kN･m)</text>
                 <text x="420" y="44">(kN)</text>
-                
+
               </g>
               <!--横線-->
               <g fill="none" stroke="black">
                 <line stroke-width="0.50" x1="0" y1="15" x2="490" y2="15" />
                 <line stroke-width="0.50" x1="0" y1="47" x2="490" y2="47" />
               </g>
-              
+
               <ng-container *ngFor="let row of table.rows; index as r">
                 <!--横線-->
                 <g fill="none" stroke="black">
@@ -153,25 +153,25 @@
                     <line stroke-width="0.50" x1="0" [attr.y1]="79 + r * 32" x2="490" [attr.y2]="79 + r * 32" />
                   </ng-container>
                 </g>
-              
+
                 <!--column Header-->
                 <g font-size="10pt">
                   <text x="12" [attr.y]="60 + r * 32" text-anchor="middle">
                     {{ row.m_no }}
                   </text>
                   <text x="42" [attr.y]="60 + r * 32" text-anchor="middle">
-                    {{ row.p_name }}
+                    {{ row.p_id }}
                   </text>
                   <text x="105" [attr.y]="60 + r * 32" text-anchor="end">
                     {{ row.position }}
                   </text>
                   <text x="115" [attr.y]="60 + r * 32" text-anchor="start">
-                    {{ row.p_name_ex }}
+                    {{ row.p_name }}
                   </text>
                   <text x="228" [attr.y]="60 + r * 32" text-anchor="middle">
                     {{ row.upperSideName }}
                   </text>
-  
+
                   <text x="310" [attr.y]="60 + r * 32" text-anchor="end">
                     {{ row.upper.Vd }}
                   </text>
@@ -202,7 +202,7 @@
                   </text>
                 </g>
               </ng-container>
-              
+
               <!--縦線-->
               <g fill="none" stroke="black">
                 <line stroke-width="0.25" x1="27" y1="15" x2="27" [attr.y2]="47 + table.rows.length * 32" />

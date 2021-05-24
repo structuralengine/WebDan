@@ -1,7 +1,7 @@
 ﻿import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 
 import { UserInfoService } from '../../providers/user-info.service';
-import { InputCalclationPrintService } from '../../components/calculation-print/input-calclation-print.service';
+import { InputCalclationPrintService } from '../../components/calculation-print/calculation-print.service';
 import { CalcDurabilityMomentService } from '../result-durability-moment/calc-durability-moment.service';
 import { CalcEarthquakesMomentService } from '../result-earthquakes-moment/calc-earthquakes-moment.service';
 import { CalcEarthquakesShearForceService } from '../result-earthquakes-shear-force/calc-earthquakes-shear-force.service';
@@ -55,16 +55,12 @@ export class ResultViewerComponent implements OnInit {
 
     this.printcalculate = false;
     if (this.printControl.print_selected.print_calculate_checked === true) {
-      /*
-      if (this.user.loggedIn === true) {
-      */
+      // if (this.user.loggedIn === true) {
         this.printcalculate = true;
-      /*
-      } else {
-        alert('ログインしてください');
-        return;
-      }
-      */
+      // } else {
+      //   alert('ログインしてください');
+      //   return;
+      // }
     }
 
     this.durabilityMoment.setDesignForces();
@@ -81,7 +77,7 @@ export class ResultViewerComponent implements OnInit {
 
   }
 
-  public printTest() {
+  public print() {
     printJS({
       printable: 'print_section',
       type: 'html',
@@ -90,7 +86,7 @@ export class ResultViewerComponent implements OnInit {
   }
 
   private initPrintCss(): void {
-    this.PrintCss = '@page {';
+    this.PrintCss =  '@page {';
     this.PrintCss += 'size: A4;';
     this.PrintCss += 'margin: 0;';
     this.PrintCss += '}';

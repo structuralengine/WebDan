@@ -1,141 +1,153 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { InputSteelsService } from './input-steels.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { Component, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
+import { InputSteelsService } from './steels.service';
+import { SaveDataService } from 'src/app/providers/save-data.service';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-steels',
   templateUrl: './steels.component.html',
-  styleUrls: ['./steels.component.scss']
+  styleUrls: ['./steels.component.scss', '../subNavArea.scss']
 })
-export class SteelsComponent implements OnInit, OnDestroy {
+export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
-  hottable_height: number;
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
 
-  groupe_list: any[];
-  table_datas: any[][];
-  mergeCells: any[][];
-  readonlyRows: boolean[][];
-  table_settings: any[];
+  // データグリッドの設定変数
+  private option_list: pq.gridT.options[] = new Array();
+  private columnHeaders: object[] = new Array();
 
-  constructor(private input: InputSteelsService,
-              private helper: InputDataService) {
+  public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_name: string[];
 
-  }
+  constructor(
+    private steel: InputSteelsService,
+    private save: SaveDataService) { }
 
   ngOnInit() {
 
-    const height = this.ht_container.nativeElement.offsetHeight;
-    this.hottable_height = height - 250;
-    this.table_settings = new Array();
-    this.groupe_list = this.input.getSteelColumns();
-    this.table_datas = new Array(this.groupe_list.length);
-    this.mergeCells = new Array(this.groupe_list.length);
-    this.readonlyRows = new Array(this.groupe_list.length);
+    this.setTitle(this.save.isManual());
 
-    for (let i = 0; i < this.groupe_list.length; i++) {
-      this.table_datas[i] = new Array();
-      this.mergeCells[i] = new Array();
-      this.readonlyRows[i] = new Array();
+    this.table_datas = this.steel.getTableColumns();
 
-      let row: number = 0;
-      for (let j = 0; j < this.groupe_list[i].length; j++) {
-        const member = this.groupe_list[i][j];
-
-        const positionCount: number = member['positions'].length;
-        this.mergeCells[i].push({ row: row, col: 0, rowspan: positionCount * 2, colspan: 1 });
-
-        for (let k = 0; k < positionCount; k++) {
-          const data = member['positions'][k];
-          const column1 = {};
-          const column2 = {};
-          if (k === 0) {
-            // 最初の行には 部材番号を表示する
-            column1['m_no'] = data['m_no'];
-          }
-          // 1行目
-          column1['index'] = data['index'];
-          const a: number = this.helper.toNumber(data['position']);
-          column1['position'] = (a === null) ? '' : a.toFixed(3);
-          column1['p_name'] = data['p_name'];
-          column1['p_name_ex'] = data['p_name_ex'];
-          column1['bh'] = data['b'];
-
-          column1['design_point_id'] = data['I'].title;
-
-          column1['upper_left_cover'] = data['I'].upper_cover;
-
-          column1['upper_left_width'] = data['I'].upper_width;
-          column1['upper_left_thickness'] = data['I'].upper_thickness;
-
-          column1['web_thickness'] = data['I'].web_thickness;
-          column1['web_height'] = data['I'].web_height;
-
-          column1['lower_right_width'] = data['I'].lower_width;
-          column1['lower_right_thickness'] = data['I'].lower_thickness;
-
-          this.table_datas[i].push(column1);
-
-          // 2行目
-          column2['bh'] = data['h'];
-
-          column2['design_point_id'] = data['H'].title;
-
-          column2['upper_left_cover'] = data['H'].left_cover;
-
-          column2['upper_left_width'] = data['H'].left_width;
-          column2['upper_left_thickness'] = data['H'].left_thickness;
-
-          column2['web_thickness'] = data['H'].web_thickness;
-          column2['web_height'] = data['H'].web_height;
-
-          column2['lower_right_width'] = data['H'].right_width;
-          column2['lower_right_thickness'] = data['H'].right_thickness;
-
-          // SRCの情報
-          if (data.shape.indexOf('SRC') >= 0) {
-            this.readonlyRows[i].push(false);
-            this.readonlyRows[i].push(false);
-          } else {
-            // SRCではない場合
-            for (const key of ['upper_left_cover', 'upper_left_width', 'upper_left_thickness',
-                               'web_thickness', 'web_height',
-                               'lower_right_width', 'lower_right_thickness']) {
-              column1[key] = null;
-              column2[key] = null;
-            }
-            this.readonlyRows[i].push(true);
-            this.readonlyRows[i].push(true);
-          }
-          this.table_datas[i].push(column2);
-
-          // セルの結合情報
-          for (let col = 1; col <= 2; col++) {
-            this.mergeCells[i].push({ row: row, col: col, rowspan: 2, colspan: 1 });
-          }
-          for (let col = 12; col <= 18; col++) {
-            this.mergeCells[i].push({ row: row, col: col, rowspan: 2, colspan: 1 });
-          }
-
-          row += 2;
-        }
-      }
-      this.table_settings.push({
-        cells: (row, col, prop) => {
-          const cellProperties: any = {};
-          cellProperties.readOnly = this.readonlyRows[i][row];
-          return cellProperties;
-        }
-      });
+    // グリッドの設定
+    this.options = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      const op = {
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: "jp",
+        height: this.tableHeight().toString(),
+        numberCell: { show: this.save.isManual() }, // 行番号
+        colModel: this.columnHeaders,
+        dataModel: { data: this.table_datas[i] }
+      };
+      this.option_list.push(op);
     }
+    this.options = this.option_list[0];
+
+    // タブのタイトルとなる
+    this.groupe_name = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_name.push( this.steel.getGroupeName(i));
+    }
+
+
   }
 
-  // tslint:disable-next-line: use-life-cycle-interface
+  ngAfterViewInit(){
+    this.activeButtons(0);  
+  }
+
+  private setTitle(isManual: boolean): void{
+    if (isManual) {
+      // 断面力手入力モードの場合
+      this.columnHeaders = [
+        { title: '', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      ];
+    } else {
+      this.columnHeaders = [
+        { title: '部材<br/>番号', align: 'center', dataType: 'integer', dataIndx: 'm_no', editable: false, sortable: false, width: 60, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: '位置', dataType: 'float', format: '#.000', dataIndx: 'position', editable: false, sortable: false, width: 110, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      ];    
+    }
+
+    // 共通する項目
+    this.columnHeaders.push(
+      { title: '算出点名', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      { title: '断面<br/>B<br/>H', align: 'center', dataType: 'float', dataIndx: 'bh', editable: false, sortable: false, width: 85, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      { title: '位置', align: 'center', dataType: 'string', dataIndx: 'design_point_id', editable: false, sortable: false, width: 40, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+      { title: '上または左からの距離',  dataType: 'float', dataIndx: 'upper_left_cover', sortable: false, width: 70 },
+      {
+        title: '上フランジ または 左フランジ', align: 'center', colModel: [
+          { title: 'フランジ幅', dataType: 'float', dataIndx: 'upper_left_width', sortable: false, width: 80 },
+          { title: 'フランジ厚', dataType: 'float', dataIndx: 'upper_left_thickness', sortable: false, width: 80 },
+        ]
+      },
+      {
+        title: 'ウェブ', align: 'center', colModel: [
+          { title: 'ウェブ厚', dataType: 'float', dataIndx: 'web_thickness', sortable: false, width: 80 },
+          { title: 'ウェブ高', dataType: 'float', dataIndx: 'web_height', sortable: false, width: 80 },
+        ]
+      },
+      {
+        title: '下フランジ または 右フランジ', align: 'center', colModel: [
+          { title: 'フランジ幅', dataType: 'float', dataIndx: 'lower_right_width', sortable: false, width: 80 },
+          { title: 'フランジ厚', dataType: 'float', dataIndx: 'lower_right_thickness', sortable: false, width: 80 },
+        ]
+      },
+      { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
+    );
+  }
+
+  public getGroupeName(i: number): string {
+    return this.groupe_name[i];
+  }
+ 
   ngOnDestroy() {
     this.saveData();
   }
   public saveData(): void {
-    this.input.setSteelsColumns(this.table_datas);
+    const a = [];
+    for(const g of this.table_datas){
+      for(const e of g){
+        a.push(e);
+      }
+    }
+    this.steel.setTableColumns(a);
+  }
+
+  // 表の高さを計算する
+  private tableHeight(): number {
+    let containerHeight = window.innerHeight;
+    containerHeight -= 230;
+    return containerHeight;
+  }
+
+
+  public activePageChenge(id: number): void {
+    this.activeButtons(id);
+ 
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private activeButtons(id: number) {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("stl" + i);
+      if (data != null) {
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
+        }
+      }
+    }
   }
 
 }

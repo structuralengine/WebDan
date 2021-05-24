@@ -4,7 +4,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from '../../app.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { Router, ActivatedRoute, ParamMap, NavigationEnd } from '@angular/router';
 
 import { ResultViewerComponent } from '../../calculation/result-viewer/result-viewer.component';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
@@ -14,6 +14,12 @@ import { UserInfoService } from '../../providers/user-info.service';
 import * as FileSaver from 'file-saver';
 import { SaveDataService } from '../../providers/save-data.service';
 import { ConfigService } from '../../providers/config.service';
+import { DsdDataService } from 'src/app/providers/dsd-data.service';
+
+import { AuthService } from '../../core/auth.service';
+import firebase from 'firebase';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-menu',
@@ -22,22 +28,23 @@ import { ConfigService } from '../../providers/config.service';
 })
 export class MenuComponent implements OnInit {
 
-  loginUserName: string;
-  userPoint: string;
-  loggedIn: boolean;
-  fileName: string;
-  baseUrl: string;
-  pickup_file_name: string;
+  public loggedIn: boolean = false;
+  private fileName: string;
+  public pickup_file_name: string;
+  private userPoint: string;
+  private amount: number;
+
 
   constructor(
     private modalService: NgbModal,
     private app: AppComponent,
     private user: UserInfoService,
-    private InputData: SaveDataService,
-    private http: HttpClient,
-    private platformLocation: PlatformLocation,
+    private save: SaveDataService,
+    private helper: DataHelperModule,
+    private dsdData: DsdDataService,
     private router: Router,
-    private config: ConfigService) {
+    private config: ConfigService,
+    public auth: AuthService) {
 
     this.loggedIn = this.user.loggedIn;
     this.fileName = '';
@@ -50,10 +57,12 @@ export class MenuComponent implements OnInit {
   // 新規作成
   renew(): void {
     this.router.navigate(['/blank-page']);
-    this.app.dialogClose(); // 現在表示中の画面を閉じる
-    this.app.isManual = true;
-    this.app.isCalculated = false;
-    this.InputData.clear();
+    this.app.deactiveButtons();
+
+    setTimeout(()=>{
+      this.save.clear();
+      this.app.memberChange(); // 左側のボタンを無効にする。
+    }, 10);
   }
 
   // ファイルを開く
@@ -62,20 +71,40 @@ export class MenuComponent implements OnInit {
     const modalRef = this.modalService.open(WaitDialogComponent);
     this.fileName = file.name;
     evt.target.value = '';
+
     this.router.navigate(['/blank-page']);
-    this.fileToText(file)
-      .then(text => {
-        this.app.dialogClose(); // 現在表示中の画面を閉じる
-        this.InputData.readInputData(text); // データを読み込む
-        this.app.isManual = this.InputData.isManual();
-        this.app.isCalculated = false;
-        this.pickup_file_name = this.InputData.pickup_filename;
-        modalRef.close();
-      })
-      .catch(err => {
-        modalRef.close();
-        console.log(err)
-      });
+    this.app.deactiveButtons();
+
+    let error = null;
+    switch( this.helper.getExt(this.fileName)){
+      case 'dsd':
+        this.fileToBinary(file)
+        .then(buff  => {
+          const pik =this.dsdData.readDsdData(buff);
+          if (pik !== null){
+            alert(pik + ' を開いてください！');
+          }
+          this.app.memberChange(); // 左側のボタンを有効にする。
+        })
+        .catch(err => { error = err; });
+        break;
+      default:
+        this.fileToText(file)
+        .then(text => {
+          this.save.readInputData(text);
+          this.app.memberChange(); // 左側のボタンを有効にする。
+        })
+        .catch(err => { error = err; });
+    }
+
+    // 後処理
+    if( error === null ){
+      this.pickup_file_name = this.save.getPickupFilename();
+    } else {
+      console.log(error)
+    }
+
+    modalRef.close();
   }
 
   // ピックアップファイルを開く
@@ -83,23 +112,17 @@ export class MenuComponent implements OnInit {
     const file = evt.target.files[0];
     const modalRef = this.modalService.open(WaitDialogComponent);
     evt.target.value = '';
+
+    this.router.navigate(['/blank-page']);
+    this.app.deactiveButtons();
+
     this.fileToText(file)
       .then(text => {
-        this.app.dialogClose(); // 現在表示中の画面を閉じる
-        this.InputData.readPickUpData(text, file.name); // データを読み込む
-        this.pickup_file_name = this.InputData.pickup_filename;
-        this.app.isManual = false;
-        this.app.isCalculated = false;
-        if (this.router.url === this.router.config[0].redirectTo ) {
-          this.router.navigate(['/blank-page']);
-        } else {
-          this.router.navigate(['/']);
-        }
+        this.save.readPickUpData(text, file.name); // データを読み込む
+        this.pickup_file_name = this.save.getPickupFilename();
         modalRef.close();
       })
       .catch(err => {
-        this.app.isManual = this.InputData.isManual();
-        this.app.isCalculated = false;
         modalRef.close();
         console.log(err);
       });
@@ -119,11 +142,25 @@ export class MenuComponent implements OnInit {
     });
   }
 
+  // バイナリのファイルを読み込む
+  private fileToBinary(file): any {
+    const reader = new FileReader();
+    reader.readAsArrayBuffer(file);
+    return new Promise((resolve, reject) => {
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = () => {
+        reject(reader.error);
+      };
+    });
+  }
+
 
   // ファイルを保存
-  save(): void {
+  public fileSave(): void {
     this.config.saveActiveComponentData();
-    const inputJson: string = this.InputData.getInputText();
+    const inputJson: string = this.save.getInputText();
     const blob = new window.Blob([inputJson], { type: 'text/plain' });
     if (this.fileName.length === 0) {
       this.fileName = 'WebDan.wdj';
@@ -132,45 +169,22 @@ export class MenuComponent implements OnInit {
   }
 
   // ログイン関係
-  private logIn(): void {
+  logIn(): void {
     this.modalService.open(LoginDialogComponent).result.then((result) => {
       this.loggedIn = this.user.loggedIn;
-      if (this.loggedIn === true) {
-        this.loginUserName = this.user.loginUserName;
-        this.userPoint = this.user.purchase_value.toString();
-      }
+      setTimeout(() => {
+        if (this.loggedIn === true) {
+          this.userPoint = this.user.purchase_value.toString();
+          this.amount = this.auth.amount;
+        }
+      }, 200);
     });
-    // 「ユーザー名」入力ボックスにフォーカスを当てる
-    document.getElementById('user_name_id').focus();
   }
 
-  // ユーザーポイントを更新
-  private setUserPoint() {
-    const url = 'https://structuralengine.com/my-module/get_points_balance.php?id=' 
-              + this.user.loginUserName + '&ps=' + this.user.loginPassword;
-    this.http.get(url, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded'
-      })
-    })
-      .subscribe(
-        response => {
-          // 通信成功時の処理（成功コールバック）
-          const response_text = response;
-          if ('error' in response_text) {
-            this.user.errorMessage = response_text['error'];
-          } else {
-            this.user.user_id = response_text['user_id'];
-            this.user.purchase_value = response_text['purchase_value'];
-            this.user.loggedIn = true;
-            this.userPoint = this.user.purchase_value.toString();
-          }
-        },
-        error => {
-          // 通信失敗時の処理（失敗コールバック）
-          this.user.errorMessage = error.statusText;
-        }
-      );
+  logOut(): void {
+    this.loggedIn = false;
+    this.user.clear();
+    this.auth.signOut();
   }
 
 

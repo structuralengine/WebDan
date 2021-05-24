@@ -1,151 +1,175 @@
-import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { InputDesignPointsService } from './input-design-points.service';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewChild } from '@angular/core';
+import { InputDesignPointsService } from './design-points.service';
 import { SaveDataService } from '../../providers/save-data.service';
-import { InputDataService } from 'src/app/providers/input-data.service';
+import { AppComponent } from 'src/app/app.component';
+import { SheetComponent } from '../sheet/sheet.component';
+import pq from 'pqgrid';
 
 @Component({
   selector: 'app-design-points',
   templateUrl: './design-points.component.html',
-  styleUrls: ['./design-points.component.scss']
+  styleUrls: ['./design-points.component.scss', '../subNavArea.scss']
 })
-export class DesignPointsComponent implements OnInit, OnDestroy {
+export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
 
-  @ViewChild('ht_container', { static: true }) ht_container: ElementRef;
-  hottable_height: number;
-  isManual:boolean;
-  is3DPickUp:boolean;
+  @ViewChild('grid') grid: SheetComponent;
+  public options: pq.gridT.options;
 
-  groupe_list: any[];
-  table_datas: any[][];
-  mergeCells: any[][];
-  position_index: number[][];
-
-  table_settings = {
-    beforeChange: (...x: any[]) => {
-      try {
-        let changes: any = null;
-        let target: any = null;
-        for (let i = 0; i < x.length; i++) {
-          if ('guid' in x[i]){
-            target = x[i];
-          }
-          if (Array.isArray(x[i])) {
-            changes = x[i];
-            break;
-          }
-        }
-        if (target === null) { return; }
-        if (changes === null) { return; }
-        for (let i = 0; i < changes.length; i++) {
-          switch (changes[i][1]) {
-            case 'La':
-              const value1: number = this.helper.toNumber(changes[i][3]);
-              if( value1 !== null ) {
-                changes[i][3] = value1.toFixed(1);
-              } else {
-                changes[i][3] = null;
-              }
-              break;
-            case 'isMyCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 7, false);
-              }
-              break;
-            case 'isVyCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 8, false);
-              }
-              break;
-            case 'isMzCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 5, false);
-              }
-              break;
-            case 'isVzCalc':
-              if( changes[i][3] === true){
-                const row: number = changes[i][0];
-                target.setDataAtCell(row, 6, false);
-              }
-              break;
-          }
-        }
-      } catch (e) {
-        console.log(e);
-      }
-    },
-    afterChange: (...x: any[]) => {
-      let changes: any = null;
-      for (let i = 0; i < x.length; i++) {
-        if (Array.isArray(x[i])) {
-          changes = x[i];
-          break;
-        }
-      }
-      if (changes === null) { return; }
-      
-    }
-  };
+  // データグリッドの設定変数
+  private option_list: pq.gridT.options[] = new Array();
+  private columnHeaders: object[] = [];
+  // このページで表示するデータ
+  public table_datas: any[];
+  // タブのヘッダ名
+  public groupe_name: string[];
 
   constructor(
-    private input: InputDesignPointsService,
+    private points: InputDesignPointsService,
     private save: SaveDataService,
-    private helper: InputDataService) { }
+    private app: AppComponent) { }
 
   ngOnInit() {
-    
-    this.isManual = this.save.isManual();
 
-    const height = this.ht_container.nativeElement.offsetHeight;
-    this.hottable_height = height - 180;
+    this.setTitle(this.save.isManual());
 
-    this.groupe_list = this.input.getDesignPointColumns();
-    this.table_datas = new Array(this.groupe_list.length);
-    this.mergeCells = new Array(this.groupe_list.length);
-    this.position_index = new Array(this.groupe_list.length);
+    this.table_datas = this.points.getTableColumns();
 
-    this.is3DPickUp = this.save.is3DPickUp();
-
-    for (let i = 0; i < this.groupe_list.length; i++) {
-      this.table_datas[i] = new Array();
-      this.mergeCells[i] = new Array();
-      this.position_index[i] = new Array();
-
-      let row: number = 0;     
-      for (let j = 0; j < this.groupe_list[i].length; j++) {
-        const member = this.groupe_list[i][j];
-
-        const positionCount: number = member['positions'].length;
-        if(positionCount> 1){
-          this.mergeCells[i].push({row: row, col: 0, rowspan: positionCount, colspan: 1});
-        }
-
-        for (let k = 0; k < positionCount; k++) {
-          const column = member['positions'][k];
-          if (k === 0) {
-            // 最初の行には 部材番号を表示する
-            column['m_no'] = member['m_no'];
+    // グリッドの設定
+    this.option_list = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      const op = {
+        showTop: false,
+        reactive: true,
+        sortable: false,
+        locale: "jp",
+        height: this.tableHeight().toString(),
+        numberCell: { show: false }, // 行番号
+        colModel: this.columnHeaders,
+        dataModel: { data: this.table_datas[i] },
+        change: (evt, ui) => {
+          for (const property of ui.updateList) {
+            for (const key of Object.keys(property.newRow)) {
+              if (property.newRow[key]===true) {
+                const target = this.table_datas[i][property.rowIndx];
+                if (key === 'isMyCalc') { target['isMzCalc'] = false; }
+                if (key === 'isMzCalc') { target['isMyCalc'] = false; }
+                if (key === 'isVyCalc') { target['isVzCalc'] = false; }
+                if (key === 'isVzCalc') { target['isVyCalc'] = false; }
+              }
+            }
           }
-
-          this.table_datas[i].push(column);
-          this.position_index[i].push(column.index)
-
-          row++;
+          // 何か変更があったら判定する
+          this.app.designPointChange(this.points.designPointChange());
         }
+      };
+      this.option_list.push(op);
+    }
+    this.options = this.option_list[0];
+
+    // タブのタイトルとなる
+    this.groupe_name = new Array();
+    for( let i =0; i < this.table_datas.length; i++){
+      this.groupe_name.push( this.points.getGroupeName(i));
+    }
+
+  }
+
+  ngAfterViewInit(){
+    this.activeButtons(0);
+  }
+
+  private setTitle(isManual: boolean): void{
+    if (isManual) {
+      // 断面力手入力モードの場合
+      this.columnHeaders = [
+        { title: "", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "算出点名", dataType: "string", dataIndx: "p_name", sortable: false, width: 250 },
+        { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
+      ];
+    } else {
+      // ピックアップファイルを使う場合
+      this.columnHeaders = [
+        { title: "部材番号", align: "left", dataType: "string", dataIndx: "m_no", sortable: false, width: 70, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "算出点", dataType: "string", dataIndx: "p_id", sortable: false, width: 85, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "位置", dataType: "float", format: "#.000", dataIndx: "position", sortable: false, width: 110, editable: false, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
+        { title: "算出点名", dataType: "string", dataIndx: "p_name", sortable: false, width: 250 },
+      ];
+      if (this.save.is3DPickUp()) {
+        // 3次元ピックアップファイルの場合
+        this.columnHeaders.push(
+          { title: '曲げ照査', align: 'center', colModel: [
+            { title: "y軸周り", align: "center", dataType: "bool", dataIndx: "isMyCalc", type: 'checkbox', sortable: false, width: 120 },
+            { title: "z軸周り", align: "center", dataType: "bool", dataIndx: "isMzCalc", type: 'checkbox', sortable: false, width: 120 },
+          ]},
+          { title: 'せん断照査', align: 'center', colModel: [
+            { title: "y軸方向", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 },
+            { title: "z軸方向", align: "center", dataType: "bool", dataIndx: "isVzCalc", type: 'checkbox', sortable: false, width: 120 }
+          ]},
+        );
+      } else {
+        // 2次元ピックアップファイルの場合
+        this.columnHeaders.push(
+          { title: "曲げ照査", align: "center", dataType: "bool", dataIndx: "isMzCalc", type: 'checkbox', sortable: false, width: 120 },
+          { title: "せん断照査", align: "center", dataType: "bool", dataIndx: "isVyCalc", type: 'checkbox', sortable: false, width: 120 }
+        );
       }
+      this.columnHeaders.push(
+        { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 }
+      );
     }
   }
-  
-  // tslint:disable-next-line: use-life-cycle-interface
+
   ngOnDestroy() {
     this.saveData();
   }
-  
+
   public saveData(): void {
-    this.input.setDesignPointColumns(this.table_datas);
+    const a = [];
+    for(const g of this.table_datas){
+      for(const p of g){
+          a.push(p);
+      }
+    }
+    if(this.save.isManual()){
+      this.points.setSaveData(a);
+    } else {
+      this.points.setTableColumns(a);
+    }
   }
-  
+
+  // 表の高さを計算する
+  private tableHeight(): number {
+    let containerHeight = window.innerHeight;
+    containerHeight -= 230;
+    return containerHeight;
+  }
+
+  public activePageChenge(id: number): void {
+    this.activeButtons(id);
+
+    this.options = this.option_list[id];
+    this.grid.options = this.options;
+    this.grid.refreshDataAndView();
+  }
+
+  // アクティブになっているボタンを全て非アクティブにする
+  private activeButtons(id: number) {
+    for (let i = 0; i <= 1; i++) {
+      const data = document.getElementById("pos" + i);
+      if (data != null) {
+        if(i === id){
+          data.classList.add("is-active");
+        } else if (data.classList.contains("is-active")) {
+            data.classList.remove("is-active");
+        }
+      }
+    }
+  }
+
+  // タブのヘッダ名
+  public getGroupeName(i: number): string{
+    return this.groupe_name[i];
+  }
+
 }
 

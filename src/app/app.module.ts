@@ -9,6 +9,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { AppRoutingModule } from './app-routing.module';
 
+import { CoreModule } from './core/core.module';
+import { AngularFireModule } from '@angular/fire';
+import { AuthGuard } from './guard/auth.guard';
+
 
 import { WebviewDirective } from './directives/webview.directive';
 
@@ -17,16 +21,16 @@ import { HotTableModule } from '@handsontable/angular';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { InputDataService } from './providers/input-data.service';
-import { InputBasicInformationService } from './components/basic-information/input-basic-information.service';
-import { InputMembersService } from './components/members/input-members.service';
-import { InputDesignPointsService } from './components/design-points/input-design-points.service';
-import { InputBarsService } from './components/bars/input-bars.service';
-import { InputSteelsService } from './components/steels/input-steels.service';
-import { InputFatiguesService } from './components/fatigues/input-fatigues.service';
-import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/input-safety-factors-material-strengths.service';
-import { InputSectionForcesService } from './components/section-forces/input-section-forces.service';
-import { InputCalclationPrintService } from './components/calculation-print/input-calclation-print.service';
+import { DataHelperModule } from './providers/data-helper.module';
+import { InputBasicInformationService } from './components/basic-information/basic-information.service';
+import { InputMembersService } from './components/members/members.service';
+import { InputDesignPointsService } from './components/design-points/design-points.service';
+import { InputBarsService } from './components/bars/bars.service';
+import { InputSteelsService } from './components/steels/steels.service';
+import { InputFatiguesService } from './components/fatigues/fatigues.service';
+import { InputSafetyFactorsMaterialStrengthsService } from './components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { InputSectionForcesService } from './components/section-forces/section-forces.service';
+import { InputCalclationPrintService } from './components/calculation-print/calculation-print.service';
 import { SaveDataService } from './providers/save-data.service';
 
 import { UserInfoService } from './providers/user-info.service';
@@ -44,7 +48,10 @@ import { BarsComponent } from './components/bars/bars.component';
 import { FatiguesComponent } from './components/fatigues/fatigues.component';
 import { SafetyFactorsMaterialStrengthsComponent } from './components/safety-factors-material-strengths/safety-factors-material-strengths.component';
 import { SectionForcesComponent } from './components/section-forces/section-forces.component';
+import { SteelsComponent } from './components/steels/steels.component';
+import { CrackSettingsComponent } from './components/crack/crack-settings.component';
 import { CalculationPrintComponent } from './components/calculation-print/calculation-print.component';
+import { SheetComponent } from './components/sheet/sheet.component';
 
 import { ResultDataService } from './calculation/result-data.service';
 import { CalcSafetyMomentService } from './calculation/result-safety-moment/calc-safety-moment.service';
@@ -75,12 +82,10 @@ import { ResultSummaryTableComponent } from './calculation/result-summary-table/
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
-import { SetSafetyFactorService} from './calculation/set-safety-factor.service';
 import { SetSectionService} from './calculation/set-section.service';
 import { SetBarService} from './calculation/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
-import { SetFatigueService } from './calculation/set-fatigue.service';
-import { SteelsComponent } from './components/steels/steels.component';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   imports: [
@@ -92,7 +97,10 @@ import { SteelsComponent } from './components/steels/steels.component';
     DragDropModule,
     BrowserAnimationsModule,
     NgbModule,
-    HotTableModule
+    HotTableModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    CoreModule,
+    DataHelperModule
   ],
   declarations: [
     AppComponent,
@@ -111,6 +119,8 @@ import { SteelsComponent } from './components/steels/steels.component';
     CalculationPrintComponent,
     BlankPageComponent,
 
+    SheetComponent,
+
     ResultSafetyMomentComponent,
     ResultSafetyShearForceComponent,
     ResultDurabilityMomentComponent,
@@ -124,7 +134,8 @@ import { SteelsComponent } from './components/steels/steels.component';
     ResultEarthquakesShearForceComponent,
     ResultSummaryTableComponent,
     SectionForceListComponent,
-    SteelsComponent
+    SteelsComponent,
+    CrackSettingsComponent
   ],
   entryComponents: [
     LoginDialogComponent,
@@ -134,8 +145,8 @@ import { SteelsComponent } from './components/steels/steels.component';
   providers: [
     UserInfoService,
     ConfigService,
+    AuthGuard,
 
-    InputDataService,
     InputBasicInformationService,
     InputMembersService,
     InputDesignPointsService,
@@ -161,11 +172,18 @@ import { SteelsComponent } from './components/steels/steels.component';
     CalcEarthquakesShearForceService,
 
     SetDesignForceService,
-    SetSafetyFactorService,
     SetSectionService,
     SetBarService,
     SetPostDataService,
-    SetFatigueService
+
+    // 計算結果コンポーネントで他のコンポーネントから使いまわされるものは　
+    // declarations だけではなくココ(providers) にも宣言して
+    // 他のコンポーネントから機能の一部を使えるようにする
+    ResultSafetyShearForceComponent,
+    ResultSafetyMomentComponent,
+    ResultRestorabilityMomentComponent,
+    ResultRestorabilityShearForceComponent,
+    ResultServiceabilityMomentComponent,
   ],
   bootstrap: [
     AppComponent

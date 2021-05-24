@@ -1,32 +1,45 @@
-import { SaveDataService } from '../../providers/save-data.service';
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service'
 
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
+import { SetSectionService } from '../set-section.service';
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class CalcServiceabilityMomentService {
+
   // 耐久性 曲げひび割れ
   public DesignForceList: any[];
+  public DesignForceList1: any[];
   public isEnable: boolean;
+  public safetyID: number = 0;
 
-  constructor(private save: SaveDataService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService,
-              private result: ResultDataService,
-              public base: CalcSafetyMomentService) {
+  constructor(
+    private safety: InputSafetyFactorsMaterialStrengthsService,
+    private calc: InputCalclationPrintService,
+    private basic: InputBasicInformationService,
+    private helper: DataHelperModule,
+    private force: SetDesignForceService,
+    private post: SetPostDataService,
+    private crack: InputCrackSettingsService,
+    private section: SetSectionService,
+    public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
 
   // 設計断面力の集計
   // ピックアップファイルを用いた場合はピックアップテーブル表のデータを返す
-  // 手入力モード（this.save.isManual() === true）の場合は空の配列を返す
+  // 手入力モード（this.save.isManual === true）の場合は空の配列を返す
   public setDesignForces(): void{
 
     this.isEnable = false;
@@ -34,21 +47,14 @@ export class CalcServiceabilityMomentService {
     this.DesignForceList = new Array();
 
     // 曲げモーメントが計算対象でない場合は処理を抜ける
-    if (this.save.calc.print_selected.calculate_moment_checked === false) {
+    if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[1]);
+    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
     // 縁応力度検討用
-    const DesignForceList1 = this.force.getDesignForceList('Md', this.save.basic.pickup_moment_no[0]);
-
-    if (this.DesignForceList.length < 1) {
-      return;
-    }
-
-    // サーバーに送信するデータを作成
-    this.post.setPostData([this.DesignForceList, DesignForceList1], 'Md');
+    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
 
   }
 
@@ -59,316 +65,38 @@ export class CalcServiceabilityMomentService {
       return null;
     }
 
+    // 複数の断面力の整合性を確認する
+    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
+
     // POST 用
-    const postData = this.post.setInputData(this.DesignForceList, 0, 'Md', '応力度', 2);
+    const postData = this.post.setInputData('Md', '応力度', this.safetyID, force[0], force[1]);
     return postData;
   }
 
-  // 出力テーブル用の配列にセット
-  public setServiceabilityPages(responseData: any[], postData: any, title: string = null): any[] {
-    const result: any[] = new Array();
-    let page: any;
-    let groupeName: string;
-    let i: number = 0;
-    let isDurability: boolean = false;
-    if (title === null) {
-      title = '耐久性　曲げひび割れの照査結果';
-    } else {
-      isDurability = true;
-    }
-
-    for (const groupe of postData) {
-      groupeName = groupe[0].g_name;
-      page = { caption: title, g_name: groupeName, columns: new Array() };
-
-      for (const member of groupe) {
-        for (const position of member.positions) {
-          for (let j = 0; j < position.PostData0.length; j++) {
-
-            // 永久荷重
-            const postdata0 = position.PostData0[j];
-
-            // 縁応力検討用荷重
-            let postdata1 = { Md: 0, Nd: 0 };
-            if ('PostData1' in position) {
-              postdata1 = position.PostData1[j];
-            }
-
-            // 印刷用データ
-            const PrintData = position.PrintData[j];
-
-            // 応力度
-            const resultData = responseData[i].ResultSigma;
-
-            if (page.columns.length > 4) {
-              result.push(page);
-              page = { caption: title, g_name: groupeName, columns: new Array() };
-            }
-
-            const column: any[] = new Array();
-
-            /////////////// まず計算 ///////////////
-            const resultWd: any = this.calcWd(PrintData, postdata0, postdata1, position, resultData, isDurability);
-            const resultColumn: any = this.getResultString(resultWd);
-
-            /////////////// タイトル /////////////// 
-            column.push(this.result.getTitleString1(member, position));
-            column.push(this.result.getTitleString2(position, postdata0));
-            column.push(this.result.getTitleString3(position, postdata0));
-            ///////////////// 形状 /////////////////
-            column.push(this.result.getShapeString_B(PrintData));
-            column.push(this.result.getShapeString_H(PrintData));
-            column.push(this.result.getShapeString_Bt(PrintData));
-            column.push(this.result.getShapeString_t(PrintData));
-            /////////////// 引張鉄筋 ///////////////
-            const Ast: any = this.result.getAsString(PrintData);
-            column.push(Ast.As);
-            column.push(Ast.AsString);
-            column.push(Ast.ds);
-            /////////////// 圧縮鉄筋 ///////////////
-            const Asc: any = this.result.getAsString(PrintData, 'Asc');
-            column.push(Asc.As);
-            column.push(Asc.AsString);
-            column.push(Asc.ds);
-            /////////////// 側面鉄筋 ///////////////
-            const Ase: any = this.result.getAsString(PrintData, 'Ase');
-            column.push(Ase.As);
-            column.push(Ase.AsString);
-            column.push(Ase.ds);
-            /////////////// コンクリート情報 ///////////////
-            const fck: any = this.result.getFckString(PrintData);
-            column.push(fck.fck);
-            column.push(fck.rc);
-            column.push(fck.fcd);
-            /////////////// 鉄筋情報 ///////////////
-            const fsk: any = this.result.getFskString(PrintData);
-            column.push(fsk.fsy);
-            column.push(fsk.rs);
-            column.push(fsk.fsd);
-            /////////////// 照査 ///////////////
-            column.push(resultColumn.con);
-
-            column.push(resultColumn.Mhd);
-            column.push(resultColumn.Nhd);
-            column.push(resultColumn.sigma_b);
-
-            column.push(resultColumn.Md);
-            column.push(resultColumn.Nd);
-            column.push(resultColumn.sigma_c);
-            column.push(resultColumn.sigma_s);
-
-            column.push(resultColumn.Mpd);
-            column.push(resultColumn.Npd);
-            column.push(resultColumn.EsEc);
-            column.push(resultColumn.sigma_se);
-            column.push(resultColumn.c);
-            column.push(resultColumn.Cs);
-            column.push(resultColumn.fai);
-            column.push(resultColumn.ecu);
-            column.push(resultColumn.k1);
-            column.push(resultColumn.k2);
-            column.push(resultColumn.n);
-            column.push(resultColumn.k3);
-            column.push(resultColumn.k4);
-            column.push(resultColumn.Wd);
-            column.push(resultColumn.Wlim);
-
-            column.push(resultColumn.ri);
-            column.push(resultColumn.ratio);
-            column.push(resultColumn.result);
-
-            page.columns.push(column);
-            i++;
-          }
-        }
-      }
-      if (page.columns.length > 0) {
-        result.push(page);
-      }
-    }
-    return result;
+  public getSafetyFactor(g_id: any, safetyID: number) {
+    return this.safety.getCalcData('Md', g_id, safetyID);
   }
 
-  // 計算と印刷用
-  private getResultString(re: any): any {
+  public calcWd(
+    res: any, shape: any,
+    fc: any, Ast: any, safety: any,
+    member: any, isDurability: boolean): any {
 
-    const result = {
-      con: { alien: 'center', value: '-' },
+    const resMin = res[0]; // 永久作用
+    const resMax = res[1]; // 永久＋変動作用
 
-      Mhd: { alien: 'center', value: '-' },
-      Nhd: { alien: 'center', value: '-' },
-      sigma_b: { alien: 'center', value: '-' },
-
-      Md: { alien: 'center', value: '-' },
-      Nd: { alien: 'center', value: '-' },
-      sigma_c: { alien: 'center', value: '-' },
-      sigma_s: { alien: 'center', value: '-' },
-
-      Mpd: { alien: 'center', value: '-' },
-      Npd: { alien: 'center', value: '-' },
-      EsEc: { alien: 'center', value: '-' },
-      sigma_se: { alien: 'center', value: '-' },
-      c: { alien: 'center', value: '-' },
-      Cs: { alien: 'center', value: '-' },
-      fai: { alien: 'center', value: '-' },
-
-      ecu: { alien: 'center', value: '-' },
-      k1: { alien: 'center', value: '-' },
-      k2: { alien: 'center', value: '-' },
-      n: { alien: 'center', value: '-' },
-      k3: { alien: 'center', value: '-' },
-      k4: { alien: 'center', value: '-' },
-
-      Wd: { alien: 'center', value: '-' },
-      Wlim: { alien: 'center', value: '-' },
-
-      ri: { alien: 'center', value: '-' },
-      ratio: { alien: 'center', value: '-' },
-      result: { alien: 'center', value: '-' }
-    };
-
-    // 環境条件
-    if ('con' in re) {
-      result.con.value = re.con;
-    }
-
-    // 永久作用
-    if ('Md' in re) {
-      result.Md = { alien: 'right', value: re.Md.toFixed(1) };
-    }
-    if ('Nd' in re) {
-      result.Nd = { alien: 'right', value: re.Nd.toFixed(1) };
-    }
-
-    // 圧縮応力度の照査
-    if ('Sigmac' in re && 'fcd04' in re) {
-      if (re.Sigmac < re.fcd04) {
-        result.sigma_c.value = re.Sigmac.toFixed(2) + ' < ' + re.fcd04.toFixed(1);
-      } else {
-        result.sigma_c.value = re.Sigmac.toFixed(2) + ' > ' + re.fcd04.toFixed(1);
-        result.result.value = '(0.4fcd) NG';
-      }
-    }
-
-    // 縁応力の照査
-    if ('Mhd' in re) {
-      result.Mhd = { alien: 'right', value: re.Mhd.toFixed(1) };
-    }
-    if ('Nhd' in re) {
-      result.Nhd = { alien: 'right', value: re.Nhd.toFixed(1) };
-    }
-    // 縁応力度
-    if ('Sigmab' in re && 'Sigmabl' in re) {
-      if (re.Sigmab < re.Sigmabl) {
-        let SigmabVal: number = re.Sigmab;
-        if ( SigmabVal < 0 ) {
-          SigmabVal = 0;
-        }
-        result.sigma_b.value = SigmabVal.toFixed(2) + ' < ' + re.Sigmabl.toFixed(2);
-
-        // 鉄筋応力度の照査
-        if ('Sigmas' in re && 'sigmal1' in re) {
-          if (re.Sigmas < 0) {
-            result.sigma_s.value = '全断面圧縮';
-            if (result.result.value === '-') {
-              result.result.value = 'OK';
-            }
-          } else if (re.Sigmas < re.sigmal1) {
-            result.sigma_s.value = re.Sigmas.toFixed(1) + ' < ' + re.sigmal1.toFixed(1);
-            if (result.result.value === '-') {
-              result.result.value = 'OK';
-            }
-          } else {
-            result.sigma_s.value = re.Sigmas.toFixed(1) + ' > ' + re.sigmal1.toFixed(1);
-            result.result.value = 'NG';
-          }
-        }
-        return result;
-      } else {
-        result.sigma_b.value = re.Sigmab.toFixed(2) + ' > ' + re.Sigmabl.toFixed(2);
-      }
-    }
-
-    // ひび割れ幅の照査
-    if ('Mpd' in re) {
-      result.Mpd = { alien: 'right', value: re.Mpd.toFixed(1) };
-    }
-    if ('Npd' in re) {
-      result.Npd = { alien: 'right', value: re.Npd.toFixed(1) };
-    }
-    if ('EsEc' in re) {
-      result.EsEc = { alien: 'right', value: re.EsEc.toFixed(2) };
-    }
-
-    if ('sigma_se' in re) {
-      result.sigma_se = { alien: 'right', value: re.sigma_se.toFixed(1) };
-    }
-    if ('c' in re) {
-      result.c = { alien: 'right', value: re.c.toFixed(1) };
-    }
-    if ('Cs' in re) {
-      result.Cs = { alien: 'right', value: re.Cs.toFixed(1) };
-    }
-    if ('fai' in re) {
-      result.fai = { alien: 'right', value: re.fai.toFixed(0) };
-    }
-    if ('ecu' in re) {
-      result.ecu = { alien: 'right', value: re.ecu.toFixed(0) };
-    }
-
-    if ('k1' in re) {
-      result.k1 = { alien: 'right', value: re.k1.toFixed(2) };
-    }
-    if ('k2' in re) {
-      result.k2 = { alien: 'right', value: re.k2.toFixed(3) };
-    }
-    if ('n' in re) {
-      result.n = { alien: 'right', value: re.n.toFixed(3) };
-    }
-    if ('k3' in re) {
-      result.k3 = { alien: 'right', value: re.k3.toFixed(3) };
-    }
-    if ('k4' in re) {
-      result.k4 = { alien: 'right', value: re.k4.toFixed(2) };
-    }
-    if ('Wd' in re) {
-      result.Wd = { alien: 'right', value: re.Wd.toFixed(3) };
-    }
-    // 制限値
-    if ('Wlim' in re) {
-      result.Wlim = { alien: 'right', value: re.Wlim.toFixed(3) };
-    }
-    if ('ri' in re) {
-      result.ri.value = re.ri.toFixed(2);
-    }
-    if ('ratio' in re) {
-      result.ratio.value = re.ratio.toFixed(3);
-    }
-
-    if (re.ratio < 1) {
-      if (result.result.value === '-') {
-        result.result.value = 'OK';
-      }
-    } else {
-      result.result.value = 'NG';
-    }
-
-    return result;
-  }
-
-  public calcWd(PrintData: any, postdata0: any, postdata1: any, position: any, resultData: any,
-                isDurability: boolean): any {
+    const crackInfo = this.crack.getTableColumn(resMin.index);
 
     const result = {};
 
     // 環境条件
     let conNum: number = 1;
-    switch (PrintData.memo) {
+    switch (resMin.side) {
       case '上側引張':
-        conNum = this.save.toNumber(position.memberInfo.con_u);
+        conNum = this.helper.toNumber(crackInfo.con_u);
         break;
       case '下側引張':
-        conNum = this.save.toNumber(position.memberInfo.con_l);
+        conNum = this.helper.toNumber(crackInfo.con_l);
         break;
     }
     if (conNum === null) { conNum = 1; }
@@ -395,72 +123,18 @@ export class CalcServiceabilityMomentService {
         break;
     }
 
-    let rc: number = 1;
-    if ('rc' in PrintData) {
-      rc = this.save.toNumber(PrintData.rc);
-      if (rc === null) { rc = 1; }
-    }
-
-    let fck: number;
-    if ('fck' in PrintData) {
-      fck = this.save.toNumber(PrintData.fck);
-      if (fck === null) { return result; }
-    } else {
-      return result;
-    }
-
-    let rfck: number = 1;
-    if ('rfck' in PrintData) {
-      rfck = this.save.toNumber(PrintData.rfck);
-      if (rfck === null) { rfck = 1; }
-    }
-
-
-    const fcd: number = rfck * fck / rc;
-
-
-    let H: number;
-    if ('H' in PrintData) {
-      H = this.save.toNumber(PrintData.H);
-      if (H === null) { return result; }
-    } else if ('R' in PrintData) {
-      H = this.save.toNumber(PrintData.R);
-      if (H === null) { return result; }
-    } else {
-      return result;
-    }
+    const fcd: number = fc.fcd;
 
     // 永久作用
-    let Md: number;
-    if ('Md' in postdata0) {
-      Md = this.save.toNumber(postdata0.Md);
-      if (Md !== null) {
-        result['Md'] = Md;
-      }
-    }
+    const Md: number = resMin.ResultSigma.Md;
+    result['Md'] = Md;
 
-    let Nd: number;
-    if ('Nd' in postdata0) {
-      Nd = this.save.toNumber(postdata0.Nd);
-      if (Nd !== null) {
-        result['Nd'] = Nd;
-      }
-    }
+    const Nd: number = resMin.ResultSigma.Nd;
     result['Nd'] = Nd;
 
-    if (resultData === null) {
-      resultData = {
-        fi: 0,
-        Md: 0,
-        Nd: 0,
-        sc: new Array(),
-        st: new Array(),
-        x: 0,
-      };
-    }
 
     // 圧縮応力度の照査
-    const Sigmac: number = this.getSigmac(resultData.sc);
+    const Sigmac: number = this.getSigmac(resMin.ResultSigma.sc);
     if (Sigmac === null) { return result; }
     result['Sigmac'] = Sigmac;
 
@@ -469,42 +143,30 @@ export class CalcServiceabilityMomentService {
     result['fcd04'] = fcd04;
 
     // 縁応力の照査
-    let Mhd: number;
-    if ('Md' in postdata1) {
-      Mhd = this.save.toNumber(postdata1.Md);
-      if (Mhd !== null) {
-        result['Mhd'] = Mhd;
-      }
-    }
+    const Mhd: number = resMax.ResultSigma.Md;
+    result['Mhd'] = Mhd;
 
-    let Nhd: number;
-    if ('Nd' in postdata1) {
-      Nhd = this.save.toNumber(postdata1.Nd);
-      if (Nhd !== null) {
-        result['Nhd'] = Nhd;
-      }
-    }
+    const Nhd: number = resMax.ResultSigma.Nd;
+    result['Nhd'] = Nhd;
 
     // 縁応力度
-    const Sigmab: number = this.getSigmab(Mhd, Nhd, PrintData);
+    const struct = this.section.getStructuralVal(
+      shape.shape, member, "Md", resMin.index);
+    const Sigmab: number = this.getSigmab(Mhd, Nhd, resMin.side, struct);
     if (Sigmab === null) { return result; }
     result['Sigmab'] = Sigmab;
 
     // 制限値
-    let Vyd_H: number; // 円形の制限値を求める時は換算矩形で求める
-    if ('Vyd_H' in PrintData) {
-      Vyd_H = this.save.toNumber(PrintData.Vyd_H);
-      if (Vyd_H === null) { return Vyd_H = H; }
-    } else {
-      Vyd_H = H;
-    }
-    const Sigmabl: number = this.getSigmaBl(Vyd_H, fcd);
+    // 円形の制限値を求める時は換算矩形で求める
+    const VydBH = this.section.getShape(shape.shape, member,'Vd', resMin.index)
+    const Sigmabl: number = this.getSigmaBl(VydBH.H, fcd);
     result['Sigmabl'] = Sigmabl;
+
+    const Sigmas: number = this.getSigmas(resMin.ResultSigma.st);
+    if (Sigmas === null) { return result; }
 
     if (Sigmab < Sigmabl) {
       // 鉄筋応力度の照査
-      const Sigmas: number = this.getSigmas(resultData.st, postdata0.Steels);
-      if (Sigmas === null) { return result; }
       result['Sigmas'] = Sigmas;
       result['sigmal1'] = sigmal1;
       return result;
@@ -514,78 +176,37 @@ export class CalcServiceabilityMomentService {
     result['Mpd'] = Md;
     result['Npd'] = Nd;
 
-    let Es: number;
-    if ('Es' in PrintData) {
-      Es = this.save.toNumber(PrintData.Es);
-      if (Es === null) { return result; }
-    } else {
-      return result;
-    }
-    let Ec: number;
-    if ('Ec' in PrintData) {
-      Ec = this.save.toNumber(PrintData.Ec);
-      if (Ec !== null) {
-        result['EsEc'] = Es / Ec;
-      }
-    }
+    const Es: number = Ast.Es;
+    const Ec: number = fc.Ec;
+    result['EsEc'] = Es / Ec;
 
-    const Sigmase: number = this.getSigmas(resultData.st, postdata0.Steels);
-    if (Sigmase === null) { return result; }
+    const Sigmase: number = Sigmas;
     result['sigma_se'] = Sigmase;
 
-    let c: number;
-    if ('Ast-c' in PrintData) {
-      c = this.save.toNumber(PrintData['Ast-c']);
-      if (c === null) { return result; }
-    } else {
-      return result;
-    }
-    result['c'] = c;
-
-    let Cs: number;
-    if ('Ast-Cs' in PrintData) {
-      Cs = this.save.toNumber(PrintData['Ast-Cs']);
-      if (Cs === null) { return result; }
-    } else {
-      return result;
-    }
-    result['Cs'] = Cs;
-
-    let fai: number;
-    if ('Ast-φ' in PrintData) {
-      fai = this.save.toNumber(PrintData['Ast-φ']);
-      if (fai === null) { return result; }
-    } else {
-      return result;
-    }
+    const fai: number = Ast.tension.rebar_dia;
     result['fai'] = fai;
 
-    let ecu: number;
-    if ('ecsd' in position.memberInfo) {
-      ecu = this.save.toNumber(position.memberInfo.ecsd);
-      if (ecu === null) { ecu = 450; }
-    } else {
-      ecu = 450;
-    }
+    const c: number = Ast.tension.dsc - (Ast.tension.rebar_dia / 2)
+    result['c'] = c;
+
+    let Cs: number = Ast.tension.rebar_ss;
+    result['Cs'] = Cs;
+
+    let ecu: number = this.helper.toNumber(crackInfo.ecsd);
+    if (ecu === null) { ecu = 450; }
     result['ecu'] = ecu;
 
-    let k1: number = 1;
-    if ('fsy' in PrintData) {
-      const fsy: number = this.save.toNumber(PrintData.fsy);
-      if (fsy === 235) {
-        k1 = 1.3;
-      }
-    }
+    const k1: number = (Ast.fsy === 235) ? 1.3 : 1;
     result['k1'] = k1;
 
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    const n: number = PrintData['Ast-n'];
+    const n: number = Ast.tension.n;
     result['n'] = n;
 
     const k3: number = (5 * (n + 2)) / (7 * n + 8);
-    result['k3'] = k3; 
+    result['k3'] = k3;
 
     const k4: number = 0.85;
     result['k4'] = k4;
@@ -604,11 +225,7 @@ export class CalcServiceabilityMomentService {
     }
     result['Wlim'] = Wlim;
 
-    let ri: number = 1;
-    if ('ri' in PrintData) {
-      ri = this.save.toNumber(PrintData.ri);
-      if (ri === null) { ri = 1; }
-    }
+    let ri: number = safety.safety_factor.ri;
     result['ri'] = ri;
 
     const ratio: number = ri * Wd / Wlim;
@@ -619,7 +236,7 @@ export class CalcServiceabilityMomentService {
 
 
   // 鉄筋の引張応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  public getSigmas(sigmaSt: any[], Steels: any[]): number {
+  public getSigmas(sigmaSt: any[]): number {
 
     if (sigmaSt === null) {
       return null;
@@ -627,7 +244,7 @@ export class CalcServiceabilityMomentService {
     if (sigmaSt.length < 1) {
       return 0;
     }
-    
+
     try {
       // とりあえず最外縁の鉄筋の応力度を用いる
       let st: number = 0;
@@ -669,27 +286,24 @@ export class CalcServiceabilityMomentService {
   }
 
   // 縁応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  private getSigmab(Mhd: number, Nhd: number, PrintData: any): number {
-    try {
-      const I: number = PrintData.I;
-      const A: number = PrintData.A;
-      const Md: number = Math.abs(Mhd * 1000000);
-      const Nd: number = Nhd * 1000;
-      let e: number;
-      switch (PrintData.memo) {
-        case '上側引張':
-          e = PrintData.eu;
-          break;
-        case '下側引張':
-          e = PrintData.el;
-          break;
-      }
-      const Z = I / e;
-      const result = Md / Z - Nd / A;
-      return result;
-    } catch{
-      return null;
+  private getSigmab(Mhd: number, Nhd: number, side: string, struct: any): number {
+
+    const I: number = struct.I;
+    const A: number = struct.A;
+    const Md: number = Math.abs(Mhd * 1000000);
+    const Nd: number = Nhd * 1000;
+    let e: number;
+    switch (side) {
+      case '上側引張':
+        e = struct.eu;
+        break;
+      case '下側引張':
+        e = struct.el;
+        break;
     }
+    const Z = I / e;
+    const result = Md / Z - Nd / A;
+    return result;
 
   }
 

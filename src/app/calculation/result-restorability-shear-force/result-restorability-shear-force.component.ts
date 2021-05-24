@@ -1,86 +1,78 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Component, OnInit } from "@angular/core";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-import { CalcRestorabilityShearForceService } from './calc-restorability-shear-force.service';
-import { SetPostDataService } from '../set-post-data.service';
-import { ResultDataService } from '../result-data.service';
-import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
-
+import { CalcRestorabilityShearForceService } from "./calc-restorability-shear-force.service";
+import { SetPostDataService } from "../set-post-data.service";
+import { ResultDataService } from "../result-data.service";
+import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
 
 @Component({
-  selector: 'app-result-restorability-shear-force',
-  templateUrl: '../result-safety-shear-force/result-safety-shear-force.component.html',
-  styleUrls: ['../result-viewer/result-viewer.component.scss']
+  selector: "app-result-restorability-shear-force",
+  templateUrl:
+    "../result-safety-shear-force/result-safety-shear-force.component.html",
+  styleUrls: ["../result-viewer/result-viewer.component.scss"],
 })
 export class ResultRestorabilityShearForceComponent implements OnInit {
-
-  private title: string = '復旧性（地震時以外）';
-  private page_index = "ap_9";
+  public title: string = "復旧性（地震時以外）";
+  public page_index = "ap_9";
   public isLoading = true;
   public isFulfilled = false;
-  private err: string;
-  private safetyShearForcePages: any[];
+  public err: string;
+  public safetyShearForcePages: any[];
 
-  constructor(private http: HttpClient,
+  constructor(
+    private http: HttpClient,
     private calc: CalcRestorabilityShearForceService,
     private result: ResultDataService,
     private post: SetPostDataService,
-    private base: CalcSafetyShearForceService) { }
+    private base: ResultSafetyShearForceComponent
+  ) {}
 
   ngOnInit() {
     this.isLoading = true;
     this.isFulfilled = false;
-    this.err = '';
+    this.err = "";
 
     // POST 用データを取得する
     const postData = this.calc.setInputData();
-    if (postData === null) {
+    if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.isFulfilled = false;
-      return;
-    }
-    if (postData.InputData0.length < 1) {
-      this.isLoading = false;
-      this.isFulfilled = false;
       return;
     }
 
     // postする
+    console.log(this.title, postData);
     const inputJson: string = this.post.getInputJsonString(postData);
-    this.http.post(this.post.URL, inputJson, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/x-www-form-urlencoded',
-        'Accept': 'application/json'
-      })
-    })
-      .subscribe(
-        response => {
-          const result: string = JSON.stringify(response);
-          this.isFulfilled = this.setPages(result, this.calc.DesignForceList);
-          this.isLoading = false;
+    this.http.post(this.post.URL, inputJson, this.post.options).subscribe(
+      (response) => {
+        if (response["ErrorException"] === null) {
+          this.isFulfilled = this.setPages(response["OutputData"]);
           this.calc.isEnable = true;
-        },
-        error => {
-          this.err = error.toString();
-          this.isLoading = false;
-          this.isFulfilled = false;
-        });
-
+        } else {
+          this.err = JSON.stringify(response["ErrorException"]);
+        }
+        this.isLoading = false;
+      },
+      (error) => {
+        this.err = error.toString();
+        this.isLoading = false;
+      }
+    );
   }
 
   // 計算結果を集計する
-  private setPages(response: string, postData: any): boolean {
-    if (response === null) {
+  private setPages(OutputData: any): boolean {
+    try {
+      // 安全性破壊のページと同じ
+      this.safetyShearForcePages = this.base.getSafetyPages(
+        OutputData,
+        "復旧性（地震時以外）せん断力の照査結果",
+        this.calc.DesignForceList
+      );
+      return true;
+    } catch (e) {
+      this.err = e.toString();
       return false;
     }
-    if (response.slice(0, 7).indexOf('Error') >= 0) {
-      this.err = response;
-      return false;
-    }
-    const json = this.post.parseJsonString(response);
-    if (json === null) { return false; }
-    // 安全性破壊のページと同じ
-    this.safetyShearForcePages = this.base.getSafetyPages(json.OutputData, postData, '復旧性（地震時以外）せん断力の照査結果');
-    return true;
   }
 }
