@@ -153,7 +153,11 @@ export class CalcSafetyFatigueShearForceService {
     if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
     if ('Nd' in PrintData) { PrintData.Nd = 0; }    // 疲労の Vcd を計算する時は βn=1
     const resultData = { M: { Mi: 0 } };
-    const result: any = this.base.calcVmu(PrintData, resultData, position);
+
+    //仮
+    let res, shape, fc, Ast, safety, La, DesignForceList;
+    const result: any = this.base.calcVmu(res, shape, fc, Ast, safety, La, DesignForceList);
+
 
     // 最小応力
     let Vpd: number;

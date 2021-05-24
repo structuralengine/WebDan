@@ -382,7 +382,7 @@ export class SetBarService {
     result['Ast-Cs'] = tension.rebar_ss; // ひび割れの検討 に用いる鉄筋間隔
     result['Ast-φ'] = tension.rebar_dia; // ひび割れの検討 に用いる鉄筋径
 
-    const Aw: any = this.setAwPrintData(bar.starrup, safety.material_bar);
+    const Aw: any = this.setAwPrintData(bar.stirrup, safety.material_bar);
     if (Aw !== null) {
       result['AW-φ'] = Aw['AW-φ'];
       result['Aw'] = Aw.Aw;
@@ -549,7 +549,7 @@ export class SetBarService {
     result['rs'] = rs;
     result['Es'] = 200;
 
-    const Aw: any = this.setAwPrintData(barInfo.starrup, safety.material_bar);
+    const Aw: any = this.setAwPrintData(barInfo.stirrup, safety.material_bar);
     if (Aw !== null) {
       result['AW-φ'] = Aw['AW-φ'];
       result['Aw'] = Aw.Aw;
@@ -717,7 +717,7 @@ export class SetBarService {
       result['dse'] = sideBar['ds'];
     }
 
-    const Aw: any = this.setAwPrintData(bar.starrup, safety.material_bar);
+    const Aw: any = this.setAwPrintData(bar.stirrup, safety.material_bar);
     if (Aw !== null) {
       result['AW-φ'] = Aw['AW-φ'];
       result['Aw'] = Aw.Aw;
@@ -999,7 +999,7 @@ export class SetBarService {
 
         const sidebar = this.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
 
-        result = { tension, compres, sidebar };
+        result = { tension, compres, sidebar, stirrup: bar.stirrup, tan: bar.tan };
         break;
 
       default:
@@ -1021,9 +1021,9 @@ export class SetBarService {
     const mark = barInfo.rebar_dia > 0 ? "D" : "R";
 
     // 鉄筋全本数
-    const rebar_n = this.helper.toNumber(barInfo.rebar_n);
+    let rebar_n = this.helper.toNumber(barInfo.rebar_n);
     if (rebar_n === null) {
-      return null;
+      rebar_n = 0;
     }
 
     // 1段当りの本数
@@ -1161,9 +1161,9 @@ export class SetBarService {
     if(target === 'Vd') {
       // せん断照査における円形の引張鉄筋は、矩形換算時の鉄筋量
       switch(shape.shape){
-        case "Circle": // 円形
-        case "Ring": // 円環
-          const VydBH = this.section.getVydBH(shape);
+        case "Circle":  // 円形
+        case "Ring":    // 円環
+          // const VydBH = this.section.getShape(shape.shape, shape, 'Vd', res.index);
           rebar_n = rebar_n / 4;
         break;
         case "VerticalOval": // 鉛直方向小判形
@@ -1243,19 +1243,13 @@ export class SetBarService {
     result.AscCos = bar.compres.cos;
 
     // 照査表における 鉄筋強度情報を取得
-    if ("fsy" in fsyt) {
-      result.fsy = fsyt.fsy;
-      result.Es = 200;
-      result.fsd = fsyt.fsy / safety.safety_factor.rs;
-    }
+    result.fsy = fsyt.fsy;
+    result.Es = 200;
+    result.fsd = fsyt.fsy / safety.safety_factor.rs;
 
-    if ("rs" in safety.safety_factor) {
-      result.rs = safety.safety_factor.rs;
-    }
+    result.rs = safety.safety_factor.rs;
 
-    if ("fsu" in fsyt) {
-      result.fsu = fsyt.fsu;
-    }
+    result.fsu = fsyt.fsu;
 
     return result;
   }
@@ -1264,41 +1258,66 @@ export class SetBarService {
   public getAw( shape: any, bar: any, safety: any): any {
 
     const result = {
+
+      stirrup_dia: null,
+      stirrup_n: null,
+
       Aw: null,
       AwString: null,
       deg: null,
       Ss: null,
 
       fwyd: null,
+      fwud: null,
       rs: null,
 
       tan: null
     };
 
     // 鉄筋径
-    if (this.helper.toNumber(bar.stirrup_dia) === null) {
-      return null;
+    if (this.helper.toNumber(bar.stirrup.stirrup_dia) === null) {
+      return result;
     }
-    const dia = Math.abs(bar.stirrup_dia);
-/*
-    // 異形鉄筋:D, 丸鋼: R
-    const mark = barInfo.rebar_dia > 0 ? "D" : "R";
+    result.stirrup_dia = Math.abs(bar.stirrup.stirrup_dia);
 
-        
-    let dia: string = "D" + bar.stirrup_dia;
-    if (fwyd === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + starrup.stirrup_dia;
+    // 異形鉄筋:D, 丸鋼: R
+    let mark = bar.stirrup.stirrup_dia > 0 ? "D" : "R";
+
+    // 鉄筋本数
+    result.stirrup_n = this.helper.toNumber(bar.stirrup.stirrup_n);
+    if (result.stirrup_n === null) {
+      result.stirrup_n = 0;
     }
+
+    result.Ss = this.helper.toNumber(bar.stirrup.stirrup_ss);
+    if (result.Ss === null) {
+      result.Ss = Number.MAX_VALUE;
+    }
+
+    const fwyd = this.getFsyk(result.stirrup_dia, safety.material_bar, "stirrup");
+    if (fwyd.fsy === 235) {
+      // 鉄筋強度が 235 なら 丸鋼
+      mark = "R";
+    }
+
+    const dia: string = mark + result.stirrup_dia;
     const As: number = this.helper.getAs(dia);
-    const n: number = starrup.stirrup_n;
-    result["AW-φ"] = starrup.stirrup_dia;
-    result.Aw = As * n;
-    result.AwString = dia + "-" + n + "本";
-    result.Ss = starrup.stirrup_ss;
-    result.fwyd = fwyd;
-    result.fwud = fwud;
-*/
+
+    result.Aw = As * result.stirrup_n;
+    if(!(result.Aw === 0)){
+      result.AwString = dia + "-" + result.stirrup_n + "本";
+    }
+
+    result.fwyd = fwyd.fsy;
+    result.fwud = fwyd.fsu;
+    result.rs = safety.safety_factor.rs;
+
+    let tan = this.helper.toNumber(bar.tan);
+    if (tan === null) {
+      tan = 0;
+    }
+    result.tan = tan;
+
     return result;
   }
 
@@ -1326,8 +1345,6 @@ export class SetBarService {
 
     return result;
   }
-
-
 
   // 鉄筋の重心位置を求める
   public getBarCenterPosition(
@@ -1369,21 +1386,21 @@ export class SetBarService {
   }
 
   /*
-  private setAwPrintData(starrup: any, materialInfo: any[]): any {
+  private setAwPrintData(stirrup: any, materialInfo: any[]): any {
     // エラーチェック
-    if (starrup.stirrup_dia === null) {
+    if (stirrup.stirrup_dia === null) {
       return null;
     }
-    if (starrup.stirrup_n === null) {
+    if (stirrup.stirrup_n === null) {
       return null;
     }
-    if (starrup.stirrup_n === 0) {
+    if (stirrup.stirrup_n === 0) {
       return null;
     }
-    if (starrup.stirrup_ss === null) {
+    if (stirrup.stirrup_ss === null) {
       return null;
     }
-    if (starrup.stirrup_ss === 0) {
+    if (stirrup.stirrup_ss === 0) {
       return null;
     }
 
@@ -1399,7 +1416,7 @@ export class SetBarService {
 
     let fwyd: number;
     let fwud: number;
-    if (starrup.stirrup_dia <= materialInfo[0].separate) {
+    if (stirrup.stirrup_dia <= materialInfo[0].separate) {
       fwyd = this.helper.toNumber(materialInfo[0].stirrup.fsy);
       fwud = this.helper.toNumber(materialInfo[0].stirrup.fsu);
     } else {
@@ -1410,17 +1427,17 @@ export class SetBarService {
       return null;
     }
 
-    let dia: string = "D" + starrup.stirrup_dia;
+    let dia: string = "D" + stirrup.stirrup_dia;
     if (fwyd === 235) {
       // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + starrup.stirrup_dia;
+      dia = "R" + stirrup.stirrup_dia;
     }
     const As: number = this.helper.getAs(dia);
-    const n: number = starrup.stirrup_n;
-    result["AW-φ"] = starrup.stirrup_dia;
+    const n: number = stirrup.stirrup_n;
+    result["AW-φ"] = stirrup.stirrup_dia;
     result.Aw = As * n;
     result.AwString = dia + "-" + n + "本";
-    result.Ss = starrup.stirrup_ss;
+    result.Ss = stirrup.stirrup_ss;
     result.fwyd = fwyd;
     result.fwud = fwud;
 

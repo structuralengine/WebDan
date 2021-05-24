@@ -83,13 +83,9 @@ export class CalcSafetyShearForceService {
     fc: any,
     Ast: any,
     safety: any,
-    member: any,
-    La: number,
-    DesignForceList: any
+    Laa: number,
+    force: any
   ): any {
-    const force = DesignForceList.find(
-      (v) => v.index === res.index
-    ).designForce.find((v) => v.side === res.side);
 
     const result: any = {}; // 印刷用
 
@@ -99,13 +95,17 @@ export class CalcSafetyShearForceService {
       Md = 0;
     }
     Md = Math.abs(Md);
-    result["Md"] = Md;
+    if (Md !== 0) {
+      result["Md"] = Md;
+    }
 
     let Nd: number = this.helper.toNumber(force.Nd);
     if (Nd === null) {
       Nd = 0;
     }
-    result["Nd"] = Nd;
+    if (Nd !== 0) {
+      result["Nd"] = Nd;
+    }
 
     let Vd: number = Math.abs(this.helper.toNumber(force.Vd));
     if (Vd === null) {
@@ -115,31 +115,27 @@ export class CalcSafetyShearForceService {
     result["Vd"] = Vd;
 
     // 換算断面
-    const VydBH = this.section.getVydBH(shape);
-    const h: number = VydBH.H;
+    const h: number = shape.H;
     result["H"] = h;
 
-    const bw: number = VydBH.B;
+    const bw: number = shape.B;
     result["B"] = bw;
 
     // 有効高さ
-    let d: number = 0;
+    const dsc = Ast.tension.dsc;
+    let d: number = h - dsc;
     result["d"] = d;
 
     //  tanθc + tanθt
-    let tan: number = 0;
+    const tan: number = Ast.tan;
     let Vhd: number = 0;
     if (tan !== 0) {
       Vhd = (Math.abs(Md) / d) * this.bar.Radians(tan);
-      result["tan"] = tan;
       result["Vhd"] = Vhd;
-    } else {
-      result["tan"] = null;
-      result["Vhd"] = null;
     }
 
-
     // せん断スパン
+    let La = this.helper.toNumber(Laa);
     if (La === null) {
       La = Number.MAX_VALUE;
     } else {
@@ -149,89 +145,54 @@ export class CalcSafetyShearForceService {
       result["La"] = La;
     }
 
-    // 引張鉄筋
-    let Ass: number = 0;
     // 引張鉄筋比
-    let pc: number = 0;
-
+    let pc: number = Ast.Ast / (shape.B * d);
 
     // 帯鉄筋
-    let Aw: number = 0;
-      Aw = this.helper.toNumber(Ast.Aw);
-      if (Aw === null) {
-        Aw = 0;
-      } else {
-        result["Aw"] = Aw;
-        result["AwString"] = Ast.AwString;
-        result["fwyd"] = Ast.fwyd;
-      }
-
-    let fwyd: number = 0;
-    fwyd = this.helper.toNumber(Ast.fwyd);
-    if (fwyd === null) {
+    let Aw: number = this.helper.toNumber(Ast.Aw);
+    let fwyd: number = this.helper.toNumber(Ast.fwyd);
+    let deg: number = this.helper.toNumber(Ast.deg);
+    if (deg === null) { deg = 90; }
+    let Ss: number = this.helper.toNumber(Ast.Ss);
+    if (Ss === null) { Ss = Number.MAX_VALUE; }
+    if (Aw === null || fwyd === null) {
+      Aw = 0;
       fwyd = 0;
     } else {
-      result["fwyd"] = fwyd;
-    }
-
-    let deg: number = 90;
-    if ("deg" in Ast) {
-      deg = this.helper.toNumber(Ast.deg);
-      if (deg === null) {
-        deg = 90;
-      } else {
-        result["deg"] = deg;
-      }
-    }
-
-    let Ss: number = Number.MAX_VALUE;
-    Ss = this.helper.toNumber(Ast.Ss);
-    if (Ss === null) {
-      Ss = Number.MAX_VALUE;
-    } else {
+      result["Aw"] = Aw;
+      result["AwString"] = Ast.AwString;
+      result["fwyd"] = Ast.fwyd;
+      result["deg"] = deg;
       result["Ss"] = Ss;
     }
 
     // コンクリート材料
-    let fck: number = 0;
-      fck = this.helper.toNumber(Ast.fck);
-      if (fck === null) {
-        return result;
-      }
+    const fck: number = this.helper.toNumber(fc.fck);
+    if (fck === null) {
+      return result;
+    }
     result["fck"] = fck;
 
-    // 杭の施工条件による計数
-    let rfck: number = 1;
-      rfck = this.helper.toNumber(Ast.rfck);
-      if (rfck === null) {
-        rfck = 1;
-      }
-
-    let rVcd: number = 1;
-    rVcd = this.helper.toNumber(Ast.rVcd);
-    if (rVcd === null) {
-      rVcd = 1;
-    }
-
-    let rc: number = this.helper.toNumber(Ast.rc);
+    let rc: number = this.helper.toNumber(fc.rc);
     if (rc === null) {
       rc = 1;
     }
     result["rc"] = rc;
 
-    const fcd = (rfck * fck) / rc;
+    let fcd: number = this.helper.toNumber(fc.fcd);
+    if (fcd === null) {
+      fcd = fck;
+    }
     result["fcd"] = fcd;
 
     // 鉄筋材料
-    let fsy: number = 0;
-    fsy = this.helper.toNumber(Ast.fsy);
-    if (fsy === null) {
-      return result;
+    let fsy: number = this.helper.toNumber(Ast.fsy);
+    if (fsy !== null) {
+      result["fsy"] = fsy;
     }
-    result["fsy"] = fsy;
 
-    let rs: number = 0;
-    rs = this.helper.toNumber(Ast.rs);
+
+    let rs: number = this.helper.toNumber(Ast.rs);
     if (rs === null) {
       rs = 1;
     }
@@ -239,52 +200,59 @@ export class CalcSafetyShearForceService {
 
     result["fsyd"] = fsy / rs;
 
+    let rVcd: number = this.helper.toNumber(fc.rVcd);;
+    if (rVcd === null) {
+      rVcd = 1;
+    }
+
     // 部材係数
-    const Mu = res.M.Mi;
+    const Mu = res.Reactions[0].M.Mi;
     result["Mu"] = Mu;
 
     // せん断耐力の照査
     let rbc: number = 1;
     if (La / d >= 2) {
-      rbc = this.helper.toNumber(safety.rbc);
+      rbc = this.helper.toNumber(safety.safety_factor.rbc);
       if (rbc === null) {
         rbc = 1;
       }
       result["rbc"] = rbc;
 
       let rbs: number = 1;
-      rbs = this.helper.toNumber(safety.rbs);
+      rbs = this.helper.toNumber(safety.safety_factor.rbs);
       if (rbs === null) {
         rbs = 1;
       }
       result["rbs"] = rbs;
 
       const Vyd: any = this.calcVyd(
-        fcd, d, pc, Nd, H,
-        Mu, B, rbc, rVcd, deg,
+        fcd, d, pc, Nd, h,
+        Mu, bw, rbc, rVcd, deg,
         Aw, fwyd, Ss, rbs);
       for (const key of Object.keys(Vyd)) {
         result[key] = Vyd[key];
       }
     } else {
-      rbc = this.helper.toNumber(safety.rbd);
+      rbc = this.helper.toNumber(safety.safety_factor.rbd);
       if (rbc === null) {
         rbc = 1;
       }
       result["rbc"] = rbc;
 
-      const Vdd: any = this.calcVdd(source);
+      const Vdd: any = this.calcVdd(
+        fcd, d, Aw, bw, Ss,
+        La, Nd, h, Mu, pc, rbc);
       for (const key of Object.keys(Vdd)) {
         result[key] = Vdd[key];
       }
     }
-    const Vwcd: any = this.calcVwcd(source);
+    const Vwcd: any = this.calcVwcd(fcd, bw, d, rbc);
     for (const key of Object.keys(Vwcd)) {
       result[key] = Vwcd[key];
     }
 
     let ri: number = 0;
-    ri = this.helper.toNumber(safety.ri);
+    ri = this.helper.toNumber(safety.safety_factor.ri);
     if (ri === null) {
       ri = 1;
     }
@@ -384,14 +352,14 @@ export class CalcSafetyShearForceService {
   }
 
   // 腹部コンクリートの設計斜め圧縮破壊耐力
-  private calcVwcd(source: any): any {
+  private calcVwcd(fcd: number, B: number, d: number, rbc: number): any {
     const result = {};
 
-    let fwcd: number = 1.25 * Math.sqrt(source.fcd);
+    let fwcd: number = 1.25 * Math.sqrt(fcd);
     fwcd = Math.min(fwcd, 7.8);
     result["fwcd"] = fwcd;
 
-    let Vwcd = (fwcd * source.B * source.d) / source.rbc;
+    let Vwcd = (fwcd * B * d) / rbc;
 
     Vwcd = Vwcd / 1000;
 
@@ -401,48 +369,49 @@ export class CalcSafetyShearForceService {
   }
 
   // 設計せん断圧縮破壊耐力 Vdd
-  private calcVdd(source: any): any {
+  private calcVdd(fcd: number, d: number, Aw: number,
+    B: number, Ss: number, La: number, Nd: number,
+    Height: number, Mu: number, pc: number, rbc: number): any {
     const result = {};
 
-    let fdd: number = 0.19 * Math.sqrt(source.fcd);
+    let fdd: number = 0.19 * Math.sqrt(fcd);
     result["fdd"] = fdd;
 
-    let Bd: number = Math.pow(1000 / source.d, 1 / 4);
+    let Bd: number = Math.pow(1000 / d, 1 / 4);
     Bd = Math.min(Bd, 1.5);
     result["Bd"] = Bd;
 
-    let pw: number = source.Aw / (source.B * source.Ss);
+    let pw: number = Aw / (B * Ss);
     result["pw"] = pw;
     if (pw < 0.002) {
       pw = 0;
     }
 
     //せん断スパン比
-    let ad: number = source.La / source.d;
+    let ad: number = La / d;
     result["ad"] = ad;
 
     let Bw: number =
-      (4.2 * Math.pow(100 * pw, 1 / 3) * (ad - 0.75)) / Math.sqrt(source.fcd);
+      (4.2 * Math.pow(100 * pw, 1 / 3) * (ad - 0.75)) / Math.sqrt(fcd);
     Bw = Math.max(Bw, 0);
     result["Bw"] = Bw;
 
     //M0 = NDD / AC * iC / Y
-    let Mo: number = (source.Nd * source.Height) / 6000;
+    let Mo: number = (Nd * Height) / 6000;
     result["Mo"] = Mo;
 
     let Bn: number;
-    if (source.Mu <= 0) {
+    if (Mu <= 0) {
       Bn = 1;
-    } else if (source.Nd > 0) {
-      Bn = 1 + (2 * Mo) / source.Mu;
+    } else if (Nd > 0) {
+      Bn = 1 + (2 * Mo) / Mu;
       Bn = Math.min(Bn, 2);
     } else {
-      Bn = 1 + (4 * Mo) / source.Mu;
+      Bn = 1 + (4 * Mo) / Mu;
       Bn = Math.max(Bn, 0);
     }
     result["Bn"] = Bn;
 
-    let pc: number = source.pc;
     result["pc"] = pc;
 
     let Bp: number = (1 + Math.sqrt(100 * pc)) / 2;
@@ -453,7 +422,7 @@ export class CalcSafetyShearForceService {
     result["Ba"] = Ba;
 
     let Vdd =
-      ((Bd * Bn + Bw) * Bp * Ba * fdd * source.B * source.d) / source.rbc;
+      ((Bd * Bn + Bw) * Bp * Ba * fdd * B * d) / rbc;
 
     Vdd = Vdd / 1000;
 

@@ -98,7 +98,6 @@ export class ResultSafetyShearForceComponent implements OnInit {
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
       for (const member of groupe[ig]) {
-        0;
         for (const position of member.positions) {
           for (const side of ["上側引張", "下側引張"]) {
             const res = OutputData.find(
@@ -107,6 +106,9 @@ export class ResultSafetyShearForceComponent implements OnInit {
             if (res === undefined || res.length < 1) {
               continue;
             }
+            const force = DesignForceList.find(
+              (v) => v.index === res.index
+            ).designForce.find((v) => v.side === res.side);
 
             if (page.columns.length > 4) {
               result.push(page);
@@ -134,9 +136,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
                 fck,
                 Ast,
                 safety,
-                member,
                 position.La,
-                DesignForceList
+                force
               )
             );
 
@@ -158,7 +159,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
             column.push(this.result.alien(Ast.AscString, "center"));
             column.push(this.result.alien(this.result.numStr(Ast.dsc), "center"));
             /////////////// 側面鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ase), "center"));
+            // column.push(this.result.alien(this.result.numStr(Ast.Ase), "center"));
             column.push(this.result.alien(Ast.AseString, "center"));
             column.push(this.result.alien(this.result.numStr(Ast.dse), "center"));
             /////////////// コンクリート情報 ///////////////
@@ -220,11 +221,6 @@ export class ResultSafetyShearForceComponent implements OnInit {
 
   public getResultString(re: any): any {
     const result = {
-      tan: { alien: "center", value: "-" },
-
-      As: { alien: "center", value: "-" },
-      AsString: { alien: "center", value: "-" },
-      dst: { alien: "center", value: "-" },
 
       Md: { alien: "center", value: "-" },
       Nd: { alien: "center", value: "-" },
@@ -260,21 +256,6 @@ export class ResultSafetyShearForceComponent implements OnInit {
       Vwcd_Ratio: { alien: "center", value: "-" },
       Vwcd_Result: { alien: "center", value: "-" },
     };
-
-    if ("tan" in re) {
-      result.tan = { alien: "right", value: re.tan.toFixed(1) };
-    }
-
-    // 引張鉄筋
-    if ("Ast" in re) {
-      result.As = { alien: "right", value: re.Ast.toFixed(1) };
-    }
-    if ("AstString" in re) {
-      result.AsString = { alien: "right", value: re.AstString };
-    }
-    if ("d" in re) {
-      result.dst = { alien: "right", value: (re.H - re.d).toFixed(1) };
-    }
 
     // 断面力
     if ("Md" in re) {

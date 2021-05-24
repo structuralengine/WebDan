@@ -42,7 +42,7 @@ export class InputBarsService {
       rebar1: this.default_rebar('上'),
       rebar2: this.default_rebar('下'),
       sidebar: this.default_sidebar(),
-      starrup: this.default_starrup(),
+      stirrup: this.default_stirrup(),
       bend: this.default_bend(),
       tan: null
     };
@@ -71,7 +71,7 @@ export class InputBarsService {
     };
   }
 
-  private default_starrup(): any {
+  private default_stirrup(): any {
     return {
       stirrup_dia: null,
       stirrup_n: null,
@@ -142,9 +142,9 @@ export class InputBarsService {
           column1['side_cover'] = data['sidebar'].side_cover;
           column1['side_ss'] = data['sidebar'].side_ss;
 
-          column1['stirrup_dia'] = data['starrup'].stirrup_dia;
-          column1['stirrup_n'] = data['starrup'].stirrup_n;
-          column1['stirrup_ss'] = data['starrup'].stirrup_ss;
+          column1['stirrup_dia'] = data['stirrup'].stirrup_dia;
+          column1['stirrup_n'] = data['stirrup'].stirrup_n;
+          column1['stirrup_ss'] = data['stirrup'].stirrup_ss;
 
           column1['tan'] = data['tan'];
           table_groupe.push(column1);
@@ -211,7 +211,7 @@ export class InputBarsService {
       }
       // 当該入力行より上の行
       let endFlg = true;
-      for(const key of ['rebar1', 'rebar2', 'sidebar', 'starrup', 'bend']){
+      for(const key of ['rebar1', 'rebar2', 'sidebar', 'stirrup', 'bend']){
         const rebar = data[key];
         const re = result[key];
         for(const k of Object.keys(re)){
@@ -272,9 +272,9 @@ export class InputBarsService {
       b.sidebar.side_cover = column1.side_cover;
       b.sidebar.side_ss = column1.side_ss;
 
-      b.starrup.stirrup_dia = column1.stirrup_dia;
-      b.starrup.stirrup_n = column1.stirrup_n;
-      b.starrup.stirrup_ss = column1.stirrup_ss;
+      b.stirrup.stirrup_dia = column1.stirrup_dia;
+      b.stirrup.stirrup_n = column1.stirrup_n;
+      b.stirrup.stirrup_ss = column1.stirrup_ss;
 
       b.bend.bending_dia = column2.stirrup_dia;
       b.bend.bending_n = column2.stirrup_n;

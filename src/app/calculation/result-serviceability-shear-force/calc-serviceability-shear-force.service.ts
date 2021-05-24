@@ -87,7 +87,11 @@ export class CalcServiceabilityShearForceService {
 
     
     if ('La' in PrintData) { delete PrintData.La; } // Vcd を計算するので La は削除する
-    const result: any = this.base.calcVmu(PrintData, resultData, position);
+
+    //仮
+    let res, shape, fc, Ast, safety, La, DesignForceList;
+    const result: any = this.base.calcVmu(res, shape, fc, Ast, safety, La, DesignForceList);
+    // 
 
     let Vd: number = Math.abs(result.Vd);
 

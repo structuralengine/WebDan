@@ -158,9 +158,9 @@ export class CalcServiceabilityMomentService {
     result['Sigmab'] = Sigmab;
 
     // 制限値
-    const VydBH = this.section.getVydBH(shape);
-    const Vyd_H: number= VydBH.H; // 円形の制限値を求める時は換算矩形で求める
-    const Sigmabl: number = this.getSigmaBl(Vyd_H, fcd);
+    // 円形の制限値を求める時は換算矩形で求める
+    const VydBH = this.section.getShape(shape.shape, member,'Vd', res0.index)
+    const Sigmabl: number = this.getSigmaBl(VydBH.H, fcd);
     result['Sigmabl'] = Sigmabl;
 
     const Sigmas: number = this.getSigmas(res0.ResultSigma.st);

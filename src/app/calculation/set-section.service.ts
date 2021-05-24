@@ -402,12 +402,19 @@ export class SetSectionService {
       fck: null,
       rc: null,
       Ec: null,
-      fcd: null
+      fcd: null,
+      rfck: null,
+      rEc: null,
+      rfbok: null,
+      rVcd: null
     };
 
     const pile = safety.pile_factor.find((e) => e.selected === true);
-    const rfck = pile !== undefined ? pile.rfck : 1;
-    const rEc = pile !== undefined ? pile.rEc : 1;
+    result.rfck = pile !== undefined ? pile.rfck : 1;
+    result.rEc = pile !== undefined ? pile.rEc : 1;
+    result.rfbok = pile !== undefined ? pile.rfbok : 1;
+    result.rVcd = pile !== undefined ? pile.rVcd : 1;
+
     let rc = safety.safety_factor.rc;
 
     if ("rc" in safety.safety_factor) {
@@ -418,10 +425,10 @@ export class SetSectionService {
 
     if ("fck" in safety.material_concrete) {
       const fck = safety.material_concrete.fck;
-      result.fck = fck * rfck;
+      result.fck = fck * result.rfck;
       const Ec = this.getEc(result.fck);
-      result.Ec = Ec * rEc;
-      result.fcd = rfck * fck / rc;
+      result.Ec = Ec * result.rEc;
+      result.fcd = result.rfck * fck / rc;
     }
 
     return result;
@@ -481,6 +488,7 @@ export class SetSectionService {
     const result = {};
 
     let h: number, b: number, bf: number, hf: number, haunch: number;
+    let Area: number, circleArea: number, rectArea: number;
     let bar: any;
 
     switch (shapeName) {
@@ -489,12 +497,28 @@ export class SetSectionService {
         if (h === null) {
           h = this.helper.toNumber(member.B);
         }
+        if (target === 'Vd') {
+          // せん断照査用の換算矩形断面を算定
+          Area = Math.pow(h, 2) * Math.PI / 4;
+          h = Math.sqrt(Area);
+        }
         result['H'] = h;
+        result['B'] = h;
         break;
 
       case 'Ring':              // 円環
-        result['H'] = this.helper.toNumber(member.H); // 外径
-        result['B'] = this.helper.toNumber(member.B); // 内径
+          h = this.helper.toNumber(member.H); // 外径
+          b = this.helper.toNumber(member.B); // 内径
+        if (target === 'Md') {
+          result['H'] = h;
+          result['B'] = b;
+        } else if (target === 'Vd') {
+          // せん断照査用の換算矩形断面を算定
+          Area = Math.pow(h, 2) * Math.PI / 4;
+          result['H'] = Math.sqrt(Area);
+          Area -= (b ** 2) * Math.PI / 4;
+          result['B'] = h - Math.sqrt((h ** 2) - Area);
+        }
         break;
 
       case 'Rectangle':         // 矩形
@@ -536,74 +560,40 @@ export class SetSectionService {
         break;
 
       case 'HorizontalOval':    // 水平方向小判形
-      case 'VerticalOval':      // 鉛直方向小判形
         h = this.helper.toNumber(member.H);
-        result['H'] = h;
-        result['B'] = this.helper.toNumber(member.B);
-        break;
-
-      default:
-        console.log("断面形状：" + member.shape + " は適切ではありません。");
-        return null;
-    }
-
-    return result;
-  }
-
-  // せん断照査用の換算矩形断面を算定
-  public getVydBH(shape: any): any {
-
-    const result = {};
-
-    let h: number, b: number, Area: number, circleArea: number, rectArea: number;
-
-    switch (shape.shape) {
-      case 'Circle':            // 円形
-        h = shape.H;
-        Area = Math.pow(h, 2) * Math.PI / 4;
-        h = Math.sqrt(Area);
-        result['H'] = h;
-        result['B'] = h;
-        break;
-
-      case 'Ring':              // 円環
-        h = shape.H; // 外径
-        b = shape.B; // 内径
-        Area = Math.pow(h, 2) * Math.PI / 4;
-        result['H'] = Math.sqrt(Area);
-        Area -= (b ** 2) * Math.PI / 4;
-        result['B'] = h - Math.sqrt((h ** 2) - Area);
-        break;
-
-      case 'Rectangle':         // 矩形
-      case 'Tsection':          // T形
-      case 'InvertedTsection':  // 逆T形
-        result['H'] = shape.H;
-        result['B'] = shape.B;
-        break;
-
-      case 'HorizontalOval':    // 水平方向小判形
-        h = shape.H;
-        b = shape.B;
-        circleArea = (h ** 2) * Math.PI / 4;
-        rectArea = h * (b - h);
-        Area = circleArea + rectArea;
-        result['H'] = h;
-        result['B'] = Area / h;
+        b = this.helper.toNumber(member.B);
+        if (target === 'Md') {
+          result['H'] = h;
+          result['B'] = b;
+        } else if (target === 'Vd') {
+          // せん断照査用の換算矩形断面を算定
+          circleArea = (h ** 2) * Math.PI / 4;
+          rectArea = h * (b - h);
+          Area = circleArea + rectArea;
+          result['H'] = h;
+          result['B'] = Area / h;
+        }
         break;
 
       case 'VerticalOval':      // 鉛直方向小判形
-        const x = h - b;
-        circleArea = (b ** 2) * Math.PI / 4;
-        rectArea = b * x;
-        Area = circleArea + rectArea;
-        result['H'] = Area / b;
-        result['B'] = b;
+        if (target === 'Md') {
+          h = this.helper.toNumber(member.H);
+          result['H'] = h;
+          result['B'] = this.helper.toNumber(member.B);
+        } else if (target === 'Vd') {
+          // せん断照査用の換算矩形断面を算定
+          const x = h - b;
+          circleArea = (b ** 2) * Math.PI / 4;
+          rectArea = b * x;
+          Area = circleArea + rectArea;
+          result['H'] = Area / b;
+          result['B'] = b;
+        }
 
         break;
 
       default:
-        console.log("断面形状：" + shape.shape + " は適切ではありません。");
+        console.log("断面形状：" + shapeName + " は適切ではありません。");
         return null;
     }
 
