@@ -138,7 +138,8 @@ export class MembersComponent implements OnInit, OnDestroy {
         }
 
         // 何か変更があったら判定する
-        this.app.memberChange();
+        const flg: boolean = this.members.checkMemberEnables(this.table_datas)
+        this.app.memberChange(flg);
 
       }
     };

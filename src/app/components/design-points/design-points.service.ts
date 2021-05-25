@@ -208,8 +208,8 @@ export class InputDesignPointsService {
 
   // 算出点に何か入力されたタイミング
   // 1行でも計算する断面が存在したら true
-  public designPointChange(): boolean{
-    for(const columns of this.position_list){
+  public designPointChange(position_list: any = this.position_list): boolean{
+    for(const columns of position_list){
       if ( this.isEnable(columns)){
         return true;
       }
