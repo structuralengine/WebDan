@@ -98,7 +98,7 @@ export class SaveDataService {
         let data: any;
         switch (mode) {
           case "pik":
-            data = this.pikFileRead(line); // 2次元（平面）解析のピックアップデータ
+            data = this.pikFileRead(tmp[j]); // 2次元（平面）解析のピックアップデータ
             break;
           case "csv":
             data = this.csvFileRead(line); // 3次元（立体）解析のピックアップデータ
@@ -180,7 +180,7 @@ export class SaveDataService {
     let ma: string = mark;
     switch (mark) {
       case "M":
-        ma = "my";
+        ma = "mz";
         break;
       case "S":
         ma = "fy";
@@ -190,7 +190,7 @@ export class SaveDataService {
         break;
     }
 
-    return {
+    const result = {
       pickUpNo: line.slice(0, 5).trim(),
       mark: ma,
       m_no: this.helper.toNumber(line.slice(10, 15)),
@@ -199,18 +199,19 @@ export class SaveDataService {
       p_id: line.slice(25, 30).trim(),
       position: this.helper.toNumber(line.slice(30, 40)),
       maxMdx: 0,
-      maxMdy: this.helper.toNumber(line.slice(40, 50)),
-      maxMdz: 0,
+      maxMdy: 0,
+      maxMdz: this.helper.toNumber(line.slice(40, 50)),
       maxVdy: this.helper.toNumber(line.slice(50, 60)),
       maxVdz: 0,
       maxNd: -1 * this.helper.toNumber(line.slice(60, 70)),
       minMdx: 0,
-      minMdy: this.helper.toNumber(line.slice(70, 80)),
-      minMdz: 0,
+      minMdy: 0,
+      minMdz: this.helper.toNumber(line.slice(70, 80)),
       minVdy: this.helper.toNumber(line.slice(80, 90)),
       minVdz: 0,
       minNd: -1 * this.helper.toNumber(line.slice(90, 100)),
     };
+    return result;
     // ※ このソフトでは 圧縮がプラス(+)
   }
 
