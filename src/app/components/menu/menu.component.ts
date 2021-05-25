@@ -61,7 +61,7 @@ export class MenuComponent implements OnInit {
 
     setTimeout(()=>{
       this.save.clear();
-      this.app.memberChange(); // 左側のボタンを無効にする。
+      this.app.memberChange(false); // 左側のボタンを無効にする。
     }, 10);
   }
 
@@ -84,7 +84,7 @@ export class MenuComponent implements OnInit {
           if (pik !== null){
             alert(pik + ' を開いてください！');
           }
-          this.app.memberChange(); // 左側のボタンを有効にする。
+          this.app.memberChange(false); // 左側のボタンを有効にする。
         })
         .catch(err => { error = err; });
         break;
@@ -92,7 +92,7 @@ export class MenuComponent implements OnInit {
         this.fileToText(file)
         .then(text => {
           this.save.readInputData(text);
-          this.app.memberChange(); // 左側のボタンを有効にする。
+          this.app.memberChange(false); // 左側のボタンを有効にする。
         })
         .catch(err => { error = err; });
     }

@@ -128,8 +128,8 @@ export class InputMembersService  {
 
   // 部材に何か入力されたタイミング
   // 1行でも有効なデータ存在したら true
-  public checkMemberEnables(): boolean {
-    for(const columns of this.member_list){
+  public checkMemberEnables(member_list: any = this.member_list): boolean {
+    for(const columns of member_list){
       if ( this.isEnable(columns)){
         return true;
       }

@@ -59,7 +59,14 @@ export class DesignPointsComponent implements OnInit, OnDestroy, AfterViewInit {
             }
           }
           // 何か変更があったら判定する
-          this.app.designPointChange(this.points.designPointChange());
+          let flg = false;
+          for(const datas of this.table_datas){
+            if(this.points.designPointChange(datas) === true){
+              flg = true;
+              break;
+            }
+          }
+          this.app.designPointChange(flg);
         }
       };
       this.option_list.push(op);
