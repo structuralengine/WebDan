@@ -20,6 +20,8 @@ import { AuthService } from '../../core/auth.service';
 import firebase from 'firebase';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { filter } from 'rxjs/operators';
+import { InputMembersService } from '../members/members.service';
+import { InputDesignPointsService } from '../design-points/design-points.service';
 
 @Component({
   selector: 'app-menu',
@@ -40,6 +42,8 @@ export class MenuComponent implements OnInit {
     private app: AppComponent,
     private user: UserInfoService,
     private save: SaveDataService,
+    private members: InputMembersService,
+    private points: InputDesignPointsService,
     private helper: DataHelperModule,
     private dsdData: DsdDataService,
     private router: Router,
@@ -84,7 +88,8 @@ export class MenuComponent implements OnInit {
           if (pik !== null){
             alert(pik + ' を開いてください！');
           }
-          this.app.memberChange(false); // 左側のボタンを有効にする。
+          this.app.memberChange(); // 左側のボタンを有効にする。
+          this.app.designPointChange(); // 左側のボタンを有効にする。
         })
         .catch(err => { error = err; });
         break;
@@ -92,7 +97,8 @@ export class MenuComponent implements OnInit {
         this.fileToText(file)
         .then(text => {
           this.save.readInputData(text);
-          this.app.memberChange(false); // 左側のボタンを有効にする。
+          this.app.memberChange(); // 左側のボタンを有効にする。
+          this.app.designPointChange(); // 左側のボタンを有効にする。
         })
         .catch(err => { error = err; });
     }
