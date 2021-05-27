@@ -135,44 +135,31 @@ export class SetDesignForceService {
         return new Array(); // 存在しない着目点がある
       }
 
-      let temp: any;
-      if (!("my" in force)) {
-        // 2次元PICKUP
-        temp = this.getSectionForce(target, n, {
-          Mdmax: force["M"].max,
-          Mdmin: force["M"].min,
-          Vdmax: force["S"].max,
-          Vdmin: force["S"].min,
-          Ndmax: force["N"].max,
-          Ndmin: force["N"].min,
-        });
-      } else {
-        let mKey1 = "my", mKey2 = "Mdy", vKey1 = "fz", vKey2 = "Vdz";
-        if ((target === "Md" && position.isMzCalc === true) ||
-            (target === "Vd" && position.isVyCalc === true)) {
-          mKey1 = "mz"; mKey2 = "Mdz";  vKey1 = "fy"; vKey2 = "Vdy";
-        }
-
-        const forceObj = {};
-        const k1 = [mKey1, vKey1, "fx"];
-        const k2 = ["Md", "Vd", "Nd"];
-        for (let i = 0; i < 3; i++) {
-          for (const k3 of ["max", "min"]) {
-            const t = force[k1[i]];
-            const m1 = t[k3];
-            const k4 = k2[i] + k3;
-            forceObj[k4] = {
-              Md: m1[mKey2],
-              Vd: m1[vKey2],
-              Nd: m1.Nd,
-              comb: m1.comb,
-            };
-          }
-        }
-        temp = this.getSectionForce(target, n, forceObj);
+      let mKey1 = "mz", mKey2 = "Mdz",  vKey1 = "fy", vKey2 = "Vdy";
+      if ((target === "Md" && position.isMyCalc === true) ||
+          (target === "Vd" && position.isVzCalc === true)) {
+        // 3次元ピックアップファイルで、上記条件の場合
+        mKey1 = "my"; mKey2 = "Mdy"; vKey1 = "fz"; vKey2 = "Vdz";
       }
 
-      position["designForce"] = temp;
+      const forceObj = {};
+      const k1 = [mKey1, vKey1, "fx"];
+      const k2 = ["Md", "Vd", "Nd"];
+      for (let i = 0; i < 3; i++) {
+        for (const k3 of ["max", "min"]) {
+          const t = force[k1[i]];
+          const m1 = t[k3];
+          const k4 = k2[i] + k3;
+          forceObj[k4] = {
+            Md: m1[mKey2],
+            Vd: m1[vKey2],
+            Nd: m1.Nd,
+            comb: m1.comb,
+          };
+        }
+      }
+
+      position["designForce"] = this.getSectionForce(target, n, forceObj);
     }
 
     return result;
