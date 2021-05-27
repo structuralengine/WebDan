@@ -171,7 +171,12 @@ export class MenuComponent implements OnInit {
     if (this.fileName.length === 0) {
       this.fileName = 'WebDan.wdj';
     }
-    FileSaver.saveAs(blob, this.fileName);
+
+    let ext = '';
+    if(this.helper.getExt(this.fileName) !== 'wdj'){
+      ext = '.wdj';
+    }
+    FileSaver.saveAs(blob, this.fileName + ext);
   }
 
   // ログイン関係
