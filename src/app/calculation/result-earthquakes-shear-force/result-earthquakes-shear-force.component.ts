@@ -5,6 +5,7 @@ import { CalcEarthquakesShearForceService } from "./calc-earthquakes-shear-force
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-earthquakes-shear-force",
@@ -25,7 +26,8 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     private calc: CalcEarthquakesShearForceService,
     private result: ResultDataService,
     private post: SetPostDataService,
-    private base: ResultSafetyShearForceComponent
+    private base: ResultSafetyShearForceComponent,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("earthquakesShearForce", null);
       return;
     }
 
@@ -52,8 +55,10 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("earthquakesShearForce", this.safetyShearForcePages);
       },
       (error) => {
+        this.summary.setSummaryTable("earthquakesShearForce", null);
         this.err = error.toString();
         this.isLoading = false;
       }

@@ -5,6 +5,7 @@ import { CalcRestorabilityShearForceService } from "./calc-restorability-shear-f
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-restorability-shear-force",
@@ -25,7 +26,8 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
     private calc: CalcRestorabilityShearForceService,
     private result: ResultDataService,
     private post: SetPostDataService,
-    private base: ResultSafetyShearForceComponent
+    private base: ResultSafetyShearForceComponent,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("restorabilityShearForce", null);
       return;
     }
 
@@ -52,10 +55,12 @@ export class ResultRestorabilityShearForceComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("restorabilityShearForce", this.safetyShearForcePages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("restorabilityShearForce", null);
       }
     );
   }

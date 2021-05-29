@@ -7,6 +7,7 @@ import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetSectionService } from "../set-section.service";
 import { SetBarService } from "../set-bar.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-safety-shear-force",
@@ -28,7 +29,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
     private result: ResultDataService,
     private section: SetSectionService,
     private bar: SetBarService,
-    private points: InputDesignPointsService
+    private points: InputDesignPointsService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -40,6 +42,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("safetyShearForce", null);
       return;
     }
 
@@ -55,10 +58,12 @@ export class ResultSafetyShearForceComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("safetyShearForce", this.safetyShearForcePages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("safetyShearForce", null);
       }
     );
   }

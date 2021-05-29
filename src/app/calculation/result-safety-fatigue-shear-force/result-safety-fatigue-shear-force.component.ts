@@ -7,6 +7,7 @@ import { InputDesignPointsService } from "src/app/components/design-points/desig
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-safety-fatigue-shear-force",
@@ -28,7 +29,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     private section: SetSectionService,
     private bar: SetBarService,
     private points: InputDesignPointsService,
-    private fatigue: InputFatiguesService
+    private fatigue: InputFatiguesService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -44,6 +46,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("safetyFatigueShearForce", null);
       return;
     }
 
@@ -52,9 +55,11 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       this.safetyFatigueShearForcepages = this.setSafetyFatiguePages(postData);
       this.isFulfilled = true;
       this.calc.isEnable = true;
+      this.summary.setSummaryTable("safetyFatigueShearForce", this.safetyFatigueShearForcepages);
     } catch (e) {
       this.err = e.toString();
       this.isFulfilled = false;
+      this.summary.setSummaryTable("safetyFatigueShearForce", null);
     }
     this.isLoading = false;
   }

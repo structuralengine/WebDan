@@ -7,6 +7,7 @@ import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-safety-moment",
@@ -28,6 +29,7 @@ export class ResultSafetyMomentComponent implements OnInit {
     private section: SetSectionService,
     private bar: SetBarService,
     private points: InputDesignPointsService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -39,6 +41,7 @@ export class ResultSafetyMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("safetyMoment", null);
       return;
     }
 
@@ -54,10 +57,12 @@ export class ResultSafetyMomentComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("safetyMoment", this.safetyMomentPages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("safetyMoment", null);
       }
     );
   }
@@ -65,7 +70,6 @@ export class ResultSafetyMomentComponent implements OnInit {
   // 計算結果を集計する
   private setPages(OutputData: any): boolean {
     try {
-
       this.safetyMomentPages = this.setSafetyPages(OutputData);
       return true;
     } catch (e) {
