@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { utils, write, WorkBook } from 'xlsx';
+import { utils, write, read, WorkBook } from 'xlsx';
 import { saveAs } from 'file-saver';
 
 @Injectable({
@@ -113,11 +113,15 @@ export class CalcSummaryTableService {
   ];
 
   initttt() {
-    const ws_name = 'SomeSheet'; // シート名
-    const wb: WorkBook = { SheetNames: [], Sheets: {} };
-    const ws: any = utils.json_to_sheet(this.table);
-    wb.SheetNames.push(ws_name);
-    wb.Sheets[ws_name] = ws;
+
+
+
+    const wb: WorkBook = read('./assets/xlsx/SummaryTable.xlsx', {type: 'binary'});
+    // const wb: WorkBook = { SheetNames: [], Sheets: {} };
+    // const ws_name = 'SomeSheet'; // シート名
+    // const ws: any = utils.json_to_sheet(this.table);
+    // wb.SheetNames.push(ws_name);
+    // wb.Sheets[ws_name] = ws;
     const wbout = write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
 
     function s2ab(s) {
@@ -129,7 +133,8 @@ export class CalcSummaryTableService {
       return buf;
     }
 
-    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'exported.xlsx');
+    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'SummaryTable.xlsx');
+    // saveAs(wbout, 'SummaryTable.xlsx');
   }
 
 }
