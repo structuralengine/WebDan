@@ -50,6 +50,9 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
           for (const property of ui.updateList) {
             for (const key of Object.keys(property.newRow)) {
               const old = property.oldRow[key];
+              if(property.newRow[key] === undefined){
+                continue; // 削除した場合 何もしない
+              }
               if (key === 'rebar_dia' || key === 'side_dia' || key === 'stirrup_dia') {
                 // 鉄筋径の規格以外は入力させない
                 const value0 = this.bars.matchBarSize(property.newRow[key]);
