@@ -1,15 +1,21 @@
 import { Component, OnInit } from '@angular/core';
+import { CalcSummaryTableService } from './calc-summary-table.service';
 
 @Component({
   selector: 'app-result-summary-table',
   templateUrl: './result-summary-table.component.html',
-  styleUrls: ['./result-summary-table.component.scss', '../result-viewer/result-viewer.component.scss']
+  styleUrls: ['./result-summary-table.component.scss']
 })
 export class ResultSummaryTableComponent implements OnInit {
+  //
+  public summary_table: any;
 
-  constructor() { }
+  constructor(private calc: CalcSummaryTableService) {
+    
+  }
 
   ngOnInit() {
+    this.summary_table = this.calc.summary_table;
   }
 
 }

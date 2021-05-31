@@ -36,6 +36,15 @@ export class CalcSummaryTableService {
   public setSummaryTable(target: string, value: any){
     this.setValue(target, value);
     this.summaryDone[target] = true; 
+
+    this.summary_table.push(
+      this.default(1, 'aasa')
+    );
+
+    this.summary_table.push(
+      this.default(1, 'aasa')
+    );
+
   }
 
   private setValue(target: string, value: any): void{
@@ -76,38 +85,85 @@ export class CalcSummaryTableService {
     }
   }
 
-  private default(index: number, side: number): any {
+  private default(index: number, side: string): any {
     return {
       index: index,
       side: side,
       title: {
-        m_no: null,
-        p_name: null,
-        side: null
+        m_no: 1,
+        p_name: 2,
+        side: 3
       },
       shape: {
-        name: null,
-        B: null,
-        H: null,
-        Bt: null,
-        t: null
+        name: 4,
+        B: 5,
+        H: 6,
+        Bt: 7,
+        t: 8
       },
       As: {
-        Ast: null,
-        AstString: null,
-        dst: null,
+        AstString: 9,
+        AseString: 10,
+        AwString: 11,
+        Ss: 12
       },
-      durabilityMoment: {},
+      durabilityMoment: {
+        Wd: 13
+      },
       earthquakesMoment: {},
       earthquakesShearForce: {},
-      restorabilityMoment: {},
-      restorabilityShearForce: {},
-      SafetyFatigueMoment: {},
-      safetyFatigueShearForce: {},
-      safetyMoment: {},
-      safetyShearForce: {},
-      serviceabilityMoment: {},
-      serviceabilityShearForce: {}
+      restorabilityMoment: {
+        ri: 14,
+        Md: 15,
+        Nd: 16,
+        Myd: 17,
+        ratio:18
+      },
+      restorabilityShearForce: {
+        Vd: 19,
+        Vyd: 20,
+        Ratio: 21
+      },
+      SafetyFatigueMoment: {
+        ri: 22,
+        rb: 23,
+        sigma_min: 24,
+        sigma_rd: 25,
+        fsr200: 26,
+        ratio200: 27
+      },
+      safetyFatigueShearForce: {
+        sigma_min: 28,
+        sigma_rd: 29,
+        frd: 30,
+        ratio: 31
+      },
+      safetyMoment: {
+        ri: 32,
+        Md: 33,
+        Nd: 34,
+        Mud: 35,
+        ratio: 36
+      },
+      safetyShearForce: {
+        Vd: 37,
+        Vyd: 38,
+        Vwcd: 39,
+        Vyd_Ratio: 40,
+        Vwcd_Ratio: 41
+      },
+      serviceabilityMoment: {
+        sigma_b: 42,
+        sigma_c: 43,
+        sigma_s: 44,
+        Wd: 45,
+        Wlim: 46
+      },
+      serviceabilityShearForce: {
+        Vcd: 47,
+        Vcd07: 48,
+        sigma: 49
+      }
     };
   }
   // 全ての項目が終了したかチェックする
