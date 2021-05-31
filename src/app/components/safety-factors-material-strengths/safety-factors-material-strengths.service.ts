@@ -45,21 +45,21 @@ export class InputSafetyFactorsMaterialStrengthsService {
           },
           {
             id: 2, title: '安全性 （疲労破壊）',
-            M_rc: 1.30, M_rs: 1.05, M_rbs: 1.10,
-            V_rc: 1.30, V_rs: 1.05, V_rbc: 1.30, V_rbs: 1.10, V_rbv: null,
+            M_rc: 1.30, M_rs: 1.05, M_rbs: 1.00,
+            V_rc: 1.30, V_rs: 1.05, V_rbc: 1.30, V_rbs: 1.0, V_rbv: null,
             ri: 1.10, range: 2,
             S_rs: 1.0, S_rb: 1.1
           },
           {
             id: 5, title: '安全性 （破壊）',
-            M_rc: 1.30, M_rs: 1.05, M_rbs: 1.10,
-            V_rc: 1.30, V_rs: 1.05, V_rbc: 1.30, V_rbs: 1.10, V_rbv: null,
-            ri: 1.10, range: 2,
+            M_rc: 1.30, M_rs: 1.0, M_rbs: 1.10,
+            V_rc: 1.30, V_rs: 1.0, V_rbc: 1.30, V_rbs: 1.10, V_rbv: 1.20,
+            ri: 1.20, range: 2,
             S_rs: 1.0, S_rb: 1.1
           },
           {
             id: 6, title: '復旧性 （損傷）地震時以外',
-            M_rc: 1.30, M_rs: 1.00, M_rbs: 1.10,
+            M_rc: 1.30, M_rs: 1.00, M_rbs: 1.0,
             V_rc: 1.30, V_rs: 1.00, V_rbc: 1.30, V_rbs: 1.10, V_rbv: 1.20,
             ri: 1.20, range: 3,
             S_rs: 1.05, S_rb: 1.1

@@ -1,6 +1,5 @@
 ﻿import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
 
-import { UserInfoService } from '../../providers/user-info.service';
 import { InputCalclationPrintService } from '../../components/calculation-print/calculation-print.service';
 import { CalcDurabilityMomentService } from '../result-durability-moment/calc-durability-moment.service';
 import { CalcEarthquakesMomentService } from '../result-earthquakes-moment/calc-earthquakes-moment.service';
@@ -15,8 +14,11 @@ import { CalcServiceabilityMomentService } from '../result-serviceability-moment
 import { CalcServiceabilityShearForceService } from '../result-serviceability-shear-force/calc-serviceability-shear-force.service';
 
 import * as printJS from 'print-js';
+
 import { CalcSummaryTableService } from '../result-summary-table/calc-summary-table.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ResultSummaryTableComponent } from '../result-summary-table/result-summary-table.component';
+
 
 @Component({
   selector: 'app-result-viewer',
@@ -30,7 +32,8 @@ export class ResultViewerComponent implements OnInit {
   // 目次 /////////////////////////////////
   public printcalculate: boolean;
   public printSectionForce: boolean;
-
+  private _printSummaryTable: boolean;
+  
   // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
@@ -80,14 +83,23 @@ export class ResultViewerComponent implements OnInit {
     this.serviceabilityShearForce.setDesignForces();
 
     this.summary.clear();
+    this._printSummaryTable = false;
   }
 
+  // 総括表の準備ができたか判定する関数
+  public printSummaryTable(): boolean {
+    if(!this._printSummaryTable){
+      this._printSummaryTable = this.summary.checkDone();
+    }
+    return this._printSummaryTable;
+  }
+
+  // 総括表を表示する関数
   public summaryTableShow() {
-    const modalRef = this.modalService.open(CalcSummaryTableService);
-    // modalRef.close();
+    this.modalService.open(ResultSummaryTableComponent);
   }
 
-
+  // 照査表を印刷する関数
   public print() {
     printJS({
       printable: 'print_section',
