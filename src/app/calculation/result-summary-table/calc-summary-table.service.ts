@@ -80,7 +80,23 @@ export class CalcSummaryTableService {
     return {
       index: index,
       side: side,
-      title: {},
+      title: {
+        m_no: null,
+        p_name: null,
+        side: null
+      },
+      shape: {
+        name: null,
+        B: null,
+        H: null,
+        Bt: null,
+        t: null
+      },
+      As: {
+        Ast: null,
+        AstString: null,
+        dst: null,
+      },
       durabilityMoment: {},
       earthquakesMoment: {},
       earthquakesShearForce: {},
