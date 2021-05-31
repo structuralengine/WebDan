@@ -1,153 +1,508 @@
-<section class="sheet">
-  <!-- <h3 class="h3">曲げ総括表</h3> -->
-  <svg
-    width="170mm"
-    height="260"
-    viewBox="0 0 170 260"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    version="1.1"
-  >
-    <!--タイトル-->
-    <text x="0" y="11" font-size="10pt" text-anchor="start">
-      曲げモーメントに対する安全度一覧表
-    </text>
-    <!--横線-->
-    <g fill="none" stroke="black">
-      <line stroke-width="0.50" x1="0" y1="12" x2="160" y2="12" />
-      <line stroke-width="0.25" x1="56" y1="17" x2="104" y2="17" />
-      <line stroke-width="0.25" x1="80" y1="22" x2="104" y2="22" />
-      <line stroke-width="0.50" x1="0" y1="27" x2="160" y2="27" />
-      <line stroke-width="0.25" x1="0" y1="35" x2="160" y2="35" />
-    </g>
-    <!--縦線-->
-    <g fill="none" stroke="black">
-      <line stroke-width="0.25" x1="7" y1="12" x2="7" y2="216" />
-      <line stroke-width="0.25" x1="14" y1="12" x2="14" y2="216" />
-      <line stroke-width="0.25" x1="35" y1="12" x2="35" y2="216" />
-      <line stroke-width="0.25" x1="40" y1="12" x2="40" y2="216" />
-      <line stroke-width="0.50" x1="56" y1="12" x2="56" y2="216" />
-      <line stroke-width="0.25" x1="68" y1="17" x2="68" y2="216" />
-      <line stroke-width="0.25" x1="80" y1="17" x2="80" y2="216" />
-      <line stroke-width="0.25" x1="92" y1="22" x2="92" y2="216" />
-      <line stroke-width="0.25" x1="104" y1="12" x2="104" y2="216" />
-      <line stroke-width="0.25" x1="118" y1="12" x2="118" y2="216" />
-      <line stroke-width="0.25" x1="132" y1="12" x2="132" y2="216" />
-      <line stroke-width="0.25" x1="146" y1="12" x2="146" y2="216" />
-    </g>
-    <!--column Header-->
-    <g font-size="10pt" text-anchor="middle">
-      <text x="4" y="20">No</text>
-      <text x="11" y="17">部</text>
-      <text x="11" y="21">材</text>
-      <text x="11" y="25">No</text>
-      <text x="25" y="21">算出点</text>
-      <text x="37.5" y="17">位</text>
-      <text x="37.5" y="25">置</text>
-      <text x="48" y="17">使用鉄筋</text>
-      <text x="48" y="21">径　本</text>
-      <text x="79" y="16">耐久性・使用性</text>
-      <text x="62" y="21">鉄筋</text>
-      <text x="62" y="25">応力度</text>
-      <text x="72" y="20">σc/</text>
-      <text x="74" y="24">0.4・fc</text>
-      <text x="92" y="21">ひび割れ幅</text>
-      <text x="86" y="26">耐久性</text>
-      <text x="97.5" y="26">外観</text>
-      <text x="111" y="21">疲労</text>
-      <text x="125" y="21">破壊</text>
-      <text x="139" y="17">復旧性</text>
-      <text x="139" y="21">常時</text>
-      <text x="153" y="17">復旧性</text>
-      <text x="153" y="21">地震時</text>
+<table>
+  <tr class="top">
+    <td>断面位置</td>
+    <td> </td>
+    <td> </td>
+    <td class="left">単位</td>
+    <td class="left">梁</td>
+    <td class="left">躯体</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left">線路方向</td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td> </td>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+  </tr>
+  <tr class="bottom">
+    <td>断面形状</td>
+    <td> </td>
+    <td> </td>
+    <td class="left">mm</td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+  </tr>
+  <tr>
+    <td>鉄</td>
+    <td class="left">主鉄筋</td>
+    <td class="left">径・本数</td>
+    <td class="left">-</td>
+    <td class="left">D32 - 23</td>
+    <td class="left">D32 - 35</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left">D32 - 10</td>
+    <td class="left">D32 - 10</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom"> </td>
+    <td class="bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>筋</td>
+    <td class="left bottom">側方向鉄筋</td>
+    <td class="left bottom">径・本数</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom"></td>
+    <td class="left bottom">13</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">折り曲げ鉄筋</td>
+    <td class="left">径・本数 ピッチ・角度</td>
+    <td class="left">-</td>
+    <td class="left"></td>
+    <td class="left">13</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>量</td>
+    <td class="left">スターラップ</td>
+    <td class="left">径・ピッチ</td>
+    <td class="left">-</td>
+    <td class="left">D22 - 1組</td>
+    <td class="left">D22 - 1組</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left">D19 - 2組</td>
+    <td class="left">D19 - 2組</td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left">ctc150</td>
+    <td class="left">ctc150</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom">構造物係数</td>
+    <td class="bottom">γi</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">1.1</td>
+    <td class="left bottom">1.0</td>
+  </tr>
+  <tr>
+    <td>破</td>
+    <td class="left">曲</td>
+    <td class="left bottom">設計曲げモーメント Md</td>
+    <td class="left bottom">kN・m</td>
+    <td class="left bottom">594.02</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">げ</td>
+    <td class="left bottom">設計軸方向力 N'd</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">設計曲げ耐力 Mud</td>
+    <td class="left bottom">kN・m</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom">γi・Md/Mud (γi・Td/Tyd)</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">(0.51 < 1.0)</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td>壊</td>
+    <td class="left">せ</td>
+    <td class="left bottom">設計せん断力 Vd</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">300.12</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">ん</td>
+    <td class="left bottom">設計せん断耐力 Vyd (Vdd)</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">937.53</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">断</td>
+    <td class="left bottom">設計斜め圧縮破壊耐力 Vwcd</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">γi・Vd/Vyd (Vdd)</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">0.76 < 1.0</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left">γi・Vd/Vwcd</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td>使</td>
+    <td class="left">曲</td>
+    <td class="left">コンクリートの縁引張応力度</td>
+    <td class="left">N/mm<sup>2</sup></td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">げ</td>
+    <td class="left bottom">／設計引張強度</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>用</td>
+    <td class="left"> </td>
+    <td class="left">コンクリートの曲げ圧縮応力度</td>
+    <td class="left">N/mm<sup>2</sup></td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">／0.4f'cd</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>性</td>
+    <td class="left"> </td>
+    <td class="left">永久荷重 鉄筋引張応力度</td>
+    <td class="left">N/mm<sup>2</sup></td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">安全度 σs／σsl1</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>・</td>
+    <td class="left"> </td>
+    <td class="left">安全性ひび割れ幅</td>
+    <td class="left">mm</td>
+    <td class="left">0.276／0.300</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">安全度 Wd／Wlim</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>耐</td>
+    <td class="left"> </td>
+    <td class="left">外観ひび割れ幅</td>
+    <td class="left">mm</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom">安全度 Wd／0.3</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>久</td>
+    <td class="left">せ</td>
+    <td class="left">補強鋼材を用いないせん断耐力 Vcd</td>
+    <td class="left">kN</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">ん</td>
+    <td class="left bottom">Vhd : 0.7Vcd</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td>性</td>
+    <td class="left">断</td>
+    <td class="left">永久荷重 鉄筋引張応力度</td>
+    <td class="left">N/mm<sup>2</sup></td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">安全度 σwpd／σsl2</td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left">折り曲げ鉄筋応力度</td>
+    <td class="left">N/mm<sup>2</sup></td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left">安全度 σbpd／σsl2</td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+    <td class="left"> </td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom">構造物係数</td>
+    <td class="bottom">γi</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">1.1</td>
+    <td class="left bottom">1.0</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom">部材係数</td>
+    <td class="bottom">γb</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">1.1</td>
+    <td class="left bottom">1.0</td>
+  </tr>
+  <tr>
+    <td>疲</td>
+    <td class="left">曲</td>
+    <td class="left bottom">鉄筋設計最小応力度 σmin</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">げ</td>
+    <td class="left bottom">鉄筋設計変動応力度 sσsr</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td>労</td>
+    <td class="left"> </td>
+    <td class="left bottom">鉄筋設計疲労強度 fsrd／γb</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom">γi・sσsr／(fsrd／γb)</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td>破</td>
+    <td class="left">せ</td>
+    <td class="left bottom">鉄筋設計最小応力度 σswpd</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">ん</td>
+    <td class="left bottom">鉄筋設計変動応力度 σswrd</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td>壊</td>
+    <td class="left">断</td>
+    <td class="left bottom">鉄筋設計疲労強度 fswrd／γb</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">γi・σswrd／(fswrd／γb)</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">鉄筋設計最小応力度 σsbpd</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">鉄筋設計変動応力度 σsbrd</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left bottom">鉄筋設計疲労強度 fsbrd／γb</td>
+    <td class="left bottom">N/mm<sup>2</sup></td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">-</td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td class="left"> </td>
+    <td class="left">γi・σsbrd／(fsbrd／γb)</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom">構造物係数</td>
+    <td class="bottom">γi</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">1.1</td>
+    <td class="left bottom">1.0</td>
+  </tr>
+  <tr>
+    <td>復</td>
+    <td class="left">曲</td>
+    <td class="left bottom">設計曲げモーメント Md</td>
+    <td class="left bottom">kN・m</td>
+    <td class="left bottom">670.69</td>
+    <td class="left bottom">12508.91</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">げ</td>
+    <td class="left bottom">設計軸方向力 N'd</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">1833.98</td>
+  </tr>
+  <tr>
+    <td>旧</td>
+    <td class="left"> </td>
+    <td class="left bottom">降伏曲げ耐力 Myd</td>
+    <td class="left bottom">kN・m</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">13593.83</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left bottom"> </td>
+    <td class="left bottom">γi・Md/Myd (γi・Td/Tyd)</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">(0.46 < 1.0)</td>
+    <td class="left bottom">0.92 < 1.0</td>
+  </tr>
+  <tr>
+    <td>性</td>
+    <td class="left">せ</td>
+    <td class="left bottom">設計せん断力 Vd</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">769.75</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td class="left">ん</td>
+    <td class="left bottom">設計せん断耐力 Vyd(Vdd)</td>
+    <td class="left bottom">kN</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">1919.20</td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td class="left">断</td>
+    <td class="left">γi・Vd／Vyd(Vdd)</td>
+    <td class="left">-</td>
+    <td class="left">-</td>
+    <td class="left">0.40 < 1.0</td>
+  </tr>
+  <tr>
+    <td> </td>
+    <td>決定ケース</td>
+    <td class="left bottom">曲げ</td>
+    <td class="left bottom">-</td>
+    <td class="left bottom">応答 0.123</td>
+    <td class="left bottom"> </td>
+  </tr>
+  <tr class="bottom">
+    <td> </td>
+    <td> </td>
+    <td class="left">せん断</td>
+    <td class="left">-</td>
+    <td class="left">応答 0.123</td>
+    <td class="left"> </td>
+  </tr>
 
-      <text x="5" y="32">1</text>
-      <text x="12" y="32">2</text>
-      <text x="23" y="32">柱前面</text>
-      <text x="37.5" y="30">上</text>
-      <text x="37.5" y="34">下</text>
-      <text x="47" y="30">D32-14</text>
-      <text x="47" y="34">D32-10</text>
-      <text x="75" y="30">0.626</text>
-      <text x="75" y="34">0.122</text>
-      <text x="87" y="30">0.823</text>
-      <text x="87" y="34">0.624</text>
-      <text x="99" y="34">0.687</text>
-      <text x="112" y="30">0.558</text>
-      <text x="112" y="34">0.051</text>
-      <text x="126" y="30">0.628</text>
-      <text x="126" y="34">0.379</text>
-      <text x="140" y="30">0.599</text>
-      <text x="140" y="34">0.387</text>
-    </g>
-  </svg>
-</section>
 
-<section class="sheet">
-  <!-- <h3 class="h3">曲げ総括表</h3> -->
-  <svg
-    width="150"
-    height="260"
-    viewBox="0 0 150 260"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    version="1.1"
-  >
-    <!--タイトル-->
-    <text x="0" y="11" font-size="10pt" text-anchor="start">
-      せん断力に対する安全度一覧表
-    </text>
-    <!--横線-->
-    <g fill="none" stroke="black">
-      <line stroke-width="0.50" x1="0" y1="12" x2="150" y2="12" />
-      <line stroke-width="0.25" x1="59" y1="17" x2="150" y2="17" />
-      <line stroke-width="0.50" x1="0" y1="27" x2="150" y2="27" />
-      <line stroke-width="0.25" x1="0" y1="35" x2="150" y2="35" />
-    </g>
-    <!--縦線-->
-    <g fill="none" stroke="black">
-      <line stroke-width="0.25" x1="7" y1="12" x2="7" y2="216" />
-      <line stroke-width="0.25" x1="14" y1="12" x2="14" y2="216" />
-      <line stroke-width="0.25" x1="28" y1="12" x2="28" y2="216" />
-      <line stroke-width="0.50" x1="59" y1="12" x2="59" y2="216" />
-      <line stroke-width="0.25" x1="77" y1="12" x2="77" y2="216" />
-      <line stroke-width="0.25" x1="95" y1="12" x2="95" y2="216" />
-      <line stroke-width="0.25" x1="113" y1="12" x2="113" y2="216" />
-      <line stroke-width="0.25" x1="131" y1="12" x2="131" y2="216" />
-    </g>
-    <!--column Header-->
-    <g font-size="10pt" text-anchor="middle">
-      <text x="4" y="21">No</text>
-      <text x="10.5" y="17">部</text>
-      <text x="10.5" y="21">材</text>
-      <text x="11" y="25">No</text>
-      <text x="21" y="21">算出点</text>
-      <text x="42" y="17">スターラップ</text>
-      <text x="42" y="21">折曲げ鉄筋</text>
-      <text x="42" y="25">組　ctc °</text>
-      <text x="68" y="16">耐久性</text>
-      <text x="68" y="21">σ wpd</text>
-      <text x="68" y="25">σ bpd</text>
-      <text x="86" y="16">疲労</text>
-      <text x="86" y="21">σ swrd</text>
-      <text x="86" y="25">σ sbrd</text>
-      <text x="104" y="16">破壊</text>
-      <text x="104" y="21">Vyd Vdd</text>
-      <text x="104" y="25">Vwcd</text>
-      <text x="122" y="16">復旧　常時</text>
-      <text x="122" y="21">Vyd Vdd</text>
-      <text x="122" y="25">Vwcd</text>
-      <text x="140" y="16">復旧　地震</text>
-      <text x="140" y="21">Vyd Vdd</text>
-      <text x="140" y="25">Vwcd</text>
-      <text x="5" y="30">1</text>
-      <text x="12" y="30">1</text>
-      <text x="21" y="30">1/2</text>
-      <text x="45" y="30">D16 2.000 150</text>
-      <text x="68" y="30">0.672</text>
-      <text x="88" y="30">0.535</text>
-      <text x="108" y="30">0.694</text>
-      <text x="108" y="34">0.358</text>
-    </g>
-  </svg>
-</section>
+</table>

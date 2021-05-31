@@ -8,22 +8,40 @@ import { saveAs } from 'file-saver';
 export class CalcSummaryTableService {
 
   //
-  public summary_table: any[] = new Array();
+  public summary_table: any[];
 
   // 計算終了フラグ
-  private durabilityMoment: boolean = false;
-  private earthquakesMoment: boolean = false;
-  private earthquakesShearForce: boolean = false;
-  private restorabilityMoment: boolean = false;
-  private restorabilityShearForce: boolean = false;
-  private SafetyFatigueMoment: boolean = false;
-  private safetyFatigueShearForce: boolean = false;
-  private safetyMoment: boolean = false;
-  private safetyShearForce: boolean = false;
-  private serviceabilityMoment: boolean = false;
-  private serviceabilityShearForce: boolean = false;
+  public summaryDone: boolean;
+  private durabilityMoment: boolean;
+  private earthquakesMoment: boolean;
+  private earthquakesShearForce: boolean;
+  private restorabilityMoment: boolean;
+  private restorabilityShearForce: boolean;
+  private SafetyFatigueMoment: boolean;
+  private safetyFatigueShearForce: boolean;
+  private safetyMoment: boolean;
+  private safetyShearForce: boolean;
+  private serviceabilityMoment: boolean;
+  private serviceabilityShearForce: boolean;
   
   constructor() { }
+  
+  public clear() {
+    this.summary_table = new Array();
+    // 計算終了フラグ
+    this.summaryDone = false;
+    this.durabilityMoment = false;
+    this.earthquakesMoment = false;
+    this.earthquakesShearForce = false;
+    this.restorabilityMoment = false;
+    this.restorabilityShearForce = false;
+    this.SafetyFatigueMoment = false;
+    this.safetyFatigueShearForce = false;
+    this.safetyMoment = false;
+    this.safetyShearForce = false;
+    this.serviceabilityMoment = false;
+    this.serviceabilityShearForce = false;
+  }
 
   public setSummaryTable(target: string, value: any){
 
@@ -66,7 +84,6 @@ export class CalcSummaryTableService {
     // 全ての項目が終了したかチェックする
     if(this.checkDone()){
       alert("計算が終了しました");
-      this.initttt();
     }
 
   }
@@ -90,51 +107,6 @@ export class CalcSummaryTableService {
         }
       }
     return true;
-  }
-
-
-
-  title = 'app';
-  table = [
-    {
-      First: 'one',
-      Second: 'two',
-      Third: 'three',
-      Forth: 'four',
-      Fifth: 'five'
-    },
-    {
-      First: 'un',
-      Second: 'deux',
-      Third: 'trois',
-      Forth: 'quatre',
-      Fifth: 'cinq'
-    },
-  ];
-
-  initttt() {
-
-
-
-    const wb: WorkBook = read('./assets/xlsx/SummaryTable.xlsx', {type: 'binary'});
-    // const wb: WorkBook = { SheetNames: [], Sheets: {} };
-    // const ws_name = 'SomeSheet'; // シート名
-    // const ws: any = utils.json_to_sheet(this.table);
-    // wb.SheetNames.push(ws_name);
-    // wb.Sheets[ws_name] = ws;
-    const wbout = write(wb, { bookType: 'xlsx', bookSST: true, type: 'binary' });
-
-    function s2ab(s) {
-      const buf = new ArrayBuffer(s.length);
-      const view = new Uint8Array(buf);
-      for (let i = 0; i !== s.length; ++i) {
-        view[i] = s.charCodeAt(i) & 0xFF;
-      };
-      return buf;
-    }
-
-    saveAs(new Blob([s2ab(wbout)], { type: 'application/octet-stream' }), 'SummaryTable.xlsx');
-    // saveAs(wbout, 'SummaryTable.xlsx');
   }
 
 }

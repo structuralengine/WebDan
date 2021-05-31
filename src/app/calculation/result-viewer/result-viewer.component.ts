@@ -15,6 +15,8 @@ import { CalcServiceabilityMomentService } from '../result-serviceability-moment
 import { CalcServiceabilityShearForceService } from '../result-serviceability-shear-force/calc-serviceability-shear-force.service';
 
 import * as printJS from 'print-js';
+import { CalcSummaryTableService } from '../result-summary-table/calc-summary-table.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-result-viewer',
@@ -32,19 +34,21 @@ export class ResultViewerComponent implements OnInit {
   // 印刷時のスタイル /////////////////////////////////
   private PrintCss: string;
 
-  constructor(private user: UserInfoService,
-              private printControl: InputCalclationPrintService,
-              public durabilityMoment: CalcDurabilityMomentService,
-              public earthquakesMoment: CalcEarthquakesMomentService,
-              public earthquakesShearForce: CalcEarthquakesShearForceService,
-              public restorabilityMoment: CalcRestorabilityMomentService,
-              public restorabilityShearForce: CalcRestorabilityShearForceService,
-              public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
-              public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
-              public safetyMoment: CalcSafetyMomentService,
-              public safetyShearForce: CalcSafetyShearForceService,
-              public serviceabilityMoment: CalcServiceabilityMomentService,
-              public serviceabilityShearForce: CalcServiceabilityShearForceService
+  constructor(
+    private modalService: NgbModal,
+    public summary: CalcSummaryTableService,
+    private printControl: InputCalclationPrintService,
+    public durabilityMoment: CalcDurabilityMomentService,
+    public earthquakesMoment: CalcEarthquakesMomentService,
+    public earthquakesShearForce: CalcEarthquakesShearForceService,
+    public restorabilityMoment: CalcRestorabilityMomentService,
+    public restorabilityShearForce: CalcRestorabilityShearForceService,
+    public SafetyFatigueMoment: CalcSafetyFatigueMomentService,
+    public safetyFatigueShearForce: CalcSafetyFatigueShearForceService,
+    public safetyMoment: CalcSafetyMomentService,
+    public safetyShearForce: CalcSafetyShearForceService,
+    public serviceabilityMoment: CalcServiceabilityMomentService,
+    public serviceabilityShearForce: CalcServiceabilityShearForceService
   ) { }
 
   ngOnInit() {
@@ -75,7 +79,14 @@ export class ResultViewerComponent implements OnInit {
     this.serviceabilityMoment.setDesignForces();
     this.serviceabilityShearForce.setDesignForces();
 
+    this.summary.clear();
   }
+
+  public summaryTableShow() {
+    const modalRef = this.modalService.open(CalcSummaryTableService);
+    // modalRef.close();
+  }
+
 
   public print() {
     printJS({
