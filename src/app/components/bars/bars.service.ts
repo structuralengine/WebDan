@@ -188,6 +188,13 @@ export class InputBarsService {
   public getCalcData(index: any): any {
 
     let result = null;
+    
+    const bar_list = JSON.parse(
+      JSON.stringify({
+        temp: this.bar_list,
+      })
+    ).temp;
+
 
     const positions = this.points.getSameGroupePoints(index);
     const start = positions.findIndex(v=>v.index === index);
@@ -198,7 +205,7 @@ export class InputBarsService {
         continue; // 計算対象ではなければスキップ
       }
       // barデータに（部材、着目点など）足りない情報を追加する
-      const data: any = this.bar_list.find((v) => v.index === pos.index);
+      const data: any = bar_list.find((v) => v.index === pos.index);
       if(data === undefined){
         continue;
       }

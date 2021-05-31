@@ -4,64 +4,54 @@
     <td> </td>
     <td> </td>
     <td class="left">単位</td>
-    <td class="left">梁</td>
-    <td class="left">躯体</td>
+    <ng-container *ngFor="let item of summary_table; index as i">
+      <td class="left">{{item.title.m_no}}</td>
+    </ng-container>
   </tr>
   <tr>
     <td> </td>
     <td> </td>
     <td> </td>
-    <td class="left"> </td>
-    <td class="left"> </td>
-    <td class="left">線路方向</td>
+    <td> </td>
+    <ng-container *ngFor="let item of summary_table; index as i">
+      <td class="left">{{item.title.p_name}}</td>
+    </ng-container>
   </tr>
   <tr class="bottom">
     <td> </td>
     <td> </td>
     <td> </td>
-    <td class="left"> </td>
-    <td class="left"> </td>
-    <td class="left"> </td>
+    <td> </td>
+    <ng-container *ngFor="let item of summary_table; index as i">
+      <td class="left">{{item.title.side}}</td>
+    </ng-container>
   </tr>
   <tr class="bottom">
     <td>断面形状</td>
     <td> </td>
     <td> </td>
     <td class="left">mm</td>
-    <td class="left"> </td>
-    <td class="left"> </td>
+    <ng-container *ngFor="let item of summary_table; index as i">
+      <td><canvas #myCanvas width="400" height="400"></canvas></td>
+    </ng-container>
   </tr>
   <tr>
     <td>鉄</td>
     <td class="left">主鉄筋</td>
     <td class="left">径・本数</td>
     <td class="left">-</td>
-    <td class="left">D32 - 23</td>
-    <td class="left">D32 - 35</td>
-  </tr>
-  <tr>
-    <td> </td>
-    <td class="left"> </td>
-    <td class="left"> </td>
-    <td class="left"> </td>
-    <td class="left">D32 - 10</td>
-    <td class="left">D32 - 10</td>
-  </tr>
-  <tr>
-    <td> </td>
-    <td class="left bottom"> </td>
-    <td class="bottom"> </td>
-    <td class="left bottom"> </td>
-    <td class="left bottom"> </td>
-    <td class="left bottom"> </td>
+    <ng-container *ngFor="let item of summary_table; index as i">
+      <td class="left">{{item.As.AstString}}</td>
+    </ng-container>
   </tr>
   <tr>
     <td>筋</td>
     <td class="left bottom">側方向鉄筋</td>
     <td class="left bottom">径・本数</td>
     <td class="left bottom">-</td>
-    <td class="left bottom"></td>
-    <td class="left bottom">13</td>
+    <ng-container *ngFor="let item of summary_table; index as i">
+      <td class="left bottom">{{item.As.AstString}}</td>
+    </ng-container>
   </tr>
   <tr>
     <td> </td>

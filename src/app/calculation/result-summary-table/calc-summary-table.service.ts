@@ -80,6 +80,7 @@ export class CalcSummaryTableService {
     return {
       index: index,
       side: side,
+      title: {},
       durabilityMoment: {},
       earthquakesMoment: {},
       earthquakesShearForce: {},
