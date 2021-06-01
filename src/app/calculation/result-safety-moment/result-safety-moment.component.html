@@ -2,27 +2,27 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<div class="sheet" id="ap_1">
-  <div style="font-size: 14px; text-align: left;">
+<div class="sheet" id="{{page_index}}">
+  <div class="sheet-title">
     <p>3.1 安全性の照査</p>
     <p></p>
-    <p style="text-indent:1em">3.1.1破壊に関する 安全性【コンクリート標準　7.2】</p>
-    <p style="text-indent:1em">(1)曲げモーメントと軸方向力に対する照査【コンクリート標準 7.2】</p>
-    <p style="text-indent:2em">曲げモーメントと軸方向力を受ける部材の照査は、設計曲げモーメントM<sub>d</sub>を設計</p>
-    <p style="text-indent:1em">応答値、設計曲げ耐力M<sub>ud</sub>を設計限界値として以下に示す式により行う。</p>
-    <p style="text-indent:2em">γi・M<sub>d</sub>/M<sub>ud</sub>≦1.0</p>
-    <p style="text-indent:2em">ここに、　γi：　構造物係数</p>
-    <p style="text-indent:8em">M<sub>d</sub>：　設計曲げモーメント</p>
-    <p style="text-indent:7.5em">M<sub>ud</sub>：　設計曲げ耐力( M<sub>ud</sub>= M<sub>u</sub>/γ<sub>b</sub>)</p>
-    <p style="text-indent:7.5em">γ<sub>b</sub>：　部材係数</p>
+    <p class="sheet-title indent10">3.1.1破壊に関する 安全性【コンクリート標準　7.2】</p>
+    <p class="sheet-title indent10">(1)曲げモーメントと軸方向力に対する照査【コンクリート標準 7.2】</p>
+    <p class="sheet-title indent20">曲げモーメントと軸方向力を受ける部材の照査は、設計曲げモーメントM<sub>d</sub>を設計</p>
+    <p class="sheet-title indent10">応答値、設計曲げ耐力M<sub>ud</sub>を設計限界値として以下に示す式により行う。</p>
+    <p class="sheet-title indent20">γi・M<sub>d</sub>/M<sub>ud</sub>≦1.0</p>
+    <p class="sheet-title indent20">ここに、　γi：　構造物係数</p>
+    <p class="sheet-title indent80">M<sub>d</sub>：　設計曲げモーメント</p>
+    <p class="sheet-title indent75">M<sub>ud</sub>：　設計曲げ耐力( M<sub>ud</sub>= M<sub>u</sub>/γ<sub>b</sub>)</p>
+    <p class="sheet-title indent75">γ<sub>b</sub>：　部材係数</p>
   </div>
 </div>
 
 <div *ngFor="let pages of safetyMomentPages; index as i">
 <div class="sheet">
-	<div style="font-size: 10pt; text-align: left;">{{pages.caption}} (その{{i+1}})</div>
-	<div style="font-size: 10pt; text-align: right;">[{{pages.g_name}}]</div>
-  <table>
+	<div class="cell_title1">{{pages.caption}} (その{{i+1}})</div>
+	<div class="cell_title2">[{{pages.g_name}}]</div>
+  <table class="main">
   	<tr>
       <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left1">部材名称</th>
       <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">{{column[0].value}}</td>
