@@ -210,7 +210,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push(resultColumn.ratio);
             column.push(resultColumn.result);
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+
             page.columns.push(column);
+
+
           }
         }
       }

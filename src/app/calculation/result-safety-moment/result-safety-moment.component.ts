@@ -169,6 +169,11 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push({ alien: 'right', value: resultColumn.ratio.toFixed(3) });
             column.push({ alien: 'center', value: resultColumn.result });
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+                        
             page.columns.push(column);
           }
         }

@@ -47,41 +47,55 @@ export class CalcSummaryTableService {
 
   }
 
-  private setValue(target: string, value: any): void{
-    switch(target){
-      case "durabilityMoment":
+  private setValue(target: string, value: any = null): void{
 
-        break;
-      case "earthquakesMoment":
-  
-        break;
-      case "earthquakesShearForce": 
+    if(value === null){
+      return;
+    }
 
-        break;
-      case "restorabilityMoment": 
+    for(const groupe of value){
+      for( const col of groupe.colmns){
+          let index: number;
+          let side: string;
+          let shape: string;
+        switch(target){
+          case "durabilityMoment":
 
-        break;
-      case "restorabilityShearForce":
+            break;
+          case "earthquakesMoment":
+      
+            break;
+          case "earthquakesShearForce": 
 
-        break;
-      case "SafetyFatigueMoment":
+            break;
+          case "restorabilityMoment": 
 
-        break;
-      case "safetyFatigueShearForce":
+            break;
+          case "restorabilityShearForce":
 
-        break;
-      case "safetyMoment": 
+            break;
+          case "SafetyFatigueMoment":
 
-        break;
-      case "safetyShearForce": 
+            break;
+          case "safetyFatigueShearForce":
 
-        break;
-      case "serviceabilityMoment": 
+            break;
+          case "safetyMoment": 
 
-        break;
-      case "serviceabilityShearForce":
+            break;
+          case "safetyShearForce": 
 
-        break;
+            break;
+          case "serviceabilityMoment": 
+            index = col[48];
+            side = col[49];
+            shape = col[50];
+            break;
+          case "serviceabilityShearForce":
+
+            break;
+        }
+      }
     }
   }
 

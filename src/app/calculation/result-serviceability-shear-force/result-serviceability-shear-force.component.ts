@@ -193,6 +193,11 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             column.push(resultColumn.Ratio);
             column.push(resultColumn.Result);
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+                        
             page.columns.push(column);
           }
         }

@@ -215,6 +215,11 @@ export class ResultSafetyShearForceComponent implements OnInit {
             column.push(resultColumn.Vwcd_Ratio);
             column.push(resultColumn.Vwcd_Result);
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+
             page.columns.push(column);
           }
         }
