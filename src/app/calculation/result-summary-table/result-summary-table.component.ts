@@ -10,9 +10,7 @@ export class ResultSummaryTableComponent implements OnInit {
   //
   public summary_table: any;
 
-  constructor(private calc: CalcSummaryTableService) {
-    
-  }
+  constructor(private calc: CalcSummaryTableService) { }
 
   ngOnInit() {
     this.summary_table = this.calc.summary_table;

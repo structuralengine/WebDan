@@ -1,520 +1,539 @@
-<section>
-  <table>
-    <tr class="top">
-      <td colspan="4">断面位置</td>
-      <!-- <td id="col-5" class="left">単位</td> -->
-      <td width="200" class="left">単位</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">{{item.title.m_no}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td class="left"> </td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">{{item.title.p_name}}</td>
-      </ng-container>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td class="left"> </td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">{{item.title.side}}</td>
-      </ng-container>
-    </tr>
-    <tr class="bottom">
-      <td colspan="4">断面形状</td>
-      <td class="left">mm</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left"><canvas #myCanvas width="400" height="400"></canvas></td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>鉄筋量</td>
-      <td class="left  bottom" colspan="2">主鉄筋</td>
-      <td class="left">径・本数</td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">{{item.As.AstString}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="left bottom" colspan="2">側方向鉄筋</td>
-      <td class="left bottom">径・本数</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.As.AseString}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="left  bottom" colspan="2">折り曲げ鉄筋</td>
-      <td class="left">径・本数 ピッチ・角度</td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">-</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td></td>
-      <td class="left" colspan="2">スターラップ</td>
-      <td class="left">径・ピッチ</td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">{{item.As.AwString}}</td>
-      </ng-container>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td class="left" colspan="2"> </td>
-      <td class="left"> </td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left">{{item.As.Ss}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom" colspan="3">構造物係数 γi</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyMoment.ri}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">曲</td>
-      <td class="left bottom" colspan="2">設計曲げモーメント Md</td>
-      <td class="left bottom">kN・m</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyMoment.Md}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>破</td>
-      <td class="left">げ</td>
-      <td class="left bottom" colspan="2">設計軸方向力 N'd</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyMoment.Nd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">設計曲げ耐力 Mud</td>
-      <td class="left bottom">kN・m</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyMoment.Mud}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom" colspan="2">γi・Md/Mud (γi・Td/Tyd)</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyMoment.ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>壊</td>
-      <td class="left">せ</td>
-      <td class="left bottom" colspan="2">設計せん断力 Vd</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyShearForce.Vd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">ん</td>
-      <td class="left bottom" colspan="2">設計せん断耐力 Vyd (Vdd)</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyShearForce.Vyd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">断</td>
-      <td class="left bottom" colspan="2">設計斜め圧縮破壊耐力 Vwcd</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyShearForce.Vwcd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">γi・Vd/Vyd (Vdd)</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyShearForce.Vyd_Ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">γi・Vd/Vwcd</td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyShearForce.Vwcd_Ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>使</td>
-      <td class="left">曲</td>
-      <td class="left" colspan="2">コンクリートの縁引張応力度</td>
-      <td class="left">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityMoment.sigma_b}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">げ</td>
-      <td class="left bottom" colspan="2">／設計引張強度</td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-    </tr>
-    <tr>
-      <td>用</td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">コンクリートの曲げ圧縮応力度</td>
-      <td class="left">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityMoment.sigma_c}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">／0.4f'cd</td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-    </tr>
-    <tr>
-      <td>性</td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">永久荷重 鉄筋引張応力度</td>
-      <td class="left">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityMoment.sigma_s}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">安全度 σs／σsl1</td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-    </tr>
-    <tr>
-      <td>・</td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">安全性ひび割れ幅</td>
-      <td class="left">mm</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityMoment.Wd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">安全度 Wd／Wlim</td>
-      <td class="left bottom"> </td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityMoment.Wlim}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>耐</td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">外観ひび割れ幅</td>
-      <td class="left">mm</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.durabilityMoment.Wd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom" colspan="2">安全度 Wd／0.3</td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-    </tr>
-    <tr>
-      <td>久</td>
-      <td class="left">せ</td>
-      <td class="left" colspan="2">補強鋼材を用いないせん断耐力 Vcd</td>
-      <td class="left">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityShearForce.Vcd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">ん</td>
-      <td class="left bottom" colspan="2">Vhd : 0.7Vcd</td>
-      <td class="left bottom"> </td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityShearForce.Vcd07}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>性</td>
-      <td class="left">断</td>
-      <td class="left" colspan="2">永久荷重 鉄筋引張応力度</td>
-      <td class="left">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.serviceabilityShearForce.sigma}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">安全度 σwpd／σsl2</td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom"> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">折り曲げ鉄筋応力度</td>
-      <td class="left">N/mm<sup>2</sup></td>
-      <td class="left">-</td>
-      <td class="left">-</td>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">安全度 σbpd／σsl2</td>
-      <td class="left"> </td>
-      <td class="left"> </td>
-      <td class="left"> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom" colspan="3">構造物係数 γi</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.SafetyFatigueMoment.ri}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom" colspan="3">部材係数 γb</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.SafetyFatigueMoment.rb}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>疲</td>
-      <td class="left">曲</td>
-      <td class="left bottom" colspan="2">鉄筋設計最小応力度 σmin</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.SafetyFatigueMoment.sigma_min}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">げ</td>
-      <td class="left bottom" colspan="2">鉄筋設計変動応力度 sσsr</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.SafetyFatigueMoment.sigma_rd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>労</td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">鉄筋設計疲労強度 fsrd／γb</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.SafetyFatigueMoment.fsr200}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom" colspan="2">γi・sσsr／(fsrd／γb)</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.SafetyFatigueMoment.ratio200}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>破</td>
-      <td class="left">せ</td>
-      <td class="left bottom" colspan="2">鉄筋設計最小応力度 σswpd</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyFatigueShearForce.sigma_min}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">ん</td>
-      <td class="left bottom" colspan="2">鉄筋設計変動応力度 σswrd</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyFatigueShearForce.sigma_rd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>壊</td>
-      <td class="left">断</td>
-      <td class="left bottom" colspan="2">鉄筋設計疲労強度 fswrd／γb</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyFatigueShearForce.frd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">γi・σswrd／(fswrd／γb)</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.safetyFatigueShearForce.ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">鉄筋設計最小応力度 σsbpd</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <td class="left bottom">-</td>
-      <td class="left bottom">-</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">鉄筋設計変動応力度 σsbrd</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <td class="left bottom">-</td>
-      <td class="left bottom">-</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">鉄筋設計疲労強度 fsbrd／γb</td>
-      <td class="left bottom">N/mm<sup>2</sup></td>
-      <td class="left bottom">-</td>
-      <td class="left bottom">-</td>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td class="left"> </td>
-      <td class="left" colspan="2">γi・σsbrd／(fsbrd／γb)</td>
-      <td class="left">-</td>
-      <td class="left">-</td>
-      <td class="left">-</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom" colspan="3">構造物係数 γi</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityMoment.ri}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>復</td>
-      <td class="left">曲</td>
-      <td class="left bottom" colspan="2">設計曲げモーメント Md</td>
-      <td class="left bottom">kN・m</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityMoment.Md}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">げ</td>
-      <td class="left bottom" colspan="2">設計軸方向力 N'd</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityMoment.Nd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>旧</td>
-      <td class="left"> </td>
-      <td class="left bottom" colspan="2">降伏曲げ耐力 Myd</td>
-      <td class="left bottom">kN・m</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityMoment.Myd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left bottom"> </td>
-      <td class="left bottom" colspan="2">γi・Md/Myd (γi・Td/Tyd)</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityMoment.ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td>性</td>
-      <td class="left">せ</td>
-      <td class="left bottom" colspan="2">設計せん断力 Vd</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityShearForce.Vd}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td class="left">ん</td>
-      <td class="left bottom" colspan="2">設計せん断耐力 Vyd(Vdd)</td>
-      <td class="left bottom">kN</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityShearForce.Vyd}}</td>
-      </ng-container>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td class="left">断</td>
-      <td class="left" colspan="2">γi・Vd／Vyd(Vdd)</td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityShearForce.Ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr>
-      <td> </td>
-      <td  colspan="2">決定ケース</td>
-      <td class="left bottom">曲げ</td>
-      <td class="left bottom">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityShearForce.Ratio}}</td>
-      </ng-container>
-    </tr>
-    <tr class="bottom">
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td class="left">せん断</td>
-      <td class="left">-</td>
-      <ng-container *ngFor="let item of summary_table; index as i">
-        <td class="left bottom">{{item.restorabilityShearForce.Ratio}}</td>
-      </ng-container>
-    </tr>
-  </table>
-</section>
+<div class="modal-dialog modal-dialog-scrollable" role="document">
+  <div class="modal-content">
+    <!-- <div class="modal-header"></div>-->
+    <div class="modal-body">
+      <table>
+        <thead>
+          <tr>
+            <th width="30px" class="top"> </th>
+            <th width="30px" class="top"> </th>
+            <th width="200px" class="top">断面位置</th>
+            <th width="150px" class="top"> </th>
+            <th width="70px" class="left top">単位</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th width="100px" class="left top">{{item.title.m_no}}</th>
+            </ng-container>
+          </tr>
+
+          <tr>
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            <th class="left"> </th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left">{{item.title.p_name}}</th>
+            </ng-container>
+          </tr>
+          <tr class="bottom">
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            <th> </th>
+            <th class="left"> </th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left">{{item.title.side}}</th>
+            </ng-container>
+          </tr>
+          <tr class="bottom">
+            <th> </th>
+            <th> </th>
+            <th>断面形状</th>
+            <th> </th>
+            <th class="left">mm</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left"><canvas #myCanvas width="400" height="400"></canvas></th>
+            </ng-container>
+          </tr>
+          <tr>
+            <th>鉄筋量</th>
+            <th class="left  bottom" colspan="2">主鉄筋</th>
+            <th class="left">径・本数</th>
+            <th class="left">-</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left">{{item.As.AstString}}</th>
+            </ng-container>
+          </tr>
+          <tr>
+            <th></th>
+            <th class="left bottom" colspan="2">側方向鉄筋</th>
+            <th class="left bottom">径・本数</th>
+            <th class="left bottom">-</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left bottom">{{item.As.AseString}}</th>
+            </ng-container>
+          </tr>
+          <tr>
+            <th></th>
+            <th class="left  bottom" colspan="2">折り曲げ鉄筋</th>
+            <th class="left">径・本数 ピッチ・角度</th>
+            <th class="left">-</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left">-</th>
+            </ng-container>
+          </tr>
+          <tr>
+            <th></th>
+            <th class="left" colspan="2">スターラップ</th>
+            <th class="left">径・ピッチ</th>
+            <th class="left">-</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left">{{item.As.AwString}}</th>
+            </ng-container>
+          </tr>
+          <tr class="bottom">
+            <th> </th>
+            <th class="left" colspan="2"> </th>
+            <th class="left"> </th>
+            <th class="left">-</th>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <th class="left">{{item.As.Ss}}</th>
+            </ng-container>
+          </tr>
+        </thead>
+        <tbody>          
+          <tr>
+            <td> </td>
+            <td class="left bottom" colspan="3">構造物係数 γi</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyMoment.ri}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">曲</td>
+            <td class="left bottom" colspan="2">設計曲げモーメント Md</td>
+            <td class="left bottom">kN・m</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyMoment.Md}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>破</td>
+            <td class="left">げ</td>
+            <td class="left bottom" colspan="2">設計軸方向力 N'd</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyMoment.Nd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">設計曲げ耐力 Mud</td>
+            <td class="left bottom">kN・m</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyMoment.Mud}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom" colspan="2">γi・Md/Mud (γi・Td/Tyd)</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyMoment.ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>壊</td>
+            <td class="left">せ</td>
+            <td class="left bottom" colspan="2">設計せん断力 Vd</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyShearForce.Vd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">ん</td>
+            <td class="left bottom" colspan="2">設計せん断耐力 Vyd (Vdd)</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyShearForce.Vyd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">断</td>
+            <td class="left bottom" colspan="2">設計斜め圧縮破壊耐力 Vwcd</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyShearForce.Vwcd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">γi・Vd/Vyd (Vdd)</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyShearForce.Vyd_Ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr class="bottom">
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">γi・Vd/Vwcd</td>
+            <td class="left">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyShearForce.Vwcd_Ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>使</td>
+            <td class="left">曲</td>
+            <td class="left" colspan="2">コンクリートの縁引張応力度</td>
+            <td class="left">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityMoment.sigma_b}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">げ</td>
+            <td class="left bottom" colspan="2">／設計引張強度</td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+          </tr>
+          <tr>
+            <td>用</td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">コンクリートの曲げ圧縮応力度</td>
+            <td class="left">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityMoment.sigma_c}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">／0.4f'cd</td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+          </tr>
+          <tr>
+            <td>性</td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">永久荷重 鉄筋引張応力度</td>
+            <td class="left">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityMoment.sigma_s}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">安全度 σs／σsl1</td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+          </tr>
+          <tr>
+            <td>・</td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">安全性ひび割れ幅</td>
+            <td class="left">mm</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityMoment.Wd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">安全度 Wd／Wlim</td>
+            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityMoment.Wlim}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>耐</td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">外観ひび割れ幅</td>
+            <td class="left">mm</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.durabilityMoment.Wd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom" colspan="2">安全度 Wd／0.3</td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+          </tr>
+          <tr>
+            <td>久</td>
+            <td class="left">せ</td>
+            <td class="left" colspan="2">補強鋼材を用いないせん断耐力 Vcd</td>
+            <td class="left">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityShearForce.Vcd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">ん</td>
+            <td class="left bottom" colspan="2">Vhd : 0.7Vcd</td>
+            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityShearForce.Vcd07}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>性</td>
+            <td class="left">断</td>
+            <td class="left" colspan="2">永久荷重 鉄筋引張応力度</td>
+            <td class="left">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.serviceabilityShearForce.sigma}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">安全度 σwpd／σsl2</td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom"> </td>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">折り曲げ鉄筋応力度</td>
+            <td class="left">N/mm<sup>2</sup></td>
+            <td class="left">-</td>
+            <td class="left">-</td>
+          </tr>
+          <tr class="bottom">
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">安全度 σbpd／σsl2</td>
+            <td class="left"> </td>
+            <td class="left"> </td>
+            <td class="left"> </td>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom" colspan="3">構造物係数 γi</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.SafetyFatigueMoment.ri}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom" colspan="3">部材係数 γb</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.SafetyFatigueMoment.rb}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>疲</td>
+            <td class="left">曲</td>
+            <td class="left bottom" colspan="2">鉄筋設計最小応力度 σmin</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.SafetyFatigueMoment.sigma_min}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">げ</td>
+            <td class="left bottom" colspan="2">鉄筋設計変動応力度 sσsr</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.SafetyFatigueMoment.sigma_rd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>労</td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">鉄筋設計疲労強度 fsrd／γb</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.SafetyFatigueMoment.fsr200}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom" colspan="2">γi・sσsr／(fsrd／γb)</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.SafetyFatigueMoment.ratio200}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>破</td>
+            <td class="left">せ</td>
+            <td class="left bottom" colspan="2">鉄筋設計最小応力度 σswpd</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyFatigueShearForce.sigma_min}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">ん</td>
+            <td class="left bottom" colspan="2">鉄筋設計変動応力度 σswrd</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyFatigueShearForce.sigma_rd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>壊</td>
+            <td class="left">断</td>
+            <td class="left bottom" colspan="2">鉄筋設計疲労強度 fswrd／γb</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyFatigueShearForce.frd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">γi・σswrd／(fswrd／γb)</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.safetyFatigueShearForce.ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">鉄筋設計最小応力度 σsbpd</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <td class="left bottom">-</td>
+            <td class="left bottom">-</td>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">鉄筋設計変動応力度 σsbrd</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <td class="left bottom">-</td>
+            <td class="left bottom">-</td>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">鉄筋設計疲労強度 fsbrd／γb</td>
+            <td class="left bottom">N/mm<sup>2</sup></td>
+            <td class="left bottom">-</td>
+            <td class="left bottom">-</td>
+          </tr>
+          <tr class="bottom">
+            <td> </td>
+            <td class="left"> </td>
+            <td class="left" colspan="2">γi・σsbrd／(fsbrd／γb)</td>
+            <td class="left">-</td>
+            <td class="left">-</td>
+            <td class="left">-</td>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom" colspan="3">構造物係数 γi</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityMoment.ri}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>復</td>
+            <td class="left">曲</td>
+            <td class="left bottom" colspan="2">設計曲げモーメント Md</td>
+            <td class="left bottom">kN・m</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityMoment.Md}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">げ</td>
+            <td class="left bottom" colspan="2">設計軸方向力 N'd</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityMoment.Nd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>旧</td>
+            <td class="left"> </td>
+            <td class="left bottom" colspan="2">降伏曲げ耐力 Myd</td>
+            <td class="left bottom">kN・m</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityMoment.Myd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left bottom"> </td>
+            <td class="left bottom" colspan="2">γi・Md/Myd (γi・Td/Tyd)</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityMoment.ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td>性</td>
+            <td class="left">せ</td>
+            <td class="left bottom" colspan="2">設計せん断力 Vd</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityShearForce.Vd}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td class="left">ん</td>
+            <td class="left bottom" colspan="2">設計せん断耐力 Vyd(Vdd)</td>
+            <td class="left bottom">kN</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityShearForce.Vyd}}</td>
+            </ng-container>
+          </tr>
+          <tr class="bottom">
+            <td> </td>
+            <td class="left">断</td>
+            <td class="left" colspan="2">γi・Vd／Vyd(Vdd)</td>
+            <td class="left">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityShearForce.Ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr>
+            <td> </td>
+            <td colspan="2">決定ケース</td>
+            <td class="left bottom">曲げ</td>
+            <td class="left bottom">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityShearForce.Ratio}}</td>
+            </ng-container>
+          </tr>
+          <tr class="bottom">
+            <td> </td>
+            <td> </td>
+            <td> </td>
+            <td class="left">せん断</td>
+            <td class="left">-</td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom">{{item.restorabilityShearForce.Ratio}}</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+<!-- 
+    <div class="modal-footer">
+    </div>
+-->
+  </div>
+</div>

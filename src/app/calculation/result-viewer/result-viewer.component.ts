@@ -96,7 +96,7 @@ export class ResultViewerComponent implements OnInit {
 
   // 総括表を表示する関数
   public summaryTableShow() {
-    this.modalService.open(ResultSummaryTableComponent);
+    this.modalService.open(ResultSummaryTableComponent, { size: 'xl', scrollable: true });
   }
 
   // 照査表を印刷する関数
