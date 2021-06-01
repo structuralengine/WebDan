@@ -20,7 +20,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public serviceabilityMomentPages: any[];
+  public serviceabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -42,7 +42,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("serviceabilityMoment", null);
+      this.summary.setSummaryTable("serviceabilityMoment");
       return;
     }
 
@@ -63,7 +63,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("serviceabilityMoment", null);
+        this.summary.setSummaryTable("serviceabilityMoment");
       }
     );
   }

@@ -18,7 +18,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public restorabilityMomentPages: any[];
+  public restorabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -37,7 +37,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("earthquakesMoment", null);
+      this.summary.setSummaryTable("earthquakesMoment");
       return;
     }
 
@@ -58,7 +58,7 @@ export class ResultEarthquakesMomentComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("earthquakesMoment", null);
+        this.summary.setSummaryTable("earthquakesMoment");
       }
     );
   }

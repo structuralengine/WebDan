@@ -16,7 +16,7 @@ import { CalcSummaryTableService } from "../result-summary-table/calc-summary-ta
   styleUrls: ["../result-viewer/result-viewer.component.scss"],
 })
 export class ResultSafetyFatigueMomentComponent implements OnInit {
-  public safetyFatigueMomentPages: any[];
+  public safetyFatigueMomentPages: any[] = new Array();
 
   public isLoading = true;
   public isFulfilled = false;
@@ -50,7 +50,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("SafetyFatigueMoment", null);
+      this.summary.setSummaryTable("SafetyFatigueMoment");
       return;
     }
 
@@ -71,7 +71,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("SafetyFatigueMoment", null);
+        this.summary.setSummaryTable("SafetyFatigueMoment");
       }
     );
   }

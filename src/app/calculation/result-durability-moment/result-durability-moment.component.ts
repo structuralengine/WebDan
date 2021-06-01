@@ -19,7 +19,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public serviceabilityMomentPages: any[];
+  public serviceabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -38,7 +38,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("durabilityMoment", null);
+      this.summary.setSummaryTable("durabilityMoment");
       return;
     }
 
@@ -59,7 +59,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("durabilityMoment", null);
+        this.summary.setSummaryTable("durabilityMoment");
       }
     );
   }

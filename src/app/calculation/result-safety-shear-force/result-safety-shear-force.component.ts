@@ -20,7 +20,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public safetyShearForcePages: any[];
+  public safetyShearForcePages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -42,7 +42,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("safetyShearForce", null);
+      this.summary.setSummaryTable("safetyShearForce");
       return;
     }
 
@@ -63,7 +63,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("safetyShearForce", null);
+        this.summary.setSummaryTable("safetyShearForce");
       }
     );
   }

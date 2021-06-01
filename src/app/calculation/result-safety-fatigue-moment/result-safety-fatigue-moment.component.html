@@ -2,6 +2,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
+<ng-container *ngIf="safetyFatigueMomentPages?.length > 0">
+
 <div class="sheet" id="{{page_index}}">
   <div class="sheet-title">
     <p class="noword sheet-title">3.4 安全性(疲労破壊)に関する照査　【ＲＣ標準 7.3.2】</p>
@@ -355,6 +357,7 @@
   </table>
 </div>
 </div>
+</ng-container>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p>{{err}}</p>

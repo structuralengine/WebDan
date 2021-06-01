@@ -19,7 +19,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public safetyShearForcePages: any[];
+  public safetyShearForcePages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -39,7 +39,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("earthquakesShearForce", null);
+      this.summary.setSummaryTable("earthquakesShearForce");
       return;
     }
 
@@ -58,7 +58,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
         this.summary.setSummaryTable("earthquakesShearForce", this.safetyShearForcePages);
       },
       (error) => {
-        this.summary.setSummaryTable("earthquakesShearForce", null);
+        this.summary.setSummaryTable("earthquakesShearForce");
         this.err = error.toString();
         this.isLoading = false;
       }

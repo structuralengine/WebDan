@@ -18,7 +18,7 @@ export class ResultSafetyMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public safetyMomentPages: any[];
+  public safetyMomentPages: any[] = new Array();
   private title = "安全性（破壊）曲げモーメントの照査結果";
 
   constructor(
@@ -41,7 +41,7 @@ export class ResultSafetyMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("safetyMoment", null);
+      this.summary.setSummaryTable("safetyMoment");
       return;
     }
 
@@ -62,7 +62,7 @@ export class ResultSafetyMomentComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("safetyMoment", null);
+        this.summary.setSummaryTable("safetyMoment");
       }
     );
   }

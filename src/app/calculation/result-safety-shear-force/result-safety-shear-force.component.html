@@ -2,330 +2,396 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<div class="sheet" id="{{page_index}}">
-  <div class="sheet-title">
-    <p>(2)せん断力に対する照査 {{title}}【コンクリート標準　7.2.3】</p>
-    <p></p>
-    <p class="sheet-title indent10">せん断力を受ける部材の照査は、設計せん断力V<sub>d</sub>を設計応答値とし、部材毎にa/dの</p>
-    <p class="sheet-title indent10">値により、設計限界値を設計せん断耐力V<sub>yd</sub>腹部コンクリートの設計斜め圧縮破壊</p>
-    <p class="sheet-title indent10">V<sub>wcd</sub>または、設計せん断圧縮破壊耐力V<sub>dd</sub>として、次式により行う。</p>
-    <p class="sheet-title indent10">1)a/d≧2.0の場合</p>
-    <p class="sheet-title indent20">(a)設計せん断による照査</p>
-    <p class="sheet-title indent30">γi・V<sub>d</sub>/V<sub>yd</sub>≦1.0</p>
-    <p class="sheet-title indent30">ここに、γi：　構造物係数</p>
-    <p class="sheet-title indent75">V<sub>d</sub>：設計せん断力</p>
-    <p class="sheet-title indent75">V<sub>yd</sub>：設計せん断耐力</p>
-    <p class="sheet-title indent90">V<sub>yd</sub> = V<sub>cd</sub> + V<sub>sd</sub></p>
-    <p class="sheet-title indent75">V<sub>cd</sub>：せん断補強鋼材を用いない棒部材のせん断耐力</p>
-    <p class="sheet-title indent75">V<sub>sd</sub>：せん断補強鋼材により受け持たれる棒部材の設計せん断力</p>
-    <p class="sheet-title indent30">a)せん断補強鋼材を用いない棒部材の設計せん断力</p>
-    <p class="sheet-title indent40">V<sub>cd</sub> = β<sub>d</sub>・β<sub>p</sub>・β<sub>n</sub>・f<sub>vcd</sub>・b<sub>w</sub>・d / ・γ<sub>b</sub></p>
-    <p class="sheet-title indent30">ここに、β<sub>d</sub>：(1000/d)<sup>1/4</sup> ただしβ<sub>d</sub>＞1.5となる場合は1.5とする。</p>
-    <p class="sheet-title indent75">β<sub>p</sub>：(100×P<sub>c</sub>)<sup>1/3</sup> ただしβ<sub>p</sub>＞1.5となる場合は1.5とする。</p>
-    <p class="sheet-title indent75">β<sub>n</sub>：1+2M<sub>0</sub>/M<sub>u</sub>(N'<sub>d</sub>≧0) ただしβ<sub>n</sub>＞2となる場合は2とする。</p>
-    <p class="sheet-title indent75">β<sub>n</sub>：1+4M<sub>0</sub>/M<sub>u</sub>(N'<sub>d</sub>＜0) ただしβ<sub>n</sub>＜0となる場合は0とする。</p>
-    <p class="sheet-title indent75">f<sub>vcd</sub>：0.2(P<sub>cd</sub>)<sup>1/3</sup></p>
-    <p class="sheet-title indent90">ただし、f<sub>vcd</sub>＞0.72N/mm<sup>2</sup>となる場合はf<sub>vcd</sub>＝0.72N/mm<sup>2</sup>とする。</p>
-    <p class="sheet-title indent75">b<sub>w</sub>：腹部の幅</p>
-    <p class="sheet-title indent75"> d：有効高さ</p>
-    <p class="sheet-title indent75">P<sub>c</sub>：せん断引張鋼材比</p>
-    <p class="sheet-title indent75">A<sub>s</sub>：引張鋼材の断面船</p>
-    <p class="sheet-title indent75">M<sub>u</sub>：曲げ耐力</p>
-    <p class="sheet-title indent75">M<sub>o</sub>：設計曲げモーメントM<sub>d</sub>に対する引張縁において、軸方向により発</p>
-    <p class="sheet-title indent90">生する応力を打ち消すのに必要な曲げモーメント。</p>
-    <p class="sheet-title indent75">N<sub>d</sub>：設計軸方向圧縮力</p>
-    <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
-    <p class="sheet-title indent30">b)せん断補強鋼材により受け持たれる棒部材の設計せん断耐力</p>
-    <p class="sheet-title indent40">ボックスカルバートの場合せん断補強鋼材にスターラップを用いるため、</p>
-    <p class="sheet-title indent30">以下にスターラップのせん断力耐力を算定する。</p>
-    <p class="sheet-title indent40">V<sub>sd</sub> = A<sub>w</sub>・f<sub>wyd</sub>・d(1.15S<sub>s</sub>・γ<sub>b</sub>)</p>
-    <p class="sheet-title indent40">ここに、A<sub>w</sub>: 区間S<sub>s</sub>におけるスターラップの総断面積</p>
-    <p class="sheet-title indent75"> d：有効高さ</p>
-    <p class="sheet-title indent75">S<sub>s</sub>：スターラップの配置間隔</p>
-    <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+<ng-container *ngIf="safetyShearForcePages?.length > 0">
+
+  <div class="sheet" id="{{page_index}}">
+    <div class="sheet-title">
+      <p>(2)せん断力に対する照査 {{title}}【コンクリート標準　7.2.3】</p>
+      <p></p>
+      <p class="sheet-title indent10">せん断力を受ける部材の照査は、設計せん断力V<sub>d</sub>を設計応答値とし、部材毎にa/dの</p>
+      <p class="sheet-title indent10">値により、設計限界値を設計せん断耐力V<sub>yd</sub>腹部コンクリートの設計斜め圧縮破壊</p>
+      <p class="sheet-title indent10">V<sub>wcd</sub>または、設計せん断圧縮破壊耐力V<sub>dd</sub>として、次式により行う。</p>
+      <p class="sheet-title indent10">1)a/d≧2.0の場合</p>
+      <p class="sheet-title indent20">(a)設計せん断による照査</p>
+      <p class="sheet-title indent30">γi・V<sub>d</sub>/V<sub>yd</sub>≦1.0</p>
+      <p class="sheet-title indent30">ここに、γi：　構造物係数</p>
+      <p class="sheet-title indent75">V<sub>d</sub>：設計せん断力</p>
+      <p class="sheet-title indent75">V<sub>yd</sub>：設計せん断耐力</p>
+      <p class="sheet-title indent90">V<sub>yd</sub> = V<sub>cd</sub> + V<sub>sd</sub></p>
+      <p class="sheet-title indent75">V<sub>cd</sub>：せん断補強鋼材を用いない棒部材のせん断耐力</p>
+      <p class="sheet-title indent75">V<sub>sd</sub>：せん断補強鋼材により受け持たれる棒部材の設計せん断力</p>
+      <p class="sheet-title indent30">a)せん断補強鋼材を用いない棒部材の設計せん断力</p>
+      <p class="sheet-title indent40">V<sub>cd</sub> =
+        β<sub>d</sub>・β<sub>p</sub>・β<sub>n</sub>・f<sub>vcd</sub>・b<sub>w</sub>・d / ・γ<sub>b</sub></p>
+      <p class="sheet-title indent30">ここに、β<sub>d</sub>：(1000/d)<sup>1/4</sup> ただしβ<sub>d</sub>＞1.5となる場合は1.5とする。</p>
+      <p class="sheet-title indent75">β<sub>p</sub>：(100×P<sub>c</sub>)<sup>1/3</sup> ただしβ<sub>p</sub>＞1.5となる場合は1.5とする。
+      </p>
+      <p class="sheet-title indent75">β<sub>n</sub>：1+2M<sub>0</sub>/M<sub>u</sub>(N'<sub>d</sub>≧0)
+        ただしβ<sub>n</sub>＞2となる場合は2とする。</p>
+      <p class="sheet-title indent75">β<sub>n</sub>：1+4M<sub>0</sub>/M<sub>u</sub>(N'<sub>d</sub>＜0)
+        ただしβ<sub>n</sub>＜0となる場合は0とする。</p>
+      <p class="sheet-title indent75">f<sub>vcd</sub>：0.2(P<sub>cd</sub>)<sup>1/3</sup></p>
+      <p class="sheet-title indent90">
+        ただし、f<sub>vcd</sub>＞0.72N/mm<sup>2</sup>となる場合はf<sub>vcd</sub>＝0.72N/mm<sup>2</sup>とする。</p>
+      <p class="sheet-title indent75">b<sub>w</sub>：腹部の幅</p>
+      <p class="sheet-title indent75"> d：有効高さ</p>
+      <p class="sheet-title indent75">P<sub>c</sub>：せん断引張鋼材比</p>
+      <p class="sheet-title indent75">A<sub>s</sub>：引張鋼材の断面船</p>
+      <p class="sheet-title indent75">M<sub>u</sub>：曲げ耐力</p>
+      <p class="sheet-title indent75">M<sub>o</sub>：設計曲げモーメントM<sub>d</sub>に対する引張縁において、軸方向により発</p>
+      <p class="sheet-title indent90">生する応力を打ち消すのに必要な曲げモーメント。</p>
+      <p class="sheet-title indent75">N<sub>d</sub>：設計軸方向圧縮力</p>
+      <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+      <p class="sheet-title indent30">b)せん断補強鋼材により受け持たれる棒部材の設計せん断耐力</p>
+      <p class="sheet-title indent40">ボックスカルバートの場合せん断補強鋼材にスターラップを用いるため、</p>
+      <p class="sheet-title indent30">以下にスターラップのせん断力耐力を算定する。</p>
+      <p class="sheet-title indent40">V<sub>sd</sub> = A<sub>w</sub>・f<sub>wyd</sub>・d(1.15S<sub>s</sub>・γ<sub>b</sub>)
+      </p>
+      <p class="sheet-title indent40">ここに、A<sub>w</sub>: 区間S<sub>s</sub>におけるスターラップの総断面積</p>
+      <p class="sheet-title indent75"> d：有効高さ</p>
+      <p class="sheet-title indent75">S<sub>s</sub>：スターラップの配置間隔</p>
+      <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+    </div>
   </div>
-</div>
-<div class="sheet" id="{{page_index}}">
-  <div class="sheet-title">
-    <p class="sheet-title indent20">(b)腹部コンクリートの斜め圧縮破壊耐力による照査</p>
-    <p class="sheet-title indent30">γi・V<sub>d</sub>/V<sub>wcd</sub>≦1.0</p>
-    <p class="sheet-title indent30">ここに、γi：構造物係数</p>
-    <p class="sheet-title indent75">V<sub>d</sub>：設計せん断力</p>
-    <p class="sheet-title indent75">V<sub>wcd</sub>：　設計斜め圧縮破壊耐力</p>
-    <p class="sheet-title indent30">V<sub>wcd</sub> = f<sub>wcd</sub>・b<sub>w</sub>・d / γ<sub>b</sub></p>
-    <p class="sheet-title indent50">f<sub>wcd</sub> = 1.25(f'<sub>cd</sub>)<sup>1/2</sup> ≧7.8(N.mm<sup>2</sup>)</p>
-    <p class="sheet-title indent75">b<sub>w</sub>：腹部の幅(mm)</p>
-    <p class="sheet-title indent75"> d：有効高さ</p>
-    <p class="sheet-title indent75">f'<sub>cd</sub>：コンクリートの設計圧縮強度(mm)</p>
-    <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
-    <p class="sheet-title indent10">2)a/d＜2.0の場合</p>
-    <p class="sheet-title indent30">γi・V<sub>d</sub>/V<sub>dd</sub>≦1.0</p>
-    <p class="sheet-title indent30">ここに、γ<sub>i</sub>：構造物係数</p>
-    <p class="sheet-title indent75">V<sub>d</sub>：設計せん断力</p>
-    <p class="sheet-title indent75">V<sub>dd</sub>：設計せん断圧縮破壊耐力</p>
-    <p class="sheet-title indent30">V<sub>dd</sub> = (β<sub>d</sub>・β<sub>n</sub>・β<sub>w</sub>)β<sub>p</sub>・β<sub>a</sub>・f<sub>dd</sub>・b<sub>w</sub>・d/γ<sub>b</sub></p>
-    <p class="sheet-title indent75">f<sub>dd</sub> = 0.19(f'<sub>cd</sub>)<sup>1/2</sup> (Nmm<sup>2</sup>)</p>
-    <p class="sheet-title indent75">β<sub>d</sub> = (1000/d)<sup>1/4</sup> ≦1.5</p>
-    <p class="sheet-title indent75">β<sub>w</sub> = 4.2・(100<sub>pw</sub>)<sup>1/3</sup>・(a/d - 0.75) / (f'<sub>cd</sub>)<sup>1/2</sup>≧0</p>
-    <p class="sheet-title indent75">β<sub>n</sub> = 1+2M<sub>o</sub>/M<sub>u</sub>≦2(N'<sub>d</sub>≧0の場合) </p>
-    <p class="sheet-title indent90">　= 1+4M<sub>0</sub>/M<sub>u</sub>≧0(N'<sub>d</sub>＜0の場合）</p>
-    <p class="sheet-title indent75">β<sub>p</sub> = ｛1 + (100<sub>pc</sub>)<sup>1/3</sup>｝/2≦1.5</p>
-    <p class="sheet-title indent75">β<sub>a</sub> = 5/｛1 + (a/d)<sup>2</sup>｝</p>
-    <p class="sheet-title indent75">b<sub>w</sub>：腹部の幅(mm)</p>
-    <p class="sheet-title indent75"> d ：有効高さ</p>
-    <p class="sheet-title indent75"> a ：支持部前面から荷重載荷点までの距離(mm)</p>
-    <p class="sheet-title indent75">p<sub>c</sub>：せん断引張鋼材比 p<sub>c</sub> = A<sub>s</sub>/(b<sub>w</sub>・d)</p>
-    <p class="sheet-title indent75">A<sub>s</sub>：引張鋼材の断面積(mm<sup>2</sup>)</p>
-    <p class="sheet-title indent75">p<sub>w</sub>：せん断補強鉄筋比 p<sub>w</sub> = A<sub>w</sub>/(b<sub>w</sub>・S<sub>s</sub>)</p>
-    <p class="sheet-title indent90">ただし、p<sub>w</sub>＜0.002となる場合はp<sub>w</sub>＝0とする。</p>
-    <p class="sheet-title indent75">A<sub>w</sub>：区間S<sub>s</sub>における部材軸と直行するせん断補強鉄筋の総断面積(mm<sup>2</sup>)</p>
-    <p class="sheet-title indent75">S<sub>s</sub>：部材軸と直行するせん断補強鉄筋の配置間隔(mm)</p>
-    <p class="sheet-title indent75">M<sub>u</sub>：曲げ耐力</p>
-    <p class="sheet-title indent75">M<sub>o</sub>：設計曲げモーメントM<sub>d</sub>に対する引張縁において、軸方向力によっ</p>
-    <p class="sheet-title indent90">て発生する応力を打ち消すのに必要なモーメント</p>
-    <p class="sheet-title indent75">N'<sub>d</sub>：設計軸方向圧縮力</p>
-    <p class="sheet-title indent75">f'<sub>cd</sub>：コンクリートの設計圧縮強度(N/mm<sup>2</sup>) (＝f'<sub>ck</sub>/γ<sub>c</sub>、γ<sub>c</sub> = 1.3)</p>
-    <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+  <div class="sheet" id="{{page_index}}">
+    <div class="sheet-title">
+      <p class="sheet-title indent20">(b)腹部コンクリートの斜め圧縮破壊耐力による照査</p>
+      <p class="sheet-title indent30">γi・V<sub>d</sub>/V<sub>wcd</sub>≦1.0</p>
+      <p class="sheet-title indent30">ここに、γi：構造物係数</p>
+      <p class="sheet-title indent75">V<sub>d</sub>：設計せん断力</p>
+      <p class="sheet-title indent75">V<sub>wcd</sub>：　設計斜め圧縮破壊耐力</p>
+      <p class="sheet-title indent30">V<sub>wcd</sub> = f<sub>wcd</sub>・b<sub>w</sub>・d / γ<sub>b</sub></p>
+      <p class="sheet-title indent50">f<sub>wcd</sub> = 1.25(f'<sub>cd</sub>)<sup>1/2</sup> ≧7.8(N.mm<sup>2</sup>)</p>
+      <p class="sheet-title indent75">b<sub>w</sub>：腹部の幅(mm)</p>
+      <p class="sheet-title indent75"> d：有効高さ</p>
+      <p class="sheet-title indent75">f'<sub>cd</sub>：コンクリートの設計圧縮強度(mm)</p>
+      <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+      <p class="sheet-title indent10">2)a/d＜2.0の場合</p>
+      <p class="sheet-title indent30">γi・V<sub>d</sub>/V<sub>dd</sub>≦1.0</p>
+      <p class="sheet-title indent30">ここに、γ<sub>i</sub>：構造物係数</p>
+      <p class="sheet-title indent75">V<sub>d</sub>：設計せん断力</p>
+      <p class="sheet-title indent75">V<sub>dd</sub>：設計せん断圧縮破壊耐力</p>
+      <p class="sheet-title indent30">V<sub>dd</sub> =
+        (β<sub>d</sub>・β<sub>n</sub>・β<sub>w</sub>)β<sub>p</sub>・β<sub>a</sub>・f<sub>dd</sub>・b<sub>w</sub>・d/γ<sub>b</sub>
+      </p>
+      <p class="sheet-title indent75">f<sub>dd</sub> = 0.19(f'<sub>cd</sub>)<sup>1/2</sup> (Nmm<sup>2</sup>)</p>
+      <p class="sheet-title indent75">β<sub>d</sub> = (1000/d)<sup>1/4</sup> ≦1.5</p>
+      <p class="sheet-title indent75">β<sub>w</sub> = 4.2・(100<sub>pw</sub>)<sup>1/3</sup>・(a/d - 0.75) /
+        (f'<sub>cd</sub>)<sup>1/2</sup>≧0</p>
+      <p class="sheet-title indent75">β<sub>n</sub> = 1+2M<sub>o</sub>/M<sub>u</sub>≦2(N'<sub>d</sub>≧0の場合) </p>
+      <p class="sheet-title indent90">　= 1+4M<sub>0</sub>/M<sub>u</sub>≧0(N'<sub>d</sub>＜0の場合）</p>
+      <p class="sheet-title indent75">β<sub>p</sub> = ｛1 + (100<sub>pc</sub>)<sup>1/3</sup>｝/2≦1.5</p>
+      <p class="sheet-title indent75">β<sub>a</sub> = 5/｛1 + (a/d)<sup>2</sup>｝</p>
+      <p class="sheet-title indent75">b<sub>w</sub>：腹部の幅(mm)</p>
+      <p class="sheet-title indent75"> d ：有効高さ</p>
+      <p class="sheet-title indent75"> a ：支持部前面から荷重載荷点までの距離(mm)</p>
+      <p class="sheet-title indent75">p<sub>c</sub>：せん断引張鋼材比 p<sub>c</sub> = A<sub>s</sub>/(b<sub>w</sub>・d)</p>
+      <p class="sheet-title indent75">A<sub>s</sub>：引張鋼材の断面積(mm<sup>2</sup>)</p>
+      <p class="sheet-title indent75">p<sub>w</sub>：せん断補強鉄筋比 p<sub>w</sub> = A<sub>w</sub>/(b<sub>w</sub>・S<sub>s</sub>)
+      </p>
+      <p class="sheet-title indent90">ただし、p<sub>w</sub>＜0.002となる場合はp<sub>w</sub>＝0とする。</p>
+      <p class="sheet-title indent75">A<sub>w</sub>：区間S<sub>s</sub>における部材軸と直行するせん断補強鉄筋の総断面積(mm<sup>2</sup>)</p>
+      <p class="sheet-title indent75">S<sub>s</sub>：部材軸と直行するせん断補強鉄筋の配置間隔(mm)</p>
+      <p class="sheet-title indent75">M<sub>u</sub>：曲げ耐力</p>
+      <p class="sheet-title indent75">M<sub>o</sub>：設計曲げモーメントM<sub>d</sub>に対する引張縁において、軸方向力によっ</p>
+      <p class="sheet-title indent90">て発生する応力を打ち消すのに必要なモーメント</p>
+      <p class="sheet-title indent75">N'<sub>d</sub>：設計軸方向圧縮力</p>
+      <p class="sheet-title indent75">f'<sub>cd</sub>：コンクリートの設計圧縮強度(N/mm<sup>2</sup>)
+        (＝f'<sub>ck</sub>/γ<sub>c</sub>、γ<sub>c</sub> = 1.3)</p>
+      <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+    </div>
   </div>
-</div>
-<div *ngFor="let pages of safetyShearForcePages; index as i">
-  <div class="sheet">
-    <div class="cell_title1">{{pages.caption}} (その{{i+1}})</div>
-    <div class="cell_title2">[{{pages.g_name}}]</div>
-    <table class="main">
-      <tr>
-        <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left1">部材名称</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">{{column[0].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">位置</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[1].alien}} g-right2 g-bottom1">{{column[1].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">断面番号</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[2].alien}} g-right2 g-bottom2">{{column[2].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">B Bf</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[3].alien}} g-right2 g-bottom1">{{column[3].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">H Ht</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[4].alien}} g-right2 g-bottom1">{{column[4].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">tanθ<sub>c</sub> + tanθ<sub></sub>t</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[5].alien}} g-right2 g-bottom2">{{column[5].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-left1">Ast</th>
-        <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[6].alien}} g-right2">{{column[6].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">引張鉄筋</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[7].alien}} g-right2 g-bottom1">{{column[7].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">dast</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[8].alien}} g-right2 g-bottom1">{{column[8].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-left1">Asc</th>
-        <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[9].alien}} g-right2">{{column[9].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">圧縮鉄筋</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[10].alien}} g-right2 g-bottom1">{{column[10].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">dasc</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[11].alien}} g-right2 g-bottom1">{{column[11].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">側方鉄筋 Ase</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[12].alien}} g-right2 g-bottom1">{{column[12].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom2 g-left1">dase</th>
-        <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[13].alien}} g-right2 g-bottom2">{{column[13].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">f'ck</th>
-        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[14].alien}} g-right2 g-bottom1">{{column[14].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γc</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[15].alien}} g-right2 g-bottom1">{{column[15].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">f'cd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[16].alien}} g-right2 g-bottom1">{{column[16].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">fsyk</th>
-        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[17].alien}} g-right2 g-bottom1">{{column[17].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γs</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[18].alien}} g-right2 g-bottom1">{{column[18].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom2 g-left1">fsyd</th>
-        <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[19].alien}} g-right2 g-bottom2">{{column[19].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Md</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[20].alien}} g-right2 g-bottom1">{{column[20].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">N'd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[21].alien}} g-right2 g-bottom1">{{column[21].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom2 g-left1">Vd</th>
-        <th class="cell_name3 g-right2 g-bottom2">(kN)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[22].alien}} g-right2 g-bottom2">{{column[22].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">せん断スパン(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[23].alien}} g-right2 g-bottom1">{{column[23].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Aw</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm<sub>2</sub>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[24].alien}} g-right2 g-bottom1">{{column[24].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">スターラップ</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[25].alien}} g-right2 g-bottom1">{{column[25].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">fwyd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sub>2</sub>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[26].alien}} g-right2 g-bottom1">{{column[26].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">θs</th>
-        <th class="cell_name3 g-right2 g-bottom1">(° )</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[27].alien}} g-right2 g-bottom1">{{column[27].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Ss</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[28].alien}} g-right2 g-bottom1">{{column[28].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">fvcd fdd (N/mm<sub>2</sub>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom1">{{column[29].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βd</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom1">{{column[30].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βp</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[31].alien}} g-right2 g-bottom1">{{column[31].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Mu</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[32].alien}} g-right2 g-bottom1">{{column[32].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Mo</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[33].alien}} g-right2 g-bottom1">{{column[33].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βn</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[34].alien}} g-right2 g-bottom1">{{column[34].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">せん断スパン比</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[35].alien}} g-right2 g-bottom1">{{column[35].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βaf (a/d)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[36].alien}} g-right2 g-bottom1">{{column[36].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">pw</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[37].alien}} g-right2 g-bottom1">{{column[37].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βw cotθ</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[38].alien}} g-right2 g-bottom1">{{column[38].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbc</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[39].alien}} g-right2 g-bottom1">{{column[39].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Vcd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[40].alien}} g-right2 g-bottom1">{{column[40].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbs</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom1">{{column[41].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Vsd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[42].alien}} g-right2 g-bottom1">{{column[42].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Vyd Vdd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom1">{{column[43].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">γi</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[44].alien}} g-right2 g-bottom2">{{column[44].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi・Vd/Vyd</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[45].alien}} g-right2 g-bottom1">{{column[45].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[46].alien}} g-right2 g-bottom2">{{column[46].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">fwcd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sub>2</sub>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[47].alien}} g-right2 g-bottom1">{{column[47].value}}</td>
-      </tr>
-      <tr>
-        <th class="cell_name2 g-bottom1 g-left1">Vwcd</th>
-        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[48].alien}} g-right2 g-bottom1">{{column[48].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi・Vd/Vwcd</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[49].alien}} g-right2 g-bottom1">{{column[49].value}}</td>
-      </tr>
-      <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column[50].alien}} g-right2 g-bottom2">{{column[50].value}}</td>
-      </tr>
-    </table>
+  <div *ngFor="let pages of safetyShearForcePages; index as i">
+    <div class="sheet">
+      <div class="cell_title1">{{pages.caption}} (その{{i+1}})</div>
+      <div class="cell_title2">[{{pages.g_name}}]</div>
+      <table class="main">
+        <tr>
+          <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left1">部材名称</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">
+            {{column[0].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">位置</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[1].alien}} g-right2 g-bottom1">
+            {{column[1].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">断面番号</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[2].alien}} g-right2 g-bottom2">
+            {{column[2].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">B Bf</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[3].alien}} g-right2 g-bottom1">
+            {{column[3].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">H Ht</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[4].alien}} g-right2 g-bottom1">
+            {{column[4].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">tanθ<sub>c</sub> + tanθ<sub></sub>t</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[5].alien}} g-right2 g-bottom2">
+            {{column[5].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Ast</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[6].alien}} g-right2">{{column[6].value}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">引張鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[7].alien}} g-right2 g-bottom1">
+            {{column[7].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">dast</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[8].alien}} g-right2 g-bottom1">
+            {{column[8].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Asc</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[9].alien}} g-right2">{{column[9].value}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">圧縮鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[10].alien}} g-right2 g-bottom1">
+            {{column[10].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">dasc</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[11].alien}} g-right2 g-bottom1">
+            {{column[11].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">側方鉄筋 Ase</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[12].alien}} g-right2 g-bottom1">
+            {{column[12].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">dase</th>
+          <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[13].alien}} g-right2 g-bottom2">
+            {{column[13].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">f'ck</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[14].alien}} g-right2 g-bottom1">
+            {{column[14].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γc</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[15].alien}} g-right2 g-bottom1">
+            {{column[15].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">f'cd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[16].alien}} g-right2 g-bottom1">
+            {{column[16].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fsyk</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[17].alien}} g-right2 g-bottom1">
+            {{column[17].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γs</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[18].alien}} g-right2 g-bottom1">
+            {{column[18].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">fsyd</th>
+          <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[19].alien}} g-right2 g-bottom2">
+            {{column[19].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Md</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[20].alien}} g-right2 g-bottom1">
+            {{column[20].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">N'd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[21].alien}} g-right2 g-bottom1">
+            {{column[21].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">Vd</th>
+          <th class="cell_name3 g-right2 g-bottom2">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[22].alien}} g-right2 g-bottom2">
+            {{column[22].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">せん断スパン(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[23].alien}} g-right2 g-bottom1">
+            {{column[23].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Aw</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[24].alien}} g-right2 g-bottom1">
+            {{column[24].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">スターラップ</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[25].alien}} g-right2 g-bottom1">
+            {{column[25].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fwyd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[26].alien}} g-right2 g-bottom1">
+            {{column[26].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">θs</th>
+          <th class="cell_name3 g-right2 g-bottom1">(° )</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[27].alien}} g-right2 g-bottom1">
+            {{column[27].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Ss</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[28].alien}} g-right2 g-bottom1">
+            {{column[28].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">fvcd fdd (N/mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom1">
+            {{column[29].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βd</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom1">
+            {{column[30].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βp</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[31].alien}} g-right2 g-bottom1">
+            {{column[31].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Mu</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[32].alien}} g-right2 g-bottom1">
+            {{column[32].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Mo</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[33].alien}} g-right2 g-bottom1">
+            {{column[33].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βn</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[34].alien}} g-right2 g-bottom1">
+            {{column[34].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">せん断スパン比</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[35].alien}} g-right2 g-bottom1">
+            {{column[35].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βaf (a/d)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[36].alien}} g-right2 g-bottom1">
+            {{column[36].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">pw</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[37].alien}} g-right2 g-bottom1">
+            {{column[37].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βw cotθ</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[38].alien}} g-right2 g-bottom1">
+            {{column[38].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbc</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[39].alien}} g-right2 g-bottom1">
+            {{column[39].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vcd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[40].alien}} g-right2 g-bottom1">
+            {{column[40].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbs</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom1">
+            {{column[41].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vsd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[42].alien}} g-right2 g-bottom1">
+            {{column[42].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vyd Vdd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom1">
+            {{column[43].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">γi</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[44].alien}} g-right2 g-bottom2">
+            {{column[44].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi・Vd/Vyd</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[45].alien}} g-right2 g-bottom1">
+            {{column[45].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[46].alien}} g-right2 g-bottom2">
+            {{column[46].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fwcd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[47].alien}} g-right2 g-bottom1">
+            {{column[47].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vwcd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[48].alien}} g-right2 g-bottom1">
+            {{column[48].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi・Vd/Vwcd</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[49].alien}} g-right2 g-bottom1">
+            {{column[49].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[50].alien}} g-right2 g-bottom2">
+            {{column[50].value}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
-</div>
+
+</ng-container>
 
 <div *ngIf="err.length > 0" class="sheet">
-  <p >{{err}}</p>
+  <p>{{err}}</p>
 </div>

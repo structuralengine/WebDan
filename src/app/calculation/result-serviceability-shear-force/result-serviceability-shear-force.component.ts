@@ -19,7 +19,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public serviceabilityShearForcePages: any[];
+  public serviceabilityShearForcePages: any[] = new Array();
   private title = "耐久性 せん断ひび割れの照査結果";
 
   constructor(
@@ -42,7 +42,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("serviceabilityShearForce", null);
+      this.summary.setSummaryTable("serviceabilityShearForce");
       return;
     }
 
@@ -63,7 +63,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("serviceabilityShearForce", null);
+        this.summary.setSummaryTable("serviceabilityShearForce");
       }
     );
   }

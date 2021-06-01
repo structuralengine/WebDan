@@ -33,7 +33,7 @@ export class CalcSummaryTableService {
     }
   }
 
-  public setSummaryTable(target: string, value: any){
+  public setSummaryTable(target: string, value: any = null){
     this.setValue(target, value);
     this.summaryDone[target] = true; 
 
@@ -47,7 +47,7 @@ export class CalcSummaryTableService {
 
   }
 
-  private setValue(target: string, value: any = null): void{
+  private setValue(target: string, value: any): void{
 
     if(value === null){
       return;

@@ -22,7 +22,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public restorabilityMomentPages: any[];
+  public restorabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -44,7 +44,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("restorabilityMoment", null);
+      this.summary.setSummaryTable("restorabilityMoment");
       return;
     }
 
@@ -65,7 +65,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
-        this.summary.setSummaryTable("restorabilityMoment", null);
+        this.summary.setSummaryTable("restorabilityMoment");
       }
     );
 

@@ -18,7 +18,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public safetyFatigueShearForcepages: any[];
+  public safetyFatigueShearForcepages: any[] = new Array();
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
   private title = "安全性（疲労破壊）せん断力の照査結果";
@@ -46,7 +46,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
-      this.summary.setSummaryTable("safetyFatigueShearForce", null);
+      this.summary.setSummaryTable("safetyFatigueShearForce");
       return;
     }
 
@@ -59,7 +59,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     } catch (e) {
       this.err = e.toString();
       this.isFulfilled = false;
-      this.summary.setSummaryTable("safetyFatigueShearForce", null);
+      this.summary.setSummaryTable("safetyFatigueShearForce");
     }
     this.isLoading = false;
   }
