@@ -71,6 +71,8 @@ export class SetPostDataService {
         // 送信post データの生成
         for (const force of position.designForce) {
 
+          force['index'] = position.index;
+
           // 断面力の調整
           const data = {
             index: position.index,
@@ -88,7 +90,7 @@ export class SetPostDataService {
             data['SectionElastic'] = section.SectionElastic;
 
             // 鉄筋の本数
-            const steel = this.steel.getPostData(member, position.index, force.side, section.shape, safety);
+            const steel = this.steel.getPostData(member, force.index, force.side, section.shape, safety);
             data['Steels'] = steel.Steels;
             data['SteelElastic'] = steel.SteelElastic;
 
