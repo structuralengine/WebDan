@@ -560,6 +560,9 @@ export class SetBarService {
       case "Circle": // 円形
       case "Ring": // 円環
         tension = this.rebarInfo(bar.rebar1);
+        if(tension === null){
+          throw("引張鉄筋情報がありません");
+        }
         if(tension.rebar_ss === null){
           const D = h - tension.dsc * 2;
           tension.rebar_ss = D / tension.line;
@@ -570,6 +573,9 @@ export class SetBarService {
       case "VerticalOval": // 鉛直方向小判形
         tension = this.rebarInfo(bar.rebar1);
         compres = this.rebarInfo(bar.rebar2);
+        if(tension === null){
+          throw("引張鉄筋情報がありません");
+        }
         if(tension.rebar_ss === null){
           const D = h - tension.dsc * 2;
           tension.rebar_ss = D / tension.line;
@@ -579,6 +585,9 @@ export class SetBarService {
       case "HorizontalOval": // 水平方向小判形
         tension = this.rebarInfo(bar.rebar1);
         compres = this.rebarInfo(bar.rebar2);
+        if(tension === null){
+          throw("引張鉄筋情報がありません");
+        }
         if(tension.rebar_ss === null){
           tension.rebar_ss = (b - h) / tension.line;
         }
@@ -598,6 +607,10 @@ export class SetBarService {
             compres = this.rebarInfo(bar.rebar1);
             break;
         }
+        if(tension === null){
+          const bar = this.bars.getCalcData(index);
+          throw("引張鉄筋情報がありません");
+        }
         if(tension.rebar_ss === null){
           tension.rebar_ss = b / tension.line;
         }
@@ -608,8 +621,7 @@ export class SetBarService {
         break;
 
       default:
-        console.log("断面形状：" + shapeName + " は適切ではありません。");
-        return null;
+        throw("断面形状：" + shapeName + " は適切ではありません。");
     }
     return result;
   }

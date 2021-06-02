@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { utils, write, read, WorkBook } from 'xlsx';
-import { saveAs } from 'file-saver';
 
 @Injectable({
   providedIn: 'root'
