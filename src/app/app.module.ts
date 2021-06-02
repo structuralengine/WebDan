@@ -21,6 +21,7 @@ import { AppComponent } from './app.component';
 import { HotTableModule } from '@handsontable/angular';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPrintModule } from 'ngx-print';
 
 import { DataHelperModule } from './providers/data-helper.module';
 import { InputBasicInformationService } from './components/basic-information/basic-information.service';
@@ -99,6 +100,7 @@ import { environment } from 'src/environments/environment';
     DragDropModule,
     BrowserAnimationsModule,
     NgbModule,
+    NgxPrintModule,
     HotTableModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule,

@@ -195,13 +195,6 @@ export class InputBarsService {
       })
     ).temp;
 
-
-    const bar_list = JSON.parse(
-      JSON.stringify({
-        temp: this.bar_list,
-      })
-    ).temp;
-
     const positions = this.points.getSameGroupePoints(index);
     const start = positions.findIndex(v=>v.index === index);
 
