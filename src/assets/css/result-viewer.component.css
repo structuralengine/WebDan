@@ -1,0 +1,199 @@
+
+/* ページレイアウト (section.sheet を１ページとする) */
+.HtmlPage {
+  font-family: "ＭＳ 明朝", "HG明朝E", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ＭＳ Ｐ明朝", serif;
+  /* マージン・パディングをリセットした方がデザインしやすい */
+  margin: 0;
+  padding: 0;
+  display: inline-block;
+  /* インラインブロック要素にする */
+}
+
+.sheet {
+  background: white;
+  /* 背景を白く 
+  box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+  /* ドロップシャドウ
+  */
+  box-sizing: border-box;
+  margin: 5mm auto;
+  overflow: hidden;
+  position: relative;
+  page-break-after: always;
+  /* 用紙サイズ A4 */
+  height: 1123px;
+  width: 794px;
+  /* 余白サイズ */
+  padding-top: 83px;
+  padding-left: 113px;
+  padding-right: 113px;
+}
+
+.sheet-title {
+  margin: 0;
+  font-size: 14px;
+  text-align: left;
+}
+.sheet-title .indent10 {
+  text-indent: 1em;
+}
+.sheet-title .indent20 {
+  text-indent: 2em;
+}
+.sheet-title .indent30 {
+  text-indent: 3em;
+}
+.sheet-title .indent40 {
+  text-indent: 4em;
+}
+.sheet-title .indent50 {
+  text-indent: 5em;
+}
+.sheet-title .indent60 {
+  text-indent: 6em;
+}
+.sheet-title .indent65 {
+  text-indent: 6.5em;
+}
+.sheet-title .indent70 {
+  text-indent: 7em;
+}
+.sheet-title .indent75 {
+  text-indent: 7.5em;
+}
+.sheet-title .indent80 {
+  text-indent: 8em;
+}
+.sheet-title .indent90 {
+  text-indent: 9em;
+}
+.sheet-title .indent95 {
+  text-indent: 9.5em;
+}
+.sheet-title .indent100 {
+  text-indent: 10em;
+}
+.sheet-title .indent105 {
+  text-indent: 10.5em;
+}
+.sheet-title .indent110 {
+  text-indent: 11em;
+}
+.sheet-title .indent120 {
+  text-indent: 12em;
+}
+.sheet-title .indent_title {
+  text-align: center;
+}
+
+p.noword {
+  margin-bottom: 14pt;
+}
+
+p.caption {
+  text-align: center;
+}
+
+table.title {
+  text-align: center;
+  border: 1px solid black;
+  font-size: 12px;
+  width: 454px;
+  table-layout: fixed;
+}
+
+table.formula {
+  text-align: center;
+  font-size: 12px;
+  margin: 0;
+}
+table.formula .top {
+  border-top: 1px solid black;
+}
+table.formula .bottom {
+  border-bottom: 1px solid black;
+}
+
+.cell_title1 {
+  font-size: 10pt;
+  text-align: left;
+}
+
+.cell_title2 {
+  font-size: 10pt;
+  text-align: right;
+}
+
+table{
+  border-spacing:0
+}
+
+table.main {
+  font-size: 9px;
+  table-layout: fixed;
+  margin: 0;
+}
+table.main tr {
+  height: 12px;
+}
+table.main th {
+  text-align: center;
+  white-space: nowrap;
+}
+table.main td {
+  width: 91px;
+  height: 12px;
+}
+table.main .left {
+  text-align: left;
+  padding-left: 10px;
+}
+table.main .center {
+  text-align: center;
+}
+table.main .right {
+  text-align: right;
+  padding-right: 10px;
+}
+table.main .cell_name1 {
+  width: 113px;
+}
+table.main .cell_name2 {
+  width: 53px;
+}
+table.main .cell_name3 {
+  width: 60px;
+}
+table.main .g-top1 {
+  border-top: 1px solid lightgray;
+}
+table.main .g-right1 {
+  border-right: 1px solid lightgray;
+}
+table.main .g-bottom1 {
+  border-bottom: 1px solid lightgray;
+}
+table.main .g-left1 {
+  border-left: 1px solid lightgray;
+}
+table.main .g-top2 {
+  border-top: 1px solid black;
+}
+table.main .g-right2 {
+  border-right: 1px solid black;
+}
+table.main .g-bottom2 {
+  border-bottom: 1px solid black;
+}
+table.main .g-left2 {
+  border-left: 1px solid black;
+}
+
+.center {
+  text-align: center;
+}
+
+.caption-top {
+  caption-side: top;
+  font-size: 12px;
+}

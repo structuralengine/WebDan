@@ -46,13 +46,12 @@
     "firebase": "^8.3.3",
     "handsontable": "^8.0.0",
     "jquery-ui-pack": "^1.12.3",
+    "ngx-print": "^1.2.1",
     "numbro": "^2.1.1",
     "pqgrid": "^7.7.0",
-    "print-js": "^1.0.61",
     "rxjs": "~6.6.2",
     "rxjs-compat": "^6.5.3",
     "tslib": "^2.0.0",
-    "xlsx": "^0.17.0",
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
