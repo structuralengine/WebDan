@@ -2,373 +2,336 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="!isLoading">
-  <ng-container *ngIf="isFulfilled">
+<ng-container *ngIf="serviceabilityShearForcePages?.length > 0">
 
-    <section class="sheet" id="ap_6">
-      <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-        <!--タイトル-->
-        <g font-size="10pt" text-anchor="start">
-            <text x="0" y="42">(b)せん断ひび割れの検討【コンクリート標準　10.2.2.5】</text>
-            <text x="0" y="60">1)せん断ひび割れの検討を省略できる部材</text>
-            <text x="19" y="79">永久作用と変動作用が組み合わされた時の設計せん断</text>
-            <text x="347" y="79">
-              V<tspan baseline-shift="0%" font-size="8pt">d</tspan>
-            </text>
-            <text x="364" y="79">が、せん断補強鋼材を用い</text>
-            <text x="0" y="98">ない棒部材の設計せん断耐力</text>
-            <text x="175" y="98">
-              V<tspan baseline-shift="0%" font-size="8pt">cd</tspan>
-            </text>
-            <text x="200" y="98">の70％よりも小さい場合には、せん断ひび割れの検討は</text>
-            <text x="0" y="117">省略できる。なお、この</text>
-            <text x="147" y="117">
-              V<tspan baseline-shift="0%" font-size="8pt">cd</tspan>
-            </text>
-            <text x="166" y="117">を求める場合、コンクリートの材料の材料係数</text>
-            <text x="451" y="117">
-              γ<tspan baseline-shift="0%" font-size="8pt">c</tspan>
-            </text>
-            <text x="474" y="117">および</text>
-            <text x="0" y="136">
-              γ<tspan baseline-shift="0%" font-size="8pt">b</tspan>
-            </text>
-            <text x="20" y="136">は1.0とする。</text>
-    
-            <text x="0" y="174">2)せん断ひび割れの検討</text> 
-            <text x="19" y="193">せん断ひび割れの検討においては、永久作用によるせん断補強筋の応力度</text>
-            <text x="460" y="193">
-              σ<tspan baseline-shift="0%" font-size="8pt">wpd</tspan>
-            </text>
-            <text x="510" y="193"></text>
-            <text x="0" y="212">を表3.4.2に示す限界値</text> 
-            <text x="136" y="212">
-              σ<tspan baseline-shift="0%" font-size="8pt">s12</tspan>
-            </text>
-            <text x="174" y="212">以内とすることにより、せん断ひび割れ幅に関する検討を</text>
-            <text x="0" y="231">省略してよい。</text>
-            <text x="19" y="250">
-              σ<tspan baseline-shift="0%" font-size="8pt">wpd</tspan>
-            </text>
-            <text x="57" y="250">≦</text>
-            <text x="72" y="250">
-              σ<tspan baseline-shift="0%" font-size="8pt">s12</tspan>
-            </text>
-            <text x="19" y="269">ここに、</text>
-            <text x="76" y="269">
-              σ<tspan baseline-shift="0%" font-size="8pt">wpd</tspan>
-            </text> 
-            <text x="114" y="269">: 永久作用によるせん断補強筋の設計応力度</text>
-            <text x="384" y="269">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-    
-            <text x="163" y="288">
-              (V<tspan baseline-shift="0%" font-size="8pt">pd</tspan>
-            </text> 
-            <text x="191" y="288">
-              + V<tspan baseline-shift="0%" font-size="8pt">rd</tspan>
-            </text> 
-            <text x="225" y="288">
-              - k<tspan baseline-shift="0%" font-size="8pt">r</tspan>
-            </text>  
-            <text x="245" y="288">
-              ・V<tspan baseline-shift="0%" font-size="8pt">cd</tspan>)s
-            </text> 
-    
-            <text x="357" y="288">
-              V<tspan baseline-shift="0%" font-size="8pt">pd</tspan>
-            </text> 
-            <text x="380" y="288">
-              + V<tspan baseline-shift="0%" font-size="8pt">cd</tspan>
-            </text> 
-    
-            <text x="113" y="297">
-              σ<tspan baseline-shift="0%" font-size="8pt">wpd</tspan>  ＝
-            </text> 
-            <text x="299" y="297">・</text>
-    
-            <text x="170" y="307">
-              A<tspan baseline-shift="0%" font-size="8pt">w</tspan>・z・(sinθ+cosθ)
-            </text>
-            <text x="299" y="297">・</text>
-            <text x="333" y="307">
-              V<tspan baseline-shift="0%" font-size="8pt">pd</tspan>
-            </text> 
-            <text x="359" y="307">
-              + V<tspan baseline-shift="0%" font-size="8pt">rd</tspan>
-            </text> 
-            <text x="394" y="307">
-              + V<tspan baseline-shift="0%" font-size="8pt">cd</tspan>
-            </text> 
-    
-            <text x="76" y="326">
-              σ<tspan baseline-shift="0%" font-size="8pt">s12</tspan>
-            </text>
-            <text x="106" y="326">: せん断またはねじりひび割れ幅の検討を省略できる部材における永久作</text>
-            <text x="113" y="345">
-              用による鉄筋応力度の制限幅(N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="83" y="364">
-              V<tspan baseline-shift="0%" font-size="8pt">pd</tspan>
-            </text>
-            <text x="106" y="364">: 永久作用による設計せん断力(N)</text>
-            <text x="83" y="383">
-              V<tspan baseline-shift="0%" font-size="8pt">rd</tspan>
-            </text>
-            <text x="106" y="383">: 変動作用による設計せん断力(N)</text>
-            <text x="83" y="402">
-              V<tspan baseline-shift="0%" font-size="8pt">cd</tspan>
-            </text>
-            <text x="106" y="402">: せん断補強鉄筋を用いない棒部材の設計せん断力(N)</text>
-            <text x="113" y="421">
-              (この場合の部材係数γ<tspan baseline-shift="0%" font-size="8pt">b</tspan>は1.0とする。)
-            </text>
-            <text x="91" y="440">
-                k<tspan baseline-shift="0%" font-size="8pt">r</tspan>
-            </text>
-            <text x="106" y="440">: 変動作用の頻度の影響を考慮するための係数で0.5とする。</text>
-            <text x="91" y="459">s</text>
-            <text x="106" y="459">: せん断補強鉄筋の配置間隔</text><text x="280" y="459">(mm)</text>
-            <text x="89" y="478">
-                A<tspan baseline-shift="0%" font-size="8pt">w</tspan>
-            </text>
-            <text x="106" y="478">
-                  : 区間sにおけるせん断補強鉄筋の総断面積(mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="87" y="497">θ</text>
-            <text x="102" y="497">: せん断補強鉄筋が部材軸となる角度(＝90°)</text>
-            <text x="91" y="516">z</text>
-            <text x="102" y="516">: 圧力応力の合力位置から引張鋼材の図心までの距離でｄ/1.15とする。</text>
-            <text x="91" y="535">d</text>
-            <text x="102" y="535">: 有効高さ (mm)</text>
-            
-            <text x="30" y="573">表3.3.2 せん断またはねじれひび割れの検討を省略出来る</text>
-            <text x="19" y="592">部材における永久作用による鉄筋応力度の制限値</text>
-            <text x="313" y="592">
-                σ<tspan baseline-shift="0%" font-size="8pt">12</tspan>
-            </text>
-            <text x="341" y="592">
-                (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-    
-            <text x="26" y="615">鉄筋の種類</text>
-            <text x="189" y="611">鋼材の腐食に対する環境条件</text>
-            <text x="132" y="630">一般の環境</text> 
-            <text x="246" y="630">腐食性環境</text>
-            <text x="359" y="630">特に厳しい腐食性環境</text>
-            <text x="26" y="649">異形鉄筋</text>
-            <text x="26" y="668">普通丸鋼</text> 
-            <text x="163" y="649">120</text>
-            <text x="163" y="668">100</text>
-            <text x="276" y="649">100</text>
-            <text x="280" y="668">80</text>
-            <text x="423" y="649">80</text>
-            <text x="423" y="668">60</text>
-    
-            
-            
-    
-    
-             <!--横線-->
-             <g fill="none" stroke="black">
-              <line stroke-width="0.30" x1="163" y1="295" x2="287" y2="295" />
-              <line stroke-width="0.30" x1="321" y1="295" x2="446" y2="295" />
-    
-              <line stroke-width="0.50" x1="0" y1="594" x2="510" y2="594" />
-              <line stroke-width="0.50" x1="113" y1="613" x2="510" y2="613" />
-              <line stroke-width="0.50" x1="0" y1="632" x2="510" y2="632" />
-              <line stroke-width="0.50" x1="0" y1="651" x2="510" y2="651" />
-              <line stroke-width="0.50" x1="0" y1="670" x2="510" y2="670" />
-            </g> 
-    
-            <!--縦線-->
-            <g fill="none" stroke="black">
-                <line stroke-width="0.50" x1="0" y1="594" x2="0" y2="670" />
-                <line stroke-width="0.50" x1="113" y1="594" x2="113" y2="670" />
-                <line stroke-width="0.50" x1="227" y1="613" x2="227" y2="670" />
-                <line stroke-width="0.50" x1="340" y1="613" x2="340" y2="670" />
-                <line stroke-width="0.50" x1="510" y1="594" x2="510" y2="670" />
-              </g>
-      </g> 
-      </svg>
-    </section>
+  <div class="sheet" id="{{page_index}}">
+    <div class="sheet-title">
+      <p>(b)せん断ひび割れの検討【コンクリート標準　10.2.2.5】</p>
+      <p>1)せん断ひび割れの検討を省略できる部材</p>
+      <p class="sheet-title indent10">永久作用と変動作用が組み合わされた時の設計せん断V<sub>d</sub>が、せん断補強鋼材を用い</p>
+      <p class="sheet-title">ない棒部材の設計せん断耐力V<sub>cd</sub>の70％よりも小さい場合には、せん断ひび割れの検討は</p>
+      <p class="sheet-title">省略できる。なお、このV<sub>cd</sub>を求める場合、コンクリートの材料の材料係数γ<sub>c</sub>および</p>
+      <p class="noword sheet-title">γ<sub>b</sub>は1.0とする</p>
+      <p class="sheet-title">2)せん断ひび割れの検討</p>
+      <p class="sheet-title indent10">せん断ひび割れの検討においては、永久作用によるせん断補強筋の応力度σ<sub>wpd</sub></p>
+      <p class="sheet-title">を表3.4.2に示す限界値σ<sub>s12</sub>以内とすることにより、せん断ひび割れ幅に関する検討を</p>
+      <p class="sheet-title">省略してよい。</p>
+      <p class="sheet-title indent10">σ<sub>wpd</sub>≦σ<sub>s12</sub></p>
+      <p class="sheet-title indent10">ここに、σ<sub>wpd</sub>: 永久作用によるせん断補強筋の設計応力度(N/mm<sup>2</sup>)</p>
+      <div align="center">
+        <table class="formula">
+          <tr>
+            <td rowspan="2">σ<sub>wpd</sub> = </td>
+            <td class="bottom">(V<sub>pd</sub> + V<sub>rd</sub> - k<sub>r</sub>・V<sub>cd</sub>)s</td>
+            <td rowspan="2">・</td>
+            <td class="bottom">V<sub>pd</sub> + V<sub>cd</sub></td>
+          </tr>
+          <tr>
+            <td>A<sub>w</sub>・z・(sinθ + cosθ)</td>
+            <td>V<sub>pd</sub> + V<sub>rd</sub> + V<sub>cd</sub></td>
+          </tr>
+        </table>
+      </div>
+      <p class="sheet-title indent50">σ<sub>s12</sub>: せん断またはねじりひび割れ幅の検討を省略できる部材における永久</p>
+      <p class="sheet-title indent80">作用による鉄筋応力度の制限幅(N/mm<sup>2</sup>)</p>
+      <p class="sheet-title indent60">V<sub>pd</sub>: 永久作用による設計せん断力(N)</p>
+      <p class="sheet-title indent60">V<sub>rd</sub>: 変動作用による設計せん断力(N)</p>
+      <p class="sheet-title indent60">V<sub>cd</sub>: せん断補強鉄筋を用いない棒部材の設計せん断力(N)</p>
+      <p class="sheet-title indent80">(この場合の部材係数γ<sub>b</sub>は1.0とする。)</p>
+      <p class="sheet-title indent60">k<sub>r</sub>: 変動作用の頻度の影響を考慮するための係数で0.5とする。</p>
+      <p class="sheet-title indent60">s: せん断補強鉄筋の配置間隔(mm)</p>
+      <p class="sheet-title indent60">A<sub>w</sub>: 区間sにおけるせん断補強鉄筋の総断面積(mm2)</p>
+      <p class="sheet-title indent60">θ: せん断補強鉄筋が部材軸となる角度(＝90°)</p>
+      <p class="sheet-title indent60">z: 圧力応力の合力位置から引張鋼材の図心までの距離でｄ/1.15とする。</p>
+      <p class="noword sheet-title indent60">d: 有効高さ (mm)</p>
+      <p class="caption">表3.3.2 せん断またはねじれひび割れの検討を省略出来る部材における永久作用による鉄筋応力度の制限値σ<sub>12</sub>(N/mm2)</p>
+      <div align="center">
+        <table border="1" class="title">
+          <tr>
+            <td rowspan="2">鉄筋の種類</td>
+            <td colspan="3">鋼材の腐食に対する環境条件</td>
+          </tr>
+          <tr>
+            <td>一般の環境</td>
+            <td>腐食性環境</td>
+            <td>特に厳しい腐食性環境</td>
+          </tr>
+          <tr>
+            <td>異形鉄筋</td>
+            <td>0.005c</td>
+            <td>0.004c</td>
+            <td>0.0035c</td>
+          </tr>
+          <tr>
+            <td>普通丸鋼</td>
+            <td>100</td>
+            <td>80</td>
+            <td>60</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    <ng-container *ngFor="let pages of serviceabilityShearForcePages; index as i">
-      <section class="sheet">
-        <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-          <!--タイトル-->
-          <text x="0" y="42" font-size="9pt" text-anchor="start">{{pages.caption}} (その{{i+1}})</text>
-          <text x="567" y="42" font-size="9pt" text-anchor="end">[{{pages.g_name}}]</text>
+  <div *ngFor="let pages of serviceabilityShearForcePages; index as i">
+    <div class="sheet">
+      <div class="cell_title1">{{pages.caption}} (その{{i+1}})</div>
+      <div class="cell_title2">[{{pages.g_name}}]</div>
+      <table class="main">
+        <tr>
+          <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left1">部材名称</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">
+            {{column[0].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">位置</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[1].alien}} g-right2 g-bottom1">
+            {{column[1].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">断面番号</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[2].alien}} g-right2 g-bottom2">
+            {{column[2].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">B</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[3].alien}} g-right2 g-bottom1">
+            {{column[3].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">H</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[4].alien}} g-right2 g-bottom1">
+            {{column[4].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">tanθ<sub>c</sub> + tanθ<sub></sub>t</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[5].alien}} g-right2 g-bottom2">
+            {{column[5].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Ast</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[6].alien}} g-right2">{{column[6].value}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">引張鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[7].alien}} g-right2 g-bottom1">
+            {{column[7].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">dast</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[8].alien}} g-right2 g-bottom1">
+            {{column[8].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Asc</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[9].alien}} g-right2">{{column[9].value}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">圧縮鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[10].alien}} g-right2 g-bottom1">
+            {{column[10].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">dasc</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[11].alien}} g-right2 g-bottom1">
+            {{column[11].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">側方鉄筋 Ase</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[12].alien}} g-right2 g-bottom1">
+            {{column[12].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">dase</th>
+          <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[13].alien}} g-right2 g-bottom2">
+            {{column[13].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">f'ck</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[14].alien}} g-right2 g-bottom1">
+            {{column[14].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γc</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[15].alien}} g-right2 g-bottom1">
+            {{column[15].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">f'cd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[16].alien}} g-right2 g-bottom1">
+            {{column[16].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fsyk</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[17].alien}} g-right2 g-bottom1">
+            {{column[17].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γs</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[18].alien}} g-right2 g-bottom1">
+            {{column[18].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fsyd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[19].alien}} g-right2 g-bottom1">
+            {{column[19].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Aw</th>
+          <th class="cell_name3 g-right2">(mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[20].alien}} g-right2">
+            {{column[20].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">スターラップ</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[21].alien}} g-right2 g-bottom1">
+            {{column[21].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fwyd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[22].alien}} g-right2 g-bottom1">
+            {{column[22].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">θs</th>
+          <th class="cell_name3 g-right2 g-bottom1">(° )</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[23].alien}} g-right2 g-bottom1">
+            {{column[23].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Ss</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[24].alien}} g-right2 g-bottom1">
+            {{column[24].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">N'd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[25].alien}} g-right2 g-bottom1">
+            {{column[25].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vhd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[26].alien}} g-right2 g-bottom1">
+            {{column[26].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vpd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[27].alien}} g-right2 g-bottom1">
+            {{column[27].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vrd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[28].alien}} g-right2 g-bottom1">
+            {{column[28].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fvcd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sub>2</sub>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom1">
+            {{column[29].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βd</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom1">
+            {{column[30].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">pc</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[31].alien}} g-right2 g-bottom1">
+            {{column[31].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βp</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[32].alien}} g-right2 g-bottom1">
+            {{column[32].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Mu</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[33].alien}} g-right2 g-bottom1">
+            {{column[33].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Mo</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[34].alien}} g-right2 g-bottom1">
+            {{column[34].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">βn</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[35].alien}} g-right2 g-bottom1">
+            {{column[35].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbc</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[36].alien}} g-right2 g-bottom1">
+            {{column[36].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Vcd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[37].alien}} g-right2 g-bottom1">
+            {{column[37].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">Vhd : 0.7/Vcd</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[38].alien}} g-right2 g-bottom1">
+            {{column[38].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">環境条件</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[39].alien}} g-right2 g-bottom1">
+            {{column[39].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">Kr</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[40].alien}} g-right2 g-bottom1">
+            {{column[40].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">γi</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom2">
+            {{column[41].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">σwpd σs12(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[42].alien}} g-right2 g-bottom1">
+            {{column[42].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">γi・σwpd / σ12</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom2">
+            {{column[43].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[44].alien}} g-right2 g-bottom2">
+            {{column[44].value}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-          <!--横線-->
-          <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="0" y1="45" x2="567" y2="45" />
-            <line stroke-width="0.25" x1="0" y1="64" x2="567" y2="64" />
-            <line stroke-width="0.25" x1="0" y1="83" x2="567" y2="83" />
-            <line stroke-width="0.50" x1="0" y1="102" x2="567" y2="102" />
-            <line stroke-width="0.25" x1="0" y1="121" x2="567" y2="121" />
-            <line stroke-width="0.25" x1="0" y1="140" x2="567" y2="140" />
-            <line stroke-width="0.50" x1="0" y1="159" x2="567" y2="159" />
-            <line stroke-width="0.25" x1="0" y1="197" x2="567" y2="197" />
-            <line stroke-width="0.25" x1="0" y1="216" x2="567" y2="216" />
-            <line stroke-width="0.25" x1="0" y1="253" x2="567" y2="253" />
-            <line stroke-width="0.25" x1="0" y1="272" x2="567" y2="272" />
-            <line stroke-width="0.25" x1="0" y1="291" x2="567" y2="291" />
-            <line stroke-width="0.50" x1="0" y1="310" x2="567" y2="310" />
-            <line stroke-width="0.25" x1="0" y1="329" x2="567" y2="329" />
-            <line stroke-width="0.25" x1="0" y1="348" x2="567" y2="348" />
-            <line stroke-width="0.25" x1="0" y1="367" x2="567" y2="367" />
-            <line stroke-width="0.25" x1="0" y1="386" x2="567" y2="386" />
-            <line stroke-width="0.25" x1="0" y1="405" x2="567" y2="405" />
-            <line stroke-width="0.50" x1="0" y1="423" x2="567" y2="423" />
-            <line stroke-width="0.25" x1="0" y1="461" x2="567" y2="461" />
-            <line stroke-width="0.25" x1="0" y1="480" x2="567" y2="480" />
-            <line stroke-width="0.25" x1="0" y1="499" x2="567" y2="499" />
-            <line stroke-width="0.50" x1="0" y1="518" x2="567" y2="518" />
-            <line stroke-width="0.25" x1="0" y1="537" x2="567" y2="537" />
-            <line stroke-width="0.25" x1="0" y1="556" x2="567" y2="556" />
-            <line stroke-width="0.25" x1="0" y1="575" x2="567" y2="575" />
-            <line stroke-width="0.50" x1="0" y1="594" x2="567" y2="594" />
-            <line stroke-width="0.25" x1="0" y1="613" x2="567" y2="613" />
-            <line stroke-width="0.25" x1="0" y1="631" x2="567" y2="631" />
-            <line stroke-width="0.25" x1="0" y1="650" x2="567" y2="650" />
-            <line stroke-width="0.25" x1="0" y1="669" x2="567" y2="669" />
-            <line stroke-width="0.25" x1="0" y1="688" x2="567" y2="688" />
-            <line stroke-width="0.25" x1="0" y1="707" x2="567" y2="707" />
-            <line stroke-width="0.25" x1="0" y1="726" x2="567" y2="726" />
-            <line stroke-width="0.25" x1="0" y1="745" x2="567" y2="745" />
-            <line stroke-width="0.50" x1="0" y1="764" x2="567" y2="764" />
-            <line stroke-width="0.50" x1="0" y1="783" x2="567" y2="783" />
-            <line stroke-width="0.25" x1="0" y1="802" x2="567" y2="802" />
-            <line stroke-width="0.25" x1="0" y1="821" x2="567" y2="821" />
-            <line stroke-width="0.50" x1="0" y1="839" x2="567" y2="839" />
-            <line stroke-width="0.25" x1="0" y1="858" x2="567" y2="858" />
-            <line stroke-width="0.25" x1="0" y1="877" x2="567" y2="877" />
-            <line stroke-width="0.50" x1="0" y1="896" x2="567" y2="896" />
-          </g>
-          <!--縦線-->
-          <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="113" y1="45" x2="113" y2="896" />
-            <line stroke-width="0.25" x1="204" y1="45" x2="204" y2="896" />
-            <line stroke-width="0.25" x1="295" y1="45" x2="295" y2="896" />
-            <line stroke-width="0.25" x1="386" y1="45" x2="386" y2="896" />
-            <line stroke-width="0.25" x1="476" y1="45" x2="476" y2="896" />
-          </g>
-          <!--Row Header-->
-          <g font-size="9pt" text-anchor="middle">
-            <text x="57" y="60">部材名称</text>
-            <text x="57" y="79">位　　置</text>
-            <text x="57" y="98">断面番号</text>
-
-            <text x="30" y="117">B</text><text x="70" y="117">(mm)</text>
-            <text x="30" y="136">H</text><text x="70" y="136">(mm)</text>
-            <text x="57" y="155">tanθc+tanθt</text>
-
-            <text x="30" y="174">Ast</text>
-            <text x="76" y="174">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="193">引張鉄筋</text>
-            <text x="30" y="212">dast</text><text x="70" y="212">(mm)</text>
-
-            <text x="30" y="231">Asc</text>
-            <text x="76" y="231">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="250">圧縮鉄筋</text>
-            <text x="30" y="268">dasc</text><text x="70" y="268">(mm)</text>
-
-            <text x="57" y="287">側方鉄筋　Ase</text>
-            <text x="30" y="306">dase</text><text x="70" y="306">(mm)</text>
-
-            <text x="30" y="325">f'ck</text>
-            <text x="76" y="325">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="344">γc</text>
-            <text x="30" y="363">f'cd</text>
-            <text x="76" y="363">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-
-            <text x="30" y="382">fsyk</text>
-            <text x="76" y="382">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="401">γs</text>
-            <text x="30" y="420">fsyd</text>
-            <text x="76" y="420">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-
-            <text x="30" y="439">Aw</text>
-            <text x="76" y="439">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="458">スターラップ</text>
-            <text x="30" y="476">fwyd</text>
-            <text x="76" y="476">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="30" y="495">θs</text><text x="70" y="495">(° )</text>
-            <text x="30" y="514">Ss</text><text x="70" y="514">(mm)</text>
-
-            <text x="30" y="533">N'd</text><text x="70" y="533">(kN)</text>
-            <text x="30" y="552">Vhd</text><text x="70" y="552">(kN)</text>
-            <text x="30" y="571">Vpd</text><text x="70" y="571">(kN)</text>
-            <text x="30" y="590">Vrd</text><text x="70" y="590">(kN)</text>
-
-            <text x="30" y="609">fvcd</text>
-            <text x="76" y="609">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="628">βd</text>
-            <text x="57" y="647">pc</text>
-            <text x="57" y="665">βp</text>
-            <text x="30" y="684">Mu</text><text x="70" y="684">(kN･m)</text>
-            <text x="30" y="703">Mo</text><text x="70" y="703">(kN･m)</text>
-            <text x="57" y="722">βn</text>
-            <text x="57" y="741">γbc</text>
-            <text x="30" y="760">Vcd</text><text x="80" y="760">(kN)</text>
-
-            <text x="57" y="779">Vhd:0.7/Vcd</text>
-
-            <text x="57" y="798">環境条件</text>
-            <text x="57" y="817">Kr</text>
-            <text x="57" y="836">γi</text>
-
-            <text x="38" y="855">σwpd σs12</text>
-            <text x="95" y="855">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="873">γi・σwpd/σ12</text>
-            <text x="57" y="892">照査結果</text>
-
-          </g>
-
-          <!--calclate-->
-          <g font-size="9pt">
-            <ng-container *ngFor="let column of pages.columns; index as c">
-              <ng-container *ngFor="let item of column; index as r">
-                <ng-container *ngIf="item.value != ''">
-                    <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="199+c*91"
-                    [attr.y]="57+r*19">{{item.value}}</text>
-                  <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="159+c*91"
-                    [attr.y]="57+r*19">{{item.value}}</text>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </g>
-        </svg>
-      </section>
-    </ng-container>
-
-
-  </ng-container>
-  <section *ngIf="err.length > 0" class="sheet">
-      <p >{{err}}</p>
-  </section>
 </ng-container>
+
+<div *ngIf="err.length > 0" class="sheet">
+  <p>{{err}}</p>
+</div>

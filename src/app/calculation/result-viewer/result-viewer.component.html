@@ -37,6 +37,9 @@
   <div class="sticky">
     <!-- 印刷ボタン -->
     <button (click)="print()">Print</button>
+    <ng-container *ngIf="printSummaryTable()">
+      <button (click)="summaryTableShow()">総括表</button>
+    </ng-container>
     <!-- 目次 -->
     <ul>
       <!-- 断面力一覧表 -->

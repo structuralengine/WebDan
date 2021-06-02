@@ -2,200 +2,219 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="!isLoading">
-  <ng-container *ngIf="isFulfilled">
+<ng-container *ngIf="safetyMomentPages?.length > 0">
 
-    <section class="sheet" id="ap_1">
-      <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-        <!--タイトル-->
-        <g font-size="10pt" text-anchor="start">
-            <text x="0" y="42">3.1 安全性の照査</text>
-            <text x="19" y="79">3.1.1破壊に関する 安全性【コンクリート標準　7.2】 </text>
-            <text x="19" y="98">(1)曲げモーメントと軸方向力に対する照査【コンクリート標準 7.2】</text>
-            <text x="38" y="117">曲げモーメントと軸方向力を受ける部材の照査は、設計曲げモーメント</text>
-            <text x="504" y="117">
-              M<tspan baseline-shift="0%" font-size="8pt">d</tspan>
-            </text>
-            <text x="516" y="117">を設計</text>
-            <text x="19" y="136">応答値、設計曲げ耐力</text>
-            <text x="165" y="136">
-              M<tspan baseline-shift="0%" font-size="8pt">ud</tspan>
-            </text>
-            <text x="184" y="136">を設計限界値として以下に示す式により行う。</text>
-            <text x="38" y="155">γi・</text>
-            <text x="70" y="155">
-              M<tspan baseline-shift="0%" font-size="8pt">d</tspan>
-            </text>
-            <text x="81" y="155">/</text>
-            <text x="93" y="155">
-              M<tspan baseline-shift="0%" font-size="8pt">ud</tspan>
-            </text>
-            <text x="112" y="155">≦1.0</text>
-            <text x="38" y="174">ここに、　γi：　構造物係数</text>
-            <text x="106" y="193">
-              M<tspan baseline-shift="0%" font-size="8pt">d</tspan>
-            </text>
-            <text x="121" y="193">：　設計曲げモーメント</text>
-            <text x="106" y="212">
-              M<tspan baseline-shift="0%" font-size="8pt">ud</tspan>
-            </text>
-            <text x="121" y="212">：　設計曲げ耐力(</text>
-            <text x="251" y="212">
-              M<tspan baseline-shift="0%" font-size="8pt">ud</tspan>
-            </text>
-            <text x="270" y="212">=</text>
-            <text x="285" y="212">
-              M<tspan baseline-shift="0%" font-size="8pt">u</tspan>
-            </text>
-            <text x="300" y="212">/</text>
-            <text x="307" y="212">
-              γ<tspan baseline-shift="0%" font-size="8pt">b</tspan>
-            </text>
-            <text x="330" y="212">)</text>
-            <text x="106" y="231">
-              γ<tspan baseline-shift="0%" font-size="8pt">b</tspan>
-            </text>
-            <text x="121" y="231">：　部材係数</text>
-        </g>
+  <div class="sheet" id="{{page_index}}">
+    <div class="sheet-title">
+      <p>3.1 安全性の照査</p>
+      <p></p>
+      <p class="sheet-title indent10">3.1.1破壊に関する 安全性【コンクリート標準　7.2】</p>
+      <p class="sheet-title indent10">(1)曲げモーメントと軸方向力に対する照査【コンクリート標準 7.2】</p>
+      <p class="sheet-title indent20">曲げモーメントと軸方向力を受ける部材の照査は、設計曲げモーメントM<sub>d</sub>を設計</p>
+      <p class="sheet-title indent10">応答値、設計曲げ耐力M<sub>ud</sub>を設計限界値として以下に示す式により行う。</p>
+      <p class="sheet-title indent20">γi・M<sub>d</sub>/M<sub>ud</sub>≦1.0</p>
+      <p class="sheet-title indent20">ここに、　γi：　構造物係数</p>
+      <p class="sheet-title indent80">M<sub>d</sub>：　設計曲げモーメント</p>
+      <p class="sheet-title indent75">M<sub>ud</sub>：　設計曲げ耐力( M<sub>ud</sub>= M<sub>u</sub>/γ<sub>b</sub>)</p>
+      <p class="sheet-title indent75">γ<sub>b</sub>：　部材係数</p>
+    </div>
+  </div>
 
-      </svg>
-    </section>
-    
-    <ng-container *ngFor="let pages of safetyMomentPages; index as i">
-      <section class="sheet">
-        <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-          <!--タイトル-->
-          <text x="0" y="42" font-size="9pt" text-anchor="start">{{pages.caption}} (その{{i+1}})</text>
-          <text x="567" y="42" font-size="9pt" text-anchor="end">[{{pages.g_name}}]</text>
-          <!--横線-->
-          <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="0" y1="45" x2="567" y2="45" />
-            <line stroke-width="0.25" x1="0" y1="64" x2="567" y2="64" />
-            <line stroke-width="0.25" x1="0" y1="83" x2="567" y2="83" />
-            <line stroke-width="0.50" x1="0" y1="102" x2="567" y2="102" />
-            <line stroke-width="0.25" x1="0" y1="121" x2="567" y2="121" />
-            <line stroke-width="0.25" x1="0" y1="140" x2="567" y2="140" />
-            <line stroke-width="0.25" x1="0" y1="159" x2="567" y2="159" />
-            <line stroke-width="0.50" x1="0" y1="178" x2="567" y2="178" />
-            <line stroke-width="0.25" x1="0" y1="216" x2="567" y2="216" />
-            <line stroke-width="0.25" x1="0" y1="234" x2="567" y2="234" />
-            <line stroke-width="0.25" x1="0" y1="272" x2="567" y2="272" />
-            <line stroke-width="0.25" x1="0" y1="291" x2="567" y2="291" />
-            <line stroke-width="0.25" x1="0" y1="329" x2="567" y2="329" />
-            <line stroke-width="0.50" x1="0" y1="348" x2="567" y2="348" />
-            <line stroke-width="0.25" x1="0" y1="367" x2="567" y2="367" />
-            <line stroke-width="0.25" x1="0" y1="386" x2="567" y2="386" />
-            <line stroke-width="0.25" x1="0" y1="405" x2="567" y2="405" />
-            <line stroke-width="0.25" x1="0" y1="423" x2="567" y2="423" />
-            <line stroke-width="0.25" x1="0" y1="442" x2="567" y2="442" />
-            <line stroke-width="0.50" x1="0" y1="461" x2="567" y2="461" />
-            <line stroke-width="0.25" x1="0" y1="480" x2="567" y2="480" />
-            <line stroke-width="0.50" x1="0" y1="499" x2="567" y2="499" />
-            <line stroke-width="0.25" x1="0" y1="518" x2="567" y2="518" />
-            <line stroke-width="0.25" x1="0" y1="537" x2="567" y2="537" />
-            <line stroke-width="0.25" x1="0" y1="556" x2="567" y2="556" />
-            <line stroke-width="0.25" x1="0" y1="575" x2="567" y2="575" />
-            <line stroke-width="0.25" x1="0" y1="594" x2="567" y2="594" />
-            <line stroke-width="0.25" x1="0" y1="613" x2="567" y2="613" />
-            <line stroke-width="0.50" x1="0" y1="631" x2="567" y2="631" />
-            <line stroke-width="0.25" x1="0" y1="650" x2="567" y2="650" />
-            <line stroke-width="0.50" x1="0" y1="669" x2="567" y2="669" />
-          </g>
-          <!--縦線-->
-          <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="113" y1="45" x2="113" y2="669" />
-            <line stroke-width="0.25" x1="204" y1="45" x2="204" y2="669" />
-            <line stroke-width="0.25" x1="295" y1="45" x2="295" y2="669" />
-            <line stroke-width="0.25" x1="386" y1="45" x2="386" y2="669" />
-            <line stroke-width="0.25" x1="476" y1="45" x2="476" y2="669" />
-          </g>
-          <!--Row Header-->
-          <g font-size="9pt" text-anchor="middle">
-            <text x="57" y="60">部材名称</text>
-            <text x="57" y="79">位　　置</text>
-            <text x="57" y="98">断面番号</text>
+  <div *ngFor="let pages of safetyMomentPages; index as i">
+    <div class="sheet">
+      <div class="cell_title1">{{pages.caption}} (その{{i+1}})</div>
+      <div class="cell_title2">[{{pages.g_name}}]</div>
+      <table class="main">
+        <tr>
+          <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left1">部材名称</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">
+            {{column[0].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">位置</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[1].alien}} g-right2 g-bottom1">
+            {{column[1].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">断面番号</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[2].alien}} g-right2 g-bottom2">
+            {{column[2].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">B</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[3].alien}} g-right2 g-bottom1">
+            {{column[3].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">H</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[4].alien}} g-right2 g-bottom1">
+            {{column[4].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Bf</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[5].alien}} g-right2 g-bottom1">
+            {{column[5].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">Hf</th>
+          <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[6].alien}} g-right2 g-bottom2">
+            {{column[6].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Ast</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[7].alien}} g-right2">{{column[7].value}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">引張鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[8].alien}} g-right2 g-bottom1">
+            {{column[8].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">dest</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[9].alien}} g-right2 g-bottom1">
+            {{column[9].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Asc</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[10].alien}} g-right2">
+            {{column[10].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">圧縮鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[11].alien}} g-right2 g-bottom1">
+            {{column[11].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">desc</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[12].alien}} g-right2 g-bottom1">
+            {{column[12].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-left1">Ase</th>
+          <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[13].alien}} g-right2">
+            {{column[13].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">側方鉄筋</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[14].alien}} g-right2 g-bottom1">
+            {{column[14].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">dase</th>
+          <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[15].alien}} g-right2 g-bottom2">
+            {{column[15].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">f'ck</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[16].alien}} g-right2 g-bottom1">
+            {{column[16].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γc</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[17].alien}} g-right2 g-bottom1">
+            {{column[17].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">f'cd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[18].alien}} g-right2 g-bottom1">
+            {{column[18].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">fsyk</th>
+          <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[19].alien}} g-right2 g-bottom1">
+            {{column[19].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γs</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[20].alien}} g-right2 g-bottom1">
+            {{column[20].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">fsyd</th>
+          <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[21].alien}} g-right2 g-bottom2">
+            {{column[21].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Md</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[22].alien}} g-right2 g-bottom1">
+            {{column[22].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left1">N'd</th>
+          <th class="cell_name3 g-right2 g-bottom2">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[23].alien}} g-right2 g-bottom2">
+            {{column[23].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">ε'cu</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[24].alien}} g-right2 g-bottom1">
+            {{column[24].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">εs</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[25].alien}} g-right2 g-bottom1">
+            {{column[25].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">x</th>
+          <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[26].alien}} g-right2 g-bottom1">
+            {{column[26].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Mu</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[27].alien}} g-right2 g-bottom1">
+            {{column[27].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γb</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[28].alien}} g-right2 g-bottom1">
+            {{column[28].value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left1">Mud</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom1">
+            {{column[29].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">γi</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom2">
+            {{column[30].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi･Md/Mud</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[31].alien}} g-right2 g-bottom1">
+            {{column[31].value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column[32].alien}} g-right2 g-bottom2">
+            {{column[32].value}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
 
-            <text x="30" y="117">B</text><text x="70" y="117">(mm)</text>
-            <text x="30" y="136">H</text><text x="70" y="136">(mm)</text>
-            <text x="30" y="155">Bf</text><text x="70" y="155">(mm)</text>
-            <text x="30" y="174">Hf</text><text x="70" y="174">(mm)</text>
-
-            <text x="30" y="193">Ast</text>
-            <text x="76" y="193">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="212">引張鉄筋</text>
-            <text x="30" y="231">dast</text><text x="70" y="231">(mm)</text>
-
-            <text x="30" y="250">Asc</text>
-            <text x="76" y="250">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="268">圧縮鉄筋</text>
-            <text x="30" y="287">dasc</text><text x="70" y="287">(mm)</text>
-
-            <text x="30" y="306">Ase</text>
-            <text x="76" y="306">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="325">側方鉄筋</text>
-            <text x="30" y="344">dase</text><text x="70" y="344">(mm)</text>
-
-            <text x="30" y="363">f'ck</text>
-            <text x="76" y="363">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="382">γc</text>
-            <text x="30" y="401">f'cd</text>
-            <text x="76" y="401">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-
-            <text x="30" y="420">fsyk</text>
-            <text x="76" y="420">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="439">γs</text>
-            <text x="30" y="458">fsyd</text>
-            <text x="76" y="458">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-
-            <text x="30" y="476">Md</text><text x="70" y="476">(kN･m)</text>
-            <text x="30" y="495">N'd</text><text x="70" y="495">(kN)</text>
-
-            <text x="57" y="514">ε'cu</text>
-            <text x="57" y="533">εs</text>
-            <text x="30" y="552">x</text><text x="70" y="552">(mm)</text>
-            <text x="30" y="571">Mu</text><text x="70" y="571">(kN･m)</text>
-            <text x="57" y="590">γb</text>
-            <text x="30" y="609">Mud</text><text x="70" y="609">(kN･m)</text>
-            <text x="57" y="628">γi</text>
-
-            <text x="57" y="647">γi･Md/Mud</text>
-            <text x="57" y="665">照査結果</text>
-          </g>
-          <!--calclate-->
-          <g font-size="9pt">
-            <ng-container *ngFor="let column of pages.columns; index as c">
-              <ng-container *ngFor="let item of column; index as r">
-                <ng-container *ngIf="item.value != ''">
-                  <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="199+c*91"
-                    [attr.y]="60+r*19">{{item.value}}</text>
-                  <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="159+c*91"
-                    [attr.y]="60+r*19">{{item.value}}</text>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </g>
-        </svg>
-      </section>
-    </ng-container>
-
-  </ng-container>
-  <section *ngIf="err.length > 0" class="sheet">
-      <p >{{err}}</p>
-  </section>
 </ng-container>
+
+<div *ngIf="err.length > 0" class="sheet">
+  <p >{{err}}</p>
+</div>

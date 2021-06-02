@@ -8,6 +8,7 @@ import { InputDesignPointsService } from "src/app/components/design-points/desig
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-safety-fatigue-moment",
@@ -15,7 +16,7 @@ import { InputFatiguesService } from "src/app/components/fatigues/fatigues.servi
   styleUrls: ["../result-viewer/result-viewer.component.scss"],
 })
 export class ResultSafetyFatigueMomentComponent implements OnInit {
-  public safetyFatigueMomentPages: any[];
+  public safetyFatigueMomentPages: any[] = new Array();
 
   public isLoading = true;
   public isFulfilled = false;
@@ -32,7 +33,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     private section: SetSectionService,
     private bar: SetBarService,
     private points: InputDesignPointsService,
-    private fatigue: InputFatiguesService
+    private fatigue: InputFatiguesService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -48,6 +50,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("SafetyFatigueMoment");
       return;
     }
 
@@ -63,10 +66,12 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("SafetyFatigueMoment", this.safetyFatigueMomentPages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("SafetyFatigueMoment");
       }
     );
   }
@@ -194,6 +199,11 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             column.push(resultColumn.ri);
             column.push(resultColumn.ratio);
             column.push(resultColumn.result);
+
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
 
             page.columns.push(column);
           }

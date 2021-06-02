@@ -7,6 +7,7 @@ import { InputDesignPointsService } from "src/app/components/design-points/desig
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-safety-fatigue-shear-force",
@@ -17,7 +18,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public safetyFatigueShearForcepages: any[];
+  public safetyFatigueShearForcepages: any[] = new Array();
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
   private title = "安全性（疲労破壊）せん断力の照査結果";
@@ -28,7 +29,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     private section: SetSectionService,
     private bar: SetBarService,
     private points: InputDesignPointsService,
-    private fatigue: InputFatiguesService
+    private fatigue: InputFatiguesService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -44,6 +46,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("safetyFatigueShearForce");
       return;
     }
 
@@ -52,9 +55,11 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       this.safetyFatigueShearForcepages = this.setSafetyFatiguePages(postData);
       this.isFulfilled = true;
       this.calc.isEnable = true;
+      this.summary.setSummaryTable("safetyFatigueShearForce", this.safetyFatigueShearForcepages);
     } catch (e) {
       this.err = e.toString();
       this.isFulfilled = false;
+      this.summary.setSummaryTable("safetyFatigueShearForce");
     }
     this.isLoading = false;
   }
@@ -183,6 +188,11 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             column.push(resultColumn.ratio);
             column.push(resultColumn.result);
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+                        
             page.columns.push(column);
           }
         }

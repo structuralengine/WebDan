@@ -7,6 +7,7 @@ import { ResultDataService } from '../result-data.service';
 import { InputDesignPointsService } from 'src/app/components/design-points/design-points.service';
 import { SetBarService } from '../set-bar.service';
 import { SetSectionService } from '../set-section.service';
+import { CalcSummaryTableService } from '../result-summary-table/calc-summary-table.service';
 
 
 @Component({
@@ -21,7 +22,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public restorabilityMomentPages: any[];
+  public restorabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -30,7 +31,9 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     private result: ResultDataService,
     private section: SetSectionService,
     private bar: SetBarService,
-    private points: InputDesignPointsService ) { }
+    private points: InputDesignPointsService,
+    private summary: CalcSummaryTableService 
+    ) { }
 
   ngOnInit() {
     this.isLoading = true;
@@ -41,6 +44,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("restorabilityMoment");
       return;
     }
 
@@ -56,10 +60,12 @@ export class ResultRestorabilityMomentComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("restorabilityMoment", this.restorabilityMomentPages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("restorabilityMoment");
       }
     );
 
@@ -169,6 +175,11 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             column.push({ alien: 'right', value: resultColumn.ri.toFixed(2) });
             column.push({ alien: 'right', value: resultColumn.ratio.toFixed(3) });
             column.push({ alien: 'center', value: resultColumn.result });
+
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
 
             page.columns.push(column);
           }

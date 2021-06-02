@@ -8,6 +8,7 @@ import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/re
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetBarService } from "../set-bar.service";
 import { SetSectionService } from "../set-section.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-serviceability-shear-force",
@@ -18,7 +19,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public serviceabilityShearForcePages: any[];
+  public serviceabilityShearForcePages: any[] = new Array();
   private title = "耐久性 せん断ひび割れの照査結果";
 
   constructor(
@@ -28,7 +29,8 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     private result: ResultDataService,
     private section: SetSectionService,
     private bar: SetBarService,
-    private points: InputDesignPointsService
+    private points: InputDesignPointsService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -40,6 +42,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("serviceabilityShearForce");
       return;
     }
 
@@ -55,10 +58,12 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("serviceabilityShearForce", this.serviceabilityShearForcePages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("serviceabilityShearForce");
       }
     );
   }
@@ -66,8 +71,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
   // 計算結果を集計する
   private setPages(OutputData: any): boolean {
     try {
-      this.serviceabilityShearForcePages =
-        this.setServiceabilityPages(OutputData);
+      this.serviceabilityShearForcePages = this.setServiceabilityPages(OutputData);
       return true;
     } catch (e) {
       this.err = e.toString();
@@ -189,6 +193,11 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             column.push(resultColumn.Ratio);
             column.push(resultColumn.Result);
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+                        
             page.columns.push(column);
           }
         }

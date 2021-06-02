@@ -4,6 +4,8 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcDurabilityMomentService } from "./calc-durability-moment.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultServiceabilityMomentComponent } from "../result-serviceability-moment/result-serviceability-moment.component";
+import { CalcSafetyMomentService } from "../result-safety-moment/calc-safety-moment.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-durability-moment",
@@ -17,13 +19,14 @@ export class ResultDurabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public serviceabilityMomentPages: any[];
+  public serviceabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
     private calc: CalcDurabilityMomentService,
     private post: SetPostDataService,
-    private base: ResultServiceabilityMomentComponent
+    private base: ResultServiceabilityMomentComponent,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -35,6 +38,7 @@ export class ResultDurabilityMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("durabilityMoment");
       return;
     }
 
@@ -50,10 +54,12 @@ export class ResultDurabilityMomentComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("durabilityMoment", this.serviceabilityMomentPages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("durabilityMoment");
       }
     );
   }

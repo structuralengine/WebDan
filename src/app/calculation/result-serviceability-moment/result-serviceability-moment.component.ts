@@ -7,6 +7,7 @@ import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetSectionService } from "../set-section.service";
 import { SetBarService } from "../set-bar.service";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-serviceability-moment",
@@ -19,7 +20,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public serviceabilityMomentPages: any[];
+  public serviceabilityMomentPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -28,7 +29,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     private result: ResultDataService,
     private section: SetSectionService,
     private bar: SetBarService,
-    private points: InputDesignPointsService
+    private points: InputDesignPointsService,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -40,6 +42,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("serviceabilityMoment");
       return;
     }
 
@@ -55,10 +58,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("serviceabilityMoment", this.serviceabilityMomentPages);
       },
       (error) => {
         this.err = error.toString();
         this.isLoading = false;
+        this.summary.setSummaryTable("serviceabilityMoment");
       }
     );
   }
@@ -205,7 +210,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push(resultColumn.ratio);
             column.push(resultColumn.result);
 
+            /////////////// 総括表用 ///////////////
+            column.push(position.index);
+            column.push(side);
+            column.push(shape.shape);
+
             page.columns.push(column);
+
+
           }
         }
       }
