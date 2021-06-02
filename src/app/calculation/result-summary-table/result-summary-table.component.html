@@ -194,8 +194,9 @@
             <td class="left">げ</td>
             <td class="left bottom" colspan="2">／設計引張強度</td>
             <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom"> </td>
+            </ng-container>
           </tr>
           <tr>
             <td>用</td>
@@ -211,8 +212,9 @@
             <td class="left"> </td>
             <td class="left bottom" colspan="2">／0.4f'cd</td>
             <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom"> </td>
+            </ng-container>
           </tr>
           <tr>
             <td>性</td>
@@ -228,8 +230,9 @@
             <td class="left"> </td>
             <td class="left bottom" colspan="2">安全度 σs／σsl1</td>
             <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom"> </td>
+            </ng-container>
           </tr>
           <tr>
             <td>・</td>
@@ -263,8 +266,9 @@
             <td class="left bottom"> </td>
             <td class="left bottom" colspan="2">安全度 Wd／0.3</td>
             <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom"> </td>
+            </ng-container>
           </tr>
           <tr>
             <td>久</td>
@@ -298,10 +302,11 @@
             <td class="left"> </td>
             <td class="left bottom" colspan="2">安全度 σwpd／σsl2</td>
             <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
-            <td class="left bottom"> </td>
+            <ng-container *ngFor="let item of summary_table; index as i">
+              <td class="left bottom"> </td>
+            </ng-container>
           </tr>
-          <tr>
+          <!--<tr>
             <td> </td>
             <td class="left"> </td>
             <td class="left" colspan="2">折り曲げ鉄筋応力度</td>
@@ -316,7 +321,7 @@
             <td class="left"> </td>
             <td class="left"> </td>
             <td class="left"> </td>
-          </tr>
+          </tr>-->
           <tr>
             <td> </td>
             <td class="left bottom" colspan="3">構造物係数 γi</td>
@@ -398,14 +403,15 @@
           </tr>
           <tr>
             <td> </td>
-            <td class="left"> </td>
+            <!--<td class="left"> </td>-->
+            <td class="left bottom"> </td>
             <td class="left bottom" colspan="2">γi・σswrd／(fswrd／γb)</td>
             <td class="left bottom">-</td>
             <ng-container *ngFor="let item of summary_table; index as i">
               <td class="left bottom">{{item.safetyFatigueShearForce.ratio}}</td>
             </ng-container>
           </tr>
-          <tr>
+          <!--<tr>
             <td> </td>
             <td class="left"> </td>
             <td class="left bottom" colspan="2">鉄筋設計最小応力度 σsbpd</td>
@@ -436,7 +442,7 @@
             <td class="left">-</td>
             <td class="left">-</td>
             <td class="left">-</td>
-          </tr>
+          </tr>-->
           <tr>
             <td> </td>
             <td class="left bottom" colspan="3">構造物係数 γi</td>
