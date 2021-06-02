@@ -13,7 +13,15 @@ export class ResultSummaryTableComponent implements OnInit {
   constructor(private calc: CalcSummaryTableService) { }
 
   ngOnInit() {
-    this.summary_table = this.calc.summary_table;
+    // 初期化
+    this.summary_table = new Array();
+    // 総括表の index配列を取得
+    const keys = Object.keys(this.calc.summary_table);
+    keys.sort(); // 並び変える
+    // 並び変えた順に登録
+    for(const k of keys){
+      this.summary_table.push(this.calc.summary_table[k]);
+    }
   }
 
 }

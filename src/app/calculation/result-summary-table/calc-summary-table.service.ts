@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 export class CalcSummaryTableService {
 
   //
-  public summary_table: any[];
+  public summary_table: any;
 
   // 計算終了フラグ
   private summaryDone: any;
@@ -16,7 +16,7 @@ export class CalcSummaryTableService {
   constructor() { }
   
   public clear() {
-    this.summary_table = new Array();
+    this.summary_table = {};
     // 計算終了フラグ
     this.summaryDone = {
       durabilityMoment: false,
@@ -34,16 +34,14 @@ export class CalcSummaryTableService {
   }
 
   public setSummaryTable(target: string, value: any = null){
+
+    if(value === null){
+      this.summaryDone[target] = true; 
+      return;
+    }
+
     this.setValue(target, value);
     this.summaryDone[target] = true; 
-
-    this.summary_table.push(
-      this.default(1, 'aasa')
-    );
-
-    this.summary_table.push(
-      this.default(1, 'aasa')
-    );
 
   }
 
@@ -54,10 +52,11 @@ export class CalcSummaryTableService {
     }
 
     for(const groupe of value){
-      for( const col of groupe.colmns){
-          let index: number;
-          let side: string;
-          let shape: string;
+      for( const col of groupe.columns){
+
+        let index: number, side: string, key: string, shape: string;
+        let columns: any
+
         switch(target){
           case "durabilityMoment":
 
@@ -87,10 +86,35 @@ export class CalcSummaryTableService {
 
             break;
           case "serviceabilityMoment": 
+            // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[48];
             side = col[49];
-            shape = col[50];
+            key = index + '-' + side;
+            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+
+            // 断面位置
+            columns.title.m_no = col[0].value;
+            columns.title.p_name = col[1].value;
+            columns.title.side = col[2].value;
+            // 断面形状
+            columns.shape.name = col[50];
+            columns.shape.B = col[3].value;
+            columns.shape.H = col[4].value;
+            columns.shape.Bt = col[5].value;
+            columns.shape.t = col[6].value;
+            // 鉄筋量
+            columns.As.AstString = col[8].value;
+            columns.As.AseString = col[14].value;
+            // 照査結果
+            columns.serviceabilityMoment.sigma_b = col[25].value;
+            columns.serviceabilityMoment.sigma_c = col[28].value;
+            columns.serviceabilityMoment.sigma_s = col[29].value;
+            columns.serviceabilityMoment.Wd = col[43].value;
+            columns.serviceabilityMoment.Wlim = col[44].value;
+
+            this.summary_table[key] = columns;
             break;
+            
           case "serviceabilityShearForce":
 
             break;
