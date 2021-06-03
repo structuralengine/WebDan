@@ -8,8 +8,8 @@
     <div class="sheet-title">
       <p class="noword sheet-title indent10">(2)せん断力に対する照査【ＲＣ標準 7.3.3】</p>
       <p class="noword sheet-title indent20">➀ 部材の照査</p>
-      <p class="sheet-title indent30">せん断力を受け、せん断補強鉄筋を用いる部材の疲労に関する照査は、設計変動</p>
-      <p class="sheet-title indent30">応力度σwrdを設計応答値、設計疲労強度frdを部材係数で除した値を設計</p>
+      <p class="sheet-title indent30">せん断力を受け、せん断補強鉄筋を用いる部材の疲労に関する照査は、設計変</p>
+      <p class="sheet-title indent30">動応力度σwrdを設計応答値、設計疲労強度frdを部材係数で除した値を設計</p>
       <p class="noword sheet-title indent30">限度地とし、次式により行う。</p>
       <p class="noword sheet-title indent50">γ i ・IRd / ILd ≦　1.0</p>
       <p class="sheet-title indent40">ここに、 γi ： 構造物係数</p>
@@ -87,279 +87,279 @@
       <div class="cell_title2">[{{pages.g_name}}]</div>
       <table class="main">
         <tr>
-          <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left1">部材名称</th>
+          <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left2">部材名称</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">
             {{column[0].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">位置</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">位置</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[1].alien}} g-right2 g-bottom1">
             {{column[1].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">断面番号</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">断面番号</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[2].alien}} g-right2 g-bottom2">
             {{column[2].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">B Bf</th>
+          <th class="cell_name2 g-bottom1 g-left2">B Bf</th>
           <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[3].alien}} g-right2 g-bottom1">
             {{column[3].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">H Ht</th>
+          <th class="cell_name2 g-bottom1 g-left2">H Ht</th>
           <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[4].alien}} g-right2 g-bottom1">
             {{column[4].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">tanθ<sub>c</sub> + tanθ<sub></sub>t</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">tanθ<sub>c</sub> + tanθ<sub></sub>t</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[5].alien}} g-right2 g-bottom2">
             {{column[5].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-left1">Ast</th>
+          <th class="cell_name2 g-left2">Ast</th>
           <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[6].alien}} g-right2">{{column[6].value}}
           </td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1"></th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2"></th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[7].alien}} g-right2 g-bottom1">
             {{column[7].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom2 g-left1">dast</th>
+          <th class="cell_name2 g-bottom2 g-left2">dast</th>
           <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[8].alien}} g-right2 g-bottom2">
             {{column[8].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">f'ck</th>
+          <th class="cell_name2 g-bottom1 g-left2">f'ck</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[9].alien}} g-right2 g-bottom1">
             {{column[9].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γc</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γc</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[10].alien}} g-right2 g-bottom1">
             {{column[10].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">f'cd</th>
+          <th class="cell_name2 g-bottom1 g-left2">f'cd</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[11].alien}} g-right2 g-bottom1">
             {{column[11].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">fsyk</th>
+          <th class="cell_name2 g-bottom1 g-left2">fsyk</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[12].alien}} g-right2 g-bottom1">
             {{column[12].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γs</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γs</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[13].alien}} g-right2 g-bottom1">
             {{column[13].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">fsyd</th>
+          <th class="cell_name2 g-bottom1 g-left2">fsyd</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[14].alien}} g-right2 g-bottom1">
             {{column[14].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom2 g-left1">fsyk</th>
+          <th class="cell_name2 g-bottom2 g-left2">fsyk</th>
           <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[15].alien}} g-right2 g-bottom2">
             {{column[15].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-left1">Aw Ab</th>
+          <th class="cell_name2 g-left2">Aw Ab</th>
           <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[16].alien}} g-right2">
             {{column[16].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">fyd</th>
+          <th class="cell_name2 g-bottom1 g-left2">fyd</th>
           <th class="cell_name3 g-right2 g-bottom1">(mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[17].alien}} g-right2 g-bottom1">
             {{column[17].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">θ</th>
+          <th class="cell_name2 g-bottom1 g-left2">θ</th>
           <th class="cell_name3 g-right2 g-bottom1">(° )</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[18].alien}} g-right2 g-bottom1">
             {{column[18].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">S</th>
+          <th class="cell_name2 g-bottom1 g-left2">S</th>
           <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[19].alien}} g-right2 g-bottom1">
             {{column[19].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom2 g-left1">Vpd</th>
+          <th class="cell_name2 g-bottom2 g-left2">Vpd</th>
           <th class="cell_name3 g-right2 g-bottom2">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[20].alien}} g-right2 g-bottom2">
             {{column[20].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">Mpd</th>
+          <th class="cell_name2 g-bottom1 g-left2">Mpd</th>
           <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[21].alien}} g-right2 g-bottom1">
             {{column[21].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">N'pd</th>
+          <th class="cell_name2 g-bottom1 g-left2">N'pd</th>
           <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[22].alien}} g-right2 g-bottom1">
             {{column[22].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom2 g-left1">Vrd</th>
+          <th class="cell_name2 g-bottom2 g-left2">Vrd</th>
           <th class="cell_name3 g-right2 g-bottom2">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[23].alien}} g-right2 g-bottom2">
             {{column[23].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">Mrd</th>
+          <th class="cell_name2 g-bottom1 g-left2">Mrd</th>
           <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[24].alien}} g-right2 g-bottom1">
             {{column[24].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">N'rd</th>
+          <th class="cell_name2 g-bottom1 g-left2">N'rd</th>
           <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[25].alien}} g-right2 g-bottom1">
             {{column[25].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom2 g-left1">fvcd</th>
+          <th class="cell_name2 g-bottom2 g-left2">fvcd</th>
           <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[26].alien}} g-right2 g-bottom2">
             {{column[26].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbc</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γbc</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[27].alien}} g-right2 g-bottom1">
             {{column[27].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">Vcd</th>
+          <th class="cell_name2 g-bottom1 g-left2">Vcd</th>
           <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[28].alien}} g-right2 g-bottom1">
             {{column[28].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">Kr</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">Kr</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom2">
             {{column[29].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">σspd</th>
+          <th class="cell_name2 g-bottom1 g-left2">σspd</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom1">
             {{column[30].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">σsrd</th>
+          <th class="cell_name2 g-bottom1 g-left2">σsrd</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[31].alien}} g-right2 g-bottom1">
             {{column[31].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom2 g-left1">σsr</th>
+          <th class="cell_name2 g-bottom2 g-left2">σsr</th>
           <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[32].alien}} g-right2 g-bottom2">
             {{column[32].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">fsr200</th>
+          <th class="cell_name2 g-bottom1 g-left2">fsr200</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[33].alien}} g-right2 g-bottom1">
             {{column[33].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi・σsrd / (fsr200/γb)</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γi・σsrd / (fsr200/γb)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[34].alien}} g-right2 g-bottom1">
             {{column[34].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">K</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">K</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[35].alien}} g-right2 g-bottom1">
             {{column[35].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">鉄筋補正　αr</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">鉄筋補正　αr</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[36].alien}} g-right2 g-bottom1">
             {{column[36].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">ΣＮ</th>
+          <th class="cell_name2 g-bottom1 g-left2">ΣＮ</th>
           <th class="cell_name3 g-right2 g-bottom1">(回)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[37].alien}} g-right2 g-bottom1">
             {{column[37].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">N<sub>A</sub></th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">N<sub>A</sub></th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[38].alien}} g-right2 g-bottom1">
             {{column[38].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">N<sub>B</sub></th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">N<sub>B</sub></th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[39].alien}} g-right2 g-bottom1">
             {{column[39].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">S<sub>A</sub>/S<sub>C</sub></th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">S<sub>A</sub>/S<sub>C</sub></th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[40].alien}} g-right2 g-bottom1">
             {{column[40].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">S<sub>B</sub>/S<sub>C</sub></th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">S<sub>B</sub>/S<sub>C</sub></th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom1">
             {{column[41].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">鉄筋加工補正 r1</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">鉄筋加工補正 r1</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[42].alien}} g-right2 g-bottom1">
             {{column[42].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">鉄筋加工補正 r2</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">鉄筋加工補正 r2</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom1">
             {{column[43].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γs</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γs</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[44].alien}} g-right2 g-bottom1">
             {{column[44].value}}</td>
         </tr>
         <tr>
-          <th class="cell_name2 g-bottom1 g-left1">fsrd</th>
+          <th class="cell_name2 g-bottom1 g-left2">fsrd</th>
           <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[45].alien}} g-right2 g-bottom1">
             {{column[45].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γbs</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γbs</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[46].alien}} g-right2 g-bottom1">
             {{column[46].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">γi</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γi</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[47].alien}} g-right2 g-bottom2">
             {{column[47].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left1">γi・σsrd/(fsrd/γb)</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γi・σsrd/(fsrd/γb)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[48].alien}} g-right2 g-bottom1">
             {{column[48].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left1">照査結果</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">照査結果</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[49].alien}} g-right2 g-bottom2">
             {{column[49].value}}</td>
         </tr>
