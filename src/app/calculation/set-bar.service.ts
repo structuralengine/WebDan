@@ -14,7 +14,7 @@ export class SetBarService {
   ) { }
 
   // 鉄筋情報を集計する
-   public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
+  public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
 
     // 鉄筋情報を 集計
     let result: object;
@@ -346,7 +346,7 @@ export class SetBarService {
       SteelElastic: new Array(),
     };
 
-    const h: number = member.H;
+    const h: number = member.H; // ハンチを
     const b: number = member.B;
     const barInfo = this.getInputData("Rectangle", index, side, b, h);
 
@@ -486,7 +486,7 @@ export class SetBarService {
       rebar_n = rebar_n - barInfo.line;
     }
 
-    return result;safety
+    return result;
   }
 
   // 矩形、Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数

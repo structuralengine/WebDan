@@ -90,7 +90,7 @@ export class SetPostDataService {
             data['SectionElastic'] = section.SectionElastic;
 
             // 鉄筋の本数
-            const steel = this.steel.getPostData(member, force.index, force.side, section.shape, safety);
+            const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
             data['Steels'] = steel.Steels;
             data['SteelElastic'] = steel.SteelElastic;
 

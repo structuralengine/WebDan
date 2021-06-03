@@ -168,6 +168,7 @@ export class SetSectionService {
       olddeg = deg;
     }
 
+    result['member'] = shape;
     return result;
   }
 
@@ -218,6 +219,7 @@ export class SetSectionService {
       olddeg = deg;
     }
 
+    result['member'] = shape;
     return result;
   }
 
@@ -249,6 +251,7 @@ export class SetSectionService {
     };
     result.Sections.push(section1);
 
+    result['member'] = shape;
     return result;
   }
 
@@ -279,6 +282,7 @@ export class SetSectionService {
     };
     result.Sections.push(section2);
 
+    result['member'] = shape;
     return result;
   }
 
@@ -299,6 +303,7 @@ export class SetSectionService {
       ElasticID: 'c'  // 材料番号
     };
     result.Sections.push(section);
+    result['member'] = shape;
 
     return result;
   }
@@ -342,6 +347,7 @@ export class SetSectionService {
       b3 = b4;
     }
 
+    result['member'] = shape;
     return result;
   }
 
@@ -368,7 +374,7 @@ export class SetSectionService {
       result.Sections.push(section);
       b1 = b2;
     }
-
+    result['member'] = shape;
     return result;
   }
 
