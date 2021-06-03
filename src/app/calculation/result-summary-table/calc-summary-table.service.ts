@@ -174,7 +174,6 @@ export class CalcSummaryTableService {
 
           case "restorabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            console.log(col)//到達していない
             index = col[51];
             side = col[52];
             key = index + '-' + side;

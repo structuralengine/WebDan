@@ -1,7 +1,7 @@
 
 /* ページレイアウト (section.sheet を１ページとする) */
 .HtmlPage {
-  font-family: "ＭＳ 明朝", "HG明朝E", "游明朝", YuMincho, "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ＭＳ Ｐ明朝", serif;
+  font-family: "ＭＳ 明朝", "HG明朝E", "游明朝", "YuMincho", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ＭＳ Ｐ明朝", serif;
   /* マージン・パディングをリセットした方がデザインしやすい */
   margin: 0;
   padding: 0;
@@ -46,8 +46,14 @@
 .sheet-title .indent40 {
   text-indent: 4em;
 }
+.sheet-title .indent45 {
+  text-indent: 4.5em;
+}
 .sheet-title .indent50 {
   text-indent: 5em;
+}
+.sheet-title .indent55 {
+  text-indent: 5.5em;
 }
 .sheet-title .indent60 {
   text-indent: 6em;
@@ -63,6 +69,9 @@
 }
 .sheet-title .indent80 {
   text-indent: 8em;
+}
+.sheet-title .indent85 {
+  text-indent: 8.5em;
 }
 .sheet-title .indent90 {
   text-indent: 9em;
@@ -189,7 +198,7 @@ table.main .g-left2 {
   border-left: 1px solid black;
 }
 
-.center {
+div.center {
   text-align: center;
 }
 

@@ -179,7 +179,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
             column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
             /////////////// 照査 ///////////////
-            column.push(resultColumn.con);22
+            column.push(resultColumn.con);
 
             column.push(resultColumn.Mhd);
             column.push(resultColumn.Nhd);
