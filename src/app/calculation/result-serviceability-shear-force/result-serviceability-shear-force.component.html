@@ -13,11 +13,11 @@
       <p class="sheet-title">は省略できる。なお、このV<sub>cd</sub>を求める場合、コンクリートの材料の材料係数γ<sub>c</sub>および</p>
       <p class="noword sheet-title">γ<sub>b</sub>は1.0とする</p>
       <p class="sheet-title">2)せん断ひび割れの検討</p>
-      <p class="sheet-title indent10">せん断ひび割れの検討においては、永久作用によるせん断補強筋の応力度σ<sub>wpd</sub></p>
-      <p class="sheet-title">を表3.4.2に示す限界値σ<sub>s12</sub>以内とすることにより、せん断ひび割れ幅に関する検討を</p>
-      <p class="sheet-title">省略してよい。</p>
+      <p class="sheet-title indent10">せん断ひび割れの検討においては、永久作用によるせん断補強筋の応力度σ<sub>wpd</sub>を</p>
+      <p class="sheet-title">表3.4.2に示す限界値σ<sub>s12</sub>以内とすることにより、せん断ひび割れ幅に関する検討を省略</p>
+      <p class="sheet-title">してよい。</p>
       <p class="sheet-title indent10">σ<sub>wpd</sub>≦σ<sub>s12</sub></p>
-      <p class="sheet-title indent10">ここに、σ<sub>wpd</sub>: 永久作用によるせん断補強筋の設計応力度(N/mm<sup>2</sup>)</p>
+      <p class="sheet-title indent10">ここに、σ<sub>wpd</sub>： 永久作用によるせん断補強筋の設計応力度(N/mm<sup>2</sup>)</p>
       <div align="center">
         <table class="formula">
           <tr>
@@ -32,18 +32,18 @@
           </tr>
         </table>
       </div>
-      <p class="sheet-title indent50">σ<sub>s12</sub>: せん断またはねじりひび割れ幅の検討を省略できる部材における永</p>
+      <p class="sheet-title indent50">σ<sub>s12</sub>： せん断またはねじりひび割れ幅の検討を省略できる部材における永</p>
       <p class="sheet-title indent80">久作用による鉄筋応力度の制限幅(N/mm<sup>2</sup>)</p>
-      <p class="sheet-title indent60">V<sub>pd</sub>: 永久作用による設計せん断力(N)</p>
-      <p class="sheet-title indent60">V<sub>rd</sub>: 変動作用による設計せん断力(N)</p>
-      <p class="sheet-title indent60">V<sub>cd</sub>: せん断補強鉄筋を用いない棒部材の設計せん断力(N)</p>
+      <p class="sheet-title indent55">V<sub>pd</sub>： 永久作用による設計せん断力(N)</p>
+      <p class="sheet-title indent55">V<sub>rd</sub>： 変動作用による設計せん断力(N)</p>
+      <p class="sheet-title indent55">V<sub>cd</sub>： せん断補強鉄筋を用いない棒部材の設計せん断力(N)</p>
       <p class="sheet-title indent80">(この場合の部材係数γ<sub>b</sub>は1.0とする。)</p>
-      <p class="sheet-title indent60">k<sub>r</sub>: 変動作用の頻度の影響を考慮するための係数で0.5とする。</p>
-      <p class="sheet-title indent60">s: せん断補強鉄筋の配置間隔(mm)</p>
-      <p class="sheet-title indent60">A<sub>w</sub>: 区間sにおけるせん断補強鉄筋の総断面積(mm2)</p>
-      <p class="sheet-title indent60">θ: せん断補強鉄筋が部材軸となる角度(＝90°)</p>
-      <p class="sheet-title indent60">z: 圧力応力の合力位置から引張鋼材の図心までの距離でｄ/1.15とする。</p>
-      <p class="noword sheet-title indent60">d: 有効高さ (mm)</p>
+      <p class="sheet-title indent60">k<sub>r</sub>： 変動作用の頻度の影響を考慮するための係数で0.5とする。</p>
+      <p class="sheet-title indent65">s: せん断補強鉄筋の配置間隔(mm)</p>
+      <p class="sheet-title indent55">A<sub>w</sub>： 区間sにおけるせん断補強鉄筋の総断面積(mm2)</p>
+      <p class="sheet-title indent60">θ： せん断補強鉄筋が部材軸となる角度(＝90°)</p>
+      <p class="sheet-title indent60">z： 圧力応力の合力位置から引張鋼材の図心までの距離でｄ/1.15とする。</p>
+      <p class="noword sheet-title indent60">d： 有効高さ (mm)</p>
       <p class="caption">表3.3.2 せん断またはねじれひび割れの検討を省略出来る部材における永久作用による鉄筋応力度の制限値σ<sub>12</sub>(N/mm<sup>2</sup>)</p>
       <div align="center">
         <table border="1" class="title">
@@ -307,7 +307,7 @@
             {{column[40].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γi</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γ<sub>i</sub></th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom2">
             {{column[41].value}}</td>
         </tr>
@@ -317,7 +317,7 @@
             {{column[42].value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γi・σwpd / σ12</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γ<sub>i</sub>・σwpd / σ12</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom2">
             {{column[43].value}}</td>
         </tr>

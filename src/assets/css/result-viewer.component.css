@@ -46,8 +46,14 @@
 .sheet-title .indent40 {
   text-indent: 4em;
 }
+.sheet-title .indent45 {
+  text-indent: 4.5em;
+}
 .sheet-title .indent50 {
   text-indent: 5em;
+}
+.sheet-title .indent55 {
+  text-indent: 5.5em;
 }
 .sheet-title .indent60 {
   text-indent: 6em;

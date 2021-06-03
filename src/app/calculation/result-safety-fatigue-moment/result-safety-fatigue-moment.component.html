@@ -13,10 +13,10 @@
     <p class="sheet-title indent20">設計応答値、設計疲労強度f<sub>rd</sub>を豊歳係数で除した値を設計限界値とし、次式</p>
     <p class="noword sheet-title indent20">により行う。</p>
     <p class="noword sheet-title indent40">γ<sub>i</sub> ・I<sub>Rd</sub> / I<sub>Ld</sub> ≦　1.0</p>
-    <p class="sheet-title indent30">ここに、 γ<sub>i</sub>： 構造物係数　(＝ 1.0)</p>
-    <p class="sheet-title indent80">I<sub>Rd</sub>： 設計応答値　(＝ σ<sub>srd</sub>)</p>
-    <p class="sheet-title indent80">I<sub>Ld</sub>： 設計限界値　(＝ f<sub>rd</sub>/γ<sub>b</sub>)</p>
-    <p class="noword sheet-title indent80">γ<sub>b</sub>： 部材係数　(＝ 1.0)</p>
+    <p class="sheet-title indent30">ここに、γ<sub>i</sub>： 構造物係数　(＝ 1.0)</p>
+    <p class="sheet-title indent65">I<sub>Rd</sub>： 設計応答値　(＝ σ<sub>srd</sub>)</p>
+    <p class="sheet-title indent65">I<sub>Ld</sub>： 設計限界値　(＝ f<sub>rd</sub>/γ<sub>b</sub>)</p>
+    <p class="noword sheet-title indent65">γ<sub>b</sub>： 部材係数　(＝ 1.0)</p>
     <p class="noword sheet-title indent10">➁ 列車本数</p>
     <p class="sheet-title indent40">A列車荷重 ： 旅客列車 → {{NA}}本/日</p>
     <p class="noword sheet-title indent40">B列車荷重 ： 貨物列車 → {{NB}}本/日</p>
@@ -42,12 +42,12 @@
       </table>
     </div>
     <p class="sheet-title indent30">ここに、ar = 3.09 - 0.003 φ</p>
-    <p class="sheet-title indent80">k = 0.12</p>
+    <p class="sheet-title indent75">k = 0.12</p>
     <p class="sheet-title indent60">σ<sub>min</sub>： 鉄筋の引張最小応力度(N/mm<sup>2</sup>)で圧縮を受ける場合は</p>
     <p class="sheet-title indent100">0とする。</p>
     <p class="sheet-title indent65">f<sub>suk</sub>： 鉄筋の引張強度の特性値(N/mm<sup>2</sup>)</p>
     <p class="sheet-title indent70">γ<sub>1</sub>： 鉄筋の継手、曲げ加工による低減係数(圧接：0.7、</p>
-    <p class="sheet-title indent105">曲げ加工:0.65)</p>
+    <p class="sheet-title indent90">曲げ加工 : 0.65)</p>
     <p class="sheet-title indent70">γ<sub>s</sub>： 鉄筋の材料係数</p>
     <p class="sheet-title indent70">φ ： 照査の対象とする鉄筋の直径(mm)</p>
   </div>
@@ -63,8 +63,8 @@
           <td colspan="2">異形鉄筋
         </tr>
         <tr>
-          <td>γ<sub>i</sub>・σ<sub>srd</sub>/(f<sub>sr200</sub>/γ<sub>b</sub>)≦1.0</td>
-          <td>γ<sub>i</sub>・σ<sub>srd</sub>/(f<sub>sr200</sub>/γ<sub>b</sub>)＞1.0</td>
+          <td>γ<sub>i</sub>・σ<sub>srd</sub> / (f<sub>sr200</sub> / γ<sub>b</sub>)≦1.0</td>
+          <td>γ<sub>i</sub>・σ<sub>srd</sub> / (f<sub>sr200</sub> / γ<sub>b</sub>)＞1.0</td>
         </tr>
         <tr>
           <td>ar</td>
@@ -99,10 +99,10 @@
     <p class="sheet-title indent30">ここに、T： 設計耐用期間　(＝ 100)</p>
     <p class="sheet-title indent50">S<sub>A</sub>/S<sub>C</sub>： Ａ列車荷重と標準列車荷重の最大変動断面力比</p>
     <p class="sheet-title indent50">S<sub>B</sub>/S<sub>C</sub>： Ｂ列車荷重と標準列車荷重の最大変動断面力比</p>
-    <p class="sheet-title indent50">S<sub>A</sub>,S<sub>B</sub>： 実列車荷重(Ａ列車荷重,Ｂ列車荷重)による最大変動断面力</p>
+    <p class="sheet-title indent50">S<sub>A</sub>, S<sub>B</sub>： 実列車荷重(Ａ列車荷重,Ｂ列車荷重)による最大変動断面力</p>
     <p class="sheet-title indent65">S<sub>C</sub>： 標準列車荷重による最大変動断面力</p>
-    <p class="sheet-title indent50">N<sub>A</sub>,N<sub>B</sub>： S<sub>A</sub>,S<sub>B</sub>に対する列車１編成あたり等価繰返し回数(回)</p>
-    <p class="sheet-title indent50">j<sub>A</sub>,j<sub>B</sub>： 実列車の１線、１日あたりの本数(本/回)</p>
+    <p class="sheet-title indent45">N<sub>A</sub>, N<sub>B</sub>： S<sub>A</sub>, S<sub>B</sub>に対する列車１編成あたり等価繰返し回数(回)</p>
+    <p class="sheet-title indent55">j<sub>A</sub>, j<sub>B</sub>： 実列車の１線、１日あたりの本数(本/回)</p>
     <p class="noword sheet-title indent70">k： Ｓ－Ｎ線図の勾配</p>
     <p class="noword sheet-title indent10">⑦ 設計引帳疲労強度f<sub>rd</sub>の算定</p>
     <p class="sheet-title indent20">総等価繰返し回数ΣＮを用いて、字式により設計引帳疲労強度f<sub>rd</sub>を求める。</p>
@@ -122,13 +122,13 @@
       </table>
     </div>
     <p class="sheet-title indent30">ここに、f<sub>rd</sub>： 鉄筋の設計引帳疲労強度　(N/mm<sup>2</sup>)</p>
-    <p class="sheet-title indent75">Ｎ： 標準列車荷重換算の総等価繰返し回数ΣＮ</p>
+    <p class="sheet-title indent70">Ｎ： 標準列車荷重換算の総等価繰返し回数ΣＮ</p>
     <p class="sheet-title indent60">ar, k： Ｓ－Ｎ線図の係数</p>
     <p class="sheet-title indent60">σ<sub>min</sub>： 鉄筋の引帳最小応力度(N/mm<sup>2</sup>)で、圧縮を受ける場合は</p>
-    <p class="sheet-title indent100">0とする。</p>
+    <p class="sheet-title indent90">0とする。</p>
     <p class="sheet-title indent65">f<sub>suk</sub>： 鉄筋の引帳強度の特値(N/mm<sup>2</sup>）</p>
     <p class="sheet-title indent70">γ<sub>1</sub>： 鉄筋継手、曲げ加工による低減係数(圧接：0.7,</p>
-    <p class="sheet-title indent100">曲げ加工:0.65)</p>
+    <p class="sheet-title indent90">曲げ加工:0.65)</p>
     <p class="sheet-title indent70">γ<sub>2</sub>： 複線を支持する部材における荷重分布比aによる補正係数</p>
     <div align="center">
       <table class="formula">
@@ -141,8 +141,8 @@
         </tr>
       </table>
     </div>
-    <p class="sheet-title indent80">a： 当該部材の</p>
-    <p class="sheet-title indent100">(１線載荷による最大断面力)/(複線載荷による最大断面力)</p>
+    <p class="sheet-title indent75">a： 当該部材の</p>
+    <p class="sheet-title indent90">(１線載荷による最大断面力)/(複線載荷による最大断面力)</p>
     <p class="sheet-title indent70">γ<sub>s</sub>： 鉄筋の材料係数</p>
   </div>
 </div>
@@ -294,7 +294,7 @@
       <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom1">{{column[29].value}}</td>
     </tr>
     <tr>
-      <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γi・σsrd/(fsr200/γb)</th>
+      <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γ<sub>i</sub>・σsrd/(fsr200/γb)</th>
       <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom1">{{column[30].value}}</td>
     </tr>
     <tr>
@@ -344,11 +344,11 @@
       <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom1">{{column[41].value}}</td>
     </tr>
     <tr>
-      <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γi</th>
+      <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γ<sub>i</sub></th>
       <td *ngFor="let column of pages.columns; index as c" class="{{column[42].alien}} g-right2 g-bottom2">{{column[42].value}}</td>
     </tr>
     <tr>
-      <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γi・σsrd/(fsrd/γb)</th>
+      <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γ<sub>i</sub>・σsrd/(fsrd/γb)</th>
       <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom1">{{column[43].value}}</td>
     </tr>
     <tr>
