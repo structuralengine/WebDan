@@ -41,7 +41,37 @@
             <th> </th>
             <th class="left">mm</th>
             <ng-container *ngFor="let item of summary_table; index as i">
-              <th class="left"><canvas #myCanvas width="400" height="400"></canvas></th>
+              <td class="left"><!--<canvas #myCanvas width="400" height="400"></canvas>-->
+                <div *ngIf="item.shape.name=='Circle'" class="aaa">
+                  <img src="../../assets/img/circle.png" alt="cilinder.png" width="100px" height="100px">
+                  <p class="yoko">{{item.shape.B}}</p>
+                </div>
+                <div *ngIf="item.shape.name=='Rectangle'" class="aaa">
+                  <img src="../../assets/img/rectangle.png" alt="rectangle.png" width="100px" height="100px">
+                  <p class="tate">{{item.shape.H}}</p>
+                  <p class="yoko">{{item.shape.B}}</p>
+                </div>
+                <div *ngIf="item.shape.name=='Tsection'" class="aaa">
+                  <img src="../../assets/img/tsection.png" alt="tsection.png" width="100px" height="100px">
+                  <p class="tate">{{item.shape.H}}</p>
+                  <p class="yoko">{{item.shape.B}}</p>
+                </div>
+                <div *ngIf="item.shape.name=='InvertedTsection'" class="aaa">
+                  <img src="../../assets/img/invertedtsection.png" alt="tsection.png" width="100px" height="100px">
+                  <p class="tate">{{item.shape.H}}</p>
+                  <p class="yoko">{{item.shape.B}}</p>
+                </div>
+                <div *ngIf="item.shape.name=='HorizontalOval'" class="aaa">
+                  <img src="../../assets/img/horizontalOval.png" alt="horizontalOval.png" width="100px" height="100px">
+                  <p class="tate">{{item.shape.H}}</p>
+                  <p class="yoko">{{item.shape.B}}</p>
+                </div>
+                <div *ngIf="item.shape.name=='VerticalOval'" class="aaa">
+                  <img src="../../assets/img/verticalOval.png" alt="verticalOval.png" width="100px" height="100px">
+                  <p class="tate">{{item.shape.H}}</p>
+                  <p class="yoko">{{item.shape.B}}</p>
+                </div>
+              </td> 
             </ng-container>
           </tr>
           <tr>
