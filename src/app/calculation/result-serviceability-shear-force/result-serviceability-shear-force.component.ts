@@ -211,7 +211,18 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
           }
         }
       }
+      // 最後のページ
       if (page.columns.length > 0) {
+        for(let i=page.columns.length; i<5; i++){
+          const column: any[] = new Array();
+          for(let j=0; j<page.columns[0].length-3; j++){
+            column.push({alien: 'center', value: '-'});
+          }
+          column.push(null);//position.index);
+          column.push(null);//side);
+          column.push(null);//shape.shape);
+          page.columns.push(column);
+        }
         result.push(page);
       }
     }
