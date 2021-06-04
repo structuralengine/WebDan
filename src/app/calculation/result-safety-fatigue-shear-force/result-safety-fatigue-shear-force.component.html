@@ -2,9 +2,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="safetyFatigueShearForcepages?.length > 0">
-
-  <div class="sheet" id="{{page_index}}">
+<div *ngIf="safetyFatigueShearForcepages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p class="noword sheet-title indent10">(2)せん断力に対する照査【ＲＣ標準 7.3.3】</p>
       <p class="noword sheet-title indent20">➀ 部材の照査</p>
@@ -67,7 +66,7 @@
     </div>
   </div>
 
-  <div class="sheet" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p class="noword sheet-title indent20">➃ 200万回　引張疲労強度f<sub>sr200</sub>の算定。</p>
       <p class="noword sheet-title indent30">曲げモーメントに対する照査と同様に算定する。</p>
@@ -366,7 +365,7 @@
       </table>
     </div>
   </div>
-</ng-container>
+</div>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p>{{err}}</p>

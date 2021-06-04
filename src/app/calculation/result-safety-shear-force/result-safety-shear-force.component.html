@@ -2,9 +2,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="safetyShearForcePages?.length > 0">
-
-  <div class="sheet" id="{{page_index}}">
+<div *ngIf="safetyShearForcePages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p>(2)せん断力に対する照査 {{title}}【コンクリート標準　7.2.3】</p>
       <p></p>
@@ -52,7 +51,7 @@
       <p class="sheet-title indent85">γ<sub>b</sub>：部材係数</p>
     </div>
   </div>
-  <div class="sheet" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p class="sheet-title indent20">(b)腹部コンクリートの斜め圧縮破壊耐力による照査</p>
       <p class="sheet-title indent30">γ<sub>i</sub>・V<sub>d</sub>/V<sub>wcd</sub>≦1.0</p>
@@ -389,7 +388,7 @@
     </div>
   </div>
 
-</ng-container>
+</div>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p>{{err}}</p>

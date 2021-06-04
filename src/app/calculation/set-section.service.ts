@@ -513,8 +513,8 @@ export class SetSectionService {
         break;
 
       case 'Ring':              // 円環
-          h = this.helper.toNumber(member.H); // 外径
-          b = this.helper.toNumber(member.B); // 内径
+        h = this.helper.toNumber(member.H); // 外径
+        b = this.helper.toNumber(member.B); // 内径
         if (target === 'Md') {
           result['H'] = h;
           result['B'] = b;

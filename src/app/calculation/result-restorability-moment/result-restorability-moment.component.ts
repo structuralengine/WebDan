@@ -63,7 +63,16 @@ export class ResultRestorabilityMomentComponent implements OnInit {
         this.summary.setSummaryTable("restorabilityMoment", this.restorabilityMomentPages);
       },
       (error) => {
-        this.err = error.toString();
+        this.err = 'error!!' + '\n'; 
+        let e: any = error;
+        while('error' in e) {
+          if('message' in e){ this.err += e.message + '\n'; }
+          if('text' in e){ this.err += e.text + '\n'; }
+          e = e.error;
+        }
+        if('message' in e){ this.err += e.message + '\n'; }
+        if('stack' in e){ this.err += e.stack; }
+
         this.isLoading = false;
         this.summary.setSummaryTable("restorabilityMoment");
       }

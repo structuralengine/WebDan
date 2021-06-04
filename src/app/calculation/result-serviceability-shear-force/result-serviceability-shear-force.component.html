@@ -2,9 +2,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="serviceabilityShearForcePages?.length > 0">
-
-  <div class="sheet" id="{{page_index}}">
+<div *ngIf="serviceabilityShearForcePages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p>(b)せん断ひび割れの検討【コンクリート標準　10.2.2.5】</p>
       <p>1)せん断ひび割れの検討を省略できる部材</p>
@@ -330,7 +329,7 @@
     </div>
   </div>
 
-</ng-container>
+</div>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p>{{err}}</p>
