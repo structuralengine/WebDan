@@ -59,6 +59,7 @@ export class CalcSummaryTableService {
           case "durabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[48];
+            if(index===null){continue;}
             side = col[49];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -86,6 +87,7 @@ export class CalcSummaryTableService {
           case "earthquakesMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[33];
+            if(index===null){continue;}
             side = col[34];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -117,6 +119,7 @@ export class CalcSummaryTableService {
           case "earthquakesShearForce": 
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[51];
+            if(index===null){continue;}
             side = col[52];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -144,6 +147,7 @@ export class CalcSummaryTableService {
           case "restorabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[33];
+            if(index===null){continue;}
             side = col[34];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -175,6 +179,7 @@ export class CalcSummaryTableService {
           case "restorabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[51];
+            if(index===null){continue;}
             side = col[52];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -202,6 +207,7 @@ export class CalcSummaryTableService {
           case "SafetyFatigueMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[45];
+            if(index===null){continue;}
             side = col[46];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -234,6 +240,7 @@ export class CalcSummaryTableService {
           case "safetyFatigueShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[50];
+            if(index===null){continue;}
             side = col[51];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -260,6 +267,7 @@ export class CalcSummaryTableService {
           case "safetyMoment": 
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[33];
+            if(index===null){continue;}
             side = col[34];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -291,6 +299,7 @@ export class CalcSummaryTableService {
           case "safetyShearForce": 
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[51];
+            if(index===null){continue;}
             side = col[52];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -320,6 +329,7 @@ export class CalcSummaryTableService {
           case "serviceabilityMoment": 
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[48];
+            if(index===null){continue;}
             side = col[49];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
@@ -351,6 +361,7 @@ export class CalcSummaryTableService {
           case "serviceabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[45];
+            if(index===null){continue;}
             side = col[46];
             key = index + '-' + side;
             columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
