@@ -55,7 +55,11 @@ export class InputMembersService  {
 
   public getCalcData(m_no: number){
     const result = this.member_list.find( (item) => item.m_no === m_no );
-    return result;
+    return JSON.parse(
+      JSON.stringify({
+        temp: result
+      })
+    ).temp; 
   }
 
   // 同じグループの部材リストを取得する

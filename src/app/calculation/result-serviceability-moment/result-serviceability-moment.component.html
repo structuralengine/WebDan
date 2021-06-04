@@ -2,9 +2,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="serviceabilityMomentPages?.length > 0">
-
-  <div class="sheet" id="{{page_index}}">
+<div *ngIf="serviceabilityMomentPages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p class="noword sheet-title">耐久性の照査</p>
       <p class="noword sheet-title indent10">(1)曲げモーメントに関する照査</p>
@@ -42,7 +41,7 @@
     </div>
   </div>
 
-  <div class="sheet" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p class="noword sheet-title indent20">c)曲げひび割れ幅の検討</p>
       <p class="sheet-title indent30">曲げひび割れの検討は、コンクリート表面の設計曲げひび割れ幅W<sub>d</sub>がひび割れ幅</p>
@@ -373,7 +372,7 @@
       </table>
     </div>
   </div>
-</ng-container>
+</div>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p>{{err}}</p>

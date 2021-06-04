@@ -37,14 +37,6 @@
 
   <!-- サイドバー -->
   <div class="sticky">
-    <!-- 印刷ボタン -->
-    <button
-      styleSheetFile="assets/css/result-viewer.component.css"
-      printSectionId = "print_section" ngxPrint >Print</button>
-    <!-- <button (click)="print()">Print</button> -->
-    <ng-container *ngIf="printSummaryTable()">
-      <button (click)="summaryTableShow()">総括表</button>
-    </ng-container>
     <!-- 目次 -->
     <ul>
       <!-- 断面力一覧表 -->
@@ -102,6 +94,14 @@
         </ng-container>
       </ng-container>
     </ul>
+    <!-- 印刷ボタン -->
+    <button
+      styleSheetFile="assets/css/result-viewer.component.css"
+      printSectionId = "print_section" ngxPrint >Print</button>
+    <ng-container *ngIf="printSummaryTable()">
+      <button (click)="summaryTableShow()">総括表</button>
+    </ng-container>
+
   </div>
 
 </main>

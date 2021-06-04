@@ -2,10 +2,9 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="restorabilityMomentPages?.length > 0">
-
-  <div class="sheet" id="{{page_index}}">
-    <div class="sheet-title">
+<div *ngIf="restorabilityMomentPages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
+    <div class="sheet-title" >
       <p>{{title}}</p>
       <p></p>
       <p class="sheet-title indent10">復旧性に関する 安全性【コンクリート標準　7.2】</p>
@@ -213,7 +212,7 @@
     </div>
   </div>
 
-</ng-container>
+</div>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p>{{err}}</p>

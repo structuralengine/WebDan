@@ -14,7 +14,7 @@ export class SetBarService {
   ) { }
 
   // 鉄筋情報を集計する
-   public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
+  public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
 
     // 鉄筋情報を 集計
     let result: object;
@@ -285,6 +285,7 @@ export class SetBarService {
     }
 
     const barInfo = this.getInputData("Circle", index, side, h);
+    const tension: any = barInfo.tension;
 
     const fsy = this.getFsyk(
       barInfo.rebar_dia,
@@ -294,16 +295,16 @@ export class SetBarService {
     const id = "s" + fsy.id;
 
     // 鉄筋径
-    let dia: string = barInfo.mark + barInfo.rebar_dia;
+    let dia: string = tension.mark + tension.rebar_dia;
     if (fsy.fsy === 235) {
       // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + barInfo.rebar_dia;
+      dia = "R" + tension.rebar_dia;
     }
 
-    for (let i = 0; i < barInfo.n; i++) {
-      const Depth = barInfo.dsc + i * barInfo.space;
+    for (let i = 0; i < tension.n; i++) {
+      const Depth = tension.dsc + i * tension.space;
       const Rt: number = h - Depth * 2; // 鉄筋直径
-      const num = barInfo.rebar_n - barInfo.line * i; // 鉄筋本数
+      const num = tension.rebar_n - tension.line * i; // 鉄筋本数
       const steps: number = 360 / num; // 鉄筋角度間隔
 
       for (let j = 0; j < num; j++) {
@@ -315,7 +316,7 @@ export class SetBarService {
           i: dia, // 鋼材
           n: 1, // 鋼材の本数
           IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
-          ElasticID: "s", // 材料番号
+          ElasticID: id, // 材料番号
         };
         result.Steels.push(Steel1);
       }
@@ -346,7 +347,7 @@ export class SetBarService {
       SteelElastic: new Array(),
     };
 
-    const h: number = member.H;
+    const h: number = member.H; // ハンチを
     const b: number = member.B;
     const barInfo = this.getInputData("Rectangle", index, side, b, h);
 
@@ -486,7 +487,7 @@ export class SetBarService {
       rebar_n = rebar_n - barInfo.line;
     }
 
-    return result;safety
+    return result;
   }
 
   // 矩形、Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数
@@ -554,7 +555,7 @@ export class SetBarService {
 
     const bar = this.bars.getCalcData(index);
 
-    let tension: any, compres: any;
+    let tension: any, compres: any = null, sidebar: any = null;
 
     switch (shapeName) {
       case "Circle": // 円形
@@ -567,7 +568,6 @@ export class SetBarService {
           const D = h - tension.dsc * 2;
           tension.rebar_ss = D / tension.line;
         }
-        result = { tension };
         break;
 
       case "VerticalOval": // 鉛直方向小判形
@@ -580,6 +580,7 @@ export class SetBarService {
           const D = h - tension.dsc * 2;
           tension.rebar_ss = D / tension.line;
         }
+        sidebar = this.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
         break;
 
       case "HorizontalOval": // 水平方向小判形
@@ -591,6 +592,7 @@ export class SetBarService {
         if(tension.rebar_ss === null){
           tension.rebar_ss = (b - h) / tension.line;
         }
+        sidebar = this.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
         break;
 
       case "Rectangle": // 矩形
@@ -614,15 +616,14 @@ export class SetBarService {
         if(tension.rebar_ss === null){
           tension.rebar_ss = b / tension.line;
         }
-
-        const sidebar = this.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
-
-        result = { tension, compres, sidebar, stirrup: bar.stirrup, tan: bar.tan };
+        sidebar = this.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
         break;
 
       default:
         throw("断面形状：" + shapeName + " は適切ではありません。");
     }
+
+    result = { tension, compres, sidebar, stirrup: bar.stirrup, tan: bar.tan };
     return result;
   }
 
@@ -857,7 +858,9 @@ export class SetBarService {
     }
 
     result.AstCos = bar.tension.cos;
-    result.AscCos = bar.compres.cos;
+    if(bar.compres !== null){
+      result.AscCos = this.helper.toNumber(bar.compres.cos);
+    }
 
     // 照査表における 鉄筋強度情報を取得
     result.fsy = fsyt.fsy;

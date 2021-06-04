@@ -2,9 +2,8 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="safetyMomentPages?.length > 0">
-
-  <div class="sheet" id="{{page_index}}">
+<div *ngIf="safetyMomentPages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
     <div class="sheet-title">
       <p>3.1 安全性の照査</p>
       <p></p>
@@ -213,7 +212,7 @@
     </div>
   </div>
 
-</ng-container>
+</div>
 
 <div *ngIf="err.length > 0" class="sheet">
   <p >{{err}}</p>
