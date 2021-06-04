@@ -5,7 +5,7 @@
   /* マージン・パディングをリセットした方がデザインしやすい */
   margin: 0;
   padding: 0;
-  display: inline-block;
+  display: block;
   /* インラインブロック要素にする */
 }
 

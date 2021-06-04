@@ -15,7 +15,7 @@
   /* マージン・パディングをリセットした方がデザインしやすい */
   margin: 0;
   padding: 0;
-  display: inline-block;        /* インラインブロック要素にする */
+  display: block;        /* インラインブロック要素にする */
 }
 
 .sheet {
