@@ -20,6 +20,7 @@ export class ResultSafetyMomentComponent implements OnInit {
   public err: string;
   public safetyMomentPages: any[] = new Array();
   private title = "安全性（破壊）曲げモーメントの照査結果";
+  public page_index = "ap_1";
 
   constructor(
     private http: HttpClient,
