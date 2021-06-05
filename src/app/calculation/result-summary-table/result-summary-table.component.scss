@@ -20,4 +20,24 @@ table {
   .left {
     border-left: 1px solid black;
   }
-  
+
+.aaa{
+  position: relative;
+}
+  .aaa img{
+    width: 100px;
+    height: 100px
+  }
+  .aaa .tate{
+    position:absolute;
+    color: black;
+    transform: rotate( -90deg );
+    top: 30%;
+    left: 77%;
+  }
+  .aaa .yoko{
+    position:absolute;
+    color: black;
+    top: 75%;
+    left: 24%;
+  }
