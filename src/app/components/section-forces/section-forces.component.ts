@@ -19,8 +19,8 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // 曲げモーメントのグリッド設定変数
   private columnHeaders1: object[] = [
-    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
-    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    // { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', sortable: false, width: 250 },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '縁応力検討用', align: 'center', colModel: [
         { title: 'Md<br/>(kN/m)',  dataType: 'float', 'format': '#.00', dataIndx: 'case0_Md', sortable: false, width: 100 },
@@ -64,8 +64,9 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // せん断力のグリッド設定変数
   private columnHeaders2: object[] = [
-    { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
-    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    // { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', editable: false, sortable: false, width: 110, style: {'background': '#f5f5f5' }, styleHead: {'background': '#f5f5f5' }  },
+    { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', sortable: false, width: 250 },
+    { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
     { title: '耐久性・使用性', align: 'center', colModel: [
       { title: '設計耐力検討用', align: 'center', colModel: [
         { title: 'Vd<br/>(kN)',   dataType: 'float', 'format': '#.00', dataIndx: 'case0_Vd', sortable: false, width: 100 },
@@ -116,7 +117,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
     ]},
   ];
   private ROWS_COUNT2 = 0;
-  private table_datas2: any[] = [];
+  // private table_datas2: any[] = [];
   private options2: pq.gridT.options;
 
 
@@ -159,9 +160,9 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
       height: this.tableHeight().toString(),
       numberCell: { show: true }, // 行番号
       colModel: this.columnHeaders2,
-      dataModel: { data: this.table_datas2 },
+      dataModel: { data: this.table_datas1 },
       beforeTableView:(evt, ui) => {
-        const dataV = this.table_datas2.length;
+        const dataV = this.table_datas1.length;
         if (ui.initV == null) {
           return;
         }
@@ -190,9 +191,9 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // 指定行row まで、せん断力入力データを読み取る
   private loadData2(row: number): void {
-    for (let i = this.table_datas2.length + 1; i <= row; i++) {
+    for (let i = this.table_datas1.length + 1; i <= row; i++) {
       const column = this.force.getTable2Columns(i);
-      this.table_datas2.push(column);
+      this.table_datas1.push(column);
     }
   }
 
@@ -201,7 +202,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
   }
   public saveData(): void {
     this.force.setTable1Columns(this.table_datas1);
-    this.force.setTable2Columns(this.table_datas2);
+    // this.force.setTable2Columns(this.table_datas2);
   }
 
 
