@@ -39,14 +39,14 @@
             <span>部材・断面</span>
           </a>
         </li>
-        <li *ngIf="!isManual()" class="c-mainNavArea__navItem">
+        <li class="c-mainNavArea__navItem" [hidden]="isManual()">
           <a routerLink="./design-points" routerLinkActive="selected-item"
             (click)="activePageChenge(2)" id="2"
             class="c-mainNavArea__navItemTitle disabled">
             <span>算出点</span>
           </a>
         </li>
-        <li *ngIf="isManual()" class="c-mainNavArea__navItem">
+        <li class="c-mainNavArea__navItem" [hidden]="!isManual()">
           <a routerLink="./section-forces" routerLinkActive="selected-item"
             (click)="activePageChenge(8)" id="8"
             class="c-mainNavArea__navItemTitle">

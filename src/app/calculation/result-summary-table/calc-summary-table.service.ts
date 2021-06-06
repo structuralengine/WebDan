@@ -1,18 +1,17 @@
-import { Injectable } from '@angular/core';
+import { Injectable } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CalcSummaryTableService {
-
   //
   public summary_table: any;
 
   // 計算終了フラグ
   private summaryDone: any;
 
-  constructor() { }
-  
+  constructor() {}
+
   public clear() {
     this.summary_table = {};
     // 計算終了フラグ
@@ -27,42 +26,43 @@ export class CalcSummaryTableService {
       safetyMoment: false,
       safetyShearForce: false,
       serviceabilityMoment: false,
-      serviceabilityShearForce: false
-    }
+      serviceabilityShearForce: false,
+    };
   }
 
-  public setSummaryTable(target: string, value: any = null){
-
-    if(value === null){
-      this.summaryDone[target] = true; 
+  public setSummaryTable(target: string, value: any = null) {
+    if (value === null) {
+      this.summaryDone[target] = true;
       return;
     }
 
     this.setValue(target, value);
-    this.summaryDone[target] = true; 
-
+    this.summaryDone[target] = true;
   }
 
-  private setValue(target: string, value: any): void{
-
-    if(value === null){
+  private setValue(target: string, value: any): void {
+    if (value === null) {
       return;
     }
 
-    for(const groupe of value){
-      for( const col of groupe.columns){
-
+    for (const groupe of value) {
+      for (const col of groupe.columns) {
         let index: number, side: string, key: string, shape: string;
-        let columns: any
+        let columns: any;
 
-        switch(target){
+        switch (target) {
           case "durabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[48];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[49];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -87,10 +87,15 @@ export class CalcSummaryTableService {
           case "earthquakesMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[33];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[34];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -114,15 +119,20 @@ export class CalcSummaryTableService {
             columns.earthquakesMoment.ratio = col[31].value;
 
             this.summary_table[key] = columns;
-            break; 
+            break;
 
-          case "earthquakesShearForce": 
+          case "earthquakesShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[51];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[52];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -147,10 +157,15 @@ export class CalcSummaryTableService {
           case "restorabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[33];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[34];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -174,15 +189,20 @@ export class CalcSummaryTableService {
             columns.restorabilityMoment.ratio = col[31].value;
 
             this.summary_table[key] = columns;
-            break; 
+            break;
 
           case "restorabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[51];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[52];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -207,10 +227,15 @@ export class CalcSummaryTableService {
           case "SafetyFatigueMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[45];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[46];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -240,10 +265,15 @@ export class CalcSummaryTableService {
           case "safetyFatigueShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[50];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[51];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -264,13 +294,18 @@ export class CalcSummaryTableService {
             this.summary_table[key] = columns;
             break;
 
-          case "safetyMoment": 
+          case "safetyMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[33];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[34];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -296,20 +331,25 @@ export class CalcSummaryTableService {
             this.summary_table[key] = columns;
             break;
 
-          case "safetyShearForce": 
+          case "safetyShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[51];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[52];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
             columns.title.p_name = col[1].value;
             columns.title.side = col[2].value;
             // 断面形状
-            columns.shape.name = col[52];
+            columns.shape.name = col[53];
             columns.shape.B = col[3].value;
             columns.shape.H = col[4].value;
             // 鉄筋量
@@ -326,13 +366,18 @@ export class CalcSummaryTableService {
             this.summary_table[key] = columns;
             break;
 
-          case "serviceabilityMoment": 
+          case "serviceabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[48];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[49];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -357,14 +402,19 @@ export class CalcSummaryTableService {
 
             this.summary_table[key] = columns;
             break;
-            
+
           case "serviceabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
             index = col[45];
-            if(index===null){continue;}
+            if (index === null) {
+              continue;
+            }
             side = col[46];
-            key = index + '-' + side;
-            columns = (key in this.summary_table) ? this.summary_table[key] : this.default(index, side);
+            key = this.zeroPadding(index) + "-" + side;
+            columns =
+              key in this.summary_table
+                ? this.summary_table[key]
+                : this.default(index, side);
 
             // 断面位置
             columns.title.m_no = col[0].value;
@@ -388,7 +438,7 @@ export class CalcSummaryTableService {
         }
       }
     }
-    console.log(this.summary_table)
+    console.log(this.summary_table);
   }
 
   // 初期値
@@ -397,100 +447,103 @@ export class CalcSummaryTableService {
       index: index,
       side: side,
       title: {
-        m_no: '-',
-        p_name: '-',
-        side: '-'
+        m_no: "-",
+        p_name: "-",
+        side: "-",
       },
       shape: {
-        name: '-',
-        B: '-',
-        H: '-',
-        Bt: '-',
-        t: '-'
+        name: "-",
+        B: "-",
+        H: "-",
+        Bt: "-",
+        t: "-",
       },
       As: {
-        AstString: '-',
-        AseString: '-',
-        AwString: '-',
-        Ss: '-'
+        AstString: "-",
+        AseString: "-",
+        AwString: "-",
+        Ss: "-",
       },
       durabilityMoment: {
-        Wd: '-'
+        Wd: "-",
       },
       earthquakesMoment: {
-        ri: '-',
-        Md: '-',
-        Nd: '-',
-        Myd: '-',
-        ratio:'-'
+        ri: "-",
+        Md: "-",
+        Nd: "-",
+        Myd: "-",
+        ratio: "-",
       },
-      earthquakesShearForce: {  
-        Vd: '-',
-        Vyd: '-',
-        Ratio: '-'
+      earthquakesShearForce: {
+        Vd: "-",
+        Vyd: "-",
+        Ratio: "-",
       },
       restorabilityMoment: {
-        ri: '-',
-        Md: '-',
-        Nd: '-',
-        Myd: '-',
-        ratio: '-'
+        ri: "-",
+        Md: "-",
+        Nd: "-",
+        Myd: "-",
+        ratio: "-",
       },
       restorabilityShearForce: {
-        Vd: '-',
-        Vyd: '-',
-        Ratio: '-'
+        Vd: "-",
+        Vyd: "-",
+        Ratio: "-",
       },
       SafetyFatigueMoment: {
-        ri: '-',
-        rb: '-',
-        sigma_min: '-',
-        sigma_rd: '-',
-        fsr200: '-',
-        ratio200: '-'
+        ri: "-",
+        rb: "-",
+        sigma_min: "-",
+        sigma_rd: "-",
+        fsr200: "-",
+        ratio200: "-",
       },
       safetyFatigueShearForce: {
-        sigma_min: '-',
-        sigma_rd: '-',
-        frd: '-',
-        ratio: '-'
+        sigma_min: "-",
+        sigma_rd: "-",
+        frd: "-",
+        ratio: "-",
       },
       safetyMoment: {
-        ri: '-',
-        Md: '-',
-        Nd: '-',
-        Mud: '-',
-        ratio: '-'
+        ri: "-",
+        Md: "-",
+        Nd: "-",
+        Mud: "-",
+        ratio: "-",
       },
       safetyShearForce: {
-        Vd: '-',
-        Vyd: '-',
-        Vwcd: '-',
-        Vyd_Ratio: '-',
-        Vwcd_Ratio: '-'
+        Vd: "-",
+        Vyd: "-",
+        Vwcd: "-",
+        Vyd_Ratio: "-",
+        Vwcd_Ratio: "-",
       },
       serviceabilityMoment: {
-        sigma_b: '-',
-        sigma_c: '-',
-        sigma_s: '-',
-        Wd: '-',
-        Wlim: '-'
+        sigma_b: "-",
+        sigma_c: "-",
+        sigma_s: "-",
+        Wd: "-",
+        Wlim: "-",
       },
       serviceabilityShearForce: {
-        Vcd: '-',
-        Vcd07: '-',
-        sigma: '-'
-      }
+        Vcd: "-",
+        Vcd07: "-",
+        sigma: "-",
+      },
     };
   }
   // 全ての項目が終了したかチェックする
   public checkDone(): boolean {
-    for(const target of Object.keys(this.summaryDone)) {
-        if(this.summaryDone[target] === false){
-          return false;
-        }
+    for (const target of Object.keys(this.summaryDone)) {
+      if (this.summaryDone[target] === false) {
+        return false;
       }
+    }
     return true;
   }
 
+  private zeroPadding(NUM: number, LEN = 9){
+    return ( Array(LEN).join('0') + NUM ).slice( -LEN );
+  }
 }

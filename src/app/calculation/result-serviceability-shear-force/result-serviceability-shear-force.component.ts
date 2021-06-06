@@ -21,6 +21,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
   public err: string;
   public serviceabilityShearForcePages: any[] = new Array();
   private title = "耐久性 せん断ひび割れの照査結果";
+  public page_index = "ap_6";
 
   constructor(
     private http: HttpClient,

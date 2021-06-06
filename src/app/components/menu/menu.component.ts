@@ -56,6 +56,7 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.renew();
   }
 
   // 新規作成
@@ -79,33 +80,34 @@ export class MenuComponent implements OnInit {
     this.router.navigate(['/blank-page']);
     this.app.deactiveButtons();
 
-    let error = null;
     switch( this.helper.getExt(this.fileName)){
       case 'dsd':
         this.fileToBinary(file)
         .then(buff  => {
           const pik =this.dsdData.readDsdData(buff);
+          this.open_done(modalRef);
           if (pik !== null){
             alert(pik + ' を開いてください！');
           }
-          this.app.memberChange(); // 左側のボタンを有効にする。
-          this.app.designPointChange(); // 左側のボタンを有効にする。
         })
-        .catch(err => { error = err; });
+        .catch(err => { this.open_done(modalRef, err); });
         break;
       default:
         this.fileToText(file)
         .then(text => {
           this.save.readInputData(text);
-          this.app.memberChange(); // 左側のボタンを有効にする。
-          this.app.designPointChange(); // 左側のボタンを有効にする。
+          this.open_done(modalRef);
         })
-        .catch(err => { error = err; });
+        .catch(err => { this.open_done(modalRef, err); });
     }
+  }
 
+  private open_done(modalRef, error = null){
     // 後処理
     if( error === null ){
       this.pickup_file_name = this.save.getPickupFilename();
+      this.app.memberChange(); // 左側のボタンを有効にする。
+      this.app.designPointChange(); // 左側のボタンを有効にする。
     } else {
       console.log(error)
     }

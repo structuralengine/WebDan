@@ -87,6 +87,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   ngAfterViewInit(){
     this.activeButtons(0);
+    // this.grid.refreshDataAndView();
   }
 
   // 指定行row まで、曲げモーメント入力データを読み取る
