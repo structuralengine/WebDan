@@ -1,11 +1,11 @@
 
 /* ページレイアウト (section.sheet を１ページとする) */
 .HtmlPage {
-  font-family: "ＭＳ 明朝", "HG明朝E", "游明朝", "YuMincho", "ヒラギノ明朝 ProN W3", "Hiragino Mincho ProN", "ＭＳ Ｐ明朝", serif;
+  font-family: "ＭＳ 明朝", serif;
   /* マージン・パディングをリセットした方がデザインしやすい */
   margin: 0;
   padding: 0;
-  display: inline-block;
+  display: block;
   /* インラインブロック要素にする */
 }
 
@@ -124,12 +124,12 @@ table.formula .bottom {
 }
 
 .cell_title1 {
-  font-size: 10pt;
+  font-size: 12pt;
   text-align: left;
 }
 
 .cell_title2 {
-  font-size: 10pt;
+  font-size: 11pt;
   text-align: right;
 }
 
@@ -138,7 +138,7 @@ table{
 }
 
 table.main {
-  font-size: 9px;
+  font-size: 10px;
   table-layout: fixed;
   margin: 0;
 }
