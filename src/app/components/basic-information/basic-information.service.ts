@@ -7,8 +7,8 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 export class InputBasicInformationService  {
 
   // pick up table に関する変数
-  private pickup_moment: any[];
-  private pickup_shear_force: any[];
+  public pickup_moment: any[];
+  public pickup_shear_force: any[];
 
   // 適用 に関する変数
   private specification1_list: any[];
@@ -86,7 +86,7 @@ export class InputBasicInformationService  {
         result = [
           { id: 0, title: '耐久性 縁応力度検討用', no: null},
           { id: 1, title: '耐久性 （永久荷重）', no: null},
-          { id: 2, title: '安全性 （疲労破壊）疲労限', no: null},
+          // { id: 2, title: '安全性 （疲労破壊）疲労限', no: null},
           { id: 3, title: '安全性 （疲労破壊）永久作用', no: null},
           { id: 4, title: '安全性 （疲労破壊）永久＋変動', no: null},
           { id: 5, title: '安全性 （破壊）', no: null},

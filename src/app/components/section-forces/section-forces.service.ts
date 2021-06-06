@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputBasicInformationService } from '../basic-information/basic-information.service';
 import { InputDesignPointsService } from '../design-points/design-points.service';
 import { InputMembersService } from '../members/members.service';
 
@@ -10,7 +12,8 @@ export class InputSectionForcesService  {
   private force: any[];
 
   constructor(
-    private members: InputMembersService,
+    private helper: DataHelperModule,
+    private basic: InputBasicInformationService,
     private points: InputDesignPointsService) {
     this.clear();
   }
@@ -18,26 +21,89 @@ export class InputSectionForcesService  {
     this.force = new Array();
   }
 
+  public getColumnHeaders1(): any {
+    const result: object[] = [
+      { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', sortable: false, width: 250 }
+    ];
+
+    let old: string = null;
+    let head: any = null;
+    for(const m of this.basic.pickup_moment){
+      const titles = m.title.split(' ');
+      if(old !== titles[0]){
+        if( head !== null){
+          result.push(head);
+        }
+        head = { title: titles[0], align: 'center', colModel:[] }
+        old = titles[0];
+      }
+      const key = 'Md' + m.id;
+      head.colModel.push(
+        { title: titles[1], align: 'center', colModel: [
+          { title: 'Md<br/>(kN・m)',  dataType: 'float', 'format': '#.00', dataIndx: key + '_Md', sortable: false, width: 100 },
+          { title: 'Nd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: key + '_Nd', sortable: false, width: 100 }
+        ]
+      })
+    }
+    if( head !== null){
+      result.push(head);
+    }
+
+    return result;
+  }
+
+  public getColumnHeaders2(): any {
+    const result: object[] = [
+      { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', sortable: false, width: 250 },
+      { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
+      ];
+
+    let old: string = null;
+    let head: any = null;
+    for(const s of this.basic.pickup_shear_force){
+      const titles = s.title.split(' ');
+      if(old !== titles[0]){
+        if( head !== null){
+          result.push(head);
+        }
+        head = { title: titles[0], align: 'center', colModel:[] }
+        old = titles[0];
+      }
+      const key = 'Vd' + s.id;
+      head.colModel.push(
+        { title: titles[1], align: 'center', colModel: [
+          { title: 'Vd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: key + '_Vd', sortable: false, width: 100 },
+          { title: 'Md<br/>(kN・m)', dataType: 'float', 'format': '#.00', dataIndx: key + '_Md', sortable: false, width: 100 },
+          { title: 'Nd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: key + '_Nd', sortable: false, width: 100 }
+        ]
+      })
+    }
+    if( head !== null){
+      result.push(head);
+    }
+
+    return result;
+  }
+
   // １行 のデフォルト値
-  private default_1_column(index: number): any {
+  private default_column(index: number): any {
 
-    const moment = { Md: null, Nd: null };
-    const shearForce = { Md: null, Nd: null, Vd: null };
-
-    const rows: any = { 
-      index, 
-      ap_1: moment,       // safetyMoment
-      ap_2: shearForce,   // safetyShearForce
-      ap_3: moment,       // SafetyFatigueMoment
-      ap_4: shearForce,   // safetyFatigueShearForce
-      ap_5: moment,       // serviceabilityMoment
-      ap_6: shearForce,   // serviceabilityShearForce
-      ap_7: moment,       // durabilityMoment
-      ap_8: moment,       // restorabilityMoment
-      ap_9: shearForce,   // restorabilityShearForce
-      ap_10: moment,      // earthquakesMoment
-      ap_11: shearForce,  // earthquakesShearForce
+    const rows: any = {
+      index,
     };
+
+    for(const m of this.basic.pickup_moment){
+      const key = 'Md' + m.id;
+      rows[key + '_Md'] = null;
+      rows[key + '_Nd'] = null;
+    }
+
+    for(const s of this.basic.pickup_shear_force){
+      const key = 'Vd' + s.id;
+      rows[key + '_Vd'] = null;
+      rows[key + '_Md'] = null;
+      rows[key + '_Nd'] = null;
+    }
 
     return rows;
   }
@@ -47,21 +113,18 @@ export class InputSectionForcesService  {
   public getTable1Columns(index: number): any {
 
     let result = this.force.find( (item) => item.index === index );
-    //
-    const design_point = this.points.getTableColumn(index);
-    const member = this.members.getTableColumns(design_point.m_no);
-
-    const p_name: string = (design_point !== undefined) ? design_point.p_name: '';
-    const g_name: string = (member !== undefined) ? member.g_name: '';
-    const La: number = (design_point !== undefined) ? design_point.La: null;
 
     // 対象データが無かった時に処理
     if (result === undefined) {
-      result = this.default_1_column(index);
+      result = this.default_column(index);
       this.force.push(result);
     }
 
-    result['g_name'] = g_name;
+    //
+    const design_point = this.points.getTableColumn(index);
+    const p_name: string = (design_point !== undefined) ? design_point.p_name: '';
+    const La: number = (design_point !== undefined) ? design_point.La: null;
+
     result['p_name'] = p_name;
     result['La'] = La;
     return result;
@@ -69,19 +132,27 @@ export class InputSectionForcesService  {
   }
 
   // ファイル
-  public setTable1Columns(table_datas1: any[]) {
-    this.force = new Array();
-    for (const data of table_datas1) {
-      const new_colum = this.default_1_column(data.index);
-      for (let i = 0; i < new_colum.case.length; i++) {
-        new_colum.case[i].Md = data['case' + i + '_Md'];
-        new_colum.case[i].Nd = data['case' + i + '_Nd'];
-
-        new_colum.case[i].Vd = data['case' + i + '_Vd'];
-        new_colum.case[i].Md = data['case' + i + '_Md'];
-        new_colum.case[i].Nd = data['case' + i + '_Nd'];
+  public setTableColumns(table_datas: any[]) {
+    this.clear();
+    for (const data of table_datas) {
+      const new_colum = this.default_column(data.index);
+      let flg = false;
+      for(const key of Object.keys(new_colum)){
+        if(key in data) {
+          const value = this.helper.toNumber(data[key]);
+          if(value !== null){
+            new_colum[key] = value;
+            flg = true;
+          }
+        }
       }
-      this.force.push(new_colum);
+      if( flg === true){
+        this.force.push(new_colum);
+      }
+      //
+      const position = this.points.getCalcData(new_colum.index);
+      position.p_name = data.p_name;
+      position.La = data.La;
     }
   }
 
@@ -93,9 +164,5 @@ export class InputSectionForcesService  {
     this.force = force;
   }
 
-  public setTableColumns(force: any): void{
-    this.clear();
-    this.force = force;
-  }
 
 }

@@ -9,6 +9,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class CalcServiceabilityShearForceService {
   public safetyID: number = 0;
 
   constructor(
+    private save: SaveDataService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private basic: InputBasicInformationService,
     private calc: InputCalclationPrintService,
@@ -52,12 +54,19 @@ export class CalcServiceabilityShearForceService {
 
     // せん断ひび割れ検討判定用
     // せん断ひび割れにの検討における Vcd は １つ目の ピックアップ（永久＋変動）の Mu を使う
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(0));
+    const No0 = (this.save.isManual()) ? 0 : this.basic.pickup_shear_force_no(0);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Vd', No0);
     // 永久荷重
-    this.DesignForceList1 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(1));
+    const No1 = (this.save.isManual()) ? 1 : this.basic.pickup_shear_force_no(1);
+    this.DesignForceList1 = this.force.getDesignForceList(
+      'Vd', No1);
 
     // 変動荷重
-    this.DesignForceList2 = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(2));
+    const No2 = (this.save.isManual()) ? 2 : this.basic.pickup_shear_force_no(2);
+    this.DesignForceList2 = this.force.getDesignForceList(
+      'Vd', No2);
+
     if (this.DesignForceList2.length < 1){
       this.DesignForceList2 = this.force.getLiveload(this.DesignForceList , this.DesignForceList1);
     }

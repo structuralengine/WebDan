@@ -5,6 +5,7 @@ import { Injectable } from "@angular/core";
 import { InputBasicInformationService } from "src/app/components/basic-information/basic-information.service";
 import { InputCalclationPrintService } from "src/app/components/calculation-print/calculation-print.service";
 import { InputCrackSettingsService } from "src/app/components/crack/crack-settings.service";
+import { SaveDataService } from "src/app/providers/save-data.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,6 +19,7 @@ export class CalcDurabilityMomentService {
   public safetyID: number = 0;
 
   constructor(
+    private save: SaveDataService,
     private crack: InputCrackSettingsService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
@@ -39,11 +41,13 @@ export class CalcDurabilityMomentService {
       return;
     }
     // 永久荷重
+    const No1 = (this.save.isManual()) ? 1 : this.basic.pickup_moment_no(1);
     this.DesignForceList = this.force.getDesignForceList(
-      "Md", this.basic.pickup_moment_no(1));
+      "Md", No1);
     // 縁応力検討用
+    const No0 = (this.save.isManual()) ? 0 :this.basic.pickup_moment_no(0);
     this.DesignForceList1 = this.force.getDesignForceList(
-      "Md", this.basic.pickup_moment_no(0));
+      "Md", No0);
 
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition();

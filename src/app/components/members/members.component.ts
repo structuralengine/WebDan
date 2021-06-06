@@ -226,7 +226,7 @@ export class MembersComponent implements OnInit, OnDestroy {
   // 表の高さを計算する
   private tableHeight(): number {
     let containerHeight = window.innerHeight;
-    containerHeight -= 280;
+    containerHeight -= 100;
     return containerHeight;
   }
 

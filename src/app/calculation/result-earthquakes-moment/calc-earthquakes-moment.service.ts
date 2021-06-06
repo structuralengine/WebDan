@@ -3,6 +3,7 @@ import { SetPostDataService } from '../set-post-data.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { Injectable } from '@angular/core';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,6 +16,7 @@ export class CalcEarthquakesMomentService {
   public safetyID: number = 4;
 
   constructor(
+    private save: SaveDataService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private basic: InputBasicInformationService,
@@ -37,7 +39,9 @@ export class CalcEarthquakesMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(7));
+    const No7 = (this.save.isManual()) ? 7 : this.basic.pickup_moment_no(7);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Md', No7);
 
   }
 

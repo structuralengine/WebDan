@@ -10,6 +10,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
 import { SetSectionService } from '../set-section.service';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class CalcServiceabilityMomentService {
   public safetyID: number = 0;
 
   constructor(
+    private save: SaveDataService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private calc: InputCalclationPrintService,
     private basic: InputBasicInformationService,
@@ -52,9 +54,13 @@ export class CalcServiceabilityMomentService {
     }
 
     // 永久荷重
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(1));
+    const No1 = (this.save.isManual()) ? 1 : this.basic.pickup_moment_no(1);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Md', No1);
     // 縁応力度検討用
-    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(0));
+    const No0 = (this.save.isManual()) ? 0 : this.basic.pickup_moment_no(0);
+    this.DesignForceList1 = this.force.getDesignForceList(
+      'Md', No0);
 
   }
 

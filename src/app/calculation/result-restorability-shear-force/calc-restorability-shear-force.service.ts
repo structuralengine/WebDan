@@ -16,10 +16,12 @@ export class CalcRestorabilityShearForceService {
   public isEnable: boolean;
   public safetyID: number = 3;
 
-  constructor(private basic: InputBasicInformationService,
-              private calc: InputCalclationPrintService,
-              private force: SetDesignForceService,
-              private post: SetPostDataService) {
+  constructor(
+    private save: SaveDataService,   
+    private basic: InputBasicInformationService,
+    private calc: InputCalclationPrintService,
+    private force: SetDesignForceService,
+    private post: SetPostDataService) {
     this.DesignForceList = null;
     this.isEnable = false;
   }
@@ -38,7 +40,9 @@ export class CalcRestorabilityShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(6));
+    const No6 = (this.save.isManual()) ? 6 : this.basic.pickup_shear_force_no(6);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Vd', No6);
 
   }
 

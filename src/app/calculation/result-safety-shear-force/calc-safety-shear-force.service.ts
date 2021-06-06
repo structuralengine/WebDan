@@ -50,10 +50,9 @@ export class CalcSafetyShearForceService {
       return;
     }
 
+    const No5 = (this.save.isManual()) ? 5 : this.basic.pickup_shear_force_no(5);
     this.DesignForceList = this.force.getDesignForceList(
-      "Vd",
-      this.basic.pickup_shear_force_no(5)
-    );
+      "Vd",No5 );
   }
 
   // サーバー POST用データを生成する
