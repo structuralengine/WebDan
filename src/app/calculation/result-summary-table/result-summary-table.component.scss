@@ -21,21 +21,21 @@ table {
     border-left: 1px solid black;
   }
 
-.aaa{
+.shape{
   position: relative;
 }
-  .aaa img{
+  .shape img{
     width: 100px;
     height: 100px
   }
-  .aaa .tate{
+  .shape .tate{
     position:absolute;
     color: black;
     transform: rotate( -90deg );
     top: 30%;
     left: 77%;
   }
-  .aaa .yoko{
+  .shape .yoko{
     position:absolute;
     color: black;
     top: 75%;
