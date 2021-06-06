@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { InputMembersService } from './members.service';
 import { SheetComponent } from '../sheet/sheet.component';
 import { AppComponent } from 'src/app/app.component';
@@ -13,7 +13,7 @@ import { InputDesignPointsService } from '../design-points/design-points.service
 })
 
 
-export class MembersComponent implements OnInit, OnDestroy {
+export class MembersComponent implements OnInit, AfterViewInit, OnDestroy {
 
   // データグリッドの設定変数
   @ViewChild('grid') grid: SheetComponent;
@@ -209,6 +209,9 @@ export class MembersComponent implements OnInit, OnDestroy {
     }
   }
 
+  ngAfterViewInit(){
+    this.grid.refreshDataAndView();
+  }
 
   ngOnDestroy() {
     this.saveData();
