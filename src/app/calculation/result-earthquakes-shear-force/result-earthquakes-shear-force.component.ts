@@ -5,6 +5,7 @@ import { CalcEarthquakesShearForceService } from "./calc-earthquakes-shear-force
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
+import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({
   selector: "app-result-earthquakes-shear-force",
@@ -18,14 +19,15 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public safetyShearForcePages: any[];
+  public safetyShearForcePages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
     private calc: CalcEarthquakesShearForceService,
     private result: ResultDataService,
     private post: SetPostDataService,
-    private base: ResultSafetyShearForceComponent
+    private base: ResultSafetyShearForceComponent,
+    private summary: CalcSummaryTableService
   ) {}
 
   ngOnInit() {
@@ -37,6 +39,7 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
     const postData = this.calc.setInputData();
     if (postData === null || postData.length < 1) {
       this.isLoading = false;
+      this.summary.setSummaryTable("earthquakesShearForce");
       return;
     }
 
@@ -52,10 +55,21 @@ export class ResultEarthquakesShearForceComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
+        this.summary.setSummaryTable("earthquakesShearForce", this.safetyShearForcePages);
       },
       (error) => {
-        this.err = error.toString();
+        this.err = 'error!!' + '\n'; 
+        let e: any = error;
+        while('error' in e) {
+          if('message' in e){ this.err += e.message + '\n'; }
+          if('text' in e){ this.err += e.text + '\n'; }
+          e = e.error;
+        }
+        if('message' in e){ this.err += e.message + '\n'; }
+        if('stack' in e){ this.err += e.stack; }
+
         this.isLoading = false;
+        this.summary.setSummaryTable("earthquakesShearForce");
       }
     );
   }

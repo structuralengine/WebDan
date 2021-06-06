@@ -188,6 +188,12 @@ export class InputBarsService {
   public getCalcData(index: any): any {
 
     let result = null;
+    
+    const bar_list = JSON.parse(
+      JSON.stringify({
+        temp: this.bar_list,
+      })
+    ).temp;
 
     const positions = this.points.getSameGroupePoints(index);
     const start = positions.findIndex(v=>v.index === index);
@@ -198,7 +204,7 @@ export class InputBarsService {
         continue; // 計算対象ではなければスキップ
       }
       // barデータに（部材、着目点など）足りない情報を追加する
-      const data: any = this.bar_list.find((v) => v.index === pos.index);
+      const data: any = bar_list.find((v) => v.index === pos.index);
       if(data === undefined){
         continue;
       }
@@ -206,7 +212,15 @@ export class InputBarsService {
         // 当該入力行 の情報を入手
         result = this.default(index);
         for(const key of Object.keys(result)){
-          result[key] = data[key];
+          if(['rebar1', 'rebar2', 'sidebar', 'stirrup', 'bend'].includes(key)){
+            for(const k of Object.keys(result[key])){
+              if(k in data[key]){
+                result[key][k] = data[key][k];
+              }
+            }
+          } else {
+            result[key] = data[key];
+          }
         }
       }
       // 当該入力行より上の行
@@ -228,6 +242,7 @@ export class InputBarsService {
     }
     return result;
   }
+
 
   public setTableColumns(table_datas: any[]) {
 

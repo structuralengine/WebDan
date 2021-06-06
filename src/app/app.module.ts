@@ -1,4 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';  
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -20,6 +21,7 @@ import { AppComponent } from './app.component';
 import { HotTableModule } from '@handsontable/angular';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgxPrintModule } from 'ngx-print';
 
 import { DataHelperModule } from './providers/data-helper.module';
 import { InputBasicInformationService } from './components/basic-information/basic-information.service';
@@ -90,6 +92,7 @@ import { environment } from 'src/environments/environment';
 @NgModule({
   imports: [
     BrowserModule,
+    CommonModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
@@ -97,6 +100,7 @@ import { environment } from 'src/environments/environment';
     DragDropModule,
     BrowserAnimationsModule,
     NgbModule,
+    NgxPrintModule,
     HotTableModule,
     AngularFireModule.initializeApp(environment.firebase),
     CoreModule,

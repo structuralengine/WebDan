@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 import { InputMembersService } from '../members/members.service';
 
 @Injectable({
@@ -75,12 +77,12 @@ export class InputDesignPointsService {
     }
   }
 
-  public getTableColumns(): any[] {
+  public getTableColumns(isManual = false): any[] {
 
     const table_datas: any[] = new Array();
 
     // グリッド用データの作成
-    for( const groupe of this.getGroupeList()){
+    for( const groupe of this.getGroupeList(isManual)){
       const columns = [];
       for ( const member of groupe) {
         const position = member.positions;
@@ -111,7 +113,7 @@ export class InputDesignPointsService {
   //    { index, m_no, g_name, position, p_name, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
   //    ...
   //   }, ...
-  public getGroupeList(): any[] {
+  public getGroupeList(isManual = false): any[] {
 
     const groupe_list: any[] = this.members.getGroupeList();
 
@@ -121,13 +123,24 @@ export class InputDesignPointsService {
         member['positions'] = new Array();
 
         // 同じ要素番号のものを探す
-        const position: any[] = this.position_list.filter(
+        let position: any[] = this.position_list.filter(
           item => item.m_no === member.m_no );
 
-        // 対象データが無かった時に処理
-        for(const pos of position){
-          member.positions.push(pos);
+        // マニュアルモードの場合 部材番号＝インデックス で見つかる場合がある
+        if(position.length === 0 && isManual){
+          position = this.position_list.filter(
+            item => item.index === member.m_no );
+            for(const pos of position){
+              pos.m_no = member.m_no;
+              member.positions.push(pos);
+            }
+        } else {
+          // 対象データが無かった時に処理
+          for(const pos of position){
+            member.positions.push(pos);
+          }
         }
+
       }
 
     }
@@ -237,7 +250,7 @@ export class InputDesignPointsService {
   // 算出点データも同時に生成されなければならない
   public setManualData():void {
     const data = [];
-    for(const g of this.getTableColumns()){
+    for(const g of this.getTableColumns(true)){
       for(const p of g){
           p.isMzCalc = true;
           p.isVzCalc = true;

@@ -20,6 +20,7 @@ export class CalcSafetyMomentService {
   public safetyID: number = 2;
 
   constructor(
+    private save: SaveDataService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
@@ -44,7 +45,9 @@ export class CalcSafetyMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(5));
+    const No5 = (this.save.isManual()) ? 5 : this.basic.pickup_moment_no(5);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Md', No5);
 
   }
 

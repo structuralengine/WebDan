@@ -4,6 +4,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 
 import { Injectable } from '@angular/core';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,7 @@ export class CalcEarthquakesShearForceService {
   public safetyID: number = 4;
 
   constructor(
+    private save: SaveDataService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private basic: InputBasicInformationService,
@@ -35,7 +37,9 @@ export class CalcEarthquakesShearForceService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Vd', this.basic.pickup_shear_force_no(7));
+    const No7 = (this.save.isManual()) ? 7 : this.basic.pickup_shear_force_no(7);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Vd', No7);
 
   }
 

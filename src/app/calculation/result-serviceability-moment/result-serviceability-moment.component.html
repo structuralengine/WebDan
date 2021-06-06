@@ -2,417 +2,377 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="!isLoading">
-  <ng-container *ngIf="isFulfilled">
+<div *ngIf="serviceabilityMomentPages?.length > 0" id="{{page_index}}">
+  <div class="sheet">
+    <div class="sheet-title">
+      <p class="noword sheet-title">耐久性の照査</p>
+      <p class="noword sheet-title indent10">(1)曲げモーメントに関する照査</p>
+      <p class="noword sheet-title indent20">a)曲げひび割れに対する部材の検討方法</p>
+      <p class="sheet-title indent30">曲げひび割れに対する部材の検討葉、全断面を有効としたコンクリートの縁引</p>
+      <p class="sheet-title indent20">帳応力度σ<sub>b</sub>が断面高さに応じた縁引帳応力度の制限値σ<sub>b1</sub>以下の場合は、永久作</p>
+      <p class="sheet-title indent20">用による引帳鉄筋の応力度σ<sub>s</sub>による検討を行い、σ<sub>b</sub>がσ<sub>b1</sub>以上の場合には、曲げ</p>
+      <p class="noword sheet-title indent20">ひび割れ幅W<sub>d</sub>による検討を行う。</p>
+      <p class="sheet-title indent50">σ<sub>b</sub>≦σ<sub>b1</sub>の場合 → 永久作用による引帳鉄筋の応力度による検討</p>
+      <p class="noword sheet-title indent50">σ<sub>b</sub>＞σ<sub>b1</sub>の場合 → 曲げひび割れ幅による検討</p>
+      <p class="noword sheet-title indent20">b)永久作用による引帳鉄筋の応力度による検討</p>
+      <p class="sheet-title indent30">永久作用による引帳鉄筋応力度σ<sub>s</sub>が永久作用による引帳鉄筋応力度の制限値</p>
+      <p class="noword sheet-title indent20">σ<sub>s11</sub>に対し、以下の式を満たすことを検討する。</p>
+      <p class="noword sheet-title indent50">σ<sub>s</sub> / σ<sub>s11</sub> ≦ 1.0</p>
+      <p class="sheet-title indent50">ここに、σ<sub>s</sub>: 永久作用による引帳鉄筋の設計応力度</p>
+      <p class="noword sheet-title indent85">σ<sub>s11</sub>: 永久作用による引帳鉄筋応力度の制限値</p>
+      <p class="caption">永久作用による引帳鉄筋応力度の制限値 σ<sub>s11</sub>(N/mm<sup>2</sup>)</p>
+      <div align="center">
+        <table border="1" class="title">
+          <tr>
+            <td colspan="3">鋼材の腐食に対する環境条件</td>
+          </tr>
+          <tr>
+            <td>一般の環境</td>
+            <td>腐食性環境</td>
+            <td>特に厳しい腐食性環境</td>
+          </tr>
+          <tr>
+            <td>140</td>
+            <td>120</td>
+            <td>100</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    <section class="sheet" id={{page_index}}>
-      <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-      xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-        <!--タイトル-->
-        <g font-size="10pt" text-anchor="start">
-            <text x="0" y="42">{{title}}</text>
-  
-            <text x="11" y="79">(1)曲げモーメントに関する照査</text>
-            <text x="26" y="117">a)曲げひび割れに対する部材の検討方法</text>
-            <text x="45" y="155">曲げひび割れに対する部材の検討葉、全断面を有効としたコンクリートの縁引帳</text>
-            <text x="26" y="174">応力度</text>
-            <text x="68" y="174">
-              σ<tspan baseline-shift="0%" font-size="8pt">b</tspan>
-            </text>
-            <text x="94" y="174">が断面高さに応じた縁引帳応力度の制限値</text>
-            <text x="348" y="174">
-              σ<tspan baseline-shift="0%" font-size="8pt">b1</tspan>
-            </text>
-            <text x="375" y="174">以下の場合は、永久作用に</text>
-            <text x="26" y="193">よる引帳鉄筋の応力度</text>
-            <text x="160" y="193">
-              σ<tspan baseline-shift="0%" font-size="8pt">s</tspan>
-            </text>
-            <text x="185" y="193">による検討を行い、</text>
-            <text x="295" y="193">
-              σ<tspan baseline-shift="0%" font-size="8pt">b</tspan>
-            </text>
-            <text x="325" y="193">
-              がσ<tspan baseline-shift="0%" font-size="8pt">b1</tspan>
-            </text>
-            <text x="363" y="193">以上の場合には、曲げひび</text>
-            <text x="26" y="212">
-              割れ幅 W<tspan baseline-shift="0%" font-size="8pt">ｄ</tspan>
-              による検討を行う。</text>
-  
-            <text x="76" y="250">
-              σ<tspan baseline-shift="0%" font-size="8pt">b</tspan>≦
-            </text>
-            <text x="106" y="250">
-              σ<tspan baseline-shift="0%" font-size="8pt">b1</tspan>の場合
-            </text>
-            <text x="189" y="250">→</text>
-            <text x="227" y="250">永久作用による引帳鉄筋の応力度による検討</text>
-            <text x="76" y="268">
-              σ<tspan baseline-shift="0%" font-size="8pt">b</tspan>＞
-            </text>
-            <text x="106" y="268">
-              σ<tspan baseline-shift="0%" font-size="8pt">b1</tspan>の場合
-            </text>
-            <text x="189" y="268">→</text>
-            <text x="227" y="268">曲げひび割れ幅による検討</text>
-  
-            <text x="26" y="306">b)永久作用による引帳鉄筋の応力度による検討</text>
-            <text x="45" y="344">永久作用による引帳鉄筋応力度</text>
-            <text x="235" y="344">
-              σ<tspan baseline-shift="0%" font-size="8pt">s</tspan>
-            </text>
-            <text x="256" y="344">が永久作用による引帳鉄筋応力度の制限値</text>
-            <text x="26" y="363">
-              σ<tspan baseline-shift="0%" font-size="8pt">s11</tspan>
-            </text>
-            <text x="57" y="363">に対し、以下の式を満たすことを検討する。</text>
-  
-            <text x="113" y="401">
-              σ<tspan baseline-shift="0%" font-size="8pt">s</tspan> /
-            </text>
-            <text x="151" y="401">
-              σ<tspan baseline-shift="0%" font-size="8pt">s11</tspan>
-            </text>
-            <text x="189" y="401">≦　1.0</text>
-            <text x="113" y="439">
-              ここに、 σ<tspan baseline-shift="0%" font-size="8pt">s</tspan></text>
-            <text x="197" y="439">: 永久作用による引帳鉄筋の設計応力度</text>
-            <text x="163" y="458">
-              σ<tspan baseline-shift="0%" font-size="8pt">s11</tspan></text>
-            <text x="197" y="458">: 永久作用による引帳鉄筋応力度の制限値</text>
-  
-            <text x="95" y="495">永久作用による引帳鉄筋応力度の制限値 σ<tspan baseline-shift="0%" font-size="8pt">s11</tspan></text>
-            <text x="375" y="495">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="189" y="514">鋼材の腐食に対する環境条件</text>
-            <text x="95" y="533">一般の環境</text>
-            <text x="216" y="533">腐食性環境</text>
-            <text x="329" y="533">特に厳しい腐食性環境</text>
-            <text x="125" y="552">140</text>
-            <text x="234" y="552">120</text>
-            <text x="386" y="552">100</text>
-  
-            <text x="19" y="590">c)曲げひび割れ幅の検討</text>
-            <text x="45" y="628">曲げひび割れの検討は、コンクリート表面の設計曲げひび割れ幅</text>
-            <text x="436" y="628">
-              W<tspan baseline-shift="0%" font-size="8pt">d</tspan>
-            </text>
-            <text x="461" y="628">がひび割れ幅</text>
-            <text x="19" y="647">が限界値</text>
-            <text x="75" y="647">
-              W<tspan baseline-shift="0%" font-size="8pt">lim</tspan>
-            </text>
-            <text x="104" y="647">に対して、次式の条件を満たす方法により行う。</text>
-  
-            <text x="113" y="684">
-              γ<tspan baseline-shift="0%" font-size="8pt">i</tspan>・
-            </text>
-  
-            <text x="142" y="684">
-              W<tspan baseline-shift="0%" font-size="8pt">d</tspan> /
-            </text>
-            <text x="172" y="684">
-              W<tspan baseline-shift="0%" font-size="8pt">lim</tspan>
-            </text>
-            <text x="200" y="684">≦　1.0</text>
-            <text x="95" y="711">ここに、γ<tspan baseline-shift="0%" font-size="8pt">i</tspan></text>
-            <text x="170" y="711">： 構造係数</text>
-            <text x="151" y="730">W<tspan baseline-shift="0%" font-size="8pt">d</tspan></text>
-            <text x="170" y="730">： コンクリート表面の設計曲げひび割れ幅(mm)</text>
-            <text x="151" y="749">W<tspan baseline-shift="0%" font-size="8pt">d</tspan>
-              ＝1.1・</text>
-            <text x="224" y="749">k<tspan baseline-shift="0%" font-size="8pt">1</tspan>・</text>
-            <text x="254" y="749">k<tspan baseline-shift="0%" font-size="8pt">2</tspan>・</text>
-            <text x="284" y="749">k<tspan baseline-shift="0%" font-size="8pt">3</tspan>・</text>
-            <text x="314" y="749">k<tspan baseline-shift="0%" font-size="8pt">4</tspan>{{'{'}}</text>
-            <text x="333" y="749">4c+0.7(</text>
-            <text x="385" y="749">C<tspan baseline-shift="0%" font-size="8pt">s</tspan>
-              - φ）{{'}'}}</text>
-            <text x="455" y="749">(σ<tspan baseline-shift="0%" font-size="8pt">se</tspan> /</text>
-            <text x="492" y="749">E<tspan baseline-shift="0%" font-size="8pt">s</tspan> +ε'csd)</text>
-            <text x="151" y="768">k<tspan baseline-shift="0%" font-size="8pt">1</tspan></text>
-            <text x="170" y="768">： 鋼材の表面形状がひび割れ幅に及ぼす影響を表す係数で、異</text>
-            <text x="189" y="786">形鉄筋の場合は1.0とする。</text>
-            <text x="151" y="805">k<tspan baseline-shift="0%" font-size="8pt">2</tspan></text>
-            <text x="170" y="805">： コンクリートの品質がひび割れ幅に及ぼす影響を表す係数</text>
-            <text x="302" y="824">15</text>
-            <text x="227" y="836">k<tspan baseline-shift="0%" font-size="8pt">2</tspan> ＝</text>
-            <text x="359" y="836">+ 0.7</text>
-            <text x="284" y="843">f'cd + 20</text>
-            <text x="151" y="862">f<tspan baseline-shift="0%" font-size="8pt">cd</tspan></text>
-            <text x="170" y="862">： コンクリートの設計圧縮強度</text>
-            <text x="379" y="862">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="151" y="881">k<tspan baseline-shift="0%" font-size="8pt">3</tspan></text>
-            <text x="170" y="881">： 引帳鋼材の段数の影響を表す係数</text>
-            
-  
-            <!--横線-->
-            <g fill="none" stroke="black">
-              <line stroke-width="0.50" x1="76" y1="499" x2="492" y2="499" />
-              <line stroke-width="0.25" x1="76" y1="518" x2="492" y2="518" />
-              <line stroke-width="0.25" x1="76" y1="537" x2="492" y2="537" />
-              <line stroke-width="0.50" x1="76" y1="556" x2="492" y2="556" />
-  
-              <line stroke-width="0.30" x1="276" y1="828" x2="352" y2="828" />
-            </g>
-  
-            <!--縦線-->
-            <g fill="none" stroke="black">
-              <line stroke-width="0.50" x1="76" y1="499" x2="76" y2="556" />
-              <line stroke-width="0.25" x1="189" y1="518" x2="189" y2="556" />
-              <line stroke-width="0.25" x1="302" y1="518" x2="302" y2="556" />
-              <line stroke-width="0.50" x1="492" y1="499" x2="492" y2="556" />
-  
-            </g>
-  
-          </g>
-        </svg>
-  
-      </section>
-  
-      <section class="sheet">
-        <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-        xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-          <!--タイトル-->
-          <g font-size="10pt" text-anchor="start">
-            <text x="151" y="42">k<tspan baseline-shift="0%" font-size="8pt">4</tspan></text>
-            <text x="170" y="42">： 曲げひび割れの変動を考慮する係数</text>
-            <text x="151" y="60">c</text>
-            <text x="170" y="60">: 引帳鋼材のかぶり(mm)</text>
-            <text x="147" y="79">
-              C<tspan baseline-shift="0%" font-size="8pt">s</tspan></text>
-            <text x="170" y="79">: 鋼材の中心間隔(mm)</text>
-  
-            <text x="144" y="98">φ </text>
-            <text x="170" y="98">: 鋼材径(mm)</text>
-            <text x="125" y="117">
-              ε'<tspan baseline-shift="0%" font-size="8pt">csd</tspan></text>
-            <text x="170" y="117">: コンクリートの収縮及びクリープの影響等によるひび割れ幅</text>
-            <text x="189" y="136">の増加を考慮するための数値</text>
-            <text x="144" y="155">
-              σ<tspan baseline-shift="0%" font-size="8pt">se</tspan></text>
-            <text x="170" y="155">: 鋼材位置のコンクリートの応力度が0の状態からの鉄筋応力度</text>
-            <text x="189" y="174">の増加量</text>
-            <text x="250" y="174">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="144" y="212">
-              W<tspan baseline-shift="0%" font-size="8pt">lim</tspan></text>
-            <text x="174" y="212">: ひび割れ幅の制限値</text>
-  
-            　　　　　 <text x="76" y="231">表3.3.1 鋼材の腐食に対するコンクリートのひび割れ幅の制限値</text>
-            <text x="460" y="231">
-              W<tspan baseline-shift="0%" font-size="8pt">lim</tspan></text>
-  
-            <!--横線-->
-            <g fill="none" stroke="black">
-  
-              <line stroke-width="0.50" x1="11" y1="238" x2="567" y2="238" />
-              <line stroke-width="0.25" x1="200" y1="257" x2="567" y2="257" />
-              <line stroke-width="0.25" x1="11" y1="276" x2="567" y2="276" />
-              <line stroke-width="0.25" x1="11" y1="295" x2="567" y2="295" />
-            </g>
-  
-            <!--縦線-->
-            <g fill="none" stroke="black">
-  
-              <line stroke-width="0.50" x1="11" y1="238" x2="11" y2="295" />
-              <line stroke-width="0.25" x1="200" y1="238" x2="200" y2="295" />
-              <line stroke-width="0.25" x1="295" y1="257" x2="295" y2="295" />
-              <line stroke-width="0.25" x1="389" y1="257" x2="389" y2="295" />
-              <line stroke-width="0.50" x1="567" y1="238" x2="567" y2="295" />
-            </g>
-  
-            <text x="76" y="261">鉄筋の種類</text>
-            <text x="302" y="253">鋼材の腐食に対する環境条件</text>
-            <text x="216" y="272">一般の環境</text>
-            <text x="310" y="272">腐食性環境</text>
-            <text x="416" y="272">特に厳しい腐食性環境</text>
-            <text x="76" y="291">異形鉄筋</text>
-            <text x="227" y="291">0.005c</text>
-            <text x="321" y="291">0.004c</text>
-            <text x="454" y="291">0.0035c</text>
-  
-          </g>
-      </svg>
+  <div class="sheet">
+    <div class="sheet-title">
+      <p class="noword sheet-title indent20">c)曲げひび割れ幅の検討</p>
+      <p class="sheet-title indent30">曲げひび割れの検討は、コンクリート表面の設計曲げひび割れ幅W<sub>d</sub>がひび割れ幅</p>
+      <p class="noword sheet-title indent20">が限界値W<sub>lim</sub>に対して、次式の条件を満たす方法により行う。</p>
+      <p class="noword sheet-title indent60">γ<sub>i</sub>・W<sub>d</sub> / W<sub>lim</sub> ≦ 1.0</p>
+      <p class="sheet-title indent50">ここに、γ<sub>i</sub>：構造係数</p>
+      <p class="sheet-title indent85">W<sub>d</sub>：コンクリート表面の設計曲げひび割れ幅(mm)</p>
+      <p class="sheet-title indent90">k<sub>1</sub>：鋼材の表面形状がひび割れ幅に及ぼす影響を表す係数で、</p>
+      <p class="sheet-title indent110">異形鉄筋の場合は1.0とする。</p>
+      <p class="sheet-title indent90">k<sub>2</sub>：コンクリートの品質がひび割れ幅に及ぼす影響を表す係数</p>
+      <div align="center">
+        <table class="formula">
+          <tr>
+            <td rowspan="2">k<sub>2</sub> = </td>
+            <td class="bottom">15</td>
+            <td rowspan="2"> + 0.7</td>
+          </tr>
+          <tr>
+            <td>f'<sub>cd</sub> + 20</td>
+          </tr>
+        </table>
+      </div>
+      <p class="sheet-title indent90">f<sub>cd</sub>：コンクリートの設計圧縮強度(N/mm<sup>2</sup>)</p>
+      <p class="sheet-title indent90">k<sub>3</sub>：引帳鋼材の段数の影響を表す係数</p>
+      <p class="sheet-title indent90">k<sub>4</sub>：曲げひび割れの変動を考慮する係数</p>
+      <p class="sheet-title indent90">c：引帳鋼材のかぶり(mm)</p>
+      <p class="sheet-title indent90">C<sub>s</sub>：鋼材の中心間隔(mm)</p>
+      <p class="sheet-title indent90">φ：鋼材径(mm)</p>
+      <p class="sheet-title indent80">ε'<sub>csd</sub>：コンクリートの収縮及びクリープの影響等によるひび割れ</p>
+      <p class="sheet-title indent110">幅の増加を考慮するための数値</p>
+      <p class="sheet-title indent85">σ<sub>se</sub>：鋼材位置のコンクリートの応力度が0の状態からの鉄筋応力</p>
+      <p class="sheet-title indent110">度の増加量(N/mm<sup>2</sup>)</p>
+      <p class="noword sheet-title indent80">W<sub>lim</sub>：ひび割れ幅の制限値</p>
+      <p class="caption">表3.3.1 鋼材の腐食に対するコンクリートのひび割れ幅の制限値W<sub>lim</sub></p>
+      <div align="center">
+        <table border="1" class="title">
+          <tr>
+            <td rowspan="2" width="19%">鉄筋の種類</td>
+            <td colspan="3">鋼材の腐食に対する環境条件</td>
+          </tr>
+          <tr>
+            <td>一般の環境</td>
+            <td>腐食性環境</td>
+            <td>特に厳しい腐食性環境</td>
+          </tr>
+          <tr>
+            <td>異形鉄筋</td>
+            <td>0.005c</td>
+            <td>0.004c</td>
+            <td>0.0035c</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 
-    </section>
+  <div *ngFor="let pages of serviceabilityMomentPages; index as i" class="sheet">
+    <div class="cell_title1">{{pages.caption}} (その{{i+1}})</div>
+    <div class="cell_title2">[{{pages.g_name}}]</div>
+    <table class="main">
+      <tr>
+        <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left2">部材名称</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[0].alien}} g-top2 g-right2 g-bottom1">
+          {{column[0].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">位置</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[1].alien}} g-right2 g-bottom1">
+          {{column[1].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">断面番号</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[2].alien}} g-right2 g-bottom2">
+          {{column[2].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">B</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[3].alien}} g-right2 g-bottom1">
+          {{column[3].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">H</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[4].alien}} g-right2 g-bottom1">
+          {{column[4].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Bf</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[5].alien}} g-right2 g-bottom1">
+          {{column[5].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom2 g-left2">Hf</th>
+        <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[6].alien}} g-right2 g-bottom2">
+          {{column[6].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-left2">Ast</th>
+        <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[7].alien}} g-right2">{{column[7].value}}
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">引張鉄筋</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[8].alien}} g-right2 g-bottom1">
+          {{column[8].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">dast</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[9].alien}} g-right2 g-bottom1">
+          {{column[9].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-left2">Asc</th>
+        <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[10].alien}} g-right2">
+          {{column[10].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">圧縮鉄筋</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[11].alien}} g-right2 g-bottom1">
+          {{column[11].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">dasc</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[12].alien}} g-right2 g-bottom1">
+          {{column[12].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-left2">Ase</th>
+        <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[13].alien}} g-right2">
+          {{column[13].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">側方鉄筋</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[14].alien}} g-right2 g-bottom1">
+          {{column[14].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom2 g-left2">dase</th>
+        <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[15].alien}} g-right2 g-bottom2">
+          {{column[15].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">f''ck</th>
+        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[16].alien}} g-right2 g-bottom1">
+          {{column[16].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γc</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[17].alien}} g-right2 g-bottom1">
+          {{column[17].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">f''cd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[18].alien}} g-right2 g-bottom1">
+          {{column[18].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">fsyk</th>
+        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[19].alien}} g-right2 g-bottom1">
+          {{column[19].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γs</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[20].alien}} g-right2 g-bottom1">
+          {{column[20].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">fsyd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[21].alien}} g-right2 g-bottom1">
+          {{column[21].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">環境条件</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[22].alien}} g-right2 g-bottom2">
+          {{column[22].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Mhd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[23].alien}} g-right2 g-bottom1">
+          {{column[23].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Nhd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[24].alien}} g-right2 g-bottom1">
+          {{column[24].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">σ<sub>b</sub>≦σ<sub>b1</sub></th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[25].alien}} g-right2 g-bottom2">
+          {{column[25].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Md</th>
+        <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[26].alien}} g-right2 g-bottom1">
+          {{column[26].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Nd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[27].alien}} g-right2 g-bottom1">
+          {{column[27].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">σ<sub>c</sub>≦0.4/f''<sub>cd</sub></th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[28].alien}} g-right2 g-bottom1">
+          {{column[28].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">σ<sub>s</sub>≦σ<sub>s11</sub></th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[29].alien}} g-right2 g-bottom2">
+          {{column[29].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Mpd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[30].alien}} g-right2 g-bottom1">
+          {{column[30].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Npd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(kN)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[31].alien}} g-right2 g-bottom1">
+          {{column[31].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">n/(E<sub>s</sub>/E<sub>c</sub>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[32].alien}} g-right2 g-bottom2">
+          {{column[32].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">σ<sub>se</sub></th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm<sub>2</sub>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[33].alien}} g-right2 g-bottom1">
+          {{column[33].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">C</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[34].alien}} g-right2 g-bottom1">
+          {{column[34].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">C<sub>s</sub></th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[35].alien}} g-right2 g-bottom1">
+          {{column[35].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Φ</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[36].alien}} g-right2 g-bottom1">
+          {{column[36].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">ε''<sub>csd</sub>(×10<sup>-6</sup>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[37].alien}} g-right2 g-bottom1">
+          {{column[37].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">κ1</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[38].alien}} g-right2 g-bottom1">
+          {{column[38].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">κ2</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[39].alien}} g-right2 g-bottom1">
+          {{column[39].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">n</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[40].alien}} g-right2 g-bottom1">
+          {{column[40].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">κ3</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[41].alien}} g-right2 g-bottom1">
+          {{column[41].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">κ4</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[42].alien}} g-right2 g-bottom1">
+          {{column[42].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom1 g-left2">Wd</th>
+        <th class="cell_name3 g-right2 g-bottom1">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[43].alien}} g-right2 g-bottom1">
+          {{column[43].value}}</td>
+      </tr>
+      <tr>
+        <th class="cell_name2 g-bottom2 g-left2">Wlim</th>
+        <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[44].alien}} g-right2 g-bottom2">
+          {{column[44].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γ<sub>i</sub></th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[45].alien}} g-right2 g-bottom1">
+          {{column[45].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γ<sub>i</sub>・Wd/Wlim</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[46].alien}} g-right2 g-bottom1">
+          {{column[46].value}}</td>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">照査結果</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column[47].alien}} g-right2 g-bottom2">
+          {{column[47].value}}</td>
+      </tr>
+    </table>
+  </div>
 
-    <ng-container *ngFor="let pages of serviceabilityMomentPages; index as i">
-      <section class="sheet">
-        <svg width="568" height="897" viewBox="0 0 568 897" xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-          <!--タイトル-->
-          <text x="0" y="42" font-size="9pt" text-anchor="start">{{pages.caption}} (その{{i+1}})</text>
-          <text x="567" y="42" font-size="9pt" text-anchor="end">[{{pages.g_name}}]</text>
-          <!--横線-->
-          <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="0" y1="45" x2="567" y2="45" />
-            <line stroke-width="0.25" x1="0" y1="60" x2="567" y2="60" />
-            <line stroke-width="0.25" x1="0" y1="76" x2="567" y2="76" />
-            <line stroke-width="0.50" x1="0" y1="91" x2="567" y2="91" />
-            <line stroke-width="0.25" x1="0" y1="106" x2="567" y2="106" />
-            <line stroke-width="0.25" x1="0" y1="121" x2="567" y2="121" />
-            <line stroke-width="0.25" x1="0" y1="136" x2="567" y2="136" />
-            <line stroke-width="0.50" x1="0" y1="151" x2="567" y2="151" />
-            <line stroke-width="0.25" x1="0" y1="181" x2="567" y2="181" />
-            <line stroke-width="0.25" x1="0" y1="197" x2="567" y2="197" />
-            <line stroke-width="0.25" x1="0" y1="227" x2="567" y2="227" />
-            <line stroke-width="0.25" x1="0" y1="242" x2="567" y2="242" />
-            <line stroke-width="0.25" x1="0" y1="257" x2="567" y2="257" />
-            <line stroke-width="0.50" x1="0" y1="287" x2="567" y2="287" />
-            <line stroke-width="0.25" x1="0" y1="302" x2="567" y2="302" />
-            <line stroke-width="0.25" x1="0" y1="318" x2="567" y2="318" />
-            <line stroke-width="0.25" x1="0" y1="333" x2="567" y2="333" />
-            <line stroke-width="0.25" x1="0" y1="363" x2="567" y2="363" />
-            <line stroke-width="0.25" x1="0" y1="378" x2="567" y2="378" />
-            <line stroke-width="0.50" x1="0" y1="393" x2="567" y2="393" />
-            <line stroke-width="0.25" x1="0" y1="408" x2="567" y2="408" />
-            <line stroke-width="0.25" x1="0" y1="423" x2="567" y2="423" />
-            <line stroke-width="0.50" x1="0" y1="439" x2="567" y2="439" />
-            <line stroke-width="0.25" x1="0" y1="454" x2="567" y2="454" />
-            <line stroke-width="0.25" x1="0" y1="469" x2="567" y2="469" />
-            <line stroke-width="0.25" x1="0" y1="484" x2="567" y2="484" />
-            <line stroke-width="0.50" x1="0" y1="499" x2="567" y2="499" />
-            <line stroke-width="0.25" x1="0" y1="514" x2="567" y2="514" />
-            <line stroke-width="0.25" x1="0" y1="529" x2="567" y2="529" />
-            <line stroke-width="0.25" x1="0" y1="544" x2="567" y2="544" />
-            <line stroke-width="0.25" x1="0" y1="560" x2="567" y2="560" />
-            <line stroke-width="0.25" x1="0" y1="575" x2="567" y2="575" />
-            <line stroke-width="0.25" x1="0" y1="590" x2="567" y2="590" />
-            <line stroke-width="0.25" x1="0" y1="605" x2="567" y2="605" />
-            <line stroke-width="0.25" x1="0" y1="620" x2="567" y2="620" />
-            <line stroke-width="0.25" x1="0" y1="635" x2="567" y2="635" />
-            <line stroke-width="0.25" x1="0" y1="650" x2="567" y2="650" />
-            <line stroke-width="0.25" x1="0" y1="665" x2="567" y2="665" />
-            <line stroke-width="0.25" x1="0" y1="681" x2="567" y2="681" />
-            <line stroke-width="0.25" x1="0" y1="696" x2="567" y2="696" />
-            <line stroke-width="0.25" x1="0" y1="711" x2="567" y2="711" />
-            <line stroke-width="0.50" x1="0" y1="726" x2="567" y2="726" />
-            <line stroke-width="0.25" x1="0" y1="741" x2="567" y2="741" />
-            <line stroke-width="0.25" x1="0" y1="756" x2="567" y2="756" />
-            <line stroke-width="0.50" x1="0" y1="771" x2="567" y2="771" />
-          </g>
-          <!--縦線-->
-          <g fill="none" stroke="black">
-            <line stroke-width="0.50" x1="113" y1="45" x2="113" y2="771" />
-            <line stroke-width="0.25" x1="204" y1="45" x2="204" y2="771" />
-            <line stroke-width="0.25" x1="295" y1="45" x2="295" y2="771" />
-            <line stroke-width="0.25" x1="386" y1="45" x2="386" y2="771" />
-            <line stroke-width="0.25" x1="476" y1="45" x2="476" y2="771" />
-          </g>
-          <!--Row Header-->
-          <g font-size="9pt" text-anchor="middle">
-            <text x="57" y="57">部材名称</text>
-            <text x="57" y="72">位　　置</text>
-            <text x="57" y="87">断面番号</text>
+</div>
 
-            <text x="30" y="102">B</text><text x="70" y="102">(mm)</text>
-            <text x="30" y="117">H</text><text x="70" y="117">(mm)</text>
-            <text x="30" y="132">Bf</text><text x="70" y="132">(mm)</text>
-            <text x="30" y="147">Hf</text><text x="70" y="147">(mm)</text>
-
-            <text x="30" y="163">Ast</text>
-            <text x="76" y="163">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="178">引張鉄筋</text>
-            <text x="30" y="193">dast</text><text x="70" y="193">(mm)</text>
-
-            <text x="30" y="208">Asc</text>
-            <text x="76" y="208">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="223">圧縮鉄筋</text>
-            <text x="30" y="238">dasc</text><text x="70" y="238">(mm)</text>
-
-            <text x="30" y="253">Ase</text>
-            <text x="76" y="253">
-              (mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="268">側方鉄筋</text>
-            <text x="30" y="284">dase</text><text x="70" y="284">(mm)</text>
-
-            <text x="30" y="299">f"ck</text>
-            <text x="76" y="299">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="314">γc</text>
-            <text x="30" y="329">f"cd</text>
-            <text x="76" y="329">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-
-            <text x="30" y="344">fsyk</text>
-            <text x="76" y="344">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="359">γs</text>
-            <text x="30" y="374">fsyd</text>
-            <text x="76" y="374">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="57" y="389">環境条件</text>
-
-            <text x="30" y="405">Mhd</text><text x="70" y="405">(kN･m)</text>
-            <text x="30" y="420">Nhd</text><text x="70" y="420">(kN)</text>
-            <text x="57" y="435">σb≦σb1</text>
-
-            <text x="30" y="450">Md</text><text x="70" y="450">(kN･m)</text>
-            <text x="30" y="465">Nd</text><text x="70" y="465">(kN)</text>
-            <text x="57" y="480">σc≦0.4/f"cd</text>
-            <text x="57" y="495">σs≦σs11</text>
-
-            <text x="30" y="510">Mpd</text><text x="70" y="510">(kN･m)</text>
-            <text x="30" y="526">Npd</text><text x="70" y="526">(kN)</text>
-            <text x="57" y="541">n(Es/Ec)</text>
-            <text x="30" y="556">σse</text>
-            <text x="76" y="556">
-              (N/mm<tspan baseline-shift="18%" font-size="8pt">2</tspan>)
-            </text>
-            <text x="30" y="571">C</text><text x="70" y="571">(mm)</text>
-            <text x="30" y="586">Cs</text><text x="70" y="586">(mm)</text>
-            <text x="30" y="601">φ</text><text x="70" y="601">(mm)</text>
-            <text x="30" y="616">ε"csd</text>
-            <text x="76" y="616">
-              (x 10<tspan baseline-shift="18%" font-size="8pt">-6</tspan>)
-            </text>
-            <text x="57" y="631">κ1</text>
-            <text x="57" y="647">κ2</text>
-            <text x="57" y="662">n</text>
-            <text x="57" y="677">κ3</text>
-            <text x="57" y="692">κ4</text>
-            <text x="30" y="707">Wd</text><text x="70" y="707">(mm)</text>
-            <text x="30" y="722">Wlim</text><text x="70" y="722">(mm)</text>
-
-            <text x="57" y="737">γi</text>
-            <text x="57" y="752">γi・Wd/Wlim</text>
-            <text x="57" y="768">照査結果</text>
-
-          </g>
-          <!--calclate-->
-          <g font-size="9pt">
-            <ng-container *ngFor="let column of pages.columns; index as c">
-              <ng-container *ngFor="let item of column; index as r">
-                <ng-container *ngIf="item.value != ''">
-                    <text *ngIf="item.alien == 'right'" text-anchor="end" [attr.x]="199+c*91"
-                    [attr.y]="57+r*15.15">{{item.value}}</text>
-                  <text *ngIf="item.alien == 'center'" text-anchor="middle" [attr.x]="159+c*91"
-                    [attr.y]="57+r*15.15">{{item.value}}</text>
-                </ng-container>
-              </ng-container>
-            </ng-container>
-          </g>
-        </svg>
-      </section>
-    </ng-container>
-
-  </ng-container>
-  <section *ngIf="err.length > 0" class="sheet">
-    <p>{{err}}</p>
-  </section>
-</ng-container>
+<div *ngIf="err.length > 0" class="sheet">
+  <p>{{err}}</p>
+</div>

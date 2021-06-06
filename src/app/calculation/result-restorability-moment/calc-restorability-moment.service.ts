@@ -6,6 +6,7 @@ import { Injectable } from '@angular/core';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class CalcRestorabilityMomentService {
   public safetyID: number = 3;
 
   constructor(
+    private save: SaveDataService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private force: SetDesignForceService,
     private post: SetPostDataService,
@@ -43,7 +45,9 @@ export class CalcRestorabilityMomentService {
       return;
     }
 
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(6));
+    const No6 = (this.save.isManual()) ? 6 : this.basic.pickup_moment_no(6);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Md', No6);
 
   }
 

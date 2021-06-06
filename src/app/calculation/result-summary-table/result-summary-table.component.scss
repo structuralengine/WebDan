@@ -1,0 +1,43 @@
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  .modal-dialog{
+    max-width: 100%;
+    margin: 15px;
+  }
+  
+  .top {
+      border-top: 1px solid black;
+  }
+  
+  .bottom {
+      border-bottom: 1px solid black;
+  }
+  
+  .left {
+    border-left: 1px solid black;
+  }
+
+.aaa{
+  position: relative;
+}
+  .aaa img{
+    width: 100px;
+    height: 100px
+  }
+  .aaa .tate{
+    position:absolute;
+    color: black;
+    transform: rotate( -90deg );
+    top: 30%;
+    left: 77%;
+  }
+  .aaa .yoko{
+    position:absolute;
+    color: black;
+    top: 75%;
+    left: 24%;
+  }

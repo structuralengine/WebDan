@@ -8,6 +8,7 @@ import { InputFatiguesService } from 'src/app/components/fatigues/fatigues.servi
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputCalclationPrintService } from 'src/app/components/calculation-print/calculation-print.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -24,6 +25,7 @@ export class CalcSafetyFatigueMomentService {
   public safetyID: number = 1;
 
   constructor(
+    private save: SaveDataService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private helper: DataHelperModule,
     private force: SetDesignForceService,
@@ -52,11 +54,17 @@ export class CalcSafetyFatigueMomentService {
     }
 
     // 疲労現
-    this.DesignForceList1 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(2));
+    const No2 = (this.save.isManual()) ? 2 : this.basic.pickup_moment_no(2);
+    this.DesignForceList1 = this.force.getDesignForceList(
+      'Md', No2);
     // 永久作用
-    this.DesignForceList3 = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(3));
+    const No3 = (this.save.isManual()) ? 3 : this.basic.pickup_moment_no(3);
+    this.DesignForceList3 = this.force.getDesignForceList(
+      'Md', No3);
     // 永久+変動作用
-    this.DesignForceList = this.force.getDesignForceList('Md', this.basic.pickup_moment_no(4));
+    const No4 = (this.save.isManual()) ? 4 : this.basic.pickup_moment_no(4);
+    this.DesignForceList = this.force.getDesignForceList(
+      'Md', No4);
 
     // 変動応力
     this.DesignForceList2 = this.force.getLiveload(this.DesignForceList3, this.DesignForceList);
@@ -69,7 +77,7 @@ export class CalcSafetyFatigueMomentService {
     // 列車本数の入力がない場合は処理を抜ける
     if (this.helper.toNumber(this.fatigue.train_A_count) === null &&
       this.helper.toNumber(this.fatigue.train_B_count) === null) {
-      return;
+      return null;
     }
 
     if (this.DesignForceList.length < 1) {

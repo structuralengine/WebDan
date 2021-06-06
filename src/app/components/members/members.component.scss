@@ -1,3 +1,8 @@
+.ht-container {
+  width: 700px;
+  float: left;
+}
+
 .footer {
   margin-top: 10px;
 
@@ -16,6 +21,7 @@
 
   .left-table{
     float: left;
+    margin-left: 15px;
   }
   .right-table{
     float: left;

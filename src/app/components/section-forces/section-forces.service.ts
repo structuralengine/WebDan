@@ -1,144 +1,168 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { InputBasicInformationService } from '../basic-information/basic-information.service';
 import { InputDesignPointsService } from '../design-points/design-points.service';
+import { InputMembersService } from '../members/members.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class InputSectionForcesService  {
 
-  private moment_force: any[];
-  private shear_force: any[];
+  private force: any[];
 
-  constructor(private points: InputDesignPointsService) {
+  constructor(
+    private helper: DataHelperModule,
+    private basic: InputBasicInformationService,
+    private points: InputDesignPointsService) {
     this.clear();
   }
   public clear(): void {
-    this.moment_force = new Array();
-    this.shear_force = new Array();
+    this.force = new Array();
   }
 
-  // 曲げモーメント １入力行のデフォルト値
-  // { index, p_name, case: [{Md, Nd}, {Md, Nd}, ...] }
-  private default_1_column(index: number): any {
+  public getColumnHeaders1(): any {
+    const result: object[] = [
+      { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', sortable: false, width: 250 }
+    ];
 
-    const rows: any = { index, case: new Array() };
+    let old: string = null;
+    let head: any = null;
+    for(const m of this.basic.pickup_moment){
+      const titles = m.title.split(' ');
+      if(old !== titles[0]){
+        if( head !== null){
+          result.push(head);
+        }
+        head = { title: titles[0], align: 'center', colModel:[] }
+        old = titles[0];
+      }
+      const key = 'Md' + m.id;
+      head.colModel.push(
+        { title: titles[1], align: 'center', colModel: [
+          { title: 'Md<br/>(kN・m)',  dataType: 'float', 'format': '#.00', dataIndx: key + '_Md', sortable: false, width: 100 },
+          { title: 'Nd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: key + '_Nd', sortable: false, width: 100 }
+        ]
+      })
+    }
+    if( head !== null){
+      result.push(head);
+    }
 
-    let counter: number = 7;
+    return result;
+  }
 
-    for (let i = 0; i < counter; i++) {
-      const tmp = {Md: null, Nd: null };
-      rows.case.push(tmp)
+  public getColumnHeaders2(): any {
+    const result: object[] = [
+      { title: '算出点名', align: 'left', dataType: 'string', dataIndx: 'p_name', sortable: false, width: 250 },
+      { title: "せん断スパン長(mm)", dataType: "float", dataIndx: "La", sortable: false, width: 140 },
+      ];
+
+    let old: string = null;
+    let head: any = null;
+    for(const s of this.basic.pickup_shear_force){
+      const titles = s.title.split(' ');
+      if(old !== titles[0]){
+        if( head !== null){
+          result.push(head);
+        }
+        head = { title: titles[0], align: 'center', colModel:[] }
+        old = titles[0];
+      }
+      const key = 'Vd' + s.id;
+      head.colModel.push(
+        { title: titles[1], align: 'center', colModel: [
+          { title: 'Vd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: key + '_Vd', sortable: false, width: 100 },
+          { title: 'Md<br/>(kN・m)', dataType: 'float', 'format': '#.00', dataIndx: key + '_Md', sortable: false, width: 100 },
+          { title: 'Nd<br/>(kN)',    dataType: 'float', 'format': '#.00', dataIndx: key + '_Nd', sortable: false, width: 100 }
+        ]
+      })
+    }
+    if( head !== null){
+      result.push(head);
+    }
+
+    return result;
+  }
+
+  // １行 のデフォルト値
+  private default_column(index: number): any {
+
+    const rows: any = {
+      index,
+    };
+
+    for(const m of this.basic.pickup_moment){
+      const key = 'Md' + m.id;
+      rows[key + '_Md'] = null;
+      rows[key + '_Nd'] = null;
+    }
+
+    for(const s of this.basic.pickup_shear_force){
+      const key = 'Vd' + s.id;
+      rows[key + '_Vd'] = null;
+      rows[key + '_Md'] = null;
+      rows[key + '_Nd'] = null;
     }
 
     return rows;
   }
 
-  // せん断力 １入力行のデフォルト値
-  // { index, p_name, case: [{Vd, Md, Nd}, {Vd, Md, Nd}, ...] }
-  private default_2_column(index: number): any {
-
-    const rows: any = { index, case: new Array() };
-
-    let counter: number = 8;
-
-    for (let i = 0; i < counter; i++) {
-      const tmp = {Vd: null, Md: null, Nd: null};
-      rows.case.push(tmp)
-    }
-
-    return rows;
-  }
 
   // 曲げモーメント moment_force から 指定行 のデータを返す関数
-  public getTable1Columns(row: number): any {
+  public getTable1Columns(index: number): any {
 
-    let result = this.moment_force.find( (item) => item.index === row );
-    //
-    const design_point = this.points.getTableColumn(row);
-    let g_name: string = '';
-    let p_name: string = '';
-    if(design_point !== undefined){
-      g_name = design_point.g_name;
-      p_name = design_point.p_name;
-    }
+    let result = this.force.find( (item) => item.index === index );
 
     // 対象データが無かった時に処理
     if (result === undefined) {
-      result = this.default_1_column(row);
-      this.moment_force.push(result);
+      result = this.default_column(index);
+      this.force.push(result);
     }
 
-    result['g_name'] = g_name;
+    //
+    const design_point = this.points.getTableColumn(index);
+    const p_name: string = (design_point !== undefined) ? design_point.p_name: '';
+    const La: number = (design_point !== undefined) ? design_point.La: null;
+
     result['p_name'] = p_name;
+    result['La'] = La;
     return result;
 
   }
 
   // ファイル
-  public setTable1Columns(table_datas1: any[]) {
-    this.moment_force = new Array();
-    for (const data of table_datas1) {
-      const new_colum = this.default_1_column(data.index);
-      for (let i = 0; i < new_colum.case.length; i++) {
-        new_colum.case[i].Md = data['case' + i + '_Md'];
-        new_colum.case[i].Nd = data['case' + i + '_Nd'];
+  public setTableColumns(table_datas: any[]) {
+    this.clear();
+    for (const data of table_datas) {
+      const new_colum = this.default_column(data.index);
+      let flg = false;
+      for(const key of Object.keys(new_colum)){
+        if(key in data) {
+          const value = this.helper.toNumber(data[key]);
+          if(value !== null){
+            new_colum[key] = value;
+            flg = true;
+          }
+        }
       }
-      this.moment_force.push(new_colum);
-    }
-  }
-
-  // せん断力 shear_force から 指定行 のデータを返す関数
-  public getTable2Columns(row: number): any {
-
-    let result = this.shear_force.find( (item) => item.index === row );
-    //
-    const design_point = this.points.getTableColumn(row);
-    const p_name: string = (design_point !== undefined) ? design_point.p_name: '';
-
-    // 対象データが無かった時に処理
-    if (result === undefined) {
-      result = this.default_2_column(row);
-      this.shear_force.push(result);
-    }
-
-    result['p_name'] = p_name;
-    return result;
-
-  }
-
-  public setTable2Columns(table_datas2: any[]) {
-    this.shear_force = new Array();
-    for (const data of table_datas2) {
-      const new_colum = this.default_2_column(data.index);
-      for (let i = 0; i < new_colum.case.length; i++) {
-        new_colum.case[i].Vd = data['case' + i + '_Vd'];
-        new_colum.case[i].Md = data['case' + i + '_Md'];
-        new_colum.case[i].Nd = data['case' + i + '_Nd'];
+      if( flg === true){
+        this.force.push(new_colum);
       }
-      this.shear_force.push(new_colum);
+      //
+      const position = this.points.getCalcData(new_colum.index);
+      position.p_name = data.p_name;
+      position.La = data.La;
     }
   }
 
   public getSaveData(): any{
-    return {
-      moment_force: this.moment_force,
-      shear_force: this.shear_force
-    };
+    return this.force;
   }
 
   public setSaveData(force: any) {
-    this.moment_force = force.moment_force,
-    this.shear_force = force.shear_force
+    this.force = force;
   }
 
-  public setTableColumns(force: any): void{
-    this.clear();
-    if('moment_force' in force){
-      this.moment_force = force.moment_force;
-    }
-    if('shear_force' in force){
-      this.shear_force = force.shear_force;
-    }
-  }
 
 }

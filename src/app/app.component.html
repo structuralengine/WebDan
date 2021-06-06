@@ -11,7 +11,7 @@
       </h1>
     </div>
     <div class="c-headerBar__shopTitle">
-      <span>断面性能照査プログラム ver1.1.1</span>
+      <span>断面性能照査プログラム ver1.2.2</span>
     </div>
     <div class="c-headerBar__userMenu">
       <app-menu></app-menu>
@@ -39,11 +39,18 @@
             <span>部材・断面</span>
           </a>
         </li>
-        <li class="c-mainNavArea__navItem">
+        <li *ngIf="!isManual()" class="c-mainNavArea__navItem">
           <a routerLink="./design-points" routerLinkActive="selected-item"
             (click)="activePageChenge(2)" id="2"
             class="c-mainNavArea__navItemTitle disabled">
             <span>算出点</span>
+          </a>
+        </li>
+        <li *ngIf="isManual()" class="c-mainNavArea__navItem">
+          <a routerLink="./section-forces" routerLinkActive="selected-item"
+            (click)="activePageChenge(8)" id="8"
+            class="c-mainNavArea__navItemTitle">
+            <span>断面力</span>
           </a>
         </li>
         <li class="c-mainNavArea__navItem">
@@ -79,13 +86,6 @@
             (click)="activePageChenge(7)" id="7"
             class="c-mainNavArea__navItemTitle disabled">
             <span>安全係数・材料強度</span>
-          </a>
-        </li>
-        <li *ngIf="isManual()" class="c-mainNavArea__navItem">
-          <a routerLink="./section-forces" routerLinkActive="selected-item"
-            (click)="activePageChenge(8)" id="8"
-            class="c-mainNavArea__navItemTitle">
-            <span>断面力</span>
           </a>
         </li>
         <li class="c-mainNavArea__navItem">

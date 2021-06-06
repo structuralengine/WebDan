@@ -71,6 +71,8 @@ export class SetPostDataService {
         // 送信post データの生成
         for (const force of position.designForce) {
 
+          force['index'] = position.index;
+
           // 断面力の調整
           const data = {
             index: position.index,
@@ -80,18 +82,23 @@ export class SetPostDataService {
           if(type === "応力度") {
             data['Md'] = Math.abs(force.Md);
           }
+          try{
 
-          // 断面形状
-          const section = this.section.getPostData(member, force, safety);
-          data['Sections'] = section.Sections;
-          data['SectionElastic'] = section.SectionElastic;
+            // 断面形状
+            const section = this.section.getPostData(member, force, safety);
+            data['Sections'] = section.Sections;
+            data['SectionElastic'] = section.SectionElastic;
 
-          // 鉄筋の本数
-          const steel = this.steel.getPostData(member, position.index, force.side, section.shape, safety);
-          data['Steels'] = steel.Steels;
-          data['SteelElastic'] = steel.SteelElastic;
+            // 鉄筋の本数
+            const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
+            data['Steels'] = steel.Steels;
+            data['SteelElastic'] = steel.SteelElastic;
 
-          result.push(data);
+            result.push(data);
+          } catch(e){
+            console.log(e);
+          }
+
         }
       }
     }
