@@ -333,24 +333,19 @@ export class SetDesignForceService {
       })
     ).temp;
 
-    for (let ig = 0; ig < minDesignForceList.length; ig++) {
-      const groupe = minDesignForceList[ig];
-      for (let im = 0; im < groupe.length; im++) {
-        const member = groupe[im];
-        for (let ip = 0; ip < member.positions.length; ip++) {
+    for (let ip = 0; ip < minDesignForceList.length; ip++) {
 
-          // 最大応力 - 最小応力 で変動荷重を求める
-          const minForce: any = member.positions[ip].designForce;
-          const maxForce: any = result[ig][im].positions[ip].designForce;
-          for (let i = 0; i < minForce.length; i++) {
-            for (const key1 of ['Md', 'Vd', 'Nd']) {
-              maxForce[i][key1] -= minForce[i][key1];
-            }
-            maxForce[i]['comb'] = "-";
-          }
+      // 最大応力 - 最小応力 で変動荷重を求める
+      const minForce: any = minDesignForceList[ip];
+      const maxForce: any = result[ip];
+      for (let i = 0; i < minForce.designForce.length; i++) {
+        for (const key1 of ['Md', 'Vd', 'Nd']) {
+          maxForce.designForce[i][key1] -= minForce.designForce[i][key1];
         }
+        maxForce.designForce[i]['comb'] = "-";
       }
     }
+
     return result;
   }
 }

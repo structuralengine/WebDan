@@ -138,20 +138,27 @@ table{
 }
 
 table.main {
-  font-size: 10px;
+  font-size: 14px;
   table-layout: fixed;
   margin: 0;
 }
 table.main tr {
-  height: 12px;
+  height: 16px;
 }
 table.main th {
   text-align: center;
   white-space: nowrap;
+  margin: 0;
 }
+/*table.main th sup{
+  vertical-align: top;
+  position: relative;
+  top: 7px;
+}*/
 table.main td {
   width: 91px;
-  height: 12px;
+  height: 16px;
+  margin: 0;
 }
 table.main .left {
   text-align: left;

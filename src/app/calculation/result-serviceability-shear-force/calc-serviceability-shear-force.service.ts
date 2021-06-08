@@ -106,7 +106,6 @@ export class CalcServiceabilityShearForceService {
     if(force0 === undefined){
       force0 = { Md: 0, Nd: 0, Vd: 0}
     }
-    let Vd: number = Math.abs(force0.Vd);
 
     // 永久荷重
     const force1 = this.DesignForceList1.find(
@@ -116,13 +115,16 @@ export class CalcServiceabilityShearForceService {
     const result: any = this.base.calcVmu(
       res, shape, fc, Ast, safety, null, force1);
 
-    // 変動荷重
+      // 変動荷重
     let force2 = this.DesignForceList2.find(
       (v) => v.index === res.index
     ).designForce.find((v) => v.side === res.side);
     if(force2 === undefined){
       force2 = { Md: 0, Nd: 0, Vd: 0}
     }
+
+    let Vd: number = Math.abs(force0.Vd);
+    result['Vd'] = Vd;
 
     let Vpd: number = this.helper.toNumber(force1.Vd);
     if (Vpd === null) { Vpd = 0; }

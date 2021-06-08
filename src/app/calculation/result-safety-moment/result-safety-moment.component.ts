@@ -167,8 +167,8 @@ export class ResultSafetyMomentComponent implements OnInit {
             column.push(this.result.alien(Ast.rs.toFixed(2), 'center'));
             column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'));
             /////////////// 照査 ///////////////
-            column.push({ alien: 'right', value: resultColumn.Md.toFixed(1) });
-            column.push({ alien: 'right', value: resultColumn.Nd.toFixed(1) });
+            column.push({ alien: 'right', value: (Math.round(resultColumn.Md*10)/10).toFixed(1) });
+            column.push({ alien: 'right', value: (Math.round(resultColumn.Nd*10)/10).toFixed(1) });
             column.push({ alien: 'right', value: resultColumn.εcu.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.εs.toFixed(5) });
             column.push({ alien: 'right', value: resultColumn.x.toFixed(1) });
