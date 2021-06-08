@@ -41,7 +41,7 @@ export class InputBasicInformationService  {
   }
   /// get_specification1 によって変わる項目の設定
   private set_default_pickup(): void {
-    
+
     const sp1 = this.get_specification1();
 
     // 曲げモーメントテーブル

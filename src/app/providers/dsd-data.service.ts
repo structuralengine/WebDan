@@ -3,6 +3,16 @@ import { SaveDataService } from './save-data.service';
 
 import * as Encord from 'encoding-japanese';
 import { DataHelperModule } from './data-helper.module';
+import { InputBarsService } from '../components/bars/bars.service';
+import { InputBasicInformationService } from '../components/basic-information/basic-information.service';
+import { InputCalclationPrintService } from '../components/calculation-print/calculation-print.service';
+import { InputCrackSettingsService } from '../components/crack/crack-settings.service';
+import { InputDesignPointsService } from '../components/design-points/design-points.service';
+import { InputFatiguesService } from '../components/fatigues/fatigues.service';
+import { InputMembersService } from '../components/members/members.service';
+import { InputSafetyFactorsMaterialStrengthsService } from '../components/safety-factors-material-strengths/safety-factors-material-strengths.service';
+import { InputSectionForcesService } from '../components/section-forces/section-forces.service';
+import { InputSteelsService } from '../components/steels/steels.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +21,36 @@ export class DsdDataService {
 
   constructor(
     private save: SaveDataService,
+    private bars: InputBarsService,
+    private steel: InputSteelsService,
+    private basic: InputBasicInformationService,
+    private points: InputDesignPointsService,
+    private crack: InputCrackSettingsService,
+    private fatigues: InputFatiguesService,
+    private members: InputMembersService,
+    private safety: InputSafetyFactorsMaterialStrengthsService,
+    private force: InputSectionForcesService,
+    private calc: InputCalclationPrintService,
     private helper: DataHelperModule) { }
 
   // DSD データを読み込む
   public readDsdData(arrayBuffer: ArrayBuffer): string {
+
+    const jsonData = {
+      // ピックアップ断面力
+      pickup_filename: null,
+      pickup_data: null,
+      basic: null,      // 設計条件
+      members: [],    // 部材情報
+      crack: null,      // ひび割れ情報
+      points: [],     // 着目点情報
+      bar: null,        // 鉄筋情報
+      fatigues: null,   // 疲労情報
+      safety: null,     // 安全係数情報
+      force: null,      // 断面力手入力情報
+      calc: null        // 計算印刷設定
+    };
+
 
     const buff: any = {
       u8array: new Uint8Array(arrayBuffer),
@@ -27,7 +63,7 @@ export class DsdDataService {
 
     // 断面力手入力モード
     if (buff.isManualInput) {
-      this.FrmManualGetTEdata(buff, obj.ManualInput);
+      this.FrmManualGetTEdata(buff, obj.ManualInput, jsonData);
     }
     // 画面１ 基本データ
     this.GetKIHONscrn(buff);
@@ -42,13 +78,12 @@ export class DsdDataService {
     // 画面６　計算・印刷フォーム
     this.GetPrtScrn(buff)
 
-    // 
-    const jsonData = {};
+    //
     this.save.setInputData(jsonData);
 
     // 断面力手入力モード
     if (buff.isManualInput) {
-      return null; 
+      return null;
     } else {
       return buff.PickFile.trim();
     }
@@ -150,7 +185,7 @@ export class DsdDataService {
       const isOlder311 = (this.isOlder('3.1.1', buff.datVersID));
       for (let ii = 0; ii <= 3; ii++) {
         let sngDanmen = this.readSingle(buff);
-        if (isOlder311) { sngDanmen *= 10; } // cm --> mm 
+        if (isOlder311) { sngDanmen *= 10; } // cm --> mm
       }
 
       // 環境条件 曲げ
@@ -467,23 +502,106 @@ export class DsdDataService {
   }
 
   // 断面力手入力情報を
-  private FrmManualGetTEdata(buff: any, NumManualDt: number): void {
+  private FrmManualGetTEdata(buff: any, NumManualDt: number, jsonData: any): void {
 
     let strfix10: string;
     let strfix32: string;
 
     for (let i = 0; i < NumManualDt; i++) {
+      const index = i + 1;
 
+      // グループNo
+      const member = this.members.default_member(index);
       strfix10 = this.readString(buff, 10);
-      strfix32 = this.readString(buff, 32);
-      strfix32 = this.readString(buff, 32);
+      member.g_no = this.helper.toNumber(strfix10.trim());
+      if (member.g_no === null) {
+        member.g_id = 'blank';
+      }
 
+      // 部材名
+      strfix32 = this.readString(buff, 32);
+      member.g_name = strfix32.trim();
+
+      const position = this.points.default_position(index);
+      for(const key of Object.keys(position)){
+        if(key in member){
+          position[key] = member[key];
+        }
+      }
+
+      // 着目点名
+      strfix32 = this.readString(buff, 32);
+      position.p_name = strfix32.trim();
+      position.isMzCalc = true;
+      position.isVyCalc = true;
+
+      jsonData.members.push(member);
+      jsonData.points.push(position);
+
+      // 断面力
+      const force = this.force.default_column(index);
       // 設計曲げモーメントの入力を取得
       let sHAND_MageDAN: number;
-      for (let j = 0; j <= 10; j++) {
-        sHAND_MageDAN = this.readSingle(buff);
-        sHAND_MageDAN = this.readSingle(buff);
+      // 耐久性 縁応力検討揚
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md0_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md0_Nd'] = sHAND_MageDAN;
+      // 耐久性 鉄筋応力検討用
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md1_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md1_Nd'] = sHAND_MageDAN;
+      // 耐久性 永久
+      sHAND_MageDAN = this.readSingle(buff);
+      if( sHAND_MageDAN !== null ){
+        force['Md1_Md'] = sHAND_MageDAN;
       }
+      sHAND_MageDAN = this.readSingle(buff);
+      if( sHAND_MageDAN !== null ){
+        force['Md1_Nd'] = sHAND_MageDAN;
+      }
+      // 耐久性 変動
+      sHAND_MageDAN = this.readSingle(buff);
+      sHAND_MageDAN = this.readSingle(buff);
+      // 耐久性 外観
+      sHAND_MageDAN = this.readSingle(buff);
+      if( sHAND_MageDAN !== null ){
+        force['Md1_Md'] = sHAND_MageDAN;
+      }
+      sHAND_MageDAN = this.readSingle(buff);
+      if( sHAND_MageDAN !== null ){
+        force['Md1_Nd'] = sHAND_MageDAN;
+      }
+      // 疲労 最小応力
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md3_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md3_Nd'] = sHAND_MageDAN;
+      // 疲労 最大応力
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md4_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md4_Nd'] = sHAND_MageDAN;
+      // 安全性 破壊
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md5_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md5_Nd'] = sHAND_MageDAN;
+      // 復旧性 地震時以外
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md6_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md6_Nd'] = sHAND_MageDAN;
+      // 復旧性 地震時
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md7_Md'] = sHAND_MageDAN;
+      sHAND_MageDAN = this.readSingle(buff);
+      force['Md7_Nd'] = sHAND_MageDAN;
+      // 
+      sHAND_MageDAN = this.readSingle(buff);
+      sHAND_MageDAN = this.readSingle(buff);
+
       // 設計せん断力の入力を取得
       let sHAND_SenDAN: number;
       for (let j = 0; j <= 7; j++) {

@@ -18,7 +18,7 @@ export class InputMembersService  {
   }
 
   // 部材情報
-  private default_member(m_no: number): any {
+  public default_member(m_no: number): any {
     // メモ:
     // g_no: 表面上の(member.component だけで用いる)グループ番号
     // g_id: 本当のグループ番号
