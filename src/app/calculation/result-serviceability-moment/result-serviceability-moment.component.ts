@@ -292,10 +292,10 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
     // 永久作用
     if ("Md" in re) {
-      result.Md = { alien: "right", value: re.Md.toFixed(1) };
+      result.Md = { alien: "right", value: (Math.round(re.Md*10)/10).toFixed(1) };
     }
     if ("Nd" in re) {
-      result.Nd = { alien: "right", value: re.Nd.toFixed(1) };
+      result.Nd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
     }
 
     // 圧縮応力度の照査
@@ -312,10 +312,10 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
     // 縁応力の照査
     if ("Mhd" in re) {
-      result.Mhd = { alien: "right", value: re.Mhd.toFixed(1) };
+      result.Mhd = { alien: "right", value: (Math.round(re.Mhd*10)/10).toFixed(1) };
     }
     if ("Nhd" in re) {
-      result.Nhd = { alien: "right", value: re.Nhd.toFixed(1) };
+      result.Nhd = { alien: "right", value: (Math.round(re.Nhd*10)/10).toFixed(1) };
     }
     // 縁応力度
     if ("Sigmab" in re && "Sigmabl" in re) {
@@ -355,10 +355,10 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
     // ひび割れ幅の照査
     if ("Mpd" in re) {
-      result.Mpd = { alien: "right", value: re.Mpd.toFixed(1) };
+      result.Mpd = { alien: "right", value: (Math.round(re.Mpd*10)/10).toFixed(1) };
     }
     if ("Npd" in re) {
-      result.Npd = { alien: "right", value: re.Npd.toFixed(1) };
+      result.Npd = { alien: "right", value: (Math.round(re.Npd*10)/10).toFixed(1) };
     }
     if ("EsEc" in re) {
       result.EsEc = { alien: "right", value: re.EsEc.toFixed(2) };

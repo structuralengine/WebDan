@@ -166,7 +166,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
             column.push(this.result.alien(shape.B));
             column.push(this.result.alien(shape.H));
             /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(Ast.tan, "center"));
+            column.push(this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"));
             column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
             column.push(this.result.alien(Ast.AstString, "center"));
             column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
@@ -291,18 +291,18 @@ export class ResultSafetyShearForceComponent implements OnInit {
 
     // 断面力
     if ("Md" in re) {
-      result.Md = { alien: "right", value: re.Md.toFixed(1) };
+      result.Md = { alien: "right", value: (Math.round(re.Md*10)/10).toFixed(1) };
     }
     if ("Nd" in re) {
-      result.Nd = { alien: "right", value: re.Nd.toFixed(1) };
+      result.Nd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
     }
     if ("Vhd" in re) {
       // tanθc + tanθt があるとき
       const sVd: string =
-        (re.Vd - re.Vhd).toFixed(1) + "(" + re.Vd.toFixed(1) + ")";
+      (Math.round((re.Vd - re.Vhd)*10)/10).toFixed(1) + "(" + (Math.round(re.Vd*10)/10).toFixed(1) + ")";
       result.Vd = { alien: "right", value: sVd };
     } else {
-      result.Vd = { alien: "right", value: re.Vd.toFixed(1) };
+      result.Vd = { alien: "right", value: (Math.round(re.Vd*10)/10).toFixed(1) };
     }
 
     if ("La" in re) {

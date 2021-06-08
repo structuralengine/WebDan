@@ -208,7 +208,7 @@ export class InputFatiguesService {
 
   public setTableColumns(fatigues: any) {
 
-    this.train_A_count - fatigues.train_A_count;
+    this.train_A_count = fatigues.train_A_count;
     this.train_B_count = fatigues.train_B_count;
     this.service_life = fatigues.service_life;
 

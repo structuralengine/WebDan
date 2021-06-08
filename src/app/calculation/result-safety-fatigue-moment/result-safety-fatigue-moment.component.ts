@@ -24,6 +24,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
   private title = "安全性（疲労破壊）曲げモーメントの照査結果";
+  public page_index = 'ap_3';
 
   constructor(
     private http: HttpClient,
@@ -271,20 +272,20 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     };
 
     if ("Mdmin" in re) {
-      result.Mdmin = { alien: "right", value: re.Mdmin.toFixed(1) };
+      result.Mdmin = { alien: "right", value: (Math.round(re.Mdmin*10)/10).toFixed(1) };
     }
     if ("Ndmin" in re) {
-      result.Ndmin = { alien: "right", value: re.Ndmin.toFixed(1) };
+      result.Ndmin = { alien: "right", value: (Math.round(re.Ndmin*10)/10).toFixed(1) };
     }
     if ("sigma_min" in re) {
       result.sigma_min = { alien: "right", value: re.sigma_min.toFixed(2) };
     }
 
     if ("Mrd" in re) {
-      result.Mrd = { alien: "right", value: re.Mrd.toFixed(1) };
+      result.Mrd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };
     }
     if ("Nrd" in re) {
-      result.Nrd = { alien: "right", value: re.Nrd.toFixed(1) };
+      result.Nrd = { alien: "right", value: (Math.round(re.Nrd*10)/10).toFixed(1) };
     }
     if ("sigma_rd" in re) {
       result.sigma_rd = { alien: "right", value: re.sigma_rd.toFixed(2) };
