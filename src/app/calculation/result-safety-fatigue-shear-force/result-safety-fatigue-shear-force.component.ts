@@ -22,6 +22,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   public NA: number; // A列車の回数
   public NB: number; // B列車の回数
   private title = "安全性（疲労破壊）せん断力の照査結果";
+  public page_index = 'ap_4';
 
   constructor(
     private calc: CalcSafetyFatigueShearForceService,
@@ -127,7 +128,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             column.push(this.result.alien(shape.B));
             column.push(this.result.alien(shape.H));
             /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(Ast.tan, "center"));
+            column.push(this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"));
             column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
             column.push(this.result.alien(Ast.AstString, "center"));
             column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
@@ -285,23 +286,23 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
     // 断面力
     if ("Vpd" in re) {
-      result.Vpd = { alien: "right", value: re.Vpd.toFixed(1) };
+      result.Vpd = { alien: "right", value: (Math.round(re.Vpd*10)/10).toFixed(1) };
     }
     if ("Mpd" in re) {
-      result.Mpd = { alien: "right", value: re.Mpd.toFixed(1) };
+      result.Mpd = { alien: "right", value: (Math.round(re.Mpd*10)/10).toFixed(1) };
     }
     if ("Npd" in re) {
-      result.Npd = { alien: "right", value: re.Npd.toFixed(1) };
+      result.Npd = { alien: "right", value: (Math.round(re.Npd*10)/10).toFixed(1) };
     }
 
     if ("Vrd" in re) {
-      result.Vrd = { alien: "right", value: re.Vrd.toFixed(1) };
+      result.Vrd = { alien: "right", value: (Math.round(re.Vrd*10)/10).toFixed(1) };
     }
     if ("Mrd" in re) {
-      result.Mrd = { alien: "right", value: re.Mrd.toFixed(1) };
+      result.Mrd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };
     }
     if ("Nrd" in re) {
-      result.Nrd = { alien: "right", value: re.Nrd.toFixed(1) };
+      result.Nrd = { alien: "right", value: (Math.round(re.Nrd*10)/10).toFixed(1) };
     }
 
     // 耐力

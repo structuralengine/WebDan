@@ -5,7 +5,7 @@
 <div *ngIf="serviceabilityMomentPages?.length > 0" id="{{page_index}}">
   <div class="sheet">
     <div class="sheet-title">
-      <p class="noword sheet-title">耐久性の照査</p>
+      <p class="noword sheet-title">{{title}}</p>
       <p class="noword sheet-title indent10">(1)曲げモーメントに関する照査</p>
       <p class="noword sheet-title indent20">a)曲げひび割れに対する部材の検討方法</p>
       <p class="sheet-title indent30">曲げひび割れに対する部材の検討葉、全断面を有効としたコンクリートの縁引</p>
@@ -74,27 +74,32 @@
       <p class="sheet-title indent110">幅の増加を考慮するための数値</p>
       <p class="sheet-title indent85">σ<sub>se</sub>：鋼材位置のコンクリートの応力度が0の状態からの鉄筋応力</p>
       <p class="sheet-title indent110">度の増加量(N/mm<sup>2</sup>)</p>
-      <p class="noword sheet-title indent80">W<sub>lim</sub>：ひび割れ幅の制限値</p>
-      <p class="caption">表3.3.1 鋼材の腐食に対するコンクリートのひび割れ幅の制限値W<sub>lim</sub></p>
-      <div align="center">
-        <table border="1" class="title">
-          <tr>
-            <td rowspan="2" width="19%">鉄筋の種類</td>
-            <td colspan="3">鋼材の腐食に対する環境条件</td>
-          </tr>
-          <tr>
-            <td>一般の環境</td>
-            <td>腐食性環境</td>
-            <td>特に厳しい腐食性環境</td>
-          </tr>
-          <tr>
-            <td>異形鉄筋</td>
-            <td>0.005c</td>
-            <td>0.004c</td>
-            <td>0.0035c</td>
-          </tr>
-        </table>
-      </div>
+      <ng-container *ngIf="page_index=='ap_5'">
+        <p class="noword sheet-title indent80">W<sub>lim</sub>：ひび割れ幅の制限値</p>
+        <p class="caption">表3.3.1 鋼材の腐食に対するコンクリートのひび割れ幅の制限値W<sub>lim</sub></p>
+        <div align="center">
+          <table border="1" class="title">
+            <tr>
+              <td rowspan="2" width="19%">鉄筋の種類</td>
+              <td colspan="3">鋼材の腐食に対する環境条件</td>
+            </tr>
+            <tr>
+              <td>一般の環境</td>
+              <td>腐食性環境</td>
+              <td>特に厳しい腐食性環境</td>
+            </tr>
+            <tr>
+              <td>異形鉄筋</td>
+              <td>0.005c</td>
+              <td>0.004c</td>
+              <td>0.0035c</td>
+            </tr>
+          </table>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="page_index=='ap_7'">
+        <p class="noword sheet-title indent80">W<sub>lim</sub>：ひび割れ幅の制限値(=0.30mm)</p>
+      </ng-container>
     </div>
   </div>
 
