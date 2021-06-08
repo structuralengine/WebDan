@@ -91,12 +91,12 @@ export class CalcSafetyFatigueMomentService {
     this.deleteFatigueDisablePosition(force);
 
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force[0], force[1]);
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force[2], force[1]);
     return postData;
   }
 
    // 疲労破壊の照査の対象外の着目点を削除する
-   private deleteFatigueDisablePosition(force: any) {
+  private deleteFatigueDisablePosition(force: any) {
 
     for (let ip = force[0].length - 1; ip >= 0; ip--) {
       const pos: any = force[0][ip];
