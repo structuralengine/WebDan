@@ -137,13 +137,35 @@ table{
   border-spacing:0
 }
 
+/*以降は表部分に用いる*/
+.sheet-table {
+  background: white;
+  /* 背景を白く 
+  box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3);
+  /* ドロップシャドウ
+  */
+  box-sizing: border-box;
+  margin: 5mm auto;
+  overflow: hidden;
+  position: relative;
+  page-break-after: always;
+  /* 用紙サイズ A4 */
+  height: 1123px;
+  width: 794px;
+  /* 余白サイズ*/
+  padding-top: 63px;
+  padding-bottom: 63px;
+  padding-left: 79px;
+  padding-right: 50px;
+}
+
 table.main {
-  font-size: 14px;
+  font-size: 12px;
   table-layout: fixed;
   margin: 0;
 }
 table.main tr {
-  height: 16px;
+  height: 20px;
 }
 table.main th {
   text-align: center;
@@ -156,8 +178,8 @@ table.main th {
   top: 7px;
 }*/
 table.main td {
-  width: 91px;
-  height: 16px;
+  width: 106px;
+  height: 20px;
   margin: 0;
 }
 table.main .left {
@@ -172,13 +194,13 @@ table.main .right {
   padding-right: 10px;
 }
 table.main .cell_name1 {
-  width: 113px;
+  width: 135px;
 }
 table.main .cell_name2 {
-  width: 53px;
+  width: 60px;
 }
 table.main .cell_name3 {
-  width: 60px;
+  width: 75px;
 }
 table.main .g-top1 {
   border-top: 1px solid lightgray;

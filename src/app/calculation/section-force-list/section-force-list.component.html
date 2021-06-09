@@ -2,224 +2,97 @@
   <span class="sr-only">Loading...</span>
 </div>
 
-<ng-container *ngIf="!isLoading">
-  <ng-container *ngIf="isFulfilled">
-    <div id="ap_0"></div>
+<!--<div *ngIf="serviceabilityShearForcePages?.length > 0" id="{{page_index}}">-->
+<div *ngFor="let page of pages" class="sheet-table">
+  <div *ngIf="page.tableType == 1">
+    <h5>{{ page.g_name }}</h5>
+    <div *ngFor="let table of page.tables">
+      <div class="cell_title1">{{ table.title }}</div>
+      <table class="spreadsheet">
+        <thead>
+          <tr>
+            <th class="center g-right1" style="width:40px;" rowspan="2">部材<br>番号</th>
+            <th class="center g-right1" style="width:40px;" rowspan="2">算出<br>番号</th>
+            <th class="center g-right1" style="width:64px;" rowspan="2">算出点</th>
+            <th class="center g-right2" style="width:110px;" rowspan="2">算出点名</th>
+            <th class="center g-right2 g-bottom1" style="width:190px;" colspan="3">上側</th>
+            <th class="center g-right2 g-bottom1" style="width:190px;" colspan="3">下側</th>
+          </tr>
+          <tr>
+            <th class="center g-right1" style="width:75px;">M (kN・m)</th>
+            <th class="center g-right1" style="width:75px;">N (kN)</th>
+            <th class="center g-right2" style="width:40px;">comb</th>
+            <th class="center g-right1" style="width:75px;">M (kN・m)</th>
+            <th class="center g-right1" style="width:75px;">N (kN)</th>
+            <th class="center g-right2" style="width:40px;">comb</th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let row of table.rows; index as r">
+          <tr>
+            <td class="center g-right1">{{ row.m_no }}</td>
+            <td class="center g-right1">{{ row.p_id }}</td>
+            <td class="center g-right1">{{ row.position }}</td>
+            <td class="left g-right2">{{ row.p_name }}</td>
+            <td class="{{row.upper.Md.position}} g-right1">{{ row.upper.Md.value }}</td>
+            <td class="{{row.upper.Nd.position}} g-right1">{{ row.upper.Nd.value }}</td>
+            <td class="{{row.upper.comb.position}} g-right2">{{ row.upper.comb.value }}</td>
+            <td class="{{row.lower.Md.position}} g-right1">{{ row.lower.Md.value }}</td>
+            <td class="{{row.lower.Nd.position}} g-right1">{{ row.lower.Nd.value }}</td>
+            <td class="{{row.lower.comb.position}} g-right2">{{ row.lower.comb.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div *ngIf="page.tableType == 2">
+    <div *ngFor="let table of page.tables">
+      <h5>{{ page.g_name }}</h5>
+      <div class="cell_title1">{{ table.title }}</div>
+      <table class="spreadsheet">
+        <thead>
+          <tr>
+            <th class="center g-right1" style="width:40px;" rowspan="2">部材<br>番号</th>
+            <th class="center g-right1" style="width:40px;" rowspan="2">算出<br>番号</th>
+            <th class="center g-right1" style="width:64px;" rowspan="2">算出点</th>
+            <th class="center g-right2" style="width:170px;" colspan="2" rowspan="2">算出点名</th>
+            <th class="center g-right1" style="width:80px;">V</th>
+            <th class="center g-right1" style="width:80px;">M</th>
+            <th class="center g-right1" style="width:80px;">N</th>
+            <th class="center g-right2" style="width:40px;">comb</th>
+          </tr>
+          <tr>
+            <th class="center g-right1">(kN)</th>
+            <th class="center g-right1">(kN・m)</th>
+            <th class="center g-right1">(kN)</th>
+            <th> </th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let row of table.rows; index as r">
+          <tr>
+            <td class="center g-right1" rowspan="2">{{ row.m_no }}</td>
+            <td class="center g-right1" rowspan="2">{{ row.p_id }}</td>
+            <td class="center g-right1" rowspan="2">{{ row.position }}</td>
+            <td class="left g-right1" rowspan="2">{{ row.p_name }}</td>
+            <td class="center g-right2" style="width:40px;">{{ row.upperSideName }}</td>
+            <td class="{{row.upper.Vd.position}} g-right1">{{ row.upper.Vd.value }}</td>
+            <td class="{{row.upper.Md.position}} g-right1">{{ row.upper.Md.value }}</td>
+            <td class="{{row.upper.Nd.position}} g-right1">{{ row.upper.Nd.value }}</td>
+            <td class="{{row.upper.comb.position}}">{{ row.upper.comb.value }}</td>
+          </tr>
+          <tr>
+            <td class="center g-right2" style="width:40px;">{{ row.bottomSideName }}</td>
+            <td class="{{row.lower.Vd.position}} g-right1">{{ row.lower.Vd.value }}</td>
+            <td class="{{row.lower.Md.position}} g-right1">{{ row.lower.Md.value }}</td>
+            <td class="{{row.lower.Nd.position}} g-right1">{{ row.lower.Nd.value }}</td>
+            <td class="{{row.lower.comb.position}}">{{ row.lower.comb.value }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  <div>
+</div>
+<!--<div>
 
-    <ng-container *ngFor="let page of pages">
-      <section class="sheet">
-        <h5>{{ page.g_name }}</h5>
-
-        <ng-container *ngIf="page.tableType == 1">
-          <ng-container *ngFor="let table of page.tables">
-            <svg width="568" [attr.height]="table.viewBox.height" [attr.viewBox]="table.viewBox" xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-              <!--タイトル-->
-              <text x="0" y="11" font-size="10pt" text-anchor="start">
-                {{ table.title }}
-              </text>
-
-              <!--column Header-->
-              <g font-size="10pt" text-anchor="middle">
-                <text x="14" y="27">部材</text>
-                <text x="14" y="43">番号</text>
-                <text x="40" y="27">算出</text>
-                <text x="40" y="43">番号</text>
-
-                <text x="80" y="27">算出点</text>
-                <text x="155" y="27">算 出 点 名</text>
-                <text x="299" y="27">{{table.upperSideName}}</text>
-                <text x="470" y="27">{{table.bottomSideName}}</text>
-
-                <text x="245" y="44">M (kN･m)</text>
-                <text x="315" y="44">N (kN)</text>
-                <text x="368" y="44">comb</text>
-                <text x="420" y="44">M (kN･m)</text>
-                <text x="490" y="44">N (kN)</text>
-                <text x="545" y="44">comb</text>
-              </g>
-              <!--横線-->
-              <g fill="none" stroke="black">
-                <line stroke-width="0.50" x1="0" y1="15" x2="568" y2="15" />
-                <line stroke-width="0.25" x1="210" y1="31" x2="568" y2="31" />
-                <line stroke-width="0.50" x1="0" y1="47" x2="568" y2="47" />
-              </g>
-
-              <ng-container *ngFor="let row of table.rows; index as r">
-                <!--横線-->
-                <g fill="none" stroke="black">
-                  <ng-container *ngIf= "r != table.rows.length-1">
-                    <line stroke-width="0.25" x1="0" [attr.y1]="63 + r * 16" x2="568" [attr.y2]="63 + r * 16" />
-                  </ng-container>
-                  <ng-container *ngIf= "r == table.rows.length-1">
-                    <line stroke-width="0.50" x1="0" [attr.y1]="63 + r * 16" x2="568" [attr.y2]="63 + r * 16" />
-                  </ng-container>
-                </g>
-
-                <!--column Header-->
-                <g font-size="10pt">
-                  <text x="12" [attr.y]="60 + r * 16" text-anchor="middle">
-                    {{ row.m_no }}
-                  </text>
-                  <text x="42" [attr.y]="60 + r * 16" text-anchor="middle">
-                    {{ row.p_id }}
-                  </text>
-                  <text x="105" [attr.y]="60 + r * 16" text-anchor="end">
-                    {{ row.position }}
-                  </text>
-                  <text x="115" [attr.y]="60 + r * 16" text-anchor="start">
-                    {{ row.p_name }}
-                  </text>
-                  <text x="275" [attr.y]="60 + r * 16" text-anchor="end">
-                    {{ row.upper.Md }}
-                  </text>
-                  <text x="345" [attr.y]="60 + r * 16" text-anchor="end">
-                    {{ row.upper.Nd }}
-                  </text>
-                  <text x="368" [attr.y]="60 + r * 16" text-anchor="middle">
-                    {{ row.upper.comb }}
-                  </text>
-                  <text x="450" [attr.y]="60 + r * 16" text-anchor="end">
-                    {{ row.lower.Md }}
-                  </text>
-                  <text x="520" [attr.y]="60 + r * 16" text-anchor="end">
-                    {{ row.lower.Nd }}
-                  </text>
-                  <text x="545" [attr.y]="60 + r * 16" text-anchor="middle">
-                    {{ row.lower.comb }}
-                  </text>
-                </g>
-              </ng-container>
-
-              <!--縦線-->
-              <g fill="none" stroke="black">
-                <line stroke-width="0.25" x1="27"  y1="15" x2="27"  [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="54"  y1="15" x2="54"  [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="110" y1="15" x2="110" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.50" x1="210" y1="15" x2="210" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="280" y1="31" x2="280" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="350" y1="31" x2="350" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.50" x1="385" y1="15" x2="385" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="455" y1="31" x2="455" [attr.y2]="47 + table.rows.length * 16" />
-                <line stroke-width="0.25" x1="525" y1="31" x2="525" [attr.y2]="47 + table.rows.length * 16" />
-              </g>
-
-            </svg>
-          </ng-container>
-        </ng-container>
-
-        <ng-container *ngIf="page.tableType == 2">
-          <ng-container *ngFor="let table of page.tables">
-            <svg width="568" [attr.height]="table.viewBox.height" [attr.viewBox]="table.viewBox"
-              xmlns="http://www.w3.org/2000/svg"
-              xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1">
-              <!--タイトル-->
-              <text x="0" y="11" font-size="10pt" text-anchor="start">
-                {{ table.title }}
-              </text>
-
-              <!--column Header-->
-              <g font-size="10pt" text-anchor="middle">
-                <text x="14" y="27">部材</text>
-                <text x="14" y="43">番号</text>
-                <text x="40" y="27">算出</text>
-                <text x="40" y="43">番号</text>
-
-                <text x="80" y="27">算出点</text>
-                <text x="155" y="27">算 出 点 名</text>
-                <text x="283" y="27">V</text>
-                <text x="350" y="27">M</text>
-                <text x="420" y="27">N</text>
-                <text x="470" y="27">comb</text>
-
-                <text x="283" y="44">(kN)</text>
-                <text x="350" y="44">(kN･m)</text>
-                <text x="420" y="44">(kN)</text>
-
-              </g>
-              <!--横線-->
-              <g fill="none" stroke="black">
-                <line stroke-width="0.50" x1="0" y1="15" x2="490" y2="15" />
-                <line stroke-width="0.50" x1="0" y1="47" x2="490" y2="47" />
-              </g>
-
-              <ng-container *ngFor="let row of table.rows; index as r">
-                <!--横線-->
-                <g fill="none" stroke="black">
-                  <ng-container *ngIf="r != table.rows.length-1">
-                    <line stroke-width="0.25" x1="0" [attr.y1]="79+ r * 32" x2="490" [attr.y2]="79 + r * 32" />
-                  </ng-container>
-                  <ng-container *ngIf="r == table.rows.length-1">
-                    <line stroke-width="0.50" x1="0" [attr.y1]="79 + r * 32" x2="490" [attr.y2]="79 + r * 32" />
-                  </ng-container>
-                </g>
-
-                <!--column Header-->
-                <g font-size="10pt">
-                  <text x="12" [attr.y]="60 + r * 32" text-anchor="middle">
-                    {{ row.m_no }}
-                  </text>
-                  <text x="42" [attr.y]="60 + r * 32" text-anchor="middle">
-                    {{ row.p_id }}
-                  </text>
-                  <text x="105" [attr.y]="60 + r * 32" text-anchor="end">
-                    {{ row.position }}
-                  </text>
-                  <text x="115" [attr.y]="60 + r * 32" text-anchor="start">
-                    {{ row.p_name }}
-                  </text>
-                  <text x="228" [attr.y]="60 + r * 32" text-anchor="middle">
-                    {{ row.upperSideName }}
-                  </text>
-
-                  <text x="310" [attr.y]="60 + r * 32" text-anchor="end">
-                    {{ row.upper.Vd }}
-                  </text>
-                  <text x="380" [attr.y]="60 + r * 32" text-anchor="end">
-                    {{ row.upper.Md }}
-                  </text>
-                  <text x="445" [attr.y]="60 + r * 32" text-anchor="end">
-                    {{ row.upper.Nd }}
-                  </text>
-                  <text x="470" [attr.y]="60 + r * 32" text-anchor="middle">
-                    {{ row.upper.comb }}
-                  </text>
-
-                  <text x="228" [attr.y]="76 + r * 32" text-anchor="middle">
-                    {{ row.bottomSideName }}
-                  </text>
-                  <text x="310" [attr.y]="76 + r * 32" text-anchor="end">
-                    {{ row.lower.Vd }}
-                  </text>
-                  <text x="380" [attr.y]="76 + r * 32" text-anchor="end">
-                    {{ row.lower.Md }}
-                  </text>
-                  <text x="445" [attr.y]="76 + r * 32" text-anchor="end">
-                    {{ row.lower.Nd }}
-                  </text>
-                  <text x="470" [attr.y]="76 + r * 32" text-anchor="middle">
-                    {{ row.lower.comb }}
-                  </text>
-                </g>
-              </ng-container>
-
-              <!--縦線-->
-              <g fill="none" stroke="black">
-                <line stroke-width="0.25" x1="27" y1="15" x2="27" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.25" x1="54" y1="15" x2="54" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.25" x1="110" y1="15" x2="110" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.25" x1="210" y1="47" x2="210" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.50" x1="245" y1="15" x2="245" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.25" x1="315" y1="15" x2="315" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.25" x1="385" y1="15" x2="385" [attr.y2]="47 + table.rows.length * 32" />
-                <line stroke-width="0.25" x1="450" y1="15" x2="450" [attr.y2]="47 + table.rows.length * 32" />
-              </g>
-            </svg>
-          </ng-container>
-        </ng-container>
-
-      </section>
-    </ng-container>
-
-  </ng-container>
-</ng-container>
+<div *ngIf="err.length > 0" class="sheet">
+  <p>{{err}}</p>
+</div>-->
