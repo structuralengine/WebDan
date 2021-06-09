@@ -45,8 +45,8 @@
     </div>
   </div>
   <div *ngIf="page.tableType == 2">
+    <h5>{{ page.g_name }}</h5>
     <div *ngFor="let table of page.tables">
-      <h5>{{ page.g_name }}</h5>
       <div class="cell_title1">{{ table.title }}</div>
       <table class="spreadsheet">
         <thead>
