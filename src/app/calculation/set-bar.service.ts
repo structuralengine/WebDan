@@ -347,7 +347,7 @@ export class SetBarService {
       SteelElastic: new Array(),
     };
 
-    const h: number = member.H; // ハンチを
+    const h: number = member.H; // ハンチを含む高さ
     const b: number = member.B;
     const barInfo = this.getInputData("Rectangle", index, side, b, h);
 
@@ -474,8 +474,10 @@ export class SetBarService {
 
     // 鉄筋情報を登録
     let rebar_n = barInfo.rebar_n;
+    const dsc = barInfo.dsc / barInfo.cos;
+    const space = barInfo.space / barInfo.cos;
     for (let i = 0; i < barInfo.n; i++) {
-      const dst: number = barInfo.dsc + i * barInfo.space;
+      const dst: number = dsc + i * space;
       const Steel1 = {
         Depth: dst,
         i: dia,
@@ -760,6 +762,10 @@ export class SetBarService {
 
       tan: null
     };
+
+    // ここから
+    const post = this.getPostData(shape, res.index, res.side, shape.shape, safety)
+
 
     const bar = this.getInputData(shape.shape, res.index, res.side, shape.B, shape.H);
     for(const key of Object.keys(bar)){
