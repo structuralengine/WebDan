@@ -157,77 +157,78 @@ export class ResultSafetyShearForceComponent implements OnInit {
               )
             );
 
-            const column: any[] = new Array();
-            /////////////// タイトル ///////////////
-            column.push({ alien: "center", value: titleColumn.m_no });
-            column.push({ alien: "center", value: titleColumn.p_name });
-            column.push({ alien: "center", value: titleColumn.side });
-            ///////////////// 形状 /////////////////
-            column.push(this.result.alien(shape.B));
-            column.push(this.result.alien(shape.H));
-            /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
-            column.push(this.result.alien(Ast.AstString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
-            /////////////// 圧縮鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Asc), "center"));
-            column.push(this.result.alien(Ast.AscString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dsc), "center"));
-            /////////////// 側面鉄筋 ///////////////
-            // column.push(this.result.alien(this.result.numStr(Ast.Ase), "center"));
-            column.push(this.result.alien(Ast.AseString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dse), "center"));
-            /////////////// コンクリート情報 ///////////////
-            column.push(this.result.alien(fck.fck.toFixed(1), "center"));
-            column.push(this.result.alien(fck.rc.toFixed(2), "center"));
-            column.push(this.result.alien(fck.fcd.toFixed(1), "center"));
-            /////////////// 鉄筋強度情報 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), "center"));
-            column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
-            /////////////// 断面力 ///////////////
-            column.push(resultColumn.Md);
-            column.push(resultColumn.Nd);
-            column.push(resultColumn.Vd);
-            column.push(resultColumn.La);
+            const column = {
+              /////////////// タイトル ///////////////
+              m_no : { alien: "center", value: titleColumn.m_no },
+              p_name : { alien: "center", value: titleColumn.p_name },
+              side : { alien: "center", value: titleColumn.side },
+              ///////////////// 形状 /////////////////
+              B : this.result.alien(shape.B),
+              H : this.result.alien(shape.H),
+              /////////////// 引張鉄筋 ///////////////
+              tan : this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"),
+              Ast : this.result.alien(this.result.numStr(Ast.Ast), "center"),
+              AstString : this.result.alien(Ast.AstString, "center"),
+              dst : this.result.alien(this.result.numStr(Ast.dst), "center"),
+              /////////////// 圧縮鉄筋 ///////////////
+              Asc : this.result.alien(this.result.numStr(Ast.Asc), "center"),
+              AscString : this.result.alien(Ast.AscString, "center"),
+              dsc : this.result.alien(this.result.numStr(Ast.dsc), "center"),
+              /////////////// 側面鉄筋 ///////////////
+              // Ase : this.result.alien(this.result.numStr(Ast.Ase), "center"),
+              AseString : this.result.alien(Ast.AseString, "center"),
+              dse : this.result.alien(this.result.numStr(Ast.dse), "center"),
+              /////////////// コンクリート情報 ///////////////
+              fck : this.result.alien(fck.fck.toFixed(1), "center"),
+              rc : this.result.alien(fck.rc.toFixed(2), "center"),
+              fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
+              /////////////// 鉄筋強度情報 ///////////////
+              fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), "center"),
+              rs : this.result.alien(Ast.rs.toFixed(2), "center"),
+              fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), "center"),
+              /////////////// 断面力 ///////////////
+              Md : resultColumn.Md,
+              Nd : resultColumn.Nd,
+              Vd : resultColumn.Vd,
+              La : resultColumn.La,
 
-            /////////////// 帯鉄筋情報 ///////////////
-            column.push(resultColumn.Aw);
-            column.push(resultColumn.AwString);
-            column.push(resultColumn.fwyd);
-            column.push(resultColumn.deg);
-            column.push(resultColumn.Ss);
+              /////////////// 帯鉄筋情報 ///////////////
+              Aw : resultColumn.Aw,
+              AwString : resultColumn.AwString,
+              fwyd : resultColumn.fwyd,
+              deg : resultColumn.deg,
+              Ss : resultColumn.Ss,
 
-            /////////////// 照査 ///////////////
-            column.push(resultColumn.fvcd);
-            column.push(resultColumn.Bd);
-            column.push(resultColumn.Bp);
-            column.push(resultColumn.Mu);
-            column.push(resultColumn.Mo);
-            column.push(resultColumn.Bn);
-            column.push(resultColumn.ad);
-            column.push(resultColumn.Ba);
-            column.push(resultColumn.pw);
-            column.push(resultColumn.Bw);
-            column.push(resultColumn.rbc);
-            column.push(resultColumn.Vcd);
-            column.push(resultColumn.rbs);
-            column.push(resultColumn.Vsd);
-            column.push(resultColumn.Vyd);
-            column.push(resultColumn.ri);
-            column.push(resultColumn.Vyd_Ratio);
-            column.push(resultColumn.Vyd_Result);
+              /////////////// 照査 ///////////////
+              fvcd : resultColumn.fvcd,
+              Bd : resultColumn.Bd,
+              Bp : resultColumn.Bp,
+              Mu : resultColumn.Mu,
+              Mo : resultColumn.Mo,
+              Bn : resultColumn.Bn,
+              ad : resultColumn.ad,
+              Ba : resultColumn.Ba,
+              pw : resultColumn.pw,
+              Bw : resultColumn.Bw,
+              rbc : resultColumn.rbc,
+              Vcd : resultColumn.Vcd,
+              rbs : resultColumn.rbs,
+              Vsd : resultColumn.Vsd,
+              Vyd : resultColumn.Vyd,
+              ri : resultColumn.ri,
+              Vyd_Ratio : resultColumn.Vyd_Ratio,
+              Vyd_Result : resultColumn.Vyd_Result,
 
-            column.push(resultColumn.fwcd);
-            column.push(resultColumn.Vwcd);
-            column.push(resultColumn.Vwcd_Ratio);
-            column.push(resultColumn.Vwcd_Result);
+              fwcd : resultColumn.fwcd,
+              Vwcd : resultColumn.Vwcd,
+              Vwcd_Ratio : resultColumn.Vwcd_Ratio,
+              Vwcd_Result : resultColumn.Vwcd_Result,
 
-            /////////////// 総括表用 ///////////////
-            column.push(position.index);
-            column.push(side);
-            column.push(shape.shape);
+              /////////////// 総括表用 ///////////////
+              index_summary : position.index,
+              side_summary : side,
+              shape_summary : shape.shape,
+            }
 
             page.columns.push(column);
           }
@@ -236,13 +237,14 @@ export class ResultSafetyShearForceComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);
