@@ -509,7 +509,6 @@ export class SetSectionService {
           h = Math.sqrt(Area);
         }
         result['H'] = h;
-        result['B'] = h;
         break;
 
       case 'Ring':              // 円環
