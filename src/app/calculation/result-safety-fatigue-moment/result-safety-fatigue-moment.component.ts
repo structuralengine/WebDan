@@ -147,73 +147,74 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
                 res, Ast, safety, fatigueInfo)
             );
 
-            const column: any[] = new Array();
+            const column = {
             /////////////// タイトル ///////////////
-            column.push({ alien: 'center', value: titleColumn.m_no });
-            column.push({ alien: 'center', value: titleColumn.p_name });
-            column.push({ alien: 'center', value: titleColumn.side });
+            m_no : { alien: 'center', value: titleColumn.m_no },
+            p_name : { alien: 'center', value: titleColumn.p_name },
+            side : { alien: 'center', value: titleColumn.side },
             ///////////////// 形状 /////////////////
-            column.push(this.result.alien(shape.B));
-            column.push(this.result.alien(shape.H));
-            column.push(this.result.alien(shape.Bt));
-            column.push(this.result.alien(shape.t));
+            B : this.result.alien(shape.B),
+            H : this.result.alien(shape.H),
+            Bt : this.result.alien(shape.Bt),
+            t : this.result.alien(shape.t),
             /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ast), 'center'));
-            column.push(this.result.alien(Ast.AstString, 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.dst), 'center'));
+            Ast : this.result.alien(this.result.numStr(Ast.Ast), 'center'),
+            AstString : this.result.alien(Ast.AstString, 'center'),
+            dst : this.result.alien(this.result.numStr(Ast.dst), 'center'),
             /////////////// 圧縮鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Asc), 'center'));
-            column.push(this.result.alien(Ast.AscString, 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.dsc), 'center'));
+            Asc : this.result.alien(this.result.numStr(Ast.Asc), 'center'),
+            AscString : this.result.alien(Ast.AscString, 'center'),
+            dsc : this.result.alien(this.result.numStr(Ast.dsc), 'center'),
             /////////////// 側面鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ase), 'center'));
-            column.push(this.result.alien(Ast.AseString, 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.dse), 'center'));
+            Ase : this.result.alien(this.result.numStr(Ast.Ase), 'center'),
+            AseString : this.result.alien(Ast.AseString, 'center'),
+            dse : this.result.alien(this.result.numStr(Ast.dse), 'center'),
             /////////////// コンクリート情報 ///////////////
-            column.push(this.result.alien(fck.fck.toFixed(1), 'center'));
-            column.push(this.result.alien(fck.rc.toFixed(2), 'center'));
-            column.push(this.result.alien(fck.fcd.toFixed(1), 'center'));
+            fck : this.result.alien(fck.fck.toFixed(1), 'center'),
+            rc : this.result.alien(fck.rc.toFixed(2), 'center'),
+            fcd : this.result.alien(fck.fcd.toFixed(1), 'center'),
             /////////////// 鉄筋情報 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), 'center'));
-            column.push(this.result.alien(Ast.rs.toFixed(2), 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'));
-            column.push(this.result.alien(Ast.fsu, 'center'));
+            fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), 'center'),
+            rs : this.result.alien(Ast.rs.toFixed(2), 'center'),
+            fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'),
+            fsu : this.result.alien(Ast.fsu, 'center'),
             /////////////// 照査 ///////////////
-            column.push(resultColumn.Mdmin);
-            column.push(resultColumn.Ndmin);
-            column.push(resultColumn.sigma_min);
+            Mdmin : resultColumn.Mdmin,
+            Ndmin : resultColumn.Ndmin,
+            sigma_min : resultColumn.sigma_min,
 
-            column.push(resultColumn.Mrd);
-            column.push(resultColumn.Nrd);
-            column.push(resultColumn.sigma_rd);
+            Mrd : resultColumn.Mrd,
+            Nrd : resultColumn.Nrd,
+            sigma_rd : resultColumn.sigma_rd,
 
-            column.push(resultColumn.fsr200);
-            column.push(resultColumn.ratio200);
+            fsr200 : resultColumn.fsr200,
+            ratio200 : resultColumn.ratio200,
 
-            column.push(resultColumn.k);
-            column.push(resultColumn.ar);
-            column.push(resultColumn.N);
+            k : resultColumn.k,
+            ar : resultColumn.ar,
+            N : resultColumn.N,
 
-            column.push(resultColumn.NA);
-            column.push(resultColumn.NB);
+            NA : resultColumn.NA,
+            NB : resultColumn.NB,
 
-            column.push(resultColumn.SASC);
-            column.push(resultColumn.SBSC);
+            SASC : resultColumn.SASC,
+            SBSC : resultColumn.SBSC,
 
-            column.push(resultColumn.r1);
-            column.push(resultColumn.r2);
+            r1 : resultColumn.r1,
+            r2 : resultColumn.r2,
 
-            column.push(resultColumn.rs);
-            column.push(resultColumn.frd);
+            rs2 : resultColumn.rs,
+            frd : resultColumn.frd,
 
-            column.push(resultColumn.ri);
-            column.push(resultColumn.ratio);
-            column.push(resultColumn.result);
+            ri : resultColumn.ri,
+            ratio : resultColumn.ratio,
+            result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
-            column.push(position.index);
-            column.push(side);
-            column.push(shape.shape);
+            index_summary : position.index,
+            side_summary : side,
+            shape_summary : shape.shape,
+            }
 
             page.columns.push(column);
           }
@@ -222,13 +223,14 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);

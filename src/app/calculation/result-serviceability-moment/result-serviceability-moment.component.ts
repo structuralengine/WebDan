@@ -157,7 +157,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               )
             );
 
-            const column: any[] = new Array();
+            /*const column: any[] = new Array();
             /////////////// タイトル ///////////////
             column.push({ alien: "center", value: titleColumn.m_no });
             column.push({ alien: "center", value: titleColumn.p_name });
@@ -222,7 +222,75 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             /////////////// 総括表用 ///////////////
             column.push(position.index);
             column.push(side);
-            column.push(shape.shape);
+            column.push(shape.shape);*/
+
+            const column = {
+              /////////////// タイトル ///////////////
+              m_no : { alien: "center", value: titleColumn.m_no },
+              p_name : { alien: "center", value: titleColumn.p_name },
+              side : { alien: "center", value: titleColumn.side },
+              ///////////////// 形状 /////////////////
+              B : this.result.alien(shape.B),
+              H : this.result.alien(shape.H),
+              Bt : this.result.alien(shape.Bt),
+              t : this.result.alien(shape.t),
+              /////////////// 引張鉄筋 ///////////////
+              Ast : this.result.alien(this.result.numStr(Ast.Ast), "center"),
+              AstString : this.result.alien(Ast.AstString, "center"),
+              dst : this.result.alien(this.result.numStr(Ast.dst), "center"),
+              /////////////// 圧縮鉄筋 ///////////////
+              Asc : this.result.alien(this.result.numStr(Ast.Asc), "center"),
+              AscString : this.result.alien(Ast.AscString, "center"),
+              dsc : this.result.alien(this.result.numStr(Ast.dsc), "center"),
+              /////////////// 側面鉄筋 ///////////////
+              Ase : this.result.alien(this.result.numStr(Ast.Ase), "center"),
+              AseString : this.result.alien(Ast.AseString, "center"),
+              dse : this.result.alien(this.result.numStr(Ast.dse), "center"),
+              /////////////// コンクリート情報 ///////////////
+              fck : this.result.alien(fck.fck.toFixed(1), "center"),
+              rc : this.result.alien(fck.rc.toFixed(2), "center"),
+              fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
+              /////////////// 鉄筋情報 ///////////////
+              fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), "center"),
+              rs : this.result.alien(Ast.rs.toFixed(2), "center"),
+              fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), "center"),
+              /////////////// 照査 ///////////////
+              con : resultColumn.con,
+
+              Mhd : resultColumn.Mhd,
+              Nhd : resultColumn.Nhd,
+              sigma_b : resultColumn.sigma_b,
+
+              Md : resultColumn.Md,
+              Nd : resultColumn.Nd,
+              sigma_c : resultColumn.sigma_c,
+              sigma_s : resultColumn.sigma_s,
+
+              Mpd : resultColumn.Mpd,
+              Npd : resultColumn.Npd,
+              EsEc : resultColumn.EsEc,
+              sigma_se : resultColumn.sigma_se,
+              c : resultColumn.c,
+              Cs : resultColumn.Cs,
+              fai : resultColumn.fai,
+              ecu : resultColumn.ecu,
+              k1 : resultColumn.k1,
+              k2 : resultColumn.k2,
+              n : resultColumn.n,
+              k3 : resultColumn.k3,
+              k4 : resultColumn.k4,
+              Wd : resultColumn.Wd,
+              Wlim : resultColumn.Wlim,
+
+              ri : resultColumn.ri,
+              ratio : resultColumn.ratio,
+              result : resultColumn.result,
+
+              /////////////// 総括表用 ///////////////
+              index_summary : position.index,
+              side_summary : side,
+              shape_summary : shape.shape,
+            }
 
             page.columns.push(column);
 
@@ -233,13 +301,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);

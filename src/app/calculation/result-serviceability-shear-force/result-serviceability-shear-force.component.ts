@@ -144,69 +144,70 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
                 safety)
             );
 
-            const column: any[] = new Array();
-            /////////////// タイトル ///////////////
-            column.push({ alien: "center", value: titleColumn.m_no });
-            column.push({ alien: "center", value: titleColumn.p_name });
-            column.push({ alien: "center", value: titleColumn.side });
-            ///////////////// 形状 /////////////////
-            column.push(this.result.alien(shape.B));
-            column.push(this.result.alien(shape.H));
-            /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
-            column.push(this.result.alien(Ast.AstString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
-            /////////////// 圧縮鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Asc), "center"));
-            column.push(this.result.alien(Ast.AscString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dsc), "center"));
-            /////////////// 側面鉄筋 ///////////////
-            // column.push(this.result.alien(this.result.numStr(Ast.Ase), 'center'));
-            column.push(this.result.alien(Ast.AseString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dse), "center"));
-            /////////////// コンクリート情報 ///////////////
-            column.push(this.result.alien(fck.fck.toFixed(1), "center"));
-            column.push(this.result.alien(fck.rc.toFixed(2), "center"));
-            column.push(this.result.alien(fck.fcd.toFixed(1), "center"));
-            /////////////// 鉄筋強度情報 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), "center"));
-            column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
-            /////////////// 帯鉄筋情報 ///////////////
-            column.push(resultColumn.Aw);
-            column.push(resultColumn.AwString);
-            column.push(resultColumn.fwyd);
-            column.push(resultColumn.deg);
-            column.push(resultColumn.Ss);
-            /////////////// 断面力 ///////////////
-            column.push(resultColumn.Nd);
-            column.push(resultColumn.Vhd);
-            column.push(resultColumn.Vpd);
-            column.push(resultColumn.Vrd);
-            /////////////// せん断耐力 ///////////////
-            column.push(resultColumn.fvcd);
-            column.push(resultColumn.Bd);
-            column.push(resultColumn.pc);
-            column.push(resultColumn.Bp);
-            column.push(resultColumn.Mu);
-            column.push(resultColumn.Mo);
-            column.push(resultColumn.Bn);
-            column.push(resultColumn.rbc);
-            column.push(resultColumn.Vcd);
-            column.push(resultColumn.Vcd07);
-            /////////////// せん断応力度 ///////////////
-            column.push(resultColumn.con);
-            column.push(resultColumn.kr);
-            column.push(resultColumn.ri);
-            column.push(resultColumn.sigma);
-            column.push(resultColumn.Ratio);
-            column.push(resultColumn.Result);
+            const column = {
+              /////////////// タイトル ///////////////
+              m_no : { alien: "center", value: titleColumn.m_no },
+              p_name : { alien: "center", value: titleColumn.p_name },
+              side : { alien: "center", value: titleColumn.side },
+              ///////////////// 形状 /////////////////
+              B : this.result.alien(shape.B),
+              H : this.result.alien(shape.H),
+              /////////////// 引張鉄筋 ///////////////
+              tan : this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"),
+              Ast : this.result.alien(this.result.numStr(Ast.Ast), "center"),
+              AstString : this.result.alien(Ast.AstString, "center"),
+              dst : this.result.alien(this.result.numStr(Ast.dst), "center"),
+              /////////////// 圧縮鉄筋 ///////////////
+              Asc : this.result.alien(this.result.numStr(Ast.Asc), "center"),
+              AscString : this.result.alien(Ast.AscString, "center"),
+              dsc : this.result.alien(this.result.numStr(Ast.dsc), "center"),
+              /////////////// 側面鉄筋 ///////////////
+              // col : this.result.alien(this.result.numStr(Ast.Ase), 'center'),
+              AseString : this.result.alien(Ast.AseString, "center"),
+              dse : this.result.alien(this.result.numStr(Ast.dse), "center"),
+              /////////////// コンクリート情報 ///////////////
+              fck : this.result.alien(fck.fck.toFixed(1), "center"),
+              rc : this.result.alien(fck.rc.toFixed(2), "center"),
+              fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
+              /////////////// 鉄筋強度情報 ///////////////
+              fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), "center"),
+              rs : this.result.alien(Ast.rs.toFixed(2), "center"),
+              fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), "center"),
+              /////////////// 帯鉄筋情報 ///////////////
+              Aw : resultColumn.Aw,
+              AwString : resultColumn.AwString,
+              fwyd : resultColumn.fwyd,
+              deg : resultColumn.deg,
+              Ss : resultColumn.Ss,
+              /////////////// 断面力 ///////////////
+              Nd : resultColumn.Nd,
+              Vhd : resultColumn.Vhd,
+              Vpd : resultColumn.Vpd,
+              Vrd : resultColumn.Vrd,
+              /////////////// せん断耐力 ///////////////
+              fvcd : resultColumn.fvcd,
+              Bd : resultColumn.Bd,
+              pc : resultColumn.pc,
+              Bp : resultColumn.Bp,
+              Mu : resultColumn.Mu,
+              Mo : resultColumn.Mo,
+              Bn : resultColumn.Bn,
+              rbc : resultColumn.rbc,
+              Vcd : resultColumn.Vcd,
+              Vcd07 : resultColumn.Vcd07,
+              /////////////// せん断応力度 ///////////////
+              con : resultColumn.con,
+              kr : resultColumn.kr,
+              ri : resultColumn.ri,
+              sigma : resultColumn.sigma,
+              Ratio : resultColumn.Ratio,
+              Result : resultColumn.Result,
 
-            /////////////// 総括表用 ///////////////
-            column.push(position.index);
-            column.push(side);
-            column.push(shape.shape);
+              /////////////// 総括表用 ///////////////
+              index_summary : position.index,
+              side_summary : side,
+              shape_summary : shape.shape,
+            }
                         
             page.columns.push(column);
           }
@@ -215,13 +216,14 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);
