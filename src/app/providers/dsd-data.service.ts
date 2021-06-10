@@ -38,17 +38,17 @@ export class DsdDataService {
 
     const jsonData = {
       // ピックアップ断面力
-      pickup_filename: null,
-      pickup_data: null,
-      basic: null,      // 設計条件
+      pickup_filename: '',
+      pickup_data: {},
+      // basic:  {},      // 設計条件
       members: [],    // 部材情報
-      crack: null,      // ひび割れ情報
+      // crack: [],      // ひび割れ情報
       points: [],     // 着目点情報
-      bar: null,        // 鉄筋情報
-      fatigues: null,   // 疲労情報
-      safety: null,     // 安全係数情報
-      force: null,      // 断面力手入力情報
-      calc: null        // 計算印刷設定
+      // bar: [],        // 鉄筋情報
+      // fatigues: {},   // 疲労情報
+      // safety: {},     // 安全係数情報
+      force: [],      // 断面力手入力情報
+      // calc: {}        // 計算印刷設定
     };
 
 
@@ -535,98 +535,97 @@ export class DsdDataService {
       position.isMzCalc = true;
       position.isVyCalc = true;
 
-      jsonData.members.push(member);
-      jsonData.points.push(position);
-
       // 断面力
       const force = this.force.default_column(index);
       // 設計曲げモーメントの入力を取得
       let sHAND_MageDAN: number;
-      // 耐久性 縁応力検討揚
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md0_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md0_Nd'] = sHAND_MageDAN;
-      // 耐久性 鉄筋応力検討用
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md1_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md1_Nd'] = sHAND_MageDAN;
-      // 耐久性 永久
-      sHAND_MageDAN = this.readSingle(buff);
-      if( sHAND_MageDAN !== null ){
-        force['Md1_Md'] = sHAND_MageDAN;
+      // 耐久性 縁応力検討用
+      for(const k3 of ['Md0_Md', 'Md0_Nd']){
+        sHAND_MageDAN = this.readSingle(buff);
+        if( sHAND_MageDAN !==null ){
+          force[k3] = Math.round(sHAND_MageDAN * 100 ) / 100;
+        }
       }
-      sHAND_MageDAN = this.readSingle(buff);
-      if( sHAND_MageDAN !== null ){
-        force['Md1_Nd'] = sHAND_MageDAN;
+
+      // 耐久性 鉄筋応力検討用, 永久
+      for(let id = 0; id <= 1; id++){
+        for(const k3 of ['Md1_Md', 'Md1_Nd']){
+          sHAND_MageDAN = this.readSingle(buff);
+          if( sHAND_MageDAN !== null ){
+            force[k3] = Math.round(sHAND_MageDAN * 100 ) / 100;
+          }
+        }
       }
       // 耐久性 変動
       sHAND_MageDAN = this.readSingle(buff);
       sHAND_MageDAN = this.readSingle(buff);
       // 耐久性 外観
-      sHAND_MageDAN = this.readSingle(buff);
-      if( sHAND_MageDAN !== null ){
-        force['Md1_Md'] = sHAND_MageDAN;
+      for(const k3 of ['Md1_Md', 'Md1_Nd']){
+        sHAND_MageDAN = this.readSingle(buff);
+        if( sHAND_MageDAN !== null ){
+          force[k3] = Math.round(sHAND_MageDAN * 100 ) / 100;
+        }
+      }      
+      // 3疲労 最小応力, 4最大応力, 5安全性, 6復旧性 地震時以外, 7復旧性 地震時
+      for(let id = 3; id <= 7; id++){
+        const k1 = 'Md' + id;
+        for(const k2 of ['_Md', '_Nd']){
+          const k3 = k1 + k2;
+          sHAND_MageDAN = this.readSingle(buff);
+          if( sHAND_MageDAN !== null ){
+            force[k3] = Math.round(sHAND_MageDAN * 100 ) / 100;
+          }
+        }
       }
-      sHAND_MageDAN = this.readSingle(buff);
-      if( sHAND_MageDAN !== null ){
-        force['Md1_Nd'] = sHAND_MageDAN;
-      }
-      // 疲労 最小応力
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md3_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md3_Nd'] = sHAND_MageDAN;
-      // 疲労 最大応力
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md4_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md4_Nd'] = sHAND_MageDAN;
-      // 安全性 破壊
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md5_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md5_Nd'] = sHAND_MageDAN;
-      // 復旧性 地震時以外
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md6_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md6_Nd'] = sHAND_MageDAN;
-      // 復旧性 地震時
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md7_Md'] = sHAND_MageDAN;
-      sHAND_MageDAN = this.readSingle(buff);
-      force['Md7_Nd'] = sHAND_MageDAN;
-      // 
+      // 余り
       sHAND_MageDAN = this.readSingle(buff);
       sHAND_MageDAN = this.readSingle(buff);
 
       // 設計せん断力の入力を取得
       let sHAND_SenDAN: number;
-      for (let j = 0; j <= 7; j++) {
-        sHAND_SenDAN = this.readSingle(buff);
-        sHAND_SenDAN = this.readSingle(buff);
-        sHAND_SenDAN = this.readSingle(buff);
+      for(let id = 0; id <= 7; id++){
+        const k1 = 'Vd' + id;
+        for(const k2 of ['_Vd', '_Md', '_Nd']){
+          const k3 = k1 + k2;
+          sHAND_SenDAN = this.readSingle(buff);
+          if( sHAND_SenDAN !== null ){
+            force[k3] = Math.round(sHAND_SenDAN * 100 ) / 100;
+          }
+        }
       }
+
       // せん断スパンの入力を取得
-      let sHAND_SenDANLa: number = 0;
+      let sHAND_SenDANLa: number = null;
       if (!this.isOlder('3.1.7', buff.datVersID)) {
         sHAND_SenDANLa = this.readSingle(buff);
       }
+      if(sHAND_SenDANLa !== null && sHAND_SenDANLa !== 0 ){
+        position.La = sHAND_SenDANLa;
+      }
+
       // 安全性破壊の設計軸圧縮力の入力を取得
-      let sHAND_軸力maxDAN = 0
+      let sHAND_軸力maxDAN = null
       if (!this.isOlder('3.2.4', buff.datVersID)) {
         sHAND_軸力maxDAN = this.readSingle(buff);
       }
-      let sHAND_SenDANLa2_1: number = 0
+
+      // min(t/2, d) の入力
+      let sHAND_SenDANLa2_1: number = null
       if (!this.isOlder('3.2.7', buff.datVersID)) {
         sHAND_SenDANLa2_1 = this.readSingle(buff);
       }
-      let sHAND_SenDANLa2_2: number = 0
+
+      // 杭の直径 の入力
+      let sHAND_SenDANLa2_2: number = null
       if (!this.isOlder('3.2.8', buff.datVersID)) {
         sHAND_SenDANLa2_2 = this.readSingle(buff);
       }
+
+      // 登録
+      jsonData.members.push(member);
+      jsonData.points.push(position);
+      jsonData.force.push(force);
+
     }
   }
 
@@ -688,7 +687,10 @@ export class DsdDataService {
   // single型の情報を バイナリから読み取る
   private readSingle(buff: any): number {
     const view = this.getDataView(buff, 4);
-    const num = view.getFloat32(0);
+    let num = view.getFloat32(0);
+    if(num > 3.4 * Math.pow(10,38)){
+      num = null;
+    }
     return num;
   }
 
