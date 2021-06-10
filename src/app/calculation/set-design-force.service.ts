@@ -141,6 +141,49 @@ export class SetDesignForceService {
       position["designForce"] = this.getSectionForce(target, n, forceObj);
     }
 
+    // 地中Max の
+    for (let ip = result.length - 1; ip >= 0; ip--) {
+      if( result[ip].isMax === true ){
+        const designForce = [
+          { Md: 0, Nd: 0, Vd: 0, side:'上側引張' },
+          { Md: 0, Nd: 0, Vd: 0, side:'下側引張' }
+        ];
+        // max 始まりを探す
+        let jp = ip;
+        for (let i = ip; i >= 0; i--) {
+          if(result[jp].isMax === false) break;
+          jp--;
+        }
+        jp++;
+        for (let i = ip; i >= jp; i--) {
+          for(const force of result[i].designForce){
+            if(target === 'Md'){
+              if(force.side === '上側引張' && force[target] <= designForce[0][target]){
+                designForce[0] = force;
+              } else if( force[target] >= designForce[0][target]){
+                designForce[1] = force;
+              }
+            } else if(target === 'Vd' && Math.abs(force[target]) > Math.abs(designForce[0][target])){
+              if(force.side === '上側引張'){
+                designForce[0] = force;
+              } else {
+                designForce[1] = force;
+              }
+            }
+          }
+          if(i !== jp) result.splice(i, 1);
+        }
+        // 値が代入されなかった
+        for (let i = designForce.length - 1; i >= 0; i--) {
+          if(!('comb' in designForce[i])) {
+            designForce.splice(i, 1);
+          }
+        }
+        ip = jp;
+        result[ip].designForce = designForce;
+      }
+    }
+
     return result;
   }
 
