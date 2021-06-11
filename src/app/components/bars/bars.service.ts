@@ -39,8 +39,8 @@ export class InputBarsService {
       index: id,
       haunch_M: null,
       haunch_V: null,
-      rebar1: this.default_rebar('上'),
-      rebar2: this.default_rebar('下'),
+      rebar1: this.default_rebar('上側'),
+      rebar2: this.default_rebar('下側'),
       sidebar: this.default_sidebar(),
       stirrup: this.default_stirrup(),
       bend: this.default_bend(),
@@ -240,6 +240,11 @@ export class InputBarsService {
         break;
       }
     }
+    const nono = this.points.position_list.findIndex(v=>v.index === index);
+    const notar = this.points.position_list.find(v=>v.index === index);
+    const target_bar_list = bar_list.find(v=>v.index === notar.index);
+    this.points.position_list[nono].title = [target_bar_list.rebar1.title, target_bar_list.rebar2.title]
+
     return result;
   }
 

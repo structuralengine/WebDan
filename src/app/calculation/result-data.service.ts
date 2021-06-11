@@ -28,7 +28,12 @@ export class ResultDataService {
     const title2: string = position.p_name; // + side;
 
     // 照査表における タイトル３行目を取得
-    const title3: string = side;
+    let title3: string = '';
+    if(side === '上側引張'){
+      title3 = position.title[0].toString() + '引張';
+    } else {
+      title3 = position.title[1].toString() + '引張';
+    }
 
     return {
       m_no: title1,
