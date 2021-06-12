@@ -32,7 +32,7 @@ export class InputFatiguesService {
   }
 
   // 疲労情報
-  private default_fatigue(id: number): any {
+  public default_fatigue(id: number): any {
     return {
       m_no: null,
       index: id,
@@ -127,16 +127,17 @@ export class InputFatiguesService {
     return table_datas;
   }
 
-  private getTableColumn(index: any): any {
+  public getTableColumn(index: any): any {
     let result = this.fatigue_list.find((value) => value.index === index);
     const bar = this.bars.getTableColumn(index);
-    result['title1'] = bar.rebar1.title;
-    result['title2'] = bar.rebar2.title;
     if (result === undefined) {
       result = this.default_fatigue(index);
       result.titgle1 = bar.title1;
       this.fatigue_list.push(result);
     }
+    result['title1'] = bar.rebar1.title;
+    result['title2'] = bar.rebar2.title;
+
     return result;
   }
 

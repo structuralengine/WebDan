@@ -28,7 +28,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
   // 材料強度情報
   /// specification1_selected によって変わる項目の設定
-  private default_safety_factor(): any {
+  public default_safety_factor(): any {
 
     let result: any;
 
@@ -91,13 +91,15 @@ export class InputSafetyFactorsMaterialStrengthsService {
         separate: 25,
         tensionBar: { fsy: 345, fsu: 490 },
         sidebar: { fsy: 345, fsu: 490 },
-        stirrup: { fsy: 345, fsu: 490 }
+        stirrup: { fsy: 345, fsu: 490 },
+        bend: { fsy: 345, fsu: 490 }
       },
       {
         separate: 29,
         tensionBar: { fsy: 345, fsu: 490 },
         sidebar: { fsy: 345, fsu: 490 },
-        stirrup: { fsy: 345, fsu: 490 }
+        stirrup: { fsy: 345, fsu: 490 },
+        bend: { fsy: 345, fsu: 490 }
       }
     ]
     return result;

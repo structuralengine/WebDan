@@ -112,7 +112,11 @@ export class InputBasicInformationService  {
     }
     return result;
   }
-
+  public set_pickup_moment(id: number, no: number){
+    const target = this.pickup_moment.find(e => e.id === id);
+    if(target === undefined) return;
+    target.no = no;
+  }
   // せん断テーブルの初期値
   private default_pickup_shear(specification1: number): any{
     let result: any[] = new Array();
@@ -147,6 +151,11 @@ export class InputBasicInformationService  {
     }
     return result;
   }
+  public set_pickup_shear_force(id: number, no: number){
+    const target = this.pickup_shear_force.find(e => e.id === id);
+    if(target === undefined) return;
+    target.no = no;
+  }
 
   // 仕様の初期値
   private default_specification2(specification1: number): any{
@@ -157,7 +166,7 @@ export class InputBasicInformationService  {
           { id: 0, title: 'ＪＲ各社', selected: true },
           { id: 1, title: '運輸機構', selected: false },
           { id: 2, title: 'ＪＲ東日本', selected: false },
-          { id: 3, title: 'ＪＲ西日本', selected: false }
+          { id: 5, title: 'ＪＲ東日本（既存構造物）', selected: false }
         ];
         break;
 
@@ -168,6 +177,16 @@ export class InputBasicInformationService  {
         // まだ対応していない
     }
     return result;
+  }
+  public set_specification2(id: number): any {
+
+    if( this.specification2_list.find(e => e.id === id) === undefined) {
+      return;
+    }
+
+    this.specification2_list.map(
+      obj => obj.selected = (obj.id === id) ? true : false);
+
   }
 
   // 設計条件の初期値
@@ -190,6 +209,16 @@ export class InputBasicInformationService  {
     }
     return result;
   }
+  public set_conditions(id: string, value: boolean): any {
+
+    const target = this.conditions_list.find(e => e.id === id);
+    if( target === undefined) {
+      return;
+    }
+
+    target.selected = value;
+  }
+
 
   public pickup_moment_no(id: number){
     const old = this.pickup_moment.find(v=>v.id===id);
