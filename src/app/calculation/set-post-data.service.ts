@@ -3,10 +3,8 @@ import { UserInfoService } from "../providers/user-info.service";
 import { InputMembersService } from "../components/members/members.service";
 import { InputBarsService } from '../components/bars/bars.service';
 import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
-import { SetSectionService } from "./shape-data/old-section.service";
-import { SetBarService } from "./shape-data/old-bar.service";
 import { HttpHeaders } from "@angular/common/http";
-import { SetShapeService } from "./shape-data/set-shape.service";
+import { SetSectionService } from "./shape-data/set-section.service";
 
 @Injectable({
   providedIn: "root",
@@ -15,11 +13,8 @@ export class SetPostDataService {
   constructor(
     private user: UserInfoService,
     private section: SetSectionService,
-    private shape: SetShapeService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
-    private members: InputMembersService,
-    private bars: InputBarsService,
-    private steel: SetBarService) {}
+    private members: InputMembersService ) {}
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
   public URL: string =
@@ -86,9 +81,9 @@ export class SetPostDataService {
           }
           try{
 
-            const shape = this.shape.getPostData(member, force, safety);
-            const section = this.section.getPostData(member, force, safety);
-            const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
+            const shape = this.section.getPostData(member, force, safety);
+            // const section = this.section.getPostData(member, force, safety);
+            // const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
 
             // 断面形状
             data['Sections'] = shape.Sections;

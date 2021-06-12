@@ -13,6 +13,35 @@ export class SetBarService {
     private helper: DataHelperModule
   ) { }
 
+ // 鉄筋強度の情報を返す
+ public getFsyk(
+  rebar_dia: number,
+  material_bar: any,
+  key: string = "tensionBar"
+): any {
+  let result = {
+    fsy: null,
+    fsu: null,
+    id: "",
+  };
+
+  if (rebar_dia <= material_bar[0].separate) {
+    result.fsy = this.helper.toNumber(material_bar[0][key].fsy);
+    result.fsu = this.helper.toNumber(material_bar[0][key].fsu);
+    result.id = "1";
+  } else {
+    result.fsy = this.helper.toNumber(material_bar[1][key].fsy);
+    result.fsu = this.helper.toNumber(material_bar[1][key].fsu);
+    result.id = "2";
+  }
+
+  return result;
+}
+
+
+
+
+
   // 鉄筋情報を集計する
   public getPostData(member: any, index: number, side: string, shape: string, safety: any): any {
 
@@ -949,31 +978,6 @@ export class SetBarService {
       tan = 0;
     }
     result.tan = tan;
-
-    return result;
-  }
-
-  // 鉄筋強度の情報を返す
-  public getFsyk(
-    rebar_dia: number,
-    material_bar: any,
-    key: string = "tensionBar"
-  ): any {
-    let result = {
-      fsy: null,
-      fsu: null,
-      id: "",
-    };
-
-    if (rebar_dia <= material_bar[0].separate) {
-      result.fsy = this.helper.toNumber(material_bar[0][key].fsy);
-      result.fsu = this.helper.toNumber(material_bar[0][key].fsu);
-      result.id = "1";
-    } else {
-      result.fsy = this.helper.toNumber(material_bar[1][key].fsy);
-      result.fsu = this.helper.toNumber(material_bar[1][key].fsu);
-      result.id = "2";
-    }
 
     return result;
   }
