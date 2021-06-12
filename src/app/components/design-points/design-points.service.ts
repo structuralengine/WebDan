@@ -9,7 +9,7 @@ import { InputMembersService } from '../members/members.service';
 export class InputDesignPointsService {
 
   // 着目点情報
-  public position_list: any[];
+  private position_list: any[];
   // { index, m_no, p_id, position, p_name, isMyCalc, isVyCalc, isMzCalc, isVzCalc, La },
 
   constructor(
@@ -184,8 +184,7 @@ export class InputDesignPointsService {
       isVyCalc: false,
       isMzCalc: false,
       isVzCalc: false,
-      La: null,
-      title: ["上側", "下側"],
+      La: null
     };
   }
 
