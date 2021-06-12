@@ -9,7 +9,7 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
-import { SetSectionService } from '../set-section.service';
+import { SetSectionService } from '../shape-data/old-section.service';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({

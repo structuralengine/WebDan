@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
-import { InputBarsService } from "../components/bars/bars.service";
-import { DataHelperModule } from "../providers/data-helper.module";
-import { SetSectionService } from "./set-section.service";
+import { InputBarsService } from "../../components/bars/bars.service";
+import { DataHelperModule } from "../../providers/data-helper.module";
+import { SetSectionService } from "./old-section.service";
 
 @Injectable({
   providedIn: "root",

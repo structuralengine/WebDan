@@ -6,8 +6,8 @@ import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetBarService } from "../set-bar.service";
-import { SetSectionService } from "../set-section.service";
+import { SetBarService } from "../shape-data/old-bar.service";
+import { SetSectionService } from "../shape-data/old-section.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({

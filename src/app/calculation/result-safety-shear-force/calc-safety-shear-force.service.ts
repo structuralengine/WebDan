@@ -2,7 +2,7 @@ import { SaveDataService } from "../../providers/save-data.service";
 import { SetDesignForceService } from "../set-design-force.service";
 import { ResultDataService } from "../result-data.service";
 import { SetPostDataService } from "../set-post-data.service";
-import { SetBarService } from "../set-bar.service";
+import { SetBarService } from "../shape-data/old-bar.service";
 
 import { Injectable } from "@angular/core";
 import { range } from "rxjs";
@@ -11,7 +11,7 @@ import { DataHelperModule } from "src/app/providers/data-helper.module";
 import { InputCalclationPrintService } from "src/app/components/calculation-print/calculation-print.service";
 import { InputBasicInformationService } from "src/app/components/basic-information/basic-information.service";
 import { InputSafetyFactorsMaterialStrengthsService } from "src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service";
-import { SetSectionService } from "../set-section.service";
+import { SetSectionService } from "../shape-data/old-section.service";
 
 @Injectable({
   providedIn: "root",

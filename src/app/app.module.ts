@@ -84,8 +84,8 @@ import { ResultSummaryTableComponent } from './calculation/result-summary-table/
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
-import { SetSectionService} from './calculation/set-section.service';
-import { SetBarService} from './calculation/set-bar.service';
+import { SetSectionService} from './calculation/shape-data/old-section.service';
+import { SetBarService} from './calculation/shape-data/old-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { environment } from 'src/environments/environment';
 

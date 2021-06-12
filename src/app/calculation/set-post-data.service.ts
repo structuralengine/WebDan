@@ -3,9 +3,10 @@ import { UserInfoService } from "../providers/user-info.service";
 import { InputMembersService } from "../components/members/members.service";
 import { InputBarsService } from '../components/bars/bars.service';
 import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
-import { SetSectionService } from "./set-section.service";
-import { SetBarService } from "./set-bar.service";
+import { SetSectionService } from "./shape-data/old-section.service";
+import { SetBarService } from "./shape-data/old-bar.service";
 import { HttpHeaders } from "@angular/common/http";
+import { SetShapeService } from "./shape-data/set-shape.service";
 
 @Injectable({
   providedIn: "root",
@@ -14,6 +15,7 @@ export class SetPostDataService {
   constructor(
     private user: UserInfoService,
     private section: SetSectionService,
+    private shape: SetShapeService,
     private safety: InputSafetyFactorsMaterialStrengthsService,
     private members: InputMembersService,
     private bars: InputBarsService,
@@ -84,15 +86,17 @@ export class SetPostDataService {
           }
           try{
 
-            // 断面形状
+            const shape = this.shape.getPostData(member, force, safety);
             const section = this.section.getPostData(member, force, safety);
-            data['Sections'] = section.Sections;
-            data['SectionElastic'] = section.SectionElastic;
+            const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
+
+            // 断面形状
+            data['Sections'] = shape.Sections;
+            data['SectionElastic'] = shape.SectionElastic;
 
             // 鉄筋の本数
-            const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
-            data['Steels'] = steel.Steels;
-            data['SteelElastic'] = steel.SteelElastic;
+            data['Steels'] = shape.Steels;
+            data['SteelElastic'] = shape.SteelElastic;
 
             result.push(data);
           } catch(e){
