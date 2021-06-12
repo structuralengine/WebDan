@@ -625,7 +625,13 @@ export class SetBarService {
         throw("断面形状：" + shapeName + " は適切ではありません。");
     }
 
-    result = { tension, compres, sidebar, stirrup: bar.stirrup, tan: bar.tan };
+    result = { 
+      tension, 
+      compres, 
+      sidebar, 
+      stirrup: bar.stirrup, 
+      tan: bar.tan
+    };
     return result;
   }
 

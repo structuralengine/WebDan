@@ -2,12 +2,14 @@
 
 import { Injectable } from "@angular/core";
 import { DataHelperModule } from "../providers/data-helper.module";
+import { InputBarsService } from "../components/bars/bars.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ResultDataService {
   constructor(
+    private bars: InputBarsService,
     private helper: DataHelperModule
   ) {}
 
@@ -28,7 +30,14 @@ export class ResultDataService {
     const title2: string = position.p_name; // + side;
 
     // 照査表における タイトル３行目を取得
-    const title3: string = side;
+    const bar = this.bars.getCalcData(position.index);
+
+    let title3: string = '';
+    if(side === '上側引張'){
+      title3 = bar.rebar1.title + '引張';
+    } else {
+      title3 = bar.rebar2.title + '引張';
+    }
 
     return {
       m_no: title1,

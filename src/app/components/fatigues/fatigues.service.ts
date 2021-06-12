@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { DataHelperModule } from "src/app/providers/data-helper.module";
+import { InputBarsService } from "../bars/bars.service";
 import { InputDesignPointsService } from "../design-points/design-points.service";
 
 @Injectable({
@@ -17,7 +18,8 @@ export class InputFatiguesService {
 
   constructor(
     private helper: DataHelperModule,
-    private points: InputDesignPointsService) {
+    private points: InputDesignPointsService,
+    private bars: InputBarsService) {
     this.clear();
   }
   public clear(): void {
@@ -38,10 +40,10 @@ export class InputFatiguesService {
       p_name: null,
       b: null,
       h: null,
-      title1: "上",
+      //itle1: "上側",
       M1: this.default_fatigue_coefficient('Md'),
       V1: this.default_fatigue_coefficient('Vd'),
-      title2: "下",
+      //title2: "下側",
       M2: this.default_fatigue_coefficient('Md'),
       V2: this.default_fatigue_coefficient('Vd'),
     };
@@ -127,8 +129,12 @@ export class InputFatiguesService {
 
   private getTableColumn(index: any): any {
     let result = this.fatigue_list.find((value) => value.index === index);
+    const bar = this.bars.getTableColumn(index);
+    result['title1'] = bar.rebar1.title;
+    result['title2'] = bar.rebar2.title;
     if (result === undefined) {
       result = this.default_fatigue(index);
+      result.titgle1 = bar.title1;
       this.fatigue_list.push(result);
     }
     return result;
@@ -221,7 +227,7 @@ export class InputFatiguesService {
 
       const f = this.default_fatigue(column1.index);
 
-      f.title1 = column1.design_point_id;
+      //f.title1 = column1.design_point_id;
       f['M1'].SA = column1.M_SA;
       f['M1'].SB = column1.M_SB;
       f['M1'].NA06 = column1.M_NA06;
@@ -243,7 +249,7 @@ export class InputFatiguesService {
       f['V1'].B = column1.V_B;
       f['V1'].r1_2 = column1.r1_2;
 
-      f.title2 = column2.design_point_id;
+      //f.title2 = column2.design_point_id;
       f['M2'].SA = column2.M_SA;
       f['M2'].SB = column2.M_SB;
       f['M2'].NA06 = column2.M_NA06;
