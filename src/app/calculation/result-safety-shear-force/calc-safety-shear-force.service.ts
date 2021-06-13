@@ -2,7 +2,7 @@ import { SaveDataService } from "../../providers/save-data.service";
 import { SetDesignForceService } from "../set-design-force.service";
 import { ResultDataService } from "../result-data.service";
 import { SetPostDataService } from "../set-post-data.service";
-import { SetBarService } from "../shape-data/old-bar.service";
+import { SetBarService } from "../shape-data/set-bar.service";
 
 import { Injectable } from "@angular/core";
 import { range } from "rxjs";

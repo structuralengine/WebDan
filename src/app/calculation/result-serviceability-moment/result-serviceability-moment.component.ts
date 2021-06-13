@@ -6,7 +6,7 @@ import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { SetSectionService } from "../shape-data/old-section.service";
-import { SetBarService } from "../shape-data/old-bar.service";
+import { SetBarService } from "../shape-data/set-bar.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 
 @Component({

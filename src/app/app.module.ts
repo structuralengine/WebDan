@@ -85,7 +85,7 @@ import { SectionForceListComponent } from './calculation/section-force-list/sect
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
 import { SetSectionService} from './calculation/shape-data/old-section.service';
-import { SetBarService} from './calculation/shape-data/old-bar.service';
+import { SetBarService} from './calculation/shape-data/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { environment } from 'src/environments/environment';
 
