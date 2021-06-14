@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
-import { SectionInfoService } from './section-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,6 @@ export class SetRectService {
 
   constructor(
     private bars: InputBarsService,
-    private info: SectionInfoService,
     private helper: DataHelperModule
   ) { }
 
@@ -168,12 +166,12 @@ export class SetRectService {
     let compres: any;
     switch (side) {
       case "上側引張":
-        tension = this.info.rebarInfo(bar.rebar1);
-        compres = this.info.rebarInfo(bar.rebar2);
+        tension = this.helper.rebarInfo(bar.rebar1);
+        compres = this.helper.rebarInfo(bar.rebar2);
         break;
       case "下側引張":
-        tension = this.info.rebarInfo(bar.rebar2);
-        compres = this.info.rebarInfo(bar.rebar1);
+        tension = this.helper.rebarInfo(bar.rebar2);
+        compres = this.helper.rebarInfo(bar.rebar1);
         break;
     }
     if(tension === null){
@@ -182,7 +180,7 @@ export class SetRectService {
     if(tension.rebar_ss === null){
       tension.rebar_ss = b / tension.line;
     }
-    let sideInfo: any = this.info.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
+    let sideInfo: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
 
 
     const tensionBar = this.getCompresBar(tension, safety);
@@ -272,7 +270,7 @@ export class SetRectService {
     // 鉄筋強度の入力
     const rs = safety.safety_factor.rs;
 
-    const fsy = this.info.getFsyk(
+    const fsy = this.helper.getFsyk(
       barInfo.rebar_dia,
       safety.material_bar,
       "tensionBar"

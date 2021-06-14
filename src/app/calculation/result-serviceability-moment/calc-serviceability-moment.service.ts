@@ -1,6 +1,5 @@
 import { SetDesignForceService } from '../set-design-force.service';
 import { SetPostDataService } from '../set-post-data.service';
-import { ResultDataService } from '../result-data.service';
 import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-moment.service'
 
 import { Injectable } from '@angular/core';
@@ -9,7 +8,6 @@ import { InputCalclationPrintService } from 'src/app/components/calculation-prin
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
-import { SetSectionService } from '../shape-data/old-section.service';
 import { SaveDataService } from 'src/app/providers/save-data.service';
 
 @Injectable({
@@ -33,7 +31,6 @@ export class CalcServiceabilityMomentService {
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private crack: InputCrackSettingsService,
-    private section: SetSectionService,
     public base: CalcSafetyMomentService) {
     this.DesignForceList = null;
     this.isEnable = false;

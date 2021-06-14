@@ -5,10 +5,9 @@ import { CalcSafetyFatigueMomentService } from "./calc-safety-fatigue-moment.ser
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SectionInfoService } from "../shape-data/section-info.service";
-import { SetSectionService } from "../shape-data/old-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-safety-fatigue-moment",
@@ -31,8 +30,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     private calc: CalcSafetyFatigueMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SectionInfoService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private fatigue: InputFatiguesService,
     private summary: CalcSummaryTableService
@@ -140,7 +138,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             const titleColumn = this.result.getTitleString(member, position, side)
             const shape = this.section.getResult('Md', member, res[0]);
             const Ast: any = this.bar.getResult('Md', shape, res[0], safety);
-            const fck: any = this.section.getFck(safety);
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcFatigue(

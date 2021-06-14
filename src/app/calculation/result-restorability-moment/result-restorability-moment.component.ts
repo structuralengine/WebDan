@@ -5,9 +5,8 @@ import { CalcRestorabilityMomentService } from './calc-restorability-moment.serv
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
 import { InputDesignPointsService } from 'src/app/components/design-points/design-points.service';
-import { SectionInfoService } from '../shape-data/section-info.service';
-import { SetSectionService } from '../shape-data/old-section.service';
 import { CalcSummaryTableService } from '../result-summary-table/calc-summary-table.service';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 
 @Component({
@@ -29,8 +28,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     private calc: CalcRestorabilityMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SectionInfoService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService 
     ) { }
@@ -135,7 +133,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             const titleColumn = this.result.getTitleString(member, position, side)
             const shape = this.section.getResult('Md', member, res);
             const Ast: any = this.bar.getResult('Md', shape, res, safety);
-            const fck: any = this.section.getFck(safety);
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.calc.getResultValue(
               res, safety, DesignForceList

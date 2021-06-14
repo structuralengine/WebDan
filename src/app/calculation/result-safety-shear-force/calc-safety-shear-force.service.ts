@@ -1,17 +1,12 @@
 import { SaveDataService } from "../../providers/save-data.service";
 import { SetDesignForceService } from "../set-design-force.service";
-import { ResultDataService } from "../result-data.service";
 import { SetPostDataService } from "../set-post-data.service";
-import { SectionInfoService } from "../shape-data/section-info.service";
 
 import { Injectable } from "@angular/core";
-import { range } from "rxjs";
-import { Data } from "@angular/router";
 import { DataHelperModule } from "src/app/providers/data-helper.module";
 import { InputCalclationPrintService } from "src/app/components/calculation-print/calculation-print.service";
 import { InputBasicInformationService } from "src/app/components/basic-information/basic-information.service";
 import { InputSafetyFactorsMaterialStrengthsService } from "src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service";
-import { SetSectionService } from "../shape-data/old-section.service";
 
 @Injectable({
   providedIn: "root",
@@ -28,8 +23,6 @@ export class CalcSafetyShearForceService {
     private helper: DataHelperModule,
     private force: SetDesignForceService,
     private post: SetPostDataService,
-    private section: SetSectionService,
-    private bar: SectionInfoService,
     private calc: InputCalclationPrintService,
     private basic: InputBasicInformationService
   ) {

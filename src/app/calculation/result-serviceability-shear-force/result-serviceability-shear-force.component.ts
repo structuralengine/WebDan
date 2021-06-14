@@ -4,11 +4,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcServiceabilityShearForceService } from "./calc-serviceability-shear-force.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
-import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SectionInfoService } from "../shape-data/section-info.service";
-import { SetSectionService } from "../shape-data/old-section.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-serviceability-shear-force",
@@ -28,8 +26,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     private calc: CalcServiceabilityShearForceService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SectionInfoService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
@@ -133,7 +130,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             );
             const shape = this.section.getResult("Vd", member, res);
             const Ast: any = this.bar.getResult("Vd", shape, res, safety);
-            const fck: any = this.section.getFck(safety);
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcSigma(

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
-import { SectionInfoService } from './section-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,6 @@ export class SetCircleService {
 
   constructor(
     private bars: InputBarsService,
-    private info: SectionInfoService,
     private helper: DataHelperModule
   ) { }
 
@@ -69,7 +67,7 @@ export class SetCircleService {
 
     const bar = this.bars.getCalcData(index);
 
-    const tension = this.info.rebarInfo(bar.rebar1);
+    const tension = this.helper.rebarInfo(bar.rebar1);
     if(tension === null){
       throw ("引張鉄筋情報がありません");
     }
@@ -78,7 +76,7 @@ export class SetCircleService {
       tension.rebar_ss = D / tension.line;
     }
 
-    const fsy = this.info.getFsyk(
+    const fsy = this.helper.getFsyk(
       tension.rebar_dia,
       safety.material_bar,
       "tensionBar"

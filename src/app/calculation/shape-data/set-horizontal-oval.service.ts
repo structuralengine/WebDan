@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
-import { SectionInfoService } from './section-info.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +9,6 @@ export class SetHorizontalOvalService {
 
   constructor(
     private bars: InputBarsService,
-    private info: SectionInfoService,
     private helper: DataHelperModule
   ) { }
 
@@ -71,15 +69,15 @@ export class SetHorizontalOvalService {
     const b: number = member.B;
 
     const bar = this.bars.getCalcData(index);
-    const tension = this.info.rebarInfo(bar.rebar1);
-    const compres = this.info.rebarInfo(bar.rebar2);
+    const tension = this.helper.rebarInfo(bar.rebar1);
+    const compres = this.helper.rebarInfo(bar.rebar2);
     if(tension === null){
       throw("引張鉄筋情報がありません");
     }
     if(tension.rebar_ss === null){
       tension.rebar_ss = (b - h) / tension.line;
     }
-    const sideInfo = this.info.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
+    const sideInfo = this.helper.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
 
 
     const tensionBar = this.getCompresBar(tension, safety);
@@ -173,7 +171,7 @@ export class SetHorizontalOvalService {
     // 鉄筋強度の入力
     const rs = safety.safety_factor.rs;
 
-    const fsy = this.info.getFsyk(
+    const fsy = this.helper.getFsyk(
       barInfo.rebar_dia,
       safety.material_bar,
       "tensionBar"
@@ -257,7 +255,7 @@ export class SetHorizontalOvalService {
     // 1段当りの本数
     const line = 2;
 
-    const fsy = this.info.getFsyk(barInfo.rebar_dia, safety.material_bar, "sidebar");
+    const fsy = this.helper.getFsyk(barInfo.rebar_dia, safety.material_bar, "sidebar");
     const id = "s" + fsy.id;
 
     // 鉄筋径
