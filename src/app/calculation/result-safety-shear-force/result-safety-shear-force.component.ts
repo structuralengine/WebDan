@@ -109,8 +109,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
             const res = OutputData.find(
@@ -134,13 +134,14 @@ export class ResultSafetyShearForceComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
+            const section = this.result.getSection("Vd", res, safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
             const titleColumn = this.result.getTitleString(
-              member,
-              position,
-              side
+              member, position, side
             );
-            const shape = this.section.getResult("Vd", member, res);
-            const Ast: any = this.bar.getResult("Vd", shape, res, safety);
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(

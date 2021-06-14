@@ -31,14 +31,15 @@ export class SetHorizontalOvalService {
 
   // 横小判形断面の POST 用 データ作成
   private getHorizontalOvalSection(member: any, safety: any): any {
-    
+
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const h: number = this.helper.toNumber(member.H);
-    const b: number = this.helper.toNumber(member.B);
+    const shape = this.getShape(member);
+    const h: number = shape.H;
+    const b: number = shape.B;
 
     const steps = 180 / RCOUNT;
 
@@ -58,6 +59,17 @@ export class SetHorizontalOvalService {
 
     return result;
   }
+
+  // 断面の幅と高さを取得する
+  public getShape(member: any): any {
+
+    return {
+      H: this.helper.toNumber(member.H),
+      B: this.helper.toNumber(member.B)
+    };
+
+  }
+
 
   private getHorizontalOvalBar(member: any, index: number, safety: any ): any {
     const result = {

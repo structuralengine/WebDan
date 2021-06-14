@@ -22,7 +22,7 @@ export class ResultDataService {
     private circle: SetCircleService,
     private rect: SetRectService,
     private hOval: SetHorizontalOvalService,
-    private vOval: SetVerticalOvalService) { }    
+    private vOval: SetVerticalOvalService) { }
 
   // 表題の共通した行
   public getTitleString(member: any, position: any, side: string): any {
@@ -71,7 +71,7 @@ export class ResultDataService {
   // 整数なら Fixed(0), 少数なら dim で指定した少数で丸める
   public numStr(dst: number, dim: number = 2): string{
 
-    if ( dst === null ){ 
+    if ( dst === null ){
       return null;
     }
 
@@ -79,7 +79,9 @@ export class ResultDataService {
   }
 
   // 照査表における 断面の文字列を取得
-  public getResult(target: string, res: any): any {
+  public getSection(target: string, res: any, safety: any): any {
+
+    const result = {};
 
     const index = res.index;
     const side = res.side;
@@ -88,45 +90,48 @@ export class ResultDataService {
 
     // 部材情報
     const member = this.members.getCalcData(position.m_no);
+    result['member'] = member;
 
     // 断面形状
     const shapeName = this.post.getShapeName(member, side);
+    result['shapeName'] = shapeName;
 
-    // 断面情報  
-    let sectionInfo: any;  
+    // 断面情報
+    let shape: any, Ast: any;
     switch (shapeName) {
       case 'Circle':            // 円形
-        sectionInfo = this.circle.getCircleShape(member);
+        if(target === 'Md'){
+          shape = this.circle.getCircleShape(member);
+        } else {
+          shape = this.circle.getCircleVdShape(member);
+        }
         break;
       case 'Ring':              // 円環
-        sectionInfo = this.circle.getRingShape(member);
+        if(target === 'Md'){
+          shape = this.circle.getRingShape(member);
+        } else {
+          shape = this.circle.getRingVdShape(member);
+        }
         break;
       case 'Rectangle':         // 矩形
-        sectionInfo = this.rect.getRectangle(target, member, index, side);
-        break;
       case 'Tsection':          // T形
-        sectionInfo = this.rect.getTsection(target, member, index, side);
-        break;
       case 'InvertedTsection':  // 逆T形
-        sectionInfo = this.rect.getInvertedTsection(target, member, index, side);
+        shape = this.rect.getShape(shapeName, member, target, index);
         break;
       case 'HorizontalOval':    // 水平方向小判形
-        sectionInfo = this.hOval.getHorizontalOval(member, index);
+        shape = this.hOval.getShape(member);
         break;
       case 'VerticalOval':      // 鉛直方向小判形
-        sectionInfo = this.vOval.getVerticalOval(member, index);
+        shape = this.vOval.getShape(member);
         break;
       default:
         throw("断面形状：" + member.shape + " は適切ではありません。");
     }
 
-    return {
-      B: this.helper.toNumber(sectionInfo.B),
-      H: this.helper.toNumber(sectionInfo.H),
-      Bt: this.helper.toNumber(sectionInfo.Bt),
-      t: this.helper.toNumber(sectionInfo.t),
-      shape: shapeName,
-    };
+    result['shape'] = shape;
+
+
+    return result;
   }
 
 }

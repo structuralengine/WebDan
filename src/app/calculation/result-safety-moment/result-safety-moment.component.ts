@@ -59,7 +59,7 @@ export class ResultSafetyMomentComponent implements OnInit {
         this.summary.setSummaryTable("safetyMoment", this.safetyMomentPages);
       },
       (error) => {
-        this.err = 'error!!' + '\n'; 
+        this.err = 'error!!' + '\n';
         let e: any = error;
         while('error' in e) {
           if('message' in e){ this.err += e.message + '\n'; }
@@ -68,7 +68,7 @@ export class ResultSafetyMomentComponent implements OnInit {
         }
         if('message' in e){ this.err += e.message + '\n'; }
         if('stack' in e){ this.err += e.stack; }
-        
+
         this.isLoading = false;
         this.summary.setSummaryTable("safetyMoment");
       }
@@ -104,8 +104,8 @@ export class ResultSafetyMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
             const res = OutputData.find(
@@ -125,9 +125,12 @@ export class ResultSafetyMomentComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
+            const section = this.result.getSection('Md', res, safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
             const titleColumn = this.result.getTitleString(member, position, side)
-            const shape = this.section.getResult('Md', member, res);
-            const Ast: any = this.bar.getResult('Md',shape, res, safety);
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.calc.getResultValue(

@@ -311,10 +311,7 @@ export class SetRectService {
   }
 
   // 矩形、Ｔ形断面における 側面鉄筋 の 鉄筋情報を生成する関数
-  private getSideBar(
-    barInfo: any,
-    safety: any
-  ): any {
+  private getSideBar( barInfo: any, safety: any): any {
 
     const result = {
       Steels: new Array(),

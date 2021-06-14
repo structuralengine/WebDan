@@ -59,7 +59,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
         this.summary.setSummaryTable("serviceabilityShearForce", this.serviceabilityShearForcePages);
       },
       (error) => {
-        this.err = 'error!!' + '\n'; 
+        this.err = 'error!!' + '\n';
         let e: any = error;
         while('error' in e) {
           if('message' in e){ this.err += e.message + '\n'; }
@@ -123,13 +123,16 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
+            const section = this.result.getSection("Vd", res, safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
             const titleColumn = this.result.getTitleString(
               member,
               position,
               side
             );
-            const shape = this.section.getResult("Vd", member, res);
-            const Ast: any = this.bar.getResult("Vd", shape, res, safety);
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
@@ -205,7 +208,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               side_summary : side,
               shape_summary : shape.shape,
             }
-                        
+
             page.columns.push(column);
           }
         }

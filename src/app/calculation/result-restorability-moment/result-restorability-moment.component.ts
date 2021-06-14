@@ -110,8 +110,8 @@ export class ResultRestorabilityMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
             const res = OutputData.find(
@@ -130,9 +130,12 @@ export class ResultRestorabilityMomentComponent implements OnInit {
               };
             }
             /////////////// まず計算 ///////////////
+            const section = this.result.getSection('Md', res, safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
             const titleColumn = this.result.getTitleString(member, position, side)
-            const shape = this.section.getResult('Md', member, res);
-            const Ast: any = this.bar.getResult('Md', shape, res, safety);
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.calc.getResultValue(

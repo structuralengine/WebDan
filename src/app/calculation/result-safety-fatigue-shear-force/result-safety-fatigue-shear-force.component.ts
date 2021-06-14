@@ -81,8 +81,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
 
@@ -103,13 +103,17 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
+            const section = this.result.getSection("Vd", res[0], safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
             const titleColumn = this.result.getTitleString(
               member,
               position,
               side
             );
-            const shape = this.section.getResult("Vd", member, res[0]);
-            const Ast: any = this.bar.getResult("Vd", shape, res[0], safety);
+            // const Ast: any = this.bar.getResult("Vd", shape, res[0], safety);
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(

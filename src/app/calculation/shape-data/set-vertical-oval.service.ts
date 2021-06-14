@@ -37,8 +37,9 @@ export class SetVerticalOvalService {
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const h: number = this.helper.toNumber(member.H);
-    const b: number = this.helper.toNumber(member.B);
+    const shape = this.getShape(member);
+    const h: number = shape.H;
+    const b: number = shape.B;
 
     const steps = 180 / RCOUNT;
 
@@ -80,6 +81,17 @@ export class SetVerticalOvalService {
 
     return result;
   }
+
+  // 断面の幅と高さを取得する
+  public getShape(member: any): any {
+
+    return {
+      H: this.helper.toNumber(member.H),
+      B: this.helper.toNumber(member.B)
+    };
+
+  }
+
 
   private getVerticalOvalBar(member: any, index: number, safety: any): any {
     const result = {
