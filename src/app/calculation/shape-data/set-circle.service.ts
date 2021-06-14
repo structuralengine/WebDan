@@ -222,12 +222,12 @@ export class SetCircleService {
     return result;
   }
 
-  // 断面情報を集計
+  // 円環断面情報を集計
   public getRingShape(member: any){
     let h: number = this.helper.toNumber(member.H); // 外径
     let b: number = this.helper.toNumber(member.B); // 内径
     if (h === null) {
-      throw('円形の径の入力が正しくありません');
+      throw('円環の断面の入力が正しくありません');
     }
     return {
       B: b,
@@ -235,7 +235,7 @@ export class SetCircleService {
     };
   }
 
-  // 断面情報を集計
+  // 円環断面情報を集計
   public getRingVdShape(member: any){
 
     const shape = this.getRingShape(member);
