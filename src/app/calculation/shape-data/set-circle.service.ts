@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { retry } from 'rxjs/operators';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
@@ -132,13 +133,7 @@ export class SetCircleService {
     const RCOUNT = 100;
 
     // 断面情報を集計
-    let h = this.helper.toNumber(member.H);
-    if (h === null) {
-      h = this.helper.toNumber(member.B);
-    }
-    if (h === null) {
-      throw('円形の径の入力が正しくありません');
-    }
+    const h = this.getCircleShape(member).H;
 
     const x1: number = h / RCOUNT;
     let b1 = 0;
@@ -158,6 +153,32 @@ export class SetCircleService {
 
     return result;
   }
+
+  // 断面情報を集計
+  public getCircleShape(member: any){
+    let h = this.helper.toNumber(member.H);
+    if (h === null) {
+      h = this.helper.toNumber(member.B);
+    }
+    if (h === null) {
+      throw('円形の径の入力が正しくありません');
+    }
+    return {
+      H: h,
+    };
+  }
+
+  // 断面情報を集計
+  public getCircleVdShape(member: any){
+
+    let h = this.getCircleShape(member).H;
+    const Area = Math.pow(h, 2) * Math.PI / 4;
+
+    return {
+      H: Math.sqrt(Area),
+    };
+  }
+
 
   // 円環断面の POST 用 データ作成
   public getRingSection(member: any, safety: any): any {
@@ -200,6 +221,36 @@ export class SetCircleService {
 
     return result;
   }
+
+  // 断面情報を集計
+  public getRingShape(member: any){
+    let h: number = this.helper.toNumber(member.H); // 外径
+    let b: number = this.helper.toNumber(member.B); // 内径
+    if (h === null) {
+      throw('円形の径の入力が正しくありません');
+    }
+    return {
+      B: b,
+      H: h,
+    };
+  }
+
+  // 断面情報を集計
+  public getRingVdShape(member: any){
+
+    const shape = this.getRingShape(member);
+    let h = shape.H;
+    let b = shape.B;
+    const Area1 = Math.pow(h, 2) * Math.PI / 4;
+    const Area2 = Area1 - (b ** 2) * Math.PI / 4;
+
+    return {
+      H: Math.sqrt(Area1),
+      B: h - Math.sqrt((h ** 2) - Area2)
+    };
+  }
+
+
 
   // 円の頂部からの距離を指定してその円の幅を返す
   private getCircleWidth(R: number, positionFromVertex: number): number {

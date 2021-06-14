@@ -1,17 +1,28 @@
-﻿import { SaveDataService } from "../providers/save-data.service";
-
-import { Injectable } from "@angular/core";
+﻿import { Injectable } from "@angular/core";
 import { DataHelperModule } from "../providers/data-helper.module";
 import { InputBarsService } from "../components/bars/bars.service";
+import { SetPostDataService } from "./set-post-data.service";
+import { InputDesignPointsService } from "../components/design-points/design-points.service";
+import { InputMembersService } from "../components/members/members.service";
+import { SetRectService } from "./shape-data/set-rect.service";
+import { SetCircleService } from "./shape-data/set-circle.service";
+import { SetHorizontalOvalService } from "./shape-data/set-horizontal-oval.service";
+import { SetVerticalOvalService } from "./shape-data/set-vertical-oval.service";
 
 @Injectable({
   providedIn: "root",
 })
 export class ResultDataService {
   constructor(
+    private members: InputMembersService,
+    private points: InputDesignPointsService,
     private bars: InputBarsService,
-    private helper: DataHelperModule
-  ) {}
+    private post: SetPostDataService,
+    private helper: DataHelperModule,
+    private circle: SetCircleService,
+    private rect: SetRectService,
+    private hOval: SetHorizontalOvalService,
+    private vOval: SetVerticalOvalService) { }    
 
   // 表題の共通した行
   public getTitleString(member: any, position: any, side: string): any {
@@ -65,6 +76,57 @@ export class ResultDataService {
     }
 
     return dst.toFixed(Number.isInteger(dst)? 0 : dim )
+  }
+
+  // 照査表における 断面の文字列を取得
+  public getResult(target: string, res: any): any {
+
+    const index = res.index;
+    const side = res.side;
+
+    const position = this.points.getCalcData(index);
+
+    // 部材情報
+    const member = this.members.getCalcData(position.m_no);
+
+    // 断面形状
+    const shapeName = this.post.getShapeName(member, side);
+
+    // 断面情報  
+    let sectionInfo: any;  
+    switch (shapeName) {
+      case 'Circle':            // 円形
+        sectionInfo = this.circle.getCircleShape(member);
+        break;
+      case 'Ring':              // 円環
+        sectionInfo = this.circle.getRingShape(member);
+        break;
+      case 'Rectangle':         // 矩形
+        sectionInfo = this.rect.getRectangle(target, member, index, side);
+        break;
+      case 'Tsection':          // T形
+        sectionInfo = this.rect.getTsection(target, member, index, side);
+        break;
+      case 'InvertedTsection':  // 逆T形
+        sectionInfo = this.rect.getInvertedTsection(target, member, index, side);
+        break;
+      case 'HorizontalOval':    // 水平方向小判形
+        sectionInfo = this.hOval.getHorizontalOval(member, index);
+        break;
+      case 'VerticalOval':      // 鉛直方向小判形
+        sectionInfo = this.vOval.getVerticalOval(member, index);
+        break;
+      default:
+        throw("断面形状：" + member.shape + " は適切ではありません。");
+    }
+
+    return {
+      B: this.helper.toNumber(sectionInfo.B),
+      H: this.helper.toNumber(sectionInfo.H),
+      Bt: this.helper.toNumber(sectionInfo.Bt),
+      t: this.helper.toNumber(sectionInfo.t),
+      shape: shapeName,
+    };
   }
 
 }
