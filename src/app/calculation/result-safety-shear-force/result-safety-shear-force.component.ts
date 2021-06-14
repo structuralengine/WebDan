@@ -100,6 +100,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     const groupe = this.points.getGroupeList();
     for (let ig = 0; ig < groupe.length; ig++) {
       const groupeName = this.points.getGroupeName(ig);
+      const g = groupe[ig];
 
       page = {
         caption: title,
@@ -107,9 +108,9 @@ export class ResultSafetyShearForceComponent implements OnInit {
         columns: new Array(),
       };
 
-      const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
+      const safety = this.calc.getSafetyFactor(g[0].g_id, safetyID);
 
-      for (const m of groupe[ig]) {
+      for (const m of g) {
         for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
 
@@ -145,15 +146,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
-              this.calc.calcVmu(
-                res,
-                shape,
-                fck,
-                Ast,
-                safety,
-                position.La,
-                force
-              )
+              this.calc.calcVmu( res, shape, fck, Ast, safety, position.La, force )
             );
 
             const column = {

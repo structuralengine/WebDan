@@ -33,7 +33,7 @@ export class SetCircleService {
 
   // 円環断面の POST 用 データ作成
   public getRing(member: any, index: number, safety: any): any {
-    
+
     const result = {};
 
     const result1 = this.getRingSection(member, safety);
@@ -58,13 +58,7 @@ export class SetCircleService {
     };
 
     // 鉄筋配置
-    let h: number = this.helper.toNumber(member.H);
-    if (h === null) {
-      h = this.helper.toNumber(member.B);
-    }
-    if (h === null) {
-      throw('円形の径の入力が正しくありません');
-    }
+    const h: number = this.getCircleShape(member).H;
 
     const bar = this.bars.getCalcData(index);
 
@@ -179,7 +173,6 @@ export class SetCircleService {
     };
   }
 
-
   // 円環断面の POST 用 データ作成
   public getRingSection(member: any, safety: any): any {
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
@@ -250,8 +243,6 @@ export class SetCircleService {
     };
   }
 
-
-
   // 円の頂部からの距離を指定してその円の幅を返す
   private getCircleWidth(R: number, positionFromVertex: number): number {
 
@@ -264,46 +255,5 @@ export class SetCircleService {
 
   }
 
-
-  /*/ 断面の幅と高さ（フランジ幅と高さ）を取得する
-  public getShape(shapeName: string, member: any, target: string = 'Md'): any {
-
-    const result = {};
-
-    let h: number, b: number, Area: number;
-
-    switch (shapeName) {
-      case 'Circle':            // 円形
-        h = this.helper.toNumber(member.H);
-        if (h === null) {
-          h = this.helper.toNumber(member.B);
-        }
-        if (target === 'Vd') {
-          // せん断照査用の換算矩形断面を算定
-          Area = Math.pow(h, 2) * Math.PI / 4;
-          h = Math.sqrt(Area);
-        }
-        result['H'] = h;
-        break;
-
-      case 'Ring':              // 円環
-        h = this.helper.toNumber(member.H); // 外径
-        b = this.helper.toNumber(member.B); // 内径
-        if (target === 'Md') {
-          result['H'] = h;
-          result['B'] = b;
-        } else if (target === 'Vd') {
-          // せん断照査用の換算矩形断面を算定
-          Area = Math.pow(h, 2) * Math.PI / 4;
-          result['H'] = Math.sqrt(Area);
-          Area -= (b ** 2) * Math.PI / 4;
-          result['B'] = h - Math.sqrt((h ** 2) - Area);
-        }
-        break;
-    }
-
-    return result;
-  }
-  */
 
 }

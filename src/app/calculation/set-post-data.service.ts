@@ -187,14 +187,13 @@ export class SetPostDataService {
       }
 
     } else {
-      console.log("断面形状：" + member.shape + " は適切ではありません。");
-      return null;
+      throw ("断面形状：" + member.shape + " は適切ではありません。");
     }
 
     return result;
   }
-  
-  
+
+
   private getPostData(target: string, safetyID: number, force: any): any {
     let result: object;
 
@@ -210,7 +209,7 @@ export class SetPostDataService {
     // 断面形状
     const shapeName = this.getShapeName(member, force.side);
 
-    // 断面情報    
+    // 断面情報
     switch (shapeName) {
       case 'Circle':            // 円形
         result = this.circle.getCircle(member, index, safety);
@@ -234,7 +233,7 @@ export class SetPostDataService {
         result = this.vOval.getVerticalOval(member, index, safety);
         break;
       default:
-        throw("断面形状：" + member.shape + " は適切ではありません。");
+        throw("断面形状：" + shapeName + " は適切ではありません。");
     }
     result['shape'] = shapeName;
 

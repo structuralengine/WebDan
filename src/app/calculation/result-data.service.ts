@@ -125,7 +125,7 @@ export class ResultDataService {
         shape = this.vOval.getShape(member);
         break;
       default:
-        throw("断面形状：" + member.shape + " は適切ではありません。");
+        throw("断面形状：" + shapeName + " は適切ではありません。");
     }
 
     result['shape'] = shape;
