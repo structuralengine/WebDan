@@ -84,8 +84,6 @@ import { ResultSummaryTableComponent } from './calculation/result-summary-table/
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
-import { SetSectionService} from './calculation/shape-data/old-section.service';
-import { SetBarService} from './calculation/shape-data/set-bar.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { environment } from 'src/environments/environment';
 
@@ -176,8 +174,6 @@ import { environment } from 'src/environments/environment';
     CalcEarthquakesShearForceService,
 
     SetDesignForceService,
-    SetSectionService,
-    SetBarService,
     SetPostDataService,
 
     // 計算結果コンポーネントで他のコンポーネントから使いまわされるものは　

@@ -12,9 +12,7 @@ import { SetSectionService } from "./shape-data/set-section.service";
 export class SetPostDataService {
   constructor(
     private user: UserInfoService,
-    private section: SetSectionService,
-    private safety: InputSafetyFactorsMaterialStrengthsService,
-    private members: InputMembersService ) {}
+    private section: SetSectionService ) {}
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
   public URL: string =
@@ -60,10 +58,6 @@ export class SetPostDataService {
 
     for(const list of DesignForceList) {
       for (const position of list) {
-        // 部材情報
-        const member = this.members.getCalcData(position.m_no);
-        // 安全係数
-        const safety = this.safety.getCalcData( target, member.g_id, safetyID );
 
         // 送信post データの生成
         for (const force of position.designForce) {
@@ -79,11 +73,8 @@ export class SetPostDataService {
           if(type === "応力度") {
             data['Md'] = Math.abs(force.Md);
           }
-          try{
-
-            const shape = this.section.getPostData(member, force, safety);
-            // const section = this.section.getPostData(member, force, safety);
-            // const steel = this.steel.getPostData(section.member, force.index, force.side, section.shape, safety);
+          try {
+            const shape = this.section.getPostData(target, safetyID, force);
 
             // 断面形状
             data['Sections'] = shape.Sections;

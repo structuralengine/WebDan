@@ -5,7 +5,7 @@ import { CalcRestorabilityMomentService } from './calc-restorability-moment.serv
 import { SetPostDataService } from '../set-post-data.service';
 import { ResultDataService } from '../result-data.service';
 import { InputDesignPointsService } from 'src/app/components/design-points/design-points.service';
-import { SetBarService } from '../shape-data/set-bar.service';
+import { SectionInfoService } from '../shape-data/section-info.service';
 import { SetSectionService } from '../shape-data/old-section.service';
 import { CalcSummaryTableService } from '../result-summary-table/calc-summary-table.service';
 
@@ -30,7 +30,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     private post: SetPostDataService,
     private result: ResultDataService,
     private section: SetSectionService,
-    private bar: SetBarService,
+    private bar: SectionInfoService,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService 
     ) { }

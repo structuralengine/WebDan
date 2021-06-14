@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputDesignPointsService } from 'src/app/components/design-points/design-points.service';
+import { InputMembersService } from 'src/app/components/members/members.service';
+import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { SetCircleService } from './set-circle.service';
 import { SetHorizontalOvalService } from './set-horizontal-oval.service';
@@ -14,51 +17,17 @@ export class SetSectionService {
 
   constructor(
     private basic: InputBasicInformationService,
+    private members: InputMembersService,
+    private points: InputDesignPointsService,
     private bars: InputBarsService,
+    private safety: InputSafetyFactorsMaterialStrengthsService,
     private helper: DataHelperModule,
     private circle: SetCircleService,
     private rect: SetRectService,
     private hOval: SetHorizontalOvalService,
     private vOval: SetVerticalOvalService) { }
 
-  public getPostData(member: any, force: any, safety: any): any {
-    let result: object;
-
-    const shapeName = this.getShapeName(member, force.side);
-    switch (shapeName) {
-      case 'Circle':            // 円形
-        result = this.circle.getCircle(member);
-        break;
-      case 'Ring':              // 円環
-        result = this.circle.getRing(member);
-        break;
-      case 'Rectangle':         // 矩形
-        result = this.rect.getRectangle(member, force);
-        break;
-      case 'Tsection':          // T形
-        result = this.rect.getTsection(member, force);
-        break;
-      case 'InvertedTsection':  // 逆T形
-        result = this.rect.getInvertedTsection(member, force);
-        break;
-      case 'HorizontalOval':    // 水平方向小判形
-        result = this.hOval.getHorizontalOval(member);
-        break;
-      case 'VerticalOval':      // 鉛直方向小判形
-        result = this.vOval.getVerticalOval(member);
-        break;
-      default:
-        console.log("断面形状：" + member.shape + " は適切ではありません。");
-        return null;
-    }
-    result['shape'] = shapeName;
-
-    // コンクリートの材料情報を集計
-    result['SectionElastic'] = [ this.getSectionElastic(safety) ];
-
-    return result;
-  }
-
+    
     // 断面の入力から形状名を決定する
   public getShapeName(member: any, side: string): string {
 
@@ -144,72 +113,53 @@ export class SetSectionService {
 
     return result;
   }
+  
+  public getPostData(target: string, safetyID: number, force: any): any {
+    let result: object;
 
-      // コンクリート強度の POST用データを返す
-  public getSectionElastic(safety: any): any {
+    const index = force.index;
+    const position = this.points.getCalcData(index);
 
-    const fck = this.getFck(safety);
+    // 部材情報
+    const member = this.members.getCalcData(position.m_no);
 
-    return {
-      fck: fck.fck,     // コンクリート強度
-      Ec: fck.Ec,       // コンクリートの弾性係数
-      ElasticID: 'c'      // 材料番号
-    };
+    // 安全係数
+    const safety = this.safety.getCalcData( target, member.g_id, safetyID );
 
-  }
+    // 断面形状
+    const shapeName = this.getShapeName(member, force.side);
 
-
-  public getFck(safety: any): any {
-    const result = {
-      fck: null, rc: null, Ec: null, fcd: null,
-      rfck: null, rEc: null, rfbok: null, rVcd: null
-    };
-
-    const pile = safety.pile_factor.find((e) => e.selected === true);
-    result.rfck = pile !== undefined ? pile.rfck : 1;
-    result.rEc = pile !== undefined ? pile.rEc : 1;
-    result.rfbok = pile !== undefined ? pile.rfbok : 1;
-    result.rVcd = pile !== undefined ? pile.rVcd : 1;
-
-    let rc = safety.safety_factor.rc;
-
-    if ("rc" in safety.safety_factor) {
-      result.rc = rc;
-    } else {
-      rc = 1;
+    // 断面情報    
+    switch (shapeName) {
+      case 'Circle':            // 円形
+        result = this.circle.getCircle(member, index, safety);
+        break;
+      case 'Ring':              // 円環
+        result = this.circle.getRing(member, index, safety);
+        break;
+      case 'Rectangle':         // 矩形
+        result = this.rect.getRectangle(target, member, index, force.side, safety);
+        break;
+      case 'Tsection':          // T形
+        result = this.rect.getTsection(target, member, index, force.side, safety);
+        break;
+      case 'InvertedTsection':  // 逆T形
+        result = this.rect.getInvertedTsection(target, member, index, force.side, safety);
+        break;
+      case 'HorizontalOval':    // 水平方向小判形
+        result = this.hOval.getHorizontalOval(member, index, safety);
+        break;
+      case 'VerticalOval':      // 鉛直方向小判形
+        result = this.vOval.getVerticalOval(member, index, safety);
+        break;
+      default:
+        throw("断面形状：" + member.shape + " は適切ではありません。");
     }
-
-    if ("fck" in safety.material_concrete) {
-      const fck = safety.material_concrete.fck;
-      result.fck = fck * result.rfck;
-      const Ec = this.getEc(result.fck);
-      result.Ec = Ec * result.rEc;
-      result.fcd = result.rfck * fck / rc;
-    }
+    result['shape'] = shapeName;
 
     return result;
   }
 
-    // コンクリート強度から弾性係数を 返す
-    public getEc(fck: number) {
 
-      const EcList: number[] = [22, 25, 28, 31, 33, 35, 37, 38];
-      const fckList: number[] = [18, 24, 30, 40, 50, 60, 70, 80];
-
-      const linear = (x, y) => {
-        return (x0) => {
-          const index = x.reduce((pre, current, i) => current <= x0 ? i : pre, 0) //数値が何番目の配列の間かを探す
-          const i = index === x.length - 1 ? x.length - 2 : index //配列の最後の値より大きい場合は、外挿のために、最後から2番目をindexにする
-
-          return (y[i + 1] - y[i]) / (x[i + 1] - x[i]) * (x0 - x[i]) + y[i] //線形補間の関数を返す
-        };
-      };
-
-      // 線形補間関数を作成
-      const linearEc = linear(fckList, EcList);
-
-      return linearEc(fck);
-
-    }
 
 }

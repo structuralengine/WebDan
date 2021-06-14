@@ -4,7 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcSafetyFatigueShearForceService } from "./calc-safety-fatigue-shear-force.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetBarService } from "../shape-data/set-bar.service";
+import { SectionInfoService } from "../shape-data/section-info.service";
 import { SetSectionService } from "../shape-data/old-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
@@ -28,7 +28,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     private calc: CalcSafetyFatigueShearForceService,
     private result: ResultDataService,
     private section: SetSectionService,
-    private bar: SetBarService,
+    private bar: SectionInfoService,
     private points: InputDesignPointsService,
     private fatigue: InputFatiguesService,
     private summary: CalcSummaryTableService

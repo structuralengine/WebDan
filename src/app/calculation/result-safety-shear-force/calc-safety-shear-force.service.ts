@@ -2,7 +2,7 @@ import { SaveDataService } from "../../providers/save-data.service";
 import { SetDesignForceService } from "../set-design-force.service";
 import { ResultDataService } from "../result-data.service";
 import { SetPostDataService } from "../set-post-data.service";
-import { SetBarService } from "../shape-data/set-bar.service";
+import { SectionInfoService } from "../shape-data/section-info.service";
 
 import { Injectable } from "@angular/core";
 import { range } from "rxjs";
@@ -29,7 +29,7 @@ export class CalcSafetyShearForceService {
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private section: SetSectionService,
-    private bar: SetBarService,
+    private bar: SectionInfoService,
     private calc: InputCalclationPrintService,
     private basic: InputBasicInformationService
   ) {
@@ -129,7 +129,7 @@ export class CalcSafetyShearForceService {
     const tan: number = Ast.tan;
     let Vhd: number = 0;
     if (tan !== 0) {
-      Vhd = (Math.abs(Md) / d) * this.section.Radians(tan);
+      Vhd = (Math.abs(Md) / d) * this.helper.Radians(tan);
       result["Vhd"] = Vhd;
     }
 
@@ -332,8 +332,8 @@ export class CalcSafetyShearForceService {
     result["z"] = z;
 
     let sinCos: number =
-      Math.sin(this.section.Radians(deg)) +
-      Math.cos(this.section.Radians(deg));
+      Math.sin(this.helper.Radians(deg)) +
+      Math.cos(this.helper.Radians(deg));
     result["sinCos"] = sinCos;
 
     let Vsd =
