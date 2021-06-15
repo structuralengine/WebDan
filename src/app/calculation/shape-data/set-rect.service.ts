@@ -18,7 +18,7 @@ export class SetRectService {
     const result = { Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
-    const shape = this.getShape('Rectangle', member, target, index)
+    const shape = this.getRectangleShape(member, target, index, side, safety)
     const h: number = shape.H;
     const b: number = shape.B;
 
@@ -34,7 +34,7 @@ export class SetRectService {
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
     // 鉄筋情報を集計  
-    const result2 = this.getRectBar(shape, index, side, safety);
+    const result2 = this.getRectBar(shape, safety);
     for(const key of result2){
       result[key] = result2[key];
     }
@@ -46,7 +46,7 @@ export class SetRectService {
     const result = { symmetry: false, Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
-    const shape = this.getShape('Tsection', member, target, index);
+    const shape = this.getTsectionShape(member, target, index, side, safety);
     const h: number = shape.H;
     const b: number = shape.B;
     const bf: number = shape.Bt;
@@ -71,7 +71,7 @@ export class SetRectService {
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
     // 鉄筋情報を集計  
-    const result2 = this.getRectBar(shape, index, side, safety);
+    const result2 = this.getRectBar(shape, safety);
     for(const key of result2){
       result[key] = result2[key];
     }
@@ -84,7 +84,7 @@ export class SetRectService {
     const result = { symmetry: false, Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
-    const shape = this.getShape('InvertedTsection', member, target, index);
+    const shape = this.getTsectionShape(member, target, index, side, safety);
     const h: number = shape.H;
     const b: number = shape.B;
     const bf: number = shape.Bt;
@@ -109,18 +109,22 @@ export class SetRectService {
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
     // 鉄筋情報を集計  
-    const result2 = this.getRectBar(shape, index, side, safety);
+    const result2 = this.getRectBar(shape, safety);
     for(const key of result2){
       result[key] = result2[key];
     }
 
     return result;
   }
-
-  // 断面の幅と高さ（フランジ幅と高さ）を取得する
-  public getShape(shapeName: string, member: any, target: string, index: number): any {
-
-    const result = {};
+  
+  public getSection(member: any, target: string, index: number){
+    
+    const result = {
+      H: null,
+      B: null,
+      Bt: null,
+      t: null,
+    };
 
     const bar: any = this.bars.getTableColumn(index);
     const haunch: number = (target === 'Md') ? bar.haunch_M : bar.haunch_V;
@@ -129,41 +133,34 @@ export class SetRectService {
     if (this.helper.toNumber(haunch) !== null) {
       h += haunch * 1;
     }
-    result['H'] = h;
+    result.H = h;
 
     const b = this.helper.toNumber(member.B);
-    result['B'] = b;
+    result.B = b;
 
-    switch (shapeName) {
-      case 'Tsection':          // T形
-      case 'InvertedTsection':  // 逆T形
-        let bf = this.helper.toNumber(member.Bt);
-        let hf = this.helper.toNumber(member.t);
-        if (bf === null) { bf = b; }
-        if (hf === null) { hf = h; }
-        result['Bt'] = bf;
-        result['t'] = hf;
-        break;
+    if (h === null || b === null) {
+      throw('形状の入力が正しくありません');
     }
 
-    return result;
+    let bf = this.helper.toNumber(member.Bt);
+    let hf = this.helper.toNumber(member.t);
+    if (bf === null) { bf = result.B; }
+    if (hf === null) { hf = result.H; }
+    result['Bt'] = bf;
+    result['t'] = hf;
+
+    return result
   }
 
-  // 矩形、Ｔ形断面の 鉄筋のPOST用 データを登録する。
-  private getRectBar( member: any, index: number, side: string, safety: any ): any {
+  // 断面の幅と高さ（フランジ幅と高さ）を取得する
+  public getRectangleShape(member: any, target: string, index: number, side: string, safety: any): any {
 
-    const result = {
-      Steels: new Array(),
-      SteelElastic: new Array(),
-    };
+    const result = this.getSection(member, target, index);
 
-    const h: number = member.H; // ハンチを含む高さ
-    const b: number = member.B;
-    
-    const bar = this.bars.getCalcData(index);
+    const bar: any = this.bars.getTableColumn(index);
 
     let tension: any;
-    let compres: any;
+    let compress: any;
     switch (side) {
       case "上側引張":
         tension = this.helper.rebarInfo(bar.rebar1);
@@ -178,10 +175,70 @@ export class SetRectService {
       throw("引張鉄筋情報がありません");
     }
     if(tension.rebar_ss === null){
-      tension.rebar_ss = b / tension.line;
+      tension.rebar_ss = result.B / tension.line;
     }
-    let sideInfo: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
 
+    // tension
+    const fsyt = this.helper.getFsyk(
+      tension.rebar_dia,
+      safety.material_bar,
+      "tensionBar"
+    );
+    if (fsyt.fsy === 235)  tension.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+    tension['fsy'] = fsyt;
+    tension['rs'] = safety.safety_factor.rs;;
+    
+
+    // 登録
+    result['tension'] = tension;
+
+    // compres
+    if (safety.safety_factor.range >= 2) {
+      const fsyc = this.helper.getFsyk(
+        compress.rebar_dia,
+        safety.material_bar,
+        "tensionBar"
+      );
+      if (fsyc.fsy === 235) compress.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+      compress['fsy'] = fsyc;
+      compress['rs'] = safety.safety_factor.rs;;
+      result['compress'] = compress;
+    }
+
+    // sidebar
+    if (safety.safety_factor.range >= 3) {
+      const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
+      const fsye = this.helper.getFsyk(
+        sidebar.rebar_dia,
+        safety.material_bar,
+        "sidebar"
+      );
+      if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+      sidebar['fsy'] = fsye;
+      sidebar['rs'] = safety.safety_factor.rs;
+      result['sidebar'] = sidebar;
+    }
+
+    return result;
+  }
+ 
+  public getTsectionShape(member: any, target: string, index: number, side: string, safety: any): any {
+
+    const result = this.getRectangleShape(member, target, index, side, safety);
+    
+    return result;
+  }
+
+  // 矩形、Ｔ形断面の 鉄筋のPOST用 データを登録する。
+  private getRectBar( section: any, safety: any ): any {
+
+    const result = {
+      Steels: new Array(),
+      SteelElastic: new Array(),
+    };
+
+    const h: number = section.H; // ハンチを含む高さ
+    const tension: any = section.tension;
 
     const tensionBar = this.getCompresBar(tension, safety);
     const tensionBarList = tensionBar.Steels;
@@ -192,35 +249,34 @@ export class SetRectService {
 
     // 鉄筋強度の入力
     for (const elastic of tensionBar.SteelElastic) {
-      if (
-        result.SteelElastic.find((e) => e.ElasticID === elastic.ElasticID) ===
-        undefined
-      ) {
+      if ( result.SteelElastic.find(
+          (e) => e.ElasticID === elastic.ElasticID) === undefined ) {
         result.SteelElastic.push(elastic);
       }
     }
 
     // 圧縮鉄筋 をセットする
     let compresBarList: any[] = new Array();
-    if (safety.safety_factor.range >= 2) {
-      const compresBar = this.getCompresBar(compres, safety);
+    let cosAsc: number = 1;
+    if ('compress' in section) {
+      const compress: any = section.compress;
+      const compresBar = this.getCompresBar(compress, safety);
       compresBarList = compresBar.Steels;
 
       // 鉄筋強度の入力
       for (const elastic of compresBar.SteelElastic) {
-        if (
-          result.SteelElastic.find((e) => e.ElasticID === elastic.ElasticID) ===
-          undefined
-        ) {
+        if ( result.SteelElastic.find(
+          (e) => e.ElasticID === elastic.ElasticID) === undefined ) {
           result.SteelElastic.push(elastic);
         }
       }
-
+      cosAsc = compress.cos;
     }
 
     // 側方鉄筋 をセットする
     let sideBarList = new Array();
-    if (safety.safety_factor.range >= 3) {
+    if ('sidebar' in section) {
+      const sideInfo: any = section.sidebar;
       const sideBar = this.getSideBar(
         sideInfo,
         safety
@@ -233,8 +289,6 @@ export class SetRectService {
     }
 
     // 圧縮鉄筋の登録
-    let cosAsc: number = compres.cos;
-
     for (const Asc of compresBarList) {
       Asc.n = Asc.n * cosAsc;
       Asc.Depth = Asc.Depth / cosAsc;
@@ -268,13 +322,9 @@ export class SetRectService {
     };
 
     // 鉄筋強度の入力
-    const rs = safety.safety_factor.rs;
+    const rs = barInfo.rs;
 
-    const fsy = this.helper.getFsyk(
-      barInfo.rebar_dia,
-      safety.material_bar,
-      "tensionBar"
-    );
+    const fsy = barInfo.fsy;
     const id = "t" + fsy.id;
 
     result.SteelElastic.push({
@@ -284,11 +334,7 @@ export class SetRectService {
     });
 
     // 鉄筋径
-    let dia: string = barInfo.mark + barInfo.rebar_dia;
-    if (fsy.fsy === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + barInfo.rebar_dia;
-    }
+    const dia: string = barInfo.mark + barInfo.rebar_dia;
 
     // 鉄筋情報を登録
     let rebar_n = barInfo.rebar_n;
@@ -323,19 +369,11 @@ export class SetRectService {
     }
 
     // 鉄筋強度
-    const fsy1 = this.helper.getFsyk(
-      barInfo.side_dia,
-      safety.material_bar,
-      "sidebar"
-    );
+    const fsy1 = barInfo.fsy;
     const id = "s" + fsy1.id;
 
     // 鉄筋径
     let dia: string = barInfo.mark + barInfo.side_dia;
-    if (fsy1.fsy === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + barInfo.side_dia;
-    }
 
     // 鉄筋情報を登録
     for (let i = 0; i < barInfo.n; i++) {
@@ -350,7 +388,7 @@ export class SetRectService {
     }
 
     // 鉄筋強度の入力
-    const rs = safety.safety_factor.rs;
+    const rs = barInfo.rs;
 
     result.SteelElastic.push({
       fsk: fsy1.fsy / rs,

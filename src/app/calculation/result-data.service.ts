@@ -81,7 +81,16 @@ export class ResultDataService {
   // 照査表における 断面の文字列を取得
   public getSection(target: string, res: any, safety: any): any {
 
-    const result = {};
+    const result = {
+      member: null,
+      shapeName: null,
+      shape: {
+        B: null, 
+        H: null, 
+        Bt: null, 
+        t: null,
+      }
+    };
 
     const index = res.index;
     const side = res.side;
@@ -90,48 +99,343 @@ export class ResultDataService {
 
     // 部材情報
     const member = this.members.getCalcData(position.m_no);
-    result['member'] = member;
+    result.member = member;
 
     // 断面形状
     const shapeName = this.post.getShapeName(member, side);
-    result['shapeName'] = shapeName;
+    result.shapeName = shapeName;
 
     // 断面情報
-    let shape: any, Ast: any;
+    let section: any;
     switch (shapeName) {
       case 'Circle':            // 円形
         if(target === 'Md'){
-          shape = this.circle.getCircleShape(member);
+          section = this.circle.getCircleShape(member, index, safety);
         } else {
-          shape = this.circle.getCircleVdShape(member);
+          section = this.circle.getCircleVdShape(member, index, safety);
         }
+        result.shape.H = section.H;
         break;
+
       case 'Ring':              // 円環
         if(target === 'Md'){
-          shape = this.circle.getRingShape(member);
+          section = this.circle.getRingShape(member, index, safety);
         } else {
-          shape = this.circle.getRingVdShape(member);
+          section = this.circle.getRingVdShape(member, index, safety);
         }
+        result.shape.H = section.H;
+        result.shape.B = section.B;
         break;
+
       case 'Rectangle':         // 矩形
+        section = this.rect.getRectangleShape(member, target, index, side, safety);
+        result.shape.H = section.H;
+        result.shape.B = section.B;
+        break;
+
       case 'Tsection':          // T形
       case 'InvertedTsection':  // 逆T形
-        shape = this.rect.getShape(shapeName, member, target, index);
+        section = this.rect.getTsectionShape(member, target, index, side, safety);
+        result.shape.H = section.H;
+        result.shape.B = section.B;
+        result.shape.Bt= section.Bt;
+        result.shape.t = section.t;
         break;
+
       case 'HorizontalOval':    // 水平方向小判形
-        shape = this.hOval.getShape(member);
+        section = this.hOval.getShape(member, index, side, safety);
+        result.shape.H = section.H;
+        result.shape.B = section.B;
         break;
+
       case 'VerticalOval':      // 鉛直方向小判形
-        shape = this.vOval.getShape(member);
+        section = this.vOval.getShape(member, index, side, safety);
+        result.shape.H = section.H;
+        result.shape.B = section.B;
         break;
+
       default:
         throw("断面形状：" + shapeName + " は適切ではありません。");
     }
 
-    result['shape'] = shape;
+    result['Ast'] = this.getAst(section);
+    result['Asc'] = this.getAsc(section);
+    result['Ase'] = this.getAse(section);
 
+    // せん断の場合 追加でパラメータを設定する
+    if(target === 'Vd'){
+      const vmuSection = this.getVmuSection(target, res, safety);
+      for(const key of Object.keys(vmuSection)){
+        result[key] = vmuSection[key];
+      }
+    }
+    
+    return result;
+  }
+
+  // せん断照査表における 断面の文字列を取得
+  private getVmuSection(target: string, res: any, safety: any): any {
+    
+    const result = {
+      tan: null,
+      Aw: {
+        stirrup_dia: null,
+        AwString: null,
+        fwyd: null,
+        fwud: null,
+        deg: null,
+        Ss: null
+      }
+    };
+
+    return result;
+
+  }
+
+  private getAst(section: any): any {
+
+    const result = {
+      tension: null,
+      Ast: null,
+      AstString: null,
+      dst: null,
+      fsy: null,         
+      fsu: null,
+      rs: null,         
+    }
+
+    result.tension = section.tension;
+    result.fsy = section.fsy.fsy;
+    result.fsu = section.fsy.fsu;
+
+    const mark = section.tension.mark === "R" ? "φ" : "D";
+    const AstDia = mark + section.tension.rebar_dia;
+    let rebar_n = section.tension.rebar_n;
+
+    const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.tension.cos;
+
+    result.Ast = Astx;
+    result.AstString = AstDia + "-" + rebar_n + "本";
+    result.dst = this.getBarCenterPosition(section.tension);
+    
+    return result;
+
+  }
+
+  private getAsc(section: any): any {
+
+    const result = {
+      compress: null,
+      Asc: null,
+      AscString: null,
+      dsc: null, 
+    }
+
+    if(!('compress' in section)){
+      return result;
+    }
+    
+    result.compress = section.compress;
+
+    const mark = section.compress.mark === "R" ? "φ" : "D";
+    const AstDia = mark + section.compress.rebar_dia;
+    let rebar_n = section.compress.rebar_n;
+
+    const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.compress.cos;
+
+    result.Asc = Astx;
+    result.AscString = AstDia + "-" + rebar_n + "本";
+    result.dsc = this.getBarCenterPosition(section.compress);
+    
+    return result;
+
+  }
+
+  private getAse(section: any): any {
+
+    const result = {
+      Ase: null,
+      AseString: null,
+      dse: null,
+    }
+
+    if(!('sidebar' in section)){
+      return result;
+    }
+
+    const mark = section.sidebar.mark === "R" ? "φ" : "D";
+    const AstDia = mark + section.sidebar.rebar_dia;
+    let rebar_n = section.sidebar.rebar_n;
+
+    const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.sidebar.cos;
+
+    result.Ase = Astx;
+    result.AseString = AstDia + "-" + rebar_n + "本";
+    result.dse = this.getBarCenterPosition(section.sidebar);
+    
+    return result;
+
+  }
+
+  // 断面積と断面係数
+  public getStructuralVal(shapeName: string, member: any,
+    target: string, index: number): any {
+
+    const result = {};
+
+    let shape: any;
+    let h: number, b: number, bf: number, hf: number;
+    let a1: number, a2: number, a3: number, a4: number, a5: number;
+    let x: number, e1: number, e2: number;
+    let Area: number, circleArea: number, rectArea: number;
+
+    switch (shapeName) {
+      case 'Circle':            // 円形
+        shape = this.circle.getSection(member);
+        h = shape.H;
+        result['A'] = Math.pow(h, 2) * Math.PI / 4;
+        result['I'] = Math.pow(h, 4) * Math.PI / 64;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
+
+      case 'Ring':              // 円環
+        shape = this.circle.getSection(member);
+        h = shape.H; // 外径
+        b = shape.B; // 内径
+        result['A'] = (Math.pow(h, 2) - Math.pow(b, 2)) * Math.PI / 4;
+        result['I'] = (Math.pow(h, 4) - Math.pow(b, 4)) * Math.PI / 64;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
+
+      case 'Rectangle':         // 矩形
+        shape = this.rect.getSection(member, target, index);
+        h = shape.H;
+        b = shape.B;
+        result['A'] = b * h;
+        result['I'] = b * Math.pow(h, 3) / 12;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
+
+      case 'Tsection':          // T形
+        shape = this.rect.getSection(member, target, index);
+        h = shape.H;
+        b = shape.B;
+        bf = shape.Bt;
+        hf = shape.t;
+        x = bf - b;
+        result['A'] = h * b + hf * x;
+        a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
+        a2 = 2 * (b * h + x * hf);
+        e1 = a1 / a2;
+        e2 = h - e1;
+        result['eu'] = e1;
+        result['el'] = e2;
+        a3 = bf * Math.pow(e1, 3);
+        a4 = x * h;
+        a5 = b * Math.pow(e2, 3);
+        result['I'] = (a3 - a4 + a5) / 3;
+        break;
+
+
+      case 'InvertedTsection':  // 逆T形
+        shape = this.rect.getSection(member, target, index);
+        h = shape.H;
+        b = shape.B;
+        bf = shape.Bt;
+        hf = shape.t;
+        x = bf - b;
+        result['A'] = h * b + hf * x;
+        a1 = b * Math.pow(h, 2) + x * Math.pow(hf, 2);
+        a2 = 2 * (b * h + x * hf);
+        e1 = a1 / a2;
+        e2 = h - e1;
+        result['eu'] = e2;
+        result['el'] = e1;
+        a3 = bf * Math.pow(e1, 3);
+        a4 = x * h;
+        a5 = b * Math.pow(e2, 3);
+        result['I'] = (a3 - a4 + a5) / 3;
+        break;
+
+      case 'HorizontalOval':    // 水平方向小判形
+        shape = this.hOval.getSection(member);
+        h = shape.H;
+        b = shape.B;
+        circleArea = (h ** 2) * Math.PI / 4;
+        rectArea = h * (b - h);
+        Area = circleArea + rectArea;
+        result['A'] = Area;
+        result['I'] = (Math.pow(h, 4) * Math.PI / 64) + ((b - h) * Math.pow(h, 3) / 12);
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+        break;
+
+      case 'VerticalOval':      // 鉛直方向小判形
+        shape = this.vOval.getSection(member);
+        x = h - b;
+        circleArea = (b ** 2) * Math.PI / 4;
+        rectArea = b * x;
+        Area = circleArea + rectArea;
+        a1 = Math.PI * Math.pow(b, 4) / 64;
+        a2 = x * Math.pow(b, 3) / 6;
+        a3 = Math.PI * Math.pow(x, 2) * Math.pow(b, 2) / 16;
+        a4 = b * Math.pow(x, 3) / 12;
+        result['A'] = Area;
+        result['I'] = a1 + a2 + a3 + a4;
+        result['eu'] = h / 2;
+        result['el'] = h / 2;
+
+        break;
+
+      default:
+        throw ("断面形状：" + member.shape + " は適切ではありません。");
+    }
 
     return result;
   }
+
+  // 鉄筋の重心位置を求める
+  private getBarCenterPosition( bar: any ){
+
+    const cover: number = bar.dsc;
+    const n: number = bar.rebar_n;
+    const line: number = bar.line;
+    const space: number = bar.space;
+    const cos: number = bar.cos;
+
+    // 計算する必要のない場合の処理
+    if (cover === null) {
+      return 0;
+    }
+    if (n === null || n <= 0) {
+      return cover;
+    }
+    if (line === null || line <= 0) {
+      return cover;
+    }
+    if (space === null || space <= 0) {
+      return cover;
+    }
+    if (n < line) {
+      return cover;
+    }
+    // 鉄筋の重心位置を計算する
+    const steps: number = Math.ceil(n / line); // 鉄筋段数
+    let reNum: number = n;
+    let PosNum: number = 0;
+    for (let i = 0; i < steps; i++) {
+      const pos = cover + i * space;
+      const num: number = Math.min(line, reNum);
+      PosNum += pos * num;
+      reNum -= line;
+    }
+    let result: number = PosNum / n;
+    result /= cos;
+    return result;
+  }
+
 
 }

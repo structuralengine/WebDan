@@ -227,10 +227,10 @@ export class SetPostDataService {
         result = this.rect.getInvertedTsection(target, member, index, force.side, safety);
         break;
       case 'HorizontalOval':    // 水平方向小判形
-        result = this.hOval.getHorizontalOval(member, index, safety);
+        result = this.hOval.getHorizontalOval(member, index, force.side, safety);
         break;
       case 'VerticalOval':      // 鉛直方向小判形
-        result = this.vOval.getVerticalOval(member, index, safety);
+        result = this.vOval.getVerticalOval(member, index, force.side, safety);
         break;
       default:
         throw("断面形状：" + shapeName + " は適切ではありません。");

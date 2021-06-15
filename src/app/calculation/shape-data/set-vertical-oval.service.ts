@@ -13,33 +13,16 @@ export class SetVerticalOvalService {
   ) { }
 
 
-  public getVerticalOval(member: any, index: number, safety: any): any {
+  public getVerticalOval(member: any, index: number,side: string, safety: any): any {
 
-    const result = { symmetry: true, Sections: [], SectionElastic:[] };
-
-    const result1 = this.getVerticalOvalSection(member, safety);
-    for(const key of result1){
-      result[key] = result1[key];
-    }
-
-    const result2 = this.getVerticalOvalBar(member, index, safety);
-    for(const key of result2){
-      result[key] = result2[key];
-    }
-
-    return result;
-  }
-
-  // 縦小判形断面の POST 用 データ作成
-  private getVerticalOvalSection(member: any, safety: any): any {
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const shape = this.getShape(member);
-    const h: number = shape.H;
-    const b: number = shape.B;
+    const section = this.getShape(member, index, side, safety);
+    const h: number = section.H;
+    const b: number = section.B;
 
     const steps = 180 / RCOUNT;
 
@@ -79,51 +62,119 @@ export class SetVerticalOvalService {
 
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
+    // 鉄筋
+    const result2 = this.getVerticalOvalBar(section, safety);
+    for(const key of result2){
+      result[key] = result2[key];
+    }
+
     return result;
   }
 
   // 断面の幅と高さを取得する
-  public getShape(member: any): any {
+  public getShape(member: any, index: number, side: string, safety: any): any {
 
-    return {
-      H: this.helper.toNumber(member.H),
-      B: this.helper.toNumber(member.B)
-    };
+    const result = this.getSection(member);
 
-  }
+    const bar: any = this.bars.getTableColumn(index);
 
-
-  private getVerticalOvalBar(member: any, index: number, safety: any): any {
-    const result = {
-      Steels: new Array(),
-      SteelElastic: new Array(),
-      PrintData: {},
-    };
-
-    const h: number = this.helper.toNumber(member.H);
-    const b: number = this.helper.toNumber(member.B);
-
-    const bar = this.bars.getCalcData(index);
-    const tension: any = this.helper.rebarInfo(bar.rebar1);
-    const compres: any =  this.helper.rebarInfo(bar.rebar2);
+    let tension: any;
+    let compress: any;
+    switch (side) {
+      case "上側引張":
+        tension = this.helper.rebarInfo(bar.rebar1);
+        compres = this.helper.rebarInfo(bar.rebar2);
+        break;
+      case "下側引張":
+        tension = this.helper.rebarInfo(bar.rebar2);
+        compres = this.helper.rebarInfo(bar.rebar1);
+        break;
+    }
     if(tension === null){
       throw("引張鉄筋情報がありません");
     }
     if(tension.rebar_ss === null){
-      const D = h - tension.dsc * 2;
+      const D = result.H - tension.dsc * 2;
       tension.rebar_ss = D / tension.line;
     }
-    const sideBar = this.helper.sideInfo(bar.sidebar, tension.dsc, compres.dsc, h);
+
+    // tension
+    const fsyt = this.helper.getFsyk(
+      tension.rebar_dia,
+      safety.material_bar,
+      "tensionBar"
+    );
+    if (fsyt.fsy === 235)  tension.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+    tension['fsy'] = fsyt;
+    
+    // 登録
+    result['tension'] = tension;
+
+    // compres
+    if (safety.safety_factor.range >= 2) {
+      const fsyc = this.helper.getFsyk(
+        compress.rebar_dia,
+        safety.material_bar,
+        "tensionBar"
+      );
+      if (fsyc.fsy === 235) compress.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+      compress['fsy'] = fsyc;
+      result['compress'] = compress;
+    }
+
+    // sidebar
+    if (safety.safety_factor.range >= 3) {
+      const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
+      const fsye = this.helper.getFsyk(
+        sidebar.rebar_dia,
+        safety.material_bar,
+        "sidebar"
+      );
+      if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+      sidebar['fsy'] = fsye;
+      result['sidebar'] = sidebar;
+    }
+
+    return result;
+
+  }
+  
+  public getSection(member){
+    
+    const result = {
+      H: null,
+      B: null
+    };
+
+    let h: number = this.helper.toNumber(member.H);
+    result.H = h;
+
+    const b = this.helper.toNumber(member.B);
+    result.B = b;
+
+    if (h === null || b === null) {
+      throw('形状の入力が正しくありません');
+    }
+
+    return result
+  }
+
+  private getVerticalOvalBar(section: any, safety: any): any {
+
+    const result = {
+      Steels: new Array(),
+      SteelElastic: new Array()
+    };
+
+    const h: number = section.H;
+    const b: number = section.B;
+    const tension: any = section.tension;
 
     // 鉄筋強度の入力
     const rs = safety.safety_factor.rs;
 
     // 鉄筋強度
-    const fsy1 = this.helper.getFsyk(
-      tension.rebar_dia,
-      safety.material_bar,
-      "tensionBar"
-    );
+    const fsy1 = tension.fsy;
     const id1 = "s" + fsy1.id;
     result.SteelElastic.push({
       fsk: fsy1.fsy / rs,
@@ -132,26 +183,14 @@ export class SetVerticalOvalService {
     });
 
     // 鉄筋径
-    let dia1: string = tension.mark + tension.rebar_dia;
-    if (fsy1 === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia1 = "R" + tension.rebar_dia;
-    }
+    const dia1: string = tension.mark + tension.rebar_dia;
 
     // 圧縮（上側）鉄筋配置
     const compresBarList: any[] = new Array();
-    if (safety.safety_factor.range >= 2) {
-      const fsy2 = this.helper.getFsyk(
-        compres.rebar_dia,
-        safety.material_bar,
-        "tensionBar"
-      );
-
-      let dia2: string = compres.mark + compres.rebar_dia;
-      if (fsy2 === 235) {
-        // 鉄筋強度が 235 なら 丸鋼
-        dia2 = "R" + compres.rebar_dia;
-      }
+    if ('compress' in section) {
+      const compress: any = section.compress;
+      const fsy2 = compress.fsy;
+      const dia2: string = compress.mark + compress.rebar_dia;
 
       const id2 = "s" + fsy2.id;
       if (result.SteelElastic.find((e) => e.ElasticID === id2) === undefined) {
@@ -162,10 +201,10 @@ export class SetVerticalOvalService {
         });
       }
 
-      for (let i = 0; i < compres.n; i++) {
-        const Depth = compres.dsc + i * compres.space;
+      for (let i = 0; i < compress.n; i++) {
+        const Depth = compress.dsc + i * compress.space;
         const Rt: number = b - Depth * 2; // 鉄筋直径
-        const steps: number = 180 / (compres.rebar_n - compres.line * i + 1); // 鉄筋角度間隔
+        const steps: number = 180 / (compress.rebar_n - compress.line * i + 1); // 鉄筋角度間隔
 
         for (let deg = steps; deg < 180; deg += steps) {
           const dsc = b / 2 - Math.sin(this.helper.Radians(deg)) * Rt;
@@ -184,7 +223,8 @@ export class SetVerticalOvalService {
 
     // 側方鉄筋 をセットする
     let sideBarList: any[] = new Array();
-    if (safety.safety_factor.range >= 3) {
+    if ('sidebar' in section) {
+      const sideBar: any = section.sidebar;
       const rebar = this.getSideBar(sideBar, safety); //, h - b, 0, 0);
       sideBarList = rebar.Steels;
       for (const elastic of rebar.SteelElastic) {
@@ -249,19 +289,11 @@ export class SetVerticalOvalService {
     }
 
     // 鉄筋強度
-    const fsy1 = this.helper.getFsyk(
-      barInfo.side_dia,
-      safety.material_bar,
-      "sidebar"
-    );
+    const fsy1 = barInfo.fsy;
     const id = "s" + fsy1.id;
 
     // 鉄筋径
     let dia: string = barInfo.mark + barInfo.side_dia;
-    if (fsy1.fsy === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + barInfo.side_dia;
-    }
 
     // 鉄筋情報を登録
     for (let i = 0; i < barInfo.n; i++) {

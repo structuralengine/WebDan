@@ -16,118 +16,13 @@ export class SetCircleService {
   // 円形断面の POST 用 データ作成
   public getCircle(member: any, index: number, safety: any): any {
 
-    const result = {};
-
-    const result1 = this.getCircleSection(member, safety);
-    for(const key of result1){
-      result[key] = result1[key];
-    }
-
-    const result2 = this.getCircleBar(member, index, safety);
-    for(const key of result2){
-      result[key] = result2[key];
-    }
-
-    return result;
-  }
-
-  // 円環断面の POST 用 データ作成
-  public getRing(member: any, index: number, safety: any): any {
-
-    const result = {};
-
-    const result1 = this.getRingSection(member, safety);
-    for(const key of result1){
-      result[key] = result1[key];
-    }
-
-    const result2 = this.getCircleBar(member, index, safety);
-    for(const key of result2){
-      result[key] = result2[key];
-    }
-
-    return result;
-  }
-
-  // 円形の 鉄筋のPOST用 データを登録する。
-  private getCircleBar(member: any, index: number, safety: any ): any {
-
-    const result = {
-      Steels: new Array(),
-      SteelElastic: new Array(),
-    };
-
-    // 鉄筋配置
-    const h: number = this.getCircleShape(member).H;
-
-    const bar = this.bars.getCalcData(index);
-
-    const tension = this.helper.rebarInfo(bar.rebar1);
-    if(tension === null){
-      throw ("引張鉄筋情報がありません");
-    }
-    if(tension.rebar_ss === null){
-      const D = h - tension.dsc * 2;
-      tension.rebar_ss = D / tension.line;
-    }
-
-    const fsy = this.helper.getFsyk(
-      tension.rebar_dia,
-      safety.material_bar,
-      "tensionBar"
-    );
-    const id = "s" + fsy.id;
-
-    // 鉄筋径
-    let dia: string = tension.mark + tension.rebar_dia;
-    if (fsy.fsy === 235) {
-      // 鉄筋強度が 235 なら 丸鋼
-      dia = "R" + tension.rebar_dia;
-    }
-
-    for (let i = 0; i < tension.n; i++) {
-      const Depth = tension.dsc + i * tension.space;
-      const Rt: number = h - Depth * 2; // 鉄筋直径
-      const num = tension.rebar_n - tension.line * i; // 鉄筋本数
-      const steps: number = 360 / num; // 鉄筋角度間隔
-
-      for (let j = 0; j < num; j++) {
-        const deg = j * steps;
-        const dst = Rt / 2 - (Math.cos(this.helper.Radians(deg)) * Rt) / 2 + Depth;
-        const tensionBar: boolean = deg >= 135 && deg <= 225 ? true : false;
-        const Steel1 = {
-          Depth: dst, // 深さ位置
-          i: dia, // 鋼材
-          n: 1, // 鋼材の本数
-          IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
-          ElasticID: id, // 材料番号
-        };
-        result.Steels.push(Steel1);
-      }
-    }
-
-    // 基準となる 鉄筋強度
-    const rs = safety.safety_factor.rs;
-
-    // 鉄筋強度の入力
-    result.SteelElastic.push({
-      fsk: fsy.fsy / rs,
-      Es: 200,
-      ElasticID: id,
-    });
-
-    return result;
-  }
-
-  // 円形断面の POST 用 データ作成
-  private getCircleSection(member: any, safety: any): any {
-
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const h = this.getCircleShape(member).H;
+    const section = this.getCircleShape(member, index, safety);
+    const h = section.H;
 
     const x1: number = h / RCOUNT;
     let b1 = 0;
@@ -145,43 +40,25 @@ export class SetCircleService {
 
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
+    const result2 = this.getCircleBar(section, safety);
+    for(const key of result2){
+      result[key] = result2[key];
+    }
+
     return result;
   }
 
-  // 断面情報を集計
-  public getCircleShape(member: any){
-    let h = this.helper.toNumber(member.H);
-    if (h === null) {
-      h = this.helper.toNumber(member.B);
-    }
-    if (h === null) {
-      throw('円形の径の入力が正しくありません');
-    }
-    return {
-      H: h,
-    };
-  }
-
-  // 断面情報を集計
-  public getCircleVdShape(member: any){
-
-    let h = this.getCircleShape(member).H;
-    const Area = Math.pow(h, 2) * Math.PI / 4;
-
-    return {
-      H: Math.sqrt(Area),
-    };
-  }
-
   // 円環断面の POST 用 データ作成
-  public getRingSection(member: any, safety: any): any {
+  public getRing(member: any, index: number, safety: any): any {
+
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    let h: number = this.helper.toNumber(member.H); // 外径
-    let b: number = this.helper.toNumber(member.B); // 内径
+    const section = this.getRingShape(member, index, safety);
+    let h: number = section.H; // 外径
+    let b: number = section.B; // 内径
     const x1: number = h / RCOUNT;
     const x3: number = (h - b) / 2;
 
@@ -212,35 +89,205 @@ export class SetCircleService {
 
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
+    const result2 = this.getCircleBar(section, safety);
+    for(const key of result2){
+      result[key] = result2[key];
+    }
+
+    return result;
+  }
+
+  // 円形の 鉄筋のPOST用 データを登録する。
+  private getCircleBar(section: any, safety: any ): any {
+
+    const result = {
+      Steels: new Array(),
+      SteelElastic: new Array(),
+    };
+
+    // 鉄筋配置
+    const h: number = section.H;
+    const tension = section.tension;
+    const fsy = section.fsy;
+    const id = "s" + fsy.id;
+
+    // 鉄筋の位置
+    result.Steels = this.getSteels(tension, h, id);
+    // 基準となる 鉄筋強度
+    const rs = section.rs;
+
+    // 鉄筋強度の入力
+    result.SteelElastic.push({
+      fsk: fsy.fsy / rs,
+      Es: 200,
+      ElasticID: id,
+    });
+
+    return result;
+  }
+
+  private getSteels(tension: any, h: number, id: string){
+
+    const Steels = [];
+
+    const dia: string = tension.mark + tension.rebar_dia;
+
+    for (let i = 0; i < tension.n; i++) {
+      const Depth = tension.dsc + i * tension.space;
+      const Rt: number = h - Depth * 2; // 鉄筋直径
+      const num = tension.rebar_n - tension.line * i; // 鉄筋本数
+      const steps: number = 360 / num; // 鉄筋角度間隔
+
+      for (let j = 0; j < num; j++) {
+        const deg = j * steps;
+        const dst = Rt / 2 - (Math.cos(this.helper.Radians(deg)) * Rt) / 2 + Depth;
+        const tensionBar: boolean = deg >= 135 && deg <= 225 ? true : false;
+        Steels.push({
+          Depth: dst, // 深さ位置
+          i: dia, // 鋼材
+          n: 1, // 鋼材の本数
+          IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
+          ElasticID: id, // 材料番号
+        });
+      }
+    }
+
+    return Steels
+  }
+
+  // 断面情報を集計
+  public getCircleShape(member: any, index: number, safety: any){
+
+    const result = this.getSection(member);
+    
+    const bar = this.bars.getCalcData(index);
+
+    const tension = this.helper.rebarInfo(bar.rebar1);
+    if(tension === null){
+      throw ("引張鉄筋情報がありません");
+    }
+    if(tension.rebar_ss === null){
+      const D = result.H - tension.dsc * 2;
+      tension.rebar_ss = D / tension.line;
+    }
+
+    const fsy = this.helper.getFsyk(
+      tension.rebar_dia,
+      safety.material_bar,
+      "tensionBar"
+    );
+    result['fsy'] = fsy;
+    result['rs'] = safety.safety_factor.rs;;
+
+    // 鉄筋径
+    if (fsy.fsy === 235) {
+      // 鉄筋強度が 235 なら 丸鋼
+      tension.mark = "R";
+    }
+    result['tension'] = tension;
+    
+    return result;
+  }
+
+  // 断面情報を集計
+  public getCircleVdShape(member: any, index: number, safety: any){
+
+    const result = {};
+
+    // 円形としての情報を取得
+    const section = this.getCircleShape(member, index, safety);
+    for(const key of Object.keys(section)){
+      result[key] = section[key]
+    }
+
+    // 換算矩形
+    const Area = Math.pow(section.H, 2) * Math.PI / 4;
+    const h = Math.sqrt(Area);
+    result['H'] = h;
+    result['B'] = h;
+
+    // 換算矩形としての鉄筋位置
+    const tension = section.tension;
+    const steels = this.getSteels(tension, section.H, null);
+    let d = 0.0, n = 0;
+    for(const s of steels){
+      if(s.IsTensionBar === true){
+        d += s.Depth;
+        n += s.n;
+      }
+    }
+    const dsc = h - (d / n);
+    tension.dsc = dsc;
+
+    return result;
+  }
+
+
+  // 円環断面情報を集計
+  public getRingShape(member: any, index: number, safety: any): any{
+
+    const result = {};
+
+    // 円形としての情報を取得
+    const section = this.getCircleShape(member, index, safety);
+    for(const key of Object.keys(section)){
+      result[key] = section[key]
+    }
+
+    return result;
+  }
+
+  public getSection(member: any): any{
+    
+    const result = {};
+
+    let H = this.helper.toNumber(member.H);
+    if (H === null) {
+      H = this.helper.toNumber(member.B);
+    }
+    if (H === null) {
+      throw('円形の径の入力が正しくありません');
+    }
+    result['H'] = H; // 外径
+    result['B'] = this.helper.toNumber(member.B); // 内径
+
     return result;
   }
 
   // 円環断面情報を集計
-  public getRingShape(member: any){
-    let h: number = this.helper.toNumber(member.H); // 外径
-    let b: number = this.helper.toNumber(member.B); // 内径
-    if (h === null) {
-      throw('円環の断面の入力が正しくありません');
+  public getRingVdShape(member: any, index: number, safety: any){
+
+    const result = {};
+
+    // 円環としての情報を取得
+    const section = this.getRingShape(member, index, safety);
+    for(const key of Object.keys(section)){
+      result[key] = section[key]
     }
-    return {
-      B: b,
-      H: h,
-    };
-  }
 
-  // 円環断面情報を集計
-  public getRingVdShape(member: any){
-
-    const shape = this.getRingShape(member);
-    let h = shape.H;
-    let b = shape.B;
+    // 換算矩形
+    let h = section.H;
+    let b = section.B;
     const Area1 = Math.pow(h, 2) * Math.PI / 4;
     const Area2 = Area1 - (b ** 2) * Math.PI / 4;
+    result['H'] = Math.sqrt(Area1),
+    result['B'] = h - Math.sqrt((h ** 2) - Area2)
 
-    return {
-      H: Math.sqrt(Area1),
-      B: h - Math.sqrt((h ** 2) - Area2)
-    };
+    // 換算矩形としての鉄筋位置
+    const tension = section.tension;
+    const steels = this.getSteels(tension, section.H, null);
+    let d = 0.0, n = 0;
+    for(const s of steels){
+      if(s.IsTensionBar === true){
+        d += s.Depth;
+        n += s.n;
+      }
+    }
+    const dsc = h - (d / n);
+    tension.dsc = dsc;
+
+    return result;
+
   }
 
   // 円の頂部からの距離を指定してその円の幅を返す
