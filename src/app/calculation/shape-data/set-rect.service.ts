@@ -126,7 +126,7 @@ export class SetRectService {
       t: null,
     };
 
-    const bar: any = this.bars.getTableColumn(index);
+    const bar: any = this.bars.getCalcData(index);
     const haunch: number = (target === 'Md') ? bar.haunch_M : bar.haunch_V;
 
     let h: number = this.helper.toNumber(member.H);
@@ -157,18 +157,18 @@ export class SetRectService {
 
     const result = this.getSection(member, target, index);
 
-    const bar: any = this.bars.getTableColumn(index);
+    const bar: any = this.bars.getCalcData(index);
 
     let tension: any;
     let compress: any;
     switch (side) {
       case "上側引張":
         tension = this.helper.rebarInfo(bar.rebar1);
-        compres = this.helper.rebarInfo(bar.rebar2);
+        compress = this.helper.rebarInfo(bar.rebar2);
         break;
       case "下側引張":
         tension = this.helper.rebarInfo(bar.rebar2);
-        compres = this.helper.rebarInfo(bar.rebar1);
+        compress = this.helper.rebarInfo(bar.rebar1);
         break;
     }
     if(tension === null){

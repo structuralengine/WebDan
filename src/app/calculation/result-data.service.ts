@@ -180,13 +180,64 @@ export class ResultDataService {
       tan: null,
       Aw: {
         stirrup_dia: null,
+        stirrup_n: null,
+
+        Aw: null,
         AwString: null,
+        deg: null,
+        Ss: null,
+  
         fwyd: null,
         fwud: null,
-        deg: null,
-        Ss: null
+        rs: null,
       }
     };
+
+
+   // 鉄筋径
+  if (this.helper.toNumber(bar.stirrup.stirrup_dia) === null) {
+    return result;
+  }
+  result.stirrup_dia = Math.abs(bar.stirrup.stirrup_dia);
+
+  // 異形鉄筋:D, 丸鋼: R
+  let mark = bar.stirrup.stirrup_dia > 0 ? "D" : "R";
+
+  // 鉄筋本数
+  result.stirrup_n = this.helper.toNumber(bar.stirrup.stirrup_n);
+  if (result.stirrup_n === null) {
+    result.stirrup_n = 0;
+  }
+
+  result.Ss = this.helper.toNumber(bar.stirrup.stirrup_ss);
+  if (result.Ss === null) {
+    result.Ss = Number.MAX_VALUE;
+  }
+
+  const fwyd = this.getFsyk(result.stirrup_dia, safety.material_bar, "stirrup");
+  if (fwyd.fsy === 235) {
+    // 鉄筋強度が 235 なら 丸鋼
+    mark = "R";
+  }
+
+  const dia: string = mark + result.stirrup_dia;
+  const As: number = this.helper.getAs(dia);
+
+  result.Aw = As * result.stirrup_n;
+  if(!(result.Aw === 0)){
+    result.AwString = dia + "-" + result.stirrup_n + "本";
+  }
+
+  result.fwyd = fwyd.fsy;
+  result.fwud = fwyd.fsu;
+  result.rs = safety.safety_factor.rs;
+
+  let tan = this.helper.toNumber(bar.tan);
+  if (tan === null) {
+    tan = 0;
+  }
+  result.tan = tan;
+
 
     return result;
 

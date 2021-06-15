@@ -53,18 +53,18 @@ export class SetHorizontalOvalService {
 
     const result = this.getSection(member)
 
-    const bar: any = this.bars.getTableColumn(index);
+    const bar: any = this.bars.getCalcData(index);
   
     let tension: any;
     let compress: any;
     switch (side) {
       case "上側引張":
         tension = this.helper.rebarInfo(bar.rebar1);
-        compres = this.helper.rebarInfo(bar.rebar2);
+        compress = this.helper.rebarInfo(bar.rebar2);
         break;
       case "下側引張":
         tension = this.helper.rebarInfo(bar.rebar2);
-        compres = this.helper.rebarInfo(bar.rebar1);
+        compress = this.helper.rebarInfo(bar.rebar1);
         break;
     }
     if(tension === null){
