@@ -113,7 +113,6 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
               position,
               side
             );
-            // const Ast: any = this.bar.getResult("Vd", shape, res[0], safety);
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
