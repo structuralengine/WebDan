@@ -20,7 +20,7 @@ import { InputSteelsService } from '../components/steels/steels.service';
 export class DsdDataService {
 
   private float_max : number = 3.4 * Math.pow(10,38);
-  private float_min : number = -1.4 * Math.pow(10,-45);
+  private float_min : number = 3.4 * Math.pow(10,-38);//1.4 * Math.pow(10,-45);
   private byte_max : number = 255;
   
   constructor(
@@ -239,7 +239,7 @@ export class DsdDataService {
     iDummyCount = this.readInteger(buff)
 
     for (let i = 0; i < iDummyCount; i++) {
-      const Index = this.readInteger(buff);     // 算出点データ（基本データ）へのIndex
+      const Index = this.readInteger(buff) + 1;     // 算出点データ（基本データ）へのIndex
       const iNumCalc = this.readInteger(buff);  // 部材の算出点数
       const iBzNo = this.readInteger(buff); // 部材番号
 
@@ -520,7 +520,7 @@ export class DsdDataService {
     for (let i = 0; i < iDummyCount; i++) {
       const index = i+1;
 
-      const position = this.points.getCalcData(index);
+      let position = this.points.getTableColumn(index);
       position.p_id = index;
 
       const CalName = this.readString(buff, 12).trim();
@@ -531,13 +531,16 @@ export class DsdDataService {
 
       if (this.isOlder('0.1.2', buff.datVersID)) {
         const byteVar = this.readByte(buff);
-        position.isMzCalc = byteVar !== 0;
+        //position.isMzCalc = byteVar !== 0;
+        position.isVyCalc = byteVar !== 0;
       } else {
         const Safe2 = this.readInteger(buff);
-        position.isMzCalc = Safe2 !== 0;
+        //position.isMzCalc = Safe2 !== 0;
+        position.isVyCalc = Safe2 !== 0;
       }
       const Safe1 = this.readBoolean(buff);
-      position.isVyCalc = Safe1;
+      //position.isVyCalc = Safe1;
+      position.isMzCalc = Safe1;
       const Ness0 = this.readBoolean(buff);
       const Ness1 = this.readBoolean(buff);
 
@@ -601,7 +604,7 @@ export class DsdDataService {
       const JikuHON0 = this.readSingle(buff);
       if(JikuHON0 > 0) bar.rebar1.rebar_n = JikuHON0;
       const JikuHON1 = this.readSingle(buff);
-      if(JikuHON1 > 0) bar.rebar1.rebar_n = JikuHON1;
+      if(JikuHON1 > 0) bar.rebar2.rebar_n = JikuHON1;
       const JikuKABURI0 = this.readSingle(buff);
       if(JikuKABURI0 > 0) bar.rebar1.rebar_cover = JikuKABURI0;
       const JikuKABURI1 = this.readSingle(buff);
@@ -999,7 +1002,7 @@ export class DsdDataService {
   private readSingle(buff: any): number {
     const view = this.getDataView(buff, 4);
     let num = view.getFloat32(0);
-    if(num > this.float_max || num < this.float_min){
+    if( Math.abs(num) > this.float_max || (0 < Math.abs(num) && Math.abs(num) < this.float_min)){
       num = null;
     }
     return num;
