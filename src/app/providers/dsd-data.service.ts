@@ -602,9 +602,9 @@ export class DsdDataService {
         if(JikuR1 > 0) bar.rebar2.rebar_dia = JikuR1;
       }
       const JikuHON0 = this.readSingle(buff);
-      if(JikuHON0 > 0) bar.rebar1.rebar_n = JikuHON0;
+      if(Math.abs(JikuHON0) > 0) bar.rebar1.rebar_n = JikuHON0;
       const JikuHON1 = this.readSingle(buff);
-      if(JikuHON1 > 0) bar.rebar2.rebar_n = JikuHON1;
+      if(Math.abs(JikuHON1) > 0) bar.rebar2.rebar_n = JikuHON1;
       const JikuKABURI0 = this.readSingle(buff);
       if(JikuKABURI0 > 0) bar.rebar1.rebar_cover = JikuKABURI0;
       const JikuKABURI1 = this.readSingle(buff);
