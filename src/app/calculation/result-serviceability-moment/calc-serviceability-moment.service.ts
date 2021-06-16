@@ -9,6 +9,7 @@ import { InputBasicInformationService } from 'src/app/components/basic-informati
 import { InputSafetyFactorsMaterialStrengthsService } from 'src/app/components/safety-factors-material-strengths/safety-factors-material-strengths.service';
 import { InputCrackSettingsService } from 'src/app/components/crack/crack-settings.service';
 import { SaveDataService } from 'src/app/providers/save-data.service';
+import { ResultDataService } from '../result-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +32,8 @@ export class CalcServiceabilityMomentService {
     private force: SetDesignForceService,
     private post: SetPostDataService,
     private crack: InputCrackSettingsService,
-    public base: CalcSafetyMomentService) {
+    public base: CalcSafetyMomentService,
+    private result: ResultDataService,) {
     this.DesignForceList = null;
     this.isEnable = false;
     }
@@ -81,15 +83,16 @@ export class CalcServiceabilityMomentService {
   }
 
   public calcWd(
-    res: any, shape: any,
-    fc: any, Ast: any, safety: any,
-    member: any, isDurability: boolean): any {
+    res: any, section: any,
+    fc: any, safety: any,
+    isDurability: boolean): any {
 
     const resMin = res[0]; // 永久作用
     const resMax = res[1]; // 永久＋変動作用
 
     const crackInfo = this.crack.getTableColumn(resMin.index);
-
+    const member: any = section.member;
+    
     const result = {};
 
     // 環境条件
@@ -153,15 +156,15 @@ export class CalcServiceabilityMomentService {
     result['Nhd'] = Nhd;
 
     // 縁応力度
-    const struct = this.section.getStructuralVal(
-      shape.shape, member, "Md", resMin.index);
+    const struct = this.result.getStructuralVal(
+      section.shapeName, member, "Md", resMin.index);
     const Sigmab: number = this.getSigmab(Mhd, Nhd, resMin.side, struct);
     if (Sigmab === null) { return result; }
     result['Sigmab'] = Sigmab;
 
     // 制限値
     // 円形の制限値を求める時は換算矩形で求める
-    const VydBH = this.section.getShape(shape.shape, member,'Vd', resMin.index)
+    const VydBH = section.shape; 
     const Sigmabl: number = this.getSigmaBl(VydBH.H, fcd);
     result['Sigmabl'] = Sigmabl;
 
@@ -179,33 +182,33 @@ export class CalcServiceabilityMomentService {
     result['Mpd'] = Md;
     result['Npd'] = Nd;
 
-    const Es: number = Ast.Es;
+    const Es: number = section.Ast.Es;
     const Ec: number = fc.Ec;
     result['EsEc'] = Es / Ec;
 
     const Sigmase: number = Sigmas;
     result['sigma_se'] = Sigmase;
 
-    const fai: number = Ast.tension.rebar_dia;
+    const fai: number = section.Ast.tension.rebar_dia;
     result['fai'] = fai;
 
-    const c: number = Ast.tension.dsc - (Ast.tension.rebar_dia / 2)
+    const c: number = section.Ast.tension.dsc - (section.Ast.tension.rebar_dia / 2)
     result['c'] = c;
 
-    let Cs: number = Ast.tension.rebar_ss;
+    let Cs: number = section.Ast.tension.rebar_ss;
     result['Cs'] = Cs;
 
     let ecu: number = this.helper.toNumber(crackInfo.ecsd);
     if (ecu === null) { ecu = 450; }
     result['ecu'] = ecu;
 
-    const k1: number = (Ast.fsy === 235) ? 1.3 : 1;
+    const k1: number = (section.Ast.fsy === 235) ? 1.3 : 1;
     result['k1'] = k1;
 
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    const n: number = Ast.tension.n;
+    const n: number = section.Ast.tension.n;
     result['n'] = n;
 
     const k3: number = (5 * (n + 2)) / (7 * n + 8);

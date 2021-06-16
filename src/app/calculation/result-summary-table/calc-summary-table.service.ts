@@ -53,7 +53,7 @@ export class CalcSummaryTableService {
         switch (target) {
           case "durabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -86,7 +86,7 @@ export class CalcSummaryTableService {
 
           case "earthquakesMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -123,7 +123,7 @@ export class CalcSummaryTableService {
 
           case "earthquakesShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -156,7 +156,7 @@ export class CalcSummaryTableService {
 
           case "restorabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -193,7 +193,7 @@ export class CalcSummaryTableService {
 
           case "restorabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -226,7 +226,7 @@ export class CalcSummaryTableService {
 
           case "SafetyFatigueMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -264,7 +264,7 @@ export class CalcSummaryTableService {
 
           case "safetyFatigueShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -296,7 +296,7 @@ export class CalcSummaryTableService {
 
           case "safetyMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -333,7 +333,7 @@ export class CalcSummaryTableService {
 
           case "safetyShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -368,7 +368,7 @@ export class CalcSummaryTableService {
 
           case "serviceabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }
@@ -405,7 +405,7 @@ export class CalcSummaryTableService {
 
           case "serviceabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col.index_summary;
+            index = col.index;
             if (index === null) {
               continue;
             }

@@ -71,9 +71,8 @@ export class CalcSafetyShearForceService {
   // 変数の整理と計算
   public calcVmu(
     res: any,
-    shape: any,
+    section: any,
     fc: any,
-    Ast: any,
     safety: any,
     Laa: number,
     force: any
@@ -107,19 +106,19 @@ export class CalcSafetyShearForceService {
     result["Vd"] = Vd;
 
     // 換算断面
-    const h: number = shape.H;
+    const h: number = section.shape.H;
     result["H"] = h;
 
-    const bw: number = shape.B;
+    const bw: number = section.shape.B;
     result["B"] = bw;
 
     // 有効高さ
-    const dsc = Ast.tension.dsc;
+    const dsc = section.Ast.tension.dsc;
     let d: number = h - dsc;
     result["d"] = d;
 
     //  tanθc + tanθt
-    const tan: number = Ast.tan;
+    const tan: number = section.tan;
     let Vhd: number = 0;
     if (tan !== 0) {
       Vhd = (Math.abs(Md) / d) * this.helper.Radians(tan);
@@ -138,22 +137,22 @@ export class CalcSafetyShearForceService {
     }
 
     // 引張鉄筋比
-    let pc: number = Ast.Ast / (shape.B * d);
+    let pc: number = section.Ast.Ast / (section.shape.B * d);
 
     // 帯鉄筋
-    let Aw: number = this.helper.toNumber(Ast.Aw);
-    let fwyd: number = this.helper.toNumber(Ast.fwyd);
-    let deg: number = this.helper.toNumber(Ast.deg);
+    let Aw: number = this.helper.toNumber(section.Aw.Aw);
+    let fwyd: number = this.helper.toNumber(section.Aw.fwyd);
+    let deg: number = this.helper.toNumber(section.Aw.deg);
     if (deg === null) { deg = 90; }
-    let Ss: number = this.helper.toNumber(Ast.Ss);
+    let Ss: number = this.helper.toNumber(section.Aw.Ss);
     if (Ss === null) { Ss = Number.MAX_VALUE; }
     if (Aw === null || fwyd === null) {
       Aw = 0;
       fwyd = 0;
     } else {
       result["Aw"] = Aw;
-      result["AwString"] = Ast.AwString;
-      result["fwyd"] = Ast.fwyd;
+      result["AwString"] = section.Aw.AwString;
+      result["fwyd"] = section.Aw.fwyd;
       result["deg"] = deg;
       result["Ss"] = Ss;
     }
@@ -178,13 +177,12 @@ export class CalcSafetyShearForceService {
     result["fcd"] = fcd;
 
     // 鉄筋材料
-    let fsy: number = this.helper.toNumber(Ast.fsy);
+    let fsy: number = this.helper.toNumber(section.Ast.fsy);
     if (fsy !== null) {
       result["fsy"] = fsy;
     }
 
-
-    let rs: number = this.helper.toNumber(Ast.rs);
+    let rs: number = this.helper.toNumber(section.Ast.rs);
     if (rs === null) {
       rs = 1;
     }

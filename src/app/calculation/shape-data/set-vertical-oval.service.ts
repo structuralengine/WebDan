@@ -134,6 +134,9 @@ export class SetVerticalOvalService {
       sidebar['fsy'] = fsye;
       result['sidebar'] = sidebar;
     }
+    
+    result['stirrup'] = bar.stirrup;
+    result['bend'] = bar.bend;
 
     return result;
 

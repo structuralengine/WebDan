@@ -218,6 +218,9 @@ export class SetRectService {
       sidebar['rs'] = safety.safety_factor.rs;
       result['sidebar'] = sidebar;
     }
+    
+    result['stirrup'] = bar.stirrup;
+    result['bend'] = bar.bend;
 
     return result;
   }

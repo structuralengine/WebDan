@@ -185,6 +185,8 @@ export class SetCircleService {
       tension.mark = "R";
     }
     result['tension'] = tension;
+    result['stirrup'] = bar.stirrup;
+    result['bend'] = bar.bend;
     
     return result;
   }

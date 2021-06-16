@@ -44,7 +44,7 @@ export class ResultDataService {
     const bar = this.bars.getCalcData(position.index);
 
     let title3: string = '';
-    if(side === '上側引張'){
+    if (side === '上側引張') {
       title3 = bar.rebar1.title + '引張';
     } else {
       title3 = bar.rebar2.title + '引張';
@@ -69,13 +69,13 @@ export class ResultDataService {
   }
 
   // 整数なら Fixed(0), 少数なら dim で指定した少数で丸める
-  public numStr(dst: number, dim: number = 2): string{
+  public numStr(dst: number, dim: number = 2): string {
 
-    if ( dst === null ){
+    if (dst === null) {
       return null;
     }
 
-    return dst.toFixed(Number.isInteger(dst)? 0 : dim )
+    return dst.toFixed(Number.isInteger(dst) ? 0 : dim)
   }
 
   // 照査表における 断面の文字列を取得
@@ -85,9 +85,9 @@ export class ResultDataService {
       member: null,
       shapeName: null,
       shape: {
-        B: null, 
-        H: null, 
-        Bt: null, 
+        B: null,
+        H: null,
+        Bt: null,
         t: null,
       }
     };
@@ -109,7 +109,7 @@ export class ResultDataService {
     let section: any;
     switch (shapeName) {
       case 'Circle':            // 円形
-        if(target === 'Md'){
+        if (target === 'Md') {
           section = this.circle.getCircleShape(member, index, safety);
         } else {
           section = this.circle.getCircleVdShape(member, index, safety);
@@ -118,7 +118,7 @@ export class ResultDataService {
         break;
 
       case 'Ring':              // 円環
-        if(target === 'Md'){
+        if (target === 'Md') {
           section = this.circle.getRingShape(member, index, safety);
         } else {
           section = this.circle.getRingVdShape(member, index, safety);
@@ -138,7 +138,7 @@ export class ResultDataService {
         section = this.rect.getTsectionShape(member, target, index, side, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
-        result.shape.Bt= section.Bt;
+        result.shape.Bt = section.Bt;
         result.shape.t = section.t;
         break;
 
@@ -155,7 +155,7 @@ export class ResultDataService {
         break;
 
       default:
-        throw("断面形状：" + shapeName + " は適切ではありません。");
+        throw ("断面形状：" + shapeName + " は適切ではありません。");
     }
 
     result['Ast'] = this.getAst(section);
@@ -163,19 +163,19 @@ export class ResultDataService {
     result['Ase'] = this.getAse(section);
 
     // せん断の場合 追加でパラメータを設定する
-    if(target === 'Vd'){
-      const vmuSection = this.getVmuSection(target, res, safety);
-      for(const key of Object.keys(vmuSection)){
+    if (target === 'Vd') {
+      const vmuSection = this.getVmuSection(section, safety);
+      for (const key of Object.keys(vmuSection)) {
         result[key] = vmuSection[key];
       }
     }
-    
+
     return result;
   }
 
   // せん断照査表における 断面の文字列を取得
-  private getVmuSection(target: string, res: any, safety: any): any {
-    
+  private getVmuSection(section: any, safety: any): any {
+
     const result = {
       tan: null,
       Aw: {
@@ -186,7 +186,7 @@ export class ResultDataService {
         AwString: null,
         deg: null,
         Ss: null,
-  
+
         fwyd: null,
         fwud: null,
         rs: null,
@@ -194,49 +194,49 @@ export class ResultDataService {
     };
 
 
-   // 鉄筋径
-  if (this.helper.toNumber(bar.stirrup.stirrup_dia) === null) {
-    return result;
-  }
-  result.stirrup_dia = Math.abs(bar.stirrup.stirrup_dia);
+    // 鉄筋径
+    if (this.helper.toNumber(section.stirrup.stirrup_dia) === null) {
+      return result;
+    }
+    result.Aw.stirrup_dia = Math.abs(section.stirrup.stirrup_dia);
 
-  // 異形鉄筋:D, 丸鋼: R
-  let mark = bar.stirrup.stirrup_dia > 0 ? "D" : "R";
+    // 異形鉄筋:D, 丸鋼: R
+    let mark = section.stirrup.stirrup_dia > 0 ? "D" : "R";
 
-  // 鉄筋本数
-  result.stirrup_n = this.helper.toNumber(bar.stirrup.stirrup_n);
-  if (result.stirrup_n === null) {
-    result.stirrup_n = 0;
-  }
+    // 鉄筋本数
+    result.Aw.stirrup_n = this.helper.toNumber(section.stirrup.stirrup_n);
+    if (result.Aw.stirrup_n === null) {
+      result.Aw.stirrup_n = 0;
+    }
 
-  result.Ss = this.helper.toNumber(bar.stirrup.stirrup_ss);
-  if (result.Ss === null) {
-    result.Ss = Number.MAX_VALUE;
-  }
+    result.Aw.Ss = this.helper.toNumber(section.stirrup.stirrup_ss);
+    if (result.Aw.Ss === null) {
+      result.Aw.Ss = Number.MAX_VALUE;
+    }
 
-  const fwyd = this.getFsyk(result.stirrup_dia, safety.material_bar, "stirrup");
-  if (fwyd.fsy === 235) {
-    // 鉄筋強度が 235 なら 丸鋼
-    mark = "R";
-  }
+    const fwyd = this.helper.getFsyk(result.Aw.stirrup_dia, safety.material_bar, "stirrup");
+    if (fwyd.fsy === 235) {
+      // 鉄筋強度が 235 なら 丸鋼
+      mark = "R";
+    }
 
-  const dia: string = mark + result.stirrup_dia;
-  const As: number = this.helper.getAs(dia);
+    const dia: string = mark + result.Aw.stirrup_dia;
+    const As: number = this.helper.getAs(dia);
 
-  result.Aw = As * result.stirrup_n;
-  if(!(result.Aw === 0)){
-    result.AwString = dia + "-" + result.stirrup_n + "本";
-  }
+    result.Aw.Aw = As * result.Aw.stirrup_n;
+    if (!(result.Aw.Aw === 0)) {
+      result.Aw.AwString = dia + "-" + result.Aw.stirrup_n + "本";
+    }
 
-  result.fwyd = fwyd.fsy;
-  result.fwud = fwyd.fsu;
-  result.rs = safety.safety_factor.rs;
+    result.Aw.fwyd = fwyd.fsy;
+    result.Aw.fwud = fwyd.fsu;
+    result.Aw.rs = safety.safety_factor.rs;
 
-  let tan = this.helper.toNumber(bar.tan);
-  if (tan === null) {
-    tan = 0;
-  }
-  result.tan = tan;
+    let tan = this.helper.toNumber(section.tan);
+    if (tan === null) {
+      tan = 0;
+    }
+    result.tan = tan;
 
 
     return result;
@@ -250,9 +250,9 @@ export class ResultDataService {
       Ast: null,
       AstString: null,
       dst: null,
-      fsy: null,         
+      fsy: null,
       fsu: null,
-      rs: null,         
+      rs: null,
     }
 
     result.tension = section.tension;
@@ -268,7 +268,7 @@ export class ResultDataService {
     result.Ast = Astx;
     result.AstString = AstDia + "-" + rebar_n + "本";
     result.dst = this.getBarCenterPosition(section.tension);
-    
+
     return result;
 
   }
@@ -279,13 +279,13 @@ export class ResultDataService {
       compress: null,
       Asc: null,
       AscString: null,
-      dsc: null, 
+      dsc: null,
     }
 
-    if(!('compress' in section)){
+    if (!('compress' in section)) {
       return result;
     }
-    
+
     result.compress = section.compress;
 
     const mark = section.compress.mark === "R" ? "φ" : "D";
@@ -297,7 +297,7 @@ export class ResultDataService {
     result.Asc = Astx;
     result.AscString = AstDia + "-" + rebar_n + "本";
     result.dsc = this.getBarCenterPosition(section.compress);
-    
+
     return result;
 
   }
@@ -310,7 +310,7 @@ export class ResultDataService {
       dse: null,
     }
 
-    if(!('sidebar' in section)){
+    if (!('sidebar' in section)) {
       return result;
     }
 
@@ -323,7 +323,7 @@ export class ResultDataService {
     result.Ase = Astx;
     result.AseString = AstDia + "-" + rebar_n + "本";
     result.dse = this.getBarCenterPosition(section.sidebar);
-    
+
     return result;
 
   }
@@ -449,7 +449,7 @@ export class ResultDataService {
   }
 
   // 鉄筋の重心位置を求める
-  private getBarCenterPosition( bar: any ){
+  private getBarCenterPosition(bar: any) {
 
     const cover: number = bar.dsc;
     const n: number = bar.rebar_n;

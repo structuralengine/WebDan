@@ -151,15 +151,14 @@ export class CalcSafetyFatigueShearForceService {
     return this.safety.getCalcData('Vd', g_id, this.safetyID);
   }
 
-  public calcFatigue(
-    res: any, shape: any, fc: any, Ast: any, safety: any, tmpFatigue: any ): any {
+  public calcFatigue( res: any, section: any, fc: any, safety: any, tmpFatigue: any ): any {
 
     const resMin: any = res[0];
     const resMax: any = res[1];
 
     // 疲労の Vcd を計算する時は βn=1
     const DesignForceList = { Md: resMin.Md, Vd: resMin.Vd, Nd: 0};
-    const result: any = this.base.calcVmu(res[0], shape, fc, Ast, safety, null, DesignForceList);
+    const result: any = this.base.calcVmu(res[0], section, fc, safety, null, DesignForceList);
 
     // 最小応力
     const Vpd: number = this.helper.toNumber(resMin.Vd);
@@ -220,10 +219,10 @@ export class CalcSafetyFatigueShearForceService {
 
     let k = 0.12;
 
-    const fai: number = this.helper.toNumber(Ast.stirrup.stirrup_dia);
+    const fai: number = this.helper.toNumber(section.Aw.stirrup.stirrup_dia);
     if (fai === null) { return result; }
 
-    const fwud: number = this.helper.toNumber(Ast.fwud);
+    const fwud: number = this.helper.toNumber(section.Aw.fwud);
     if (fwud === null) { return result; }
     result['fwud'] = fwud;
 

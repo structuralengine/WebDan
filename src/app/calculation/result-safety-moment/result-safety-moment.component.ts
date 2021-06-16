@@ -130,7 +130,7 @@ export class ResultSafetyMomentComponent implements OnInit {
             const shape = section.shape;
             const Ast = section.Ast;
 
-            const titleColumn = this.result.getTitleString(member, position, side)
+            const titleColumn = this.result.getTitleString(section.member, position, side)
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.calc.getResultValue(
@@ -181,7 +181,7 @@ export class ResultSafetyMomentComponent implements OnInit {
               result : { alien: 'center', value: resultColumn.result },
 
               /////////////// 総括表用 ///////////////
-              index_summary : position.index,
+              index : position.index,
               side_summary : side,
               shape_summary : shape.shape,
             }
@@ -195,7 +195,7 @@ export class ResultSafetyMomentComponent implements OnInit {
         for(let i=page.columns.length; i<5; i++){
           const column = {};
           for (let aa of Object.keys(page.columns[0])) {
-            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
               column[aa] = null;
             } else {
               column[aa] = { alien: 'center', value: '-' };

@@ -86,18 +86,18 @@
     <table class="main">
       <tr>
         <th colspan="2" class="cell_name1 g-top2 g-right2 g-bottom1 g-left2">部材名称</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column.m_no.alien}} g-top2 g-right2 g-bottom1">
-          {{column.m_no.value}}</td>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column.title1.alien}} g-top2 g-right2 g-bottom1">
+          {{column.title1.value}}</td>
       </tr>
       <tr>
         <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">位置</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column.p_name.alien}} g-right2 g-bottom1">
-          {{column.p_name.value}}</td>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column.title2.alien}} g-right2 g-bottom1">
+          {{column.title2.value}}</td>
       </tr>
       <tr>
         <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">断面番号</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column.side.alien}} g-right2 g-bottom2">
-          {{column.side.value}}</td>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column.title3.alien}} g-right2 g-bottom2">
+          {{column.title3.value}}</td>
       </tr>
       <tr>
         <th class="cell_name2 g-bottom1 g-left2">B Bf</th>

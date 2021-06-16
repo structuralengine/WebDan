@@ -108,40 +108,36 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             const shape = section.shape;
             const Ast = section.Ast;
 
-            const titleColumn = this.result.getTitleString(
-              member,
-              position,
-              side
-            );
+            const titleColumn = this.result.getTitleString( section.member, position, side );
             const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcFatigue(
-                res, shape, fck, Ast, safety, fatigueInfo)
+                res, section, fck, safety, fatigueInfo)
             );
 
             const column = {
             /////////////// タイトル ///////////////
-            m_no : { alien: "center", value: titleColumn.m_no },
-            p_name : { alien: "center", value: titleColumn.p_name },
-            side : { alien: "center", value: titleColumn.side },
+            title1 : { alien: "center", value: titleColumn.m_no },
+            title2 : { alien: "center", value: titleColumn.p_name },
+            title3 :  { alien: "center", value: titleColumn.side },
             ///////////////// 形状 /////////////////
             B : this.result.alien(shape.B),
             H : this.result.alien(shape.H),
             /////////////// 引張鉄筋 ///////////////
-            tan : this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"),
-            Ast : this.result.alien(this.result.numStr(Ast.Ast), "center"),
-            AstString : this.result.alien(Ast.AstString, "center"),
-            dst : this.result.alien(this.result.numStr(Ast.dst), "center"),
+            tan : this.result.alien(( section.tan === 0 ) ? '-' : section.tan, "center"),
+            Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
+            AstString : this.result.alien(section.Ast.AstString, "center"),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
             /////////////// コンクリート情報 ///////////////
             fck : this.result.alien(fck.fck.toFixed(1), "center"),
             rc : this.result.alien(fck.rc.toFixed(2), "center"),
             fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
             /////////////// 鉄筋強度情報 ///////////////
-            fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), "center"),
-            rs : this.result.alien(Ast.rs.toFixed(2), "center"),
-            fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), "center"),
-            fwud : this.result.alien(Ast.fwud, "center"),
+            fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), "center"),
+            rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
+            fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
+            fwud : this.result.alien(section.Aw.fwud, "center"),
             /////////////// 帯鉄筋情報 ///////////////
             AwString : resultColumn.AwString,
             fwyd : resultColumn.fwyd,
@@ -191,7 +187,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
-            index_summary : position.index,
+            index : position.index,
             side_summary : side,
             shape_summary : shape.shape,
             }
@@ -205,7 +201,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
         for(let i=page.columns.length; i<5; i++){
           const column = {};
           for (let aa of Object.keys(page.columns[0])) {
-            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
               column[aa] = null;
             } else {
               column[aa] = { alien: 'center', value: '-' };
