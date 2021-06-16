@@ -317,7 +317,7 @@ export class SetDesignForceService {
   }
 
   // 設計断面力（リスト）を生成する
-  private getSectionForce( target: string, n: number, forceObj: any, isMax: boolean): any[] {
+  private getSectionForce( target: string, n: number, forceObj: any, isMax: boolean = true): any[] {
     // 設計断面の数をセット
     const result: any[] = new Array();
 
