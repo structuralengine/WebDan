@@ -126,10 +126,7 @@ export class ResultSafetyMomentComponent implements OnInit {
 
             /////////////// まず計算 ///////////////
             const section = this.result.getSection('Md', res, safety);
-            const member = section.member;
-            const shape = section.shape;
-            const Ast = section.Ast;
-
+   
             const titleColumn = this.result.getTitleString(section.member, position, side)
             const fck: any = this.helper.getFck(safety);
 
@@ -143,30 +140,30 @@ export class ResultSafetyMomentComponent implements OnInit {
               title2: { alien: 'center', value: titleColumn.title2 },
               title3: { alien: 'center', value: titleColumn.title3 },
               ///////////////// 形状 /////////////////
-              B : this.result.alien(shape.B),
-              H : this.result.alien(shape.H),
-              Bt : this.result.alien(shape.Bt),
-              t : this.result.alien(shape.t),
+              B : this.result.alien(section.shape.B),
+              H : this.result.alien(section.shape.H),
+              Bt : this.result.alien(section.shape.Bt),
+              t : this.result.alien(section.shape.t),
               /////////////// 引張鉄筋 ///////////////
-              Ast : this.result.alien(this.result.numStr(Ast.Ast), 'center'),
-              AstString : this.result.alien(Ast.AstString, 'center'),
-              dst : this.result.alien(this.result.numStr(Ast.dst), 'center'),
+              Ast : this.result.alien(this.result.numStr(section.Ast.Ast), 'center'),
+              AstString : this.result.alien(section.Ast.AstString, 'center'),
+              dst : this.result.alien(this.result.numStr(section.Ast.dst), 'center'),
               /////////////// 圧縮鉄筋 ///////////////
-              Asc : this.result.alien(this.result.numStr(Ast.Asc), 'center'),
-              AscString : this.result.alien(Ast.AscString, 'center'),
-              dsc : this.result.alien(this.result.numStr(Ast.dsc), 'center'),
+              Asc : this.result.alien(this.result.numStr(section.Asc.Asc), 'center'),
+              AscString : this.result.alien(section.Asc.AscString, 'center'),
+              dsc : this.result.alien(this.result.numStr(section.Asc.dsc), 'center'),
               /////////////// 側面鉄筋 ///////////////
-              Ase : this.result.alien(this.result.numStr(Ast.Ase), 'center'),
-              AseString : this.result.alien(Ast.AseString, 'center'),
-              dse : this.result.alien(this.result.numStr(Ast.dse), 'center'),
+              Ase : this.result.alien(this.result.numStr(section.Ase.Ase), 'center'),
+              AseString : this.result.alien(section.Ase.AseString, 'center'),
+              dse : this.result.alien(this.result.numStr(section.Ase.dse), 'center'),
               /////////////// コンクリート情報 ///////////////
               fck : this.result.alien(fck.fck.toFixed(1), 'center'),
               rc : this.result.alien(fck.rc.toFixed(2), 'center'),
               fcd : this.result.alien(fck.fcd.toFixed(1), 'center'),
               /////////////// 鉄筋情報 ///////////////
-              fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), 'center'),
-              rs : this.result.alien(Ast.rs.toFixed(2), 'center'),
-              fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'),
+              fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), 'center'),
+              rs : this.result.alien(section.Ast.rs.toFixed(2), 'center'),
+              fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), 'center'),
               /////////////// 照査 ///////////////
               Md : { alien: 'right', value: (Math.round(resultColumn.Md*10)/10).toFixed(1) },
               Nd : { alien: 'right', value: (Math.round(resultColumn.Nd*10)/10).toFixed(1) },
@@ -183,7 +180,7 @@ export class ResultSafetyMomentComponent implements OnInit {
               /////////////// 総括表用 ///////////////
               index : position.index,
               side_summary : side,
-              shape_summary : shape.shape,
+              shape_summary : section.shapeName,
             }
 
             page.columns.push(column);

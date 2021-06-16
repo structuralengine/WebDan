@@ -154,9 +154,9 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
             const column = {
               /////////////// タイトル ///////////////
-              title1 : { alien: "center", value: titleColumn.m_no },
-              title2 : { alien: "center", value: titleColumn.p_name },
-              title3 :  { alien: "center", value: titleColumn.side },
+              title1 : { alien: "center", value: titleColumn.title1 },
+              title2 : { alien: "center", value: titleColumn.title2 },
+              title3 :  { alien: "center", value: titleColumn.title3 },
               ///////////////// 形状 /////////////////
               B : this.result.alien(shape.B),
               H : this.result.alien(shape.H),
@@ -217,7 +217,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               /////////////// 総括表用 ///////////////
               index : position.index,
               side_summary : side,
-              shape_summary : shape.shape,
+              shape_summary : section.shapeName,
             }
 
             page.columns.push(column);

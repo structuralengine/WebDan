@@ -189,7 +189,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
               /////////////// 総括表用 ///////////////
               index : position.index,
               side_summary : side,
-              shape_summary : shape.shape,
+              shape_summary : section.shapeName,
             }
 
             page.columns.push(column);
