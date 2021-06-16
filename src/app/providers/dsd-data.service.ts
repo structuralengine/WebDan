@@ -249,7 +249,9 @@ export class DsdDataService {
       let f = this.fatigues.getTableColumn(Index);
       // 部材データ
       let m = this.members.getTableColumns(iBzNo);
-  
+      c.m_no = m.m_no;
+      f.m_no = m.m_no;
+
       const sLeng = this.readSingle(buff);  // 部材長 = JTAN
       m.m_len = sLeng;
 
@@ -260,6 +262,7 @@ export class DsdDataService {
       const strBuzaiName = this.readString(buff, 32);
       m.g_name = strBuzaiName.trim();
       f.g_name = m.g_name;
+      c.g_name = m.g_name;
 
       const intDanmenType = this.readInteger(buff);
       switch(intDanmenType){
@@ -278,25 +281,25 @@ export class DsdDataService {
       }
 
       const isOlder311 = (this.isOlder('3.1.1', buff.datVersID));
-      let sngDanmen = this.readSingle(buff);
-      if (isOlder311) { sngDanmen *= 10; } // cm --> mm
-      if(sngDanmen > 0) m.B = sngDanmen;
-      sngDanmen = this.readSingle(buff);
-      if (isOlder311) { sngDanmen *= 10; } // cm --> mm
-      if(sngDanmen > 0) m.H = sngDanmen;
-      sngDanmen = this.readSingle(buff);
-      if (isOlder311) { sngDanmen *= 10; } // cm --> mm
-      if(sngDanmen > 0) m.Bt = sngDanmen;
-      sngDanmen = this.readSingle(buff);
-      if (isOlder311) { sngDanmen *= 10; } // cm --> mm
-      if(sngDanmen > 0) m.t = sngDanmen;
+      let sngDanmen1 = this.readSingle(buff);
+      if (isOlder311) { sngDanmen1 *= 10; } // cm --> mm
+      if(sngDanmen1 > 0) m.B = sngDanmen1;
+      let sngDanmen2 = this.readSingle(buff);
+      if (isOlder311) { sngDanmen2 *= 10; } // cm --> mm
+      if(sngDanmen2 > 0) m.H = sngDanmen2;
+      let sngDanmen3 = this.readSingle(buff);
+      if (isOlder311) { sngDanmen3 *= 10; } // cm --> mm
+      if(sngDanmen3 > 0) m.Bt = sngDanmen3;
+      let sngDanmen4 = this.readSingle(buff);
+      if (isOlder311) { sngDanmen4 *= 10; } // cm --> mm
+      if(sngDanmen4 > 0) m.t = sngDanmen4;
 
 
       // 環境条件 曲げ
-      let intKankyo = this.readInteger(buff);
-      if(intKankyo > 0) c.con_u = intKankyo;
-      intKankyo = this.readInteger(buff);
-      if(intKankyo > 0) c.con_l = intKankyo;
+      const intKankyo1 = this.readInteger(buff);
+      if(intKankyo1 > 0) c.con_u = intKankyo1;
+      const intKankyo2 = this.readInteger(buff);
+      if(intKankyo2 > 0) c.con_l = intKankyo2;
 
       // 環境条件せん断 　since version 0.1.4
       if (!this.isOlder('0.1.4', buff.datVersID)) {
@@ -304,65 +307,65 @@ export class DsdDataService {
         if(intKankyo2 > 0) c.con_s = intKankyo2;
       }
 
-      let bytHibi = this.readByte(buff);
-      c.vis_u = bytHibi !== 0;
-      bytHibi = this.readByte(buff);
-      c.vis_l = bytHibi !== 0;
+      const bytHibi1 = this.readByte(buff);
+      c.vis_u = bytHibi1 !== 0;
+      const bytHibi2 = this.readByte(buff);
+      c.vis_l = bytHibi2 !== 0;
 
       if (this.isOlder("0.1.4", buff.datVersID)) {
-        let sngHirou = this.readInteger(buff);
-        if(sngHirou > 0) {
-          f.M1.r1_1 = sngHirou;
-          f.M2.r1_1 = sngHirou;
+        const sngHirou1 = this.readInteger(buff);
+        if(sngHirou1 > 0) {
+          f.M1.r1_1 = sngHirou1;
+          f.M2.r1_1 = sngHirou1;
         }
-        sngHirou = this.readInteger(buff);
-        if(sngHirou > 0) {
-          f.V1.r1_2 = sngHirou;
-          f.V2.r1_2 = sngHirou;
+        const sngHirou2 = this.readInteger(buff);
+        if(sngHirou2 > 0) {
+          f.V1.r1_2 = sngHirou2;
+          f.V2.r1_2 = sngHirou2;
         }
-        sngHirou = this.readInteger(buff);
-        if(sngHirou > 0) {
-          f.M1.r1_3 = sngHirou;
-          f.M2.r1_3 = sngHirou;
+        const sngHirou3 = this.readInteger(buff);
+        if(sngHirou3 > 0) {
+          f.M1.r1_3 = sngHirou3;
+          f.M2.r1_3 = sngHirou3;
         }
       } else {
         if (this.isOlder("2.5.1", buff.datVersID)) {
-          let sngHirou = this.readSingle(buff); // kr
-          if(sngHirou > 0) c.kr = sngHirou;
-          sngHirou = this.readSingle(buff);
-          if(sngHirou > 0) {
-            f.M1.r1_1 = sngHirou;
-            f.M2.r1_1 = sngHirou;
+          const kr = this.readSingle(buff); // kr
+          if(kr > 0) c.kr = kr;
+          const sngHirou1 = this.readSingle(buff);
+          if(sngHirou1 > 0) {
+            f.M1.r1_1 = sngHirou1;
+            f.M2.r1_1 = sngHirou1;
           }
-          sngHirou = this.readSingle(buff);
-          if(sngHirou > 0) {
-            f.V1.r1_2 = sngHirou;
-            f.V2.r1_2 = sngHirou;
+          const sngHirou2 = this.readSingle(buff);
+          if(sngHirou2 > 0) {
+            f.V1.r1_2 = sngHirou2;
+            f.V2.r1_2 = sngHirou2;
           }
-          sngHirou = this.readSingle(buff);
-          if(sngHirou > 0) {
-            f.M1.r1_3 = sngHirou;
-            f.M2.r1_3 = sngHirou;
+          const sngHirou3 = this.readSingle(buff);
+          if(sngHirou3 > 0) {
+            f.M1.r1_3 = sngHirou3;
+            f.M2.r1_3 = sngHirou3;
           }
         } else {
-          let sngHirou = this.readSingle(buff); // εcsd
-          if(sngHirou > 0) c.ecsd = sngHirou;
-          sngHirou = this.readSingle(buff);// kr
-          if(sngHirou > 0) c.kr = sngHirou;
-          sngHirou = this.readSingle(buff);
-          if(sngHirou > 0) {
-            f.M1.r1_1 = sngHirou;
-            f.M2.r1_1 = sngHirou;
+          const sngEcsd = this.readSingle(buff); // εcsd
+          if(sngEcsd > 0) c.ecsd = sngEcsd;
+          const kr = this.readSingle(buff);// kr
+          if(kr > 0) c.kr = kr;
+          const sngHirou1 = this.readSingle(buff);
+          if(sngHirou1 > 0) {
+            f.M1.r1_1 = sngHirou1;
+            f.M2.r1_1 = sngHirou1;
           }
-          sngHirou = this.readSingle(buff);
-          if(sngHirou > 0) {
-            f.V1.r1_2 = sngHirou;
-            f.V2.r1_2 = sngHirou;
+          const sngHirou2 = this.readSingle(buff);
+          if(sngHirou2 > 0) {
+            f.V1.r1_2 = sngHirou2;
+            f.V2.r1_2 = sngHirou2;
           }
-          sngHirou = this.readSingle(buff);
-          if(sngHirou > 0) {
-            f.M1.r1_3 = sngHirou;
-            f.M2.r1_3 = sngHirou;        
+          const sngHirou3 = this.readSingle(buff);
+          if(sngHirou3 > 0) {
+            f.M1.r1_3 = sngHirou3;
+            f.M2.r1_3 = sngHirou3;        
           }
         }
       }
@@ -385,6 +388,23 @@ export class DsdDataService {
       if (!this.isOlder("0.1.3", buff.datVersID)) {
         const bytTaisinKiso = this.readByte(buff);
       }
+
+      for(let j = Index + 1; j < Index+iNumCalc; j++){
+        // ひび割れデータ
+        const crack = this.crack.getTableColumn(j);
+        for( const key of Object.keys(crack)){
+          if(key === 'index') continue;
+          crack[key] = c[key];
+        }
+        // 疲労データ
+        const fatigue = this.fatigues.getTableColumn(j);
+        for( const key of Object.keys(fatigue)){
+          if(key === 'index') continue;
+          fatigue[key] = f[key];
+        }
+      }
+
+
     }
 
 
@@ -562,12 +582,21 @@ export class DsdDataService {
           bar[key] = position[key];
         }
       }
+      // 疲労データ
       const fatigue = this.fatigues.getTableColumn(index);
       for(const key of Object.keys(fatigue)){
         if(key in position){
           fatigue[key] = position[key];
         }
       }
+      // ひび割れデータ
+      const crack = this.crack.getTableColumn(index);
+      for(const key of Object.keys(crack)){
+        if(key in position){
+          crack[key] = position[key];
+        }
+      }
+      
     }
 
   }
