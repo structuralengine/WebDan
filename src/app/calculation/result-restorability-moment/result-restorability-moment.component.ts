@@ -187,6 +187,7 @@ export class ResultRestorabilityMomentComponent implements OnInit {
               result : { alien: 'center', value: resultColumn.result },
 
               /////////////// 総括表用 ///////////////
+              g_name: m.g_name,
               index : position.index,
               side_summary : side,
               shape_summary : section.shapeName,

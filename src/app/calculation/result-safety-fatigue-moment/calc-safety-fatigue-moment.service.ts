@@ -84,14 +84,17 @@ export class CalcSafetyFatigueMomentService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Md', this.safetyID, this.DesignForceList, this.DesignForceList2, this.DesignForceList3);
+
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList2, this.DesignForceList3);
+    const force2 = this.force.alignMultipleLists(force1[0], force1[1], force1[2]);
 
     // 有効な入力行以外は削除する
-    this.deleteFatigueDisablePosition(force);
+    this.deleteFatigueDisablePosition(force2);
 
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force[2], force[1]);
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force2[2], force2[1]);
     return postData;
   }
 
