@@ -83,15 +83,18 @@ export class CalcSafetyFatigueShearForceService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Vd', this.safetyID, this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
+
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
+    const force2 = this.force.alignMultipleLists(force1[0], force1[1], force1[2]);
 
     // 有効な入力行以外は削除する
-    this.deleteFatigueDisablePosition(force);
+    this.deleteFatigueDisablePosition(force2);
 
     // POST 用
     const postData = [];
-    for(const a of [force[1], force[2]]){
+    for(const a of [force2[1], force2[2]]){
       for(const b of a){
         for(const c of b.designForce){
           postData.push({

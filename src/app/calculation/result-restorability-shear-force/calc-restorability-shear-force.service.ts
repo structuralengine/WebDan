@@ -53,8 +53,11 @@ export class CalcRestorabilityShearForceService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force = this.force.checkEnable('Vd', this.safetyID, this.DesignForceList);
+
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, this.DesignForceList);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force[0]);
     return postData;
   }
 

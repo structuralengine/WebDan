@@ -212,6 +212,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
+            g_name: m.g_name,
             index : position.index,
             side_summary : side,
             shape_summary : section.shapeName,
