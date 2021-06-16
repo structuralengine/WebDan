@@ -11,14 +11,14 @@
             <th width="150px" class="top"> </th>
             <th width="70px" class="left top text-center">単位</th>
             <ng-container *ngFor="let item of summary_table; index as i">
-              <th width="100px" class="left top text-center">{{item.title.m_no}}</th>
+              <th width="100px" class="left top text-center">{{item.title.title0}}</th>
             </ng-container>
           </tr>
           <tr>
             <th colspan="4" class="text-center">断面位置</th>
             <th class="left"> </th>
             <ng-container *ngFor="let item of summary_table; index as i">
-              <th class="left text-center">{{item.title.p_name}}</th>
+              <th class="left text-center">{{item.title.title1}}</th>
             </ng-container>
           </tr>
           <tr class="bottom">
@@ -28,7 +28,7 @@
             <th> </th>
             <th class="left"> </th>
             <ng-container *ngFor="let item of summary_table; index as i">
-              <th class="left text-center">{{item.title.side}}</th>
+              <th class="left text-center">{{item.title.title2}}</th>
             </ng-container>
           </tr>
           <tr class="bottom">

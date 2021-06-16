@@ -65,9 +65,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -98,9 +99,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -135,9 +137,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -168,9 +171,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -205,9 +209,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -238,9 +243,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -276,9 +282,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -308,9 +315,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -345,9 +353,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -380,9 +389,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
@@ -417,9 +427,10 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col.m_no.value;
-            columns.title.p_name = col.p_name.value;
-            columns.title.side = col.side.value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;

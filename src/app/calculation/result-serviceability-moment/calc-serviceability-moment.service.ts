@@ -70,11 +70,14 @@ export class CalcServiceabilityMomentService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Md', this.safetyID, this.DesignForceList, this.DesignForceList1);
+
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
+    const force2 = this.force.alignMultipleLists(force1[0], force1[1]);
 
     // POST 用
-    const postData = this.post.setInputData('Md', '応力度', this.safetyID, force[0], force[1]);
+    const postData = this.post.setInputData('Md', '応力度', this.safetyID, force2[0], force2[1]);
     return postData;
   }
 

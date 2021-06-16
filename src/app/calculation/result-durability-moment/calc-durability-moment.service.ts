@@ -49,6 +49,11 @@ export class CalcDurabilityMomentService {
     this.DesignForceList1 = this.force.getDesignForceList(
       "Md", No0);
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Md', this.safetyID, this.DesignForceList, this.DesignForceList1);
+    this.DesignForceList = force1[0];
+    this.DesignForceList1 = force1[1];
+
     // 使用性（外観ひび割れ）の照査対象外の着目点を削除する
     this.deleteDurabilityDisablePosition();
   }
@@ -85,10 +90,10 @@ export class CalcDurabilityMomentService {
     }
 
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
+    const force2 = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // POST 用
-    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  force[0], force[1]);
+    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  force2[0], force2[1]);
     return postData;
   }
 }

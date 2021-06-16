@@ -80,11 +80,14 @@ export class CalcServiceabilityShearForceService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Vd', this.safetyID, this.DesignForceList1, this.DesignForceList, this.DesignForceList2);
+
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList1, this.DesignForceList, this.DesignForceList2);
+    const force2 = this.force.alignMultipleLists(force1[0], force1[1], force1[2]);
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force[0]);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force2[0]);
     return postData;
   }
 

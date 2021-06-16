@@ -103,8 +103,8 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
             const res = OutputData.find(
               (e) => e.index === position.index && e.side === side
@@ -198,6 +198,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               Result : resultColumn.Result,
 
               /////////////// 総括表用 ///////////////
+              g_name: m.g_name,
               index : position.index,
               side_summary : side,
               shape_summary : section.shapeName,
