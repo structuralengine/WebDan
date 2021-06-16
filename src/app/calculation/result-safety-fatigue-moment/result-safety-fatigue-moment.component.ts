@@ -5,10 +5,9 @@ import { CalcSafetyFatigueMomentService } from "./calc-safety-fatigue-moment.ser
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetBarService } from "../set-bar.service";
-import { SetSectionService } from "../set-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-safety-fatigue-moment",
@@ -31,8 +30,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     private calc: CalcSafetyFatigueMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SetBarService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private fatigue: InputFatiguesService,
     private summary: CalcSummaryTableService
@@ -115,8 +113,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
 
@@ -137,10 +135,13 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
-            const titleColumn = this.result.getTitleString(member, position, side)
-            const shape = this.section.getResult('Md', member, res[0]);
-            const Ast: any = this.bar.getResult('Md', shape, res[0], safety);
-            const fck: any = this.section.getFck(safety);
+            const section = this.result.getSection('Md', res[0], safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
+            const titleColumn = this.result.getTitleString(section.member, position, side)
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcFatigue(
@@ -149,35 +150,35 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
             const column = {
             /////////////// タイトル ///////////////
-            m_no : { alien: 'center', value: titleColumn.m_no },
-            p_name : { alien: 'center', value: titleColumn.p_name },
-            side : { alien: 'center', value: titleColumn.side },
+            title1: { alien: 'center', value: titleColumn.title1 },
+            title2: { alien: 'center', value: titleColumn.title2 },
+            title3: { alien: 'center', value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
             B : this.result.alien(shape.B),
             H : this.result.alien(shape.H),
             Bt : this.result.alien(shape.Bt),
             t : this.result.alien(shape.t),
             /////////////// 引張鉄筋 ///////////////
-            Ast : this.result.alien(this.result.numStr(Ast.Ast), 'center'),
-            AstString : this.result.alien(Ast.AstString, 'center'),
-            dst : this.result.alien(this.result.numStr(Ast.dst), 'center'),
+            Ast : this.result.alien(this.result.numStr(section.Ast.Ast), 'center'),
+            AstString : this.result.alien(section.Ast.AstString, 'center'),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst), 'center'),
             /////////////// 圧縮鉄筋 ///////////////
-            Asc : this.result.alien(this.result.numStr(Ast.Asc), 'center'),
-            AscString : this.result.alien(Ast.AscString, 'center'),
-            dsc : this.result.alien(this.result.numStr(Ast.dsc), 'center'),
+            Asc : this.result.alien(this.result.numStr(section.Asc.Asc), 'center'),
+            AscString : this.result.alien(section.Asc.AscString, 'center'),
+            dsc : this.result.alien(this.result.numStr(section.Asc.dsc), 'center'),
             /////////////// 側面鉄筋 ///////////////
-            Ase : this.result.alien(this.result.numStr(Ast.Ase), 'center'),
-            AseString : this.result.alien(Ast.AseString, 'center'),
-            dse : this.result.alien(this.result.numStr(Ast.dse), 'center'),
+            Ase : this.result.alien(this.result.numStr(section.Ase.Ase), 'center'),
+            AseString : this.result.alien(section.Ase.AseString, 'center'),
+            dse : this.result.alien(this.result.numStr(section.Ase.dse), 'center'),
             /////////////// コンクリート情報 ///////////////
             fck : this.result.alien(fck.fck.toFixed(1), 'center'),
             rc : this.result.alien(fck.rc.toFixed(2), 'center'),
             fcd : this.result.alien(fck.fcd.toFixed(1), 'center'),
             /////////////// 鉄筋情報 ///////////////
-            fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), 'center'),
-            rs : this.result.alien(Ast.rs.toFixed(2), 'center'),
-            fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'),
-            fsu : this.result.alien(Ast.fsu, 'center'),
+            fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), 'center'),
+            rs : this.result.alien(section.Ast.rs.toFixed(2), 'center'),
+            fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), 'center'),
+            fsu : this.result.alien(section.Ast.fsu, 'center'),
             /////////////// 照査 ///////////////
             Mdmin : resultColumn.Mdmin,
             Ndmin : resultColumn.Ndmin,
@@ -211,9 +212,9 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
-            index_summary : position.index,
+            index : position.index,
             side_summary : side,
-            shape_summary : shape.shape,
+            shape_summary : section.shapeName,
             }
 
             page.columns.push(column);
@@ -225,7 +226,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
         for(let i=page.columns.length; i<5; i++){
           const column = {};
           for (let aa of Object.keys(page.columns[0])) {
-            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
               column[aa] = null;
             } else {
               column[aa] = { alien: 'center', value: '-' };

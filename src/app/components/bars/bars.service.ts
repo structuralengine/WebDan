@@ -188,7 +188,7 @@ export class InputBarsService {
   public getCalcData(index: any): any {
 
     let result = null;
-    
+
     const bar_list = JSON.parse(
       JSON.stringify({
         temp: this.bar_list,

@@ -60,7 +60,7 @@ export class CalcSafetyFatigueMomentService {
     // 永久作用
     const No3 = (this.save.isManual()) ? 3 : this.basic.pickup_moment_no(3);
     this.DesignForceList3 = this.force.getDesignForceList(
-      'Md', No3);
+      'Md', No3, false);
     // 永久+変動作用
     const No4 = (this.save.isManual()) ? 4 : this.basic.pickup_moment_no(4);
     this.DesignForceList = this.force.getDesignForceList(

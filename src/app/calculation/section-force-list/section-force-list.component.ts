@@ -116,7 +116,7 @@ export class SectionForceListComponent implements OnInit {
         title.push("安全性（疲労破壊）最大応力");
         data.push(this.SafetyFatigueMoment.DesignForceList3);
         title.push("安全性（疲労破壊）最小応力");
-        data.push(this.SafetyFatigueMoment.DesignForceList3);
+        data.push(this.SafetyFatigueMoment.DesignForceList2);
         title.push("安全性（疲労破壊）変動応力");
         for (let i = 0; i < data.length; i++) {
           const table = this.setPage( memberList, upperName, bottomName, data[i]);

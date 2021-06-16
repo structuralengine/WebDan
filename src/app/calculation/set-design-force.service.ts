@@ -18,7 +18,7 @@ export class SetDesignForceService {
   ) {}
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
-  public getDesignForceList(target: string, pickupNo: number): any[] {
+  public getDesignForceList(target: string, pickupNo: number, isMax: boolean = true): any[] {
     if (this.helper.toNumber(pickupNo) === null) {
       return new Array();
     }
@@ -26,7 +26,7 @@ export class SetDesignForceService {
     if (this.save.isManual() === true) {
       result = this.fromManualInput(target, pickupNo);
     } else {
-      result = this.fromPickUpData(target, pickupNo);
+      result = this.fromPickUpData(target, pickupNo, isMax);
     }
 
     return result;
@@ -89,7 +89,7 @@ export class SetDesignForceService {
   }
 
   // ピックアップデータから断面力一覧を取得
-  private fromPickUpData(target: string, pickupNo: number): any[] {
+  private fromPickUpData(target: string, pickupNo: number, isMax: boolean): any[] {
 
     // 部材グループ・照査する着目点を取得
     const result = this.getEnableMembers(target);
@@ -138,7 +138,7 @@ export class SetDesignForceService {
         }
       }
 
-      position["designForce"] = this.getSectionForce(target, n, forceObj);
+      position["designForce"] = this.getSectionForce(target, n, forceObj, isMax);
     }
 
     // 地中Max の
@@ -317,7 +317,7 @@ export class SetDesignForceService {
   }
 
   // 設計断面力（リスト）を生成する
-  private getSectionForce( target: string, n: number, forceObj: any): any[] {
+  private getSectionForce( target: string, n: number, forceObj: any, isMax: boolean = true): any[] {
     // 設計断面の数をセット
     const result: any[] = new Array();
 
@@ -353,7 +353,9 @@ export class SetDesignForceService {
         if (r.side === side && r.target === target) {
           flg = true;
           // side が同じ場合値の大きい方を採用する
-          if (Math.abs(r[target]) < Math.abs(f[target])) {
+          if(isMax && (Math.abs(r[target]) < Math.abs(f[target]))){
+            result[i] = f;
+          } else if (Math.abs(r[target]) > Math.abs(f[target])) {
             result[i] = f;
           }
         }

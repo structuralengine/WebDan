@@ -4,11 +4,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcServiceabilityShearForceService } from "./calc-serviceability-shear-force.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
-import { ResultSafetyShearForceComponent } from "../result-safety-shear-force/result-safety-shear-force.component";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetBarService } from "../set-bar.service";
-import { SetSectionService } from "../set-section.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-serviceability-shear-force",
@@ -28,8 +26,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
     private calc: CalcServiceabilityShearForceService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SetBarService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
@@ -62,7 +59,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
         this.summary.setSummaryTable("serviceabilityShearForce", this.serviceabilityShearForcePages);
       },
       (error) => {
-        this.err = 'error!!' + '\n'; 
+        this.err = 'error!!' + '\n';
         let e: any = error;
         while('error' in e) {
           if('message' in e){ this.err += e.message + '\n'; }
@@ -126,53 +123,50 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
-            const titleColumn = this.result.getTitleString(
-              member,
-              position,
-              side
-            );
-            const shape = this.section.getResult("Vd", member, res);
-            const Ast: any = this.bar.getResult("Vd", shape, res, safety);
-            const fck: any = this.section.getFck(safety);
+            const section = this.result.getSection("Vd", res, safety);
+            const shape = section.shape;
+            const Ast = section.Ast;
+
+            const titleColumn = this.result.getTitleString( section.member, position, side );
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcSigma(
                 res,
-                shape,
+                section,
                 fck,
-                Ast,
                 safety)
             );
 
             const column = {
               /////////////// タイトル ///////////////
-              m_no : { alien: "center", value: titleColumn.m_no },
-              p_name : { alien: "center", value: titleColumn.p_name },
-              side : { alien: "center", value: titleColumn.side },
+              title1 : { alien: "center", value: titleColumn.title1 },
+              title2 : { alien: "center", value: titleColumn.title2 },
+              title3 :  { alien: "center", value: titleColumn.title3 },
               ///////////////// 形状 /////////////////
               B : this.result.alien(shape.B),
               H : this.result.alien(shape.H),
               /////////////// 引張鉄筋 ///////////////
-              tan : this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"),
-              Ast : this.result.alien(this.result.numStr(Ast.Ast), "center"),
-              AstString : this.result.alien(Ast.AstString, "center"),
-              dst : this.result.alien(this.result.numStr(Ast.dst), "center"),
+              tan : this.result.alien(( section.tan === 0 ) ? '-' : Ast.tan, "center"),
+              Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
+              AstString : this.result.alien(section.Ast.AstString, "center"),
+              dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
               /////////////// 圧縮鉄筋 ///////////////
-              Asc : this.result.alien(this.result.numStr(Ast.Asc), "center"),
-              AscString : this.result.alien(Ast.AscString, "center"),
-              dsc : this.result.alien(this.result.numStr(Ast.dsc), "center"),
+              Asc : this.result.alien(this.result.numStr(section.Asc.Asc), "center"),
+              AscString : this.result.alien(section.Asc.AscString, "center"),
+              dsc : this.result.alien(this.result.numStr(section.Asc.dsc), "center"),
               /////////////// 側面鉄筋 ///////////////
               // col : this.result.alien(this.result.numStr(Ast.Ase), 'center'),
-              AseString : this.result.alien(Ast.AseString, "center"),
-              dse : this.result.alien(this.result.numStr(Ast.dse), "center"),
+              AseString : this.result.alien(section.Ase.AseString, "center"),
+              dse : this.result.alien(this.result.numStr(section.Ase.dse), "center"),
               /////////////// コンクリート情報 ///////////////
               fck : this.result.alien(fck.fck.toFixed(1), "center"),
               rc : this.result.alien(fck.rc.toFixed(2), "center"),
               fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
               /////////////// 鉄筋強度情報 ///////////////
-              fsy : this.result.alien(this.result.numStr(Ast.fsy, 1), "center"),
-              rs : this.result.alien(Ast.rs.toFixed(2), "center"),
-              fsd : this.result.alien(this.result.numStr(Ast.fsd, 1), "center"),
+              fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), "center"),
+              rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
+              fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
               /////////////// 帯鉄筋情報 ///////////////
               Aw : resultColumn.Aw,
               AwString : resultColumn.AwString,
@@ -204,11 +198,11 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               Result : resultColumn.Result,
 
               /////////////// 総括表用 ///////////////
-              index_summary : position.index,
+              index : position.index,
               side_summary : side,
-              shape_summary : shape.shape,
+              shape_summary : section.shapeName,
             }
-                        
+
             page.columns.push(column);
           }
         }
@@ -218,7 +212,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
         for(let i=page.columns.length; i<5; i++){
           const column = {};
           for (let aa of Object.keys(page.columns[0])) {
-            if (aa === "index_summary" || aa === "side_summary" || aa === "shape_summary") {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
               column[aa] = null;
             } else {
               column[aa] = { alien: 'center', value: '-' };
