@@ -17,7 +17,7 @@ import { CrackSettingsComponent } from './components/crack/crack-settings.compon
 
 
 const routes: Routes = [
-    { path: '', redirectTo: '/members', pathMatch: 'full' },
+    { path: '', redirectTo: '/blank-page', pathMatch: 'full' },
     { path: 'basic-information', component: BasicInformationComponent },
     { path: 'members', component: MembersComponent },
     { path: 'design-points', component: DesignPointsComponent },

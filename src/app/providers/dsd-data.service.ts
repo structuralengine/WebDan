@@ -205,9 +205,9 @@ export class DsdDataService {
 
     if (!this.isOlder('1.3.13', buff.datVersID)) {
       const dt1HibiSeigen = this.readSingle(buff);
-      this.fatigues.train_A_count = dt1HibiSeigen;
+      this.fatigues.train_A_count = Math.round(dt1HibiSeigen);
       const dt1HibiK2 = this.readSingle(buff);
-      this.fatigues.train_B_count = dt1HibiK2;
+      this.fatigues.train_B_count = Math.round(dt1HibiK2);
     }
 
     if (!this.isOlder('1.3.14', buff.datVersID)) {
@@ -376,18 +376,19 @@ export class DsdDataService {
 
       if (this.isOlder("1.3.4", buff.datVersID)) {
         const sngNumBZI = this.readInteger(buff);
-        m.n = sngNumBZI;
+        if(sngNumBZI > 0) m.n = sngNumBZI;
       } else if (this.isOlder("3.6.2", buff.datVersID)) {
         const sngNumBZI = this.readSingle(buff);
-        m.n = sngNumBZI;
+        if(sngNumBZI > 0) m.n = sngNumBZI;
       } else {
-        const strNumBZI = this.readString(buff, 32);
-        m.n = this.helper.toNumber(strNumBZI);
+        const strNumBZI = this.helper.toNumber(this.readString(buff, 32));
+        if(strNumBZI !== null && strNumBZI > 0) m.n = strNumBZI;
       }
 
       if (!this.isOlder("0.1.3", buff.datVersID)) {
         const bytTaisinKiso = this.readByte(buff);
       }
+
 
       for(let j = Index + 1; j < Index+iNumCalc; j++){
         // ひび割れデータ
@@ -397,10 +398,12 @@ export class DsdDataService {
           crack[key] = c[key];
         }
         // 疲労データ
+        // f は連想配列が含まれているため clone をコピーしないと
+        const f2 = JSON.parse(JSON.stringify(f)); 
         const fatigue = this.fatigues.getTableColumn(j);
         for( const key of Object.keys(fatigue)){
           if(key === 'index') continue;
-          fatigue[key] = f[key];
+          fatigue[key] = f2[key];
         }
       }
 
@@ -816,7 +819,6 @@ export class DsdDataService {
 
 
     }
-
   }
 
   // 画面６　計算・印刷フォーム
