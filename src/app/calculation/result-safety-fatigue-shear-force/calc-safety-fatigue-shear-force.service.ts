@@ -219,7 +219,7 @@ export class CalcSafetyFatigueShearForceService {
 
     let k = 0.12;
 
-    const fai: number = this.helper.toNumber(section.Aw.stirrup.stirrup_dia);
+    const fai: number = this.helper.toNumber(section.Aw.stirrup_dia);
     if (fai === null) { return result; }
 
     const fwud: number = this.helper.toNumber(section.Aw.fwud);
