@@ -245,7 +245,14 @@ export class SaveDataService {
   // ファイルに保存用データを生成
   public getInputText(): string {
 
-    const jsonData = {
+    const jsonData = this.getInputJson();
+
+    // string 型にする
+    const result: string = JSON.stringify(jsonData);
+    return result;
+  }
+  public getInputJson(): any {
+    return {
       // ピックアップ断面力
       pickup_filename: this.pickup_filename,
       pickup_data: this.pickup_data,
@@ -268,12 +275,7 @@ export class SaveDataService {
       // 計算印刷設定
       calc: this.calc.getSaveData()
     };
-
-    // string 型にする
-    const result: string = JSON.stringify(jsonData);
-    return result;
   }
-
   // インプットデータを読み込む
   public readInputData(inputText: string) {
     const jsonData: {} = JSON.parse(inputText);

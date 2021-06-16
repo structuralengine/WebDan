@@ -93,6 +93,8 @@ table.formula{
   }
 }
 
+
+/*以降は表部分に用いる*/
 .cell_title1{
   font-size: 10pt;
   text-align: left;
@@ -100,6 +102,23 @@ table.formula{
 .cell_title2{
   font-size: 10pt;
   text-align: right;
+}
+
+.sheet-table {
+  background: white; /* 背景を白く */
+  box-shadow: 0 0.5mm 2mm rgba(0, 0, 0, 0.3); /* ドロップシャドウ */
+  margin: 5mm auto;
+  overflow: hidden;
+  position: relative;
+  box-sizing: border-box;
+  page-break-after: always;
+  /* 用紙サイズ A4 */
+  height: 1123px;
+  width: 794px;
+  /* 余白サイズ */
+  padding-top: 80px;
+  padding-left: 80px;
+  padding-right: 80px;
 }
 
 table.main {
@@ -120,16 +139,16 @@ table.main {
     }*/
   }
   td {
-    width: 91px;
+    width: 101px;
     height: 12px;
     margin: 0;
   }
   .left{ text-align: left; padding-left: 10px; }
   .center{ text-align: center; }
   .right{ text-align: right; padding-right: 10px; }
-  .cell_name1{ width: 113px; }
-  .cell_name2{ width: 53px; }
-  .cell_name3{ width: 60px; }
+  .cell_name1{ width: 129px; }
+  .cell_name2{ width: 60px; }
+  .cell_name3{ width: 69px; }
   .g-top1{ border-top: 1px solid lightgray; }
   .g-right1{ border-right: 1px solid lightgray; }
   .g-bottom1{ border-bottom: 1px solid lightgray; }
@@ -146,3 +165,40 @@ table.main {
   caption-side: top;
   font-size: 12px;
 }
+
+/*以降は一覧表に用いる*/
+table.spreadsheet{
+  font-size: 12px;
+  table-layout: fixed;
+  margin: 0;
+  border: 1px solid black;
+  thead {
+    border-bottom: 1px solid black;
+  }
+  tbody {
+    border-top: 1px solid lightgray;
+  }
+  tr {
+    height: 12px;
+  }
+  .left{ text-align: left; padding-left: 2px; }
+  .center{ text-align: center; }
+  .right{ text-align: right; padding-right: 2px; }
+  .g-top1{ border-top: 1px solid lightgray; }
+  .g-right1{ border-right: 1px solid lightgray; }
+  .g-bottom1{ border-bottom: 1px solid lightgray; }
+  .g-left1{ border-left: 1px solid lightgray; }
+  .g-top2{ border-top: 1px solid black; }
+  .g-right2{ border-right: 1px solid black; }
+  .g-bottom2{ border-bottom: 1px solid black; }
+  .g-left2{ border-left: 1px solid black; }
+}
+
+/*table .spreadsheet td .g-top1{ border-top: 1px solid lightgray; }
+table .spreadsheet td .g-right1{ border-right: 1px solid lightgray; }
+table .spreadsheet td .g-bottom1{ border-bottom: 1px solid lightgray; }
+table .spreadsheet td .g-left1{ border-left: 1px solid lightgray; }
+table .spreadsheet td .g-top2{ border-top: 1px solid black; }
+table .spreadsheet td .g-right2{ border-right: 1px solid black; }
+table .spreadsheet td .g-bottom2{ border-bottom: 1px solid black; }
+table .spreadsheet td .g-left2{ border-left: 1px solid black; }*/

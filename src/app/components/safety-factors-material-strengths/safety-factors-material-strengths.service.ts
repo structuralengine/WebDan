@@ -28,7 +28,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
   // 材料強度情報
   /// specification1_selected によって変わる項目の設定
-  private default_safety_factor(): any {
+  public default_safety_factor(): any {
 
     let result: any;
 
@@ -91,13 +91,15 @@ export class InputSafetyFactorsMaterialStrengthsService {
         separate: 25,
         tensionBar: { fsy: 345, fsu: 490 },
         sidebar: { fsy: 345, fsu: 490 },
-        stirrup: { fsy: 345, fsu: 490 }
+        stirrup: { fsy: 345, fsu: 490 },
+        bend: { fsy: 345, fsu: 490 }
       },
       {
         separate: 29,
         tensionBar: { fsy: 345, fsu: 490 },
         sidebar: { fsy: 345, fsu: 490 },
-        stirrup: { fsy: 345, fsu: 490 }
+        stirrup: { fsy: 345, fsu: 490 },
+        bend: { fsy: 345, fsu: 490 }
       }
     ]
     return result;
@@ -176,7 +178,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
       const first = groupe[0];
       const id = first.g_id;
 
-      // 空のデータを1行追加する 
+      // 空のデータを1行追加する
       const tmp_safety_factor = this.default_safety_factor();
       const tmp_material_bar = this.default_material_bar();
       const tmp_material_steel = this.default_material_steel();
@@ -354,29 +356,12 @@ export class InputSafetyFactorsMaterialStrengthsService {
   }
 
   // 計算に必要なデータを返す
-  public getCalcData(target: string, g_id: string , i: number): any {
+  public getCalcData(target: string, g_id: string , safetyID: number): any {
 
     const result = {};
 
     // 安全係数 を代入する
-    let safe = this.safety_factor[g_id];
-    if (safe === undefined) {
-      safe = this.default_safety_factor();
-    }
-    const safety_factor = (target === 'Md' ) ?
-        { // まげモーメントの照査の場合
-          rc: safe[i].M_rc,
-          rs: safe[i].M_rs,
-          rb: safe[i].M_rbs
-        }:{ // せん断力の照査の場合
-          rc: safe[i].V_rc,
-          rs: safe[i].V_rs,
-          rbc: safe[i].V_rbc,
-          rbs: safe[i].V_rbs,
-          rbd: safe[i].V_rbv
-        };
-    safety_factor['ri'] = safe[i].ri;
-    safety_factor['range'] = safe[i].range;
+    const safety_factor = this.getSafetyFactor(target, g_id, safetyID);
     result['safety_factor'] = safety_factor; // 安全係数
 
     // 鉄筋強度 を代入する
@@ -400,6 +385,39 @@ export class InputSafetyFactorsMaterialStrengthsService {
     }
     result['pile_factor'] = pile;
 
+
+    return result;
+  }
+
+  public getSafetyFactor(target: string, g_id: string , safetyID: number): any {
+
+    let safe = this.safety_factor[g_id];
+    let current: any;
+
+    if (safe === undefined) {
+      safe = this.default_safety_factor();
+      current = safe[safetyID];
+      for(const key of Object.keys(current)){
+        if(key === 'id' || key === 'title') continue;
+        current[key] = null;
+      }
+    } else {
+      current = safe[safetyID];
+    }
+    const result = (target === 'Md' ) ?
+        { // まげモーメントの照査の場合
+          rc: current.M_rc,
+          rs: current.M_rs,
+          rb: current.M_rbs
+        }:{ // せん断力の照査の場合
+          rc: current.V_rc,
+          rs: current.V_rs,
+          rbc: current.V_rbc,
+          rbs: current.V_rbs,
+          rbd: current.V_rbv
+        };
+    result['ri'] = current.ri;
+    result['range'] = current.range;
 
     return result;
   }

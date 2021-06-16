@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { InputCalclationPrintService } from "../components/calculation-print/calculation-print.service";
 import { InputDesignPointsService } from "../components/design-points/design-points.service";
+import { InputSafetyFactorsMaterialStrengthsService } from "../components/safety-factors-material-strengths/safety-factors-material-strengths.service";
 import { InputSectionForcesService } from "../components/section-forces/section-forces.service";
 import { DataHelperModule } from "../providers/data-helper.module";
 import { SaveDataService } from "../providers/save-data.service";
@@ -13,12 +14,13 @@ export class SetDesignForceService {
     private save: SaveDataService,
     private helper: DataHelperModule,
     private points: InputDesignPointsService,
+    private safety: InputSafetyFactorsMaterialStrengthsService,
     private force: InputSectionForcesService,
     private calc: InputCalclationPrintService
   ) {}
 
   // 断面力一覧を取得 ////////////////////////////////////////////////////////////////
-  public getDesignForceList(target: string, pickupNo: number): any[] {
+  public getDesignForceList(target: string, pickupNo: number, isMax: boolean = true): any[] {
     if (this.helper.toNumber(pickupNo) === null) {
       return new Array();
     }
@@ -26,7 +28,7 @@ export class SetDesignForceService {
     if (this.save.isManual() === true) {
       result = this.fromManualInput(target, pickupNo);
     } else {
-      result = this.fromPickUpData(target, pickupNo);
+      result = this.fromPickUpData(target, pickupNo, isMax);
     }
 
     return result;
@@ -89,7 +91,7 @@ export class SetDesignForceService {
   }
 
   // ピックアップデータから断面力一覧を取得
-  private fromPickUpData(target: string, pickupNo: number): any[] {
+  private fromPickUpData(target: string, pickupNo: number, isMax: boolean): any[] {
 
     // 部材グループ・照査する着目点を取得
     const result = this.getEnableMembers(target);
@@ -138,9 +140,52 @@ export class SetDesignForceService {
         }
       }
 
-      position["designForce"] = this.getSectionForce(target, n, forceObj);
+      position["designForce"] = this.getSectionForce(target, n, forceObj, isMax);
     }
 
+    /*/ 地中Max の
+    for (let ip = result.length - 1; ip >= 0; ip--) {
+      if( result[ip].isMax === true ){
+        const designForce = [
+          { Md: 0, Nd: 0, Vd: 0, side:'上側引張' },
+          { Md: 0, Nd: 0, Vd: 0, side:'下側引張' }
+        ];
+        // max 始まりを探す
+        let jp = ip;
+        for (let i = ip; i >= 0; i--) {
+          if(result[jp].isMax === false) break;
+          jp--;
+        }
+        jp++;
+        for (let i = ip; i >= jp; i--) {
+          for(const force of result[i].designForce){
+            if(target === 'Md'){
+              if(force.side === '上側引張' && force[target] <= designForce[0][target]){
+                designForce[0] = force;
+              } else if( force[target] >= designForce[0][target]){
+                designForce[1] = force;
+              }
+            } else if(target === 'Vd' && Math.abs(force[target]) > Math.abs(designForce[0][target])){
+              if(force.side === '上側引張'){
+                designForce[0] = force;
+              } else {
+                designForce[1] = force;
+              }
+            }
+          }
+          if(i !== jp) result.splice(i, 1);
+        }
+        // 値が代入されなかった
+        for (let i = designForce.length - 1; i >= 0; i--) {
+          if(!('comb' in designForce[i])) {
+            designForce.splice(i, 1);
+          }
+        }
+        ip = jp;
+        result[ip].designForce = designForce;
+      }
+    }
+    */
     return result;
   }
 
@@ -229,6 +274,88 @@ export class SetDesignForceService {
     return result;
   }
 
+  // 有効なデータかどうか
+  public checkEnable(target: string, safetyID: number, ...DesignForceListList: any): any {
+
+    const force = [];
+    for(const f of DesignForceListList){
+      force.push([]);
+    }
+
+    // 安全係数が有効か判定する
+    for(const groupe of this.points.getGroupeList()){
+
+      const safety = this.safety.getSafetyFactor(target, groupe[0].g_id, safetyID ); // 安全係数
+      let flg = false;
+      for(const key of Object.keys(safety)){
+        if(key === 'rbd') continue;
+        if(this.helper.toNumber(safety[key]) === null){
+          flg = true;
+          break;
+        }
+      }
+      if(flg) continue;
+
+      // 同じインデックスの断面力を登録する
+      for( const member of groupe){
+        for (const position of member.positions) {
+          const index = position.index;
+          for(let i = 0; i < DesignForceListList.length; i++){
+            const f = DesignForceListList[i].find(e => e.index === index);
+            force[i].push(f);
+          }
+        }
+      }
+    }
+
+    // 地中Max の 結合
+    for(const result of force){
+      for (let ip = result.length - 1; ip >= 0; ip--) {
+        if( result[ip].isMax === true ){
+          const designForce = [
+            { Md: 0, Nd: 0, Vd: 0, side:'上側引張' },
+            { Md: 0, Nd: 0, Vd: 0, side:'下側引張' }
+          ];
+          // max 始まりを探す
+          let jp = ip;
+          for (let i = ip; i >= 0; i--) {
+            if(result[jp].isMax === false) break;
+            jp--;
+          }
+          jp++;
+          for (let i = ip; i >= jp; i--) {
+            for(const force of result[i].designForce){
+              if(target === 'Md'){
+                if(force.side === '上側引張' && force[target] <= designForce[0][target]){
+                  designForce[0] = force;
+                } else if( force[target] >= designForce[0][target]){
+                  designForce[1] = force;
+                }
+              } else if(target === 'Vd' && Math.abs(force[target]) > Math.abs(designForce[0][target])){
+                if(force.side === '上側引張'){
+                  designForce[0] = force;
+                } else {
+                  designForce[1] = force;
+                }
+              }
+            }
+            if(i !== jp) result.splice(i, 1);
+          }
+          // 値が代入されなかった
+          for (let i = designForce.length - 1; i >= 0; i--) {
+            if(!('comb' in designForce[i])) {
+              designForce.splice(i, 1);
+            }
+          }
+          ip = jp;
+          result[ip].designForce = designForce;
+        }
+      }
+    }
+
+    return DesignForceListList;
+  }
+
   // 複数の断面力表について、
   // 基本の断面力に無いものは削除する,
   // 基本にあってtargetにないものは断面力0値を追加する
@@ -274,7 +401,7 @@ export class SetDesignForceService {
   }
 
   // 設計断面力（リスト）を生成する
-  private getSectionForce( target: string, n: number, forceObj: any): any[] {
+  private getSectionForce( target: string, n: number, forceObj: any, isMax: boolean = true): any[] {
     // 設計断面の数をセット
     const result: any[] = new Array();
 
@@ -310,7 +437,9 @@ export class SetDesignForceService {
         if (r.side === side && r.target === target) {
           flg = true;
           // side が同じ場合値の大きい方を採用する
-          if (Math.abs(r[target]) < Math.abs(f[target])) {
+          if(isMax && (Math.abs(r[target]) < Math.abs(f[target]))){
+            result[i] = f;
+          } else if (Math.abs(r[target]) > Math.abs(f[target])) {
             result[i] = f;
           }
         }

@@ -39,8 +39,8 @@ export class InputBarsService {
       index: id,
       haunch_M: null,
       haunch_V: null,
-      rebar1: this.default_rebar('上'),
-      rebar2: this.default_rebar('下'),
+      rebar1: this.default_rebar('上側'),
+      rebar2: this.default_rebar('下側'),
       sidebar: this.default_sidebar(),
       stirrup: this.default_stirrup(),
       bend: this.default_bend(),
@@ -188,7 +188,7 @@ export class InputBarsService {
   public getCalcData(index: any): any {
 
     let result = null;
-    
+
     const bar_list = JSON.parse(
       JSON.stringify({
         temp: this.bar_list,
@@ -240,6 +240,7 @@ export class InputBarsService {
         break;
       }
     }
+
     return result;
   }
 

@@ -83,15 +83,18 @@ export class CalcSafetyFatigueShearForceService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Vd', this.safetyID, this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
+
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList3, this.DesignForceList2);
+    const force2 = this.force.alignMultipleLists(force1[0], force1[1], force1[2]);
 
     // 有効な入力行以外は削除する
-    this.deleteFatigueDisablePosition(force);
+    this.deleteFatigueDisablePosition(force2);
 
     // POST 用
     const postData = [];
-    for(const a of [force[1], force[2]]){
+    for(const a of [force2[1], force2[2]]){
       for(const b of a){
         for(const c of b.designForce){
           postData.push({
@@ -151,15 +154,14 @@ export class CalcSafetyFatigueShearForceService {
     return this.safety.getCalcData('Vd', g_id, this.safetyID);
   }
 
-  public calcFatigue(
-    res: any, shape: any, fc: any, Ast: any, safety: any, tmpFatigue: any ): any {
+  public calcFatigue( res: any, section: any, fc: any, safety: any, tmpFatigue: any ): any {
 
     const resMin: any = res[0];
     const resMax: any = res[1];
 
     // 疲労の Vcd を計算する時は βn=1
     const DesignForceList = { Md: resMin.Md, Vd: resMin.Vd, Nd: 0};
-    const result: any = this.base.calcVmu(res[0], shape, fc, Ast, safety, null, DesignForceList);
+    const result: any = this.base.calcVmu(res[0], section, fc, safety, null, DesignForceList);
 
     // 最小応力
     const Vpd: number = this.helper.toNumber(resMin.Vd);
@@ -220,10 +222,10 @@ export class CalcSafetyFatigueShearForceService {
 
     let k = 0.12;
 
-    const fai: number = this.helper.toNumber(Ast.stirrup.stirrup_dia);
+    const fai: number = this.helper.toNumber(section.Aw.stirrup_dia);
     if (fai === null) { return result; }
 
-    const fwud: number = this.helper.toNumber(Ast.fwud);
+    const fwud: number = this.helper.toNumber(section.Aw.fwud);
     if (fwud === null) { return result; }
     result['fwud'] = fwud;
 

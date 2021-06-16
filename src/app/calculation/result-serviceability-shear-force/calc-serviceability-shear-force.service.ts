@@ -80,11 +80,14 @@ export class CalcServiceabilityShearForceService {
       return null;
     }
 
+    // 有効なデータかどうか
+    const force1 = this.force.checkEnable('Vd', this.safetyID, this.DesignForceList1, this.DesignForceList, this.DesignForceList2);
+
     // 複数の断面力の整合性を確認する
-    const force = this.force.alignMultipleLists(this.DesignForceList1, this.DesignForceList, this.DesignForceList2);
+    const force2 = this.force.alignMultipleLists(force1[0], force1[1], force1[2]);
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force[0]);
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force2[0]);
     return postData;
   }
 
@@ -94,9 +97,8 @@ export class CalcServiceabilityShearForceService {
 
   public calcSigma(
     res: any,
-    shape: any,
+    section: any,
     fc: any,
-    Ast: any,
     safety: any): any {
 
     // せん断ひび割れ検討判定用
@@ -113,7 +115,7 @@ export class CalcServiceabilityShearForceService {
     ).designForce.find((v) => v.side === res.side);
     // せん断耐力
     const result: any = this.base.calcVmu(
-      res, shape, fc, Ast, safety, null, force1);
+      res, section, fc, safety, null, force1);
 
       // 変動荷重
     let force2 = this.DesignForceList2.find(
@@ -154,15 +156,15 @@ export class CalcServiceabilityShearForceService {
     let sigma12: number = 120;
     switch (conNum) {
       case 1:
-        sigma12 = (Ast.fwyd !== 235) ? 120 : 100;
+        sigma12 = (section.Aw.fwyd !== 235) ? 120 : 100;
         result['con'] = '一般の環境';
         break;
       case 2:
-        sigma12 = (Ast.fwyd !== 235) ? 100 : 80;
+        sigma12 = (section.Aw.fwyd !== 235) ? 100 : 80;
         result['con'] = '腐食性環境';
         break;
       case 3:
-        sigma12 = (Ast.fwyd !== 235) ? 80 : 60;
+        sigma12 = (section.Aw.fwyd !== 235) ? 80 : 60;
         result['con'] = '厳しい腐食';
         break;
     }

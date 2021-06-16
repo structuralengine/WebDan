@@ -116,7 +116,7 @@ export class SectionForceListComponent implements OnInit {
         title.push("安全性（疲労破壊）最大応力");
         data.push(this.SafetyFatigueMoment.DesignForceList3);
         title.push("安全性（疲労破壊）最小応力");
-        data.push(this.SafetyFatigueMoment.DesignForceList3);
+        data.push(this.SafetyFatigueMoment.DesignForceList2);
         title.push("安全性（疲労破壊）変動応力");
         for (let i = 0; i < data.length; i++) {
           const table = this.setPage( memberList, upperName, bottomName, data[i]);
@@ -354,7 +354,7 @@ export class SectionForceListComponent implements OnInit {
           bottomSideName: bottomName,
         };
 
-        for (const pp of pos.designForce) {
+        /*for (const pp of pos.designForce) {
           const pt = { Md: "-", Nd: "-", Vd: "-", comb: "-" };
           if ("Md" in pp) {
             pt.Md = pp.Md.toFixed(2);
@@ -383,6 +383,52 @@ export class SectionForceListComponent implements OnInit {
         }
         if ("lower" in p === false) {
           p["lower"] = { Md: "-", Nd: "-", Vd: "-", comb: "-" };
+        }*/
+        for (const pp of pos.designForce) {
+          let md = { value: "-", position: "center"};
+          let nd = { value: "-", position: "center"};
+          let vd = { value: "-", position: "center"};
+          let comb = { value: "-", position: "center"};
+          if ("Md" in pp) {
+            md.value = pp.Md.toFixed(2);
+            md.position = "right";
+          }
+          if ("Nd" in pp) {
+            nd.value = pp.Nd.toFixed(2);
+            nd.position = "right";
+          }
+          if ("Vd" in pp) {
+            vd.value = pp.Vd.toFixed(2);
+            vd.position = "right";
+          }
+          if ("comb" in pp) {
+            comb.value = pp.comb;
+            comb.position = "center";
+          }
+          const pt = { Md: md, Nd: nd, Vd: vd, comb: comb };
+          switch (pp.side) {
+            case "上側引張":
+              p["upper"] = pt;
+              break;
+            case "下側引張":
+              p["lower"] = pt;
+              break;
+          }
+        }
+
+        if ("upper" in p === false) {
+          let md = { value: "-", position: "center"};
+          let nd = { value: "-", position: "center"};
+          let vd = { value: "-", position: "center"};
+          let comb = { value: "-", position: "center"};
+          p["upper"] = { Md: md, Nd: nd, Vd: vd, comb: comb };
+        }
+        if ("lower" in p === false) {
+          let md = { value: "-", position: "center"};
+          let nd = { value: "-", position: "center"};
+          let vd = { value: "-", position: "center"};
+          let comb = { value: "-", position: "center"};
+          p["lower"] = { Md: md, Nd: nd, Vd: vd, comb: comb };
         }
 
         result.push(p);

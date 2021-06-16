@@ -21,7 +21,7 @@ export class InputCrackSettingsService {
   }
 
   // ひび割れ情報
-  private default_crack(id: number): any {
+  public default_crack(id: number): any {
     return {
       index: id,
       m_no: null,

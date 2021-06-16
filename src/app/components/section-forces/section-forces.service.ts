@@ -86,7 +86,7 @@ export class InputSectionForcesService  {
   }
 
   // １行 のデフォルト値
-  private default_column(index: number): any {
+  public default_column(index: number): any {
 
     const rows: any = {
       index,

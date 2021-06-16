@@ -53,11 +53,11 @@ export class CalcSummaryTableService {
         switch (target) {
           case "durabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[48];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[49];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -65,32 +65,33 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[50];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
-            columns.shape.Bt = col[5].value;
-            columns.shape.t = col[6].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
+            columns.shape.Bt = col.Bt.value;
+            columns.shape.t = col.t.value;
             // 鉄筋量
-            columns.As.AstString = col[8].value;
-            columns.As.AscString = col[11].value;
-            columns.As.AseString = col[14].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.durabilityMoment.Wd = col[43].value;
+            columns.durabilityMoment.Wd = col.Wd.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "earthquakesMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[33];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[34];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -98,36 +99,37 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[35];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
-            columns.shape.Bt = col[5].value;
-            columns.shape.t = col[6].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
+            columns.shape.Bt = col.Bt.value;
+            columns.shape.t = col.t.value;
             // 鉄筋量
-            columns.As.AstString = col[8].value;
-            columns.As.AscString = col[11].value;
-            columns.As.AseString = col[14].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.earthquakesMoment.ri = col[30].value;
-            columns.earthquakesMoment.Md = col[22].value;
-            columns.earthquakesMoment.Nd = col[23].value;
-            columns.earthquakesMoment.Myd = col[29].value;
-            columns.earthquakesMoment.ratio = col[31].value;
+            columns.earthquakesMoment.ri = col.ri.value;
+            columns.earthquakesMoment.Md = col.Md.value;
+            columns.earthquakesMoment.Nd = col.Nd.value;
+            columns.earthquakesMoment.Myd = col.Myd.value;
+            columns.earthquakesMoment.ratio = col.ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "earthquakesShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[51];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[52];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -135,32 +137,33 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[53];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
             // 鉄筋量
-            columns.As.AstString = col[7].value;
-            columns.As.AseString = col[10].value;
-            columns.As.AseString = col[12].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.earthquakesShearForce.Vd = col[22].value;
-            columns.earthquakesShearForce.Vyd = col[43].value;
-            columns.earthquakesShearForce.Vyd_Ratio = col[45].value;
+            columns.earthquakesShearForce.Vd = col.Vd.value;
+            columns.earthquakesShearForce.Vyd = col.Vyd.value;
+            columns.earthquakesShearForce.Vyd_Ratio = col.Vyd_Ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "restorabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[33];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[34];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -168,36 +171,37 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[35];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
-            columns.shape.Bt = col[5].value;
-            columns.shape.t = col[6].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
+            columns.shape.Bt = col.Bt.value;
+            columns.shape.t = col.t.value;
             // 鉄筋量
-            columns.As.AstString = col[8].value;
-            columns.As.AscString = col[11].value;
-            columns.As.AseString = col[14].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.restorabilityMoment.ri = col[30].value;
-            columns.restorabilityMoment.Md = col[22].value;
-            columns.restorabilityMoment.Nd = col[23].value;
-            columns.restorabilityMoment.Myd = col[29].value;
-            columns.restorabilityMoment.ratio = col[31].value;
+            columns.restorabilityMoment.ri = col.ri.value;
+            columns.restorabilityMoment.Md = col.Md.value;
+            columns.restorabilityMoment.Nd = col.Nd.value;
+            columns.restorabilityMoment.Myd = col.Myd.value;
+            columns.restorabilityMoment.ratio = col.ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "restorabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[51];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[52];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -205,32 +209,33 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[53];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
             // 鉄筋量
-            columns.As.AstString = col[7].value;
-            columns.As.AseString = col[10].value;
-            columns.As.AseString = col[12].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.restorabilityShearForce.Vd = col[22].value;
-            columns.restorabilityShearForce.Vyd = col[43].value;
-            columns.restorabilityShearForce.Vyd_Ratio = col[45].value;
+            columns.restorabilityShearForce.Vd = col.Vd.value;
+            columns.restorabilityShearForce.Vyd = col.Vyd.value;
+            columns.restorabilityShearForce.Vyd_Ratio = col.Vyd_Ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "SafetyFatigueMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[45];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[46];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -238,37 +243,38 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[47];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
-            columns.shape.Bt = col[5].value;
-            columns.shape.t = col[6].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
+            columns.shape.Bt = col.Bt.value;
+            columns.shape.t = col.t.value;
             // 鉄筋量
-            columns.As.AstString = col[8].value;
-            columns.As.AscString = col[11].value;
-            columns.As.AseString = col[14].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.SafetyFatigueMoment.ri = col[42].value;
-            //columns.SafetyFatigueMoment.rb = col[0].value;  rbが存在しないためコメントアウト
-            columns.SafetyFatigueMoment.sigma_min = col[25].value;
-            columns.SafetyFatigueMoment.sigma_rd = col[28].value;
-            columns.SafetyFatigueMoment.fsr200 = col[29].value;
-            columns.SafetyFatigueMoment.ratio200 = col[30].value;
+            columns.SafetyFatigueMoment.ri = col.ri.value;
+            //columns.SafetyFatigueMoment.rb = col.0.value;  rbが存在しないためコメントアウト
+            columns.SafetyFatigueMoment.sigma_min = col.sigma_min.value;
+            columns.SafetyFatigueMoment.sigma_rd = col.sigma_rd.value;
+            columns.SafetyFatigueMoment.fsr200 = col.fsr200.value;
+            columns.SafetyFatigueMoment.ratio200 = col.ratio200.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "safetyFatigueShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[50];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[51];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -276,31 +282,32 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[52];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
             // 鉄筋量
-            columns.As.AstString = col[7].value;
+            columns.As.AstString = col.AstString.value;
             // 照査結果
-            columns.safetyFatigueShearForce.sigma_min = col[30].value;
-            columns.safetyFatigueShearForce.sigma_rd = col[31].value;
-            columns.safetyFatigueShearForce.frd = col[45].value;
-            columns.safetyFatigueShearForce.ratio = col[48].value;
+            columns.safetyFatigueShearForce.sigma_min = col.sigma_min.value;
+            columns.safetyFatigueShearForce.sigma_rd = col.sigma_rd.value;
+            columns.safetyFatigueShearForce.frd = col.frd.value;
+            columns.safetyFatigueShearForce.ratio = col.ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "safetyMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[33];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[34];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -308,36 +315,37 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[35];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
-            columns.shape.Bt = col[5].value;
-            columns.shape.t = col[6].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
+            columns.shape.Bt = col.Bt.value;
+            columns.shape.t = col.t.value;
             // 鉄筋量
-            columns.As.AstString = col[8].value;
-            columns.As.AscString = col[11].value;
-            columns.As.AseString = col[14].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AseString.value;
+            columns.As.AseString = col.AscString.value;
             // 照査結果
-            columns.safetyMoment.ri = col[30].value;
-            columns.safetyMoment.Md = col[22].value;
-            columns.safetyMoment.Nd = col[23].value;
-            columns.safetyMoment.Mud = col[29].value;
-            columns.safetyMoment.ratio = col[31].value;
+            columns.safetyMoment.ri = col.ri.value;
+            columns.safetyMoment.Md = col.Md.value;
+            columns.safetyMoment.Nd = col.Nd.value;
+            columns.safetyMoment.Mud = col.Mud.value;
+            columns.safetyMoment.ratio = col.ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "safetyShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[51];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[52];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -345,34 +353,35 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[53];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
             // 鉄筋量
-            columns.As.AstString = col[7].value;
-            columns.As.AscString = col[10].value;
-            columns.As.AseString = col[12].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.safetyShearForce.Vd = col[22].value;
-            columns.safetyShearForce.Vyd = col[43].value;
-            columns.safetyShearForce.Vwcd = col[48].value;
-            columns.safetyShearForce.Vyd_Ratio = col[45].value;
-            columns.safetyShearForce.Vwcd_Ratio = col[49].value;
+            columns.safetyShearForce.Vd = col.Vd.value;
+            columns.safetyShearForce.Vyd = col.Vyd.value;
+            columns.safetyShearForce.Vwcd = col.Vwcd.value;
+            columns.safetyShearForce.Vyd_Ratio = col.Vyd_Ratio.value;
+            columns.safetyShearForce.Vwcd_Ratio = col.Vwcd_Ratio.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "serviceabilityMoment":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[48];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[49];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -380,36 +389,37 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[47];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
-            columns.shape.Bt = col[5].value;
-            columns.shape.t = col[6].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
+            columns.shape.Bt = col.Bt.value;
+            columns.shape.t = col.t.value;
             // 鉄筋量
-            columns.As.AstString = col[8].value;
-            columns.As.AscString = col[11].value;
-            columns.As.AseString = col[14].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.serviceabilityMoment.sigma_b = col[25].value;
-            columns.serviceabilityMoment.sigma_c = col[28].value;
-            columns.serviceabilityMoment.sigma_s = col[29].value;
-            columns.serviceabilityMoment.Wd = col[43].value;
-            columns.serviceabilityMoment.Wlim = col[44].value;
+            columns.serviceabilityMoment.sigma_b = col.sigma_b.value;
+            columns.serviceabilityMoment.sigma_c = col.sigma_c.value;
+            columns.serviceabilityMoment.sigma_s = col.sigma_s.value;
+            columns.serviceabilityMoment.Wd = col.Wd.value;
+            columns.serviceabilityMoment.Wlim = col.Wlim.value;
 
             this.summary_table[key] = columns;
             break;
 
           case "serviceabilityShearForce":
             // index と side が同じデータだ既に登録されていればそのデータに追加する
-            index = col[45];
+            index = col.index;
             if (index === null) {
               continue;
             }
-            side = col[46];
+            side = col.side_summary;
             key = this.zeroPadding(index) + "-" + side;
             columns =
               key in this.summary_table
@@ -417,21 +427,22 @@ export class CalcSummaryTableService {
                 : this.default(index, side);
 
             // 断面位置
-            columns.title.m_no = col[0].value;
-            columns.title.p_name = col[1].value;
-            columns.title.side = col[2].value;
+            columns.title.title0 = col.g_name;
+            columns.title.title1 = col.title1.value;
+            columns.title.title2 = col.title2.value;
+            columns.title.title3 = col.title3.value;
             // 断面形状
-            columns.shape.name = col[50];
-            columns.shape.B = col[3].value;
-            columns.shape.H = col[4].value;
+            columns.shape.name = col.shape_summary;
+            columns.shape.B = col.B.value;
+            columns.shape.H = col.H.value;
             // 鉄筋量
-            columns.As.AstString = col[7].value;
-            columns.As.AscString = col[10].value;
-            columns.As.AseString = col[12].value;
+            columns.As.AstString = col.AstString.value;
+            columns.As.AscString = col.AscString.value;
+            columns.As.AseString = col.AseString.value;
             // 照査結果
-            columns.serviceabilityShearForce.Vcd = col[37].value;
-            columns.serviceabilityShearForce.Vcd07 = col[38].value;
-            columns.serviceabilityShearForce.sigma = col[42].value;
+            columns.serviceabilityShearForce.Vcd = col.Vcd.value;
+            columns.serviceabilityShearForce.Vcd07 = col.Vcd07.value;
+            columns.serviceabilityShearForce.sigma = col.sigma.value;
 
             this.summary_table[key] = columns;
             break;

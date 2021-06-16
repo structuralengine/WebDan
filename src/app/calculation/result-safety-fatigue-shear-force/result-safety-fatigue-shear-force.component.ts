@@ -4,10 +4,9 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcSafetyFatigueShearForceService } from "./calc-safety-fatigue-shear-force.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetBarService } from "../set-bar.service";
-import { SetSectionService } from "../set-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-safety-fatigue-shear-force",
@@ -27,8 +26,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
   constructor(
     private calc: CalcSafetyFatigueShearForceService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SetBarService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private fatigue: InputFatiguesService,
     private summary: CalcSummaryTableService
@@ -83,8 +81,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
 
@@ -105,94 +103,95 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
-            const titleColumn = this.result.getTitleString(
-              member,
-              position,
-              side
-            );
-            const shape = this.section.getResult("Vd", member, res[0]);
-            const Ast: any = this.bar.getResult("Vd", shape, res[0], safety);
-            const fck: any = this.section.getFck(safety);
+            const section = this.result.getSection("Vd", res[0], safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
+            const titleColumn = this.result.getTitleString( section.member, position, side );
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcFatigue(
-                res, shape, fck, Ast, safety, fatigueInfo)
+                res, section, fck, safety, fatigueInfo)
             );
 
-            const column: any[] = new Array();
+            const column = {
             /////////////// タイトル ///////////////
-            column.push({ alien: "center", value: titleColumn.m_no });
-            column.push({ alien: "center", value: titleColumn.p_name });
-            column.push({ alien: "center", value: titleColumn.side });
+            title1 : { alien: "center", value: titleColumn.title1 },
+            title2 : { alien: "center", value: titleColumn.title2 },
+            title3 :  { alien: "center", value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
-            column.push(this.result.alien(shape.B));
-            column.push(this.result.alien(shape.H));
+            B : this.result.alien(shape.B),
+            H : this.result.alien(shape.H),
             /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(( Ast.tan === 0 ) ? '-' : Ast.tan, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
-            column.push(this.result.alien(Ast.AstString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
+            tan : this.result.alien(( section.tan === 0 ) ? '-' : section.tan, "center"),
+            Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
+            AstString : this.result.alien(section.Ast.AstString, "center"),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
             /////////////// コンクリート情報 ///////////////
-            column.push(this.result.alien(fck.fck.toFixed(1), "center"));
-            column.push(this.result.alien(fck.rc.toFixed(2), "center"));
-            column.push(this.result.alien(fck.fcd.toFixed(1), "center"));
+            fck : this.result.alien(fck.fck.toFixed(1), "center"),
+            rc : this.result.alien(fck.rc.toFixed(2), "center"),
+            fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
             /////////////// 鉄筋強度情報 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), "center"));
-            column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
-            column.push(this.result.alien(Ast.fwud, "center"));
+            fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), "center"),
+            rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
+            fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
+            fwud : this.result.alien(section.Aw.fwud, "center"),
             /////////////// 帯鉄筋情報 ///////////////
-            column.push(resultColumn.AwString);
-            column.push(resultColumn.fwyd);
-            column.push(resultColumn.deg);
-            column.push(resultColumn.Ss);
+            AwString : resultColumn.AwString,
+            fwyd : resultColumn.fwyd,
+            deg : resultColumn.deg,
+            Ss : resultColumn.Ss,
             /////////////// 断面力 ///////////////
-            column.push(resultColumn.Vpd);
-            column.push(resultColumn.Mpd);
-            column.push(resultColumn.Npd);
+            Vpd : resultColumn.Vpd,
+            Mpd : resultColumn.Mpd,
+            Npd : resultColumn.Npd,
 
-            column.push(resultColumn.Vrd);
-            column.push(resultColumn.Mrd);
-            column.push(resultColumn.Nrd);
+            Vrd : resultColumn.Vrd,
+            Mrd : resultColumn.Mrd,
+            Nrd : resultColumn.Nrd,
 
-            column.push(resultColumn.fvcd);
-            column.push(resultColumn.rbc);
-            column.push(resultColumn.Vcd);
+            fvcd : resultColumn.fvcd,
+            rbc : resultColumn.rbc,
+            Vcd : resultColumn.Vcd,
 
-            column.push(resultColumn.kr);
+            kr : resultColumn.kr,
 
-            column.push(resultColumn.sigma_min);
-            column.push(resultColumn.sigma_rd);
-            column.push(resultColumn.sigma_rd);
+            sigma_min : resultColumn.sigma_min,
+            sigma_rd : resultColumn.sigma_rd,
+            sigma_r : resultColumn.sigma_rd,
 
-            column.push(resultColumn.fsr200);
-            column.push(resultColumn.ratio200);
+            fsr200 : resultColumn.fsr200,
+            ratio200 : resultColumn.ratio200,
 
-            column.push(resultColumn.k);
-            column.push(resultColumn.ar);
-            column.push(resultColumn.N);
+            k : resultColumn.k,
+            ar : resultColumn.ar,
+            N : resultColumn.N,
 
-            column.push(resultColumn.NA);
-            column.push(resultColumn.NB);
+            NA : resultColumn.NA,
+            NB : resultColumn.NB,
 
-            column.push(resultColumn.SASC);
-            column.push(resultColumn.SBSC);
+            SASC : resultColumn.SASC,
+            SBSC : resultColumn.SBSC,
 
-            column.push(resultColumn.r1);
-            column.push(resultColumn.r2);
+            r1 : resultColumn.r1,
+            r2 : resultColumn.r2,
 
-            column.push(resultColumn.rs);
-            column.push(resultColumn.frd);
+            rs2 : resultColumn.rs,
+            frd : resultColumn.frd,
 
-            column.push(resultColumn.rbs);
-            column.push(resultColumn.ri);
-            column.push(resultColumn.ratio);
-            column.push(resultColumn.result);
+            rbs : resultColumn.rbs,
+            ri : resultColumn.ri,
+            ratio : resultColumn.ratio,
+            result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
-            column.push(position.index);
-            column.push(side);
-            column.push(shape.shape);
+            g_name: m.g_name,
+            index : position.index,
+            side_summary : side,
+            shape_summary : section.shapeName,
+            }
                         
             page.columns.push(column);
           }
@@ -201,13 +200,14 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);

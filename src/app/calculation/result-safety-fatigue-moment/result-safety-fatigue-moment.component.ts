@@ -5,10 +5,9 @@ import { CalcSafetyFatigueMomentService } from "./calc-safety-fatigue-moment.ser
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetBarService } from "../set-bar.service";
-import { SetSectionService } from "../set-section.service";
 import { InputFatiguesService } from "src/app/components/fatigues/fatigues.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-safety-fatigue-moment",
@@ -31,8 +30,7 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
     private calc: CalcSafetyFatigueMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SetBarService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private fatigue: InputFatiguesService,
     private summary: CalcSummaryTableService
@@ -115,8 +113,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           const fatigueInfo = this.fatigue.getCalcData(position.index);
           for (const side of ["上側引張", "下側引張"]) {
 
@@ -137,83 +135,88 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
-            const titleColumn = this.result.getTitleString(member, position, side)
-            const shape = this.section.getResult('Md', member, res[0]);
-            const Ast: any = this.bar.getResult('Md', shape, res[0], safety);
-            const fck: any = this.section.getFck(safety);
+            const section = this.result.getSection('Md', res[0], safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
+            const titleColumn = this.result.getTitleString(section.member, position, side)
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcFatigue(
                 res, Ast, safety, fatigueInfo)
             );
 
-            const column: any[] = new Array();
+            const column = {
             /////////////// タイトル ///////////////
-            column.push({ alien: 'center', value: titleColumn.m_no });
-            column.push({ alien: 'center', value: titleColumn.p_name });
-            column.push({ alien: 'center', value: titleColumn.side });
+            title1: { alien: 'center', value: titleColumn.title1 },
+            title2: { alien: 'center', value: titleColumn.title2 },
+            title3: { alien: 'center', value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
-            column.push(this.result.alien(shape.B));
-            column.push(this.result.alien(shape.H));
-            column.push(this.result.alien(shape.Bt));
-            column.push(this.result.alien(shape.t));
+            B : this.result.alien(shape.B),
+            H : this.result.alien(shape.H),
+            Bt : this.result.alien(shape.Bt),
+            t : this.result.alien(shape.t),
             /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ast), 'center'));
-            column.push(this.result.alien(Ast.AstString, 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.dst), 'center'));
+            Ast : this.result.alien(this.result.numStr(section.Ast.Ast), 'center'),
+            AstString : this.result.alien(section.Ast.AstString, 'center'),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst), 'center'),
             /////////////// 圧縮鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Asc), 'center'));
-            column.push(this.result.alien(Ast.AscString, 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.dsc), 'center'));
+            Asc : this.result.alien(this.result.numStr(section.Asc.Asc), 'center'),
+            AscString : this.result.alien(section.Asc.AscString, 'center'),
+            dsc : this.result.alien(this.result.numStr(section.Asc.dsc), 'center'),
             /////////////// 側面鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ase), 'center'));
-            column.push(this.result.alien(Ast.AseString, 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.dse), 'center'));
+            Ase : this.result.alien(this.result.numStr(section.Ase.Ase), 'center'),
+            AseString : this.result.alien(section.Ase.AseString, 'center'),
+            dse : this.result.alien(this.result.numStr(section.Ase.dse), 'center'),
             /////////////// コンクリート情報 ///////////////
-            column.push(this.result.alien(fck.fck.toFixed(1), 'center'));
-            column.push(this.result.alien(fck.rc.toFixed(2), 'center'));
-            column.push(this.result.alien(fck.fcd.toFixed(1), 'center'));
+            fck : this.result.alien(fck.fck.toFixed(1), 'center'),
+            rc : this.result.alien(fck.rc.toFixed(2), 'center'),
+            fcd : this.result.alien(fck.fcd.toFixed(1), 'center'),
             /////////////// 鉄筋情報 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), 'center'));
-            column.push(this.result.alien(Ast.rs.toFixed(2), 'center'));
-            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), 'center'));
-            column.push(this.result.alien(Ast.fsu, 'center'));
+            fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), 'center'),
+            rs : this.result.alien(section.Ast.rs.toFixed(2), 'center'),
+            fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), 'center'),
+            fsu : this.result.alien(section.Ast.fsu, 'center'),
             /////////////// 照査 ///////////////
-            column.push(resultColumn.Mdmin);
-            column.push(resultColumn.Ndmin);
-            column.push(resultColumn.sigma_min);
+            Mdmin : resultColumn.Mdmin,
+            Ndmin : resultColumn.Ndmin,
+            sigma_min : resultColumn.sigma_min,
 
-            column.push(resultColumn.Mrd);
-            column.push(resultColumn.Nrd);
-            column.push(resultColumn.sigma_rd);
+            Mrd : resultColumn.Mrd,
+            Nrd : resultColumn.Nrd,
+            sigma_rd : resultColumn.sigma_rd,
 
-            column.push(resultColumn.fsr200);
-            column.push(resultColumn.ratio200);
+            fsr200 : resultColumn.fsr200,
+            ratio200 : resultColumn.ratio200,
 
-            column.push(resultColumn.k);
-            column.push(resultColumn.ar);
-            column.push(resultColumn.N);
+            k : resultColumn.k,
+            ar : resultColumn.ar,
+            N : resultColumn.N,
 
-            column.push(resultColumn.NA);
-            column.push(resultColumn.NB);
+            NA : resultColumn.NA,
+            NB : resultColumn.NB,
 
-            column.push(resultColumn.SASC);
-            column.push(resultColumn.SBSC);
+            SASC : resultColumn.SASC,
+            SBSC : resultColumn.SBSC,
 
-            column.push(resultColumn.r1);
-            column.push(resultColumn.r2);
+            r1 : resultColumn.r1,
+            r2 : resultColumn.r2,
 
-            column.push(resultColumn.rs);
-            column.push(resultColumn.frd);
+            rs2 : resultColumn.rs,
+            frd : resultColumn.frd,
 
-            column.push(resultColumn.ri);
-            column.push(resultColumn.ratio);
-            column.push(resultColumn.result);
+            ri : resultColumn.ri,
+            ratio : resultColumn.ratio,
+            result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
-            column.push(position.index);
-            column.push(side);
-            column.push(shape.shape);
+            g_name: m.g_name,
+            index : position.index,
+            side_summary : side,
+            shape_summary : section.shapeName,
+            }
 
             page.columns.push(column);
           }
@@ -222,13 +225,14 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);

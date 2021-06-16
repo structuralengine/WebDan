@@ -5,9 +5,8 @@ import { CalcServiceabilityMomentService } from "./calc-serviceability-moment.se
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
-import { SetSectionService } from "../set-section.service";
-import { SetBarService } from "../set-bar.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
+import { DataHelperModule } from "src/app/providers/data-helper.module";
 
 @Component({
   selector: "app-result-serviceability-moment",
@@ -27,8 +26,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     private calc: CalcServiceabilityMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
-    private section: SetSectionService,
-    private bar: SetBarService,
+    private helper: DataHelperModule,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
@@ -116,8 +114,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id, safetyID);
 
-      for (const member of groupe[ig]) {
-        for (const position of member.positions) {
+      for (const m of groupe[ig]) {
+        for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
             const res = OutputData.filter(
               (e) => e.index === position.index && e.side === side
@@ -136,93 +134,92 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             }
 
             /////////////// まず計算 ///////////////
-            const titleColumn = this.result.getTitleString(
-              member,
-              position,
-              side
-            );
-            const shape = this.section.getResult("Md", member, res[0]);
-            const Ast: any = this.bar.getResult("Md", shape, res[0], safety);
-            const fck: any = this.section.getFck(safety);
+            const section = this.result.getSection("Md", res[0], safety);
+            const member = section.member;
+            const shape = section.shape;
+            const Ast = section.Ast;
+
+            const titleColumn = this.result.getTitleString( section.member, position, side );
+            const fck: any = this.helper.getFck(safety);
 
             const resultColumn: any = this.getResultString(
               this.calc.calcWd(
                 res,
-                shape,
+                section,
                 fck,
-                Ast,
                 safety,
-                member,
                 isDurability
               )
             );
 
-            const column: any[] = new Array();
-            /////////////// タイトル ///////////////
-            column.push({ alien: "center", value: titleColumn.m_no });
-            column.push({ alien: "center", value: titleColumn.p_name });
-            column.push({ alien: "center", value: titleColumn.side });
-            ///////////////// 形状 /////////////////
-            column.push(this.result.alien(shape.B));
-            column.push(this.result.alien(shape.H));
-            column.push(this.result.alien(shape.Bt));
-            column.push(this.result.alien(shape.t));
-            /////////////// 引張鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ast), "center"));
-            column.push(this.result.alien(Ast.AstString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dst), "center"));
-            /////////////// 圧縮鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Asc), "center"));
-            column.push(this.result.alien(Ast.AscString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dsc), "center"));
-            /////////////// 側面鉄筋 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.Ase), "center"));
-            column.push(this.result.alien(Ast.AseString, "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.dse), "center"));
-            /////////////// コンクリート情報 ///////////////
-            column.push(this.result.alien(fck.fck.toFixed(1), "center"));
-            column.push(this.result.alien(fck.rc.toFixed(2), "center"));
-            column.push(this.result.alien(fck.fcd.toFixed(1), "center"));
-            /////////////// 鉄筋情報 ///////////////
-            column.push(this.result.alien(this.result.numStr(Ast.fsy, 1), "center"));
-            column.push(this.result.alien(Ast.rs.toFixed(2), "center"));
-            column.push(this.result.alien(this.result.numStr(Ast.fsd, 1), "center"));
-            /////////////// 照査 ///////////////
-            column.push(resultColumn.con);
+            const column = {
+              /////////////// タイトル ///////////////
+              title1 : { alien: "center", value: titleColumn.title1 },
+              title2 : { alien: "center", value: titleColumn.title2 },
+              title3 :  { alien: "center", value: titleColumn.title3 },
+              ///////////////// 形状 /////////////////
+              B : this.result.alien(shape.B),
+              H : this.result.alien(shape.H),
+              Bt : this.result.alien(shape.Bt),
+              t : this.result.alien(shape.t),
+              /////////////// 引張鉄筋 ///////////////
+              Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
+              AstString : this.result.alien(section.Ast.AstString, "center"),
+              dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
+              /////////////// 圧縮鉄筋 ///////////////
+              Asc : this.result.alien(this.result.numStr(section.Asc.Asc), "center"),
+              AscString : this.result.alien(section.Asc.AscString, "center"),
+              dsc : this.result.alien(this.result.numStr(section.Asc.dsc), "center"),
+              /////////////// 側面鉄筋 ///////////////
+              Ase : this.result.alien(this.result.numStr(section.Ase.Ase), "center"),
+              AseString : this.result.alien(section.Ase.AseString, "center"),
+              dse : this.result.alien(this.result.numStr(section.Ase.dse), "center"),
+              /////////////// コンクリート情報 ///////////////
+              fck : this.result.alien(fck.fck.toFixed(1), "center"),
+              rc : this.result.alien(fck.rc.toFixed(2), "center"),
+              fcd : this.result.alien(fck.fcd.toFixed(1), "center"),
+              /////////////// 鉄筋情報 ///////////////
+              fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), "center"),
+              rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
+              fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
+              /////////////// 照査 ///////////////
+              con : resultColumn.con,
 
-            column.push(resultColumn.Mhd);
-            column.push(resultColumn.Nhd);
-            column.push(resultColumn.sigma_b);
+              Mhd : resultColumn.Mhd,
+              Nhd : resultColumn.Nhd,
+              sigma_b : resultColumn.sigma_b,
 
-            column.push(resultColumn.Md);
-            column.push(resultColumn.Nd);
-            column.push(resultColumn.sigma_c);
-            column.push(resultColumn.sigma_s);
+              Md : resultColumn.Md,
+              Nd : resultColumn.Nd,
+              sigma_c : resultColumn.sigma_c,
+              sigma_s : resultColumn.sigma_s,
 
-            column.push(resultColumn.Mpd);
-            column.push(resultColumn.Npd);
-            column.push(resultColumn.EsEc);
-            column.push(resultColumn.sigma_se);
-            column.push(resultColumn.c);
-            column.push(resultColumn.Cs);
-            column.push(resultColumn.fai);
-            column.push(resultColumn.ecu);
-            column.push(resultColumn.k1);
-            column.push(resultColumn.k2);
-            column.push(resultColumn.n);
-            column.push(resultColumn.k3);
-            column.push(resultColumn.k4);
-            column.push(resultColumn.Wd);
-            column.push(resultColumn.Wlim);
+              Mpd : resultColumn.Mpd,
+              Npd : resultColumn.Npd,
+              EsEc : resultColumn.EsEc,
+              sigma_se : resultColumn.sigma_se,
+              c : resultColumn.c,
+              Cs : resultColumn.Cs,
+              fai : resultColumn.fai,
+              ecu : resultColumn.ecu,
+              k1 : resultColumn.k1,
+              k2 : resultColumn.k2,
+              n : resultColumn.n,
+              k3 : resultColumn.k3,
+              k4 : resultColumn.k4,
+              Wd : resultColumn.Wd,
+              Wlim : resultColumn.Wlim,
 
-            column.push(resultColumn.ri);
-            column.push(resultColumn.ratio);
-            column.push(resultColumn.result);
+              ri : resultColumn.ri,
+              ratio : resultColumn.ratio,
+              result : resultColumn.result,
 
-            /////////////// 総括表用 ///////////////
-            column.push(position.index);
-            column.push(side);
-            column.push(shape.shape);
+              /////////////// 総括表用 ///////////////
+              g_name: m.g_name,
+              index : position.index,
+              side_summary : side,
+              shape_summary : section.shapeName,
+            }
 
             page.columns.push(column);
 
@@ -233,13 +230,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       // 最後のページ
       if (page.columns.length > 0) {
         for(let i=page.columns.length; i<5; i++){
-          const column: any[] = new Array();
-          for(let j=0; j<page.columns[0].length-3; j++){
-            column.push({alien: 'center', value: '-'});
+          const column = {};
+          for (let aa of Object.keys(page.columns[0])) {
+            if (aa === "index" || aa === "side_summary" || aa === "shape_summary") {
+              column[aa] = null;
+            } else {
+              column[aa] = { alien: 'center', value: '-' };
+            }
           }
-          column.push(null);//position.index);
-          column.push(null);//side);
-          column.push(null);//shape.shape);
           page.columns.push(column);
         }
         result.push(page);

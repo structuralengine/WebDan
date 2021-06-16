@@ -18,7 +18,7 @@ export class InputMembersService  {
   }
 
   // 部材情報
-  private default_member(m_no: number): any {
+  public default_member(m_no: number): any {
     // メモ:
     // g_no: 表面上の(member.component だけで用いる)グループ番号
     // g_id: 本当のグループ番号
@@ -38,28 +38,32 @@ export class InputMembersService  {
   }
 
   // member_list から 指定行 のデータを返す関数
-  public getTableColumns(row: number): any {
+  public getTableColumns(m_no: number): any {
 
-    let result = this.getCalcData(row);
+    let result = this.getData(m_no);
     // 対象データが無かった時に処理
     if (result !== undefined) {
       if(result.g_no === null){
         result.g_id = '';
       }
     } else {
-      result = this.default_member(row);
+      result = this.default_member(m_no);
       this.member_list.push(result);
     }
     return result;
   }
 
   public getCalcData(m_no: number){
-    const result = this.member_list.find( (item) => item.m_no === m_no );
+    const result = this.getData(m_no);
     return JSON.parse(
       JSON.stringify({
         temp: result
       })
     ).temp; 
+  }
+
+  public getData(m_no: number){
+    return this.member_list.find( (item) => item.m_no === m_no );
   }
 
   // 同じグループの部材リストを取得する
@@ -192,16 +196,7 @@ export class InputMembersService  {
   public getGroupeList(): any[] {
 
     // 全てのグループ番号をリストアップする
-    const id_list: string[] =  new Array();
-    for (const m of this.member_list) {
-      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
-        continue;
-      }
-
-      if (id_list.find((value)=>value===m.g_id) === undefined) {
-        id_list.push(m.g_id);
-      }
-    }
+    const id_list: string[] =  this.getGroupes();
 
     // グループ番号順に並べる
     id_list.sort();
@@ -219,6 +214,20 @@ export class InputMembersService  {
         temp: result
       })
     ).temp;
+  }
+
+  public getGroupes(): string[] {
+    const id_list: string[] =  new Array();
+    for (const m of this.member_list) {
+      if (!('g_id' in m) || m.g_id === undefined || m.g_id === null || m.g_id.trim().length === 0) {
+        continue;
+      }
+
+      if (id_list.find((value)=>value===m.g_id) === undefined) {
+        id_list.push(m.g_id);
+      }
+    }
+    return id_list;
   }
 
   public getSaveData():any{
