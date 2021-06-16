@@ -35,7 +35,7 @@ export class SetRectService {
 
     // 鉄筋情報を集計  
     const result2 = this.getRectBar(shape, safety);
-    for(const key of result2){
+    for(const key of Object.keys(result2)){
       result[key] = result2[key];
     }
 
@@ -72,7 +72,7 @@ export class SetRectService {
 
     // 鉄筋情報を集計  
     const result2 = this.getRectBar(shape, safety);
-    for(const key of result2){
+    for(const key of Object.keys(result2)){
       result[key] = result2[key];
     }
 
@@ -110,7 +110,7 @@ export class SetRectService {
 
     // 鉄筋情報を集計  
     const result2 = this.getRectBar(shape, safety);
-    for(const key of result2){
+    for(const key of Object.keys(result2)){
       result[key] = result2[key];
     }
 

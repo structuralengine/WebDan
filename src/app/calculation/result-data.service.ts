@@ -51,9 +51,9 @@ export class ResultDataService {
     }
 
     return {
-      m_no: title1,
-      p_name: title2,
-      side: title3,
+      title1,
+      title2,
+      title3,
     };
   }
 
@@ -158,7 +158,7 @@ export class ResultDataService {
         throw ("断面形状：" + shapeName + " は適切ではありません。");
     }
 
-    result['Ast'] = this.getAst(section);
+    result['Ast'] = this.getAst(section, safety);
     result['Asc'] = this.getAsc(section);
     result['Ase'] = this.getAse(section);
 
@@ -225,7 +225,7 @@ export class ResultDataService {
 
     result.Aw.Aw = As * result.Aw.stirrup_n;
     if (!(result.Aw.Aw === 0)) {
-      result.Aw.AwString = dia + "-" + result.Aw.stirrup_n + "本";
+      result.Aw.AwString = dia + "-" + this.numStr(result.Aw.stirrup_n, 3) + "本";
     }
 
     result.Aw.fwyd = fwyd.fsy;
@@ -243,7 +243,7 @@ export class ResultDataService {
 
   }
 
-  private getAst(section: any): any {
+  private getAst(section: any, safety: any): any {
 
     const result = {
       tension: null,
@@ -251,13 +251,17 @@ export class ResultDataService {
       AstString: null,
       dst: null,
       fsy: null,
+      fsd: null,
       fsu: null,
       rs: null,
     }
 
     result.tension = section.tension;
-    result.fsy = section.fsy.fsy;
-    result.fsu = section.fsy.fsu;
+    result.fsy = section.tension.fsy.fsy;
+    result.fsu = section.tension.fsy.fsu;
+    result.rs = safety.safety_factor.rs;
+    result.fsd = Math.round(result.fsy / result.rs * 10) /10;
+
 
     const mark = section.tension.mark === "R" ? "φ" : "D";
     const AstDia = mark + section.tension.rebar_dia;
@@ -266,7 +270,7 @@ export class ResultDataService {
     const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.tension.cos;
 
     result.Ast = Astx;
-    result.AstString = AstDia + "-" + rebar_n + "本";
+    result.AstString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
     result.dst = this.getBarCenterPosition(section.tension);
 
     return result;
@@ -295,7 +299,7 @@ export class ResultDataService {
     const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.compress.cos;
 
     result.Asc = Astx;
-    result.AscString = AstDia + "-" + rebar_n + "本";
+    result.AscString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
     result.dsc = this.getBarCenterPosition(section.compress);
 
     return result;
@@ -321,7 +325,7 @@ export class ResultDataService {
     const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.sidebar.cos;
 
     result.Ase = Astx;
-    result.AseString = AstDia + "-" + rebar_n + "本";
+    result.AseString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
     result.dse = this.getBarCenterPosition(section.sidebar);
 
     return result;

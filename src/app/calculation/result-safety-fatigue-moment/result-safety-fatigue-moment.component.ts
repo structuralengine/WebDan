@@ -150,9 +150,9 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
 
             const column = {
             /////////////// タイトル ///////////////
-            m_no : { alien: 'center', value: titleColumn.m_no },
-            p_name : { alien: 'center', value: titleColumn.p_name },
-            side : { alien: 'center', value: titleColumn.side },
+            title1: { alien: 'center', value: titleColumn.title1 },
+            title2: { alien: 'center', value: titleColumn.title2 },
+            title3: { alien: 'center', value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
             B : this.result.alien(shape.B),
             H : this.result.alien(shape.H),
