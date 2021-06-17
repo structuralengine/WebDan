@@ -319,14 +319,14 @@ export class ResultDataService {
     }
 
     const mark = section.sidebar.mark === "R" ? "φ" : "D";
-    const AstDia = mark + section.sidebar.rebar_dia;
-    let rebar_n = section.sidebar.rebar_n;
+    const AstDia = mark + section.sidebar.side_dia;
+    let rebar_n = section.sidebar.n;
 
-    const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.sidebar.cos;
+    const Astx: number = this.helper.getAs(AstDia) * rebar_n;
 
     result.Ase = Astx;
     result.AseString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
-    result.dse = this.getBarCenterPosition(section.sidebar);
+    result.dse = section.sidebar.dse;
 
     return result;
 
