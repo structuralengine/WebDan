@@ -41,7 +41,7 @@ export class SetCircleService {
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
     const result2 = this.getCircleBar(section, safety);
-    for(const key of result2){
+    for(const key of Object.keys(result2)){
       result[key] = result2[key];
     }
 
@@ -90,7 +90,7 @@ export class SetCircleService {
     result.SectionElastic.push(this.helper.getSectionElastic(safety));
 
     const result2 = this.getCircleBar(section, safety);
-    for(const key of result2){
+    for(const key of Object.keys(result2)){
       result[key] = result2[key];
     }
 
@@ -108,13 +108,13 @@ export class SetCircleService {
     // 鉄筋配置
     const h: number = section.H;
     const tension = section.tension;
-    const fsy = section.fsy;
+    const fsy = section.tension.fsy;
     const id = "s" + fsy.id;
 
     // 鉄筋の位置
     result.Steels = this.getSteels(tension, h, id);
     // 基準となる 鉄筋強度
-    const rs = section.rs;
+    const rs = section.tension.rs;
 
     // 鉄筋強度の入力
     result.SteelElastic.push({
@@ -176,8 +176,8 @@ export class SetCircleService {
       safety.material_bar,
       "tensionBar"
     );
-    result['fsy'] = fsy;
-    result['rs'] = safety.safety_factor.rs;;
+    tension['fsy'] = fsy;
+    tension['rs'] = safety.safety_factor.rs;;
 
     // 鉄筋径
     if (fsy.fsy === 235) {

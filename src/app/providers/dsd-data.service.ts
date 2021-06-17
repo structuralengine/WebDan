@@ -283,7 +283,12 @@ export class DsdDataService {
       const isOlder311 = (this.isOlder('3.1.1', buff.datVersID));
       let sngDanmen1 = this.readSingle(buff);
       if (isOlder311) { sngDanmen1 *= 10; } // cm --> mm
-      if(sngDanmen1 > 0) m.B = sngDanmen1;
+      if(sngDanmen1 > 0) {
+        m.B = sngDanmen1;
+        if ( m.shape === 'RC-円形' ) {
+          m.B *= 2;
+        }
+      }
       let sngDanmen2 = this.readSingle(buff);
       if (isOlder311) { sngDanmen2 *= 10; } // cm --> mm
       if(sngDanmen2 > 0) m.H = sngDanmen2;
@@ -438,7 +443,9 @@ export class DsdDataService {
       for (let ii = 0; ii <= 5; ii++) {
 
         const mgTkin = this.readByte(buff);
-        if(ii < 5) safety_factor[ii].range = mgTkin;
+        if(ii < 5) {
+          safety_factor[ii].range = mgTkin;
+        }
 
         if (isOlder328) {
           let Mage = this.readSingle(buff);
@@ -615,13 +622,27 @@ export class DsdDataService {
       const index = i+1;
 
       const bar = this.bars.getTableColumn(index);
+      const m = this.members.getCalcData(bar.m_no);
 
       const iType = this.readInteger(buff);
       const iNext = this.readInteger(buff);
       const MageSendan0 = this.readSingle(buff);
-      if(MageSendan0 > 0) bar.haunch_M = MageSendan0;
+      if(MageSendan0 > 0) {
+        if(m.g_no >= 2){
+          bar.haunch_M = null;
+        }else{
+          bar.haunch_M = MageSendan0;
+        }
+      }
       const MageSendan1 = this.readSingle(buff);
-      if(MageSendan1 > 0) bar.haunch_V = MageSendan1;
+      if(MageSendan1 > 0) {
+        if(m.g_no >= 2){
+          bar.haunch_V = null;
+        }else{
+          bar.haunch_V = MageSendan1;
+        }
+      }
+
       if (this.isOlder("3.1.4", buff.datVersID)) {
         const stDummy1 = this.readByte(buff);
         if(stDummy1 > 0) bar.rebar1.rebar_dia = stDummy1;
