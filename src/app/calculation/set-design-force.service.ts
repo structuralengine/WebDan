@@ -302,6 +302,9 @@ export class SetDesignForceService {
           const index = position.index;
           for(let i = 0; i < DesignForceListList.length; i++){
             const f = DesignForceListList[i].find(e => e.index === index);
+            if(f === undefined){
+              continue;
+            }
             force[i].push(f);
           }
         }
