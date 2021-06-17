@@ -172,7 +172,7 @@ export class DataHelperModule {
       rfck: null, rEc: null, rfbok: null, rVcd: null
     };
 
-    const pile = safety.pile_factor.find((e) => e.selected === true);
+    const pile = safety.pile_factor;//.find((e) => e.selected === true);
     result.rfck = pile !== undefined ? pile.rfck : 1;
     result.rEc = pile !== undefined ? pile.rEc : 1;
     result.rfbok = pile !== undefined ? pile.rfbok : 1;

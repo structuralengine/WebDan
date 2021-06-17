@@ -383,7 +383,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
     if (pile === undefined) {
       pile = this.default_pile_factor();
     }
-    result['pile_factor'] = pile;
+    result['pile_factor'] = pile.find((e) => e.selected === true);
 
 
     return result;
