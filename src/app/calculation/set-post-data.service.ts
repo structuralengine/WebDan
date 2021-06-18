@@ -67,8 +67,15 @@ export class SetPostDataService {
   // DesignForceList: 着目点, 断面力情報
   public setInputData( target: string, type: string, safetyID: number,
                       ...DesignForceList: any[] ): any {
-    const result = [];
 
+    const post_keys = [ 
+      'index', 'side', 'Nd','Md',
+      'SectionElastic', 'Sections',
+      'SteelElastic', 'Steels'
+    ];
+
+    const dict = {};
+    let key = 0;                    
     for(const list of DesignForceList) {
       for (const position of list) {
 
@@ -79,16 +86,18 @@ export class SetPostDataService {
 
           // 断面力の調整
           const data = {
-            index: position.index,
+            index: force.index,
             side: force.side,
             Nd: force.Nd
           };
           if(type === "応力度") {
             data['Md'] = Math.abs(force.Md);
           }
+          data['force'] = force; // 一時的に登録
           try {
             const shape = this.getPostData(target, safetyID, force);
-
+            data['shape'] = shape; // 一時的に登録
+            
             // 断面形状
             data['Sections'] = shape.Sections;
             data['SectionElastic'] = shape.SectionElastic;
@@ -97,7 +106,9 @@ export class SetPostDataService {
             data['Steels'] = shape.Steels;
             data['SteelElastic'] = shape.SteelElastic;
 
-            result.push(data);
+            dict[key] = data;
+            key++;
+
           } catch(e){
             console.log(e);
           }
@@ -105,6 +116,58 @@ export class SetPostDataService {
         }
       }
     }
+
+    // 円形など対象な構造物は、上側引張と下側引張の大きい方のみ照査対象とする
+    let stock: any = {};
+    // 対象でかつ 同じindex のデータを探す
+    for(const key of Object.keys(dict)){
+      const data = dict[key];
+      const index = data.index.toString();
+      if(data.shape.symmetry){
+        if(index in stock) {
+          stock[index].push(key);
+        } else {
+          stock[index] = [key];
+        }
+      }
+    }
+    // target 断面力が 小さい方を探す
+    const delete_list = [];
+    for(const index of Object.keys(stock)){
+      const list = stock[index];
+      if(list.length < 2) continue;
+      let key1 = list[0];
+      let tmp1 = dict[key1];
+      for(let j=1; j<list.length; j++){
+        const key2 = list[j];
+        const tmp2 = dict[key2];
+        // 比較
+        if(Math.abs(tmp1.force[target]) < Math.abs(tmp2.force[target])){
+          delete_list.push(key1);
+          tmp1 = tmp2;
+        } else {
+          delete_list.push(key2);
+        }
+      }
+    }
+    // target 断面力が 小さい方を消す
+    for(const key of delete_list){
+      delete dict[key];
+    }
+
+    // 配列に再登録
+    const result = [];
+    for(const key of Object.keys(dict)){
+      const tmp = dict[key];
+      const data = {};
+      for(const k of post_keys){
+        if(k in tmp){
+          data[k] = tmp[k];
+        }
+      }
+      result.push(data)
+    }
+
     return result;
   }
 

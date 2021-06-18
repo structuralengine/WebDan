@@ -239,8 +239,10 @@ export class SetDesignForceService {
       force.push([]);
     }
 
+    const groupe_list = this.points.getGroupeList();
+
     // 安全係数が有効か判定する
-    for(const groupe of this.points.getGroupeList()){
+    for(const groupe of groupe_list){
 
       const safety = this.safety.getSafetyFactor(target, groupe[0].g_id, safetyID ); // 安全係数
       let flg = false;
