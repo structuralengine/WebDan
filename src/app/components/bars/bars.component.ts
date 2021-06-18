@@ -114,7 +114,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
         title: '側方鉄筋', align: 'center', colModel: [
           { title: '鉄筋径', dataType: 'integer', dataIndx: 'side_dia', sortable: false, width: 70 },
           { title: '本数片', dataType: 'float', dataIndx: 'side_n', sortable: false, width: 70 },
-          { title: '右端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
+          { title: '上端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
           { title: '間隔', dataType: 'float', dataIndx: 'side_ss', sortable: false, width: 70 }
         ]
       },

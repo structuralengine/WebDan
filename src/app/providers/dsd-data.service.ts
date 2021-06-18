@@ -663,11 +663,13 @@ export class DsdDataService {
         }
       }
       const JikuKABURI0 = this.readSingle(buff);
-      if(JikuKABURI0 > 0) bar.rebar1.rebar_cover = JikuKABURI0;
+      if(JikuKABURI0 > 0) {
+        bar.rebar1.rebar_cover = Math.round(JikuKABURI0 * 10)/ 10;
+      }
       const JikuKABURI1 = this.readSingle(buff);
       if(JikuKABURI1 > 0) {
         if ( m.shape !== 'RC-円形' ) {
-          bar.rebar2.rebar_cover = JikuKABURI1;
+          bar.rebar2.rebar_cover = Math.round(JikuKABURI1 * 10)/ 10;
         }
       }
 
@@ -730,11 +732,13 @@ export class DsdDataService {
         }
       }
       const JikuPITCH0 = this.readSingle(buff);
-      if(JikuPITCH0 > 0) bar.rebar1.rebar_ss = JikuPITCH0;
+      if(JikuPITCH0 > 0) {
+        bar.rebar1.rebar_ss = Math.round(JikuPITCH0 * 10 )/ 10;
+      }
       const JikuPITCH1 = this.readSingle(buff);
       if(JikuPITCH1 > 0) {
         if ( m.shape !== 'RC-円形' ) {
-          bar.rebar2.rebar_ss = JikuPITCH1;
+          bar.rebar2.rebar_ss = Math.round(JikuPITCH1 * 10 )/ 10;
         }
       }
       const JikuSHARITU0 = this.readSingle(buff);
@@ -753,7 +757,14 @@ export class DsdDataService {
       if(SokuHON0 > 0) bar.sidebar.side_n = SokuHON0;
       const SokuHON1 = this.readByte(buff);
       const SokuKABURI0 = this.readSingle(buff);
-      if(SokuKABURI0 > 0) bar.sidebar.side_ss = SokuKABURI0;
+      if(SokuKABURI0 > 0) {
+        if ( m.g_no < 2 && m.shape !== 'RC-円形' ) {
+          const s1 = Math.floor(SokuKABURI0);
+          const s2 = Math.ceil((SokuKABURI0 - s1) * 10000);
+          if(s1 > 0) bar.sidebar.side_cover = s1;
+          if(s2 > 0) bar.sidebar.side_ss = s2;
+        }
+      }
       const SokuKABURI1 = this.readSingle(buff);
 
       const StarR0 = this.readByte(buff);
