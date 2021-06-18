@@ -396,7 +396,7 @@ export class SafetyFactorsMaterialStrengthsComponent
 
   // アクティブになっているボタンを全て非アクティブにする
   private activeButtons(id: number) {
-    for (let i = 0; i <= 1; i++) {
+    for (let i = 0; i <= this.groupe_name.length; i++) {
       const data = document.getElementById("saf" + i);
       if (data != null) {
         if(i === id){

@@ -131,7 +131,7 @@ export class SectionForcesComponent implements OnInit, AfterViewInit, OnDestroy 
 
   // アクティブになっているボタンを全て非アクティブにする
   private activeButtons(id: number) {
-    for (let i = 0; i <= 1; i++) {
+    for (let i = 0; i <= this.table_datas.length; i++) {
       const data = document.getElementById("foc" + i);
       if (data != null) {
         if(i === id){
