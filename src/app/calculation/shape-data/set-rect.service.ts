@@ -15,7 +15,7 @@ export class SetRectService {
   // 矩形断面の POST 用 データ作成
   public getRectangle(target: string, member: any, index: number, side: string, safety: any): any {
 
-    const result = { Sections: [], SectionElastic:[] };
+    const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
     const shape = this.getRectangleShape(member, target, index, side, safety)
@@ -39,6 +39,30 @@ export class SetRectService {
       result[key] = result2[key];
     }
 
+    // 配筋が上下対象でなければ、symmetry = false
+    const Steels = result['Steels'];
+    let j = Steels.length-1;
+    grid_loop:
+    for(let i=0; i<Steels.length; i++){
+      const b1 = Steels[i];
+      const b2 = Steels[j];
+      const d1 = b1.Depth
+      const d2 = section.Height - b2.Depth;
+      if(d1 !== d2){
+        result.symmetry = false;
+        break;
+      }
+      for(const key of ['i', 'n', 'ElasticID']){
+        if(d1[key] !== d2[key]){
+          result.symmetry = false;
+          break grid_loop;
+        }
+      }
+      j--;
+    }
+    if(result.symmetry === true){
+      console.log()
+    }
     return result;
   }
 
