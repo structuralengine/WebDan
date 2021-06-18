@@ -184,7 +184,7 @@ export class MembersComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     this.columnHeaders.push(
-      { title: 'グループNo', align: 'center', dataType: 'integer', dataIndx: 'g_no', sortable: false, width: 85 },
+      { title: 'グループNo', align: 'center', dataType: 'float', dataIndx: 'g_no', sortable: false, width: 85 },
       { title: '部材名', align: 'center', dataType: 'string', dataIndx: 'g_name', sortable: false, width: 110 },
       { title: '断面形状', dataType: 'string', dataIndx: 'shape', sortable: false, width: 80 },
       {

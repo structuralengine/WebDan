@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { InputBasicInformationService } from '../basic-information/basic-information.service';
 import { InputMembersService } from '../members/members.service';
 
@@ -15,7 +16,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
   constructor(
     private basic: InputBasicInformationService,
-    private members: InputMembersService) {
+    private members: InputMembersService,
+    private helper: DataHelperModule) {
     this.clear();
   }
   public clear(): void {
@@ -362,6 +364,9 @@ export class InputSafetyFactorsMaterialStrengthsService {
 
     // 安全係数 を代入する
     const safety_factor = this.getSafetyFactor(target, g_id, safetyID);
+    if(this.helper.toNumber(safety_factor.range)===null){
+      safety_factor.range = 3;
+    }
     result['safety_factor'] = safety_factor; // 安全係数
 
     // 鉄筋強度 を代入する
@@ -383,7 +388,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
     if (pile === undefined) {
       pile = this.default_pile_factor();
     }
-    result['pile_factor'] = pile;
+    result['pile_factor'] = pile.find((e) => e.selected === true);
 
 
     return result;

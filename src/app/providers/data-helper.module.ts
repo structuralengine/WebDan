@@ -172,7 +172,7 @@ export class DataHelperModule {
       rfck: null, rEc: null, rfbok: null, rVcd: null
     };
 
-    const pile = safety.pile_factor.find((e) => e.selected === true);
+    const pile = safety.pile_factor;//.find((e) => e.selected === true);
     result.rfck = pile !== undefined ? pile.rfck : 1;
     result.rEc = pile !== undefined ? pile.rEc : 1;
     result.rfbok = pile !== undefined ? pile.rfbok : 1;
@@ -294,7 +294,7 @@ export class DataHelperModule {
     const dia = Math.abs(barInfo.side_dia);
 
     // 異形鉄筋:D, 丸鋼: R
-    const mark = barInfo.rebar_dia > 0 ? "D" : "R";
+    const mark = barInfo.side_dia > 0 ? "D" : "R";
 
     // 鉄筋段数
     const n = barInfo.side_n;

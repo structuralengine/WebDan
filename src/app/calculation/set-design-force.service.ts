@@ -143,49 +143,6 @@ export class SetDesignForceService {
       position["designForce"] = this.getSectionForce(target, n, forceObj, isMax);
     }
 
-    /*/ 地中Max の
-    for (let ip = result.length - 1; ip >= 0; ip--) {
-      if( result[ip].isMax === true ){
-        const designForce = [
-          { Md: 0, Nd: 0, Vd: 0, side:'上側引張' },
-          { Md: 0, Nd: 0, Vd: 0, side:'下側引張' }
-        ];
-        // max 始まりを探す
-        let jp = ip;
-        for (let i = ip; i >= 0; i--) {
-          if(result[jp].isMax === false) break;
-          jp--;
-        }
-        jp++;
-        for (let i = ip; i >= jp; i--) {
-          for(const force of result[i].designForce){
-            if(target === 'Md'){
-              if(force.side === '上側引張' && force[target] <= designForce[0][target]){
-                designForce[0] = force;
-              } else if( force[target] >= designForce[0][target]){
-                designForce[1] = force;
-              }
-            } else if(target === 'Vd' && Math.abs(force[target]) > Math.abs(designForce[0][target])){
-              if(force.side === '上側引張'){
-                designForce[0] = force;
-              } else {
-                designForce[1] = force;
-              }
-            }
-          }
-          if(i !== jp) result.splice(i, 1);
-        }
-        // 値が代入されなかった
-        for (let i = designForce.length - 1; i >= 0; i--) {
-          if(!('comb' in designForce[i])) {
-            designForce.splice(i, 1);
-          }
-        }
-        ip = jp;
-        result[ip].designForce = designForce;
-      }
-    }
-    */
     return result;
   }
 
@@ -282,13 +239,16 @@ export class SetDesignForceService {
       force.push([]);
     }
 
+    const groupe_list = this.points.getGroupeList();
+
     // 安全係数が有効か判定する
-    for(const groupe of this.points.getGroupeList()){
+    for(const groupe of groupe_list){
 
       const safety = this.safety.getSafetyFactor(target, groupe[0].g_id, safetyID ); // 安全係数
       let flg = false;
       for(const key of Object.keys(safety)){
         if(key === 'rbd') continue;
+        if(key === 'range') continue;
         if(this.helper.toNumber(safety[key]) === null){
           flg = true;
           break;
@@ -302,6 +262,9 @@ export class SetDesignForceService {
           const index = position.index;
           for(let i = 0; i < DesignForceListList.length; i++){
             const f = DesignForceListList[i].find(e => e.index === index);
+            if(f === undefined){
+              continue;
+            }
             force[i].push(f);
           }
         }
@@ -353,7 +316,7 @@ export class SetDesignForceService {
       }
     }
 
-    return DesignForceListList;
+    return force;
   }
 
   // 複数の断面力表について、

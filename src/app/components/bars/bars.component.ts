@@ -114,7 +114,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
         title: '側方鉄筋', align: 'center', colModel: [
           { title: '鉄筋径', dataType: 'integer', dataIndx: 'side_dia', sortable: false, width: 70 },
           { title: '本数片', dataType: 'float', dataIndx: 'side_n', sortable: false, width: 70 },
-          { title: '右端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
+          { title: '上端位置', dataType: 'float', dataIndx: 'side_cover', sortable: false, width: 70 },
           { title: '間隔', dataType: 'float', dataIndx: 'side_ss', sortable: false, width: 70 }
         ]
       },
@@ -127,6 +127,14 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
       },
       { title: '主鉄筋の斜率', dataType: 'float', dataIndx: 'cos', sortable: false, width: 85 },
       { title: 'tanγ+tanβ', dataType: 'float', dataIndx: 'tan', sortable: false, width: 85 },
+      {
+        title: '折曲げ鉄筋', align: 'center', colModel: [
+          { title: '鉄筋径', dataType: 'integer', dataIndx: 'bending_dia', sortable: false, width: 70 },
+          { title: '本数', dataType: 'float', dataIndx: 'bending_n', sortable: false, width: 70 },
+          { title: '間隔', dataType: 'float', dataIndx: 'bending_ss', sortable: false, width: 70 },
+          { title: '角度', dataType: 'float', dataIndx: 'bending_angle', sortable: false, width: 70 }
+        ]
+      },
       { title: '処理', align: 'center', dataType: 'bool', dataIndx: 'enable', type: 'checkbox', sortable: false, width: 40 },
     );
   }
@@ -166,7 +174,7 @@ export class BarsComponent implements OnInit, OnDestroy, AfterViewInit {
 
   // アクティブになっているボタンを全て非アクティブにする
   private activeButtons(id: number) {
-    for (let i = 0; i <= 1; i++) {
+    for (let i = 0; i <= this.table_datas.length; i++) {
       const data = document.getElementById("bar" + i);
       if (data != null) {
         if(i === id){

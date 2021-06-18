@@ -283,7 +283,12 @@ export class DsdDataService {
       const isOlder311 = (this.isOlder('3.1.1', buff.datVersID));
       let sngDanmen1 = this.readSingle(buff);
       if (isOlder311) { sngDanmen1 *= 10; } // cm --> mm
-      if(sngDanmen1 > 0) m.B = sngDanmen1;
+      if(sngDanmen1 > 0) {
+        m.B = sngDanmen1;
+        if ( m.shape === 'RC-円形' ) {
+          m.B *= 2;
+        }
+      }
       let sngDanmen2 = this.readSingle(buff);
       if (isOlder311) { sngDanmen2 *= 10; } // cm --> mm
       if(sngDanmen2 > 0) m.H = sngDanmen2;
@@ -438,7 +443,9 @@ export class DsdDataService {
       for (let ii = 0; ii <= 5; ii++) {
 
         const mgTkin = this.readByte(buff);
-        if(ii < 5) safety_factor[ii].range = mgTkin;
+        if(ii < 5) {
+          safety_factor[ii].range = mgTkin;
+        }
 
         if (isOlder328) {
           let Mage = this.readSingle(buff);
@@ -615,75 +622,133 @@ export class DsdDataService {
       const index = i+1;
 
       const bar = this.bars.getTableColumn(index);
+      const m = this.members.getCalcData(bar.m_no);
 
       const iType = this.readInteger(buff);
       const iNext = this.readInteger(buff);
       const MageSendan0 = this.readSingle(buff);
-      if(MageSendan0 > 0) bar.haunch_M = MageSendan0;
+      if(MageSendan0 > 0) {
+        if(m.g_no < 2 && m.shape !== 'RC-小判' && m.shape !== 'RC-円形'){
+          bar.haunch_M = MageSendan0;
+        }
+      }
       const MageSendan1 = this.readSingle(buff);
-      if(MageSendan1 > 0) bar.haunch_V = MageSendan1;
+      if(MageSendan1 > 0) {
+        if(m.g_no < 2 && m.shape !== 'RC-小判' && m.shape !== 'RC-円形'){
+          bar.haunch_V = MageSendan1;
+        }
+      }
+
       if (this.isOlder("3.1.4", buff.datVersID)) {
         const stDummy1 = this.readByte(buff);
         if(stDummy1 > 0) bar.rebar1.rebar_dia = stDummy1;
         const stDummy2 = this.readByte(buff);
-        if(stDummy2 > 0) bar.rebar1.rebar_dia = stDummy2;
+        if(stDummy2 > 0) bar.rebar2.rebar_dia = stDummy2;
       } else {
         const JikuR0 = this.readInteger(buff);
         if(JikuR0 > 0) bar.rebar1.rebar_dia = JikuR0;
         const JikuR1 = this.readInteger(buff);
-        if(JikuR1 > 0) bar.rebar2.rebar_dia = JikuR1;
+        if(JikuR1 > 0) {
+          if ( m.shape !== 'RC-円形' ) {
+            bar.rebar2.rebar_dia = JikuR1;
+          }
+        }
       }
       const JikuHON0 = this.readSingle(buff);
       if(Math.abs(JikuHON0) > 0) bar.rebar1.rebar_n = JikuHON0;
       const JikuHON1 = this.readSingle(buff);
-      if(Math.abs(JikuHON1) > 0) bar.rebar2.rebar_n = JikuHON1;
+      if(Math.abs(JikuHON1) > 0) {
+        if ( m.shape !== 'RC-円形' ) {
+          bar.rebar2.rebar_n = JikuHON1;
+        }
+      }
       const JikuKABURI0 = this.readSingle(buff);
-      if(JikuKABURI0 > 0) bar.rebar1.rebar_cover = JikuKABURI0;
+      if(JikuKABURI0 > 0) {
+        bar.rebar1.rebar_cover = Math.round(JikuKABURI0 * 10)/ 10;
+      }
       const JikuKABURI1 = this.readSingle(buff);
-      if(JikuKABURI1 > 0) bar.rebar2.rebar_cover = JikuKABURI1;
+      if(JikuKABURI1 > 0) {
+        if ( m.shape !== 'RC-円形' ) {
+          bar.rebar2.rebar_cover = Math.round(JikuKABURI1 * 10)/ 10;
+        }
+      }
 
       if (this.isOlder("3.2.6", buff.datVersID) === true
         && this.isOlder("3.1.4", buff.datVersID) === false) {
         const stDummy6 = this.readByte(buff);
         if(stDummy6 > 0) bar.rebar1.rebar_lines = stDummy6;
         const stDummy7 = this.readByte(buff);
-        if(stDummy7 > 0) bar.rebar2.rebar_lines = stDummy7;
+        if(stDummy7 > 0) {
+          if ( m.shape !== 'RC-円形' ) {
+            bar.rebar2.rebar_lines = stDummy7;
+          }
+        }
         const stDummy8 = this.readSingle(buff);
         if(stDummy8 > 0) bar.rebar1.rebar_space = stDummy8;
         const stDummy9 = this.readSingle(buff);
-        if(stDummy9 > 0) bar.rebar2.rebar_space = stDummy9;
+        if(stDummy9 > 0) {
+          if ( m.shape !== 'RC-円形' ) {
+            bar.rebar2.rebar_space = stDummy9;
+          }
+        }
       } else {
         if (this.isOlder("3.1.4", buff.datVersID)) {
           const stDummy3 = this.readInteger(buff);
           if(stDummy3 > 0) bar.rebar1.rebar_lines = stDummy3;
           const stDummy4 = this.readInteger(buff);
-          if(stDummy4 > 0) bar.rebar2.rebar_lines = stDummy4;
+          if(stDummy4 > 0) {
+            if ( m.shape !== 'RC-円形' ) {
+              bar.rebar2.rebar_lines = stDummy4;
+            }
+          }
         } else {
           const JikuNARABI0 = this.readSingle(buff);
           if(JikuNARABI0 > 0) bar.rebar1.rebar_lines = JikuNARABI0;
           const JikuNARABI1 = this.readSingle(buff);
-          if(JikuNARABI1 > 0) bar.rebar2.rebar_lines = JikuNARABI1;
+          if(JikuNARABI1 > 0) {
+            if ( m.shape !== 'RC-円形' ) {
+              bar.rebar2.rebar_lines = JikuNARABI1;
+            }
+          }
         }
         if (this.isOlder("3.3.2", buff.datVersID)) {
           const stDummy6 = this.readByte(buff);
           if(stDummy6 > 0) bar.rebar1.rebar_space = stDummy6;
           const stDummy7 = this.readByte(buff);
-          if(stDummy7 > 0) bar.rebar2.rebar_space = stDummy7;
+          if(stDummy7 > 0) {
+            if ( m.shape !== 'RC-円形' ) {
+              bar.rebar2.rebar_space = stDummy7;
+            }
+          }
         } else {
           const JikuAKI0 = this.readSingle(buff);
           if(JikuAKI0 > 0) bar.rebar1.rebar_space = JikuAKI0;
           const JikuAKI1 = this.readSingle(buff);
-          if(JikuAKI1 > 0) bar.rebar2.rebar_space = JikuAKI1;
+          if(JikuAKI1 > 0) {
+            if ( m.shape !== 'RC-円形' ) {
+              bar.rebar2.rebar_space = JikuAKI1;
+            }
+          }
         }
       }
       const JikuPITCH0 = this.readSingle(buff);
-      if(JikuPITCH0 > 0) bar.rebar1.rebar_ss = JikuPITCH0;
+      if(JikuPITCH0 > 0) {
+        bar.rebar1.rebar_ss = Math.round(JikuPITCH0 * 10 )/ 10;
+      }
       const JikuPITCH1 = this.readSingle(buff);
-      if(JikuPITCH1 > 0) bar.rebar2.rebar_ss = JikuPITCH1;
+      if(JikuPITCH1 > 0) {
+        if ( m.shape !== 'RC-円形' ) {
+          bar.rebar2.rebar_ss = Math.round(JikuPITCH1 * 10 )/ 10;
+        }
+      }
       const JikuSHARITU0 = this.readSingle(buff);
       if(JikuSHARITU0 > 0) bar.rebar1.cos = Math.round(JikuSHARITU0*1000)/1000;
       const JikuSHARITU1 = this.readSingle(buff);
-      if(JikuSHARITU1 > 0) bar.rebar2.cos = Math.round(JikuSHARITU1*1000)/1000;
+      if(JikuSHARITU1 > 0) {
+        if ( m.g_no < 2 && m.shape !== 'RC-円形' ) {
+          bar.rebar2.cos = Math.round(JikuSHARITU1*1000)/1000;
+        }
+      }
 
       const SokuR0 = this.readByte(buff);
       if(SokuR0 > 0) bar.sidebar.side_dia = SokuR0;
@@ -692,7 +757,14 @@ export class DsdDataService {
       if(SokuHON0 > 0) bar.sidebar.side_n = SokuHON0;
       const SokuHON1 = this.readByte(buff);
       const SokuKABURI0 = this.readSingle(buff);
-      if(SokuKABURI0 > 0) bar.sidebar.side_ss = SokuKABURI0;
+      if(SokuKABURI0 > 0) {
+        if ( m.g_no < 2 && m.shape !== 'RC-円形' ) {
+          const s1 = Math.floor(SokuKABURI0);
+          const s2 = Math.ceil((SokuKABURI0 - s1) * 10000);
+          if(s1 > 0) bar.sidebar.side_cover = s1;
+          if(s2 > 0) bar.sidebar.side_ss = s2;
+        }
+      }
       const SokuKABURI1 = this.readSingle(buff);
 
       const StarR0 = this.readByte(buff);
@@ -705,28 +777,52 @@ export class DsdDataService {
       if(StarPitch0 > 0) bar.stirrup.stirrup_ss = StarPitch0;
       const StarPitch1 = this.readSingle(buff);
       const StarTanTHETA0 = this.readSingle(buff);
-      if(StarTanTHETA0 > 0) bar.tan = StarTanTHETA0;
+      if(StarTanTHETA0 > 0) {
+        if(m.g_no < 2){
+          bar.tan = StarTanTHETA0;
+        }
+      }
       const StarTanTHETA1 = this.readSingle(buff);
 
       const OrimgR = this.readByte(buff);
-      if(OrimgR > 0) bar.bend.bending_dia = OrimgR;
-
+      if(OrimgR > 0) {
+        if(m.g_no < 2){
+          bar.bend.bending_dia = OrimgR;
+        }
+      }
       if (this.isOlder("3.4.5", buff.datVersID)) {
         const stDummy10 = this.readByte(buff);
-        if(stDummy10 > 0) bar.bend.bending_n = stDummy10;
+        if(stDummy10 > 0) {
+          if(m.g_no < 2){
+            bar.bend.bending_n = stDummy10;
+          }
+        }
       } else {
         const OrimgHON = this.readSingle(buff);
-        if(OrimgHON > 0) bar.bend.bending_n = OrimgHON;
+        if(OrimgHON > 0) {
+          if(m.g_no < 2){
+            bar.bend.bending_n = OrimgHON;
+          }
+        }
       }
       const OrimgANGLE = this.readByte(buff);
-      if(OrimgANGLE > 0) bar.bend.bending_angle = OrimgANGLE;
+      if(OrimgANGLE > 0) {
+        if(m.g_no < 2){
+          bar.bend.bending_angle = OrimgANGLE;
+        }
+      }
 
       if (this.isOlder("0.1.5", buff.datVersID)) {
         const Shori0 = this.readByte(buff);
         bar.rebar1.enable = Shori0 !== 0;
+
       } else {
         const OrimgKankaku = this.readSingle(buff);
-        if(OrimgKankaku > 0) bar.bend.bending_ss = OrimgKankaku;
+        if(OrimgKankaku > 0) {
+          if(m.g_no < 2){
+            bar.bend.bending_ss = OrimgKankaku;
+          }
+        }
 
         const Shori0 = this.readByte(buff);
         bar.rebar1.enable = Shori0 !== 0;
@@ -1027,7 +1123,8 @@ export class DsdDataService {
         str += tmp;
         buff.u8array = buff.u8array.slice(2);
       } else {
-        str += String.fromCharCode.apply("", buff.u8array.slice(0, 1));
+        str += Encord.convert(String.fromCharCode.apply("", buff.u8array.slice(0, 1)), 'unicode', 'sjis');
+        // str += String.fromCharCode.apply("", buff.u8array.slice(0, 1));
         buff.u8array = buff.u8array.slice(1);
       }
     }

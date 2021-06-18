@@ -41,7 +41,7 @@ export class SetHorizontalOvalService {
 
     // 鉄筋
     const result2 = this.getHorizontalOvalBar(section, safety);
-    for(const key of result2){
+    for(const key of Object.keys(result2)){
       result[key] = result2[key];
     }
 
