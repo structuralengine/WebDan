@@ -1048,7 +1048,8 @@ export class DsdDataService {
         str += tmp;
         buff.u8array = buff.u8array.slice(2);
       } else {
-        str += String.fromCharCode.apply("", buff.u8array.slice(0, 1));
+        str += Encord.convert(String.fromCharCode.apply("", buff.u8array.slice(0, 1)), 'unicode', 'sjis');
+        // str += String.fromCharCode.apply("", buff.u8array.slice(0, 1));
         buff.u8array = buff.u8array.slice(1);
       }
     }

@@ -147,6 +147,12 @@ export class InputBarsService {
           column1['stirrup_ss'] = data['stirrup'].stirrup_ss;
 
           column1['tan'] = data['tan'];
+
+          column1['bending_dia'] = data['bend'].bending_dia;
+          column1['bending_n'] = data['bend'].bending_n;
+          column1['bending_ss'] = data['bend'].bending_ss;
+          column1['bending_angle'] = data['bend'].bending_angle;
+
           table_groupe.push(column1);
 
           // 2行目
@@ -160,9 +166,6 @@ export class InputBarsService {
           column2['rebar_lines'] = data['rebar2'].rebar_lines;
           column2['rebar_space'] = data['rebar2'].rebar_space;
           column2['rebar_ss'] = data['rebar2'].rebar_ss;
-          column2['stirrup_dia'] = data['bend'].bending_dia;
-          column2['stirrup_n'] = data['bend'].bending_n;
-          column2['stirrup_ss'] = data['bend'].bending_ss;
           column2['cos'] = data['rebar2'].cos;
           column2['enable'] = data['rebar2'].enable;
 
@@ -293,10 +296,10 @@ export class InputBarsService {
       b.stirrup.stirrup_n = column1.stirrup_n;
       b.stirrup.stirrup_ss = column1.stirrup_ss;
 
-      b.bend.bending_dia = column2.stirrup_dia;
-      b.bend.bending_n = column2.stirrup_n;
-      b.bend.bending_ss = column2.stirrup_ss;
-      b.bend.bending_angle = 45;
+      b.bend.bending_dia = column1.bending_dia;
+      b.bend.bending_n = column1.bending_n;
+      b.bend.bending_ss = column1.bending_ss;
+      b.bend.bending_angle = column1.bending_angle;
 
       b.tan = column1.tan;
 
