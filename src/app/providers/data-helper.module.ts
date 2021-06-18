@@ -294,7 +294,7 @@ export class DataHelperModule {
     const dia = Math.abs(barInfo.side_dia);
 
     // 異形鉄筋:D, 丸鋼: R
-    const mark = barInfo.rebar_dia > 0 ? "D" : "R";
+    const mark = barInfo.side_dia > 0 ? "D" : "R";
 
     // 鉄筋段数
     const n = barInfo.side_n;

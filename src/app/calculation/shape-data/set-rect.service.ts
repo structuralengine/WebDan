@@ -166,13 +166,6 @@ export class SetRectService {
       throw('形状の入力が正しくありません');
     }
 
-    let bf = this.helper.toNumber(member.Bt);
-    let hf = this.helper.toNumber(member.t);
-    if (bf === null) { bf = result.B; }
-    if (hf === null) { hf = result.H; }
-    result['Bt'] = bf;
-    result['t'] = hf;
-
     return result
   }
 
@@ -253,6 +246,13 @@ export class SetRectService {
 
     const result = this.getRectangleShape(member, target, index, side, safety);
     
+    let bf = this.helper.toNumber(member.Bt);
+    let hf = this.helper.toNumber(member.t);
+    if (bf === null) { bf = result.B; }
+    if (hf === null) { hf = result.H; }
+    result['Bt'] = bf;
+    result['t'] = hf;
+
     return result;
   }
 

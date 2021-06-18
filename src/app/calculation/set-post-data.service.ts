@@ -206,6 +206,8 @@ export class SetPostDataService {
           result = 'Rectangle';
 
         } else {
+          result = 'Tsection';
+
           const b: number = this.helper.toNumber(member.B);
           if (b === null) { return null; }
           let bf: number = this.helper.toNumber(member.Bt);
@@ -214,7 +216,6 @@ export class SetPostDataService {
           if (bf === null && hf == null) {
             result = 'Rectangle';
           }
-          result = 'Tsection';
 
         }
       } else if (member.shape.indexOf('逆T形') >= 0) {
