@@ -229,6 +229,7 @@ export class InputBarsService {
         const rebar = data[key];
         const re = result[key];
         for(const k of Object.keys(re)){
+          if(k==='cos' || k==='enable'|| k==='title') continue;
           if(re[k] === null && k in rebar){
             re[k] = this.helper.toNumber(rebar[k]);
             endFlg = false; // まだ終わらない

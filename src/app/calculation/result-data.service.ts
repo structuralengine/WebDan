@@ -254,6 +254,7 @@ export class ResultDataService {
       fsd: null,
       fsu: null,
       rs: null,
+      Es: 200
     }
 
     result.tension = section.tension;
