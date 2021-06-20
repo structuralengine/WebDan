@@ -154,8 +154,8 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             title2: { alien: 'center', value: titleColumn.title2 },
             title3: { alien: 'center', value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
-            B : this.result.alien(shape.B),
-            H : this.result.alien(shape.H),
+            B : this.result.alien(this.result.numStr(shape.B,1)),
+            H : this.result.alien(this.result.numStr(shape.H,1)),
             Bt : this.result.alien(shape.Bt),
             t : this.result.alien(shape.t),
             /////////////// 引張鉄筋 ///////////////

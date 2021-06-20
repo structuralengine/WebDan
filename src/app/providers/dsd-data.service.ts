@@ -701,56 +701,80 @@ export class DsdDataService {
       if (this.isOlder("3.2.6", buff.datVersID) === true
         && this.isOlder("3.1.4", buff.datVersID) === false) {
         const stDummy6 = this.readByte(buff);
-        if(stDummy6 > 0) bar.rebar1.rebar_lines = stDummy6;
+        if(stDummy6 > 0) {
+          if(m.g_no < 3){
+            bar.rebar1.rebar_lines = stDummy6;
+          }
+        }
         const stDummy7 = this.readByte(buff);
         if(stDummy7 > 0) {
-          if ( m.shape !== 'RC-円形' ) {
+          if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
             bar.rebar2.rebar_lines = stDummy7;
           }
         }
         const stDummy8 = this.readSingle(buff);
-        if(stDummy8 > 0) bar.rebar1.rebar_space = stDummy8;
+        if(stDummy8 > 0){
+          if(m.g_no < 3){
+            bar.rebar1.rebar_space = stDummy8;
+          }
+        } 
         const stDummy9 = this.readSingle(buff);
         if(stDummy9 > 0) {
-          if ( m.shape !== 'RC-円形' ) {
+          if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
             bar.rebar2.rebar_space = stDummy9;
           }
         }
       } else {
         if (this.isOlder("3.1.4", buff.datVersID)) {
           const stDummy3 = this.readInteger(buff);
-          if(stDummy3 > 0) bar.rebar1.rebar_lines = stDummy3;
+          if(stDummy3 > 0) {
+            if(m.g_no < 3){
+              bar.rebar1.rebar_lines = stDummy3;
+            }
+          }
           const stDummy4 = this.readInteger(buff);
           if(stDummy4 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_lines = stDummy4;
             }
           }
         } else {
           const JikuNARABI0 = this.readSingle(buff);
-          if(JikuNARABI0 > 0) bar.rebar1.rebar_lines = JikuNARABI0;
+          if(JikuNARABI0 > 0) {
+            if(m.g_no < 3){
+              bar.rebar1.rebar_lines = JikuNARABI0;
+            }
+          }
           const JikuNARABI1 = this.readSingle(buff);
           if(JikuNARABI1 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_lines = JikuNARABI1;
             }
           }
         }
         if (this.isOlder("3.3.2", buff.datVersID)) {
           const stDummy6 = this.readByte(buff);
-          if(stDummy6 > 0) bar.rebar1.rebar_space = stDummy6;
+          if(stDummy6 > 0) {
+            if(m.g_no < 3){
+              bar.rebar1.rebar_space = stDummy6;
+            }
+          }
           const stDummy7 = this.readByte(buff);
           if(stDummy7 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_space = stDummy7;
             }
           }
         } else {
           const JikuAKI0 = this.readSingle(buff);
-          if(JikuAKI0 > 0) bar.rebar1.rebar_space = JikuAKI0;
+          if(JikuAKI0 > 0){
+            if(m.g_no < 3){
+              bar.rebar1.rebar_space = JikuAKI0;
+            }
+          } 
           const JikuAKI1 = this.readSingle(buff);
           if(JikuAKI1 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_space = JikuAKI1;
             }
           }
@@ -758,16 +782,22 @@ export class DsdDataService {
       }
       const JikuPITCH0 = this.readSingle(buff);
       if(JikuPITCH0 > 0) {
-        bar.rebar1.rebar_ss = Math.round(JikuPITCH0 * 10 )/ 10;
+        if(m.g_no < 3){
+          bar.rebar1.rebar_ss = Math.round(JikuPITCH0 * 10 )/ 10;
+        }
       }
       const JikuPITCH1 = this.readSingle(buff);
       if(JikuPITCH1 > 0) {
-        if ( m.shape !== 'RC-円形' ) {
+        if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
           bar.rebar2.rebar_ss = Math.round(JikuPITCH1 * 10 )/ 10;
         }
       }
       const JikuSHARITU0 = this.readSingle(buff);
-      if(JikuSHARITU0 > 0) bar.rebar1.cos = Math.round(JikuSHARITU0*1000)/1000;
+      if(JikuSHARITU0 > 0) {
+        if(m.g_no < 2){
+          bar.rebar1.cos = Math.round(JikuSHARITU0*1000)/1000;
+        }
+      }
       const JikuSHARITU1 = this.readSingle(buff);
       if(JikuSHARITU1 > 0) {
         if ( m.g_no < 2 && m.shape !== 'RC-円形' ) {
@@ -776,10 +806,18 @@ export class DsdDataService {
       }
 
       const SokuR0 = this.readByte(buff);
-      if(SokuR0 > 0) bar.sidebar.side_dia = SokuR0;
+      if(SokuR0 > 0) {
+        if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
+          bar.sidebar.side_dia = SokuR0;
+        }
+      }
       const SokuR1 = this.readByte(buff);
       const SokuHON0 = this.readByte(buff);
-      if(SokuHON0 > 0) bar.sidebar.side_n = SokuHON0;
+      if(SokuHON0 > 0) {
+        if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
+          bar.sidebar.side_n = SokuHON0;
+        }
+      }
       const SokuHON1 = this.readByte(buff);
       const SokuKABURI0 = this.readSingle(buff);
       if(SokuKABURI0 > 0) {

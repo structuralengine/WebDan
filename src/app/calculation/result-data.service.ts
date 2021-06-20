@@ -111,16 +111,22 @@ export class ResultDataService {
       case 'Circle':            // 円形
         if (target === 'Md') {
           section = this.circle.getCircleShape(member, index, safety);
+          result['Ast'] = this.getAst(section, safety);
+          result.shape.H = section.H;
         } else {
           section = this.circle.getCircleVdShape(member, index, safety);
-        }
-        result.shape.H = section.H;
+          result['Ast'] = this.getAstCircleVd(section, safety);
+          result.shape.H = section.H;
+          result.shape.B = section.B;
+          }
         break;
 
       case 'Ring':              // 円環
         if (target === 'Md') {
           section = this.circle.getRingShape(member, index, safety);
+          result['Ast'] = this.getAst(section, safety);
         } else {
+          result['Ast'] = this.getAstCircleVd(section, safety);
           section = this.circle.getRingVdShape(member, index, safety);
         }
         result.shape.H = section.H;
@@ -129,6 +135,7 @@ export class ResultDataService {
 
       case 'Rectangle':         // 矩形
         section = this.rect.getRectangleShape(member, target, index, side, safety);
+        result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
         break;
@@ -136,6 +143,7 @@ export class ResultDataService {
       case 'Tsection':          // T形
       case 'InvertedTsection':  // 逆T形
         section = this.rect.getTsectionShape(member, target, index, side, safety);
+        result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
         result.shape.Bt = section.Bt;
@@ -144,12 +152,14 @@ export class ResultDataService {
 
       case 'HorizontalOval':    // 水平方向小判形
         section = this.hOval.getShape(member, index, side, safety);
+        result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
         break;
 
       case 'VerticalOval':      // 鉛直方向小判形
         section = this.vOval.getShape(member, index, side, safety);
+        result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
         break;
@@ -158,7 +168,6 @@ export class ResultDataService {
         throw ("断面形状：" + shapeName + " は適切ではありません。");
     }
 
-    result['Ast'] = this.getAst(section, safety);
     result['Asc'] = this.getAsc(section);
     result['Ase'] = this.getAse(section);
 
@@ -238,6 +247,41 @@ export class ResultDataService {
     }
     result.tan = tan;
 
+
+    return result;
+
+  }
+  
+  private getAstCircleVd(section: any, safety: any): any {
+
+    const result = {
+      tension: null,
+      Ast: null,
+      AstString: null,
+      dst: null,
+      fsy: null,
+      fsd: null,
+      fsu: null,
+      rs: null,
+      Es: 200
+    }
+
+    result.tension = section.tension;
+    result.fsy = section.tension.fsy.fsy;
+    result.fsu = section.tension.fsy.fsu;
+    result.rs = safety.safety_factor.rs;
+    result.fsd = Math.round(result.fsy / result.rs * 10) /10;
+
+
+    const mark = section.tension.mark === "R" ? "φ" : "D";
+    const AstDia = mark + section.tension.rebar_dia;
+    let rebar_n = section.tension.rebar_n;
+
+    const Astx: number = this.helper.getAs(AstDia) * rebar_n * section.tension.cos;
+
+    result.Ast = Astx;
+    result.AstString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
+    result.dst = section.tension.dsc;
 
     return result;
 

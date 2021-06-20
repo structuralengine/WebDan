@@ -153,8 +153,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
               title2 : { alien: "center", value: titleColumn.title2 },
               title3 :  { alien: "center", value: titleColumn.title3 },
               ///////////////// 形状 /////////////////
-              B : this.result.alien(shape.B),
-              H : this.result.alien(shape.H),
+              B : this.result.alien(this.result.numStr(shape.B,1)),
+              H : this.result.alien(this.result.numStr(shape.H,1)),
               /////////////// 引張鉄筋 ///////////////
               tan : this.result.alien(( section.tan === 0 ) ? '-' : section.tan, "center"),
               Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
