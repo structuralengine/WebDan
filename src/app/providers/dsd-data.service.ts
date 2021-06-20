@@ -121,7 +121,8 @@ export class DsdDataService {
     this.basic.set_specification2(dt1Spec)
 
     const dt1Ser = this.readInteger(buff);
-    const dt1Sekou = this.readByte(buff);
+    const dt1Sekou = this.readByte(buff); // 杭の施工条件
+    buff['dt1Sekou'] = dt1Sekou;
     const dt1Shusei = this.readSingle(buff); // -----> 材料修正係数 ----->  ' 耐用年数 05/02/22
     this.fatigues.service_life = dt1Shusei;
 
@@ -511,12 +512,36 @@ export class DsdDataService {
       }
       if (IsOldData) {
         const iii = this.readInteger(buff);
-        material_concrete.fck = iii;
+        material_concrete.fck = Math.round(iii * 10 )/ 10;
       } else {
         const Dummy = this.readSingle(buff);
-        material_concrete.fck = Dummy;
+        material_concrete.fck = Math.round(Dummy * 10 )/ 10;
       }
 
+      if(this.helper.toNumber(g_id) >= 3){
+        let id = null;
+        switch(buff['dt1Sekou']){
+          case 0:
+            id = 'pile-000';
+            break;
+          case 1:
+            id = 'pile-001';
+            break;
+          case 2:
+            id = 'pile-002';
+            break;
+          case 3:
+            id = 'pile-003';
+            break;
+          case 9:
+            id = 'pile-004';
+            break;
+        }
+        for(const key of Object.keys(pile_factor)){
+          const value = pile_factor[key];
+          value.selected = (value.id === id) ? true : false;
+        }
+      }
       jsonData.safety_factor[g_id] = safety_factor;
       jsonData.material_bar[g_id] = material_bar;
       jsonData.material_steel[g_id] = material_steel;

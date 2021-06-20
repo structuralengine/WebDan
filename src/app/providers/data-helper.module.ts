@@ -309,9 +309,9 @@ export class DataHelperModule {
     }
 
     // 鉄筋かぶり
-    let dse = barInfo.side_cover;
-    if (this.toNumber(dse) === null) {
-      dse = dsc + space;
+    let cover = barInfo.side_cover;
+    if (this.toNumber(cover) === null) {
+      cover = dsc + space;
     }
 
     // 1段当りの本数
@@ -322,7 +322,7 @@ export class DataHelperModule {
       side_dia: dia,
       n,
       space,
-      dse,
+      cover,
       line
     }
   }

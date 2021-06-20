@@ -321,13 +321,17 @@ export class ResultDataService {
 
     const mark = section.sidebar.mark === "R" ? "φ" : "D";
     const AstDia = mark + section.sidebar.side_dia;
-    let rebar_n = section.sidebar.n;
+    const rebar_n = section.sidebar.n;
 
     const Astx: number = this.helper.getAs(AstDia) * rebar_n;
 
     result.Ase = Astx;
     result.AseString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
-    result.dse = section.sidebar.dse;
+
+    const cover = section.sidebar.cover;
+    const space = section.sidebar.space;
+    
+    result.dse = cover + (space * (rebar_n - 1)) / 2;
 
     return result;
 

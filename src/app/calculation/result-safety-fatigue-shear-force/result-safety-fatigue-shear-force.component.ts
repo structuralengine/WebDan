@@ -128,7 +128,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             tan : this.result.alien(( section.tan === 0 ) ? '-' : section.tan, "center"),
             Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
             AstString : this.result.alien(section.Ast.AstString, "center"),
-            dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), "center"),
             /////////////// コンクリート情報 ///////////////
             fck : this.result.alien(fck.fck.toFixed(1), "center"),
             rc : this.result.alien(fck.rc.toFixed(2), "center"),
