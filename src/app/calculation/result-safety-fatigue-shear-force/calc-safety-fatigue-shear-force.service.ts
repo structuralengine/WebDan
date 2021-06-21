@@ -321,7 +321,7 @@ export class CalcSafetyFatigueShearForceService {
     const tmpN1: number = 365 * T * jA * NA * Math.pow(SASC, 1 / k);
     const tmpN2: number = 365 * T * jB * NB * Math.pow(SBSC, 1 / k);
     const N: number = tmpN1 + tmpN2;
-    result['N'] = Math.ceil(N / 100) * 100;
+    result['N'] = Math.round(N / 100) * 100;
 
     // frd の計算
     const tmpR21: number = Math.pow(a, 1 / k);
