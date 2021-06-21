@@ -121,7 +121,8 @@ export class DsdDataService {
     this.basic.set_specification2(dt1Spec)
 
     const dt1Ser = this.readInteger(buff);
-    const dt1Sekou = this.readByte(buff);
+    const dt1Sekou = this.readByte(buff); // 杭の施工条件
+    buff['dt1Sekou'] = dt1Sekou;
     const dt1Shusei = this.readSingle(buff); // -----> 材料修正係数 ----->  ' 耐用年数 05/02/22
     this.fatigues.service_life = dt1Shusei;
 
@@ -511,12 +512,36 @@ export class DsdDataService {
       }
       if (IsOldData) {
         const iii = this.readInteger(buff);
-        material_concrete.fck = iii;
+        material_concrete.fck = Math.round(iii * 10 )/ 10;
       } else {
         const Dummy = this.readSingle(buff);
-        material_concrete.fck = Dummy;
+        material_concrete.fck = Math.round(Dummy * 10 )/ 10;
       }
 
+      if(this.helper.toNumber(g_id) >= 3){
+        let id = null;
+        switch(buff['dt1Sekou']){
+          case 0:
+            id = 'pile-000';
+            break;
+          case 1:
+            id = 'pile-001';
+            break;
+          case 2:
+            id = 'pile-002';
+            break;
+          case 3:
+            id = 'pile-003';
+            break;
+          case 9:
+            id = 'pile-004';
+            break;
+        }
+        for(const key of Object.keys(pile_factor)){
+          const value = pile_factor[key];
+          value.selected = (value.id === id) ? true : false;
+        }
+      }
       jsonData.safety_factor[g_id] = safety_factor;
       jsonData.material_bar[g_id] = material_bar;
       jsonData.material_steel[g_id] = material_steel;
@@ -676,56 +701,80 @@ export class DsdDataService {
       if (this.isOlder("3.2.6", buff.datVersID) === true
         && this.isOlder("3.1.4", buff.datVersID) === false) {
         const stDummy6 = this.readByte(buff);
-        if(stDummy6 > 0) bar.rebar1.rebar_lines = stDummy6;
+        if(stDummy6 > 0) {
+          if(m.g_no < 3){
+            bar.rebar1.rebar_lines = stDummy6;
+          }
+        }
         const stDummy7 = this.readByte(buff);
         if(stDummy7 > 0) {
-          if ( m.shape !== 'RC-円形' ) {
+          if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
             bar.rebar2.rebar_lines = stDummy7;
           }
         }
         const stDummy8 = this.readSingle(buff);
-        if(stDummy8 > 0) bar.rebar1.rebar_space = stDummy8;
+        if(stDummy8 > 0){
+          if(m.g_no < 3){
+            bar.rebar1.rebar_space = stDummy8;
+          }
+        } 
         const stDummy9 = this.readSingle(buff);
         if(stDummy9 > 0) {
-          if ( m.shape !== 'RC-円形' ) {
+          if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
             bar.rebar2.rebar_space = stDummy9;
           }
         }
       } else {
         if (this.isOlder("3.1.4", buff.datVersID)) {
           const stDummy3 = this.readInteger(buff);
-          if(stDummy3 > 0) bar.rebar1.rebar_lines = stDummy3;
+          if(stDummy3 > 0) {
+            if(m.g_no < 3){
+              bar.rebar1.rebar_lines = stDummy3;
+            }
+          }
           const stDummy4 = this.readInteger(buff);
           if(stDummy4 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_lines = stDummy4;
             }
           }
         } else {
           const JikuNARABI0 = this.readSingle(buff);
-          if(JikuNARABI0 > 0) bar.rebar1.rebar_lines = JikuNARABI0;
+          if(JikuNARABI0 > 0) {
+            if(m.g_no < 3){
+              bar.rebar1.rebar_lines = JikuNARABI0;
+            }
+          }
           const JikuNARABI1 = this.readSingle(buff);
           if(JikuNARABI1 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_lines = JikuNARABI1;
             }
           }
         }
         if (this.isOlder("3.3.2", buff.datVersID)) {
           const stDummy6 = this.readByte(buff);
-          if(stDummy6 > 0) bar.rebar1.rebar_space = stDummy6;
+          if(stDummy6 > 0) {
+            if(m.g_no < 3){
+              bar.rebar1.rebar_space = stDummy6;
+            }
+          }
           const stDummy7 = this.readByte(buff);
           if(stDummy7 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_space = stDummy7;
             }
           }
         } else {
           const JikuAKI0 = this.readSingle(buff);
-          if(JikuAKI0 > 0) bar.rebar1.rebar_space = JikuAKI0;
+          if(JikuAKI0 > 0){
+            if(m.g_no < 3){
+              bar.rebar1.rebar_space = JikuAKI0;
+            }
+          } 
           const JikuAKI1 = this.readSingle(buff);
           if(JikuAKI1 > 0) {
-            if ( m.shape !== 'RC-円形' ) {
+            if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
               bar.rebar2.rebar_space = JikuAKI1;
             }
           }
@@ -733,16 +782,22 @@ export class DsdDataService {
       }
       const JikuPITCH0 = this.readSingle(buff);
       if(JikuPITCH0 > 0) {
-        bar.rebar1.rebar_ss = Math.round(JikuPITCH0 * 10 )/ 10;
+        if(m.g_no < 3){
+          bar.rebar1.rebar_ss = Math.round(JikuPITCH0 * 10 )/ 10;
+        }
       }
       const JikuPITCH1 = this.readSingle(buff);
       if(JikuPITCH1 > 0) {
-        if ( m.shape !== 'RC-円形' ) {
+        if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
           bar.rebar2.rebar_ss = Math.round(JikuPITCH1 * 10 )/ 10;
         }
       }
       const JikuSHARITU0 = this.readSingle(buff);
-      if(JikuSHARITU0 > 0) bar.rebar1.cos = Math.round(JikuSHARITU0*1000)/1000;
+      if(JikuSHARITU0 > 0) {
+        if(m.g_no < 2){
+          bar.rebar1.cos = Math.round(JikuSHARITU0*1000)/1000;
+        }
+      }
       const JikuSHARITU1 = this.readSingle(buff);
       if(JikuSHARITU1 > 0) {
         if ( m.g_no < 2 && m.shape !== 'RC-円形' ) {
@@ -751,10 +806,18 @@ export class DsdDataService {
       }
 
       const SokuR0 = this.readByte(buff);
-      if(SokuR0 > 0) bar.sidebar.side_dia = SokuR0;
+      if(SokuR0 > 0) {
+        if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
+          bar.sidebar.side_dia = SokuR0;
+        }
+      }
       const SokuR1 = this.readByte(buff);
       const SokuHON0 = this.readByte(buff);
-      if(SokuHON0 > 0) bar.sidebar.side_n = SokuHON0;
+      if(SokuHON0 > 0) {
+        if ( m.g_no < 3 && m.shape !== 'RC-円形' ) {
+          bar.sidebar.side_n = SokuHON0;
+        }
+      }
       const SokuHON1 = this.readByte(buff);
       const SokuKABURI0 = this.readSingle(buff);
       if(SokuKABURI0 > 0) {

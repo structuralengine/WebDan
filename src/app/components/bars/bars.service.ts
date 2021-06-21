@@ -303,6 +303,19 @@ export class InputBarsService {
 
       b.tan = column1.tan;
 
+      for(const key1 of Object.keys(b)){
+        const value1 = b[key1];
+        if(['rebar1', 'rebar2', 'sidebar', 'stirrup', 'bend'].includes(key1)){
+          for(const key2 of Object.keys(value1)){
+            const value2 = value1[key2];
+            if( value2 === undefined ){
+              value1[key2] = null;
+            }
+          }
+        } else if( value1 === undefined ){
+          b[key1] = null;
+        }
+      }
       this.bar_list.push(b);
     }
   }

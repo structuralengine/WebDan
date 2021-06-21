@@ -154,22 +154,22 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             title2: { alien: 'center', value: titleColumn.title2 },
             title3: { alien: 'center', value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
-            B : this.result.alien(shape.B),
-            H : this.result.alien(shape.H),
+            B : this.result.alien(this.result.numStr(shape.B,1)),
+            H : this.result.alien(this.result.numStr(shape.H,1)),
             Bt : this.result.alien(shape.Bt),
             t : this.result.alien(shape.t),
             /////////////// 引張鉄筋 ///////////////
             Ast : this.result.alien(this.result.numStr(section.Ast.Ast), 'center'),
             AstString : this.result.alien(section.Ast.AstString, 'center'),
-            dst : this.result.alien(this.result.numStr(section.Ast.dst), 'center'),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), 'center'),
             /////////////// 圧縮鉄筋 ///////////////
             Asc : this.result.alien(this.result.numStr(section.Asc.Asc), 'center'),
             AscString : this.result.alien(section.Asc.AscString, 'center'),
-            dsc : this.result.alien(this.result.numStr(section.Asc.dsc), 'center'),
+            dsc : this.result.alien(this.result.numStr(section.Asc.dsc ,1), 'center'),
             /////////////// 側面鉄筋 ///////////////
             Ase : this.result.alien(this.result.numStr(section.Ase.Ase), 'center'),
             AseString : this.result.alien(section.Ase.AseString, 'center'),
-            dse : this.result.alien(this.result.numStr(section.Ase.dse), 'center'),
+            dse : this.result.alien(this.result.numStr(section.Ase.dse, 1), 'center'),
             /////////////// コンクリート情報 ///////////////
             fck : this.result.alien(fck.fck.toFixed(1), 'center'),
             rc : this.result.alien(fck.rc.toFixed(2), 'center'),

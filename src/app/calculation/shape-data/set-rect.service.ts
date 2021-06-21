@@ -405,7 +405,7 @@ export class SetRectService {
     // 鉄筋情報を登録
     for (let i = 0; i < barInfo.n; i++) {
       const Steel1 = {
-        Depth: barInfo.dse + i * barInfo.space,
+        Depth: barInfo.cover + i * barInfo.space,
         i: dia,
         n: barInfo.line,
         IsTensionBar: false,

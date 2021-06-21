@@ -28,8 +28,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/handsontable.full.css"
+              "src/styles.scss"
             ],
             "scripts": []
           },

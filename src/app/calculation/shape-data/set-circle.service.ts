@@ -141,14 +141,27 @@ export class SetCircleService {
       for (let j = 0; j < num; j++) {
         const deg = j * steps;
         const dst = Rt / 2 - (Math.cos(this.helper.Radians(deg)) * Rt) / 2 + Depth;
-        const tensionBar: boolean = deg >= 135 && deg <= 225 ? true : false;
-        Steels.push({
-          Depth: dst, // 深さ位置
-          i: dia, // 鋼材
-          n: 1, // 鋼材の本数
-          IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
-          ElasticID: id, // 材料番号
-        });
+        if( deg === 135 || deg === 225){
+          // ちょうど 45° 半分引張鉄筋
+          for(const tensionBar of [true, false]){
+            Steels.push({
+              Depth: dst, // 深さ位置
+              i: dia, // 鋼材
+              n: 0.5, // 鋼材の本数
+              IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
+              ElasticID: id, // 材料番号
+            });      
+          }
+        } else {
+          const tensionBar: boolean = deg >= 135 && deg <= 225 ? true : false;
+          Steels.push({
+            Depth: dst, // 深さ位置
+            i: dia, // 鋼材
+            n: 1, // 鋼材の本数
+            IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
+            ElasticID: id, // 材料番号
+          });
+        }
       }
     }
 
@@ -166,7 +179,7 @@ export class SetCircleService {
     if(tension === null){
       throw ("引張鉄筋情報がありません");
     }
-    if(tension.rebar_ss === null){
+    if(tension.rebar_ss === null || tension.rebar_ss === 0){
       const D = result.H - tension.dsc * 2;
       tension.rebar_ss = D / tension.line;
     }
@@ -214,12 +227,14 @@ export class SetCircleService {
     let d = 0.0, n = 0;
     for(const s of steels){
       if(s.IsTensionBar === true){
-        d += s.Depth;
+        d += s.Depth * s.n;
         n += s.n;
       }
     }
-    const dsc = h - (d / n);
-    tension.dsc = dsc;
+    const dh = (section.H - h)/2;
+    const dsc = d / n;
+    tension.dsc = h - dsc + dh;
+    tension.rebar_n = n;
 
     return result;
   }
