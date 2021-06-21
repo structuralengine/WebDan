@@ -23,8 +23,9 @@ export class SectionForceListComponent implements OnInit {
   public isLoading = true;
   public isFulfilled = false;
 
-  private rowCountAtPage: number = 65; // 1ページあたり 65行
+  private rowCountAtPage: number = 52; // 1ページあたり 65行 --(変更)-> 最大55行程度？
   private rowTitleRowCount: number = 6; // タイトル行は 6行分
+  private rowTitleRowCount1: number = 4; // タイトル行は 4行分
 
   constructor(
     private members: InputMembersService,
@@ -295,14 +296,15 @@ export class SectionForceListComponent implements OnInit {
     const result: object = {};
     const tableRowsOfPage: any[] = new Array();
     let rows: any[] = new Array();
-    currentRow += this.rowTitleRowCount;
+    //currentRow += this.rowTitleRowCount;
+    currentRow += currentRow === 0 ? this.rowTitleRowCount : this.rowTitleRowCount1;
     const a: number = tableType === 1 ? 1 : 2;
     const RowsCount: number = targetRows.length * a;
 
     if (currentRow > this.rowTitleRowCount) {
       if (this.rowCountAtPage < currentRow + RowsCount) {
         // 改ページが必要
-        if (this.rowTitleRowCount + RowsCount < this.rowCountAtPage) {
+        if (this.rowTitleRowCount1 + RowsCount < this.rowCountAtPage) {
           // 次のページに収まる
           tableRowsOfPage.push(null);
           tableRowsOfPage.push(targetRows);
