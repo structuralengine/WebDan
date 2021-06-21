@@ -46,8 +46,10 @@ export class CalcSafetyMomentService {
     }
 
     const No5 = (this.save.isManual()) ? 5 : this.basic.pickup_moment_no(5);
-    this.DesignForceList = this.force.getDesignForceList(
-      'Md', No5);
+    if(No5 === null){
+      return;
+    }
+    this.DesignForceList = this.force.getDesignForceList('Md', No5);
 
   }
 

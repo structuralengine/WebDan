@@ -111,11 +111,7 @@ export class SetDesignForceService {
       // 奥行き本数
       const n: number = position.n;
       const index = position.index;
-      if(index === 20){
-        console.log();
-      }
-
-      const force = targetPick.find((value) => value.index === position.index);
+      const force = targetPick.find((value) => value.index === index);
 
       if (force === undefined) {
         return new Array(); // 存在しない着目点がある
