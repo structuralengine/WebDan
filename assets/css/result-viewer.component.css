@@ -98,9 +98,11 @@
 p.noword {
   margin-bottom: 14pt;
 }
-
 p.caption {
   text-align: center;
+}
+div.noword{
+  margin-bottom: 14pt;
 }
 
 table.title {
@@ -126,6 +128,7 @@ table.formula .bottom {
 .cell_title1 {
   font-size: 12pt;
   text-align: left;
+  margin-top: 14px;
 }
 
 .cell_title2 {
@@ -235,3 +238,31 @@ div.center {
   caption-side: top;
   font-size: 12px;
 }
+
+/*以降は一覧表に用いる*/
+table.spreadsheet{
+  font-size: 12px;
+  table-layout: fixed;
+  margin: 0;
+  border: 1px solid black;
+}
+/*table.spreadsheet thead.head {
+  border-bottom: 1px solid black;
+}
+table.spreadsheet tbody.body {
+  border-top: 1px solid lightgray;
+}*/
+table.spreadsheet tr {
+  height: 12px;
+}
+table.spreadsheet .left{ text-align: left; padding-left: 2px; }
+table.spreadsheet .center{ text-align: center; }
+table.spreadsheet .right{ text-align: right; padding-right: 2px; }
+table.spreadsheet .g-top1{ border-top: 1px solid lightgray; }
+table.spreadsheet .g-right1{ border-right: 1px solid lightgray; }
+table.spreadsheet .g-bottom1{ border-bottom: 1px solid lightgray; }
+table.spreadsheet .g-left1{ border-left: 1px solid lightgray; }
+table.spreadsheet .g-top2{ border-top: 1px solid black; }
+table.spreadsheet .g-right2{ border-right: 1px solid black; }
+table.spreadsheet .g-bottom2{ border-bottom: 1px solid black; }
+table.spreadsheet .g-left2{ border-left: 1px solid black; }
