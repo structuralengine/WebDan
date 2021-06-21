@@ -110,6 +110,11 @@ export class SetDesignForceService {
     for (const position of result) {
       // 奥行き本数
       const n: number = position.n;
+      const index = position.index;
+      if(index === 20){
+        console.log();
+      }
+
       const force = targetPick.find((value) => value.index === position.index);
 
       if (force === undefined) {
@@ -402,7 +407,7 @@ export class SetDesignForceService {
           // side が同じ場合値の大きい方を採用する
           if(isMax && (Math.abs(r[target]) < Math.abs(f[target]))){
             result[i] = f;
-          } else if (Math.abs(r[target]) > Math.abs(f[target])) {
+          } else if (!isMax && Math.abs(r[target]) > Math.abs(f[target])) {
             result[i] = f;
           }
         }
