@@ -130,9 +130,10 @@ export class ResultSafetyMomentComponent implements OnInit {
             const titleColumn = this.result.getTitleString(section.member, position, side)
             const fck: any = this.helper.getFck(safety);
 
-            const resultColumn: any = this.calc.getResultValue(
+            const resultColumn: any = this.getResultString(
+              this.calc.getResultValue(
               res, safety
-            );
+            ));
 
             const column = {
               /////////////// タイトル ///////////////
@@ -165,17 +166,17 @@ export class ResultSafetyMomentComponent implements OnInit {
               rs : this.result.alien(section.Ast.rs.toFixed(2), 'center'),
               fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), 'center'),
               /////////////// 照査 ///////////////
-              Md : { alien: 'right', value: (Math.round(resultColumn.Md*10)/10).toFixed(1) },
-              Nd : { alien: 'right', value: (Math.round(resultColumn.Nd*10)/10).toFixed(1) },
-              ecu : { alien: 'right', value: resultColumn.εcu.toFixed(5) },
-              es : { alien: 'right', value: resultColumn.εs.toFixed(5) },
-              x : { alien: 'right', value: resultColumn.x.toFixed(1) },
-              Mu : { alien: 'right', value: resultColumn.Mu.toFixed(1) },
-              rb : { alien: 'right', value: resultColumn.rb.toFixed(2) },
-              Mud : { alien: 'right', value: resultColumn.Mud.toFixed(1) },
-              ri : { alien: 'right', value: resultColumn.ri.toFixed(2) },
-              ratio : { alien: 'right', value: resultColumn.ratio.toFixed(3) },
-              result : { alien: 'center', value: resultColumn.result },
+              Md : resultColumn.Md,
+              Nd : resultColumn.Nd,
+              ecu : resultColumn.ecu,
+              es : resultColumn.es,
+              x : resultColumn.x,
+              Mu : resultColumn.Mu,
+              rb : resultColumn.rb,
+              Mud : resultColumn.Mud,
+              ri : resultColumn.ri,
+              ratio : resultColumn.ratio,
+              result : resultColumn.result,
 
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
@@ -204,6 +205,70 @@ export class ResultSafetyMomentComponent implements OnInit {
         result.push(page);
       }
     }
+    return result;
+  }
+
+  private getResultString(re: any): any {
+    const result = {
+
+      Md: { alien: "center", value: "-" },
+      Nd: { alien: "center", value: "-" },
+      ecu: { alien: "center", value: "-" },
+      es: { alien: "center", value: "-" },
+      x: { alien: "center", value: "-" },
+
+      Mu: { alien: "center", value: "-" },
+      rb: { alien: "center", value: "-" },
+      Mud: { alien: "center", value: "-" },
+
+      ri: { alien: "center", value: "-" },
+      ratio: { alien: "center", value: "-" },
+      result: { alien: "center", value: "-" },
+
+      };
+
+    // 帯鉄筋
+    if ("Md" in re) {
+      result.Md = { alien: "right", value: (Math.round(re.Md*10)/10).toFixed(1) };
+    }
+    if ("Nd" in re) {
+      result.Nd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
+    }
+    if ("ecu" in re) {
+      result.ecu = { alien: "right", value: re.εcu.toFixed(5) };
+    }
+    if ("es" in re) {
+      result.es = { alien: "right", value: re.εs.toFixed(5) };
+    }
+    if ("x" in re) {
+      result.x = { alien: "right", value: re.x.toFixed(1) };
+    }
+
+    if ("Mu" in re) {
+      result.Mu = { alien: "right", value: re.Mu.toFixed(1) };
+    }
+    if ("rb" in re) {
+      result.rb = { alien: "right", value: re.rb.toFixed(2) };
+    }
+    if ("Mud" in re) {
+      result.Mud = { alien: "right", value: re.Mud.toFixed(1) };
+    }
+
+    if ("ri" in re) {
+      result.ri = { alien: "right", value: re.ri.toFixed(2) };
+    }
+    let ratio = 0;
+    if ("ratio" in re) {
+      //result.ratio.value = re.ratio.toFixed(3);
+      ratio = re.ratio;
+      result.ratio.value = re.ratio.toFixed(3).toString() + ((re.ratio < 1) ? ' < 1.00' : ' < 1.00');
+    }
+    if (ratio < 1) {
+      result.result.value = "OK";
+    } else {
+      result.result.value = "NG";
+    }
+
     return result;
   }
 }

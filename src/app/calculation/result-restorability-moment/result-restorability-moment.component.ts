@@ -138,9 +138,10 @@ export class ResultRestorabilityMomentComponent implements OnInit {
             const titleColumn = this.result.getTitleString(section.member, position, side)
             const fck: any = this.helper.getFck(safety);
 
-            const resultColumn: any = this.calc.getResultValue(
+            const resultColumn: any = this.getResultString(
+               this.calc.getResultValue(
               res, safety, DesignForceList
-            );
+            ));
 
 
             const column = {
@@ -174,17 +175,17 @@ export class ResultRestorabilityMomentComponent implements OnInit {
               rs : this.result.alien(section.Ast.rs.toFixed(2), 'center'),
               fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), 'center'),
               /////////////// 照査 ///////////////
-              Md : { alien: 'right', value: Math.abs((Math.round(resultColumn.Md*10)/10)).toFixed(1) },
-              Nd : { alien: 'right', value: (Math.round(resultColumn.Nd*10)/10).toFixed(1) },
-              ecu : { alien: 'right', value: resultColumn.εcu.toFixed(5) },
-              es : { alien: 'right', value: resultColumn.εs.toFixed(5) },
-              x : { alien: 'right', value: resultColumn.x.toFixed(1) },
-              My : { alien: 'right', value: resultColumn.My.toFixed(1) },
-              rb : { alien: 'right', value: resultColumn.rb.toFixed(2) },
-              Myd : { alien: 'right', value: resultColumn.Myd.toFixed(1) },
-              ri : { alien: 'right', value: resultColumn.ri.toFixed(2) },
-              ratio : { alien: 'right', value: resultColumn.ratio.toFixed(3) },
-              result : { alien: 'center', value: resultColumn.result },
+              Md : resultColumn.Md,
+              Nd : resultColumn.Nd,
+              ecu : resultColumn.ecu,
+              es : resultColumn.es,
+              x : resultColumn.x,
+              My : resultColumn.My,
+              rb : resultColumn.rb,
+              Myd : resultColumn.Myd,
+              ri : resultColumn.ri,
+              ratio : resultColumn.ratio,
+              result : resultColumn.result,
 
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
@@ -213,6 +214,67 @@ export class ResultRestorabilityMomentComponent implements OnInit {
         result.push(page);
       }
     }
+    return result;
+  }
+
+  private getResultString(re: any): any {
+    const result = {
+
+      Md: { alien: "center", value: "-" },
+      Nd: { alien: "center", value: "-" },
+      ecu: { alien: "center", value: "-" },
+      es: { alien: "center", value: "-" },
+      x: { alien: "center", value: "-" },
+      My: { alien: "center", value: "-" },
+      rb: { alien: "center", value: "-" },
+      Myd: { alien: "center", value: "-" },
+      ri: { alien: "center", value: "-" },
+      ratio: { alien: "center", value: "-" },
+      result: { alien: "center", value: "-" },
+    };
+
+
+    // 断面力
+    if ("Md" in re) {
+      result.Md = { alien: "right", value: Math.abs((Math.round(re.Md*10)/10)).toFixed(1) };
+    }
+    if ("Nd" in re) {
+      result.Nd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
+    }
+    if ("ecu" in re) {
+      result.ecu = { alien: "right", value: re.εcu.toFixed(5) };
+    }
+    if ("es" in re) {
+      result.es = { alien: "right", value: re.εs.toFixed(5) };
+    }
+    if ("x" in re) {
+      result.x = { alien: "right", value: re.x.toFixed(1) };
+    }
+    if ("My" in re) {
+      result.My = { alien: "right", value: re.My.toFixed(1) };
+    }
+
+    // 耐力
+    if ("rb" in re) {
+      result.rb = { alien: "right", value: re.rb.toFixed(2) };
+    }
+    if ("Myd" in re) {
+      result.Myd = { alien: "right", value: re.Myd.toFixed(1) };
+    }
+    if ("ri" in re) {
+      result.ri = { alien: "right", value: re.ri.toFixed(2) };
+    }
+    let ratio = 0;
+    if ("ratio" in re) {
+      result.ratio.value = re.ratio.toFixed(3);
+      ratio = re.ratio;
+    }
+    if (ratio < 1) {
+      result.result.value = "OK";
+    } else {
+      result.result.value = "NG";
+    }
+
     return result;
   }
 

@@ -330,7 +330,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.fsr200 = { alien: "right", value: re.fsr200.toFixed(2) };
     }
     if ("ratio200" in re) {
-      result.ratio200.value = re.ratio200.toFixed(3);
+      result.ratio200.value = re.ratio200.toFixed(3).toString() + ((re.ratio200 < 1) ? ' < 1.00' : ' > 1.00')
     }
 
     if ("k" in re) {
@@ -375,7 +375,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
     let ratio = 0;
     if ("ratio" in re) {
-      result.ratio.value = re.ratio.toFixed(3);
+      result.ratio.value = re.ratio.toFixed(3).toString() + ((re.ratio < 1) ? ' < 1.00' : ' > 1.00');
       ratio = re.ratio;
     }
     if (ratio < 1) {
