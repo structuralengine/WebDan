@@ -67,7 +67,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
     };
 
     this.options2 = {
-      height: 290,
+      height: 310,
       showTop: false,
       reactive: true,
       sortable: false,

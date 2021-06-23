@@ -65,7 +65,7 @@ export class CalcSafetyFatigueShearForceService {
     // 最小応力
     const No3 = (this.save.isManual()) ? 3 : this.basic.pickup_shear_force_no(3);
     this.DesignForceList3 = this.force.getDesignForceList(
-      'Vd', No3);
+      'Vd', No3, false);
     // 最大応力
     const No4 = (this.save.isManual()) ? 4 : this.basic.pickup_shear_force_no(4);
     this.DesignForceList = this.force.getDesignForceList(

@@ -360,18 +360,18 @@ export class DsdDataService {
           if(kr > 0) c.kr = kr;
           const sngHirou1 = this.readSingle(buff);
           if(sngHirou1 > 0) {
-            f.M1.r1_1 = sngHirou1;
-            f.M2.r1_1 = sngHirou1;
+            f.M1.r1_1 = Math.round(sngHirou1*100)/100;
+            f.M2.r1_1 = Math.round(sngHirou1*100)/100;
           }
           const sngHirou2 = this.readSingle(buff);
           if(sngHirou2 > 0) {
-            f.V1.r1_2 = sngHirou2;
-            f.V2.r1_2 = sngHirou2;
+            f.V1.r1_2 = Math.round(sngHirou2*100)/100;
+            f.V2.r1_2 = Math.round(sngHirou2*100)/100;
           }
           const sngHirou3 = this.readSingle(buff);
           if(sngHirou3 > 0) {
-            f.M1.r1_3 = sngHirou3;
-            f.M2.r1_3 = sngHirou3;        
+            f.M1.r1_3 = Math.round(sngHirou3*100)/100;
+            f.M2.r1_3 = Math.round(sngHirou3*100)/100;        
           }
         }
       }
