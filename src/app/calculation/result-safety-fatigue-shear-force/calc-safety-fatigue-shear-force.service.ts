@@ -164,12 +164,14 @@ export class CalcSafetyFatigueShearForceService {
     const result: any = this.base.calcVmu(res[0], section, fc, safety, null, DesignForceList);
 
     // 最小応力
-    const Vpd: number = this.helper.toNumber(resMin.Vd);
+    let Vpd: number = this.helper.toNumber(resMin.Vd);
     if (Vpd === null) { return result; }
+    Vpd = Math.abs(Vpd);
     result.Vpd = Vpd;
 
-    const Mpd: number = this.helper.toNumber(resMin.Md);
+    let Mpd: number = this.helper.toNumber(resMin.Md);
     if (Mpd !== null) {
+      Mpd = Math.abs(Mpd);
       result['Mpd'] = Mpd;
     }
 
@@ -179,12 +181,14 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 変動応力
-    const Vrd: number = this.helper.toNumber(resMax.Vd);
+    let Vrd: number = this.helper.toNumber(resMax.Vd);
     if (Vrd === null) { return result; }
+    Vrd = Math.abs(Vrd);
     result['Vrd'] = Vrd;
 
-    const Mrd: number = this.helper.toNumber(resMax.Md);
+    let Mrd: number = this.helper.toNumber(resMax.Md);
     if (Mrd !== null) {
+      Mrd = Math.abs(Mrd);
       result['Mrd'] = Mrd;
     }
 

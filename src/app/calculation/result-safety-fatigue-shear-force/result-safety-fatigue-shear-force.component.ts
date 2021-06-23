@@ -111,10 +111,9 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             const titleColumn = this.result.getTitleString( section.member, position, side );
             const fck: any = this.helper.getFck(safety);
 
-            const resultColumn: any = this.getResultString(
-              this.calc.calcFatigue(
-                res, section, fck, safety, fatigueInfo)
-            );
+            const value = this.calc.calcFatigue(res, section, fck, safety, fatigueInfo);
+            if(value.N === 0) continue;
+            const resultColumn: any = this.getResultString(value );
 
             const column = {
             /////////////// タイトル ///////////////
