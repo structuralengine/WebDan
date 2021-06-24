@@ -14,7 +14,7 @@ export class InputBasicInformationService  {
   private specification1_list: any[];
 
   // 仕様 に関する変数
-  private specification2_list: any[];
+  public specification2_list: any[];
 
   // 設計条件
   public conditions_list: any[];

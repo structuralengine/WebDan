@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcServiceabilityMomentService } from "./calc-serviceability-moment.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
+import { InputBasicInformationService } from "src/app/components/basic-information/basic-information.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 import { DataHelperModule } from "src/app/providers/data-helper.module";
@@ -27,9 +28,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     private post: SetPostDataService,
     private result: ResultDataService,
     private helper: DataHelperModule,
+    private basic: InputBasicInformationService,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
+
+  public speci2Info = this.setbasicInfo(this.basic);
 
   ngOnInit() {
     this.isLoading = true;
@@ -194,8 +198,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               sigma_c : resultColumn.sigma_c,
               sigma_s : resultColumn.sigma_s,
 
+              Pt : resultColumn.Pt,
               Mpd : resultColumn.Mpd,
               Npd : resultColumn.Npd,
+              Mrd : resultColumn.Mrd,
+              Nrd : resultColumn.Nrd,
+              rd_ratio : resultColumn.rd_ratio,
               EsEc : resultColumn.EsEc,
               sigma_se : resultColumn.sigma_se,
               c : resultColumn.c,
@@ -260,8 +268,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       sigma_c: { alien: "center", value: "-" },
       sigma_s: { alien: "center", value: "-" },
 
+      Pt: { alien: "center", value: "-" },
       Mpd: { alien: "center", value: "-" },
       Npd: { alien: "center", value: "-" },
+      Mrd: { alien: "center", value: "-" },
+      Nrd: { alien: "center", value: "-" },
+      rd_ratio: { alien: "center", value: "-" },
       EsEc: { alien: "center", value: "-" },
       sigma_se: { alien: "center", value: "-" },
       c: { alien: "center", value: "-" },
@@ -352,11 +364,23 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     }
 
     // ひび割れ幅の照査
+    if ("Pt" in re) {
+      result.Pt = { alien: "right", value: re.Pt.toFixed(1) };
+    }
     if ("Mpd" in re) {
       result.Mpd = { alien: "right", value: (Math.round(re.Mpd*10)/10).toFixed(1) };
     }
     if ("Npd" in re) {
       result.Npd = { alien: "right", value: (Math.round(re.Npd*10)/10).toFixed(1) };
+    }
+    if ("Mrd" in re) {
+      result.Mpd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };
+    }
+    if ("Nrd" in re) {
+      result.Npd = { alien: "right", value: (Math.round(re.Nrd*10)/10).toFixed(1) };
+    }
+    if ("rd_ratio" in re) {
+      result.rd_ratio = { alien: "right", value: re.rd_ratio.toFixed(2) };
     }
     if ("EsEc" in re) {
       result.EsEc = { alien: "right", value: re.EsEc.toFixed(2) };
@@ -417,4 +441,17 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
     return result;
   }
+
+  private setbasicInfo(info) {
+    let basicInfo : number;
+    for (let i = 0; i < info.specification2_list.length; i++) {
+      const target = info.specification2_list[i];
+      if (target.selected) {
+        basicInfo = i;
+        break;
+      }
+    }
+    return basicInfo
+  };
+
 }

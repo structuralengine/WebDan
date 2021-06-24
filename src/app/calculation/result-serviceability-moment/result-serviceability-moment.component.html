@@ -275,6 +275,13 @@
         <td *ngFor="let column of pages.columns; index as c" class="{{column.sigma_s.alien}} g-right2 g-bottom2">
           {{column.sigma_s.value}}</td>
       </tr>
+      <ng-container *ngIf="speci2Info == 1">
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">P<sub>t</sub> = A<sub>st</sub>/(b･d)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column.Pt.alien}} g-right2 g-bottom1">
+            {{column.Pt.value}}</td>
+        </tr>
+      </ng-container>
       <tr>
         <th class="cell_name2 g-bottom1 g-left2">Mpd</th>
         <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
@@ -287,9 +294,28 @@
         <td *ngFor="let column of pages.columns; index as c" class="{{column.Npd.alien}} g-right2 g-bottom1">
           {{column.Npd.value}}</td>
       </tr>
+      <ng-container *ngIf="speci2Info == 2">
+        <tr>
+          <th class="cell_name2 g-bottom1 g-left2">Mrd</th>
+          <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column.Mrd.alien}} g-right2 g-bottom1">
+            {{column.Mrd.value}}</td>
+        </tr>
+        <tr>
+          <th class="cell_name2 g-bottom2 g-left2">Nrd</th>
+          <th class="cell_name3 g-right2 g-bottom2">(kN)</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column.Nrd.alien}} g-right2 g-bottom2">
+            {{column.Nrd.value}}</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">rd_ratio</th>
+          <td *ngFor="let column of pages.columns; index as c" class="{{column.rd_ratio.alien}} g-right2 g-bottom1">
+            {{column.rd_ratio.value}}</td>
+        </tr>
+      </ng-container>
       <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">n/(E<sub>s</sub>/E<sub>c</sub>)</th>
-        <td *ngFor="let column of pages.columns; index as c" class="{{column.EsEc.alien}} g-right2 g-bottom2">
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">n/(E<sub>s</sub>/E<sub>c</sub>)</th>
+        <td *ngFor="let column of pages.columns; index as c" class="{{column.EsEc.alien}} g-right2 g-bottom1">
           {{column.EsEc.value}}</td>
       </tr>
       <tr>
