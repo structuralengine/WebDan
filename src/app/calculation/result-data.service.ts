@@ -389,7 +389,7 @@ export class ResultDataService {
 
     let shape: any;
     let h: number, b: number, bf: number, hf: number;
-    let a1: number, a2: number, a3: number, a4: number, a5: number;
+    let a1: number, a2: number, a3: number, a4: number, a5: number, a6: number;
     let x: number, e1: number, e2: number;
     let Area: number, circleArea: number, rectArea: number;
 
@@ -424,7 +424,7 @@ export class ResultDataService {
         break;
 
       case 'Tsection':          // T形
-        shape = this.rect.getSection(member, target, index);
+        shape = this.rect.getTSection(member, target, index);
         h = shape.H;
         b = shape.B;
         bf = shape.Bt;
@@ -437,10 +437,13 @@ export class ResultDataService {
         e2 = h - e1;
         result['eu'] = e1;
         result['el'] = e2;
-        a3 = bf * Math.pow(e1, 3);
-        a4 = x * h;
-        a5 = b * Math.pow(e2, 3);
-        result['I'] = (a3 - a4 + a5) / 3;
+        a3 = bf * Math.pow(hf, 3) / 12;
+        a4 = bf * hf * Math.pow(e1 - hf / 2, 2);
+        a5 = b * Math.pow(h - hf, 3) / 12;
+        a6 = b * (h - hf) * Math.pow(e2 - (h - hf) / 2, 2);
+        result['I'] = a3 + a4 + a5 + a6;
+
+
         break;
 
 
@@ -458,10 +461,13 @@ export class ResultDataService {
         e2 = h - e1;
         result['eu'] = e2;
         result['el'] = e1;
-        a3 = bf * Math.pow(e1, 3);
-        a4 = x * h;
-        a5 = b * Math.pow(e2, 3);
-        result['I'] = (a3 - a4 + a5) / 3;
+        a3 = bf * Math.pow(hf, 3) / 12;
+        a4 = bf * hf * Math.pow(e1 - hf / 2, 2);
+        a5 = b * Math.pow(h - hf, 3) / 12;
+        a6 = b * (h - hf) * Math.pow(e2 - (h - hf) / 2, 2);
+        result['I'] = a3 + a4 + a5 + a6;
+
+
         break;
 
       case 'HorizontalOval':    // 水平方向小判形

@@ -169,6 +169,20 @@ export class SetRectService {
     return result
   }
 
+  public getTSection(member: any, target: string, index: number){
+    
+    const result = this.getSection(member, target, index);
+
+    let bf = this.helper.toNumber(member.Bt);
+    let hf = this.helper.toNumber(member.t);
+    if (bf === null) { bf = result.B; }
+    if (hf === null) { hf = result.H; }
+    result['Bt'] = bf;
+    result['t'] = hf;
+
+    return result
+  }
+
   // 断面の幅と高さ（フランジ幅と高さ）を取得する
   public getRectangleShape(member: any, target: string, index: number, side: string, safety: any): any {
 
