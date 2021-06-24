@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { retry } from 'rxjs/operators';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
+import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 
 @Injectable({
@@ -9,6 +10,7 @@ import { DataHelperModule } from 'src/app/providers/data-helper.module';
 export class SetCircleService {
 
   constructor(
+    private basic: InputBasicInformationService,
     private bars: InputBarsService,
     private helper: DataHelperModule
   ) { }
@@ -137,9 +139,11 @@ export class SetCircleService {
       const Rt: number = h - Depth * 2; // 鉄筋直径
       const num = tension.rebar_n - tension.line * i; // 鉄筋本数
       const steps: number = 360 / num; // 鉄筋角度間隔
+      //設計条件「円形断面で鉄筋を頂点に1本配置する」と鉄筋本数を条件に分岐、真上を0°として計算
+      const bar_start_point = ((num % 2 === 0) === this.basic.conditions_list['3']['selected']) ? 0: steps / 2;
 
       for (let j = 0; j < num; j++) {
-        const deg = j * steps;
+        const deg = j * steps + bar_start_point;
         const dst = Rt / 2 - (Math.cos(this.helper.Radians(deg)) * Rt) / 2 + Depth;
         if( deg === 135 || deg === 225){
           // ちょうど 45° 半分引張鉄筋
