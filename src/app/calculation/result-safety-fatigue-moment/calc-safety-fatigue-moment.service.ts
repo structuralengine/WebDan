@@ -94,7 +94,11 @@ export class CalcSafetyFatigueMomentService {
     this.deleteFatigueDisablePosition(force2);
 
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force2[2], force2[1]);
+    const option = {};
+
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, option, 
+    force2[2], force2[1]);
+    
     return postData;
   }
 
@@ -162,23 +166,31 @@ export class CalcSafetyFatigueMomentService {
 
     const result: any = {};
 
-    const Mdmin = resMin.ResultSigma.Md;;
-    result['Mdmin'] = Mdmin;
-    const Ndmin = this.helper.toNumber(resMin.ResultSigma.Nd);
-    result['Ndmin'] = Ndmin;
+    let Mdmin = resMin.ResultSigma.Md;;
+    let Ndmin = this.helper.toNumber(resMin.ResultSigma.Nd);
+    let sigma_min: number = this.base.getSigmas(resMin.ResultSigma);
 
-    const sigma_min: number = this.base.getSigmas(resMin.ResultSigma.st);
+    let Mrd = resMax.ResultSigma.Md;
+    let Nrd = this.helper.toNumber(resMax.ResultSigma.Nd);
+    let sigma_rd: number = this.base.getSigmas(resMax.ResultSigma);
+
     if (sigma_min === null) { return result; }
+    if (sigma_rd === null) { return result; }
+
+    if(sigma_rd === 0){
+      // 永久作用>変動作用ならば、永久作用と変動作用を入れ替える
+      [Mdmin, Mrd] = [Mrd, Mdmin];
+      [Ndmin, Nrd] = [Nrd, Ndmin];
+      [sigma_min, sigma_rd] = [sigma_rd, sigma_min];
+    }
+
+
+    result['Mdmin'] = Mdmin;
+    result['Ndmin'] = Ndmin;
     result['sigma_min'] = sigma_min;
 
-
-    const Mrd = resMax.ResultSigma.Md;
     result['Mrd'] = Mrd;
-    const Nrd = this.helper.toNumber(resMax.ResultSigma.Nd);
     result['Nrd'] = Nrd;
-
-    const sigma_rd: number = this.base.getSigmas(resMax.ResultSigma.st);
-    if (sigma_rd === null) { return result; }
     result['sigma_rd'] = sigma_rd;
 
     // f200 の計算
@@ -296,7 +308,7 @@ export class CalcSafetyFatigueMomentService {
     const tmpN1: number = 365 * T * jA * NA * Math.pow(SASC, 1 / k);
     const tmpN2: number = 365 * T * jB * NB * Math.pow(SBSC, 1 / k);
     const N: number = tmpN1 + tmpN2;
-    result['N'] = Math.ceil(N / 100) * 100;
+    result['N'] = Math.round(N / 100) * 100;
 
     if (ratio200 < 1 && N <= reference_count) {
       return result;

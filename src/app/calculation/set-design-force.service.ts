@@ -110,7 +110,8 @@ export class SetDesignForceService {
     for (const position of result) {
       // 奥行き本数
       const n: number = position.n;
-      const force = targetPick.find((value) => value.index === position.index);
+      const index = position.index;
+      const force = targetPick.find((value) => value.index === index);
 
       if (force === undefined) {
         return new Array(); // 存在しない着目点がある
@@ -402,7 +403,7 @@ export class SetDesignForceService {
           // side が同じ場合値の大きい方を採用する
           if(isMax && (Math.abs(r[target]) < Math.abs(f[target]))){
             result[i] = f;
-          } else if (Math.abs(r[target]) > Math.abs(f[target])) {
+          } else if (!isMax && Math.abs(r[target]) > Math.abs(f[target])) {
             result[i] = f;
           }
         }

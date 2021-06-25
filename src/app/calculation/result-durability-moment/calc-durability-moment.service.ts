@@ -40,14 +40,18 @@ export class CalcDurabilityMomentService {
     if (this.calc.print_selected.calculate_moment_checked === false) {
       return;
     }
+
     // 永久荷重
-    const No1 = (this.save.isManual()) ? 1 : this.basic.pickup_moment_no(1);
-    this.DesignForceList = this.force.getDesignForceList(
-      "Md", No1);
+    let No1 = (this.save.isManual()) ? 1 : this.basic.pickup_moment_no(1);
     // 縁応力検討用
-    const No0 = (this.save.isManual()) ? 0 :this.basic.pickup_moment_no(0);
-    this.DesignForceList1 = this.force.getDesignForceList(
-      "Md", No0);
+    let No0 = (this.save.isManual()) ? 0 :this.basic.pickup_moment_no(0);
+
+    if(No0===null) No0 = No1;
+    if(No1===null) No1 = No0;
+    if(No1===null) return;
+
+    this.DesignForceList = this.force.getDesignForceList("Md", No1);
+    this.DesignForceList1 = this.force.getDesignForceList("Md", No0);
 
     // 有効なデータかどうか
     const force1 = this.force.checkEnable('Md', this.safetyID, this.DesignForceList, this.DesignForceList1);
@@ -93,7 +97,16 @@ export class CalcDurabilityMomentService {
     const force2 = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // POST 用
-    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  force2[0], force2[1]);
+    const option = {};
+    // JR東日本モードの場合 barCenterPosition オプション = true
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      option['barCenterPosition'] = true; 
+    }
+
+    const postData = this.post.setInputData("Md", "応力度", this.safetyID, option,
+    force2[0], force2[1]);
+    
     return postData;
   }
 }

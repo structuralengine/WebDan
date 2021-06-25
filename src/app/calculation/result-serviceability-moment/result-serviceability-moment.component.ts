@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcServiceabilityMomentService } from "./calc-serviceability-moment.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
+import { InputBasicInformationService } from "src/app/components/basic-information/basic-information.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 import { DataHelperModule } from "src/app/providers/data-helper.module";
@@ -20,13 +21,16 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public serviceabilityMomentPages: any[] = new Array();
-
+  public isJREAST: boolean = false;
+  public isJRTT: boolean = false;
+  
   constructor(
     private http: HttpClient,
     private calc: CalcServiceabilityMomentService,
     private post: SetPostDataService,
     private result: ResultDataService,
     private helper: DataHelperModule,
+    private basic: InputBasicInformationService,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
@@ -99,6 +103,15 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       title = "耐久性　曲げひび割れの照査結果";
       isDurability = false;
     }
+    this.isJREAST = false;
+    this.isJRTT = false;
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      this.isJREAST = true;
+    }
+    if(speci2===1){
+      this.isJRTT = true;
+    }
 
     let page: any;
 
@@ -148,7 +161,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
                 section,
                 fck,
                 safety,
-                isDurability
+                isDurability,
+                this.isJREAST
               )
             );
 
@@ -158,22 +172,22 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               title2 : { alien: "center", value: titleColumn.title2 },
               title3 :  { alien: "center", value: titleColumn.title3 },
               ///////////////// 形状 /////////////////
-              B : this.result.alien(shape.B),
-              H : this.result.alien(shape.H),
+              B : this.result.alien(this.result.numStr(shape.B,1)),
+              H : this.result.alien(this.result.numStr(shape.H,1)),
               Bt : this.result.alien(shape.Bt),
               t : this.result.alien(shape.t),
               /////////////// 引張鉄筋 ///////////////
               Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
               AstString : this.result.alien(section.Ast.AstString, "center"),
-              dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
+              dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), "center"),
               /////////////// 圧縮鉄筋 ///////////////
               Asc : this.result.alien(this.result.numStr(section.Asc.Asc), "center"),
               AscString : this.result.alien(section.Asc.AscString, "center"),
-              dsc : this.result.alien(this.result.numStr(section.Asc.dsc), "center"),
+              dsc : this.result.alien(this.result.numStr(section.Asc.dsc ,1), "center"),
               /////////////// 側面鉄筋 ///////////////
               Ase : this.result.alien(this.result.numStr(section.Ase.Ase), "center"),
               AseString : this.result.alien(section.Ase.AseString, "center"),
-              dse : this.result.alien(this.result.numStr(section.Ase.dse), "center"),
+              dse : this.result.alien(this.result.numStr(section.Ase.dse, 1), "center"),
               /////////////// コンクリート情報 ///////////////
               fck : this.result.alien(fck.fck.toFixed(1), "center"),
               rc : this.result.alien(fck.rc.toFixed(2), "center"),
@@ -194,8 +208,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               sigma_c : resultColumn.sigma_c,
               sigma_s : resultColumn.sigma_s,
 
+              Pt : resultColumn.Pt,
               Mpd : resultColumn.Mpd,
               Npd : resultColumn.Npd,
+              Mrd : resultColumn.Mrd,
+              Nrd : resultColumn.Nrd,
+              rd_ratio : resultColumn.rd_ratio,
               EsEc : resultColumn.EsEc,
               sigma_se : resultColumn.sigma_se,
               c : resultColumn.c,
@@ -260,8 +278,12 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       sigma_c: { alien: "center", value: "-" },
       sigma_s: { alien: "center", value: "-" },
 
+      Pt: { alien: "center", value: "-" },
       Mpd: { alien: "center", value: "-" },
       Npd: { alien: "center", value: "-" },
+      Mrd: { alien: "center", value: "-" },
+      Nrd: { alien: "center", value: "-" },
+      rd_ratio: { alien: "center", value: "-" },
       EsEc: { alien: "center", value: "-" },
       sigma_se: { alien: "center", value: "-" },
       c: { alien: "center", value: "-" },
@@ -352,11 +374,29 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     }
 
     // ひび割れ幅の照査
+    if ("Pt" in re) {
+      result.Pt = { alien: "right", value: re.Pt.toFixed(1) };
+    }
     if ("Mpd" in re) {
       result.Mpd = { alien: "right", value: (Math.round(re.Mpd*10)/10).toFixed(1) };
     }
     if ("Npd" in re) {
       result.Npd = { alien: "right", value: (Math.round(re.Npd*10)/10).toFixed(1) };
+    }
+    if ("Mrd" in re) {
+      result.Mrd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };
+    }
+    if ("Nrd" in re) {
+      result.Nrd = { alien: "right", value: (Math.round(re.Nrd*10)/10).toFixed(1) };
+    }
+    if ("rd_ratio" in re) {
+      let value = re.rd_ratio.toFixed(2);
+      if(re.rd_ratio < 0.25){
+        value += ' ＜ 0.25';
+      }else{
+        value += ' ≧ 0.25';
+      }
+      result.rd_ratio = { alien: "right", value };
     }
     if ("EsEc" in re) {
       result.EsEc = { alien: "right", value: re.EsEc.toFixed(2) };
@@ -417,4 +457,17 @@ export class ResultServiceabilityMomentComponent implements OnInit {
 
     return result;
   }
+
+  private setbasicInfo(info) {
+    let basicInfo : number;
+    for (let i = 0; i < info.specification2_list.length; i++) {
+      const target = info.specification2_list[i];
+      if (target.selected) {
+        basicInfo = i;
+        break;
+      }
+    }
+    return basicInfo
+  };
+
 }

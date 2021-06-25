@@ -149,6 +149,8 @@ export class CalcSummaryTableService {
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
             columns.As.AseString = col.AseString.value;
+            columns.As.AwString = col.AwString.value;
+            columns.As.Ss = col.Ss.value;
             // 照査結果
             columns.earthquakesShearForce.Vd = col.Vd.value;
             columns.earthquakesShearForce.Vyd = col.Vyd.value;
@@ -221,6 +223,8 @@ export class CalcSummaryTableService {
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
             columns.As.AseString = col.AseString.value;
+            columns.As.AwString = col.AwString.value;
+            columns.As.Ss = col.Ss.value;
             // 照査結果
             columns.restorabilityShearForce.Vd = col.Vd.value;
             columns.restorabilityShearForce.Vyd = col.Vyd.value;
@@ -292,6 +296,8 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
+            columns.As.AwString = col.AwString.value;
+            columns.As.Ss = col.Ss.value;
             // 照査結果
             columns.safetyFatigueShearForce.sigma_min = col.sigma_min.value;
             columns.safetyFatigueShearForce.sigma_rd = col.sigma_rd.value;
@@ -365,6 +371,8 @@ export class CalcSummaryTableService {
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
             columns.As.AseString = col.AseString.value;
+            columns.As.AwString = col.AwString.value;
+            columns.As.Ss = col.Ss.value;
             // 照査結果
             columns.safetyShearForce.Vd = col.Vd.value;
             columns.safetyShearForce.Vyd = col.Vyd.value;
@@ -439,6 +447,8 @@ export class CalcSummaryTableService {
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
             columns.As.AseString = col.AseString.value;
+            columns.As.AwString = col.AwString.value;
+            columns.As.Ss = col.Ss.value;
             // 照査結果
             columns.serviceabilityShearForce.Vcd = col.Vcd.value;
             columns.serviceabilityShearForce.Vcd07 = col.Vcd07.value;

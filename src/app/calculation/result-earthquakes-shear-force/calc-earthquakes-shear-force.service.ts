@@ -54,7 +54,11 @@ export class CalcEarthquakesShearForceService {
     const force = this.force.checkEnable('Vd', this.safetyID, this.DesignForceList);
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force[0]);
+    const option = {};
+
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, option, 
+    force[0]);
+
     return postData;
   }
 

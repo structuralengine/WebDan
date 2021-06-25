@@ -153,21 +153,21 @@ export class ResultSafetyShearForceComponent implements OnInit {
               title2 : { alien: "center", value: titleColumn.title2 },
               title3 :  { alien: "center", value: titleColumn.title3 },
               ///////////////// 形状 /////////////////
-              B : this.result.alien(shape.B),
-              H : this.result.alien(shape.H),
+              B : this.result.alien(this.result.numStr(shape.B,1)),
+              H : this.result.alien(this.result.numStr(shape.H,1)),
               /////////////// 引張鉄筋 ///////////////
               tan : this.result.alien(( section.tan === 0 ) ? '-' : section.tan, "center"),
               Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
               AstString : this.result.alien(section.Ast.AstString, "center"),
-              dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
+              dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), "center"),
               /////////////// 圧縮鉄筋 ///////////////
               Asc : this.result.alien(this.result.numStr(section.Asc.Asc), "center"),
               AscString : this.result.alien(section.Asc.AscString, "center"),
-              dsc : this.result.alien(this.result.numStr(section.Asc.dsc), "center"),
+              dsc : this.result.alien(this.result.numStr(section.Asc.dsc ,1), "center"),
               /////////////// 側面鉄筋 ///////////////
               // Ase : this.result.alien(this.result.numStr(Ast.Ase), "center"),
               AseString : this.result.alien(section.Ase.AseString, "center"),
-              dse : this.result.alien(this.result.numStr(section.Ase.dse), "center"),
+              dse : this.result.alien(this.result.numStr(section.Ase.dse, 1), "center"),
               /////////////// コンクリート情報 ///////////////
               fck : this.result.alien(fck.fck.toFixed(1), "center"),
               rc : this.result.alien(fck.rc.toFixed(2), "center"),
@@ -384,7 +384,10 @@ export class ResultSafetyShearForceComponent implements OnInit {
     }
 
     if ("Vyd_Ratio" in re) {
-      result.Vyd_Ratio = { alien: "right", value: re.Vyd_Ratio.toFixed(3) };
+      result.Vyd_Ratio = { 
+        alien: "right",
+        value: re.Vyd_Ratio.toFixed(3).toString() + ((re.Vyd_Ratio < 1) ? ' < 1.00' : ' < 1.00')
+      }
     }
     if ("Vyd_Result" in re) {
       result.Vyd_Result = { alien: "center", value: re.Vyd_Result };
@@ -397,7 +400,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       result.Vwcd = { alien: "right", value: re.Vwcd.toFixed(1) };
     }
     if ("Vwcd_Ratio" in re) {
-      result.Vwcd_Ratio = { alien: "right", value: re.Vwcd_Ratio.toFixed(3) };
+      result.Vwcd_Ratio.value = re.Vwcd_Ratio.toFixed(3).toString() + ((re.Vwcd_Ratio < 1) ? ' < 1.00' : ' < 1.00')
     }
     if ("Vwcd_Result" in re) {
       result.Vwcd_Result = { alien: "center", value: re.Vwcd_Result };

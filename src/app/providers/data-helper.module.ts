@@ -158,7 +158,7 @@ export class DataHelperModule {
     const fck = this.getFck(safety);
 
     return {
-      fck: fck.fck,     // コンクリート強度
+      fck: fck.fcd,     // コンクリート強度
       Ec: fck.Ec,       // コンクリートの弾性係数
       ElasticID: 'c'      // 材料番号
     };
@@ -309,9 +309,9 @@ export class DataHelperModule {
     }
 
     // 鉄筋かぶり
-    let dse = barInfo.side_cover;
-    if (this.toNumber(dse) === null) {
-      dse = dsc + space;
+    let cover = barInfo.side_cover;
+    if (this.toNumber(cover) === null) {
+      cover = dsc + space;
     }
 
     // 1段当りの本数
@@ -322,9 +322,52 @@ export class DataHelperModule {
       side_dia: dia,
       n,
       space,
-      dse,
+      cover,
       line
     }
+  }
+
+  // 鉄筋の重心位置を求める
+  public getBarCenterPosition(bar: any, _cos: number = null) {
+
+    const cover: number = bar.dsc;
+    const n: number = bar.rebar_n;
+    const line: number = bar.line;
+    const space: number = bar.space;
+    const cos: number = (_cos === null) ? bar.cos : _cos;
+
+    // 計算する必要のない場合の処理
+    if (cover === null) {
+      return 0;
+    }
+    if (n === null || n <= 0) {
+      return cover;
+    }
+    if (line === null || line <= 0) {
+      return cover;
+    }
+    if (space === null || space <= 0) {
+      return cover;
+    }
+    if (n < line) {
+      return cover;
+    }
+    // 鉄筋の重心位置を計算する
+    const steps: number = Math.ceil(n / line); // 鉄筋段数
+    let result: number = cover;
+    if(steps > 1){
+      let reNum: number = n;
+      let PosNum: number = 0;
+      for (let i = 0; i < steps; i++) {
+        const pos = cover + i * space;
+        const num: number = Math.min(line, reNum);
+        PosNum += pos * num;
+        reNum -= line;
+      }
+      result = PosNum / n;
+    }
+    result /= cos;
+    return result;
   }
 
 }

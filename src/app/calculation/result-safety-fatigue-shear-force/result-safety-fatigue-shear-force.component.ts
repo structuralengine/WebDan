@@ -111,10 +111,9 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             const titleColumn = this.result.getTitleString( section.member, position, side );
             const fck: any = this.helper.getFck(safety);
 
-            const resultColumn: any = this.getResultString(
-              this.calc.calcFatigue(
-                res, section, fck, safety, fatigueInfo)
-            );
+            const value = this.calc.calcFatigue(res, section, fck, safety, fatigueInfo);
+            if(value.N === 0) continue;
+            const resultColumn: any = this.getResultString(value );
 
             const column = {
             /////////////// タイトル ///////////////
@@ -122,13 +121,13 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             title2 : { alien: "center", value: titleColumn.title2 },
             title3 :  { alien: "center", value: titleColumn.title3 },
             ///////////////// 形状 /////////////////
-            B : this.result.alien(shape.B),
-            H : this.result.alien(shape.H),
+            B : this.result.alien(this.result.numStr(shape.B,1)),
+            H : this.result.alien(this.result.numStr(shape.H,1)),
             /////////////// 引張鉄筋 ///////////////
             tan : this.result.alien(( section.tan === 0 ) ? '-' : section.tan, "center"),
             Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
             AstString : this.result.alien(section.Ast.AstString, "center"),
-            dst : this.result.alien(this.result.numStr(section.Ast.dst), "center"),
+            dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), "center"),
             /////////////// コンクリート情報 ///////////////
             fck : this.result.alien(fck.fck.toFixed(1), "center"),
             rc : this.result.alien(fck.rc.toFixed(2), "center"),
@@ -330,7 +329,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.fsr200 = { alien: "right", value: re.fsr200.toFixed(2) };
     }
     if ("ratio200" in re) {
-      result.ratio200.value = re.ratio200.toFixed(3);
+      result.ratio200.value = re.ratio200.toFixed(3).toString() + ((re.ratio200 < 1) ? ' < 1.00' : ' > 1.00')
     }
 
     if ("k" in re) {
@@ -375,7 +374,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
     let ratio = 0;
     if ("ratio" in re) {
-      result.ratio.value = re.ratio.toFixed(3);
+      result.ratio.value = re.ratio.toFixed(3).toString() + ((re.ratio < 1) ? ' < 1.00' : ' > 1.00');
       ratio = re.ratio;
     }
     if (ratio < 1) {

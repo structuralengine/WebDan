@@ -65,7 +65,7 @@ export class CalcSafetyFatigueShearForceService {
     // 最小応力
     const No3 = (this.save.isManual()) ? 3 : this.basic.pickup_shear_force_no(3);
     this.DesignForceList3 = this.force.getDesignForceList(
-      'Vd', No3);
+      'Vd', No3, false);
     // 最大応力
     const No4 = (this.save.isManual()) ? 4 : this.basic.pickup_shear_force_no(4);
     this.DesignForceList = this.force.getDesignForceList(
@@ -164,12 +164,14 @@ export class CalcSafetyFatigueShearForceService {
     const result: any = this.base.calcVmu(res[0], section, fc, safety, null, DesignForceList);
 
     // 最小応力
-    const Vpd: number = this.helper.toNumber(resMin.Vd);
+    let Vpd: number = this.helper.toNumber(resMin.Vd);
     if (Vpd === null) { return result; }
+    Vpd = Math.abs(Vpd);
     result.Vpd = Vpd;
 
-    const Mpd: number = this.helper.toNumber(resMin.Md);
+    let Mpd: number = this.helper.toNumber(resMin.Md);
     if (Mpd !== null) {
+      Mpd = Math.abs(Mpd);
       result['Mpd'] = Mpd;
     }
 
@@ -179,12 +181,14 @@ export class CalcSafetyFatigueShearForceService {
     }
 
     // 変動応力
-    const Vrd: number = this.helper.toNumber(resMax.Vd);
+    let Vrd: number = this.helper.toNumber(resMax.Vd);
     if (Vrd === null) { return result; }
+    Vrd = Math.abs(Vrd);
     result['Vrd'] = Vrd;
 
-    const Mrd: number = this.helper.toNumber(resMax.Md);
+    let Mrd: number = this.helper.toNumber(resMax.Md);
     if (Mrd !== null) {
+      Mrd = Math.abs(Mrd);
       result['Mrd'] = Mrd;
     }
 
@@ -321,7 +325,7 @@ export class CalcSafetyFatigueShearForceService {
     const tmpN1: number = 365 * T * jA * NA * Math.pow(SASC, 1 / k);
     const tmpN2: number = 365 * T * jB * NB * Math.pow(SBSC, 1 / k);
     const N: number = tmpN1 + tmpN2;
-    result['N'] = Math.ceil(N / 100) * 100;
+    result['N'] = Math.round(N / 100) * 100;
 
     // frd の計算
     const tmpR21: number = Math.pow(a, 1 / k);

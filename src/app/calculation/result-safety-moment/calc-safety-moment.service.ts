@@ -46,8 +46,10 @@ export class CalcSafetyMomentService {
     }
 
     const No5 = (this.save.isManual()) ? 5 : this.basic.pickup_moment_no(5);
-    this.DesignForceList = this.force.getDesignForceList(
-      'Md', No5);
+    if(No5 === null){
+      return;
+    }
+    this.DesignForceList = this.force.getDesignForceList('Md', No5);
 
   }
 
@@ -62,7 +64,11 @@ export class CalcSafetyMomentService {
     const force1 = this.force.checkEnable('Md', this.safetyID, this.DesignForceList);
 
     // POST 用
-    const postData = this.post.setInputData('Md', '耐力', this.safetyID, force1[0]);
+    const option = {};
+
+    const postData = this.post.setInputData('Md', '耐力', this.safetyID, option, 
+    force1[0]);
+    
     return postData;
   }
 

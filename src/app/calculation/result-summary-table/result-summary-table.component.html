@@ -37,31 +37,31 @@
             <ng-container *ngFor="let item of summary_table; index as i">
               <td class="left">
                 <div *ngIf="item.shape.name=='Circle'" class="shape">
-                  <img src="../../assets/img/circle.png" alt="cilinder.png" width="100px" height="100px">
+                  <img src="./assets/img/circle.png" alt="circle.png" width="100px" height="100px">
                   <p class="yoko">{{item.shape.B}}</p>
                 </div>
                 <div *ngIf="item.shape.name=='Rectangle'" class="shape">
-                  <img src="../../assets/img/rectangle.png" alt="rectangle.png" width="100px" height="100px">
+                  <img src="./assets/img/rectangle.png" alt="rectangle.png" width="100px" height="100px">
                   <p class="tate">{{item.shape.H}}</p>
                   <p class="yoko">{{item.shape.B}}</p>
                 </div>
                 <div *ngIf="item.shape.name=='Tsection'" class="shape">
-                  <img src="../../assets/img/tsection.png" alt="tsection.png" width="100px" height="100px">
+                  <img src="./assets/img/tsection.png" alt="tsection.png" width="100px" height="100px">
                   <p class="tate">{{item.shape.H}}</p>
                   <p class="yoko">{{item.shape.B}}</p>
                 </div>
                 <div *ngIf="item.shape.name=='InvertedTsection'" class="shape">
-                  <img src="../../assets/img/invertedtsection.png" alt="invertedtsection.png" width="100px" height="100px">
+                  <img src="./assets/img/invertedtsection.png" alt="invertedtsection.png" width="100px" height="100px">
                   <p class="tate">{{item.shape.H}}</p>
                   <p class="yoko">{{item.shape.B}}</p>
                 </div>
                 <div *ngIf="item.shape.name=='HorizontalOval'" class="shape">
-                  <img src="../../assets/img/horizontalOval.png" alt="horizontalOval.png" width="100px" height="100px">
+                  <img src="./assets/img/horizontalOval.png" alt="horizontalOval.png" width="100px" height="100px">
                   <p class="tate">{{item.shape.H}}</p>
                   <p class="yoko">{{item.shape.B}}</p>
                 </div>
                 <div *ngIf="item.shape.name=='VerticalOval'" class="shape">
-                  <img src="../../assets/img/verticalOval.png" alt="verticalOval.png" width="100px" height="100px">
+                  <img src="./assets/img/verticalOval.png" alt="verticalOval.png" width="100px" height="100px">
                   <p class="tate">{{item.shape.H}}</p>
                   <p class="yoko">{{item.shape.B}}</p>
                 </div>
@@ -494,7 +494,7 @@
             <td class="left text-center" colspan="2">γ<sub>i</sub>・V<sub>d</sub>／V<sub>yd</sub>(V<sub>dd</sub>)</td>
             <td class="left text-center">-</td>
             <ng-container *ngFor="let item of summary_table; index as i">
-              <td class="left bottom text-center">{{item.restorabilityShearForce.Ratio}}</td>
+              <td class="left bottom text-center">{{item.restorabilityShearForce.Vyd_Ratio}}</td>
             </ng-container>
           </tr>
           <tr>

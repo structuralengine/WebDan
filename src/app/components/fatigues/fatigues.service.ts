@@ -237,8 +237,8 @@ export class InputFatiguesService {
       f['M1'].NB12 = column1.M_NB12;
       f['M1'].A = column1.M_A;
       f['M1'].B = column1.M_B;
-      f['M1'].r1_1 = column1.r1_1;
-      f['M1'].r1_3 = column1.r1_3;
+      f['M1'].r1_1 = column1.M_r1_1;
+      f['M1'].r1_3 = column1.M_r1_3;
 
       f['V1'].SA = column1.V_SA;
       f['V1'].SB = column1.V_SB;
@@ -248,7 +248,7 @@ export class InputFatiguesService {
       f['V1'].NB12 = column1.V_NB12;
       f['V1'].A = column1.V_A;
       f['V1'].B = column1.V_B;
-      f['V1'].r1_2 = column1.r1_2;
+      f['V1'].r1_2 = column1.V_r1_2;
 
       //f.title2 = column2.design_point_id;
       f['M2'].SA = column2.M_SA;
@@ -259,8 +259,8 @@ export class InputFatiguesService {
       f['M2'].NB12 = column2.M_NB12;
       f['M2'].A = column2.M_A;
       f['M2'].B = column2.M_B;
-      f['M2'].r1_1 = column1.r1_1;
-      f['M2'].r1_3 = column1.r1_3;
+      f['M2'].r1_1 = column1.M_r1_1;
+      f['M2'].r1_3 = column1.M_r1_3;
 
       f['V2'].SA = column2.V_SA;
       f['V2'].SB = column2.V_SB;
@@ -270,7 +270,7 @@ export class InputFatiguesService {
       f['V2'].NB12 = column2.V_NB12;
       f['V2'].A = column2.V_A;
       f['V2'].B = column2.V_B;
-      f['V2'].r1_2 = column1.r1_2;
+      f['V2'].r1_2 = column1.V_r1_2;
 
       this.fatigue_list.push(f);
     }
