@@ -65,8 +65,9 @@ export class SetPostDataService {
   // type: '応力度', '耐力'
   // safetyID: 安全係数の行番号
   // DesignForceList: 着目点, 断面力情報
-  public setInputData( target: string, type: string, safetyID: number,
-                      ...DesignForceList: any[] ): any {
+  public setInputData( 
+    target: string, type: string, safetyID: number,
+    option: any, ...DesignForceList: any[] ): any {
 
     const post_keys = [ 
       'index', 'side', 'Nd','Md',
@@ -95,7 +96,7 @@ export class SetPostDataService {
           }
           data['force'] = force; // 一時的に登録
           try {
-            const shape = this.getPostData(target, safetyID, force);
+            const shape = this.getPostData(target, safetyID, force, option);
             data['shape'] = shape; // 一時的に登録
             
             // 断面形状
@@ -257,8 +258,12 @@ export class SetPostDataService {
     return result;
   }
 
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }
+  private getPostData(
+    target: string, safetyID: number, force: any, option: any): any {
 
-  private getPostData(target: string, safetyID: number, force: any): any {
     let result: object;
 
     const index = force.index;
@@ -276,25 +281,25 @@ export class SetPostDataService {
     // 断面情報
     switch (shapeName) {
       case 'Circle':            // 円形
-        result = this.circle.getCircle(member, index, safety);
+        result = this.circle.getCircle(member, index, safety, option);
         break;
       case 'Ring':              // 円環
-        result = this.circle.getRing(member, index, safety);
+        result = this.circle.getRing(member, index, safety, option);
         break;
       case 'Rectangle':         // 矩形
-        result = this.rect.getRectangle(target, member, index, force.side, safety);
+        result = this.rect.getRectangle(target, member, index, force.side, safety, option);
         break;
       case 'Tsection':          // T形
-        result = this.rect.getTsection(target, member, index, force.side, safety);
+        result = this.rect.getTsection(target, member, index, force.side, safety, option);
         break;
       case 'InvertedTsection':  // 逆T形
-        result = this.rect.getInvertedTsection(target, member, index, force.side, safety);
+        result = this.rect.getInvertedTsection(target, member, index, force.side, safety, option);
         break;
       case 'HorizontalOval':    // 水平方向小判形
-        result = this.hOval.getHorizontalOval(member, index, force.side, safety);
+        result = this.hOval.getHorizontalOval(member, index, force.side, safety, option);
         break;
       case 'VerticalOval':      // 鉛直方向小判形
-        result = this.vOval.getVerticalOval(member, index, force.side, safety);
+        result = this.vOval.getVerticalOval(member, index, force.side, safety, option);
         break;
       default:
         throw("断面形状：" + shapeName + " は適切ではありません。");
@@ -303,5 +308,6 @@ export class SetPostDataService {
 
     return result;
   }
+
 
 }

@@ -110,7 +110,7 @@ export class ResultDataService {
     switch (shapeName) {
       case 'Circle':            // 円形
         if (target === 'Md') {
-          section = this.circle.getCircleShape(member, index, safety);
+          section = this.circle.getCircleShape(member, index, safety, {});
           result['Ast'] = this.getAst(section, safety);
           result.shape.H = section.H;
         } else {
@@ -123,7 +123,7 @@ export class ResultDataService {
 
       case 'Ring':              // 円環
         if (target === 'Md') {
-          section = this.circle.getRingShape(member, index, safety);
+          section = this.circle.getRingShape(member, index, safety, {});
           result['Ast'] = this.getAst(section, safety);
         } else {
           result['Ast'] = this.getAstCircleVd(section, safety);
@@ -134,7 +134,7 @@ export class ResultDataService {
         break;
 
       case 'Rectangle':         // 矩形
-        section = this.rect.getRectangleShape(member, target, index, side, safety);
+        section = this.rect.getRectangleShape(member, target, index, side, safety, {});
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
@@ -142,7 +142,7 @@ export class ResultDataService {
 
       case 'Tsection':          // T形
       case 'InvertedTsection':  // 逆T形
-        section = this.rect.getTsectionShape(member, target, index, side, safety);
+        section = this.rect.getTsectionShape(member, target, index, side, safety, {});
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
@@ -151,14 +151,14 @@ export class ResultDataService {
         break;
 
       case 'HorizontalOval':    // 水平方向小判形
-        section = this.hOval.getShape(member, index, side, safety);
+        section = this.hOval.getShape(member, index, side, safety, {});
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
         break;
 
       case 'VerticalOval':      // 鉛直方向小判形
-        section = this.vOval.getShape(member, index, side, safety);
+        section = this.vOval.getShape(member, index, side, safety, {});
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
@@ -316,7 +316,7 @@ export class ResultDataService {
 
     result.Ast = Astx;
     result.AstString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
-    result.dst = this.getBarCenterPosition(section.tension);
+    result.dst = this.helper.getBarCenterPosition(section.tension);
 
     return result;
 
@@ -345,7 +345,7 @@ export class ResultDataService {
 
     result.Asc = Astx;
     result.AscString = AstDia + "-" + this.numStr(rebar_n, 3) + "本";
-    result.dsc = this.getBarCenterPosition(section.compress);
+    result.dsc = this.helper.getBarCenterPosition(section.compress);
 
     return result;
 
@@ -507,45 +507,7 @@ export class ResultDataService {
     return result;
   }
 
-  // 鉄筋の重心位置を求める
-  private getBarCenterPosition(bar: any) {
 
-    const cover: number = bar.dsc;
-    const n: number = bar.rebar_n;
-    const line: number = bar.line;
-    const space: number = bar.space;
-    const cos: number = bar.cos;
-
-    // 計算する必要のない場合の処理
-    if (cover === null) {
-      return 0;
-    }
-    if (n === null || n <= 0) {
-      return cover;
-    }
-    if (line === null || line <= 0) {
-      return cover;
-    }
-    if (space === null || space <= 0) {
-      return cover;
-    }
-    if (n < line) {
-      return cover;
-    }
-    // 鉄筋の重心位置を計算する
-    const steps: number = Math.ceil(n / line); // 鉄筋段数
-    let reNum: number = n;
-    let PosNum: number = 0;
-    for (let i = 0; i < steps; i++) {
-      const pos = cover + i * space;
-      const num: number = Math.min(line, reNum);
-      PosNum += pos * num;
-      reNum -= line;
-    }
-    let result: number = PosNum / n;
-    result /= cos;
-    return result;
-  }
 
 
 }
