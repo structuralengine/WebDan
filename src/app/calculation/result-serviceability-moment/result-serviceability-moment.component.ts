@@ -21,6 +21,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public serviceabilityMomentPages: any[] = new Array();
+  public speci2Info: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -32,8 +33,6 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
-
-  public speci2Info = this.setbasicInfo(this.basic);
 
   ngOnInit() {
     this.isLoading = true;
@@ -103,6 +102,11 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       title = "耐久性　曲げひび割れの照査結果";
       isDurability = false;
     }
+    this.speci2Info = false;
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      this.speci2Info = true;
+    }
 
     let page: any;
 
@@ -152,7 +156,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
                 section,
                 fck,
                 safety,
-                isDurability
+                isDurability,
+                this.speci2Info
               )
             );
 

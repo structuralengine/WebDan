@@ -91,14 +91,15 @@ export class CalcServiceabilityMomentService {
   public calcWd(
     res: any, section: any,
     fc: any, safety: any,
-    isDurability: boolean): any {
+    isDurability: boolean,
+    speci2Info: boolean,): any {
 
     const resMin = res[0]; // 永久作用
     const resMax = res[1]; // 永久＋変動作用
 
     const crackInfo = this.crack.getTableColumn(resMin.index);
     const member: any = section.member;
-    
+
     const result = {};
 
     // 環境条件
@@ -170,11 +171,11 @@ export class CalcServiceabilityMomentService {
 
     // 制限値
     // 円形の制限値を求める時は換算矩形で求める
-    const VydBH = section.shape; 
+    const VydBH = section.shape;
     const Sigmabl: number = this.getSigmaBl(VydBH.H, fcd);
     result['Sigmabl'] = Sigmabl;
 
-    const Sigmas: number = this.getSigmas(resMin.ResultSigma.st);
+    const Sigmas: number = this.getSigmas(resMin.ResultSigma);
     if (Sigmas === null) { return result; }
 
     if (Sigmab < Sigmabl) {
@@ -192,9 +193,6 @@ export class CalcServiceabilityMomentService {
     const Ec: number = fc.Ec;
     result['EsEc'] = Es / Ec;
 
-    const Sigmase: number = Sigmas;
-    result['sigma_se'] = Sigmase;
-
     const fai: number = section.Ast.tension.rebar_dia;
     result['fai'] = fai;
 
@@ -208,20 +206,43 @@ export class CalcServiceabilityMomentService {
     if (ecu === null) { ecu = 450; }
     result['ecu'] = ecu;
 
-    const k1: number = (section.Ast.fsy === 235) ? 1.3 : 1;
+    const k1: number = (section.Ast.tension.mark === 'D') ? 1 : 1.3;
     result['k1'] = k1;
 
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    const n: number = section.Ast.tension.n;
-    result['n'] = n;
+    let n: number = section.Ast.tension.n;
 
-    const k3: number = (5 * (n + 2)) / (7 * n + 8);
-    result['k3'] = k3;
+    let k3: number = (5 * (n + 2)) / (7 * n + 8);
 
     const k4: number = 0.85;
     result['k4'] = k4;
+
+    let Sigmase: number = Sigmas;
+
+    // JR東日本の場合
+    if( speci2Info === true ) {
+      if( isDurability === false ){
+        const Mrd: number =  Mhd - Md;
+        const Nrd: number =  Nhd - Nd;
+        // Ｍrd／(Ｍpd+Ｍrd)
+        result['Mrd'] = Mrd;
+        result['Nrd'] = Nrd;
+        const rd_ratio = Mrd / Mhd;
+        result['rd_ratio'] = rd_ratio;
+        ecu = (rd_ratio > 0.25) ? 300: 150;
+      }
+      const cover = this.result.getBarCenterPosition(section.Ast.tension);
+      const barCenter = member.H - cover;
+      Sigmase = this.getSigmas(resMin.ResultSigma, barCenter);
+      n = 1;
+      k3 = 1;
+    }
+
+    result['sigma_se'] = Sigmase;
+    result['n'] = n;
+    result['k3'] = k3;
 
     const w1: number = 1.1 * k1 * k2 * k3 * k4;
     const w2: number = 4 * c + 0.7 * (Cs - fai);
@@ -248,7 +269,9 @@ export class CalcServiceabilityMomentService {
 
 
   // 鉄筋の引張応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  public getSigmas(sigmaSt: any[]): number {
+  public getSigmas(ResultSigma: any, pos: number = null): number {
+
+    const sigmaSt: any[] = ResultSigma.st;
 
     if (sigmaSt === null) {
       return null;
@@ -258,13 +281,24 @@ export class CalcServiceabilityMomentService {
     }
 
     try {
-      // とりあえず最外縁の鉄筋の応力度を用いる
       let st: number = 0;
-      let maxDepth: number = 0;
-      for (const steel of sigmaSt) {
-        if (maxDepth < steel.Depth) {
-          st = steel.s;
-          maxDepth = steel.Depth;
+      if(pos === null){
+        // 最外縁の鉄筋の応力度を用いる
+        let maxDepth: number = 0;
+        for (const steel of sigmaSt) {
+          if (maxDepth < steel.Depth) {
+            st = steel.s;
+            maxDepth = steel.Depth;
+          }
+        }
+      } else {
+        // 重心位置の鉄筋の応力度を用いる
+        let maxDepth: number = 0;
+        for (const steel of sigmaSt) {
+          if (maxDepth < steel.Depth) {
+            st = steel.s;
+            maxDepth = steel.Depth;
+          }
         }
       }
       return -st;

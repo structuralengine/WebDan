@@ -508,7 +508,7 @@ export class ResultDataService {
   }
 
   // 鉄筋の重心位置を求める
-  private getBarCenterPosition(bar: any) {
+  public getBarCenterPosition(bar: any) {
 
     const cover: number = bar.dsc;
     const n: number = bar.rebar_n;
@@ -534,15 +534,18 @@ export class ResultDataService {
     }
     // 鉄筋の重心位置を計算する
     const steps: number = Math.ceil(n / line); // 鉄筋段数
-    let reNum: number = n;
-    let PosNum: number = 0;
-    for (let i = 0; i < steps; i++) {
-      const pos = cover + i * space;
-      const num: number = Math.min(line, reNum);
-      PosNum += pos * num;
-      reNum -= line;
+    let result: number = cover;
+    if(steps > 1){
+      let reNum: number = n;
+      let PosNum: number = 0;
+      for (let i = 0; i < steps; i++) {
+        const pos = cover + i * space;
+        const num: number = Math.min(line, reNum);
+        PosNum += pos * num;
+        reNum -= line;
+      }
+      result = PosNum / n;
     }
-    let result: number = PosNum / n;
     result /= cos;
     return result;
   }
