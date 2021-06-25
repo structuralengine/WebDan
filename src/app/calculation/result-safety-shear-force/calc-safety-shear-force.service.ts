@@ -115,7 +115,7 @@ export class CalcSafetyShearForceService {
     result["B"] = bw;
 
     // 有効高さ
-    const dsc = section.Ast.tension.dsc;
+    const dsc = section.Ast.dst;
     let d: number = h - dsc;
     result["d"] = d;
 
