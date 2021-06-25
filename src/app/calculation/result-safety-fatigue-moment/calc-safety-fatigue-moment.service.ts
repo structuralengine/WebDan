@@ -94,7 +94,11 @@ export class CalcSafetyFatigueMomentService {
     this.deleteFatigueDisablePosition(force2);
 
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force2[2], force2[1]);
+    const option = {};
+
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, option, 
+    force2[2], force2[1]);
+    
     return postData;
   }
 

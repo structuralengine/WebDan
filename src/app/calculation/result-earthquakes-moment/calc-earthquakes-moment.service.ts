@@ -56,7 +56,11 @@ export class CalcEarthquakesMomentService {
     const force = this.force.checkEnable('Md', this.safetyID, this.DesignForceList);
 
     // POST 用
-    const postData = this.post.setInputData('Md', '耐力', this.safetyID, force[0]);
+    const option = {};
+
+    const postData = this.post.setInputData('Md', '耐力', this.safetyID, option, 
+    force[0]);
+
     return postData;
   }
 

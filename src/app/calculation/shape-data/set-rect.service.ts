@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { ResultDataService } from '../result-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +14,14 @@ export class SetRectService {
   ) { }
 
   // 矩形断面の POST 用 データ作成
-  public getRectangle(target: string, member: any, index: number, side: string, safety: any): any {
+  public getRectangle(
+    target: string, member: any, index: number, 
+    side: string, safety: any, option: any): any {
 
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
-    const shape = this.getRectangleShape(member, target, index, side, safety)
+    const shape = this.getRectangleShape(member, target, index, side, safety, option)
     const h: number = shape.H;
     const b: number = shape.B;
 
@@ -66,11 +69,17 @@ export class SetRectService {
     return result;
   }
 
-  public getTsection(target: string, member: any, index: number, side: string, safety: any): object {
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }
+  public getTsection(
+    target: string, member: any, index: number, 
+    side: string, safety: any, option: any): object {
+
     const result = { symmetry: false, Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
-    const shape = this.getTsectionShape(member, target, index, side, safety);
+    const shape = this.getTsectionShape(member, target, index, side, safety, option);
     const h: number = shape.H;
     const b: number = shape.B;
     const bf: number = shape.Bt;
@@ -103,12 +112,17 @@ export class SetRectService {
     return result;
   }
 
-  public getInvertedTsection(target: string, member: any, index: number, side: string, safety: any): object {
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }
+  public getInvertedTsection(
+    target: string, member: any, index: number, 
+    side: string, safety: any, option: any): object {
     
     const result = { symmetry: false, Sections: [], SectionElastic:[] };
 
     // 断面情報を集計
-    const shape = this.getTsectionShape(member, target, index, side, safety);
+    const shape = this.getTsectionShape(member, target, index, side, safety, option);
     const h: number = shape.H;
     const b: number = shape.B;
     const bf: number = shape.Bt;
@@ -184,7 +198,12 @@ export class SetRectService {
   }
 
   // 断面の幅と高さ（フランジ幅と高さ）を取得する
-  public getRectangleShape(member: any, target: string, index: number, side: string, safety: any): any {
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }
+  public getRectangleShape(
+    member: any, target: string, index: number, 
+    side: string, safety: any, option: any): any {
 
     const result = this.getSection(member, target, index);
 
@@ -207,6 +226,14 @@ export class SetRectService {
     }
     if(tension.rebar_ss === null){
       tension.rebar_ss = result.B / tension.line;
+    }
+    if( 'barCenterPosition' in option ){
+      if(option.barCenterPosition){
+        // 多段配筋を１段に
+        tension.dsc = this.helper.getBarCenterPosition(tension, 1);
+        tension.line = tension.rebar_n;
+        tension.n = 1;
+      }
     }
 
     // tension
@@ -255,10 +282,15 @@ export class SetRectService {
 
     return result;
   }
- 
-  public getTsectionShape(member: any, target: string, index: number, side: string, safety: any): any {
 
-    const result = this.getRectangleShape(member, target, index, side, safety);
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // } 
+  public getTsectionShape(
+    member: any, target: string, index: number, 
+    side: string, safety: any, option: any): any {
+
+    const result = this.getRectangleShape(member, target, index, side, safety, option);
     
     let bf = this.helper.toNumber(member.Bt);
     let hf = this.helper.toNumber(member.t);
@@ -343,11 +375,11 @@ export class SetRectService {
     }
 
     // 引張鉄筋の登録
-    let cosAst: number = tension.cos;
+    // let cosAst: number = tension.cos;
 
     for (const Ast of tensionBarList) {
-      Ast.n = Ast.n * cosAst;
-      Ast.Depth = h - Ast.Depth / cosAst;
+      Ast.n = Ast.n;// * cosAst;
+      Ast.Depth = h - Ast.Depth;// / cosAst;
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }

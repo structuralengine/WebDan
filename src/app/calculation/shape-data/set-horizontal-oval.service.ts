@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { ResultDataService } from '../result-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,14 +13,17 @@ export class SetHorizontalOvalService {
     private helper: DataHelperModule
   ) { }
 
-  public getHorizontalOval(member: any, index: number,side: string, safety: any): any {
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }
+  public getHorizontalOval(member: any, index: number,side: string, safety: any, option: any): any {
 
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const section = this.getShape(member, index, side, safety);
+    const section = this.getShape(member, index, side, safety, option);
     const h: number = section.H;
     const b: number = section.B;
 
@@ -49,7 +53,7 @@ export class SetHorizontalOvalService {
   }
 
   // 断面の幅と高さを取得する
-  public getShape(member: any, index: number, side: string, safety: any): any {
+  public getShape(member: any, index: number, side: string, safety: any, option: any): any {
 
     const result = this.getSection(member)
 
@@ -72,6 +76,14 @@ export class SetHorizontalOvalService {
     }
     if(tension.rebar_ss === null){
       tension.rebar_ss = (result.B - result.H) / tension.line;
+    }
+    if( 'barCenterPosition' in option ){
+      if(option.barCenterPosition){
+        // 多段配筋を１段に
+        tension.dsc = this.helper.getBarCenterPosition(tension, 1);
+        tension.line = tension.rebar_n;
+        tension.n = 1;
+      }
     }
 
     // tension
@@ -221,11 +233,11 @@ export class SetHorizontalOvalService {
     }
 
     // 引張鉄筋の登録
-    let cosAst: number = tension.cos;
+    // let cosAst: number = tension.cos;
 
     for (const Ast of tensionBarList) {
-      Ast.n = Ast.n * cosAst;
-      Ast.Depth = h - Ast.Depth / cosAst;
+      Ast.n = Ast.n;// * cosAst;
+      Ast.Depth = h - Ast.Depth;// / cosAst;
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }

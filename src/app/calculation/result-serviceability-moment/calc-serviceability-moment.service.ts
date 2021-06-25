@@ -20,6 +20,7 @@ export class CalcServiceabilityMomentService {
   // 耐久性 曲げひび割れ
   public DesignForceList: any[];
   public DesignForceList1: any[];
+  public DesignForceList2: any[];
   public isEnable: boolean;
   public safetyID: number = 0;
 
@@ -64,6 +65,8 @@ export class CalcServiceabilityMomentService {
     this.DesignForceList = this.force.getDesignForceList('Md', No1);
     this.DesignForceList1 = this.force.getDesignForceList('Md', No0);
 
+    // 変動作用において 最小の永久作用を用いる
+    this.DesignForceList2 = this.force.getDesignForceList('Md', No1, false);
   }
 
   // サーバー POST用データを生成する
@@ -80,7 +83,16 @@ export class CalcServiceabilityMomentService {
     const force2 = this.force.alignMultipleLists(force1[0], force1[1]);
 
     // POST 用
-    const postData = this.post.setInputData('Md', '応力度', this.safetyID, force2[0], force2[1]);
+    const option = {};
+    // JR東日本モードの場合 barCenterPosition オプション = true
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      option['barCenterPosition'] = true; 
+    }
+
+    const postData = this.post.setInputData('Md', '応力度', this.safetyID, option,
+    force2[0], force2[1]);
+
     return postData;
   }
 
@@ -186,9 +198,6 @@ export class CalcServiceabilityMomentService {
     }
 
     // ひび割れ幅の照査
-    result['Mpd'] = Md;
-    result['Npd'] = Nd;
-
     const Es: number = section.Ast.Es;
     const Ec: number = fc.Ec;
     result['EsEc'] = Es / Ec;
@@ -204,7 +213,7 @@ export class CalcServiceabilityMomentService {
 
     let ecu: number = this.helper.toNumber(crackInfo.ecsd);
     if (ecu === null) { ecu = 450; }
-    result['ecu'] = ecu;
+
 
     const k1: number = (section.Ast.tension.mark === 'D') ? 1 : 1.3;
     result['k1'] = k1;
@@ -216,33 +225,46 @@ export class CalcServiceabilityMomentService {
 
     let k3: number = (5 * (n + 2)) / (7 * n + 8);
 
-    const k4: number = 0.85;
-    result['k4'] = k4;
+    let k4: number = 0.85;
 
     let Sigmase: number = Sigmas;
+    result['sigma_se'] = Sigmase;
 
     // JR東日本の場合
     if( speci2Info === true ) {
       if( isDurability === false ){
-        const Mrd: number =  Mhd - Md;
-        const Nrd: number =  Nhd - Nd;
+        let Mrd: number =  Mhd - Md;
+        let Nrd: number =  Nhd - Nd;
+        let Mpd: number  = Md;
+        let Npd: number  = Nd;
+        const p = this.DesignForceList2.find((e) => e.index === resMin.index);
+        if(p !== undefined){
+          const f = p.designForce.find((e) => e.side === resMin.side );
+          if(f !== undefined){
+            Mpd = (resMin.side==='上側引張') ? -f.Md : f.Md;
+            Npd = f.Nd;
+            Mrd = Mhd - Mpd;
+            Nrd = Nhd - Npd;
+          }
+        }
         // Ｍrd／(Ｍpd+Ｍrd)
+        result['Mpd'] = Mpd;
+        result['Npd'] = Npd;
         result['Mrd'] = Mrd;
         result['Nrd'] = Nrd;
         const rd_ratio = Mrd / Mhd;
         result['rd_ratio'] = rd_ratio;
-        ecu = (rd_ratio > 0.25) ? 300: 150;
+        ecu = (rd_ratio < 0.25) ? 150 : 300;
       }
-      const cover = this.result.getBarCenterPosition(section.Ast.tension);
-      const barCenter = member.H - cover;
-      Sigmase = this.getSigmas(resMin.ResultSigma, barCenter);
       n = 1;
       k3 = 1;
+      k4 = 0.85;
     }
 
-    result['sigma_se'] = Sigmase;
+    result['ecu'] = ecu;
     result['n'] = n;
     result['k3'] = k3;
+    result['k4'] = k4;
 
     const w1: number = 1.1 * k1 * k2 * k3 * k4;
     const w2: number = 4 * c + 0.7 * (Cs - fai);
@@ -269,7 +291,7 @@ export class CalcServiceabilityMomentService {
 
 
   // 鉄筋の引張応力度を返す　(引張応力度がプラス+, 圧縮応力度がマイナス-)
-  public getSigmas(ResultSigma: any, pos: number = null): number {
+  public getSigmas(ResultSigma: any): number {
 
     const sigmaSt: any[] = ResultSigma.st;
 
@@ -282,23 +304,12 @@ export class CalcServiceabilityMomentService {
 
     try {
       let st: number = 0;
-      if(pos === null){
-        // 最外縁の鉄筋の応力度を用いる
-        let maxDepth: number = 0;
-        for (const steel of sigmaSt) {
-          if (maxDepth < steel.Depth) {
-            st = steel.s;
-            maxDepth = steel.Depth;
-          }
-        }
-      } else {
-        // 重心位置の鉄筋の応力度を用いる
-        let maxDepth: number = 0;
-        for (const steel of sigmaSt) {
-          if (maxDepth < steel.Depth) {
-            st = steel.s;
-            maxDepth = steel.Depth;
-          }
+      // 最外縁の鉄筋の応力度を用いる
+      let maxDepth: number = 0;
+      for (const steel of sigmaSt) {
+        if (maxDepth < steel.Depth) {
+          st = steel.s;
+          maxDepth = steel.Depth;
         }
       }
       return -st;

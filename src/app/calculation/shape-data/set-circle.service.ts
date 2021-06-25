@@ -3,6 +3,7 @@ import { retry } from 'rxjs/operators';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
+import { ResultDataService } from '../result-data.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,14 +17,17 @@ export class SetCircleService {
   ) { }
 
   // 円形断面の POST 用 データ作成
-  public getCircle(member: any, index: number, safety: any): any {
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }  
+  public getCircle(member: any, index: number, safety: any, option: any): any {
 
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const section = this.getCircleShape(member, index, safety);
+    const section = this.getCircleShape(member, index, safety, option);
     const h = section.H;
 
     const x1: number = h / RCOUNT;
@@ -51,14 +55,14 @@ export class SetCircleService {
   }
 
   // 円環断面の POST 用 データ作成
-  public getRing(member: any, index: number, safety: any): any {
+  public getRing(member: any, index: number, safety: any, option: any): any {
 
     const result = { symmetry: true, Sections: [], SectionElastic:[] };
 
     const RCOUNT = 100;
 
     // 断面情報を集計
-    const section = this.getRingShape(member, index, safety);
+    const section = this.getRingShape(member, index, safety, option);
     let h: number = section.H; // 外径
     let b: number = section.B; // 内径
     const x1: number = h / RCOUNT;
@@ -173,7 +177,7 @@ export class SetCircleService {
   }
 
   // 断面情報を集計
-  public getCircleShape(member: any, index: number, safety: any){
+  public getCircleShape(member: any, index: number, safety: any, option: any){
 
     const result = this.getSection(member);
     
@@ -186,6 +190,14 @@ export class SetCircleService {
     if(tension.rebar_ss === null || tension.rebar_ss === 0){
       const D = result.H - tension.dsc * 2;
       tension.rebar_ss = D / tension.line;
+    }
+    if( 'barCenterPosition' in option ){
+      if(option.barCenterPosition){
+        // 多段配筋を１段に
+        tension.dsc = this.helper.getBarCenterPosition(tension, 1);
+        tension.line = tension.rebar_n;
+        tension.n = 1;
+      }
     }
 
     const fsy = this.helper.getFsyk(
@@ -214,7 +226,7 @@ export class SetCircleService {
     const result = {};
 
     // 円形としての情報を取得
-    const section = this.getCircleShape(member, index, safety);
+    const section = this.getCircleShape(member, index, safety, {});
     for(const key of Object.keys(section)){
       result[key] = section[key]
     }
@@ -245,12 +257,15 @@ export class SetCircleService {
 
 
   // 円環断面情報を集計
-  public getRingShape(member: any, index: number, safety: any): any{
+  // option: {
+  //  barCenterPosition: 多段配筋の鉄筋を重心位置に全ての鉄筋があるものとす
+  // }
+  public getRingShape(member: any, index: number, safety: any, option: any): any{
 
     const result = {};
 
     // 円形としての情報を取得
-    const section = this.getCircleShape(member, index, safety);
+    const section = this.getCircleShape(member, index, safety, option);
     for(const key of Object.keys(section)){
       result[key] = section[key]
     }
@@ -281,7 +296,7 @@ export class SetCircleService {
     const result = {};
 
     // 円環としての情報を取得
-    const section = this.getRingShape(member, index, safety);
+    const section = this.getRingShape(member, index, safety, {});
     for(const key of Object.keys(section)){
       result[key] = section[key]
     }

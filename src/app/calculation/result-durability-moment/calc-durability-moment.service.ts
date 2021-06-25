@@ -97,7 +97,16 @@ export class CalcDurabilityMomentService {
     const force2 = this.force.alignMultipleLists(this.DesignForceList, this.DesignForceList1);
 
     // POST 用
-    const postData = this.post.setInputData("Md", "応力度", this.safetyID,  force2[0], force2[1]);
+    const option = {};
+    // JR東日本モードの場合 barCenterPosition オプション = true
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      option['barCenterPosition'] = true; 
+    }
+
+    const postData = this.post.setInputData("Md", "応力度", this.safetyID, option,
+    force2[0], force2[1]);
+    
     return postData;
   }
 }
