@@ -183,7 +183,6 @@ export class SetHorizontalOvalService {
     // 圧縮鉄筋 をセットする
     let compresBarList: any[] = new Array();
     let sideBarList = new Array();
-    let cosAsc: number = 1;
     if ('compress' in section) {
       const compress: any = section.compress;
       const compresBar = this.getCompresBar(compress, safety);
@@ -198,7 +197,6 @@ export class SetHorizontalOvalService {
           result.SteelElastic.push(elastic);
         }
       }
-      cosAsc = compress.cos;
 
       // 側方鉄筋 をセットする
       let sideBar: any;
@@ -221,8 +219,8 @@ export class SetHorizontalOvalService {
 
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
-      Asc.n = Asc.n * cosAsc;
-      Asc.Depth = Asc.Depth / cosAsc;
+      Asc.n = Asc.n;
+      Asc.Depth = Asc.Depth;
       result.Steels.push(Asc);
     }
 

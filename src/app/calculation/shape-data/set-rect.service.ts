@@ -330,7 +330,6 @@ export class SetRectService {
 
     // 圧縮鉄筋 をセットする
     let compresBarList: any[] = new Array();
-    let cosAsc: number = 1;
     if ('compress' in section) {
       const compress: any = section.compress;
       const compresBar = this.getCompresBar(compress, safety);
@@ -343,7 +342,6 @@ export class SetRectService {
           result.SteelElastic.push(elastic);
         }
       }
-      cosAsc = compress.cos;
     }
 
     // 側方鉄筋 をセットする
@@ -363,8 +361,8 @@ export class SetRectService {
 
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
-      Asc.n = Asc.n * cosAsc;
-      Asc.Depth = Asc.Depth / cosAsc;
+      Asc.n = Asc.n;
+      Asc.Depth = Asc.Depth;
       result.Steels.push(Asc);
     }
 
@@ -375,11 +373,9 @@ export class SetRectService {
     }
 
     // 引張鉄筋の登録
-    // let cosAst: number = tension.cos;
-
     for (const Ast of tensionBarList) {
-      Ast.n = Ast.n;// * cosAst;
-      Ast.Depth = h - Ast.Depth;// / cosAst;
+      Ast.n = Ast.n;
+      Ast.Depth = h - Ast.Depth;
       Ast.IsTensionBar = true;
       result.Steels.push(Ast);
     }
