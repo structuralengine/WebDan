@@ -21,7 +21,9 @@ export class ResultServiceabilityMomentComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public serviceabilityMomentPages: any[] = new Array();
-
+  public isJREAST: boolean = false;
+  public isJRTT: boolean = false;
+  
   constructor(
     private http: HttpClient,
     private calc: CalcServiceabilityMomentService,
@@ -32,8 +34,6 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
-
-  public speci2Info = this.setbasicInfo(this.basic);
 
   ngOnInit() {
     this.isLoading = true;
@@ -103,6 +103,15 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       title = "耐久性　曲げひび割れの照査結果";
       isDurability = false;
     }
+    this.isJREAST = false;
+    this.isJRTT = false;
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      this.isJREAST = true;
+    }
+    if(speci2===1){
+      this.isJRTT = true;
+    }
 
     let page: any;
 
@@ -152,7 +161,8 @@ export class ResultServiceabilityMomentComponent implements OnInit {
                 section,
                 fck,
                 safety,
-                isDurability
+                isDurability,
+                this.isJREAST
               )
             );
 
@@ -374,13 +384,19 @@ export class ResultServiceabilityMomentComponent implements OnInit {
       result.Npd = { alien: "right", value: (Math.round(re.Npd*10)/10).toFixed(1) };
     }
     if ("Mrd" in re) {
-      result.Mpd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };
+      result.Mrd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };
     }
     if ("Nrd" in re) {
-      result.Npd = { alien: "right", value: (Math.round(re.Nrd*10)/10).toFixed(1) };
+      result.Nrd = { alien: "right", value: (Math.round(re.Nrd*10)/10).toFixed(1) };
     }
     if ("rd_ratio" in re) {
-      result.rd_ratio = { alien: "right", value: re.rd_ratio.toFixed(2) };
+      let value = re.rd_ratio.toFixed(2);
+      if(re.rd_ratio < 0.25){
+        value += ' ＜ 0.25';
+      }else{
+        value += ' ≧ 0.25';
+      }
+      result.rd_ratio = { alien: "right", value };
     }
     if ("EsEc" in re) {
       result.EsEc = { alien: "right", value: re.EsEc.toFixed(2) };

@@ -64,7 +64,11 @@ export class CalcSafetyMomentService {
     const force1 = this.force.checkEnable('Md', this.safetyID, this.DesignForceList);
 
     // POST 用
-    const postData = this.post.setInputData('Md', '耐力', this.safetyID, force1[0]);
+    const option = {};
+
+    const postData = this.post.setInputData('Md', '耐力', this.safetyID, option, 
+    force1[0]);
+    
     return postData;
   }
 

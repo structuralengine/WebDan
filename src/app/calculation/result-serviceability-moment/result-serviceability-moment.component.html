@@ -275,7 +275,7 @@
         <td *ngFor="let column of pages.columns; index as c" class="{{column.sigma_s.alien}} g-right2 g-bottom2">
           {{column.sigma_s.value}}</td>
       </tr>
-      <ng-container *ngIf="speci2Info == 1">
+      <ng-container *ngIf="isJRTT">
         <tr>
           <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">P<sub>t</sub> = A<sub>st</sub>/(b･d)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column.Pt.alien}} g-right2 g-bottom1">
@@ -294,7 +294,7 @@
         <td *ngFor="let column of pages.columns; index as c" class="{{column.Npd.alien}} g-right2 g-bottom1">
           {{column.Npd.value}}</td>
       </tr>
-      <ng-container *ngIf="speci2Info == 2">
+      <ng-container *ngIf="isJREAST">
         <tr>
           <th class="cell_name2 g-bottom1 g-left2">Mrd</th>
           <th class="cell_name3 g-right2 g-bottom1">(kN･m)</th>
@@ -308,7 +308,7 @@
             {{column.Nrd.value}}</td>
         </tr>
         <tr>
-          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">rd_ratio</th>
+          <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">Ｍrd／(Ｍpd+Ｍrd)</th>
           <td *ngFor="let column of pages.columns; index as c" class="{{column.rd_ratio.alien}} g-right2 g-bottom1">
             {{column.rd_ratio.value}}</td>
         </tr>

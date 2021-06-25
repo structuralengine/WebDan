@@ -94,7 +94,11 @@ export class CalcSafetyFatigueMomentService {
     this.deleteFatigueDisablePosition(force2);
 
     // POST 用
-    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, force2[2], force2[1]);
+    const option = {};
+
+    const postData = this.post.setInputData( 'Md', '応力度', this.safetyID, option, 
+    force2[2], force2[1]);
+    
     return postData;
   }
 
@@ -164,11 +168,11 @@ export class CalcSafetyFatigueMomentService {
 
     let Mdmin = resMin.ResultSigma.Md;;
     let Ndmin = this.helper.toNumber(resMin.ResultSigma.Nd);
-    let sigma_min: number = this.base.getSigmas(resMin.ResultSigma.st);
+    let sigma_min: number = this.base.getSigmas(resMin.ResultSigma);
 
     let Mrd = resMax.ResultSigma.Md;
     let Nrd = this.helper.toNumber(resMax.ResultSigma.Nd);
-    let sigma_rd: number = this.base.getSigmas(resMax.ResultSigma.st);
+    let sigma_rd: number = this.base.getSigmas(resMax.ResultSigma);
 
     if (sigma_min === null) { return result; }
     if (sigma_rd === null) { return result; }

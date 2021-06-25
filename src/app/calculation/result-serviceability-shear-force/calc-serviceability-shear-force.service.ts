@@ -87,7 +87,11 @@ export class CalcServiceabilityShearForceService {
     const force2 = this.force.alignMultipleLists(force1[0], force1[1], force1[2]);
 
     // POST 用
-    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, force2[0]);
+    const option = {};
+
+    const postData = this.post.setInputData('Vd', '耐力', this.safetyID, option, 
+    force2[0]);
+    
     return postData;
   }
 
