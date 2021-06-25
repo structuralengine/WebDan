@@ -180,7 +180,12 @@ table.main th {
   position: relative;
   top: 7px;
 }*/
-table.main td {
+table.main td.S {
+  width: 53px;
+  height: 20px;
+  margin: 0;
+}
+table.main td.M {
   width: 106px;
   height: 20px;
   margin: 0;
@@ -195,6 +200,9 @@ table.main .center {
 table.main .right {
   text-align: right;
   padding-right: 10px;
+}
+table.main .right-S {
+  text-align: right;
 }
 table.main .cell_name1 {
   width: 135px;
