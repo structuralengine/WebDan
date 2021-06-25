@@ -137,11 +137,16 @@ export class SetCircleService {
     const Steels = [];
 
     const dia: string = tension.mark + tension.rebar_dia;
+    let _rebar_n: number = tension.rebar_n;
+    let _line: number = this.helper.toNumber(tension.line);
+    if(_line === null){
+      _line = tension.rebar_n;
+    }
 
     for (let i = 0; i < tension.n; i++) {
       const Depth = tension.dsc + i * tension.space;
       const Rt: number = h - Depth * 2; // 鉄筋直径
-      const num = tension.rebar_n - tension.line * i; // 鉄筋本数
+      const num = (_rebar_n > _line) ? _line : _rebar_n; // 鉄筋本数
       const steps: number = 360 / num; // 鉄筋角度間隔
       //設計条件「円形断面で鉄筋を頂点に1本配置する」と鉄筋本数を条件に分岐、真上を0°として計算
       const bar_start_point = ((num % 2 === 0) === this.basic.conditions_list['3']['selected']) ? 0: steps / 2;
@@ -171,6 +176,8 @@ export class SetCircleService {
           });
         }
       }
+
+      _rebar_n -= _line;
     }
 
     return Steels

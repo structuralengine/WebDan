@@ -212,12 +212,14 @@ export class CalcSafetyFatigueShearForceService {
     if (sigma_min === null) { return result; }
     sigma_min = sigma_min * 1000;
     result['sigma_min'] = sigma_min;
+    const _sigma_min = Math.max(sigma_min, 0);
 
     // スターラップの変動応力度
     let sigma_rd: number = (tmpWrd1 / tmpWrd2) * (Vrd / tmpWrd4);
     if (sigma_rd === null) { return result; }
     sigma_rd = sigma_rd * 1000;
     result['sigma_rd'] = sigma_rd;
+    const _sigma_rd = Math.max(sigma_rd, 0);
 
     // f200 の計算
     let rs = this.helper.toNumber(safety.safety_factor.rs);
@@ -246,7 +248,7 @@ export class CalcSafetyFatigueShearForceService {
       reference_count = 2000000;
     }
     const tmp201: number = Math.pow(10, ar) / Math.pow(reference_count, k);
-    const tmp202: number = 1 - sigma_min / fwud;
+    const tmp202: number = 1 - _sigma_min / fwud;
     const fsr200: number = r1 * tmp201 * tmp202 / rs;
     result['fsr200'] = fsr200;
 
@@ -256,7 +258,7 @@ export class CalcSafetyFatigueShearForceService {
     let rb = this.helper.toNumber(safety.safety_factor.rbs);
     if (rb === null) { rb = 1; }
 
-    const ratio200: number = ri * sigma_rd / (fsr200 / rb);
+    const ratio200: number = ri * _sigma_rd / (fsr200 / rb);
     result['ratio200'] = ratio200;
 
     if (ratio200 < 1) {
@@ -335,14 +337,14 @@ export class CalcSafetyFatigueShearForceService {
     result['r2'] = r2;
 
     const tmpfrd1: number = Math.pow(10, ar) / Math.pow(N, k);
-    const tmpfrd2: number = 1 - sigma_min / fwud;
+    const tmpfrd2: number = 1 - _sigma_min / fwud;
     const frd: number = r1 * r2 * tmpfrd1 * tmpfrd2 / rs;
     result['frd'] = frd;
 
     if (ratio200 < 1 && N <= reference_count) {
       return result;
     }
-    const ratio: number = ri * sigma_rd / (frd / rb);
+    const ratio: number = ri * _sigma_rd / (frd / rb);
     result['ratio'] = ratio;
 
     return result;
