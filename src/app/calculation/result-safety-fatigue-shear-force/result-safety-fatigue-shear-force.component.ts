@@ -186,6 +186,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             result : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
+            bendFlag : true,  //折り曲げ鉄筋の情報があればtrue、無ければfalse
+            /////////////// 総括表用 ///////////////
             g_name: m.g_name,
             index : position.index,
             side_summary : side,
@@ -220,6 +222,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
       Aw: { alien: "center", value: "-" },
       AwString: { alien: "center", value: "-" },
+      Ab: { alien: "center", value: "-" },
+      AbString: { alien: "center", value: "-" },
       fwyd: { alien: "center", value: "-" },
       deg: { alien: "center", value: "-" },
       Ss: { alien: "center", value: "-" },
@@ -272,6 +276,12 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
     if ("AwString" in re) {
       result.AwString = { alien: "right", value: re.AwString };
+    }
+    if ("Ab" in re) {
+      result.Ab = { alien: "right", value: re.Ab.toFixed(1) };
+    }
+    if ("AbString" in re) {
+      result.AbString = { alien: "right", value: re.AbString };
     }
     if ("fwyd" in re) {
       result.fwyd = { alien: "right", value: re.fwyd.toFixed(0) };

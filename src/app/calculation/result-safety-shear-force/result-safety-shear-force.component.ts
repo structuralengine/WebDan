@@ -215,6 +215,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
               Vwcd_Result : resultColumn.Vwcd_Result,
 
               /////////////// 総括表用 ///////////////
+              bendFlag : true,//折り曲げ鉄筋の情報があればtrue、無ければfalse
+              /////////////// 総括表用 ///////////////
               g_name: m.g_name,
               index : position.index,
               side_summary : side,

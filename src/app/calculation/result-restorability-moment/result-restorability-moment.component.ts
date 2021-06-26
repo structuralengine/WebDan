@@ -241,10 +241,10 @@ export class ResultRestorabilityMomentComponent implements OnInit {
     if ("Nd" in re) {
       result.Nd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
     }
-    if ("ecu" in re) {
+    if ("εcu" in re) {
       result.ecu = { alien: "right", value: re.εcu.toFixed(5) };
     }
-    if ("es" in re) {
+    if ("εs" in re) {
       result.es = { alien: "right", value: re.εs.toFixed(5) };
     }
     if ("x" in re) {
