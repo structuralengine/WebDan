@@ -341,16 +341,16 @@ export class DataHelperModule {
       return 0;
     }
     if (n === null || n <= 0) {
-      return cover;
+      return cover / cos;
     }
     if (line === null || line <= 0) {
-      return cover;
+      return cover / cos;
     }
     if (space === null || space <= 0) {
-      return cover;
+      return cover / cos;
     }
     if (n < line) {
-      return cover;
+      return cover / cos;
     }
     // 鉄筋の重心位置を計算する
     const steps: number = Math.ceil(n / line); // 鉄筋段数
