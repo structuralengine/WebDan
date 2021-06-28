@@ -139,15 +139,13 @@ table.main {
       top: 7px;
     }*/
   }
-  td.S {
+  td {
     width: 50px;
     height: 12px;
     margin: 0;
   }
-  td.M {
-    width: 100px;
-    height: 12px;
-    margin: 0;
+  .minwidth{
+    min-width: 100px;
   }
   .left{ text-align: left; padding-left: 10px; }
   .center{ text-align: center; }

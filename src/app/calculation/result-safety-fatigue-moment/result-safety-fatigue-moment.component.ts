@@ -162,10 +162,12 @@ export class ResultSafetyFatigueMomentComponent implements OnInit {
             Ast : this.result.alien(this.result.numStr(section.Ast.Ast), 'center'),
             AstString : this.result.alien(section.Ast.AstString, 'center'),
             dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), 'center'),
+            tcos : this.result.alien(this.result.numStr((section.Ast.tension!==null)?section.Ast.tension.cos: 1, 3), "center"),
             /////////////// 圧縮鉄筋 ///////////////
             Asc : this.result.alien(this.result.numStr(section.Asc.Asc), 'center'),
             AscString : this.result.alien(section.Asc.AscString, 'center'),
             dsc : this.result.alien(this.result.numStr(section.Asc.dsc ,1), 'center'),
+            ccos : this.result.alien(this.result.numStr((section.Asc.compress!==null)?section.Asc.compress.cos: 1, 3), "center"),
             /////////////// 側面鉄筋 ///////////////
             Ase : this.result.alien(this.result.numStr(section.Ase.Ase), 'center'),
             AseString : this.result.alien(section.Ase.AseString, 'center'),

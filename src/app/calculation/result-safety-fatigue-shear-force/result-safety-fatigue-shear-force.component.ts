@@ -128,6 +128,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
             AstString : this.result.alien(section.Ast.AstString, "center"),
             dst : this.result.alien(this.result.numStr(section.Ast.dst, 1), "center"),
+            tcos : this.result.alien(this.result.numStr((section.Ast.tension!==null)?section.Ast.tension.cos: 1, 3), "center"),
             /////////////// コンクリート情報 ///////////////
             fck : this.result.alien(fck.fck.toFixed(1), "center"),
             rc : this.result.alien(fck.rc.toFixed(2), "center"),

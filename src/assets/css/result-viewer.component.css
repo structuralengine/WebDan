@@ -180,15 +180,13 @@ table.main th {
   position: relative;
   top: 7px;
 }*/
-table.main td.S {
+table.main td {
   width: 53px;
   height: 20px;
   margin: 0;
 }
-table.main td.M {
-  width: 106px;
-  height: 20px;
-  margin: 0;
+table.main minwidth{
+  min-width: 100px;
 }
 table.main .left {
   text-align: left;
