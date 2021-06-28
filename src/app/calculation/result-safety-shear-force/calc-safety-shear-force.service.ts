@@ -159,6 +159,24 @@ export class CalcSafetyShearForceService {
       result["Ss"] = Ss;
     }
 
+    // 帯鉄筋
+    let Asb: number = this.helper.toNumber(section.Asb.Asb);
+    let fwyd2: number = this.helper.toNumber(section.Asb.fwyd);
+    let deg2: number = this.helper.toNumber(section.Asb.deg);
+    if (deg2 === null) { deg2 = 90; }
+    let Ss2: number = this.helper.toNumber(section.Asb.Ss);
+    if (Ss2 === null) { Ss2 = Number.MAX_VALUE; }
+    if (Asb === null || fwyd2 === null) {
+      Asb = 0;
+      fwyd2 = 0;
+    } else {
+      result["Asb"] = Asb;
+      result["AsbString"] = section.Asb.AsbString;
+      result["fwyd2"] = section.Asb.fwyd;
+      result["deg2"] = deg2;
+      result["Ss2"] = Ss2;
+    }
+
     // コンクリート材料
     const fck: number = this.helper.toNumber(fc.fck);
     if (fck === null) {

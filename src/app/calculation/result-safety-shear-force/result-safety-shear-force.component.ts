@@ -191,6 +191,13 @@ export class ResultSafetyShearForceComponent implements OnInit {
               deg : resultColumn.deg,
               Ss : resultColumn.Ss,
 
+              /////////////// 折り曲げ鉄筋情報 ///////////////
+              Asb : resultColumn.Asb,
+              AsbString : resultColumn.AsbString,
+              fwyd2 : resultColumn.fwyd2,
+              deg2 : resultColumn.deg2,
+              Ss2 : resultColumn.Ss2,
+
               /////////////// 照査 ///////////////
               fvcd : resultColumn.fvcd,
               Bd : resultColumn.Bd,
@@ -206,6 +213,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
               Vcd : resultColumn.Vcd,
               rbs : resultColumn.rbs,
               Vsd : resultColumn.Vsd,
+              Vsd2 : resultColumn.Vsd2,
               Vyd : resultColumn.Vyd,
               ri : resultColumn.ri,
               Vyd_Ratio : resultColumn.Vyd_Ratio,
@@ -217,13 +225,14 @@ export class ResultSafetyShearForceComponent implements OnInit {
               Vwcd_Result : resultColumn.Vwcd_Result,
 
               /////////////// 総括表用 ///////////////
-              bendFlag : true,//折り曲げ鉄筋の情報があればtrue、無ければfalse
+              bendFlag : (resultColumn.Asb.value!=='-'),//折り曲げ鉄筋の情報があればtrue、無ければfalse
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
               index : position.index,
               side_summary : side,
               shape_summary : section.shapeName,
             }
+            console.log(column.bendFlag, column.Asb)
 
             page.columns.push(column);
           }
@@ -262,6 +271,12 @@ export class ResultSafetyShearForceComponent implements OnInit {
       deg: { alien: "center", value: "-" },
       Ss: { alien: "center", value: "-" },
 
+      Asb: { alien: "center", value: "-" },
+      AsbString: { alien: "center", value: "-" },
+      fwyd2: { alien: "center", value: "-" },
+      deg2: { alien: "center", value: "-" },
+      Ss2: { alien: "center", value: "-" },
+
       fvcd: { alien: "center", value: "-" },
       Bd: { alien: "center", value: "-" },
       Bp: { alien: "center", value: "-" },
@@ -276,6 +291,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       Vcd: { alien: "center", value: "-" },
       rbs: { alien: "center", value: "-" },
       Vsd: { alien: "center", value: "-" },
+      Vsd2: { alien: "center", value: "-" },
       Vyd: { alien: "center", value: "-" },
       ri: { alien: "center", value: "-" },
       Vyd_Ratio: { alien: "center", value: "-" },
@@ -321,6 +337,23 @@ export class ResultSafetyShearForceComponent implements OnInit {
     }
     if ("Ss" in re) {
       result.Ss = { alien: "right", value: re.Ss.toFixed(0) };
+    }
+
+    //折り曲げ鉄筋
+    if ("Asb" in re) {
+      result.Asb = { alien: "right", value: re.Asb.toFixed(1) };
+    }
+    if ("AsbString" in re) {
+      result.AsbString = { alien: "right", value: re.AsbString };
+    }
+    if ("fwyd2" in re) {
+      result.fwyd2 = { alien: "right", value: re.fwyd2.toFixed(0) };
+    }
+    if ("deg2" in re) {
+      result.deg2 = { alien: "right", value: re.deg2.toFixed(0) };
+    }
+    if ("Ss2" in re) {
+      result.Ss2 = { alien: "right", value: re.Ss2.toFixed(0) };
     }
 
     if ("fvcd" in re) {
@@ -374,6 +407,9 @@ export class ResultSafetyShearForceComponent implements OnInit {
     }
     if ("Vsd" in re) {
       result.Vsd = { alien: "right", value: re.Vsd.toFixed(1) };
+    }
+    if ("Vsd" in re) {
+      result.Vsd2 = { alien: "right", value: re.Vsd.toFixed(1) };
     }
 
     if ("Vyd" in re) {

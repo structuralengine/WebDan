@@ -211,35 +211,72 @@
         </ng-container>
       </tr>
       <tr>
-        <th class="cell_name2 g-bottom1 g-left2">Aw  Ab</th>
-        <th class="cell_name3 g-right2 g-bottom1">(mm<sup>2</sup>)</th>
+        <th class="cell_name2 g-left2">Aw  Ab</th>
+        <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.AwString.alien}} g-right2 g-bottom1">
-          {{column.AwString.value}}</td>
+          <ng-container *ngIf="!column.bendFlag">
+            <td colspan="2" class="{{column.Aw.alien}} g-right2 g-bottom1">
+            {{column.Aw.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="column.bendFlag">
+            <td class="right-S">{{column.Aw.value}}</td>
+            <td class="right-S g-right2">{{column.Asb.value}}</td>
+          </ng-container>
+        </ng-container>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2"></th>
+        <ng-container *ngFor="let column of pages.columns; index as c">
+          <ng-container *ngIf="!column.bendFlag">
+            <td colspan="2" class="{{column.AwString.alien}} g-right2 g-bottom1">
+            {{column.AwString.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="column.bendFlag">
+            <td class="right-S g-bottom1">{{column.AwString.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.AsbString.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
         <th class="cell_name2 g-bottom1 g-left2">fyd</th>
         <th class="cell_name3 g-right2 g-bottom1">(mm<sup>2</sup>)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.fwyd.alien}} g-right2 g-bottom1">
-          {{column.fwyd.value}}</td>
+          <ng-container *ngIf="!column.bendFlag">
+            <td colspan="2" class="{{column.fwyd.alien}} g-right2 g-bottom1">
+            {{column.fwyd.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="column.bendFlag">
+            <td class="right-S g-bottom1">{{column.fwyd.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.fwyd2.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
         <th class="cell_name2 g-bottom1 g-left2">θ</th>
         <th class="cell_name3 g-right2 g-bottom1">(° )</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.deg.alien}} g-right2 g-bottom1">
-          {{column.deg.value}}</td>
+          <ng-container *ngIf="!column.bendFlag">
+            <td colspan="2" class="{{column.deg.alien}} g-right2 g-bottom1">
+            {{column.deg.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="column.bendFlag">
+            <td class="right-S g-bottom1">{{column.deg.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.deg2.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
         <th class="cell_name2 g-bottom2 g-left2">S</th>
         <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.Ss.alien}} g-right2 g-bottom2">
-          {{column.Ss.value}}</td>
+          <ng-container *ngIf="!column.bendFlag">
+            <td colspan="2" class="{{column.Ss.alien}} g-right2 g-bottom1">
+            {{column.Ss.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="column.bendFlag">
+            <td class="right-S g-bottom2">{{column.Ss.value}}</td>
+            <td class="right-S g-right2 g-bottom2">{{column.Ss2.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
@@ -329,8 +366,8 @@
             {{column.sigma_min.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.sigma_min.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.sigma_min.value}}</td>
+            <td class="right-S g-bottom1">{{column.sigma_min.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.sigma_min2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -343,8 +380,8 @@
             {{column.sigma_rd.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom2">{{column.sigma_rd.value}}</td>
-            <td class="right-S S g-right2 g-bottom2">{{column.sigma_rd.value}}</td>
+            <td class="right-S g-bottom2">{{column.sigma_rd.value}}</td>
+            <td class="right-S g-right2 g-bottom2">{{column.sigma_rd2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -357,8 +394,8 @@
             {{column.sigma_r.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.sigma_r.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.sigma_r.value}}</td>
+            <td class="right-S g-bottom1">{{column.sigma_r.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.sigma_r2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -371,8 +408,8 @@
             {{column.fsr200.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.fsr200.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.fsr200.value}}</td>
+            <td class="right-S g-bottom1">{{column.fsr200.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.fsr2002.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -384,8 +421,8 @@
             {{column.ratio200.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.ratio200.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.ratio200.value}}</td>
+            <td class="right-S g-bottom1">{{column.ratio200.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.ratio2002.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -403,8 +440,8 @@
             {{column.ar.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.ar.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.ar.value}}</td>
+            <td class="right-S g-bottom1">{{column.ar.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.ar2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -452,8 +489,8 @@
             {{column.r1.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.r1.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.r1.value}}</td>
+            <td class="right-S g-bottom1">{{column.r1.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.r12.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -480,8 +517,8 @@
             {{column.frd.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.frd.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.frd.value}}</td>
+            <td class="right-S g-bottom1">{{column.frd.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.frd2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -507,8 +544,8 @@
             {{column.ratio.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom1">{{column.ratio.value}}</td>
-            <td class="right-S S g-right2 g-bottom1">{{column.ratio.value}}</td>
+            <td class="right-S g-bottom1">{{column.ratio.value}}</td>
+            <td class="right-S g-right2 g-bottom1">{{column.ratio2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -520,8 +557,8 @@
             {{column.result.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S S g-bottom2">{{column.result.value}}</td>
-            <td class="right-S S g-right2 g-bottom2">{{column.result.value}}</td>
+            <td class="right-S g-bottom2">{{column.result.value}}</td>
+            <td class="right-S g-right2 g-bottom2">{{column.result2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>

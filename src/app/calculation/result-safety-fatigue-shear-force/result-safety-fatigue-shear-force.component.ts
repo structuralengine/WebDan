@@ -139,10 +139,17 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
             fwud : this.result.alien(section.Aw.fwud, "center"),
             /////////////// 帯鉄筋情報 ///////////////
+            Aw : resultColumn.Aw,
             AwString : resultColumn.AwString,
             fwyd : resultColumn.fwyd,
             deg : resultColumn.deg,
             Ss : resultColumn.Ss,
+            /////////////// 折り曲げ鉄筋情報 ///////////////
+            Asb : resultColumn.Asb,
+            AsbString : resultColumn.AsbString,
+            fwyd2 : resultColumn.fwyd2,
+            deg2 : resultColumn.deg2,
+            Ss2 : resultColumn.Ss2,
             /////////////// 断面力 ///////////////
             Vpd : resultColumn.Vpd,
             Mpd : resultColumn.Mpd,
@@ -165,8 +172,16 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             fsr200 : resultColumn.fsr200,
             ratio200 : resultColumn.ratio200,
 
+            sigma_min2 : resultColumn.sigma_min,
+            sigma_rd2 : resultColumn.sigma_rd,
+            sigma_r2 : resultColumn.sigma_rd,
+            
+            fsr2002 : resultColumn.fsr200,
+            ratio2002 : resultColumn.ratio200,
+            
             k : resultColumn.k,
             ar : resultColumn.ar,
+            ar2 : resultColumn.ar,
             N : resultColumn.N,
 
             NA : resultColumn.NA,
@@ -176,24 +191,29 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             SBSC : resultColumn.SBSC,
 
             r1 : resultColumn.r1,
+            r12 : resultColumn.r1,
             r2 : resultColumn.r2,
 
             rs2 : resultColumn.rs,
             frd : resultColumn.frd,
+            frd2 : resultColumn.frd,
 
             rbs : resultColumn.rbs,
             ri : resultColumn.ri,
             ratio : resultColumn.ratio,
             result : resultColumn.result,
+            ratio2 : resultColumn.ratio,
+            result2 : resultColumn.result,
 
             /////////////// 総括表用 ///////////////
-            bendFlag : true,  //折り曲げ鉄筋の情報があればtrue、無ければfalse
+            bendFlag : (resultColumn.Asb.value!=='-'),  //折り曲げ鉄筋の情報があればtrue、無ければfalse
             /////////////// 総括表用 ///////////////
             g_name: m.g_name,
             index : position.index,
             side_summary : side,
             shape_summary : section.shapeName,
             }
+            console.log(column.bendFlag, column.Asb)
                         
             page.columns.push(column);
           }
@@ -223,11 +243,15 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
       Aw: { alien: "center", value: "-" },
       AwString: { alien: "center", value: "-" },
-      Ab: { alien: "center", value: "-" },
-      AbString: { alien: "center", value: "-" },
       fwyd: { alien: "center", value: "-" },
       deg: { alien: "center", value: "-" },
       Ss: { alien: "center", value: "-" },
+
+      Asb: { alien: "center", value: "-" },
+      AsbString: { alien: "center", value: "-" },
+      fwyd2: { alien: "center", value: "-" },
+      deg2: { alien: "center", value: "-" },
+      Ss2: { alien: "center", value: "-" },
 
       Vpd: { alien: "center", value: "-" },
       Mpd: { alien: "center", value: "-" },
@@ -248,9 +272,16 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
 
       fsr200: { alien: "center", value: "-" },
       ratio200: { alien: "center", value: "-" },
+      
+      sigma_min2: { alien: "center", value: "-" },
+      sigma_rd2: { alien: "center", value: "-" },
+
+      fsr2002: { alien: "center", value: "-" },
+      ratio2002: { alien: "center", value: "-" },
 
       k: { alien: "center", value: "-" },
       ar: { alien: "center", value: "-" },
+      ar2: { alien: "center", value: "-" },
       N: { alien: "center", value: "-" },
 
       NA: { alien: "center", value: "-" },
@@ -260,15 +291,19 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       SBSC: { alien: "center", value: "-" },
 
       r1: { alien: "center", value: "-" },
+      r12: { alien: "center", value: "-" },
       r2: { alien: "center", value: "-" },
 
       rs: { alien: "center", value: "-" },
       frd: { alien: "center", value: "-" },
+      frd2: { alien: "center", value: "-" },
 
       rbs: { alien: "center", value: "-" },
       ri: { alien: "center", value: "-" },
       ratio: { alien: "center", value: "-" },
       result: { alien: "center", value: "-" },
+      ratio2: { alien: "center", value: "-" },
+      result2: { alien: "center", value: "-" },
     };
 
     // 帯鉄筋
@@ -278,12 +313,6 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     if ("AwString" in re) {
       result.AwString = { alien: "right", value: re.AwString };
     }
-    if ("Ab" in re) {
-      result.Ab = { alien: "right", value: re.Ab.toFixed(1) };
-    }
-    if ("AbString" in re) {
-      result.AbString = { alien: "right", value: re.AbString };
-    }
     if ("fwyd" in re) {
       result.fwyd = { alien: "right", value: re.fwyd.toFixed(0) };
     }
@@ -292,6 +321,22 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
     if ("Ss" in re) {
       result.Ss = { alien: "right", value: re.Ss.toFixed(0) };
+    }
+    //折り曲げ鉄筋
+    if ("Asb" in re) {
+      result.Asb = { alien: "right", value: re.Asb.toFixed(1) };
+    }
+    if ("AsbString" in re) {
+      result.AsbString = { alien: "right", value: re.AsbString };
+    }
+    if ("fwyd" in re) {
+      result.fwyd2 = { alien: "right", value: re.fwyd2.toFixed(0) };
+    }
+    if ("deg" in re) {
+      result.deg2 = { alien: "right", value: re.deg2.toFixed(0) };
+    }
+    if ("Ss" in re) {
+      result.Ss2 = { alien: "right", value: re.Ss2.toFixed(0) };
     }
 
     // 断面力
@@ -343,11 +388,28 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.ratio200.value = re.ratio200.toFixed(3).toString() + ((re.ratio200 < 1) ? ' < 1.00' : ' > 1.00')
     }
 
+    if ("sigma_min" in re) {
+      result.sigma_min2 = { alien: "right", value: re.sigma_min.toFixed(2) };
+    }
+    if ("sigma_rd" in re) {
+      result.sigma_rd2 = { alien: "right", value: re.sigma_rd.toFixed(2) };
+    }
+    
+    if ("fsr200" in re) {
+      result.fsr2002 = { alien: "right", value: re.fsr200.toFixed(2) };
+    }
+    if ("ratio200" in re) {
+      result.ratio2002.value = re.ratio200.toFixed(3).toString() + ((re.ratio200 < 1) ? ' < 1.00' : ' > 1.00')
+    }
+
     if ("k" in re) {
       result.k = { alien: "right", value: re.k.toFixed(2) };
     }
     if ("ar" in re) {
       result.ar = { alien: "right", value: re.ar.toFixed(3) };
+    }
+    if ("ar" in re) {
+      result.ar2 = { alien: "right", value: re.ar.toFixed(3) };
     }
     if ("N" in re) {
       result.N = { alien: "right", value: re.N.toFixed(0) };
@@ -368,6 +430,9 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     if ("r1" in re) {
       result.r1 = { alien: "right", value: re.r1.toFixed(2) };
     }
+    if ("r1" in re) {
+      result.r12 = { alien: "right", value: re.r1.toFixed(2) };
+    }
     if ("r2" in re) {
       result.r2 = { alien: "right", value: re.r2.toFixed(3) };
     }
@@ -376,6 +441,9 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     }
     if ("frd" in re) {
       result.frd = { alien: "right", value: re.frd.toFixed(2) };
+    }
+    if ("frd2" in re) {
+      result.frd2 = { alien: "right", value: re.frd.toFixed(2) };
     }
     if ("rbs" in re) {
       result.rbs = { alien: "right", value: re.rbs.toFixed(2) };
@@ -392,6 +460,16 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.result.value = "OK";
     } else {
       result.result.value = "NG";
+    }
+    ratio = 0;
+    if ("ratio" in re) {
+      result.ratio2.value = re.ratio.toFixed(3).toString() + ((re.ratio < 1) ? ' < 1.00' : ' > 1.00');
+      ratio = re.ratio;
+    }
+    if (ratio < 1) {
+      result.result2.value = "OK";
+    } else {
+      result.result2.value = "NG";
     }
 
     return result;
