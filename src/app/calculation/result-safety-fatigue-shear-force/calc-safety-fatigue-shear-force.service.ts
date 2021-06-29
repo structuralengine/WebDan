@@ -238,7 +238,7 @@ export class CalcSafetyFatigueShearForceService {
     const inputFatigue: any = tmpFatigue.share;
 
     let r1: number = this.helper.toNumber(inputFatigue.r1_2);
-    if (r1 === null) { r1 = 1; }
+    if (r1 === null) { r1 = 0.65; }
     result['r1'] = r1;
 
     let ar: number = 3.09 - 0.003 * fai;
@@ -279,31 +279,34 @@ export class CalcSafetyFatigueShearForceService {
     const jA = j[0];
     const jB = j[1];
 
-
     let SASC: number = this.helper.toNumber(inputFatigue.SA);
     if (SASC === null) {
       SASC = 1;
-    } else {
+    } else if(jA > 0) {
       result['SASC'] = SASC;
     }
+  
     let SBSC: number = this.helper.toNumber(inputFatigue.SB);
     if (SBSC === null) {
       SBSC = 1;
-    } else {
+    } else if(jB > 0){
       result['SBSC'] = SBSC;
     }
+
     let a: number = this.helper.toNumber(inputFatigue.A);
     if (a === null) {
       a = 1;
     } else {
       result['a'] = a;
     }
+    
     let b: number = this.helper.toNumber(inputFatigue.B);
     if (b === null) {
       b = 1;
     } else {
       result['b'] = b;
     }
+
     let NA = 0;
     let NB = 0;
     if (k === 0.06) {
@@ -315,12 +318,12 @@ export class CalcSafetyFatigueShearForceService {
     }
     if (NA === null) {
       NA = 0;
-    } else {
+    } else if(jA > 0){
       result['NA'] = NA;
     }
     if (NB === null) {
       NB = 0;
-    } else {
+    } else if(jB > 0){
       result['NB'] = NB;
     }
 
@@ -344,8 +347,11 @@ export class CalcSafetyFatigueShearForceService {
     if (ratio200 < 1 && N <= reference_count) {
       return result;
     }
+
     const ratio: number = ri * _sigma_rd / (frd / rb);
-    result['ratio'] = ratio;
+    if(ratio > 0){
+      result['ratio'] = ratio;
+    }
 
     return result;
 

@@ -329,13 +329,13 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     if ("AsbString" in re) {
       result.AsbString = { alien: "right", value: re.AsbString };
     }
-    if ("fwyd" in re) {
+    if ("fwyd2" in re) {
       result.fwyd2 = { alien: "right", value: re.fwyd2.toFixed(0) };
     }
-    if ("deg" in re) {
+    if ("deg2" in re) {
       result.deg2 = { alien: "right", value: re.deg2.toFixed(0) };
     }
-    if ("Ss" in re) {
+    if ("Ss2" in re) {
       result.Ss2 = { alien: "right", value: re.Ss2.toFixed(0) };
     }
 

@@ -122,7 +122,7 @@ export class CalcSafetyShearForceService {
     //  tanθc + tanθt
     const tan: number = section.tan;
     let Vhd: number = 0;
-    if (tan !== 0) {
+    if (tan !== null && tan !== 0) {
       Vhd = (Math.abs(Md) / d) * this.helper.Radians(tan);
       result["Vhd"] = Vhd;
     }
@@ -221,11 +221,18 @@ export class CalcSafetyShearForceService {
 
     // せん断耐力の照査
     let rbc: number = 1;
+    rbc = this.helper.toNumber(safety.safety_factor.rbc);
+    if (rbc === null) {
+      rbc = 1;
+    }
+
+    const Vwcd: any = this.calcVwcd(fcd, bw, d, rbc);
+    for (const key of Object.keys(Vwcd)) {
+      result[key] = Vwcd[key];
+    }
+        
     if (La / d >= 2) {
-      rbc = this.helper.toNumber(safety.safety_factor.rbc);
-      if (rbc === null) {
-        rbc = 1;
-      }
+
       result["rbc"] = rbc;
 
       let rbs: number = 1;
@@ -243,6 +250,7 @@ export class CalcSafetyShearForceService {
         result[key] = Vyd[key];
       }
     } else {
+      
       rbc = this.helper.toNumber(safety.safety_factor.rbd);
       if (rbc === null) {
         rbc = 1;
@@ -256,10 +264,7 @@ export class CalcSafetyShearForceService {
         result[key] = Vdd[key];
       }
     }
-    const Vwcd: any = this.calcVwcd(fcd, bw, d, rbc);
-    for (const key of Object.keys(Vwcd)) {
-      result[key] = Vwcd[key];
-    }
+
 
     let ri: number = 0;
     ri = this.helper.toNumber(safety.safety_factor.ri);

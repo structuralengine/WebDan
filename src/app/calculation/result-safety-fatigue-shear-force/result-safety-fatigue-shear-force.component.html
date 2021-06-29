@@ -270,7 +270,7 @@
         <th class="cell_name3 g-right2 g-bottom2">(mm)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
           <ng-container *ngIf="!column.bendFlag">
-            <td colspan="2" class="{{column.Ss.alien}} g-right2 g-bottom1">
+            <td colspan="2" class="{{column.Ss.alien}} g-right2 g-bottom2">
             {{column.Ss.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
