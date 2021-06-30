@@ -30,7 +30,7 @@ export class SetHorizontalOvalService {
     const steps = 180 / RCOUNT;
 
     let olddeg = 0;
-    for (let deg = steps; deg <= 180; deg += steps) {
+    for (let deg = steps; Math.round(deg * 10) / 10 <= 180; deg += steps) {
       const section = {
         Height: (Math.cos(this.helper.Radians(olddeg)) - Math.cos(this.helper.Radians(deg))) * h / 2, // 断面高さ
         WTop: b - h + Math.sin(this.helper.Radians(olddeg)) * h, // 断面幅（上辺）
@@ -101,29 +101,34 @@ export class SetHorizontalOvalService {
 
     // compres
     if (safety.safety_factor.range >= 2) {
-      const fsyc = this.helper.getFsyk(
-        compress.rebar_dia,
-        safety.material_bar,
-        "tensionBar"
-      );
-      if (fsyc.fsy === 235) compress.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
-      compress['fsy'] = fsyc;
-      compress['rs'] = safety.safety_factor.rs;
-      result['compress'] = compress;
+      if(compress !== null){
+        const fsyc = this.helper.getFsyk(
+          compress.rebar_dia,
+          safety.material_bar,
+          "tensionBar"
+        );
+        if (fsyc.fsy === 235) compress.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+        compress['fsy'] = fsyc;
+        compress['rs'] = safety.safety_factor.rs;
+        result['compress'] = compress;
+      }
     }
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
+      if (compress === null) compress = {dsc: 0};
       const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
-      const fsye = this.helper.getFsyk(
-        sidebar.rebar_dia,
-        safety.material_bar,
-        "sidebar"
-      );
-      if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
-      sidebar['fsy'] = fsye;
-      sidebar['rs'] = safety.safety_factor.rs;
-      result['sidebar'] = sidebar;
+      if(sidebar !== null){
+        const fsye = this.helper.getFsyk(
+          sidebar.rebar_dia,
+          safety.material_bar,
+          "sidebar"
+        );
+        if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+        sidebar['fsy'] = fsye;
+        sidebar['rs'] = safety.safety_factor.rs;
+        result['sidebar'] = sidebar;
+      }
     }
 
     result['stirrup'] = bar.stirrup;
@@ -286,22 +291,26 @@ export class SetHorizontalOvalService {
   }
 
   private getSideBar(
-    barInfo: any, safety: any, tensionBar: any, compresBar: any, height: number ): any[] {
-    const result: any[] = new Array();
+    barInfo: any, safety: any, tensionBar: any, compresBar: any, height: number ): any {
+    
+    const result = {
+      Steels: new Array(),
+      SteelElastic: new Array(),
+    };
 
     // 鉄筋径の入力が ない場合は スキップ
     if (barInfo.side_dia === null) {
       return new Array();
     }
     // 鉄筋段数
-    const n = barInfo.sidebar_n;
+    const n = barInfo.n;
     if (n === 0) {
       return new Array(); // 鉄筋段数の入力が 0 の場合は スキップ
     }
 
     // 主鉄筋のかぶり
-    let dst = tensionBar.rebar_cover;
-    let dsc = compresBar.rebar_cover;
+    let dst = tensionBar.dsc;
+    let dsc = compresBar.dsc;
 
     // 鉄筋配置直径
     const Rt: number = height - (dst + dsc);
@@ -310,37 +319,45 @@ export class SetHorizontalOvalService {
     const arcLength: number = (Rt * Math.PI) / 2;
 
     // 側方鉄筋スタート位置
-    let dse = barInfo.side_cover;
+    /*let dse = barInfo.cover;
     if (this.helper.toNumber(dse) === null) {
       dse = arcLength / (n + 1);
-    }
+    }*/
 
     // 鉄筋間隔
-    let space = barInfo.side_ss;
+    /*let space = barInfo.space;
     if (this.helper.toNumber(space) === null) {
       space = arcLength / (n + 1);
-    }
+    }*/
 
     // 弧の長さより長くなってしまった場合は調整する
-    if (dse + space * n > arcLength) {
+    /*if (dse + space * n > arcLength) {
       space = (arcLength - dse * 2) / (n - 1);
-    }
+    }*/
 
     // 1段当りの本数
     const line = 2;
 
+    // 鉄筋強度
     const fsy = barInfo.fsy;
     const id = "s" + fsy.id;
+    // 鉄筋強度の入力
+    const rs = safety.safety_factor.rs;
 
     // 鉄筋径
     let dia: string = barInfo.mark + barInfo.side_dia;
 
     // 鉄筋情報を登録
-    const start_deg: number = (360 * dse) / (Math.PI * Rt); // 鉄筋配置開始角度
+    /*const start_deg: number = (360 * dse) / (Math.PI * Rt); // 鉄筋配置開始角度
     const steps_deg: number = (360 * space) / (Math.PI * Rt); // 鉄筋配置角度
-    const end_deg: number = start_deg + steps_deg * (n - 1); // 鉄筋配置終了角度
+    const end_deg: number = start_deg + steps_deg * (n - 1); // 鉄筋配置終了角度*/
+    const steps_deg: number = 180 / (barInfo.n + 1); // 鉄筋配置角度
+    const start_deg: number = steps_deg;  // 鉄筋配置開始角度
+    const end_deg: number = steps_deg * barInfo.n; // 鉄筋配置終了角度
     for (let deg = start_deg; deg <= end_deg; deg += steps_deg) {
-      const dt = Rt / 2 - (Math.cos(this.helper.Radians(deg)) * Rt) / 2 + dsc;
+
+      //const dt = Rt / 2 - (Math.cos(this.helper.Radians(deg)) * Rt) / 2 + dsc;
+      const dt = height / 2 - Rt / 2 * Math.cos(this.helper.Radians(deg))
 
       const Steel1 = {
         Depth: dt,
@@ -349,9 +366,15 @@ export class SetHorizontalOvalService {
         IsTensionBar: false,
         ElasticID: id,
       };
-      result.push(Steel1);
+      result.Steels.push(Steel1);
 
     }
+
+    result.SteelElastic.push({
+      fsk: fsy.fsy / rs,
+      Es: 200,
+      ElasticID: id,
+    });
 
     return result;
   }

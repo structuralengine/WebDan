@@ -232,7 +232,6 @@ export class ResultSafetyShearForceComponent implements OnInit {
               side_summary : side,
               shape_summary : section.shapeName,
             }
-            console.log(column.bendFlag, column.Asb)
 
             page.columns.push(column);
           }
