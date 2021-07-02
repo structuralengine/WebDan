@@ -134,6 +134,10 @@ export class SetVerticalOvalService {
       result['compress'] = compress;
       }
     }
+    if(compress === null) {
+      compress = tension
+      result['compress'] = tension;
+    }
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
@@ -154,6 +158,22 @@ export class SetVerticalOvalService {
     result['stirrup'] = bar.stirrup;
     result['bend'] = bar.bend;
 
+    const section = result
+    const steels = this.getVerticalOvalBar(section, safety).Steels;//resultをそのまま入れてもよい
+    // 換算矩形としての鉄筋位置
+    let d = 0.0, n = 0;
+    for(const s of steels){
+      if(s.IsTensionBar === true){ 
+        //=0°～180°の範囲にある鉄筋
+        d += s.Depth * s.n;
+        n += s.n;
+      }
+    }
+    const dh = (section.H - section.Hw)/2;
+    const dsc = d / n;
+    tension.dsc = section.Hw - dsc + dh;
+    tension.rebar_n = n;
+
     return result;
 
   }
@@ -162,7 +182,8 @@ export class SetVerticalOvalService {
     
     const result = {
       H: null,
-      B: null
+      B: null,
+      Hw: null
     };
 
     let h: number = this.helper.toNumber(member.H);
@@ -174,6 +195,11 @@ export class SetVerticalOvalService {
     if (h === null || b === null) {
       throw('形状の入力が正しくありません');
     }
+
+    //小判型の断面積Sと簡略化した矩形断面の幅Bw
+    const S = (Math.PI * (b/2)**2) / 2 + b*(h - b) + (Math.PI * (b/2)**2) / 2;
+    const Hw = S / b;
+    result.Hw = Hw
 
     return result
   }
@@ -263,11 +289,13 @@ export class SetVerticalOvalService {
 
       for (let deg = steps; deg < 180; deg += steps) {
         const dst = h - b / 2 + Math.sin(this.helper.Radians(deg)) * Rt / 2;
+        //対象を下側の全鉄筋とする
+        const tensionBar = (0 <= deg && deg <= 180) ? true: false;
         const Steel1 = {
           Depth: dst, // 深さ位置
           i: dia1, // 鋼材
           n: 1, // 鋼材の本数
-          IsTensionBar: true, // 鋼材の引張降伏着目Flag
+          IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
           ElasticID: id1, // 材料番号
         };
         tensionBarList.push(Steel1);

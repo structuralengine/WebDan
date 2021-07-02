@@ -262,9 +262,14 @@ export class SetRectService {
       compress['rs'] = safety.safety_factor.rs;;
       result['compress'] = compress;
     }
+    /*if(compress === null) {
+      compress = tension;
+      result['compress'] = tension
+    }*/
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
+      if (compress===null){compress = {dsc: 0}}
       const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
       if(sidebar !== null){
         const fsye = this.helper.getFsyk(

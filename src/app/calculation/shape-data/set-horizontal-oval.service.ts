@@ -113,10 +113,13 @@ export class SetHorizontalOvalService {
         result['compress'] = compress;
       }
     }
+    if (compress === null) {
+      compress = tension;
+      result['compress'] = tension;
+    }
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
-      if (compress === null) compress = {dsc: 0};
       const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
       if(sidebar !== null){
         const fsye = this.helper.getFsyk(
@@ -143,7 +146,8 @@ export class SetHorizontalOvalService {
     
     const result = {
       H: null,
-      B: null
+      B: null,
+      Bw: null
     };
 
     let h: number = this.helper.toNumber(member.H);
@@ -155,6 +159,11 @@ export class SetHorizontalOvalService {
     if (h === null || b === null) {
       throw('形状の入力が正しくありません');
     }
+
+    //小判型の断面積Sと簡略化した矩形断面の幅Bw
+    const S = (Math.PI * (h/2)**2) / 2 + h*(b - h) + (Math.PI * (h/2)**2) / 2;
+    const Bw = S / h;
+    result.Bw = Bw
 
     return result
   }

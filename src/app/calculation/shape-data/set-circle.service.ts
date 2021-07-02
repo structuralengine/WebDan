@@ -149,7 +149,8 @@ export class SetCircleService {
       const num = (_rebar_n > _line) ? _line : _rebar_n; // 鉄筋本数
       const steps: number = 360 / num; // 鉄筋角度間隔
       //設計条件「円形断面で鉄筋を頂点に1本配置する」と鉄筋本数を条件に分岐、真上を0°として計算
-      const bar_start_point = ((num % 2 === 0) === this.basic.conditions_list['3']['selected']) ? 0: steps / 2;
+      const target_condition = this.basic.conditions_list.find(element => element['id'] === 'JR-003');
+      const bar_start_point = ((num % 2 === 0) === target_condition['selected']) ? 0: steps / 2;
 
       for (let j = 0; j < num; j++) {
         const deg = j * steps + bar_start_point;
@@ -249,7 +250,8 @@ export class SetCircleService {
     const steels = this.getSteels(tension, section.H, null);
     let d = 0.0, n = 0;
     for(const s of steels){
-      if(s.IsTensionBar === true){
+      if(s.IsTensionBar === true){ 
+        //=135°～225°の範囲にある鉄筋
         d += s.Depth * s.n;
         n += s.n;
       }

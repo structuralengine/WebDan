@@ -89,6 +89,8 @@ export class ResultDataService {
         H: null,
         Bt: null,
         t: null,
+        Bw: null,
+        Hw: null,
       }
     };
 
@@ -155,12 +157,14 @@ export class ResultDataService {
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
+        result.shape.Bw = section.Bw;
         break;
 
       case 'VerticalOval':      // 鉛直方向小判形
         section = this.vOval.getShape(member, index, side, safety, {});
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
+        result.shape.Hw = section.Hw;
         result.shape.B = section.B;
         break;
 

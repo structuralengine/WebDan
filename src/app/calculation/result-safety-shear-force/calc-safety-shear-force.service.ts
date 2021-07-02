@@ -110,13 +110,21 @@ export class CalcSafetyShearForceService {
     // 換算断面
     const h: number = section.shape.H;
     result["H"] = h;
+    let Hw2 = null; //小判型における換算断面の幅
+    if(section.shape.Hw !== null) {
+      Hw2 = section.shape.Hw
+    }
 
     const bw: number = section.shape.B;
     result["B"] = bw;
+    let Bw2 = null; //小判型における換算断面の幅
+    if(section.shape.Bw !== null) {
+      Bw2 = section.shape.Bw
+    }
 
     // 有効高さ
     const dsc = section.Ast.dst;
-    let d: number = h - dsc;
+    let d: number = (Hw2 === null) ? h - dsc: Hw2 - dsc;;
     result["d"] = d;
 
     //  tanθc + tanθt
@@ -226,7 +234,7 @@ export class CalcSafetyShearForceService {
       rbc = 1;
     }
 
-    const Vwcd: any = this.calcVwcd(fcd, bw, d, rbc);
+    const Vwcd: any = this.calcVwcd(fcd, (Bw2 === null) ? bw : Bw2, d, rbc);
     for (const key of Object.keys(Vwcd)) {
       result[key] = Vwcd[key];
     }
