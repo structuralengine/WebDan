@@ -167,7 +167,7 @@ export class CalcSafetyShearForceService {
       result["Ss"] = Ss;
     }
 
-    // 帯鉄筋
+    // 折り曲げ鉄筋
     let Asb: number = this.helper.toNumber(section.Asb.Asb);
     let fwyd2: number = this.helper.toNumber(section.Asb.fwyd);
     let deg2: number = this.helper.toNumber(section.Asb.deg);
@@ -252,8 +252,8 @@ export class CalcSafetyShearForceService {
 
       const Vyd: any = this.calcVyd(
         fcd, d, pc, Nd, h,
-        Mu, bw, rbc, rVcd, deg,
-        Aw, fwyd, Ss, rbs);
+        Mu, bw, rbc, rVcd, deg, deg2,
+        Aw, Asb, fwyd, fwyd2, Ss, Ss2, rbs);
       for (const key of Object.keys(Vyd)) {
         result[key] = Vyd[key];
       }
@@ -313,8 +313,8 @@ export class CalcSafetyShearForceService {
   // 標準せん断耐力
   private calcVyd(
     fcd: number, d: number, pc: number, Nd: number, H: number,
-    Mu: number, B: number, rbc: number, rVcd: number, deg: number,
-    Aw: number, fwyd: number, Ss: number, rbs: number): any {
+    Mu: number, B: number, rbc: number, rVcd: number, deg: number, deg2: number,
+    Aw: number, Asb: number, fwyd: number, fwyd2: number, Ss: number, Ss2: number, rbs: number): any {
     const result = {};
 
     let fvcd: number = 0.2 * Math.pow(fcd, 1 / 3);
@@ -352,6 +352,7 @@ export class CalcSafetyShearForceService {
     Vcd = Vcd * rVcd; // 杭の施工条件
     result["Vcd"] = Vcd;
 
+    //スターラップの設計せん断耐力
     let z: number = d / 1.15;
     result["z"] = z;
 
@@ -366,6 +367,19 @@ export class CalcSafetyShearForceService {
     Vsd = Vsd / 1000;
 
     result["Vsd"] = Vsd;
+
+    //折り曲げ鉄筋のの設計せん断耐力
+    let sinCos2: number =
+      Math.sin(this.helper.Radians(deg2)) +
+      Math.cos(this.helper.Radians(deg2));
+    result["sinCos2"] = sinCos2;
+
+    let Vsd2 = (((Asb * fwyd2 * sinCos2) / Ss2) * z) / rbs;
+
+    Vsd2 = Vsd2 / 1000;
+
+    result["Vsd2"] = Vsd2;
+    
 
     const Vyd: number = Vcd + Vsd;
 

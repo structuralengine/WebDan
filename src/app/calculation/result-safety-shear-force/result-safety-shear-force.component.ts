@@ -407,8 +407,8 @@ export class ResultSafetyShearForceComponent implements OnInit {
     if ("Vsd" in re) {
       result.Vsd = { alien: "right", value: re.Vsd.toFixed(1) };
     }
-    if ("Vsd" in re) {
-      result.Vsd2 = { alien: "right", value: re.Vsd.toFixed(1) };
+    if ("Vsd2" in re) {
+      result.Vsd2 = { alien: "right", value: re.Vsd2.toFixed(1) };
     }
 
     if ("Vyd" in re) {
