@@ -190,7 +190,7 @@ export class ResultDataService {
   private getVmuSection(section: any, safety: any): any {
 
     const result = {
-      tan: null,
+      tan: (this.helper.toNumber(section.tan) !== null) ? this.helper.toNumber(section.tan) : 0,
       Aw: {   // スターラップ
         stirrup_dia: null,
         stirrup_n: null,
@@ -301,14 +301,6 @@ export class ResultDataService {
     result.Asb.fwyd = fwyd2.fsy;
     result.Asb.fwud = fwyd2.fsu;
     result.Asb.rs = safety.safety_factor.rs;
-
-    // その他 -------------------------------------------------------------------------
-    let tan = this.helper.toNumber(section.tan);
-    if (tan === null) {
-      tan = 0;
-    }
-    result.tan = tan;
-
 
     return result;
 

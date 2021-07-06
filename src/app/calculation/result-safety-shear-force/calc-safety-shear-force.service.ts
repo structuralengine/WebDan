@@ -83,11 +83,11 @@ export class CalcSafetyShearForceService {
     const result: any = {}; // 印刷用
 
     // 断面力
-    let Md: number = this.helper.toNumber(force.Md);
-    if (Md === null) {
-      Md = 0;
+    let Md1: number = this.helper.toNumber(force.Md);
+    if (Md1 === null) {
+      Md1 = 0;
     }
-    Md = Math.abs(Md);
+    let Md = Math.abs(Md1);
     if (Md !== 0) {
       result["Md"] = Md;
     }
@@ -131,7 +131,7 @@ export class CalcSafetyShearForceService {
     const tan: number = section.tan;
     let Vhd: number = 0;
     if (tan !== null && tan !== 0) {
-      Vhd = (Math.abs(Md) / d) * this.helper.Radians(tan);
+      Vhd = (-Md1 / d * 1000) * tan;
       result["Vhd"] = Vhd;
     }
 

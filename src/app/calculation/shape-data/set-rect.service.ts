@@ -162,6 +162,7 @@ export class SetRectService {
       B: null,
       Bt: null,
       t: null,
+      tan: null
     };
 
     const bar: any = this.bars.getCalcData(index);
@@ -180,6 +181,8 @@ export class SetRectService {
       throw('形状の入力が正しくありません');
     }
 
+    result.tan = bar.tan;
+    
     return result
   }
 
