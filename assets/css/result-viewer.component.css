@@ -156,10 +156,10 @@ table{
   height: 1123px;
   width: 794px;
   /* 余白サイズ*/
-  padding-top: 63px;
+  padding-top: 35px;
   padding-bottom: 63px;
-  padding-left: 79px;
-  padding-right: 50px;
+  padding-left: 55px;
+  padding-right: 55px;
 }
 
 table.main {
@@ -181,12 +181,12 @@ table.main th {
   top: 7px;
 }*/
 table.main td {
-  width: 53px;
+  width: 54px;
   height: 20px;
   margin: 0;
 }
-table.main minwidth{
-  min-width: 100px;
+table.main .minwidth{
+  min-width: 108px;
 }
 table.main .left {
   text-align: left;
@@ -203,13 +203,13 @@ table.main .right-S {
   text-align: right;
 }
 table.main .cell_name1 {
-  width: 135px;
+  width: 144px;
 }
 table.main .cell_name2 {
-  width: 60px;
+  width: 70px;
 }
 table.main .cell_name3 {
-  width: 75px;
+  width: 74px;
 }
 table.main .g-top1 {
   border-top: 1px solid lightgray;
