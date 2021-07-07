@@ -296,6 +296,15 @@ export class SetCircleService {
     result['H'] = H; // 外径
     result['B'] = this.helper.toNumber(member.B); // 内径
 
+    //換算した断面の1辺の長さ
+    if (this.helper.toNumber(member.H) === null || this.helper.toNumber(member.B) === null) {
+      result['Hw'] = Math.sqrt(Math.PI * (H / 2)**2);
+      result['Bw'] = null;
+    } else {
+      result['Hw'] = ( (-1-Math.PI/4)*H**2 + 2*H*result['B'] - (1-Math.PI/4)*result['B']**2)/(2*result['B'] - 2*H);
+      result['Bw'] = result['Hw'] - result['H'] + result['B'];
+    }
+
     return result;
   }
 

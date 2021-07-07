@@ -162,6 +162,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
                 fck,
                 safety,
                 isDurability,
+                this.isJRTT,
                 this.isJREAST
               )
             );
@@ -339,6 +340,14 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     if ("Nhd" in re) {
       result.Nhd = { alien: "right", value: (Math.round(re.Nhd*10)/10).toFixed(1) };
     }
+    //少し先に鉄筋量の出力の準備をしておく
+    if ("Pt" in re) {
+      if (re.Pt < 0.50){
+        result.Pt = { alien: "center", value: re.Pt.toFixed(2) + " < 0.50 (%)"};
+      } else {
+        result.Pt = { alien: "center", value: re.Pt.toFixed(2) + " > 0.50 (%)"};
+      }
+    }
     // 縁応力度
     if ("Sigmab" in re && "Sigmabl" in re) {
       if (re.Sigmab < re.Sigmabl) {
@@ -368,7 +377,13 @@ export class ResultServiceabilityMomentComponent implements OnInit {
             result.result.value = "NG";
           }
         }
-        return result;
+        if (!this.isJRTT){
+          return result;
+        } else {
+          if (re.Pt < 0.50){
+            return result
+          }
+        }
       } else {
         result.sigma_b.value =
           re.Sigmab.toFixed(2) + " > " + re.Sigmabl.toFixed(2);
@@ -376,14 +391,11 @@ export class ResultServiceabilityMomentComponent implements OnInit {
     }
 
     // ひび割れ幅の照査
-    if ("Pt" in re) {
-      result.Pt = { alien: "right", value: re.Pt.toFixed(1) };
+    if ("Md" in re) {
+      result.Mpd = { alien: "right", value: (Math.round(re.Md*10)/10).toFixed(1) };
     }
-    if ("Mpd" in re) {
-      result.Mpd = { alien: "right", value: (Math.round(re.Mpd*10)/10).toFixed(1) };
-    }
-    if ("Npd" in re) {
-      result.Npd = { alien: "right", value: (Math.round(re.Npd*10)/10).toFixed(1) };
+    if ("Nd" in re) {
+      result.Npd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
     }
     if ("Mrd" in re) {
       result.Mrd = { alien: "right", value: (Math.round(re.Mrd*10)/10).toFixed(1) };

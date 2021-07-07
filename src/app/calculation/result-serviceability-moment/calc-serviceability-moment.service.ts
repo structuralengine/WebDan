@@ -104,6 +104,7 @@ export class CalcServiceabilityMomentService {
     res: any, section: any,
     fc: any, safety: any,
     isDurability: boolean,
+    speci2Info_TT: boolean,
     speci2Info: boolean,): any {
 
     const resMin = res[0]; // 永久作用
@@ -190,11 +191,56 @@ export class CalcServiceabilityMomentService {
     const Sigmas: number = this.getSigmas(resMin.ResultSigma);
     if (Sigmas === null) { return result; }
 
-    if (Sigmab < Sigmabl) {
-      // 鉄筋応力度の照査
-      result['Sigmas'] = Sigmas;
-      result['sigmal1'] = sigmal1;
-      return result;
+    // 鉄筋比
+    let SectionalArea: number;
+    let pt: number;
+    let As: number = section.Ast.Ast;
+    // 有効断面積を算出
+    switch (section.shapeName) {
+      case 'Circle':            // 円形
+        SectionalArea = section.shape.Hw * section.shape.Hw;
+        As = As / 4;
+        pt = As / SectionalArea;
+        break;
+      case 'Ring':              // 円環
+        SectionalArea = section.shape.Hw**2 - section.shape.Bw ** 2;
+        As = As / 4;
+        pt = As / SectionalArea;
+        break;
+      case 'Rectangle':         // 矩形
+      case 'Tsection':          // T形
+      case 'InvertedTsection':  // 逆T形
+        SectionalArea = section.shape.B * (section.shape.H - section.Ast.dst);
+        pt = section.Ast.Ast / SectionalArea;
+        break;
+      case 'HorizontalOval':    // 水平方向小判形
+        SectionalArea = section.shape.Bw * (section.shape.H - section.Ast.dst);
+        pt = section.Ast.Ast / SectionalArea;
+        break;
+      case 'VerticalOval':      // 鉛直方向小判形
+        SectionalArea = section.shape.B * (section.shape.Hw - section.Ast.dst);
+        pt = section.Ast.Ast / SectionalArea;
+        break;
+    }
+    result['Pt'] = pt * 100;
+
+    /* 運輸機構の場合 */
+    if (speci2Info_TT){
+      if (Sigmab < Sigmabl) {
+        // 鉄筋応力度の照査
+        result['Sigmas'] = Sigmas;
+        result['sigmal1'] = sigmal1;
+        if (pt < 0.0050) {
+          return result;
+        }
+      }
+    } else {
+      if (Sigmab < Sigmabl) {
+        // 鉄筋応力度の照査
+        result['Sigmas'] = Sigmas;
+        result['sigmal1'] = sigmal1;
+        return result;
+      }
     }
 
     // ひび割れ幅の照査
@@ -221,7 +267,7 @@ export class CalcServiceabilityMomentService {
     const k2: number = 15 / (fcd + 20) + 0.7;
     result['k2'] = k2;
 
-    let n: number = section.Ast.tension.n;
+    let n: number = section.Ast.tension.rebar_n / section.Ast.tension.line;
 
     let k3: number = (5 * (n + 2)) / (7 * n + 8);
 

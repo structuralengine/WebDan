@@ -115,11 +115,14 @@ export class ResultDataService {
           section = this.circle.getCircleShape(member, index, safety, {});
           result['Ast'] = this.getAst(section, safety);
           result.shape.H = section.H;
+          result.shape.Hw = section.Hw;
         } else {
           section = this.circle.getCircleVdShape(member, index, safety);
           result['Ast'] = this.getAstCircleVd(section, safety);
           result.shape.H = section.H;
           result.shape.B = section.B;
+          result.shape.Hw = section.Hw;
+          result.shape.Bw = section.Bw;
           }
         break;
 
