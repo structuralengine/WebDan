@@ -31,7 +31,7 @@ export class SetVerticalOvalService {
 
     let olddeg = 0;
     // 上側の曲線部
-    for (let deg = steps; deg <= 90; deg += steps) {
+    for (let deg = steps; Math.round(deg*10)/10 <= 90; deg += steps) {
       const section1 = {
         Height: (Math.cos(this.helper.Radians(olddeg)) - Math.cos(this.helper.Radians(deg))) * b / 2,  // 断面高さ
         WTop: Math.sin(this.helper.Radians(olddeg)) * b,   // 断面幅（上辺）
@@ -52,7 +52,7 @@ export class SetVerticalOvalService {
     result.Sections.push(section2);
 
     // 下側の曲線部
-    for (let deg = 90 + steps; deg <= 180; deg += steps) {
+    for (let deg = 90 + steps; Math.round(deg*10)/10 <= 180; deg += steps) {
       const section3 = {
         Height: (Math.cos(this.helper.Radians(olddeg)) - Math.cos(this.helper.Radians(deg))) * b / 2,  // 断面高さ
         WTop: Math.sin(this.helper.Radians(olddeg)) * b, // 断面幅（上辺）
@@ -123,6 +123,7 @@ export class SetVerticalOvalService {
 
     // compres
     if (safety.safety_factor.range >= 2) {
+      if (compress !== null){
       const fsyc = this.helper.getFsyk(
         compress.rebar_dia,
         safety.material_bar,
@@ -131,23 +132,47 @@ export class SetVerticalOvalService {
       if (fsyc.fsy === 235) compress.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
       compress['fsy'] = fsyc;
       result['compress'] = compress;
+      }
+    }
+    if(compress === null) {
+      compress = tension
+      result['compress'] = tension;
     }
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
+      if (compress === null) compress = {dsc: 0};
       const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
-      const fsye = this.helper.getFsyk(
-        sidebar.rebar_dia,
-        safety.material_bar,
-        "sidebar"
-      );
-      if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
-      sidebar['fsy'] = fsye;
-      result['sidebar'] = sidebar;
+      if(sidebar !== null){
+        const fsye = this.helper.getFsyk(
+          sidebar.side_dia,
+          safety.material_bar,
+          "sidebar"
+        );
+        if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+        sidebar['fsy'] = fsye;
+        result['sidebar'] = sidebar;
+      }
     }
     
     result['stirrup'] = bar.stirrup;
     result['bend'] = bar.bend;
+
+    const section = result
+    const steels = this.getVerticalOvalBar(section, safety).Steels;//resultをそのまま入れてもよい
+    // 換算矩形としての鉄筋位置
+    let d = 0.0, n = 0;
+    for(const s of steels){
+      if(s.IsTensionBar === true){ 
+        //=0°～180°の範囲にある鉄筋
+        d += s.Depth * s.n;
+        n += s.n;
+      }
+    }
+    const dh = (section.H - section.Hw)/2;
+    const dsc = d / n;
+    tension.dsc = section.Hw - dsc + dh;
+    tension.rebar_n = n;
 
     return result;
 
@@ -157,7 +182,8 @@ export class SetVerticalOvalService {
     
     const result = {
       H: null,
-      B: null
+      B: null,
+      Hw: null
     };
 
     let h: number = this.helper.toNumber(member.H);
@@ -169,6 +195,11 @@ export class SetVerticalOvalService {
     if (h === null || b === null) {
       throw('形状の入力が正しくありません');
     }
+
+    //小判型の断面積Sと簡略化した矩形断面の幅Bw
+    const S = (Math.PI * (b/2)**2) / 2 + b*(h - b) + (Math.PI * (b/2)**2) / 2;
+    const Hw = S / b;
+    result.Hw = Hw
 
     return result
   }
@@ -221,7 +252,7 @@ export class SetVerticalOvalService {
         const steps: number = 180 / (compress.rebar_n - compress.line * i + 1); // 鉄筋角度間隔
 
         for (let deg = steps; deg < 180; deg += steps) {
-          const dsc = b / 2 - Math.sin(this.helper.Radians(deg)) * Rt;
+          const dsc = b / 2 - Math.sin(this.helper.Radians(deg)) * Rt / 2;
           const Steel1 = {
             Depth: dsc, // 深さ位置
             i: dia2, // 鋼材
@@ -257,12 +288,14 @@ export class SetVerticalOvalService {
       const steps: number = 180 / (tension.rebar_n - tension.line * i + 1);
 
       for (let deg = steps; deg < 180; deg += steps) {
-        const dst = h - b / 2 + Math.sin(this.helper.Radians(deg)) * Rt;
+        const dst = h - b / 2 + Math.sin(this.helper.Radians(deg)) * Rt / 2;
+        //対象を下側の全鉄筋とする
+        const tensionBar = (0 <= deg && deg <= 180) ? true: false;
         const Steel1 = {
           Depth: dst, // 深さ位置
           i: dia1, // 鋼材
           n: 1, // 鋼材の本数
-          IsTensionBar: true, // 鋼材の引張降伏着目Flag
+          IsTensionBar: tensionBar, // 鋼材の引張降伏着目Flag
           ElasticID: id1, // 材料番号
         };
         tensionBarList.push(Steel1);
@@ -312,7 +345,7 @@ export class SetVerticalOvalService {
     // 鉄筋情報を登録
     for (let i = 0; i < barInfo.n; i++) {
       const Steel1 = {
-        Depth: barInfo.dse + i * barInfo.space,
+        Depth: barInfo.cover + i * barInfo.space,
         i: dia,
         n: barInfo.line,
         IsTensionBar: false,

@@ -228,7 +228,7 @@ export class InputBarsService {
       }
       // 当該入力行より上の行
       let endFlg = true;
-      for(const key of ['rebar1', 'rebar2', 'sidebar', 'stirrup', 'bend']){
+      for(const key of ['rebar1', 'rebar2', 'sidebar', 'stirrup']){
         const rebar = data[key];
         const re = result[key];
         for(const k of Object.keys(re)){

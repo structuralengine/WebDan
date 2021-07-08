@@ -447,9 +447,9 @@
         </ng-container>
       </tr>
       <tr>
-        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">γ<sub>i</sub>・σwpd / σ12</th>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γ<sub>i</sub>・σwpd / σ12</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.Ratio.alien}} g-right2 g-bottom2">
+          <td colspan="2" class="{{column.Ratio.alien}} g-right2 g-bottom1">
           {{column.Ratio.value}}</td>
         </ng-container>
       </tr>
@@ -458,6 +458,27 @@
         <ng-container *ngFor="let column of pages.columns; index as c">
         <td colspan="2" class="{{column.Result.alien}} g-right2 g-bottom2">
           {{column.Result.value}}</td>
+        </ng-container>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">σbpd σs12(N/mm<sup>2</sup>)</th>
+        <ng-container *ngFor="let column of pages.columns; index as c">
+          <td colspan="2" class="{{column.Result.alien}} g-right2 g-bottom1">
+          {{column.sigma2.value}}</td>
+        </ng-container>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γ<sub>i</sub>・σwpd / σ12</th>
+        <ng-container *ngFor="let column of pages.columns; index as c">
+          <td colspan="2" class="{{column.Result.alien}} g-right2 g-bottom1">
+          {{column.Ratio2.value}}</td>
+        </ng-container>
+      </tr>
+      <tr>
+        <th colspan="2" class="cell_name1 g-right2 g-bottom2 g-left2">照査結果</th>
+        <ng-container *ngFor="let column of pages.columns; index as c">
+          <td colspan="2" class="{{column.Result2.alien}} g-right2 g-bottom2">
+          {{column.Result2.value}}</td>
         </ng-container>
       </tr>
     </table>

@@ -162,6 +162,7 @@ export class SetRectService {
       B: null,
       Bt: null,
       t: null,
+      tan: null
     };
 
     const bar: any = this.bars.getCalcData(index);
@@ -180,6 +181,8 @@ export class SetRectService {
       throw('形状の入力が正しくありません');
     }
 
+    result.tan = bar.tan;
+    
     return result
   }
 
@@ -251,7 +254,7 @@ export class SetRectService {
     result['tension'] = tension;
 
     // compres
-    if (safety.safety_factor.range >= 2) {
+    if (safety.safety_factor.range >= 2 && compress !== null) {
       const fsyc = this.helper.getFsyk(
         compress.rebar_dia,
         safety.material_bar,
@@ -262,19 +265,26 @@ export class SetRectService {
       compress['rs'] = safety.safety_factor.rs;;
       result['compress'] = compress;
     }
+    /*if(compress === null) {
+      compress = tension;
+      result['compress'] = tension
+    }*/
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
+      if (compress===null){compress = {dsc: 0}}
       const sidebar: any = this.helper.sideInfo(bar.sidebar, tension.dsc, compress.dsc, result.H);
-      const fsye = this.helper.getFsyk(
-        sidebar.rebar_dia,
-        safety.material_bar,
-        "sidebar"
-      );
-      if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
-      sidebar['fsy'] = fsye;
-      sidebar['rs'] = safety.safety_factor.rs;
-      result['sidebar'] = sidebar;
+      if(sidebar !== null){
+        const fsye = this.helper.getFsyk(
+          sidebar.rebar_dia,
+          safety.material_bar,
+          "sidebar"
+        );
+        if (fsye.fsy === 235) sidebar.mark = "R"; // 鉄筋強度が 235 なら 丸鋼
+        sidebar['fsy'] = fsye;
+        sidebar['rs'] = safety.safety_factor.rs;
+        result['sidebar'] = sidebar;
+      }
     }
     
     result['stirrup'] = bar.stirrup;

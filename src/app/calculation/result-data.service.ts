@@ -89,6 +89,8 @@ export class ResultDataService {
         H: null,
         Bt: null,
         t: null,
+        Bw: null,
+        Hw: null,
       }
     };
 
@@ -113,11 +115,14 @@ export class ResultDataService {
           section = this.circle.getCircleShape(member, index, safety, {});
           result['Ast'] = this.getAst(section, safety);
           result.shape.H = section.H;
+          result.shape.Hw = section.Hw;
         } else {
           section = this.circle.getCircleVdShape(member, index, safety);
           result['Ast'] = this.getAstCircleVd(section, safety);
           result.shape.H = section.H;
           result.shape.B = section.B;
+          result.shape.Hw = section.Hw;
+          result.shape.Bw = section.Bw;
           }
         break;
 
@@ -155,12 +160,14 @@ export class ResultDataService {
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
         result.shape.B = section.B;
+        result.shape.Bw = section.Bw;
         break;
 
       case 'VerticalOval':      // 鉛直方向小判形
         section = this.vOval.getShape(member, index, side, safety, {});
         result['Ast'] = this.getAst(section, safety);
         result.shape.H = section.H;
+        result.shape.Hw = section.Hw;
         result.shape.B = section.B;
         break;
 
@@ -186,7 +193,7 @@ export class ResultDataService {
   private getVmuSection(section: any, safety: any): any {
 
     const result = {
-      tan: null,
+      tan: (this.helper.toNumber(section.tan) !== null) ? this.helper.toNumber(section.tan) : 0,
       Aw: {   // スターラップ
         stirrup_dia: null,
         stirrup_n: null,
@@ -297,14 +304,6 @@ export class ResultDataService {
     result.Asb.fwyd = fwyd2.fsy;
     result.Asb.fwud = fwyd2.fsu;
     result.Asb.rs = safety.safety_factor.rs;
-
-    // その他 -------------------------------------------------------------------------
-    let tan = this.helper.toNumber(section.tan);
-    if (tan === null) {
-      tan = 0;
-    }
-    result.tan = tan;
-
 
     return result;
 

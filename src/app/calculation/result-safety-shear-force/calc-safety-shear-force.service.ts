@@ -83,11 +83,11 @@ export class CalcSafetyShearForceService {
     const result: any = {}; // 印刷用
 
     // 断面力
-    let Md: number = this.helper.toNumber(force.Md);
-    if (Md === null) {
-      Md = 0;
+    let Md1: number = this.helper.toNumber(force.Md);
+    if (Md1 === null) {
+      Md1 = 0;
     }
-    Md = Math.abs(Md);
+    let Md = Math.abs(Md1);
     if (Md !== 0) {
       result["Md"] = Md;
     }
@@ -110,20 +110,28 @@ export class CalcSafetyShearForceService {
     // 換算断面
     const h: number = section.shape.H;
     result["H"] = h;
+    let Hw2 = null; //小判型における換算断面の幅
+    if(section.shape.Hw !== null) {
+      Hw2 = section.shape.Hw
+    }
 
     const bw: number = section.shape.B;
     result["B"] = bw;
+    let Bw2 = null; //小判型における換算断面の幅
+    if(section.shape.Bw !== null) {
+      Bw2 = section.shape.Bw
+    }
 
     // 有効高さ
     const dsc = section.Ast.dst;
-    let d: number = h - dsc;
+    let d: number = (Hw2 === null) ? h - dsc: Hw2 - dsc;;
     result["d"] = d;
 
     //  tanθc + tanθt
     const tan: number = section.tan;
     let Vhd: number = 0;
     if (tan !== null && tan !== 0) {
-      Vhd = (Math.abs(Md) / d) * this.helper.Radians(tan);
+      Vhd = (-Md1 / d * 1000) * tan;
       result["Vhd"] = Vhd;
     }
 
@@ -159,7 +167,7 @@ export class CalcSafetyShearForceService {
       result["Ss"] = Ss;
     }
 
-    // 帯鉄筋
+    // 折り曲げ鉄筋
     let Asb: number = this.helper.toNumber(section.Asb.Asb);
     let fwyd2: number = this.helper.toNumber(section.Asb.fwyd);
     let deg2: number = this.helper.toNumber(section.Asb.deg);
@@ -226,7 +234,7 @@ export class CalcSafetyShearForceService {
       rbc = 1;
     }
 
-    const Vwcd: any = this.calcVwcd(fcd, bw, d, rbc);
+    const Vwcd: any = this.calcVwcd(fcd, (Bw2 === null) ? bw : Bw2, d, rbc);
     for (const key of Object.keys(Vwcd)) {
       result[key] = Vwcd[key];
     }
@@ -244,24 +252,44 @@ export class CalcSafetyShearForceService {
 
       const Vyd: any = this.calcVyd(
         fcd, d, pc, Nd, h,
-        Mu, bw, rbc, rVcd, deg,
-        Aw, fwyd, Ss, rbs);
+        Mu, bw, rbc, rVcd, deg, deg2,
+        Aw, Asb, fwyd, fwyd2, Ss, Ss2, rbs);
       for (const key of Object.keys(Vyd)) {
         result[key] = Vyd[key];
       }
     } else {
-      
+      // La / d < 2 の場合
+      let rbs: number = 1;
+      rbs = this.helper.toNumber(safety.safety_factor.rbs);
+      if (rbs === null) {
+        rbs = 1;
+      }
+      result["rbs"] = rbs;
+
       rbc = this.helper.toNumber(safety.safety_factor.rbd);
       if (rbc === null) {
-        rbc = 1;
+        rbc = 1.2;
       }
       result["rbc"] = rbc;
 
-      const Vdd: any = this.calcVdd(
-        fcd, d, Aw, bw, Ss,
-        La, Nd, h, Mu, pc, rbc);
-      for (const key of Object.keys(Vdd)) {
-        result[key] = Vdd[key];
+      if ( this.basic.get_specification2() !== 2 && this.basic.get_specification2() !== 5 ) {
+        // 標準の式
+        const Vdd: any = this.calcVdd(
+          fcd, d, Aw, bw, Ss,
+          La, Nd, h, Mu, pc, rbc);
+        for (const key of Object.keys(Vdd)) {
+          result[key] = Vdd[key];
+        }
+      } else {
+        // JR東日本の場合
+        const Vydd = this.calcVydd(
+          fcd, d, La, pc, Nd, h,
+          Mu, bw, rbc, rVcd, deg, deg2,
+          Aw, Asb, fwyd, fwyd2, Ss, Ss2)
+
+        for (const key of Object.keys(Vydd)) {
+          result[key] = Vydd[key];
+        }
       }
     }
 
@@ -305,8 +333,8 @@ export class CalcSafetyShearForceService {
   // 標準せん断耐力
   private calcVyd(
     fcd: number, d: number, pc: number, Nd: number, H: number,
-    Mu: number, B: number, rbc: number, rVcd: number, deg: number,
-    Aw: number, fwyd: number, Ss: number, rbs: number): any {
+    Mu: number, B: number, rbc: number, rVcd: number, deg: number, deg2: number,
+    Aw: number, Asb: number, fwyd: number, fwyd2: number, Ss: number, Ss2: number, rbs: number): any {
     const result = {};
 
     let fvcd: number = 0.2 * Math.pow(fcd, 1 / 3);
@@ -344,6 +372,7 @@ export class CalcSafetyShearForceService {
     Vcd = Vcd * rVcd; // 杭の施工条件
     result["Vcd"] = Vcd;
 
+    //スターラップの設計せん断耐力
     let z: number = d / 1.15;
     result["z"] = z;
 
@@ -358,6 +387,19 @@ export class CalcSafetyShearForceService {
     Vsd = Vsd / 1000;
 
     result["Vsd"] = Vsd;
+
+    //折り曲げ鉄筋のの設計せん断耐力
+    let sinCos2: number =
+      Math.sin(this.helper.Radians(deg2)) +
+      Math.cos(this.helper.Radians(deg2));
+    result["sinCos2"] = sinCos2;
+
+    let Vsd2 = (((Asb * fwyd2 * sinCos2) / Ss2) * z) / rbs;
+
+    Vsd2 = Vsd2 / 1000;
+
+    result["Vsd2"] = Vsd2;
+    
 
     const Vyd: number = Vcd + Vsd;
 
@@ -445,4 +487,98 @@ export class CalcSafetyShearForceService {
 
     return result;
   }
+
+    // JR東日本式せん断耐力
+    private calcVydd(
+      fcd: number, d: number, La: number, pc: number, Nd: number, H: number,
+      Mu: number, B: number, rbc: number, rVcd: number, deg: number, deg2: number,
+      Aw: number, Asb: number, fwyd: number, fwyd2: number, Ss: number, Ss2: number): any {
+
+      const result = {};
+
+      let fvcd: number = Math.pow(fcd, 1 / 3);
+      result["fvcd"] = fvcd;
+
+      let Ba: number = Math.pow(La / d, -1.166)
+      Ba = Math.min(Ba, 2.244);
+      result["Ba"] = Ba;
+
+      let Bd: number = Math.pow(1000 / d, 1 / 4);
+      Bd = Math.min(Bd, 1.5);
+      result["Bd"] = Bd;
+
+      //let Bp: number = (1 + Math.pow(100 * pc, 1/3)) / 2;
+      let Bp: number = (0 + Math.pow(100 * pc, 1/3));
+      Bp = Math.min(Bp, 1.5);
+      result["Bp"] = Bp;
+
+      //M0 = NDD / AC * iC / Y
+      let Mo: number = (Nd * H) / 6000;
+      result["Mo"] = Mo;
+
+      let Bn: number;
+      if (Mu <= 0) {
+        Bn = 1;
+      } else if (Nd > 0) {
+        Bn = 1 + (2 * Mo) / Mu;
+        Bn = Math.min(Bn, 2);
+      } else {
+        Bn = 1 + (4 * Mo) / Mu;
+        Bn = Math.max(Bn, 0);
+      }
+      result["Bn"] = Bn;
+
+      //let pw: number = Aw / (B * Ss);
+      //result["pw"] = pw;
+      //if (pw < 0.002) {
+        //pw = 0;
+      //}
+
+      //せん断スパン比
+      let ad: number = La / d;
+      result["ad"] = ad;
+
+      //let Bw: number = (4.2 * Math.pow(100 * pw, 1 / 3) * (ad - 0.75)) / Math.sqrt(fcd);
+      //Bw = Math.max(Bw, 0);
+      //result["Bw"] = Bw;
+
+      // Vcddの算出
+      const Vcdd: number = 0.65 * Ba * fvcd * Bd * Bp * Bn * B * d / rbc;
+      result["Vdd"] = Vcdd / 1000;
+
+      let Bs: number = (La / d < 0) ? 0.0 : (La / d > 1) ? 1.0 : 2 * (La / d - 0.5);
+      const rb = 1.1;
+
+      //スターラップの設計せん断耐力 Vsd
+      let z: number = d / 1.15;
+      //result["z"] = z;
+  
+      let sinCos: number =
+        Math.sin(this.helper.Radians(deg)) +
+        Math.cos(this.helper.Radians(deg));
+      //result["sinCos"] = sinCos;
+  
+      let Vsd = (((Aw * fwyd * sinCos) / Ss) * z) / rb;
+      result['Vsd'] = Vsd / 1000;
+  
+      //折り曲げ鉄筋のの設計せん断耐力 Vsd2
+      let sinCos2: number =
+        Math.sin(this.helper.Radians(deg2)) +
+        Math.cos(this.helper.Radians(deg2));
+      //result["sinCos2"] = sinCos2;
+  
+      let Vsd2 = (((Asb * fwyd2 * sinCos2) / Ss2) * z) / rb;
+      result["Vsd2"] = Vsd2 / 1000;
+
+      // Vsddの算出
+      const Vsdd: number = Bs * (Vsd + Vsd2);
+
+      // 設計せん断耐力の算出
+      let Vydd = Vcdd + Vsdd;
+      Vydd = Vydd / 1000;
+      result["Vyd"] = Vydd;
+
+      return result;// 設計せん断圧縮破壊耐力に比べ、fddとpcの情報が欠落
+    }
+
 }

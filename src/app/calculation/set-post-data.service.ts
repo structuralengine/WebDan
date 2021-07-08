@@ -238,7 +238,7 @@ export class SetPostDataService {
         }
       }
 
-    } else if (member.shape.indexOf('小判形') >= 0) {
+    } else if (member.shape.indexOf('小判') >= 0) {
 
       if (member.B > member.H) {
         result = 'HorizontalOval';

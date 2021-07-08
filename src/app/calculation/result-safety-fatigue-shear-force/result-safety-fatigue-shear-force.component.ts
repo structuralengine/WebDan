@@ -172,16 +172,16 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             fsr200 : resultColumn.fsr200,
             ratio200 : resultColumn.ratio200,
 
-            sigma_min2 : resultColumn.sigma_min,
-            sigma_rd2 : resultColumn.sigma_rd,
-            sigma_r2 : resultColumn.sigma_rd,
+            sigma_min2 : resultColumn.sigma_min2,
+            sigma_rd2 : resultColumn.sigma_rd2,
+            sigma_r2 : resultColumn.sigma_rd2,
             
-            fsr2002 : resultColumn.fsr200,
-            ratio2002 : resultColumn.ratio200,
+            fsr2002 : resultColumn.fsr2002,
+            ratio2002 : resultColumn.ratio2002,
             
             k : resultColumn.k,
             ar : resultColumn.ar,
-            ar2 : resultColumn.ar,
+            ar2 : resultColumn.ar2,
             N : resultColumn.N,
 
             NA : resultColumn.NA,
@@ -191,19 +191,19 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             SBSC : resultColumn.SBSC,
 
             r1 : resultColumn.r1,
-            r12 : resultColumn.r1,
+            r12 : resultColumn.r12,
             r2 : resultColumn.r2,
 
             rs2 : resultColumn.rs,
             frd : resultColumn.frd,
-            frd2 : resultColumn.frd,
+            frd2 : resultColumn.frd2,
 
             rbs : resultColumn.rbs,
             ri : resultColumn.ri,
             ratio : resultColumn.ratio,
             result : resultColumn.result,
-            ratio2 : resultColumn.ratio,
-            result2 : resultColumn.result,
+            ratio2 : resultColumn.ratio2,
+            result2 : resultColumn.result2,
 
             /////////////// 総括表用 ///////////////
             bendFlag : (resultColumn.Asb.value!=='-'),  //折り曲げ鉄筋の情報があればtrue、無ければfalse
@@ -213,7 +213,6 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
             side_summary : side,
             shape_summary : section.shapeName,
             }
-            console.log(column.bendFlag, column.Asb)
                         
             page.columns.push(column);
           }
@@ -388,18 +387,18 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.ratio200.value = re.ratio200.toFixed(3).toString() + ((re.ratio200 < 1) ? ' < 1.00' : ' > 1.00')
     }
 
-    if ("sigma_min" in re) {
-      result.sigma_min2 = { alien: "right", value: re.sigma_min.toFixed(2) };
+    if ("sigma_min2" in re) {
+      result.sigma_min2 = { alien: "right", value: re.sigma_min2.toFixed(2) };
     }
-    if ("sigma_rd" in re) {
-      result.sigma_rd2 = { alien: "right", value: re.sigma_rd.toFixed(2) };
+    if ("sigma_rd2" in re) {
+      result.sigma_rd2 = { alien: "right", value: re.sigma_rd2.toFixed(2) };
     }
     
-    if ("fsr200" in re) {
-      result.fsr2002 = { alien: "right", value: re.fsr200.toFixed(2) };
+    if ("fsr2002" in re) {
+      result.fsr2002 = { alien: "right", value: re.fsr2002.toFixed(2) };
     }
-    if ("ratio200" in re) {
-      result.ratio2002.value = re.ratio200.toFixed(3).toString() + ((re.ratio200 < 1) ? ' < 1.00' : ' > 1.00')
+    if ("ratio2002" in re) {
+      result.ratio2002.value = re.ratio2002.toFixed(3).toString() + ((re.ratio2002 < 1) ? ' < 1.00' : ' > 1.00')
     }
 
     if ("k" in re) {
@@ -408,8 +407,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     if ("ar" in re) {
       result.ar = { alien: "right", value: re.ar.toFixed(3) };
     }
-    if ("ar" in re) {
-      result.ar2 = { alien: "right", value: re.ar.toFixed(3) };
+    if ("ar2" in re) {
+      result.ar2 = { alien: "right", value: re.ar2.toFixed(3) };
     }
     if ("N" in re) {
       result.N = { alien: "right", value: re.N.toFixed(0) };
@@ -430,8 +429,8 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
     if ("r1" in re) {
       result.r1 = { alien: "right", value: re.r1.toFixed(2) };
     }
-    if ("r1" in re) {
-      result.r12 = { alien: "right", value: re.r1.toFixed(2) };
+    if ("r12" in re) {
+      result.r12 = { alien: "right", value: re.r12.toFixed(2) };
     }
     if ("r2" in re) {
       result.r2 = { alien: "right", value: re.r2.toFixed(3) };
@@ -443,7 +442,7 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.frd = { alien: "right", value: re.frd.toFixed(2) };
     }
     if ("frd2" in re) {
-      result.frd2 = { alien: "right", value: re.frd.toFixed(2) };
+      result.frd2 = { alien: "right", value: re.frd2.toFixed(2) };
     }
     if ("rbs" in re) {
       result.rbs = { alien: "right", value: re.rbs.toFixed(2) };
@@ -462,9 +461,9 @@ export class ResultSafetyFatigueShearForceComponent implements OnInit {
       result.result.value = "NG";
     }
     ratio = 0;
-    if ("ratio" in re) {
-      result.ratio2.value = re.ratio.toFixed(3).toString() + ((re.ratio < 1) ? ' < 1.00' : ' > 1.00');
-      ratio = re.ratio;
+    if ("ratio2" in re) {
+      result.ratio2.value = re.ratio2.toFixed(3).toString() + ((re.ratio2 < 1) ? ' < 1.00' : ' > 1.00');
+      ratio = re.ratio2;
     }
     if (ratio < 1) {
       result.result2.value = "OK";

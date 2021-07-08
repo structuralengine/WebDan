@@ -232,7 +232,6 @@ export class ResultSafetyShearForceComponent implements OnInit {
               side_summary : side,
               shape_summary : section.shapeName,
             }
-            console.log(column.bendFlag, column.Asb)
 
             page.columns.push(column);
           }
@@ -293,6 +292,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       Vsd: { alien: "center", value: "-" },
       Vsd2: { alien: "center", value: "-" },
       Vyd: { alien: "center", value: "-" },
+      Vdd: { alien: "center", value: "-" },
       ri: { alien: "center", value: "-" },
       Vyd_Ratio: { alien: "center", value: "-" },
       Vyd_Result: { alien: "center", value: "-" },
@@ -408,15 +408,15 @@ export class ResultSafetyShearForceComponent implements OnInit {
     if ("Vsd" in re) {
       result.Vsd = { alien: "right", value: re.Vsd.toFixed(1) };
     }
-    if ("Vsd" in re) {
-      result.Vsd2 = { alien: "right", value: re.Vsd.toFixed(1) };
+    if ("Vsd2" in re) {
+      result.Vsd2 = { alien: "right", value: re.Vsd2.toFixed(1) };
     }
 
     if ("Vyd" in re) {
       result.Vyd = { alien: "right", value: re.Vyd.toFixed(1) };
     }
     if ("Vdd" in re) {
-      result.Vyd = { alien: "right", value: re.Vdd.toFixed(1) };
+      result.Vdd = { alien: "right", value: re.Vdd.toFixed(1) };
     }
 
     if ("ri" in re) {

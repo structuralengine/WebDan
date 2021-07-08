@@ -179,10 +179,16 @@ export class CalcServiceabilityShearForceService {
     if (kr === null) { kr = 0.5; }
     result['kr'] = kr;
 
-    const VpdVrd_krVcd_s: number = (Vpd + Vrd - kr * result.Vcd) * result.Ss;
-    const AwZsinCos: number = result.Aw * result.z * result.sinCos;
+    let VpdVrd_krVcd_s: number = (Vpd + Vrd - kr * result.Vcd) * result.Ss;
+    let AwZsinCos: number = result.Aw * result.z * result.sinCos;
     const VpdVcd: number = Vpd + result.Vcd;
     const VpdVrdVcd: number = Vpd + Vrd + result.Vcd;
+    //折り曲げ鉄筋があれば、AwZsinCosの値を変更する。
+    if (result.Asb !== undefined) {
+      const SumCosSin = Math.cos(Math.PI * result.deg2 / 180) + Math.cos(Math.PI * result.deg2 / 180);
+      VpdVrd_krVcd_s = (Vpd + Vrd - kr * result.Vcd)
+      AwZsinCos = result.Aw * result.z / result.Ss + result.Asb * result.z * SumCosSin ** 3 / result.Ss2;
+    }
 
     const sigmaw = (VpdVrd_krVcd_s / AwZsinCos) * (VpdVcd / VpdVrdVcd) * 1000;
     result['sigmaw'] = sigmaw;
@@ -196,6 +202,26 @@ export class CalcServiceabilityShearForceService {
       Result = 'OK';
     }
     result['Result'] = Result;
+
+    //折り曲げ鉄筋の設計応力度
+    if(result.Asb !== undefined){
+
+      const SumCosSin = Math.cos(Math.PI * result.deg2 / 180) + Math.cos(Math.PI * result.deg2 / 180);
+      AwZsinCos = result.Aw * result.z / (result.Ss * SumCosSin ** 2) + result.Asb * result.z * SumCosSin / result.Ss2;
+
+      const sigmab = (VpdVrd_krVcd_s / AwZsinCos) * (VpdVcd / VpdVrdVcd) * 1000;
+      result['sigmab'] = sigmab;
+
+      // 安全率
+      const Ratio2: number = result.ri * sigmab / sigma12;
+      result['Ratio2'] = Ratio2;
+
+      let Result2: string = 'NG';
+      if (Ratio2 < 1) {
+        Result2 = 'OK';
+      }
+      result['Result2'] = Result2;
+    }
 
     return result;
 

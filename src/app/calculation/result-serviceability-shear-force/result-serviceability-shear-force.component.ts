@@ -205,6 +205,9 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               sigma : resultColumn.sigma,
               Ratio : resultColumn.Ratio,
               Result : resultColumn.Result,
+              sigma2 : resultColumn.sigma2,
+              Ratio2 : resultColumn.Ratio2,
+              Result2 : resultColumn.Result2,
 
               /////////////// 総括表用 ///////////////
               bendFlag : (resultColumn.Asb.value!=='-'),  //折り曲げ鉄筋の情報があればtrue、無ければfalse
@@ -214,7 +217,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               side_summary : side,
               shape_summary : section.shapeName,
             }
-            console.log(column.bendFlag, column.Asb)
 
             page.columns.push(column);
           }
@@ -278,6 +280,10 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       sigma: { alien: "center", value: "-" },
       Ratio: { alien: "center", value: "-" },
       Result: { alien: "center", value: "-" },
+
+      sigma2: { alien: "center", value: "-" },
+      Ratio2: { alien: "center", value: "-" },
+      Result2: { alien: "center", value: "-" },
     };
 
     // 帯鉄筋
@@ -389,12 +395,23 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
       const str: string = re.sigmaw.toFixed(1) + "/" + re.sigma12.toFixed(0);
       result.sigma = { alien: "center", value: str };
     }
-
     if ("Ratio" in re) {
       result.Ratio = { alien: "right", value: re.Ratio.toFixed(3) };
     }
     if ("Result" in re) {
       result.Result = { alien: "center", value: re.Result };
+    }
+
+    if ("sigmab" in re && "sigma12" in re) {
+      const str: string = re.sigmab.toFixed(1) + "/" + re.sigma12.toFixed(0);
+      result.sigma2 = { alien: "center", value: str };
+    }
+
+    if ("Ratio2" in re) {
+      result.Ratio2 = { alien: "right", value: re.Ratio2.toFixed(3) };
+    }
+    if ("Result2" in re) {
+      result.Result2 = { alien: "center", value: re.Result2 };
     }
 
     return result;

@@ -65,6 +65,7 @@ export class InputFatiguesService {
       result['r1_3'] = null;
     } else {
       result['r1_2'] = null;
+      result['r1_3'] = null;
     }
     return result;
   }
@@ -249,6 +250,7 @@ export class InputFatiguesService {
       f['V1'].A = column1.V_A;
       f['V1'].B = column1.V_B;
       f['V1'].r1_2 = column1.V_r1_2;
+      f['V1'].r1_3 = column1.V_r1_3;
 
       //f.title2 = column2.design_point_id;
       f['M2'].SA = column2.M_SA;
