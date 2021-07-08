@@ -292,6 +292,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       Vsd: { alien: "center", value: "-" },
       Vsd2: { alien: "center", value: "-" },
       Vyd: { alien: "center", value: "-" },
+      Vdd: { alien: "center", value: "-" },
       ri: { alien: "center", value: "-" },
       Vyd_Ratio: { alien: "center", value: "-" },
       Vyd_Result: { alien: "center", value: "-" },
@@ -415,7 +416,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
       result.Vyd = { alien: "right", value: re.Vyd.toFixed(1) };
     }
     if ("Vdd" in re) {
-      result.Vyd = { alien: "right", value: re.Vdd.toFixed(1) };
+      result.Vdd = { alien: "right", value: re.Vdd.toFixed(1) };
     }
 
     if ("ri" in re) {
