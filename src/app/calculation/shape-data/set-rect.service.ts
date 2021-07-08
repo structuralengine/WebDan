@@ -18,7 +18,7 @@ export class SetRectService {
     target: string, member: any, index: number, 
     side: string, safety: any, option: any): any {
 
-    const result = { symmetry: true, Sections: [], SectionElastic:[] };
+    const result = { symmetry: true, Concretes: [], ConcreteElastic:[] };
 
     // 断面情報を集計
     const shape = this.getRectangleShape(member, target, index, side, safety, option)
@@ -31,10 +31,10 @@ export class SetRectService {
       WBottom: b,     // 断面幅（底辺）
       ElasticID: 'c'  // 材料番号
     };
-    result.Sections.push(section);
+    result.Concretes.push(section);
     result['member'] = shape;
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     // 鉄筋情報を集計  
     const result2 = this.getRectBar(shape, safety);
@@ -43,12 +43,12 @@ export class SetRectService {
     }
 
     // 配筋が上下対象でなければ、symmetry = false
-    const Steels = result['Steels'];
-    let j = Steels.length-1;
+    const Bars = result['Bars'];
+    let j = Bars.length-1;
     grid_loop:
-    for(let i=0; i<Steels.length; i++){
-      const b1 = Steels[i];
-      const b2 = Steels[j];
+    for(let i=0; i<Bars.length; i++){
+      const b1 = Bars[i];
+      const b2 = Bars[j];
       const d1 = b1.Depth
       const d2 = section.Height - b2.Depth;
       if(d1 !== d2){
@@ -76,7 +76,7 @@ export class SetRectService {
     target: string, member: any, index: number, 
     side: string, safety: any, option: any): object {
 
-    const result = { symmetry: false, Sections: [], SectionElastic:[] };
+    const result = { symmetry: false, Concretes: [], ConcreteElastic:[] };
 
     // 断面情報を集計
     const shape = this.getTsectionShape(member, target, index, side, safety, option);
@@ -91,7 +91,7 @@ export class SetRectService {
       WBottom: bf,
       ElasticID: 'c'
     };
-    result.Sections.push(section1);
+    result.Concretes.push(section1);
 
     const section2 = {
       Height: h - hf,
@@ -99,9 +99,9 @@ export class SetRectService {
       WBottom: b,
       ElasticID: 'c'
     };
-    result.Sections.push(section2);
+    result.Concretes.push(section2);
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     // 鉄筋情報を集計  
     const result2 = this.getRectBar(shape, safety);
@@ -119,7 +119,7 @@ export class SetRectService {
     target: string, member: any, index: number, 
     side: string, safety: any, option: any): object {
     
-    const result = { symmetry: false, Sections: [], SectionElastic:[] };
+    const result = { symmetry: false, Concretes: [], ConcreteElastic:[] };
 
     // 断面情報を集計
     const shape = this.getTsectionShape(member, target, index, side, safety, option);
@@ -134,7 +134,7 @@ export class SetRectService {
       WBottom: b,
       ElasticID: 'c'
     };
-    result.Sections.push(section2);
+    result.Concretes.push(section2);
 
     const section1 = {
       Height: hf,
@@ -142,9 +142,9 @@ export class SetRectService {
       WBottom: bf,
       ElasticID: 'c'
     };
-    result.Sections.push(section1);
+    result.Concretes.push(section1);
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     // 鉄筋情報を集計  
     const result2 = this.getRectBar(shape, safety);
@@ -316,7 +316,7 @@ export class SetRectService {
   private getRectBar( section: any, safety: any ): any {
 
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -324,7 +324,7 @@ export class SetRectService {
     const tension: any = section.tension;
 
     const tensionBar = this.getCompresBar(tension, safety);
-    const tensionBarList = tensionBar.Steels;
+    const tensionBarList = tensionBar.Bars;
     // 有効な入力がなかった場合は null を返す.
     if (tensionBarList.length < 1) {
       return null;
@@ -343,7 +343,7 @@ export class SetRectService {
     if ('compress' in section) {
       const compress: any = section.compress;
       const compresBar = this.getCompresBar(compress, safety);
-      compresBarList = compresBar.Steels;
+      compresBarList = compresBar.Bars;
 
       // 鉄筋強度の入力
       for (const elastic of compresBar.SteelElastic) {
@@ -362,7 +362,7 @@ export class SetRectService {
         sideInfo,
         safety
       );
-      sideBarList = sideBar.Steels;
+      sideBarList = sideBar.Bars;
       // 鉄筋強度の入力
       for (const elastic of sideBar.SteelElastic) {
         result.SteelElastic.push(elastic);
@@ -373,13 +373,13 @@ export class SetRectService {
     for (const Asc of compresBarList) {
       Asc.n = Asc.n;
       Asc.Depth = Asc.Depth;
-      result.Steels.push(Asc);
+      result.Bars.push(Asc);
     }
 
     // 側面鉄筋の登録
     for (const Ase of sideBarList) {
       Ase.n = Ase.n;
-      result.Steels.push(Ase);
+      result.Bars.push(Ase);
     }
 
     // 引張鉄筋の登録
@@ -387,7 +387,7 @@ export class SetRectService {
       Ast.n = Ast.n;
       Ast.Depth = h - Ast.Depth;
       Ast.IsTensionBar = true;
-      result.Steels.push(Ast);
+      result.Bars.push(Ast);
     }
 
     return result;
@@ -396,7 +396,7 @@ export class SetRectService {
   // 矩形、Ｔ形断面における 上側（圧縮側）の 鉄筋情報を生成する関数
   private getCompresBar(barInfo: any, safety: any): any {
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -428,7 +428,7 @@ export class SetRectService {
         IsTensionBar: false,
         ElasticID: id,
       };
-      result.Steels.push(Steel1);
+      result.Bars.push(Steel1);
       rebar_n = rebar_n - barInfo.line;
     }
 
@@ -439,7 +439,7 @@ export class SetRectService {
   private getSideBar( barInfo: any, safety: any): any {
 
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -463,7 +463,7 @@ export class SetRectService {
         IsTensionBar: false,
         ElasticID: id,
       };
-      result.Steels.push(Steel1);
+      result.Bars.push(Steel1);
     }
 
     // 鉄筋強度の入力

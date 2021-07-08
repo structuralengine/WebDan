@@ -153,7 +153,7 @@ export class DataHelperModule {
   }
 
   // コンクリート強度の POST用データを返す
-  public getSectionElastic(safety: any): any {
+  public getConcreteElastic(safety: any): any {
 
     const fck = this.getFck(safety);
 
