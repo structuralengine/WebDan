@@ -72,6 +72,13 @@ export class InputSafetyFactorsMaterialStrengthsService {
             V_rc: 1.30, V_rs: 1.00, V_rbc: 1.30, V_rbs: 1.00, V_rbv: 1.20,
             ri: 1.00, range: 3,
             S_rs: 1.05, S_rb: 1.1
+          },
+          {
+            id: 8, title: '最小鉄筋量',
+            M_rc: 1.30, M_rs: 1.00, M_rbs: 1.00,
+            V_rc: null, V_rs: null, V_rbc: null, V_rbs: null, V_rbv: null,
+            ri: 1.00, range: 3,
+            S_rs: 1.05, S_rb: 1.1
           }
         ]
 

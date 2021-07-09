@@ -56,7 +56,7 @@ export class BasicInformationComponent implements OnInit, OnDestroy {
     this.table2_datas = basic.pickup_shear_force;
 
     this.options1 = {
-      height: 290,
+      height: 340,
       showTop: false,
       reactive: true,
       sortable: false,
