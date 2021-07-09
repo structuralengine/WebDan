@@ -110,21 +110,21 @@ export class CalcSafetyShearForceService {
     // 換算断面
     const h: number = section.shape.H;
     result["H"] = h;
-    let Hw2 = null; //小判型における換算断面の幅
+    let hw2 = null; //小判型における換算断面の幅
     if(section.shape.Hw !== null) {
-      Hw2 = section.shape.Hw
+      hw2 = section.shape.Hw
     }
 
     const bw: number = section.shape.B;
     result["B"] = bw;
-    let Bw2 = null; //小判型における換算断面の幅
+    let bw2 = null; //小判型における換算断面の幅
     if(section.shape.Bw !== null) {
-      Bw2 = section.shape.Bw
+      bw2 = section.shape.Bw
     }
 
     // 有効高さ
     const dsc = section.Ast.dst;
-    let d: number = (Hw2 === null) ? h - dsc: Hw2 - dsc;;
+    let d: number = (hw2 === null) ? h - dsc: hw2 - dsc;;
     result["d"] = d;
 
     //  tanθc + tanθt
@@ -147,7 +147,12 @@ export class CalcSafetyShearForceService {
     }
 
     // 引張鉄筋比
-    let pc: number = section.Ast.Ast / (section.shape.B * d);
+    let pc: number;
+    if (section.shape.Bw === null) {
+      pc = section.Ast.Ast / (section.shape.B * d);
+    } else {
+      pc = section.Ast.Ast / (section.shape.Bw * d);
+    }
 
     // 帯鉄筋
     let Aw: number = this.helper.toNumber(section.Aw.Aw);
@@ -234,7 +239,7 @@ export class CalcSafetyShearForceService {
       rbc = 1;
     }
 
-    const Vwcd: any = this.calcVwcd(fcd, (Bw2 === null) ? bw : Bw2, d, rbc);
+    const Vwcd: any = this.calcVwcd(fcd, (bw2 === null) ? bw : bw2, d, rbc);
     for (const key of Object.keys(Vwcd)) {
       result[key] = Vwcd[key];
     }
@@ -283,8 +288,8 @@ export class CalcSafetyShearForceService {
       } else {
         // JR東日本の場合
         const Vydd = this.calcVydd(
-          fcd, d, La, pc, Nd, h,
-          Mu, bw, rbc, rVcd, deg, deg2,
+          fcd, d, La, pc, Nd, h, hw2,
+          Mu, bw, bw2, rbc, rVcd, deg, deg2,
           Aw, Asb, fwyd, fwyd2, Ss, Ss2)
 
         for (const key of Object.keys(Vydd)) {
@@ -490,8 +495,8 @@ export class CalcSafetyShearForceService {
 
     // JR東日本式せん断耐力
     private calcVydd(
-      fcd: number, d: number, La: number, pc: number, Nd: number, H: number,
-      Mu: number, B: number, rbc: number, rVcd: number, deg: number, deg2: number,
+      fcd: number, d: number, La: number, pc: number, Nd: number, H: number, Hw: number,
+      Mu: number, B: number, Bw: number, rbc: number, rVcd: number, deg: number, deg2: number,
       Aw: number, Asb: number, fwyd: number, fwyd2: number, Ss: number, Ss2: number): any {
 
       const result = {};
@@ -513,7 +518,7 @@ export class CalcSafetyShearForceService {
       result["Bp"] = Bp;
 
       //M0 = NDD / AC * iC / Y
-      let Mo: number = (Nd * H) / 6000;
+      let Mo: number = (Hw === null) ? (Nd * H) / 6000: (Nd * Hw) / 6000;
       result["Mo"] = Mo;
 
       let Bn: number;
@@ -543,7 +548,8 @@ export class CalcSafetyShearForceService {
       //result["Bw"] = Bw;
 
       // Vcddの算出
-      const Vcdd: number = 0.65 * Ba * fvcd * Bd * Bp * Bn * B * d / rbc;
+      const Vcdd: number = (Bw === null) ? 0.65 * Ba * fvcd * Bd * Bp * Bn * B  * d / rbc :
+                                           0.65 * Ba * fvcd * Bd * Bp * Bn * Bw * d / rbc ;
       result["Vdd"] = Vcdd / 1000;
 
       let Bs: number = (La / d < 0) ? 0.0 : (La / d > 1) ? 1.0 : 2 * (La / d - 0.5);
