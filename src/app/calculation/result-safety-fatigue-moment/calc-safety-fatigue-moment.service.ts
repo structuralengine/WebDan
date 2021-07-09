@@ -149,7 +149,7 @@ export class CalcSafetyFatigueMomentService {
     // 応力度
     let resMin: any = res[0];
     let resMax: any;
-    if (res.length < 1) {
+    if (res.length < 2) {
       resMax = {
         ResultSigma: {
           fi: 0,
@@ -164,8 +164,7 @@ export class CalcSafetyFatigueMomentService {
       resMax = res[1];
     }
 
-    const result: any = {};
-
+    const result: any = {};   
     let Mdmin = resMin.ResultSigma.Md;;
     let Ndmin = this.helper.toNumber(resMin.ResultSigma.Nd);
     let sigma_min: number = this.base.getSigmas(resMin.ResultSigma);

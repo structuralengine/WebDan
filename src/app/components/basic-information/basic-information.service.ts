@@ -86,12 +86,13 @@ export class InputBasicInformationService  {
         result = [
           { id: 0, title: '耐久性 縁応力度検討用', no: null},
           { id: 1, title: '耐久性 （永久荷重）', no: null},
-          // { id: 2, title: '安全性 （疲労破壊）疲労限', no: null},
+          { id: 2, title: '安全性 （疲労破壊）疲労限', no: null},
           { id: 3, title: '安全性 （疲労破壊）永久作用', no: null},
           { id: 4, title: '安全性 （疲労破壊）永久＋変動', no: null},
           { id: 5, title: '安全性 （破壊）', no: null},
           { id: 6, title: '復旧性 （損傷）地震時以外', no: null},
-          { id: 7, title: '復旧性 （損傷）地震時', no: null}
+          { id: 7, title: '復旧性 （損傷）地震時', no: null},
+          { id: 8, title: '最小鉄筋量', no: null},
         ];
         break;
 

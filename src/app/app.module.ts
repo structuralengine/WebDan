@@ -86,6 +86,7 @@ import { SectionForceListComponent } from './calculation/section-force-list/sect
 import { SetDesignForceService} from './calculation/set-design-force.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { environment } from 'src/environments/environment';
+import { ResultMinimumReinforcementComponent } from './calculation/result-minimum-reinforcement/result-minimum-reinforcement.component';
 
 @NgModule({
   imports: [
@@ -137,7 +138,8 @@ import { environment } from 'src/environments/environment';
     ResultSummaryTableComponent,
     SectionForceListComponent,
     SteelsComponent,
-    CrackSettingsComponent
+    CrackSettingsComponent,
+    ResultMinimumReinforcementComponent
   ],
   entryComponents: [
     LoginDialogComponent,

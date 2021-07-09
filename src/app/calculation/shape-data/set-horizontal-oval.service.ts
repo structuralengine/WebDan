@@ -18,7 +18,7 @@ export class SetHorizontalOvalService {
   // }
   public getHorizontalOval(member: any, index: number,side: string, safety: any, option: any): any {
 
-    const result = { symmetry: true, Sections: [], SectionElastic:[] };
+    const result = { symmetry: true, Concretes: [], ConcreteElastic:[] };
 
     const RCOUNT = 100;
 
@@ -37,11 +37,11 @@ export class SetHorizontalOvalService {
         WBottom: b - h + Math.sin(this.helper.Radians(deg)) * h, // 断面幅（底辺
         ElasticID: 'c'                                    // 材料番号
       };
-      result.Sections.push(section);
+      result.Concretes.push(section);
       olddeg = deg;
     }
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     // 鉄筋
     const result2 = this.getHorizontalOvalBar(section, safety);
@@ -171,14 +171,14 @@ export class SetHorizontalOvalService {
 
   private getHorizontalOvalBar(section: any, safety: any ): any {
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
     const h: number = section.H; // ハンチを含む高さ
     const tension: any = section.tension;
     const tensionBar = this.getCompresBar(tension, safety);
-    const tensionBarList = tensionBar.Steels;
+    const tensionBarList = tensionBar.Bars;
     // 有効な入力がなかった場合は null を返す.
     if (tensionBarList.length < 1) {
       return null;
@@ -200,7 +200,7 @@ export class SetHorizontalOvalService {
     if ('compress' in section) {
       const compress: any = section.compress;
       const compresBar = this.getCompresBar(compress, safety);
-      compresBarList = compresBar.Steels;
+      compresBarList = compresBar.Bars;
 
       // 鉄筋強度の入力
       for (const elastic of compresBar.SteelElastic) {
@@ -223,7 +223,7 @@ export class SetHorizontalOvalService {
           compress,
           h
         );
-        sideBarList = sideBar.Steels;
+        sideBarList = sideBar.Bars;
         // 鉄筋強度の入力
         for (const elastic of sideBar.SteelElastic) {
           result.SteelElastic.push(elastic);
@@ -235,13 +235,13 @@ export class SetHorizontalOvalService {
     for (const Asc of compresBarList) {
       Asc.n = Asc.n;
       Asc.Depth = Asc.Depth;
-      result.Steels.push(Asc);
+      result.Bars.push(Asc);
     }
 
     // 側面鉄筋の登録
     for (const Ase of sideBarList) {
       Ase.n = Ase.n;
-      result.Steels.push(Ase);
+      result.Bars.push(Ase);
     }
 
     // 引張鉄筋の登録
@@ -251,7 +251,7 @@ export class SetHorizontalOvalService {
       Ast.n = Ast.n;// * cosAst;
       Ast.Depth = h - Ast.Depth;// / cosAst;
       Ast.IsTensionBar = true;
-      result.Steels.push(Ast);
+      result.Bars.push(Ast);
     }
 
     return result;
@@ -260,7 +260,7 @@ export class SetHorizontalOvalService {
   // 矩形、Ｔ形断面における 上側（圧縮側）の 鉄筋情報を生成する関数
   private getCompresBar(barInfo: any, safety: any): any {
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -292,7 +292,7 @@ export class SetHorizontalOvalService {
         IsTensionBar: false,
         ElasticID: id,
       };
-      result.Steels.push(Steel1);
+      result.Bars.push(Steel1);
       rebar_n = rebar_n - barInfo.line;
     }
 
@@ -303,7 +303,7 @@ export class SetHorizontalOvalService {
     barInfo: any, safety: any, tensionBar: any, compresBar: any, height: number ): any {
     
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -375,7 +375,7 @@ export class SetHorizontalOvalService {
         IsTensionBar: false,
         ElasticID: id,
       };
-      result.Steels.push(Steel1);
+      result.Bars.push(Steel1);
 
     }
 

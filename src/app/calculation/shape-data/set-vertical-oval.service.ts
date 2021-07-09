@@ -18,7 +18,7 @@ export class SetVerticalOvalService {
   // }
   public getVerticalOval(member: any, index: number,side: string, safety: any, option: any): any {
 
-    const result = { symmetry: true, Sections: [], SectionElastic:[] };
+    const result = { symmetry: true, Concretes: [], ConcreteElastic:[] };
 
     const RCOUNT = 100;
 
@@ -38,7 +38,7 @@ export class SetVerticalOvalService {
         WBottom: Math.sin(this.helper.Radians(deg)) * b,   // 断面幅（底辺
         ElasticID: 'c'                        // 材料番号
       };
-      result.Sections.push(section1);
+      result.Concretes.push(section1);
       olddeg = deg;
     }
 
@@ -49,7 +49,7 @@ export class SetVerticalOvalService {
       WBottom: b,       // 断面幅（底辺
       ElasticID: 'c'    // 材料番号
     };
-    result.Sections.push(section2);
+    result.Concretes.push(section2);
 
     // 下側の曲線部
     for (let deg = 90 + steps; Math.round(deg*10)/10 <= 180; deg += steps) {
@@ -59,11 +59,11 @@ export class SetVerticalOvalService {
         WBottom: Math.sin(this.helper.Radians(deg)) * b, // 断面幅（底辺
         ElasticID: 'c'                            // 材料番号
       };
-      result.Sections.push(section3);
+      result.Concretes.push(section3);
       olddeg = deg;
     }
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     // 鉄筋
     const result2 = this.getVerticalOvalBar(section, safety);
@@ -159,10 +159,10 @@ export class SetVerticalOvalService {
     result['bend'] = bar.bend;
 
     const section = result
-    const steels = this.getVerticalOvalBar(section, safety).Steels;//resultをそのまま入れてもよい
+    const Bars = this.getVerticalOvalBar(section, safety).Bars;//resultをそのまま入れてもよい
     // 換算矩形としての鉄筋位置
     let d = 0.0, n = 0;
-    for(const s of steels){
+    for(const s of Bars){
       if(s.IsTensionBar === true){ 
         //=0°～180°の範囲にある鉄筋
         d += s.Depth * s.n;
@@ -207,7 +207,7 @@ export class SetVerticalOvalService {
   private getVerticalOvalBar(section: any, safety: any): any {
 
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array()
     };
 
@@ -271,7 +271,7 @@ export class SetVerticalOvalService {
     if ('sidebar' in section) {
       const sideBar: any = section.sidebar;
       const rebar = this.getSideBar(sideBar, safety); //, h - b, 0, 0);
-      sideBarList = rebar.Steels;
+      sideBarList = rebar.Bars;
       for (const elastic of rebar.SteelElastic) {
         result.SteelElastic.push(elastic);
       }
@@ -305,19 +305,19 @@ export class SetVerticalOvalService {
     // 圧縮鉄筋の登録
     for (const Asc of compresBarList) {
       Asc.n = Asc.n;
-      result.Steels.push(Asc);
+      result.Bars.push(Asc);
     }
 
     // 側面鉄筋の登録
     for (const Ase of sideBarList) {
       Ase.Depth = Ase.Depth + b / 2;
       Ase.n = Ase.n;
-      result.Steels.push(Ase);
+      result.Bars.push(Ase);
     }
 
     // 引張鉄筋の登録
     for (const Ast of tensionBarList) {
-      result.Steels.push(Ast);
+      result.Bars.push(Ast);
     }
 
     return result;
@@ -327,7 +327,7 @@ export class SetVerticalOvalService {
   private getSideBar( barInfo: any, safety: any ): any {
 
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -351,7 +351,7 @@ export class SetVerticalOvalService {
         IsTensionBar: false,
         ElasticID: id,
       };
-      result.Steels.push(Steel1);
+      result.Bars.push(Steel1);
     }
 
     // 鉄筋強度の入力

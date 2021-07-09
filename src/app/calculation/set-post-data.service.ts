@@ -29,7 +29,8 @@ export class SetPostDataService {
 
   // 計算(POST)するときのヘルパー ///////////////////////////////////////////////////////////////////////////
   public URL: string =
-    "https://imj7l5o0xl.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear";
+    "https://przh0fpakg.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear-2";
+    // "https://imj7l5o0xl.execute-api.ap-northeast-1.amazonaws.com/prod/RCNonlinear";
 
   public options = {
     headers: new HttpHeaders({
@@ -71,8 +72,8 @@ export class SetPostDataService {
 
     const post_keys = [ 
       'index', 'side', 'Nd','Md',
-      'SectionElastic', 'Sections',
-      'SteelElastic', 'Steels'
+      'ConcreteElastic', 'Concretes',
+      'SteelElastic', 'Bars', 'Steels'
     ];
 
     const dict = {};
@@ -100,11 +101,11 @@ export class SetPostDataService {
             data['shape'] = shape; // 一時的に登録
             
             // 断面形状
-            data['Sections'] = shape.Sections;
-            data['SectionElastic'] = shape.SectionElastic;
+            data['Concretes'] = shape.Concretes;
+            data['ConcreteElastic'] = shape.ConcreteElastic;
 
             // 鉄筋の本数
-            data['Steels'] = shape.Steels;
+            data['Bars'] = shape.Bars;
             data['SteelElastic'] = shape.SteelElastic;
 
             dict[key] = data;

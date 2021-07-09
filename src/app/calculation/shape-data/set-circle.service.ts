@@ -22,7 +22,7 @@ export class SetCircleService {
   // }  
   public getCircle(member: any, index: number, safety: any, option: any): any {
 
-    const result = { symmetry: true, Sections: [], SectionElastic:[] };
+    const result = { symmetry: true, Concretes: [], ConcreteElastic:[] };
 
     const RCOUNT = 100;
 
@@ -35,7 +35,7 @@ export class SetCircleService {
     for (let i = 1; i <= RCOUNT; i++) {
       const x2: number = x1 * i;
       const b2: number = this.getCircleWidth(h, x2);
-      result.Sections.push({
+      result.Concretes.push({
         Height: x1,     // 断面高さ
         WTop: b1,       // 断面幅（上辺）
         WBottom: b2,    // 断面幅（底辺）
@@ -44,7 +44,7 @@ export class SetCircleService {
       b1 = b2;
     }
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     const result2 = this.getCircleBar(section, safety);
     for(const key of Object.keys(result2)){
@@ -57,7 +57,7 @@ export class SetCircleService {
   // 円環断面の POST 用 データ作成
   public getRing(member: any, index: number, safety: any, option: any): any {
 
-    const result = { symmetry: true, Sections: [], SectionElastic:[] };
+    const result = { symmetry: true, Concretes: [], ConcreteElastic:[] };
 
     const RCOUNT = 100;
 
@@ -83,7 +83,7 @@ export class SetCircleService {
         b4 = this.getCircleWidth(b, x4);
       }
 
-      result.Sections.push({
+      result.Concretes.push({
         Height: x1,       // 断面高さ
         WTop: b1 - b3,    // 断面幅（上辺）
         WBottom: b2 - b4, // 断面幅（底辺）
@@ -93,7 +93,7 @@ export class SetCircleService {
       b3 = b4;
     }
 
-    result.SectionElastic.push(this.helper.getSectionElastic(safety));
+    result.ConcreteElastic.push(this.helper.getConcreteElastic(safety));
 
     const result2 = this.getCircleBar(section, safety);
     for(const key of Object.keys(result2)){
@@ -107,7 +107,7 @@ export class SetCircleService {
   private getCircleBar(section: any, safety: any ): any {
 
     const result = {
-      Steels: new Array(),
+      Bars: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -118,7 +118,7 @@ export class SetCircleService {
     const id = "s" + fsy.id;
 
     // 鉄筋の位置
-    result.Steels = this.getSteels(tension, h, id);
+    result.Bars = this.getBars(tension, h, id);
     // 基準となる 鉄筋強度
     const rs = section.tension.rs;
 
@@ -132,9 +132,9 @@ export class SetCircleService {
     return result;
   }
 
-  private getSteels(tension: any, h: number, id: string){
+  private getBars(tension: any, h: number, id: string){
 
-    const Steels = [];
+    const Bars = [];
 
     const dia: string = tension.mark + tension.rebar_dia;
     let _rebar_n: number = tension.rebar_n;
@@ -158,7 +158,7 @@ export class SetCircleService {
         if( deg === 135 || deg === 225){
           // ちょうど 45° 半分引張鉄筋
           for(const tensionBar of [true, false]){
-            Steels.push({
+            Bars.push({
               Depth: dst, // 深さ位置
               i: dia, // 鋼材
               n: 0.5, // 鋼材の本数
@@ -168,7 +168,7 @@ export class SetCircleService {
           }
         } else {
           const tensionBar: boolean = deg >= 135 && deg <= 225 ? true : false;
-          Steels.push({
+          Bars.push({
             Depth: dst, // 深さ位置
             i: dia, // 鋼材
             n: 1, // 鋼材の本数
@@ -181,7 +181,7 @@ export class SetCircleService {
       _rebar_n -= _line;
     }
 
-    return Steels
+    return Bars
   }
 
   // 断面情報を集計
@@ -247,9 +247,9 @@ export class SetCircleService {
 
     // 換算矩形としての鉄筋位置
     const tension = section.tension;
-    const steels = this.getSteels(tension, section.H, null);
+    const Bars = this.getBars(tension, section.H, null);
     let d = 0.0, n = 0;
-    for(const s of steels){
+    for(const s of Bars){
       if(s.IsTensionBar === true){ 
         //=135°～225°の範囲にある鉄筋
         d += s.Depth * s.n;
@@ -329,9 +329,9 @@ export class SetCircleService {
 
     // 換算矩形としての鉄筋位置
     const tension = section.tension;
-    const steels = this.getSteels(tension, section.H, null);
+    const Bars = this.getBars(tension, section.H, null);
     let d = 0.0, n = 0;
-    for(const s of steels){
+    for(const s of Bars){
       if(s.IsTensionBar === true){
         d += s.Depth;
         n += s.n;

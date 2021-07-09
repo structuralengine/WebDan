@@ -89,6 +89,9 @@ export class SafetyFactorsMaterialStrengthsComponent
       // 安全係数
       const bar = [], steel =[];
       for(const col of safety.safety_factor[id]){
+
+        if (col.id === 8) continue; // 最小鉄筋量の安全係数は、編集しない
+
         bar.push({
           id: col.id, title: col.title,
           M_rc: col.M_rc, M_rs: col.M_rs, M_rbs: col.M_rbs,
@@ -147,8 +150,8 @@ export class SafetyFactorsMaterialStrengthsComponent
         dataModel: { data: this.table1_datas[i] },
       });
       this.option2_list.push({
-        width: 532,
-        height: 185,
+        width: 550,
+        height: 200,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -158,8 +161,8 @@ export class SafetyFactorsMaterialStrengthsComponent
         dataModel: { data: this.table2_datas[i] },
       });
       this.option3_list.push({
-        width: 532,
-        height: 95,
+        width: 550,
+        height: 105,
         showTop: false,
         reactive: true,
         sortable: false,
@@ -169,7 +172,7 @@ export class SafetyFactorsMaterialStrengthsComponent
         dataModel: { data: this.table3_datas[i] },
       });
       this.option4_list.push({
-        width: 400,
+        width: 410,
         height: 205,
         showTop: false,
         reactive: true,
@@ -180,8 +183,8 @@ export class SafetyFactorsMaterialStrengthsComponent
         dataModel: { data: this.table4_datas[i] },
       });
       this.option5_list.push({
-        width: 560,
-        height: 130,
+        width: 570,
+        height: 140,
         showTop: false,
         reactive: true,
         sortable: false,
