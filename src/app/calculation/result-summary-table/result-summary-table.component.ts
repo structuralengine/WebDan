@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { CalcSummaryTableService } from './calc-summary-table.service';
 
 @Component({
@@ -10,7 +11,9 @@ export class ResultSummaryTableComponent implements OnInit {
   //
   public summary_table: any;
 
-  constructor(private calc: CalcSummaryTableService) { }
+  constructor(
+    private helper: DataHelperModule,
+    private calc: CalcSummaryTableService) { }
 
   ngOnInit() {
     // 初期化
@@ -22,6 +25,23 @@ export class ResultSummaryTableComponent implements OnInit {
     for(const k of keys){
       this.summary_table.push(this.calc.summary_table[k]);
     }
+  }
+
+   /* To copy Text from Textbox */
+  public copyInputMessage($tbody) {
+    const selBox = document.createElement("textarea");
+    selBox.style.position = "fixed";
+    selBox.style.left = "0";
+    selBox.style.top = "0";
+    selBox.style.opacity = "0";
+    selBox.value = this.helper.table_To_text($tbody);
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand("copy");
+    document.body.removeChild(selBox);
+    
+    alert("クリップボードにコピーしました!");
   }
 
 }

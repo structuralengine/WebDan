@@ -265,7 +265,7 @@ export class InputBasicInformationService  {
     const sp1 = this.get_specification1();
 
     this.pickup_moment = this.default_pickup_moment(sp1);
-    for(let i=0; i<this.pickup_moment.length; i++){
+    for(let i=0; i<basic.pickup_moment.length; i++){
       const e = this.pickup_moment[i];
       const t = basic.pickup_moment[i];
       for(const k of Object.keys(e)){
@@ -276,7 +276,7 @@ export class InputBasicInformationService  {
     }
 
     this.pickup_shear_force = this.default_pickup_shear(sp1);
-    for(let i=0; i<this.pickup_shear_force.length; i++){
+    for(let i=0; i<basic.pickup_shear_force.length; i++){
       const e = this.pickup_shear_force[i];
       const t = basic.pickup_shear_force[i];
       for(const k of Object.keys(e)){

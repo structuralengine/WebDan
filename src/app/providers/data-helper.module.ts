@@ -370,4 +370,27 @@ export class DataHelperModule {
     return result;
   }
 
+  // html テーブルをクリップボードにコピーする用のテキストに変換する
+  public table_To_text(wTABLE) {
+    var wRcString = "";
+    var wTR = wTABLE.rows;
+    for (var i = 0; i < wTR.length; i++) {
+      var wTD = wTABLE.rows[i].cells;
+      var wTR_Text = "";
+      for (var j = 0; j < wTD.length; j++) {
+        const a: string = wTD[j].innerText;
+        const b = a.replace(" ", "");
+        const c = b.replace("\n", "");
+        wTR_Text += c;
+        if (j === wTD.length - 1) {
+          wTR_Text += "";
+        } else {
+          wTR_Text += "\t";
+        }
+      }
+      wRcString += wTR_Text + "\r\n";
+    }
+    return wRcString;
+  }
+
 }

@@ -81,3 +81,27 @@ table {
   display: block;
   white-space: nowrap;
 }
+
+
+// コピーボタン
+.copy{
+  font-size: 20px;
+  color: #555555;
+  opacity: 0.3;
+  &:hover{
+      opacity:  1;
+      cursor: pointer;
+  }
+}
+
+.helper{
+  padding: 0 16px;
+  ul{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      li{
+          margin-left: 8px;
+      }
+  }
+}
