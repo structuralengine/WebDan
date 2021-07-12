@@ -91,6 +91,9 @@
 .sheet-title .indent120 {
   text-indent: 12em;
 }
+.sheet-title .indent240 {
+  text-indent: 24em;
+}
 .sheet-title .indent_title {
   text-align: center;
 }

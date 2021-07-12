@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { CalcSafetyShearForceService } from "./calc-safety-shear-force.service";
 import { SetPostDataService } from "../set-post-data.service";
 import { ResultDataService } from "../result-data.service";
+import { InputBasicInformationService } from "src/app/components/basic-information/basic-information.service";
 import { InputDesignPointsService } from "src/app/components/design-points/design-points.service";
 import { CalcSummaryTableService } from "../result-summary-table/calc-summary-table.service";
 import { DataHelperModule } from "src/app/providers/data-helper.module";
@@ -20,6 +21,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
   public isFulfilled = false;
   public err: string;
   public safetyShearForcePages: any[] = new Array();
+  public isJREAST: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -27,6 +29,7 @@ export class ResultSafetyShearForceComponent implements OnInit {
     private post: SetPostDataService,
     private result: ResultDataService,
     private helper: DataHelperModule,
+    private basic: InputBasicInformationService,
     private points: InputDesignPointsService,
     private summary: CalcSummaryTableService
   ) {}
@@ -94,6 +97,12 @@ export class ResultSafetyShearForceComponent implements OnInit {
     safetyID: number = this.calc.safetyID
   ): any[] {
     const result: any[] = new Array();
+
+    this.isJREAST = false;
+    const speci2 = this.basic.get_specification2();
+    if(speci2===2 || speci2===5){
+      this.isJREAST = true;
+    }
 
     let page: any;
 
