@@ -81,12 +81,12 @@ import { ResultRestorabilityShearForceComponent } from './calculation/result-res
 import { ResultEarthquakesMomentComponent } from './calculation/result-earthquakes-moment/result-earthquakes-moment.component';
 import { ResultEarthquakesShearForceComponent } from './calculation/result-earthquakes-shear-force/result-earthquakes-shear-force.component';
 import { ResultSummaryTableComponent } from './calculation/result-summary-table/result-summary-table.component';
+import { ResultMinimumReinforcementComponent } from './calculation/result-minimum-reinforcement/result-minimum-reinforcement.component';
 import { SectionForceListComponent } from './calculation/section-force-list/section-force-list.component';
 
 import { SetDesignForceService} from './calculation/set-design-force.service';
 import { SetPostDataService} from './calculation/set-post-data.service';
 import { environment } from 'src/environments/environment';
-import { ResultMinimumReinforcementComponent } from './calculation/result-minimum-reinforcement/result-minimum-reinforcement.component';
 
 @NgModule({
   imports: [
