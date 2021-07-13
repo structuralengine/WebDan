@@ -268,6 +268,7 @@ export class InputBasicInformationService  {
     for(let i=0; i<this.pickup_moment.length; i++){
       const e = this.pickup_moment[i];
       const t = basic.pickup_moment[i];
+      if (t === undefined) { continue; }
       for(const k of Object.keys(e)){
         if(k in t){
           e[k] = t[k];

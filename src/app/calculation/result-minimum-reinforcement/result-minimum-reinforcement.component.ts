@@ -14,12 +14,12 @@ import { CalcMinimumReinforcementService } from './calc-minimum-reinforcement.se
 })
 export class ResultMinimumReinforcementComponent implements OnInit {
 
-  public title = "復旧性（地震時以外）曲げモーメントの照査";
+  public title = "最大・最小鉄筋量の照査";
   public page_index = "ap_8";
   public isLoading = true;
   public isFulfilled = false;
   public err: string;
-  public restorabilityMomentPages: any[] = new Array();
+  public ResultMinimumReinforcementPages: any[] = new Array();
 
   constructor(
     private http: HttpClient,
@@ -56,7 +56,7 @@ export class ResultMinimumReinforcementComponent implements OnInit {
           this.err = JSON.stringify(response["ErrorException"]);
         }
         this.isLoading = false;
-        this.summary.setSummaryTable("restorabilityMoment", this.restorabilityMomentPages);
+        this.summary.setSummaryTable("restorabilityMoment", this.ResultMinimumReinforcementPages);
       },
       (error) => {
         this.err = 'error!!' + '\n'; 
@@ -79,7 +79,7 @@ export class ResultMinimumReinforcementComponent implements OnInit {
   // 計算結果を集計する
   private setPages(OutputData: any): boolean {
     try {
-      this.restorabilityMomentPages = this.setRestorabilityPages(OutputData);
+      this.ResultMinimumReinforcementPages = this.setRestorabilityPages(OutputData);
       return true;
     } catch(e) {
       this.err = e.toString();
@@ -90,7 +90,8 @@ export class ResultMinimumReinforcementComponent implements OnInit {
 
   // 出力テーブル用の配列にセット
   public setRestorabilityPages( OutputData: any,
-                                title: string = '復旧性（地震時以外）曲げモーメントの照査結果',
+                                title: string = '最小鉄筋量の照査',
+                                title2: string = '最大鉄筋量の照査',
                                 DesignForceList: any = this.calc.DesignForceList,
                                 safetyID = this.calc.safetyID ): any[] {
     const result: any[] = new Array();
@@ -102,6 +103,7 @@ export class ResultMinimumReinforcementComponent implements OnInit {
       const groupeName = this.points.getGroupeName(ig);
       page = {
         caption: title,
+        caption2: title2,
         g_name: groupeName,
         columns: new Array(),
       };
@@ -123,6 +125,7 @@ export class ResultMinimumReinforcementComponent implements OnInit {
               result.push(page);
               page = {
                 caption: title,
+                caption2: title2,
                 g_name: groupeName,
                 columns: new Array()
               };
@@ -138,7 +141,7 @@ export class ResultMinimumReinforcementComponent implements OnInit {
 
             const resultColumn: any = this.getResultString(
                this.calc.getResultValue(
-              res, safety, DesignForceList
+              res, section, member, safety, fck, DesignForceList
             ));
 
 
@@ -174,18 +177,52 @@ export class ResultMinimumReinforcementComponent implements OnInit {
               fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), 'center'),
               rs : this.result.alien(section.Ast.rs.toFixed(2), 'center'),
               fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), 'center'),
-              /////////////// 照査 ///////////////
-              Md : resultColumn.Md,
+              /////////////// 最小鉄筋量の照査 ///////////////
+              dmax : resultColumn.dmax,
+              fck13 : resultColumn.fck13,
+              GF : resultColumn.GF,
+              Ec : resultColumn.Ec,
+              ftk : resultColumn.ftk,
+              lch : resultColumn.lch,
+              k0b : resultColumn.k0b,
+              k1b : resultColumn.k1b,
+              sigma_crd : resultColumn.sigma_crd,
+              I : resultColumn.I,
+              y : resultColumn.y,
               Nd : resultColumn.Nd,
+              A : resultColumn.A,
+              Mcrd_N : resultColumn.Mcrd_N,
+              Mcrd_kN : resultColumn.Mcrd_kN,
+              //fck : resultColumn.fck,
+              //rc : resultColumn.rc,
+              //fcd : resultColumn.fcd,
+              //fsyk : resultColumn.fsyk,
+              //rs : resultColumn.rs,
+              //fsyd : resultColumn.fsyd,
               ecu : resultColumn.ecu,
               es : resultColumn.es,
               x : resultColumn.x,
               My : resultColumn.My,
               rb : resultColumn.rb,
               Myd : resultColumn.Myd,
-              ri : resultColumn.ri,
-              ratio : resultColumn.ratio,
-              result : resultColumn.result,
+
+              /////////////// 最大鉄筋量の照査 ///////////////
+              //fck : resultColumn.fck,
+              //rc : resultColumn.rc,
+              //fcd : resultColumn.fcd,
+              a_val : resultColumn.a_val,
+              a : resultColumn.a,
+              ecu_val : resultColumn.ecu_val,
+              ecu_max : resultColumn.ecu_max,
+              fsyd : resultColumn.fsyd,
+              Es : resultColumn.Es,
+              esy : resultColumn.esy,
+              //Nd : resultColumn.Nd,
+              sigma_s : resultColumn.sigma_s,
+              d : resultColumn.d,
+              pb : resultColumn.pb,
+              pb075 : resultColumn.pb075,
+              pc : resultColumn.pc,
 
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
@@ -220,27 +257,115 @@ export class ResultMinimumReinforcementComponent implements OnInit {
   private getResultString(re: any): any {
     const result = {
 
-      Md: { alien: "center", value: "-" },
+      //最小鉄筋量
+      dmax: { alien: "center", value: "-" },
+      fck13: { alien: "center", value: "-" },
+      GF: { alien: "center", value: "-" },
+      Ec: { alien: "center", value: "-" },
+      ftk: { alien: "center", value: "-" },
+      lch: { alien: "center", value: "-" },
+      k0b: { alien: "center", value: "-" },
+      k1b: { alien: "center", value: "-" },
+      sigma_crd: { alien: "center", value: "-" },
+      I: { alien: "center", value: "-" },
+      y: { alien: "center", value: "-" },
       Nd: { alien: "center", value: "-" },
+      A: { alien: "center", value: "-" },
+      Mcrd_N: { alien: "center", value: "-" },
+      Mcrd_kN: { alien: "center", value: "-" },
+      //fck: { alien: "center", value: "-" },
+      //rc: { alien: "center", value: "-" },
+      //fcd: { alien: "center", value: "-" },
+      //fsyk: { alien: "center", value: "-" },
+      //rs: { alien: "center", value: "-" },
+      //fsyd: { alien: "center", value: "-" },
       ecu: { alien: "center", value: "-" },
       es: { alien: "center", value: "-" },
       x: { alien: "center", value: "-" },
       My: { alien: "center", value: "-" },
       rb: { alien: "center", value: "-" },
       Myd: { alien: "center", value: "-" },
-      ri: { alien: "center", value: "-" },
-      ratio: { alien: "center", value: "-" },
-      result: { alien: "center", value: "-" },
+
+      //最大鉄筋量
+      //fck: { alien: "center", value: "-" },
+      //rc: { alien: "center", value: "-" },
+      //fcd: { alien: "center", value: "-" },
+      a_val: { alien: "center", value: "-" },
+      a: { alien: "center", value: "-" },
+      ecu_val: { alien: "center", value: "-" },
+      ecu_max: { alien: "center", value: "-" },
+      fsyd: { alien: "center", value: "-" },
+      Es: { alien: "center", value: "-" },
+      esy: { alien: "center", value: "-" },
+      //Nd: { alien: "center", value: "-" },
+      sigma_s: { alien: "center", value: "-" },
+      d: { alien: "center", value: "-" },
+      pb: { alien: "center", value: "-" },
+      pb075: { alien: "center", value: "-" },
+      pc: { alien: "center", value: "-" },
+
     };
 
 
-    // 断面力
-    if ("Md" in re) {
-      result.Md = { alien: "right", value: Math.abs((Math.round(re.Md*10)/10)).toFixed(1) };
+    // 最小鉄筋量
+    if ("dmax" in re) {
+      result.dmax = { alien: "right", value: re.dmax.toFixed(1) };
+    }
+    if ("fck13" in re) {
+      result.fck13 = { alien: "right", value: re.fck13.toFixed(1) };
+    }
+    if ("GF" in re) {
+      result.GF = { alien: "right", value: re.GF.toFixed(4) };
+    }
+    if ("Ec" in re) {
+      result.Ec = { alien: "right", value: re.Ec.toFixed(1) };
+    }
+    if ("ftk" in re) {
+      result.ftk = { alien: "right", value: re.ftk.toFixed(2) };
+    }
+    if ("lch" in re) {
+      result.lch = { alien: "right", value: re.lch.toFixed(1) };
+    }
+    if ("k0b" in re) {
+      result.k0b = { alien: "right", value: re.k0b.toFixed(2) };
+    }
+    if ("k1b" in re) {
+      result.k1b = { alien: "right", value: re.k1b.toFixed(1) };
+    }
+    if ("sigma_crd" in re) {
+      result.sigma_crd = { alien: "right", value: re.sigma_crd.toFixed(2) };
+    }
+    if ("I" in re) {
+      result.I = { alien: "right", value: re.I.toExponential(3) };
+    }
+    if ("y" in re) {
+      result.y = { alien: "right", value: re.y.toFixed(1) };
     }
     if ("Nd" in re) {
-      result.Nd = { alien: "right", value: (Math.round(re.Nd*10)/10).toFixed(1) };
+      result.Nd = { alien: "right", value: re.Nd.toFixed(2) };
     }
+    if ("A" in re) {
+      result.A = { alien: "right", value: re.A.toFixed(0) };
+    }
+    if ("Mcrd" in re) {
+      result.Mcrd_N = { alien: "right", value: re.Mcrd.toExponential(3) };
+      result.Mcrd_kN = { alien: "right", value: (re.Mcrd / 10**6).toFixed(1) };
+    }
+    //if ("fck" in re) {
+      //result.fck = { alien: "right", value: re.fck.toFixed(1) };
+    //}
+    //if ("rc" in re) {
+      //result.rc = { alien: "right", value: re.rc.toFixed(1) };
+    //}
+    //if ("fcd" in re) {
+      //result.fcd = { alien: "right", value: re.fcd.toFixed(1) };
+    //}
+    //if ("fsyd" in re) {
+      //result.fsyd = { alien: "right", value: re.fsyd.toFixed(2) };
+    //}
+    //if ("rs" in re) {
+      //result.rs = { alien: "right", value: re.rs.toFixed(1) };
+    //}
     if ("εcu" in re) {
       result.ecu = { alien: "right", value: re.εcu.toFixed(5) };
     }
@@ -253,26 +378,59 @@ export class ResultMinimumReinforcementComponent implements OnInit {
     if ("My" in re) {
       result.My = { alien: "right", value: re.My.toFixed(1) };
     }
-
-    // 耐力
     if ("rb" in re) {
-      result.rb = { alien: "right", value: re.rb.toFixed(2) };
+      result.rb = { alien: "right", value: re.rb.toFixed(1) };
     }
     if ("Myd" in re) {
-      result.Myd = { alien: "right", value: re.Myd.toFixed(1) };
+      result.Myd = { alien: "right", value: re.Myd.toFixed(2) };
     }
-    if ("ri" in re) {
-      result.ri = { alien: "right", value: re.ri.toFixed(2) };
+    
+    // 最大鉄筋量
+    //if ("fck" in re) {
+      //result.fck = { alien: "right", value: re.fck.toFixed(1) };
+    //}
+    //if ("rc" in re) {
+      //result.rc = { alien: "right", value: re.rc.toFixed(5) };
+    //}
+    //if ("fcd" in re) {
+      //result.fcd = { alien: "right", value: re.fcd.toFixed(5) };
+    //}
+    if ("a_val" in re) {
+      result.a_val = { alien: "right", value: re.a_val.toFixed(3) };
     }
-    let ratio = 0;
-    if ("ratio" in re) {
-      result.ratio.value = re.ratio.toFixed(3);
-      ratio = re.ratio;
+    if ("a" in re) {
+      result.a = { alien: "right", value: re.a.toFixed(2) };
     }
-    if (ratio < 1) {
-      result.result.value = "OK";
-    } else {
-      result.result.value = "NG";
+    if ("εcu_val" in re) {
+      result.ecu_val = { alien: "right", value: re.εcu_val.toFixed(5) };
+    }
+    if ("εcu_max" in re) {
+      result.ecu_max = { alien: "right", value: re.εcu_max.toFixed(5) };
+    }
+    if ("fsyd" in re) {
+      result.fsyd = { alien: "right", value: re.fsyd.toFixed() };
+    }
+    if ("Es" in re) {
+      result.Es = { alien: "right", value: re.Es.toFixed(1) };
+    }
+    if ("εsy" in re) {
+      result.esy = { alien: "right", value: re.εsy.toFixed(5) };
+    }
+    //if ("Nd" in re) {
+      //result.Nd = { alien: "right", value: re.Nd.toFixed(1) };
+    //}
+    if ("sigma_s" in re) {
+      result.sigma_s = { alien: "right", value: re.sigma_s.toFixed(0) };
+    }
+    if ("d" in re) {
+      result.d = { alien: "right", value: re.d.toFixed(0) };
+    }
+    if ("pb" in re) {
+      result.pb = { alien: "right", value: re.pb.toFixed(2) };
+      result.pb075 = { alien: "right", value: (re.pb * 0.75).toFixed(2) };
+    }
+    if ("pc" in re) {
+      result.pc = { alien: "right", value: re.pc.toFixed(2) };
     }
 
     return result;

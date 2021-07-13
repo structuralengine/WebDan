@@ -415,6 +415,10 @@ export class InputSafetyFactorsMaterialStrengthsService {
       }
     } else {
       current = safe[safetyID];
+      if(current === undefined){
+        const temp = this.default_safety_factor();
+        current = temp[safetyID];
+      }
     }
     const result = (target === 'Md' ) ?
         { // まげモーメントの照査の場合

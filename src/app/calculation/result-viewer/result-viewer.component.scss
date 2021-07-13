@@ -60,9 +60,19 @@
   .indent100{text-indent: 10.0em;}
   .indent105{text-indent: 10.5em;}
   .indent110{text-indent: 11.0em;}
+  .indent115{text-indent: 11.5em;}
   .indent120{text-indent: 12.0em;}
+  .indent135{text-indent: 13.5em;}
+  .indent140{text-indent: 14.0em;}
+  .indent160{text-indent: 16.0em;}
+  .indent170{text-indent: 17.0em;}
+  .indent175{text-indent: 17.5em;}
+  .indent180{text-indent: 18.0em;}
+  .indent190{text-indent: 19.0em;}
+  .indent200{text-indent: 20.0em;}
   .indent240{text-indent: 24.0em;}
   .indent_title{text-align: center;}
+  .textright{text-align: right;}
 }
 
 p.noword{
@@ -73,6 +83,12 @@ p.caption{
 }
 div.noword{
   margin-bottom: 14pt;
+}
+div{
+  .margin30{margin-left: 3.0em;}
+  .margin50{margin-left: 5.0em;}
+  .margin110{margin-left: 11.0em;}
+  .margin115{margin-left: 11.5em;}
 }
 
 table.title{

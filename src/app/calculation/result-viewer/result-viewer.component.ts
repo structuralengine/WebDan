@@ -12,6 +12,7 @@ import { CalcSafetyMomentService } from '../result-safety-moment/calc-safety-mom
 import { CalcSafetyShearForceService } from '../result-safety-shear-force/calc-safety-shear-force.service';
 import { CalcServiceabilityMomentService } from '../result-serviceability-moment/calc-serviceability-moment.service';
 import { CalcServiceabilityShearForceService } from '../result-serviceability-shear-force/calc-serviceability-shear-force.service';
+import { CalcMinimumReinforcementService } from '../result-minimum-reinforcement/calc-minimum-reinforcement.service'
 
 import { CalcSummaryTableService } from '../result-summary-table/calc-summary-table.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -46,7 +47,8 @@ export class ResultViewerComponent implements OnInit {
     public safetyMoment: CalcSafetyMomentService,
     public safetyShearForce: CalcSafetyShearForceService,
     public serviceabilityMoment: CalcServiceabilityMomentService,
-    public serviceabilityShearForce: CalcServiceabilityShearForceService
+    public serviceabilityShearForce: CalcServiceabilityShearForceService,
+    public ResultMinimumReinforcement: CalcMinimumReinforcementService
   ) { }
 
   ngOnInit() {
@@ -74,6 +76,7 @@ export class ResultViewerComponent implements OnInit {
     this.safetyShearForce.setDesignForces();
     this.serviceabilityMoment.setDesignForces();
     this.serviceabilityShearForce.setDesignForces();
+    this.ResultMinimumReinforcement.setDesignForces();
 
     this.summary.clear();
     this._printSummaryTable = false;
