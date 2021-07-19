@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { retry } from 'rxjs/operators';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
 import { InputBasicInformationService } from 'src/app/components/basic-information/basic-information.service';
+import { InputSteelsService } from 'src/app/components/steels/steels.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { ResultDataService } from '../result-data.service';
 
@@ -13,6 +14,7 @@ export class SetCircleService {
   constructor(
     private basic: InputBasicInformationService,
     private bars: InputBarsService,
+    private steel: InputSteelsService,
     private helper: DataHelperModule
   ) { }
 
@@ -190,6 +192,7 @@ export class SetCircleService {
     const result = this.getSection(member);
     
     const bar = this.bars.getCalcData(index);
+    const steel = this.steel.getCalcData(index);
 
     const tension = this.helper.rebarInfo(bar.rebar1);
     if(tension === null){
@@ -224,6 +227,35 @@ export class SetCircleService {
     result['tension'] = tension;
     result['stirrup'] = bar.stirrup;
     result['bend'] = bar.bend;
+
+    // steel
+    for (const key of ['left', 'right']){
+      const thickness = steel.H[key + '_thickness'];
+      const fsys = this.helper.getFsyk2(
+        thickness,
+        safety.material_steel,
+      );
+      steel['fsy_' + key] = fsys;
+    }
+    for (const key of ['upper', 'lower']){
+      const thickness = steel.I[key + '_thickness'];
+      const fsys = this.helper.getFsyk2(
+        thickness,
+        safety.material_steel,
+      );
+      steel['fsy_' + key] = fsys;
+    }
+    for (const key of ['Iweb', 'Hweb']) {
+      const thickness = (key === 'Iweb') ? steel.I.web_thickness :
+                                           steel.H.web_thickness ;
+      const fvys = this.helper.getFsyk2(
+        thickness,
+        safety.material_steel,
+        'fvy'
+      );
+      steel['fvy_' + key] = fvys;
+    }
+    result['steel'] = steel;
     
     return result;
   }

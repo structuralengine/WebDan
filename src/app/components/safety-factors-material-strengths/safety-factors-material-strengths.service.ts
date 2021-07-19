@@ -390,6 +390,13 @@ export class InputSafetyFactorsMaterialStrengthsService {
     }
     result['material_concrete'] = conc;
 
+    // 鉄骨強度 を代入する
+    let steel = this.material_steel[g_id];
+    if (steel === undefined) {
+      steel = this.default_material_steel();
+    }
+    result['material_steel'] = steel;
+
     // 杭の施工条件
     let pile = this.pile_factor[g_id];
     if (pile === undefined) {
@@ -432,6 +439,8 @@ export class InputSafetyFactorsMaterialStrengthsService {
           rbs: current.V_rbs,
           rbd: current.V_rbv
         };
+    result['S_rb'] = current.S_rb;
+    result['S_rs'] = current.S_rs;
     result['ri'] = current.ri;
     result['range'] = current.range;
 

@@ -266,6 +266,8 @@ export class SaveDataService {
       points: this.points.getSaveData(),
       // 鉄筋情報
       bar: this.bars.getSaveData(),
+      // 鉄骨情報
+      steel: this.steel.getSaveData(),
       // 疲労情報
       fatigues: this.fatigues.getSaveData(),
       // 安全係数情報
@@ -323,6 +325,12 @@ export class SaveDataService {
       this.bars.setSaveData(jsonData.bar);
     } else {
       this.bars.clear();
+    }
+    // 鉄骨情報
+    if ("steel" in jsonData) {
+      this.steel.setSaveData(jsonData.steel);
+    } else {
+      this.steel.clear();
     }
     // 疲労情報
     if ("fatigues" in jsonData) {

@@ -37,8 +37,14 @@
 .sheet-title .indent10 {
   text-indent: 1em;
 }
+.sheet-title .indent15 {
+  text-indent: 1.5em;
+}
 .sheet-title .indent20 {
   text-indent: 2em;
+}
+.sheet-title .indent25 {
+  text-indent: 2.5em;
 }
 .sheet-title .indent30 {
   text-indent: 3em;
@@ -143,11 +149,17 @@ div .margin30 {
 div .margin50 {
   margin-left: 5.0em;
 }
+div .margin70 {
+  margin-left: 7.0em;
+}
 div .margin110 {
   margin-left: 11.0em;
 }
 div .margin115 {
   margin-left: 11.5em;
+}
+div .margin130 {
+  margin-left: 13em;
 }
 
 table.title {
@@ -243,9 +255,6 @@ table.main .center {
 table.main .right {
   text-align: right;
   padding-right: 10px;
-}
-table.main .right-S {
-  text-align: right;
 }
 table.main .cell_name1 {
   width: 144px;

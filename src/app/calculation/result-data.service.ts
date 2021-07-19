@@ -178,6 +178,8 @@ export class ResultDataService {
     result['Asc'] = this.getAsc(section);
     result['Ase'] = this.getAse(section);
 
+    result['steel'] = this.getSteel(section, safety, target);
+
     // せん断の場合 追加でパラメータを設定する
     if (target === 'Vd') {
       const vmuSection = this.getVmuSection(section, safety);
@@ -436,6 +438,84 @@ export class ResultDataService {
 
     return result;
 
+  }
+
+  private getSteel(section: any, safety: any, mark: string): any {
+
+    const result = {
+      I : {
+            upper_flange : null,
+            web : null, 
+            lower_flange : null,
+            title : 'I',
+          }, 
+      H : {
+            left_flange : null,
+            web : null, 
+            right_flange : null,
+            title : 'I',
+          },
+      fsy_upper : { fsy : null, fsd : null },
+      fsy_lower : { fsy : null, fsd : null },
+      fsy_left : { fsy : null, fsd : null },
+      fsy_right : { fsy : null, fsd : null },
+      //fsvy_Iweb : { fsvy : null, fvyd : null },
+      //fsvy_Hweb : { fsvy : null, fvyd : null },
+      rs : safety.safety_factor.rs,
+    }
+
+    // I配置鉄骨
+    let target = section.steel.I;
+    if (target.upper_thickness !== null && target.upper_width !== null) {
+      result.I.upper_flange =  target.upper_width.toString()
+                            + "×" 
+                            + target.upper_thickness.toString();  
+    }
+    if (target.web_thickness !== null && target.web_height !== null) {
+      result.I.web =  target.web_height.toString()
+                    + "×" 
+                    + target.web_thickness.toString();  
+    }
+    if (target.lower_thickness !== null && target.lower_width !== null) {
+      result.I.lower_flange =  target.lower_width.toString()
+                             + "×" 
+                             + target.lower_thickness.toString();  
+    }
+    // H配置鉄骨
+    target = section.steel.H;
+    if (target.left_thickness !== null && target.left_width !== null) {
+      result.H.left_flange =  target.left_width.toString()
+                            + "×" 
+                            + target.left_thickness.toString();  
+    }
+    if (target.web_thickness !== null && target.web_height !== null) {
+      result.I.web =  target.web_height.toString()
+                    + "×" 
+                    + target.web_thickness.toString();  
+    }
+    if (target.right_thickness !== null && target.right_width !== null) {
+      result.H.right_flange =  target.right_width.toString()
+                             + "×" 
+                             + target.right_thickness.toString();  
+    }
+
+    for (const target of ['fsy_upper', 'fsy_lower', 'fsy_left', 'fsy_right']) {
+      if (section.steel[target].fsy !== null){
+        result[target].fsy = section.steel[target].fsy;
+        result[target].fsd = section.steel[target].fsy / safety.safety_factor.rs;
+      }
+    }
+
+    if (mark === 'Vd') {
+      result['fsvy_Iweb'] = { fsvy : section.steel['fvy_Iweb'].fvy, 
+                              fvyd : (section.steel['fvy_Iweb'].fvy === null) ? null :
+                                      section.steel['fvy_Iweb'].fvy / safety.safety_factor.rs }
+      result['fsvy_Hweb'] = { fsvy : section.steel['fvy_Hweb'].fvy, 
+                              fvyd : (section.steel['fvy_Hweb'].fvy === null) ? null :
+                                      section.steel['fvy_Hweb'].fvy / safety.safety_factor.rs }
+    }
+
+    return result
   }
 
   // 断面積と断面係数

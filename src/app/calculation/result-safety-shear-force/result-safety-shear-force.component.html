@@ -17,9 +17,20 @@
       <p class="sheet-title indent30">ここに、γ<sub>i</sub>：　構造物係数</p>
       <p class="sheet-title indent65">V<sub>d</sub>：設計せん断力</p>
       <p class="sheet-title indent65">V<sub>yd</sub>：設計せん断耐力</p>
-      <p class="sheet-title indent80">V<sub>yd</sub> = V<sub>cd</sub> + V<sub>sd</sub></p>
+      <ng-container *ngIf="!isSRC">
+        <p class="sheet-title indent80">V<sub>yd</sub> = V<sub>cd</sub> + V<sub>sd</sub></p>
+      </ng-container>
+      <ng-container *ngIf="isSRC">
+        <p class="sheet-title indent80">V<sub>yd</sub> = V<sub>cd</sub> + V<sub>wd</sub> + V<sub>sd</sub></p>
+      </ng-container>
       <p class="sheet-title indent65">V<sub>cd</sub>：せん断補強鋼材を用いない棒部材のせん断耐力</p>
-      <p class="sheet-title indent65">V<sub>sd</sub>：せん断補強鋼材により受け持たれる棒部材の設計せん断力</p>
+      <ng-container *ngIf="!isSRC">
+        <p class="sheet-title indent65">V<sub>sd</sub>：せん断補強鋼材により受け持たれる棒部材の設計せん断力</p>
+      </ng-container>
+      <ng-container *ngIf="isSRC">
+        <p class="sheet-title indent65">V<sub>wd</sub>：せん断補強鋼材により受け持たれる棒部材の設計せん断力</p>
+        <p class="sheet-title indent65">V<sub>sd</sub>：鉄骨部分により受け持たれる棒部材の設計せん断耐力</p>
+      </ng-container>
       <p class="sheet-title indent30">a)せん断補強鋼材を用いない棒部材の設計せん断力</p>
       <p class="sheet-title indent40">V<sub>cd</sub> =
         β<sub>d</sub>・β<sub>p</sub>・β<sub>n</sub>・f<sub>vcd</sub>・b<sub>w</sub>・d / ・γ<sub>b</sub></p>
@@ -42,12 +53,24 @@
       <p class="sheet-title indent75">N<sub>d</sub>：設計軸方向圧縮力</p>
       <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
       <p class="sheet-title indent30">b)せん断補強鋼材により受け持たれる棒部材の設計せん断耐力</p>
-      <p class="sheet-title indent40">V<sub>sd</sub> = A<sub>w</sub>・f<sub>wyd</sub>・d(1.15S<sub>s</sub>・γ<sub>b</sub>)
-      </p>
-      <p class="sheet-title indent40">ここに、A<sub>w</sub>： 区間S<sub>s</sub>におけるスターラップの総断面積</p>
-      <p class="sheet-title indent95">d：有効高さ</p>
-      <p class="sheet-title indent85">S<sub>s</sub>：スターラップの配置間隔</p>
-      <p class="sheet-title indent85">γ<sub>b</sub>：部材係数</p>
+      <ng-container *ngIf="!isSRC">
+        <p class="sheet-title indent65">V<sub>sd</sub> = A<sub>w</sub>・f<sub>wyd</sub>・d(1.15S<sub>s</sub>・γ<sub>b</sub>)</p>
+      </ng-container>
+      <ng-container *ngIf="isSRC">
+        <p class="sheet-title indent65">V<sub>wd</sub> = A<sub>w</sub>・f<sub>wyd</sub>・d(1.15S<sub>s</sub>・γ<sub>b</sub>)</p>
+      </ng-container>
+      <p class="sheet-title indent40">ここに、A<sub>w</sub>：区間S<sub>s</sub>におけるスターラップの総断面積</p>
+      <p class="sheet-title indent85">d：有効高さ</p>
+      <p class="sheet-title indent80">S<sub>s</sub>：スターラップの配置間隔</p>
+      <p class="sheet-title indent75">γ<sub>b</sub>：部材係数</p>
+      <ng-container *ngIf="isSRC">
+        <p class="sheet-title indent30">c)鉄骨部分により受け持たれる棒部材の設計せん断耐力</p>
+        <p class="sheet-title indent65">V<sub>sd</sub> = f<sub>svyd</sub>・h<sub>w</sub>・t<sub>w</sub> / γ<sub>b</sub></p>
+        <p class="sheet-title indent40">ここに、f<sub>svyd</sub>：構造用鋼材の設計せん断降伏強度</p>
+        <p class="sheet-title indent95">h<sub>w</sub>：鉄骨腹板の高さ</p>
+        <p class="sheet-title indent95">t<sub>w</sub>：鉄骨腹板の厚さ</p>
+        <p class="sheet-title indent90">γ<sub>b</sub>：部材係数で、1.1とする</p>
+      </ng-container>
     </div>
   </div>
 
@@ -188,6 +211,45 @@
           {{column.tan.value}}</td>
         </ng-container>
       </tr>
+      <ng-container *ngIf="pages.SRCFlag">
+        <tr>
+          <th rowspan="3" class="cell_name2 g-right1 g-bottom1 g-left2">I配置<br>鉄骨</th>
+          <th class="cell_name3 g-right2 g-bottom1">引張フランジ</th>
+          <ng-container *ngFor="let column of pages.columns; index as c">
+            <td colspan="2" class="{{column.steel_I_tension.alien}} g-right2 g-bottom1">
+            {{column.steel_I_tension.value}}</td>
+          </ng-container>
+        </tr>
+        <tr>
+          <th class="cell_name3 g-right2 g-bottom1">腹板</th>
+          <ng-container *ngFor="let column of pages.columns; index as c">
+            <td colspan="2" class="{{column.steel_I_web.alien}} g-right2 g-bottom1">
+            {{column.steel_I_web.value}}</td>
+          </ng-container>
+        </tr>
+        <tr>
+          <th class="cell_name3 g-right2 g-bottom1">圧縮フランジ</th>
+          <ng-container *ngFor="let column of pages.columns; index as c">
+            <td colspan="2" class="{{column.steel_I_compress.alien}} g-right2 g-bottom1">
+            {{column.steel_I_compress.value}}</td>
+          </ng-container>
+        </tr>
+        <tr>
+          <th rowspan="2" class="cell_name2 g-right1 g-bottom2 g-left2">H配置<br>鉄骨</th>
+          <th class="cell_name3 g-right2 g-bottom1">フランジ</th>
+          <ng-container *ngFor="let column of pages.columns; index as c">
+            <td colspan="2" class="{{column.steel_H_tension.alien}} g-right2 g-bottom1">
+            {{column.steel_H_tension.value}}</td>
+          </ng-container>
+        </tr>
+        <tr>
+          <th class="cell_name3 g-right2 g-bottom2">腹板</th>
+          <ng-container *ngFor="let column of pages.columns; index as c">
+            <td colspan="2" class="{{column.steel_H_web.alien}} g-right2 g-bottom2">
+            {{column.steel_H_web.value}}</td>
+          </ng-container>
+        </tr>
+      </ng-container>
       <tr>
         <th class="cell_name2 g-left2">Ast</th>
         <th class="cell_name3 g-right2">(mm<sup>2</sup>)</th>
@@ -286,23 +348,47 @@
         <th class="cell_name2 g-bottom1 g-left2">fsyk</th>
         <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.fsy.alien}} g-right2 g-bottom1">
-          {{column.fsy.value}}</td>
+          <ng-container *ngIf="column.steelFlag">
+            <td class="{{column.fsy_steel.alien}} g-bottom1">
+            {{column.fsy_steel.value}}</td>
+            <td class="{{column.fsy.alien}} g-right2 g-bottom1">
+            {{column.fsy.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="!column.steelFlag">
+            <td colspan="2" class="{{column.fsy.alien}} g-right2 g-bottom1">
+            {{column.fsy.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
         <th colspan="2" class="cell_name1 g-right2 g-bottom1 g-left2">γs</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.rs.alien}} g-right2 g-bottom1">
-          {{column.rs.value}}</td>
+          <ng-container *ngIf="column.steelFlag">
+            <td class="{{column.rs_steel.alien}} g-bottom1">
+            {{column.rs_steel.value}}</td>
+            <td class="{{column.rs.alien}} g-right2 g-bottom1">
+            {{column.rs.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="!column.steelFlag">
+            <td colspan="2" class="{{column.rs.alien}} g-right2 g-bottom1">
+            {{column.rs.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
         <th class="cell_name2 g-bottom2 g-left2">fsyd</th>
         <th class="cell_name3 g-right2 g-bottom2">(N/mm<sup>2</sup>)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <td colspan="2" class="{{column.fsd.alien}} g-right2 g-bottom2">
-          {{column.fsd.value}}</td>
+          <ng-container *ngIf="column.steelFlag">
+            <td class="{{column.fsd_steel.alien}} g-bottom2">
+            {{column.fsd_steel.value}}</td>
+            <td class="{{column.fsd.alien}} g-right2 g-bottom2">
+            {{column.fsd.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="!column.steelFlag">
+            <td colspan="2" class="{{column.fsd.alien}} g-right2 g-bottom2">
+            {{column.fsd.value}}</td>
+          </ng-container>
         </ng-container>
       </tr>
       <tr>
@@ -344,8 +430,8 @@
             <td colspan="2" class="{{column.Aw.alien}} g-right2">{{column.Aw.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S ">{{column.Aw.value}}</td>
-            <td class="right-S g-right2">{{column.Asb.value}}</td>
+            <td class="right ">{{column.Aw.value}}</td>
+            <td class="right g-right2">{{column.Asb.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -356,8 +442,8 @@
             <td colspan="2" class="{{column.AwString.alien}} g-right2 g-bottom1">{{column.AwString.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S g-bottom1">{{column.AwString.value}}</td>
-            <td class="right-S g-right2 g-bottom1">{{column.AwString.value}}</td>
+            <td class="right g-bottom1">{{column.AwString.value}}</td>
+            <td class="right g-right2 g-bottom1">{{column.AwString.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -365,12 +451,16 @@
         <th class="cell_name2 g-bottom1 g-left2">fwyd</th>
         <th class="cell_name3 g-right2 g-bottom1">(N/mm<sup>2</sup>)</th>
         <ng-container *ngFor="let column of pages.columns; index as c">
-          <ng-container *ngIf="!column.bendFlag">
+          <ng-container *ngIf="!column.bendFlag && !column.steelFlag">
             <td colspan="2" class="{{column.fwyd.alien}} g-right2 g-bottom1">{{column.fwyd.value}}</td>
           </ng-container>
-          <ng-container *ngIf="column.bendFlag">
-            <td class="right-S g-bottom1">{{column.fwyd.value}}</td>
-            <td class="right-S g-right2 g-bottom1">{{column.fwyd2.value}}</td>
+          <ng-container *ngIf="column.bendFlag && !column.steelFlag">
+            <td class="right g-bottom1">{{column.fwyd.value}}</td>
+            <td class="right g-right2 g-bottom1">{{column.fwyd2.value}}</td>
+          </ng-container>
+          <ng-container *ngIf="column.steelFlag">
+            <td class="right g-bottom1">{{column.fwyd3.value}}</td>
+            <td class="right g-right2 g-bottom1">{{column.fwyd.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -382,8 +472,8 @@
             <td colspan="2" class="{{column.deg.alien}} g-right2 g-bottom1">{{column.deg.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S g-bottom1">{{column.deg.value}}</td>
-            <td class="right-S g-right2 g-bottom1">{{column.deg2.value}}</td>
+            <td class="right g-bottom1">{{column.deg.value}}</td>
+            <td class="right g-right2 g-bottom1">{{column.deg2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -395,8 +485,8 @@
             <td colspan="2" class="{{column.Ss.alien}} g-right2 g-bottom2">{{column.Ss.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S g-bottom2">{{column.Ss.value}}</td>
-            <td class="right-S g-right2 g-bottom2">{{column.Ss2.value}}</td>
+            <td class="right g-bottom2">{{column.Ss.value}}</td>
+            <td class="right g-right2 g-bottom2">{{column.Ss2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>
@@ -489,8 +579,8 @@
             <td colspan="2" class="{{column.Vsd.alien}} g-right2 g-bottom1">{{column.Vsd.value}}</td>
           </ng-container>
           <ng-container *ngIf="column.bendFlag">
-            <td class="right-S g-bottom1">{{column.Vsd.value}}</td>
-            <td class="right-S g-right2 g-bottom1">{{column.Vsd2.value}}</td>
+            <td class="right g-bottom1">{{column.Vsd.value}}</td>
+            <td class="right g-right2 g-bottom1">{{column.Vsd2.value}}</td>
           </ng-container>
         </ng-container>
       </tr>

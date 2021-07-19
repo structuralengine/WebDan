@@ -20,6 +20,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
   public serviceabilityShearForcePages: any[] = new Array();
   private title = "耐久性 せん断ひび割れの照査結果";
   public page_index = "ap_6";
+  public isSRC: boolean = false;
 
   constructor(
     private http: HttpClient,
@@ -99,10 +100,12 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
         caption: this.title,
         g_name: groupeName,
         columns: new Array(),
+        SRCFlag : false,
       };
 
       const safety = this.calc.getSafetyFactor(groupe[ig][0].g_id);
 
+      let SRCFlag = false;
       for (const m of groupe[ig]) {
         for (const position of m.positions) {
           for (const side of ["上側引張", "下側引張"]) {
@@ -114,12 +117,15 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
             }
 
             if (page.columns.length > 4) {
+              page.SRCFlag = SRCFlag;
               result.push(page);
               page = {
                 caption: this.title,
                 g_name: groupeName,
                 columns: new Array(),
+                SRCFlag : false,
               };
+              SRCFlag = false;
             }
 
             /////////////// まず計算 ///////////////
@@ -138,6 +144,19 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
                 safety)
             );
 
+            let fsy_steel: number;
+            let fsd_steel: number;
+            if (titleColumn.title3 === '下側引張'){
+              fsy_steel = section.steel.fsy_lower.fsy;
+              fsd_steel = section.steel.fsy_lower.fsd;
+            } else {
+              fsy_steel = section.steel.fsy_upper.fsy;
+              fsd_steel = section.steel.fsy_upper.fsd;
+            }
+            let fwyd3: number = (section.steel.fsvy_Hweb.fvyd !== null) ? 
+                                section.steel.fsvy_Hweb.fvyd :
+                                section.steel.fsvy_Iweb.fvyd ;
+
             const column = {
               /////////////// タイトル ///////////////
               title1 : { alien: "center", value: titleColumn.title1 },
@@ -146,6 +165,12 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               ///////////////// 形状 /////////////////
               B : this.result.alien(this.result.numStr(shape.B,1)),
               H : this.result.alien(this.result.numStr(shape.H,1)),
+              ///////////////// 鉄骨情報 /////////////////
+              steel_I_tension : this.result.alien(section.steel.I.upper_flange),
+              steel_I_web : this.result.alien(section.steel.I.web),
+              steel_I_compress : this.result.alien(section.steel.I.lower_flange),
+              steel_H_tension : this.result.alien(section.steel.H.left_flange),
+              steel_H_web : this.result.alien(section.steel.H.web),
               /////////////// 引張鉄筋 ///////////////
               tan : this.result.alien(( section.tan === 0 ) ? '-' : Ast.tan, "center"),
               Ast : this.result.alien(this.result.numStr(section.Ast.Ast), "center"),
@@ -169,6 +194,10 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               fsy : this.result.alien(this.result.numStr(section.Ast.fsy, 1), "center"),
               rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
               fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
+              /////////////// 鉄骨情報 ///////////////
+              fsy_steel : this.result.alien(this.result.numStr(fsy_steel, 1), 'center'),
+              rs_steel : this.result.alien(section.steel.rs.toFixed(2), 'center'),
+              fsd_steel : this.result.alien(this.result.numStr(fsd_steel, 1), 'center'),
               /////////////// 帯鉄筋情報 ///////////////
               Aw : resultColumn.Aw,
               AwString : resultColumn.AwString,
@@ -181,6 +210,8 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               fwyd2 : resultColumn.fwyd2,
               deg2 : resultColumn.deg2,
               Ss2 : resultColumn.Ss2,
+              /////////////// 鉄骨情報 ///////////////
+              fwyd3 : this.result.alien(this.result.numStr(fwyd3, 0), 'center'),
               /////////////// 断面力 ///////////////
               Nd : resultColumn.Nd,
               Vhd : resultColumn.Vhd,
@@ -209,15 +240,23 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               Ratio2 : resultColumn.Ratio2,
               Result2 : resultColumn.Result2,
 
-              /////////////// 総括表用 ///////////////
-              bendFlag : (resultColumn.Asb.value!=='-'),  //折り曲げ鉄筋の情報があればtrue、無ければfalse
+              /////////////// flag用 ///////////////
+              bendFlag : (resultColumn.Asb.value!=='-'),//折り曲げ鉄筋の情報があればtrue、無ければfalse
+              steelFlag: (fsy_steel !== null),// 鉄骨情報があればtrue
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
               index : position.index,
               side_summary : side,
               shape_summary : section.shapeName,
             }
-
+            // SRCのデータの有無を確認
+            for(const src_key of ['steel_I_tension', 'steel_I_web', 'steel_I_compress',
+                                  'steel_H_tension','steel_H_web']){
+              if(column[src_key].value !== '-'){
+                SRCFlag = true
+                this.isSRC = true
+              }
+            }
             page.columns.push(column);
           }
         }
@@ -235,6 +274,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
           }
           page.columns.push(column);
         }
+        page.SRCFlag = SRCFlag;
         result.push(page);
       }
     }

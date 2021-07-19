@@ -151,6 +151,37 @@ export class DataHelperModule {
 
     return result;
   }
+  
+  // 鉄骨強度の情報を返す
+  public getFsyk2( thickness: number, material_steel: any, key: string = 'fsy'): any {
+
+    const result = {
+      id: "",
+    };
+
+    if (thickness !== null) {
+      if (thickness <= material_steel[0].separate) {
+        result[key] = (key === 'fsy') ? this.toNumber(material_steel[0].fsyk) :
+                      (key === 'fvy') ? this.toNumber(material_steel[0].fsvyk) :
+                      null;
+        result.id = "1";
+      } else if (thickness <= material_steel[1].separate) {
+        result[key] = (key === 'fsy') ? this.toNumber(material_steel[1].fsyk) :
+                      (key === 'fvy') ? this.toNumber(material_steel[1].fsvyk) :
+                      null;
+        result.id = "2";
+      } else {
+        result[key] = (key === 'fsy') ? this.toNumber(material_steel[2].fsyk) :
+                      (key === 'fvy') ? this.toNumber(material_steel[1].fsvyk) :
+                      null;
+        result.id = "3";
+      }
+    } else {
+      result[key] = null;
+    }
+
+    return result;
+  }
 
   // コンクリート強度の POST用データを返す
   public getConcreteElastic(safety: any): any {

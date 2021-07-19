@@ -281,10 +281,11 @@ export class SafetyFactorsMaterialStrengthsComponent
       const id = first.g_id;
 
       // 安全係数
-      const safety = this.table1_datas[i];
+      const safety_bar = this.table1_datas[i];
+      const safety_steel = this.table4_datas[i];
       const factor = [];
-      for(let j = 0; j < safety.length; j++){
-        const bar = safety[j], steel = safety[j];
+      for(let j = 0; j < safety_bar.length; j++){
+        const bar = safety_bar[j], steel = safety_steel[j];
         factor.push({
           id: bar.id, title: bar.title,
           M_rc: bar.M_rc, M_rs: bar.M_rs, M_rbs: bar.M_rbs,
@@ -307,9 +308,9 @@ export class SafetyFactorsMaterialStrengthsComponent
           sidebar:    { fsy: bar[1].fsy2,    fsu: bar[1].fsu2 },
           stirrup:    { fsy: bar[2].fsy2,    fsu: bar[2].fsu2 }
       }];
-      const steel = this.table5_datas[i];
 
       // 鉄骨材料
+      const steel = this.table5_datas[i];
       material_steel[id] =  [
         {
           fsyk: steel[0].SRCfsyk1,

@@ -145,13 +145,72 @@ export class InputSteelsService {
     return table_datas;
   }
 
-  private getTableColumn(index: any): any {
+  public getTableColumn(index: any): any {
 
     let result = this.steel_list.find((value) => value.index === index);
     if (result === undefined) {
       result = this.default_steels(index);
       this.steel_list.push(result);
     }
+    return result;
+  }
+  
+  public getCalcData(index: any): any {
+
+    let result = null;
+
+    const steel_list = JSON.parse(
+      JSON.stringify({
+        temp: this.steel_list,
+      })
+    ).temp;
+
+    const positions = this.points.getSameGroupePoints(index);
+    const start = positions.findIndex(v=>v.index === index);
+
+    for (let ip = start; ip >= 0; ip--) {
+      const pos = positions[ip];
+      if(!this.points.isEnable(pos)){
+        continue; // 計算対象ではなければスキップ
+      }
+      // barデータに（部材、着目点など）足りない情報を追加する
+      const data: any = steel_list.find((v) => v.index === pos.index);
+      if(data === undefined){
+        continue;
+      }
+      if(result === null) {
+        // 当該入力行 の情報を入手
+        result = this.default_steels(index);
+        for(const key of Object.keys(result)){
+          if(['I', 'H'].includes(key)){
+            for(const k of Object.keys(result[key])){
+              if(k in data[key]){
+                result[key][k] = data[key][k];
+              }
+            }
+          } else {
+            result[key] = data[key];
+          }
+        }
+      }
+      // 当該入力行より上の行
+      let endFlg = true;
+      for(const key of ['I', 'H']){
+        const resteel = data[key];
+        const re = result[key];
+        for(const k of Object.keys(re)){
+          if(re[k] === null && k in resteel){
+            re[k] = this.helper.toNumber(resteel[k]);
+            endFlg = false; // まだ終わらない
+          }
+        }
+      }
+      if( endFlg === true){
+        // 全ての値に有効な数値(null以外)が格納されたら終了する
+        break;
+      }
+    }
+
     return result;
   }
 
@@ -199,6 +258,10 @@ export class InputSteelsService {
 
   public getSaveData(): any[] {
     return this.steel_list;
+  }
+
+  public setSaveData(steel: any) {
+    this.steel_list = steel;
   }
 
   public getGroupeName(i: number): string {

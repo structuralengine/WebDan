@@ -43,7 +43,9 @@
   font-size: 14px; 
   text-align: left;
   .indent10{text-indent: 1.0em;}
+  .indent15{text-indent: 1.5em;}
   .indent20{text-indent: 2.0em;}
+  .indent25{text-indent: 2.5em;}
   .indent30{text-indent: 3.0em;}
   .indent40{text-indent: 4.0em;}
   .indent45{text-indent: 4.5em;}
@@ -87,8 +89,10 @@ div.noword{
 div{
   .margin30{margin-left: 3.0em;}
   .margin50{margin-left: 5.0em;}
+  .margin70{margin-left: 7.0em;}
   .margin110{margin-left: 11.0em;}
   .margin115{margin-left: 11.5em;}
+  .margin130{margin-left: 13em;}
 }
 
 table.title{
@@ -167,10 +171,9 @@ table.main {
   .left{ text-align: left; padding-left: 10px; }
   .center{ text-align: center; }
   .right{ text-align: right; padding-right: 10px; }
-  .right-S{ text-align: right;}
-  .cell_name1{ width: 134px; }
-  .cell_name2{ width: 65px; }
-  .cell_name3{ width: 69px; }
+  .cell_name1{ table-layout: fixed; width: 134px; }
+  .cell_name2{ table-layout: fixed; width: 65px; }
+  .cell_name3{ table-layout: fixed; width: 69px; }
   .g-top1{ border-top: 1px solid lightgray; }
   .g-right1{ border-right: 1px solid lightgray; }
   .g-bottom1{ border-bottom: 1px solid lightgray; }

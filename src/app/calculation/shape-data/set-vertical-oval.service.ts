@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { InputBarsService } from 'src/app/components/bars/bars.service';
+import { InputSteelsService } from 'src/app/components/steels/steels.service';
 import { DataHelperModule } from 'src/app/providers/data-helper.module';
 import { ResultDataService } from '../result-data.service';
 
@@ -10,6 +11,7 @@ export class SetVerticalOvalService {
 
   constructor(
     private bars: InputBarsService,
+    private steel: InputSteelsService,
     private helper: DataHelperModule
   ) { }
 
@@ -80,6 +82,7 @@ export class SetVerticalOvalService {
     const result = this.getSection(member);
 
     const bar: any = this.bars.getCalcData(index);
+    const steel: any = this.steel.getCalcData(index);
 
     let tension: any;
     let compress: any;
@@ -120,6 +123,34 @@ export class SetVerticalOvalService {
     
     // 登録
     result['tension'] = tension;
+
+    for (const key of ['left', 'right']){
+      const thickness = steel.H[key + '_thickness'];
+      const fsys = this.helper.getFsyk2(
+        thickness,
+        safety.material_steel,
+      );
+      steel['fsy_' + key] = fsys;
+    }
+    for (const key of ['upper', 'lower']){
+      const thickness = steel.I[key + '_thickness'];
+      const fsys = this.helper.getFsyk2(
+        thickness,
+        safety.material_steel,
+      );
+      steel['fsy_' + key] = fsys;
+    }
+    for (const key of ['Iweb', 'Hweb']) {
+      const thickness = (key === 'Iweb') ? steel.I.web_thickness :
+                                           steel.H.web_thickness ;
+      const fvys = this.helper.getFsyk2(
+        thickness,
+        safety.material_steel,
+        'fvy'
+      );
+      steel['fvy_' + key] = fvys;
+    }
+    result['steel'] = steel;
 
     // compres
     if (safety.safety_factor.range >= 2) {
