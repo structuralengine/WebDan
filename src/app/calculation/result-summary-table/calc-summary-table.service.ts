@@ -6,6 +6,7 @@ import { Injectable } from "@angular/core";
 export class CalcSummaryTableService {
   //
   public summary_table: any;
+  public isSRC: boolean = false;
 
   // 計算終了フラグ
   private summaryDone: any;
@@ -44,6 +45,8 @@ export class CalcSummaryTableService {
     if (value === null) {
       return;
     }
+    // 鉄骨情報の有無のフラグをリセット
+    this.isSRC = false;
 
     for (const groupe of value) {
       for (const col of groupe.columns) {
@@ -75,12 +78,20 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             columns.shape.Bt = col.Bt.value;
             columns.shape.t = col.t.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
             columns.As.AseString = col.AseString.value;
             // 照査結果
             columns.durabilityMoment.Wd = col.Wd.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -109,6 +120,12 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             columns.shape.Bt = col.Bt.value;
             columns.shape.t = col.t.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -119,6 +136,8 @@ export class CalcSummaryTableService {
             columns.earthquakesMoment.Nd = col.Nd.value;
             columns.earthquakesMoment.Myd = col.Myd.value;
             columns.earthquakesMoment.ratio = col.ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -145,6 +164,12 @@ export class CalcSummaryTableService {
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
             columns.shape.H = col.H.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -155,6 +180,8 @@ export class CalcSummaryTableService {
             columns.earthquakesShearForce.Vd = col.Vd.value;
             columns.earthquakesShearForce.Vyd = col.Vyd.value;
             columns.earthquakesShearForce.Vyd_Ratio = col.Vyd_Ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -183,6 +210,12 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             columns.shape.Bt = col.Bt.value;
             columns.shape.t = col.t.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -193,6 +226,8 @@ export class CalcSummaryTableService {
             columns.restorabilityMoment.Nd = col.Nd.value;
             columns.restorabilityMoment.Myd = col.Myd.value;
             columns.restorabilityMoment.ratio = col.ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -219,6 +254,12 @@ export class CalcSummaryTableService {
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
             columns.shape.H = col.H.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -229,6 +270,8 @@ export class CalcSummaryTableService {
             columns.restorabilityShearForce.Vd = col.Vd.value;
             columns.restorabilityShearForce.Vyd = col.Vyd.value;
             columns.restorabilityShearForce.Vyd_Ratio = col.Vyd_Ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -257,6 +300,12 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             columns.shape.Bt = col.Bt.value;
             columns.shape.t = col.t.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -294,6 +343,12 @@ export class CalcSummaryTableService {
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
             columns.shape.H = col.H.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AwString = col.AwString.value;
@@ -303,6 +358,8 @@ export class CalcSummaryTableService {
             columns.safetyFatigueShearForce.sigma_rd = col.sigma_rd.value;
             columns.safetyFatigueShearForce.frd = col.frd.value;
             columns.safetyFatigueShearForce.ratio = col.ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -331,6 +388,12 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             columns.shape.Bt = col.Bt.value;
             columns.shape.t = col.t.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AseString.value;
@@ -341,6 +404,8 @@ export class CalcSummaryTableService {
             columns.safetyMoment.Nd = col.Nd.value;
             columns.safetyMoment.Mud = col.Mud.value;
             columns.safetyMoment.ratio = col.ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -367,6 +432,12 @@ export class CalcSummaryTableService {
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
             columns.shape.H = col.H.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -379,6 +450,8 @@ export class CalcSummaryTableService {
             columns.safetyShearForce.Vwcd = col.Vwcd.value;
             columns.safetyShearForce.Vyd_Ratio = col.Vyd_Ratio.value;
             columns.safetyShearForce.Vwcd_Ratio = col.Vwcd_Ratio.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -407,6 +480,12 @@ export class CalcSummaryTableService {
             columns.shape.H = col.H.value;
             columns.shape.Bt = col.Bt.value;
             columns.shape.t = col.t.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -417,6 +496,8 @@ export class CalcSummaryTableService {
             columns.serviceabilityMoment.sigma_s = col.sigma_s.value;
             columns.serviceabilityMoment.Wd = col.Wd.value;
             columns.serviceabilityMoment.Wlim = col.Wlim.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -443,6 +524,12 @@ export class CalcSummaryTableService {
             columns.shape.name = col.shape_summary;
             columns.shape.B = col.B.value;
             columns.shape.H = col.H.value;
+            // 鉄骨情報
+            columns.steel.I_tension = col.steel_I_tension.value,
+            columns.steel.I_web = col.steel_I_web.value,
+            columns.steel.I_compress = col.steel_I_compress.value,
+            columns.steel.H_flange = col.steel_H_tension.value,
+            columns.steel.H_web = col.steel_H_web.value,
             // 鉄筋量
             columns.As.AstString = col.AstString.value;
             columns.As.AscString = col.AscString.value;
@@ -453,6 +540,8 @@ export class CalcSummaryTableService {
             columns.serviceabilityShearForce.Vcd = col.Vcd.value;
             columns.serviceabilityShearForce.Vcd07 = col.Vcd07.value;
             columns.serviceabilityShearForce.sigma = col.sigma.value;
+            //鉄骨情報のフラグ
+            if (col.steelFlag) this.isSRC = true;
 
             this.summary_table[key] = columns;
             break;
@@ -478,6 +567,13 @@ export class CalcSummaryTableService {
         H: "-",
         Bt: "-",
         t: "-",
+      },
+      steel: {
+        I_tension: '-',
+        I_web: '-',
+        I_compress: '-',
+        H_flange: '-',
+        H_web: '-',
       },
       As: {
         AstString: "-",
@@ -552,6 +648,7 @@ export class CalcSummaryTableService {
         Vcd07: "-",
         sigma: "-",
       },
+      steelFlag: false
     };
   }
   // 全ての項目が終了したかチェックする

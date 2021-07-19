@@ -10,6 +10,7 @@ import { CalcSummaryTableService } from './calc-summary-table.service';
 export class ResultSummaryTableComponent implements OnInit {
   //
   public summary_table: any;
+  public isSRC: boolean = false;
 
   constructor(
     private helper: DataHelperModule,
@@ -18,6 +19,7 @@ export class ResultSummaryTableComponent implements OnInit {
   ngOnInit() {
     // 初期化
     this.summary_table = new Array();
+    this.isSRC = this.calc.isSRC;
     // 総括表の index配列を取得
     const keys = Object.keys(this.calc.summary_table);
     keys.sort(); // 並び変える

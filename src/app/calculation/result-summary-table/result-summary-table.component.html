@@ -78,6 +78,46 @@
               </td> 
             </ng-container>
           </tr>
+          <ng-container *ngIf="isSRC">
+            <tr>
+              <th class="bottom text-center" rowspan="5"><span>鉄骨情報</span></th>
+              <th class="left bottom text-center" rowspan="3" colspan="2">I配置鉄骨</th>
+              <th class="left bottom text-center">引張フランジ</th>
+              <th class="left bottom text-center">mm×mm</th>
+              <ng-container *ngFor="let item of summary_table; index as i">
+                <th class="left bottom text-center">{{item.steel.I_tension}}</th>
+              </ng-container>
+            </tr>
+            <tr>
+              <th class="left bottom text-center">腹板</th>
+              <th class="left bottom text-center">mm×mm</th>
+              <ng-container *ngFor="let item of summary_table; index as i">
+                <th class="left bottom text-center">{{item.steel.I_web}}</th>
+              </ng-container>
+            </tr>
+            <tr>
+              <th class="left bottom text-center">圧縮フランジ</th>
+              <th class="left bottom text-center">mm×mm</th>
+              <ng-container *ngFor="let item of summary_table; index as i">
+                <th class="left bottom text-center">{{item.steel.I_compress}}</th>
+              </ng-container>
+            </tr>
+            <tr>
+              <th class="left bottom text-center" rowspan="2" colspan="2">H配置鉄骨</th>
+              <th class="left bottom text-center">フランジ</th>
+              <th class="left bottom text-center">mm×mm</th>
+              <ng-container *ngFor="let item of summary_table; index as i">
+                <th class="left bottom text-center">{{item.steel.H_flange}}</th>
+              </ng-container>
+            </tr>
+            <tr>
+              <th class="left bottom text-center">腹板</th>
+              <th class="left bottom text-center">mm×mm</th>
+              <ng-container *ngFor="let item of summary_table; index as i">
+                <th class="left bottom text-center">{{item.steel.H_web}}</th>
+              </ng-container>
+            </tr>
+          </ng-container>
           <tr>
             <th class="bottom text-center" rowspan="7"><span>鉄筋量</span></th>
             <th class="left bottom text-center height3" colspan="2">主鉄筋</th>
