@@ -65,9 +65,6 @@ export class SetRectService {
       }
       j--;
     }
-    if(result.symmetry === true){
-      console.log()
-    }
     return result;
   }
 
@@ -213,7 +210,7 @@ export class SetRectService {
     const result = this.getSection(member, target, index);
 
     const bar: any = this.bars.getCalcData(index); // 鉄筋
-    const steel: any = this.steel.getCalcData(index); // 鉄骨
+    const stl: any = this.steel.getCalcData(index); // 鉄骨
 
     let tension: any;
     let compress: any;
@@ -257,33 +254,87 @@ export class SetRectService {
     result['tension'] = tension;
 
     // steel
+    const steel = {
+      I: {
+        tension_thickness: null,
+        tension_width: null,
+        compress_thickness: null,
+        compress_width: null,
+        web_thickness: null,
+        web_height: null,
+        fsy_tension: null,
+        fvy_Iweb: null,
+        },
+      H: {
+        left_thickness: null,
+        left_width: null,
+        right_thickness: null,
+        right_width: null,
+        web_thickness: null,
+        web_height: null,
+        fsy_left: null,
+        fsy_right: null,
+        fvy_Hweb: null,
+      }
+    };
+
+    // 縦向きのH鋼
+    switch (side) {
+      case "上側引張":
+        steel.I.tension_thickness = stl.I.upper_thickness;
+        steel.I.tension_width = stl.I.upper_width;
+        steel.I.compress_thickness = stl.I.lower_thickness;
+        steel.I.compress_width = stl.I.lower_width;
+
+        steel.I.fsy_tension = this.helper.getFsyk2(
+          stl.I.upper_thickness,
+          safety.material_steel,
+        );
+        break;
+      case "下側引張":
+        steel.I.tension_thickness = stl.I.lower_thickness;
+        steel.I.tension_width = stl.I.lower_width;
+        steel.I.compress_thickness = stl.I.upper_thickness;
+        steel.I.compress_width = stl.I.upper_width;
+
+        steel.I.fsy_tension = this.helper.getFsyk2(
+          stl.I.lower_thickness,
+          safety.material_steel,
+        );
+        break;
+    }
+    steel.I.web_thickness = stl.I.web_thickness;
+    steel.I.web_height = stl.I.web_height;
+
+    // 横向き
     for (const key of ['left', 'right']){
-      const thickness = steel.H[key + '_thickness'];
-      const fsys = this.helper.getFsyk2(
+      const key1 = key + '_thickness';
+      const key2 = key + '_width';
+
+      const thickness = stl.H[key1];
+      steel.H[key1] = thickness;
+      steel.H[key2] = stl.H[key2];
+
+      steel.H['fsy_' + key] = this.helper.getFsyk2(
         thickness,
         safety.material_steel,
       );
-      steel['fsy_' + key] = fsys;
     }
-    for (const key of ['upper', 'lower']){
-      const thickness = steel.I[key + '_thickness'];
-      const fsys = this.helper.getFsyk2(
-        thickness,
-        safety.material_steel,
-      );
-      steel['fsy_' + key] = fsys;
-    }
-    for (const key of ['Iweb', 'Hweb']) {
-      const thickness = (key === 'Iweb') ? steel.I.web_thickness :
-                                           steel.H.web_thickness ;
-      const fvys = this.helper.getFsyk2(
-        thickness,
+    steel.H.web_thickness = stl.H.web_thickness;
+    steel.H.web_height = stl.H.web_height;
+
+    // web の材料強度
+    for (const key of ['I', 'H']) {
+      steel['fvy_' + key + 'web'] = this.helper.getFsyk2(
+        stl[key].web_thickness,
         safety.material_steel,
         'fvy'
       );
-      steel['fvy_' + key] = fvys;
     }
+
     result['steel'] = steel;
+
+
 
     // compres
     if (safety.safety_factor.range >= 2 && compress !== null) {
@@ -297,10 +348,6 @@ export class SetRectService {
       compress['rs'] = safety.safety_factor.rs;;
       result['compress'] = compress;
     }
-    /*if(compress === null) {
-      compress = tension;
-      result['compress'] = tension
-    }*/
 
     // sidebar
     if (safety.safety_factor.range >= 3) {
@@ -349,6 +396,7 @@ export class SetRectService {
 
     const result = {
       Bars: new Array(),
+      Steels: new Array(),
       SteelElastic: new Array(),
     };
 
@@ -421,6 +469,12 @@ export class SetRectService {
       Ast.IsTensionBar = true;
       result.Bars.push(Ast);
     }
+
+    // 鉄骨の入力
+    if (!('steel' in section)) {
+      return result;
+    }
+
 
     return result;
   }

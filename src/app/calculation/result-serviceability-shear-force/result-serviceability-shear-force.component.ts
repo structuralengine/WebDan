@@ -144,15 +144,6 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
                 safety)
             );
 
-            let fsy_steel: number;
-            let fsd_steel: number;
-            if (titleColumn.title3 === '下側引張'){
-              fsy_steel = section.steel.fsy_lower.fsy;
-              fsd_steel = section.steel.fsy_lower.fsd;
-            } else {
-              fsy_steel = section.steel.fsy_upper.fsy;
-              fsd_steel = section.steel.fsy_upper.fsd;
-            }
             let fwyd3: number = (section.steel.fsvy_Hweb.fvyd !== null) ? 
                                 section.steel.fsvy_Hweb.fvyd :
                                 section.steel.fsvy_Iweb.fvyd ;
@@ -166,9 +157,9 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               B : this.result.alien(this.result.numStr(shape.B,1)),
               H : this.result.alien(this.result.numStr(shape.H,1)),
               ///////////////// 鉄骨情報 /////////////////
-              steel_I_tension : this.result.alien(section.steel.I.upper_flange),
+              steel_I_tension : this.result.alien(section.steel.I.tension_flange),
               steel_I_web : this.result.alien(section.steel.I.web),
-              steel_I_compress : this.result.alien(section.steel.I.lower_flange),
+              steel_I_compress : this.result.alien(section.steel.I.compress_flange),
               steel_H_tension : this.result.alien(section.steel.H.left_flange),
               steel_H_web : this.result.alien(section.steel.H.web),
               /////////////// 引張鉄筋 ///////////////
@@ -195,9 +186,9 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
               rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
               fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
               /////////////// 鉄骨情報 ///////////////
-              fsy_steel : this.result.alien(this.result.numStr(fsy_steel, 1), 'center'),
+              fsy_steel : this.result.alien(this.result.numStr(section.steel.fsy_tension.fsy, 1), 'center'),
               rs_steel : this.result.alien(section.steel.rs.toFixed(2), 'center'),
-              fsd_steel : this.result.alien(this.result.numStr(fsd_steel, 1), 'center'),
+              fsd_steel : this.result.alien(this.result.numStr(section.steel.fsy_tension.fsd, 1), 'center'),
               /////////////// 帯鉄筋情報 ///////////////
               Aw : resultColumn.Aw,
               AwString : resultColumn.AwString,
@@ -242,7 +233,7 @@ export class ResultServiceabilityShearForceComponent implements OnInit {
 
               /////////////// flag用 ///////////////
               bendFlag : (resultColumn.Asb.value!=='-'),//折り曲げ鉄筋の情報があればtrue、無ければfalse
-              steelFlag: (fsy_steel !== null),// 鉄骨情報があればtrue
+              steelFlag: (section.steel.fsy_tension.fsy !== null),// 鉄骨情報があればtrue
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
               index : position.index,

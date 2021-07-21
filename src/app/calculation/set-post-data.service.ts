@@ -104,8 +104,13 @@ export class SetPostDataService {
             data['Concretes'] = shape.Concretes;
             data['ConcreteElastic'] = shape.ConcreteElastic;
 
-            // 鉄筋の本数
-            data['Bars'] = shape.Bars;
+            // 鉄筋・鉄骨の本数
+            if('Bars' in shape){
+              data['Bars'] = shape.Bars;
+            }
+            if('Steels' in shape){
+              data['Steels'] = shape.Steels;
+            }
             data['SteelElastic'] = shape.SteelElastic;
 
             dict[key] = data;

@@ -80,7 +80,7 @@ export class SteelsComponent implements OnInit, OnDestroy, AfterViewInit {
       { title: '算出点名', dataType: 'string', dataIndx: 'p_name', editable: false, sortable: false, width: 250, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       { title: '断面<br/>B<br/>H', align: 'center', dataType: 'float', dataIndx: 'bh', editable: false, sortable: false, width: 85, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
       { title: '位置', align: 'center', dataType: 'string', dataIndx: 'design_point_id', editable: true, sortable: false, width: 40, style: { 'background': '#f5f5f5' }, styleHead: { 'background': '#f5f5f5' } },
-      { title: '上または左からの距離',  dataType: 'float', dataIndx: 'upper_left_cover', sortable: false, width: 70 },
+      { title: '上からの距離',  dataType: 'float', dataIndx: 'upper_left_cover', sortable: false, width: 70 },
       {
         title: '上フランジ または 左フランジ', align: 'center', colModel: [
           { title: 'フランジ幅', dataType: 'float', dataIndx: 'upper_left_width', sortable: false, width: 80 },

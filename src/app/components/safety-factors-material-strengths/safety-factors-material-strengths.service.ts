@@ -57,7 +57,7 @@ export class InputSafetyFactorsMaterialStrengthsService {
             M_rc: 1.30, M_rs: 1.0, M_rbs: 1.10,
             V_rc: 1.30, V_rs: 1.0, V_rbc: 1.30, V_rbs: 1.10, V_rbv: 1.20,
             ri: 1.20, range: 2,
-            S_rs: 1.0, S_rb: 1.1
+            S_rs: 1.05, S_rb: 1.1
           },
           {
             id: 6, title: '復旧性 （損傷）地震時以外',

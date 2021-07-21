@@ -123,7 +123,7 @@ export class ResultDataService {
           result.shape.B = section.B;
           result.shape.Hw = section.Hw;
           result.shape.Bw = section.Bw;
-          }
+        }
         break;
 
       case 'Ring':              // 円環
@@ -178,7 +178,7 @@ export class ResultDataService {
     result['Asc'] = this.getAsc(section);
     result['Ase'] = this.getAse(section);
 
-    result['steel'] = this.getSteel(section, safety, target);
+    result['steel'] = this.getSteel(section, safety, side, target);
 
     // せん断の場合 追加でパラメータを設定する
     if (target === 'Vd') {
@@ -310,7 +310,7 @@ export class ResultDataService {
     return result;
 
   }
-  
+
   private getAstCircleVd(section: any, safety: any): any {
 
     const result = {
@@ -329,7 +329,7 @@ export class ResultDataService {
     result.fsy = section.tension.fsy.fsy;
     result.fsu = section.tension.fsy.fsu;
     result.rs = safety.safety_factor.rs;
-    result.fsd = Math.round(result.fsy / result.rs * 10) /10;
+    result.fsd = Math.round(result.fsy / result.rs * 10) / 10;
 
 
     const mark = section.tension.mark === "R" ? "φ" : "D";
@@ -364,7 +364,7 @@ export class ResultDataService {
     result.fsy = section.tension.fsy.fsy;
     result.fsu = section.tension.fsy.fsu;
     result.rs = safety.safety_factor.rs;
-    result.fsd = Math.round(result.fsy / result.rs * 10) /10;
+    result.fsd = Math.round(result.fsy / result.rs * 10) / 10;
 
 
     const mark = section.tension.mark === "R" ? "φ" : "D";
@@ -433,86 +433,113 @@ export class ResultDataService {
 
     const cover = section.sidebar.cover;
     const space = section.sidebar.space;
-    
+
     result.dse = cover + (space * (rebar_n - 1)) / 2;
 
     return result;
 
   }
 
-  private getSteel(section: any, safety: any, mark: string): any {
+  private getSteel(section: any, safety: any, side: string, mark: string): any {
 
     const result = {
-      I : {
-            upper_flange : null,
-            web : null, 
-            lower_flange : null,
-            title : 'I',
-          }, 
-      H : {
-            left_flange : null,
-            web : null, 
-            right_flange : null,
-            title : 'I',
-          },
-      fsy_upper : { fsy : null, fsd : null },
-      fsy_lower : { fsy : null, fsd : null },
-      fsy_left : { fsy : null, fsd : null },
-      fsy_right : { fsy : null, fsd : null },
-      //fsvy_Iweb : { fsvy : null, fvyd : null },
-      //fsvy_Hweb : { fsvy : null, fvyd : null },
-      rs : safety.safety_factor.rs,
+      I: {
+        tension_flange: null,
+        web: null,
+        compress_flange: null,
+        title: 'I',
+      },
+      H: {
+        left_flange: null,
+        web: null,
+        right_flange: null,
+        title: 'I',
+      },
+      fsy_tension: { fsy: null, fsd: null },
+      fsy_compress: { fsy: null, fsd: null },
+      fsy_left: { fsy: null, fsd: null },
+      fsy_right: { fsy: null, fsd: null },
+      rs: safety.safety_factor.rs,
     }
 
     // I配置鉄骨
     let target = section.steel.I;
-    if (target.upper_thickness !== null && target.upper_width !== null) {
-      result.I.upper_flange =  target.upper_width.toString()
-                            + "×" 
-                            + target.upper_thickness.toString();  
+
+    if (target.tension_thickness !== null && target.tension_width !== null) {
+      result.I.tension_flange = target.tension_width.toString()
+        + "×"
+        + target.tension_thickness.toString();
     }
+    if (target.compress_thickness !== null && target.compress_width !== null) {
+      result.I.compress_flange = target.compress_width.toString()
+        + "×"
+        + target.compress_thickness.toString();
+    }
+
+
     if (target.web_thickness !== null && target.web_height !== null) {
-      result.I.web =  target.web_height.toString()
-                    + "×" 
-                    + target.web_thickness.toString();  
+      result.I.web = target.web_height.toString()
+        + "×"
+        + target.web_thickness.toString();
     }
-    if (target.lower_thickness !== null && target.lower_width !== null) {
-      result.I.lower_flange =  target.lower_width.toString()
-                             + "×" 
-                             + target.lower_thickness.toString();  
-    }
+
     // H配置鉄骨
     target = section.steel.H;
     if (target.left_thickness !== null && target.left_width !== null) {
-      result.H.left_flange =  target.left_width.toString()
-                            + "×" 
-                            + target.left_thickness.toString();  
+      result.H.left_flange = target.left_width.toString()
+        + "×"
+        + target.left_thickness.toString();
     }
     if (target.web_thickness !== null && target.web_height !== null) {
-      result.I.web =  target.web_height.toString()
-                    + "×" 
-                    + target.web_thickness.toString();  
+      result.H.web = target.web_height.toString()
+        + "×"
+        + target.web_thickness.toString();
     }
     if (target.right_thickness !== null && target.right_width !== null) {
-      result.H.right_flange =  target.right_width.toString()
-                             + "×" 
-                             + target.right_thickness.toString();  
+      result.H.right_flange = target.right_width.toString()
+        + "×"
+        + target.right_thickness.toString();
     }
 
-    for (const target of ['fsy_upper', 'fsy_lower', 'fsy_left', 'fsy_right']) {
-      if (section.steel[target].fsy !== null){
+    for (const target of ['fsy_left', 'fsy_right']) {
+      if (section.steel[target].fsy !== null) {
         result[target].fsy = section.steel[target].fsy;
         result[target].fsd = section.steel[target].fsy / safety.safety_factor.rs;
       }
     }
 
+    if (side === '下側引張'){
+      if (section.steel['fsy_lower'].fsy !== null) {
+        result['fsy_tension'].fsy = section.steel['fsy_lower'].fsy;
+        result['fsy_tension'].fsd = section.steel['fsy_lower'].fsy / safety.safety_factor.rs;
+      }
+      if (section.steel['fsy_upper'].fsy !== null) {
+        result['fsy_compress'].fsy = section.steel['fsy_upper'].fsy;
+        result['fsy_compress'].fsd = section.steel['fsy_upper'].fsy / safety.safety_factor.rs;
+      }
+    } else {
+      if (section.steel['fsy_upper'].fsy !== null) {
+        result['fsy_tension'].fsy = section.steel['fsy_upper'].fsy;
+        result['fsy_tension'].fsd = section.steel['fsy_upper'].fsy / safety.safety_factor.rs;
+      }
+      if (section.steel['fsy_lower'].fsy !== null) {
+        result['fsy_compress'].fsy = section.steel['fsy_lower'].fsy;
+        result['fsy_compress'].fsd = section.steel['fsy_lower'].fsy / safety.safety_factor.rs;
+      }
+    }
+
+
     if (mark === 'Vd') {
-      result['fsvy_Iweb'] = { fsvy : section.steel['fvy_Iweb'].fvy, 
-                              fvyd : (section.steel['fvy_Iweb'].fvy === null) ? null :
-                                      section.steel['fvy_Iweb'].fvy / safety.safety_factor.rs }
-      result['fsvy_Hweb'] = { fsvy : section.steel['fvy_Hweb'].fvy, 
-                              fvyd : (section.steel['fvy_Hweb'].fvy === null) ? null :
-                                      section.steel['fvy_Hweb'].fvy / safety.safety_factor.rs }
+      result['fsvy_Iweb'] = {
+        fsvy: section.steel['fvy_Iweb'].fvy,
+        fvyd: (section.steel['fvy_Iweb'].fvy === null) ? null :
+          section.steel['fvy_Iweb'].fvy / safety.safety_factor.rs
+      }
+      result['fsvy_Hweb'] = {
+        fsvy: section.steel['fvy_Hweb'].fvy,
+        fvyd: (section.steel['fvy_Hweb'].fvy === null) ? null :
+          section.steel['fvy_Hweb'].fvy / safety.safety_factor.rs
+      }
     }
 
     return result

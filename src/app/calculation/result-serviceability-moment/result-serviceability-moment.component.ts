@@ -173,16 +173,6 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               )
             );
 
-            let fsy_steel: number;
-            let fsd_steel: number;
-            if (titleColumn.title3 === '下側引張'){
-              fsy_steel = section.steel.fsy_lower.fsy;
-              fsd_steel = section.steel.fsy_lower.fsd;
-            } else {
-              fsy_steel = section.steel.fsy_upper.fsy;
-              fsd_steel = section.steel.fsy_upper.fsd;
-            }
-
             const column = {
               /////////////// タイトル ///////////////
               title1 : { alien: "center", value: titleColumn.title1 },
@@ -194,9 +184,9 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               Bt : this.result.alien(shape.Bt),
               t : this.result.alien(shape.t),
               ///////////////// 鉄骨情報 /////////////////
-              steel_I_tension : this.result.alien(section.steel.I.upper_flange),
+              steel_I_tension : this.result.alien(section.steel.I.tension_flange),
               steel_I_web : this.result.alien(section.steel.I.web),
-              steel_I_compress : this.result.alien(section.steel.I.lower_flange),
+              steel_I_compress : this.result.alien(section.steel.I.compress_flange),
               steel_H_tension : this.result.alien(section.steel.H.left_flange),
               steel_H_web : this.result.alien(section.steel.H.web),
               /////////////// 引張鉄筋 ///////////////
@@ -222,9 +212,9 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               rs : this.result.alien(section.Ast.rs.toFixed(2), "center"),
               fsd : this.result.alien(this.result.numStr(section.Ast.fsd, 1), "center"),
               /////////////// 鉄骨情報 ///////////////
-              fsy_steel : this.result.alien(this.result.numStr(fsy_steel, 1), 'center'),
+              fsy_steel : this.result.alien(this.result.numStr(section.steel.fsy_tension.fsy, 1), 'center'),
               rs_steel : this.result.alien(section.steel.rs.toFixed(2), 'center'),
-              fsd_steel : this.result.alien(this.result.numStr(fsd_steel, 1), 'center'),
+              fsd_steel : this.result.alien(this.result.numStr(section.steel.fsy_tension.fsd, 1), 'center'),
               /////////////// 照査 ///////////////
               con : resultColumn.con,
 
@@ -262,7 +252,7 @@ export class ResultServiceabilityMomentComponent implements OnInit {
               result : resultColumn.result,
 
               /////////////// flag用 ///////////////
-              steelFlag: (fsy_steel !== null),// 鉄骨情報があればtrue
+              steelFlag: (section.steel.fsy_tension.fsy !== null),// 鉄骨情報があればtrue
 
               /////////////// 総括表用 ///////////////
               g_name: m.g_name,
